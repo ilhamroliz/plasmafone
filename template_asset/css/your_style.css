@@ -1,0 +1,96 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 2000;
+}
+
+.menu-on-top #left-panel{
+	/*padding: 0px;*/
+}
+
+.menu-on-top nav ul li{
+	/*padding: 30px;*/
+}
+
+ul.menu-table{
+	list-style: none;
+	overflow: hidden;
+	padding: 0px;
+	font-size: 10pt;
+	font-weight: 600;
+	border-bottom: 1px solid rgba(71, 69, 68, 0.2);
+}
+
+ul.menu-table li a{
+	float: left;
+	padding: 10px 20px;
+}
+
+ul.menu-table li.right{
+	float: right;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+ul.menu-table li a{
+	color: #2e2e2e;
+}
+
+ul.menu-table li.active a, ul.menu-table li:hover a{
+	background: rgba(71, 69, 68, 0.7);
+	color: #fff;
+}
+
+
+/* Small Device with width < 950 */
+@media only screen and (max-width: 950px) {
+    .hide-on-small{
+    	display: none;
+    }
+
+    .show-on-small{
+    	display: inline-block;
+    }
+
+	/* Small Device with width < 823 */
+    @media only screen and (max-width: 823px) {
+	  
+	}
+
+	/* Small Device with width < 736 */
+	@media only screen and (max-width: 736px) {
+	   
+
+		/* Small Device with width < 320 */
+		@media only screen and (max-width: 320px) {
+			
+		}
+	}
+}
