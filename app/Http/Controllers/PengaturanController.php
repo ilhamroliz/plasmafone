@@ -46,7 +46,7 @@ class PengaturanController extends Controller
             $insert = $request->insert;
             $update = $request->update;
             $delete = $request->delete;
-            $id = Crypt::decrypt($request->id);
+            $id = $request->id;
 
             $akses = DB::table('d_access')
                 ->select('a_id')

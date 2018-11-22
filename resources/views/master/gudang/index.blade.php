@@ -130,8 +130,8 @@
 								<td>{{ $gudang->g_kode }}</td>
 								<td>{{ $gudang->g_nama }}</td>
 								<td class="text-center">
-									<button class="btn btn-xs btn-success btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $gudang->g_id }}"><i class="fa fa-pencil fa-fw"></i></button>
-									<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $gudang->g_id }}"><i class="fa fa-eraser fa-fw"></i></button>
+									<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $gudang->g_id }}"><i class="glyphicon glyphicon-edit"></i></button>
+									<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $gudang->g_id }}"><i class="glyphicon glyphicon-trash"></i></button>
 								</td>
 							</tr>
 							@endforeach

@@ -28,7 +28,7 @@ Route::group(['middleware' => 'guest'], function(){
 	    return view('auth/sign-in');
 	})->name('login');
 
-	Route::post('/login', [
+	Route::post('auth', [
 		'uses'	=> 'authController@authenticate',
 		'as'	=> 'auth.authenticate'
 	]);
@@ -43,10 +43,9 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// main route
 
-	Route::get('/dashboard', function () {
+	Route::get('dashboard', function () {
 	    return view('dashboard');
 	})->name('home');
-
 
 	// master karyawan
 
@@ -374,4 +373,5 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// main route end
 	// Route::get('/coba-print', 'PembelianController@coba_print');
+
 });

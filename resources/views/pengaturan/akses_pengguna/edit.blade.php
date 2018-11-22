@@ -47,26 +47,6 @@
 
 			<?php $mt = '20px'; ?>
 
-			@if(Session::has('flash_message_success'))
-			<?php $mt = '0px'; ?>
-			<div class="col-md-12" style="margin-top: 20px;">
-				<div class="alert alert-success alert-block">
-					<a class="close" data-dismiss="alert" href="#">×</a>
-					<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-					{{ Session::get('flash_message_success') }} 
-				</div>
-			</div>
-			@elseif(Session::has('flash_message_error'))
-			<?php $mt = '0px'; ?>
-			<div class="col-md-12" style="margin-top: 20px;">
-				<div class="alert alert-danger alert-block">
-					<a class="close" data-dismiss="alert" href="#">×</a>
-					<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
-					{{ Session::get('flash_message_error') }}
-				</div>
-			</div>
-			@endif
-
 			<!-- row -->
 			<div class="wrapper wrapper-content animated fadeInRight">
 				<div class="row m-b-lg m-t-lg">
@@ -210,9 +190,8 @@
 								@endforeach							
 								</tbody>
 							</table>
-							<input type="submit" style="float: right;" class="btn btn-primary" value="Simpan">
-							<!-- <button style="float: right;" class="btn btn-primary" onclick="simpan()" type="button">Simpan
-							</button> -->
+							<button style="float: right;" class="btn btn-primary" onclick="simpan()" type="button">Simpan
+							</button>
 							<a style="float: right; margin-right: 10px;" type="button" class="btn btn-white" href="http://localhost/plasmaphone/pengaturan/akses-pengguna">Kembali</a>
 						</form>
 					</div>
@@ -384,27 +363,6 @@ $(document).ready(function(){
 		window.location = baseUrl+'/pembelian/rencana-pembelian/rencana-pembelian/edit?id='+context.data('id');
 	})
 
-		// hapus 1 click
-	$(".hapus").click(function(evt){
-		evt.preventDefault(); context = $(this);
-
-		let ask = confirm('Apakah Anda Yakin . ?');
-		if(ask){
-			$('#overlay').fadeIn(300);
-			axios.post(baseUrl+'/master/suplier/suplier/multiple-delete', {
-				data 	: [context.data('id')],
-				_token 	: '{{ csrf_token() }}'
-			})
-			.then((response) => {
-				if(response.data.status == 'berhasil'){
-					location.reload();
-				}
-			}).catch((error) => {
-				console.log(error);
-			})
-		}
-	})
-
 	$('.status').on('change', function(e){
 		var value = $(this).val();
 		var no = $(this).attr('rel');
@@ -450,30 +408,6 @@ $(document).ready(function(){
 		}).catch((error) => {
 			console.log(error);
 		})
-	});
-
-	// view click
-	$(".view").click(function(evt){
-		evt.preventDefault(); context = $(this);
-		axios.get(baseUrl+'/pembelian/request-order/get/'+context.data('id'))
-		.then((response) => {
-			if(response.data == null){
-				context.children('option:selected').attr('disabled', 'disabled');
-				context.val(state);
-				$.toast({
-					text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-					showHideTransition: 'fade',
-					icon: 'error'
-				})
-				$('#form-load-section-status').fadeOut(200);
-			}else{
-				initiate(response.data);
-			}
-		})
-		.catch((err) => {
-			console.log(err);
-		})
-		
 	});
 
 })

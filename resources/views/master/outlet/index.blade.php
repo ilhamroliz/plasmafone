@@ -135,9 +135,9 @@
 		                                <td>{{ $cabang->nama_kota }}</td>
 		                                <td>{{ $cabang->nama_provinsi }}</td>
 		                                <td class="text-center">
-		                                	<button type="button" class="btn btn-xs btn-success btn-circle view" data-toggle="tooltip" data-placement="top" title="View Data" data-id="{{ $cabang->c_id }}"><i class="fa fa-eye fa-fw"></i></button>
-		                                	<button class="btn btn-xs btn-success btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $cabang->c_id }}"><i class="fa fa-pencil fa-fw"></i></button>
-		                                	<button class="btn btn-xs btn-success btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $cabang->c_id }}"><i class="fa fa-eraser fa-fw"></i></button>
+		                                	<button type="button" class="btn btn-xs btn-success btn-circle view" data-toggle="tooltip" data-placement="top" title="View Data" data-id="{{ $cabang->c_id }}"><i class="glyphicon glyphicon-folder-open"></i></button>
+		                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $cabang->c_id }}"><i class="glyphicon glyphicon-edit"></i></button>
+		                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $cabang->c_id }}"><i class="glyphicon glyphicon-trash"></i></button>
 		                                </td>
 									</tr>
 								@endforeach

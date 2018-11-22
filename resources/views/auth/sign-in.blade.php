@@ -116,8 +116,7 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
 						<div class="well no-padding">
-							<form action="{{ route('auth.authenticate') }}" id="login-form" class="smart-form client-form" method="post">
-                    			<input type="hidden" name="_token" value="{{ csrf_token() }}" readonly>
+							<form action="{{ url('auth') }}" id="login-form" class="smart-form client-form" method="post">
 								<header>
 									Sign In
 								</header>
@@ -130,6 +129,7 @@
 											<input type="text" name="username" value="{{ old('username') }}" placeholder="Username" required autofocus>
 											<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Mohon Mengisi Username Dengan Benar</b></label>
 									</section>
+									@csrf
 
 									<section>
 										<label class="label">Password</label>

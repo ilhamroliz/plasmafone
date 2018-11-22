@@ -47,26 +47,6 @@
 
 			<?php $mt = '20px'; ?>
 
-			@if(Session::has('flash_message_success'))
-			<?php $mt = '0px'; ?>
-			<div class="col-md-12" style="margin-top: 20px;">
-				<div class="alert alert-success alert-block">
-					<a class="close" data-dismiss="alert" href="#">×</a>
-					<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-					{{ Session::get('flash_message_success') }} 
-				</div>
-			</div>
-			@elseif(Session::has('flash_message_error'))
-			<?php $mt = '0px'; ?>
-			<div class="col-md-12" style="margin-top: 20px;">
-				<div class="alert alert-danger alert-block">
-					<a class="close" data-dismiss="alert" href="#">×</a>
-					<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
-					{{ Session::get('flash_message_error') }}
-				</div>
-			</div>
-			@endif
-
 			<!-- row -->
 			<div class="row">
 				<div class="col-md-12">
@@ -94,12 +74,12 @@
                                     <td>{{ $data_user->nama }}</td>
                                     <td class="text-center">
                                         <button type="button" 
-                                                class="btn btn-xs btn-success btn-circle edit" 
+                                                class="btn btn-xs btn-warning btn-circle edit" 
                                                 data-toggle="tooltip" 
                                                 data-placement="top"
                                                 data-id="{{ $data_user->m_id }}"
                                                 data-title="Edit Hak Akses">
-                                        <i class="fa fa-key fa-fw"></i>
+                                        <i class="fa fa-wrench"></i>
                                         </button>
                                     </td>
                                 </tr>

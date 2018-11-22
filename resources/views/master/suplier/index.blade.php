@@ -133,8 +133,8 @@
 		                                <td>{{ $supplier->s_phone }}</td>
 		                                <td>{{ $supplier->s_fax }}</td>
 		                                <td class="text-center">
-		                                	<button class="btn btn-xs btn-success btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $supplier->s_id }}"><i class="fa fa-pencil fa-fw"></i></button>
-		                                	<button class="btn btn-xs btn-success btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $supplier->s_id }}"><i class="fa fa-eraser fa-fw"></i></button>
+		                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $supplier->s_id }}"><i class="glyphicon glyphicon-edit"></i></button>
+		                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $supplier->s_id }}"><i class="glyphicon glyphicon-trash"></i></button>
 		                                </td>
 									</tr>
 								@endforeach
