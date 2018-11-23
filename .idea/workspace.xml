@@ -1,106 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/authController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/authController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/inventory/DistribusiController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/inventory/ReceptionController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/classbarang/classbarang_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/gudang/gudang_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/jabatan/jabatan_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/jenisbarang/jenisbarang_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/karyawan/karyawan_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/outlet/outlet_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/posisi/posisi_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/satuanbarang/satuanbarang_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/suplier/suplier_controller.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/ClassBarang.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/JenisBarang.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/SatuanBarang.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/d_gudang.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/d_item.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/d_jabatan.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/d_kota.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/d_posisi.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/d_provinsi.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/karyawan.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/outlet.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/master/suplier.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/pembelian/order.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Model/pengaturan/akses.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/m_member.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/d_mem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/auth.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/auth/sign-in.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/sign-in.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/distribusi/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/distribusi/print.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/receipt_goods/pusat/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/receipt_goods/pusat/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/receipt_goods/pusat/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/receipt_goods/supplier/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/receipt_goods/supplier/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/receipt_goods/supplier/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/classbarang/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/classbarang/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/classbarang/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/gudang/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/gudang/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/gudang/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/item/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/item/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/jabatan/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/jabatan/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/jabatan/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/jenisbarang/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/jenisbarang/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/jenisbarang/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/karyawan/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/karyawan/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/karyawan/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/outlet/edit_outlet.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/outlet/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/outlet/tambah_outlet.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/posisi/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/posisi/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/posisi/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/satuanbarang/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/satuanbarang/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/satuanbarang/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/suplier/edit_suplier.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/suplier/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/master/suplier/tambah_suplier.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/konfirmasi_pembelian/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/konfirmasi_pembelian/newpdf.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/konfirmasi_pembelian/newprint.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/konfirmasi_pembelian/pdf.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/konfirmasi_pembelian/print.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/edit_purchase_order.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/newpdf.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/pdf.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/print_out.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/print_purchase.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/tambah_purchase_order.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/refund/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/refund/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/refund/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/edit_rencana_pembelian.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/view_rencana_pembelian.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/request_order/edit_request_order.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/request_order/tambah_request_order.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/request_order/view_request_order.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/return_barang/add.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/return_barang/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/return_barang/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pengaturan/akses_pengguna/edit.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pengaturan/akses_pengguna/index.blade.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-    </list>
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +15,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
+          <entry key="project.closed" value="2" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.opened" value="2" />
@@ -162,8 +63,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/authController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+            <state relative-caret-position="-21">
+              <caret line="20" column="45" lean-forward="true" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
               </folding>
@@ -360,6 +261,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -384,12 +286,12 @@
       <option name="presentableId" value="Default" />
       <updated>1542867412876</updated>
       <workItem from="1542867414930" duration="2802000" />
-      <workItem from="1542890331148" duration="1285000" />
+      <workItem from="1542890331148" duration="2645000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4087000" />
+    <option name="totallyTimeSpent" value="5447000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
@@ -473,8 +375,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/authController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="16" lean-forward="true" selection-start-line="16" selection-end-line="16" />
+        <state relative-caret-position="-21">
+          <caret line="20" column="45" lean-forward="true" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
           </folding>
