@@ -55,7 +55,10 @@
 					</div>
 					<div class="col-md-6">
 						<div class="profile-image col-md-4">
-							<img source="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png" alt="profile">
+							<img src="{{ asset('template_asset/img/Logo_Plasmafone.png') }}" 
+							class="img-circle circle-border m-b-md"
+							alt="profile"
+							style="width: 100%; heigth: 100%; margin: 20px 0;">
 						</div>
 						<div class="profile-info col-md-8">
 							<div class="">
@@ -65,9 +68,7 @@
 										{{ $data->m_name }}
 									</h2>
 									<h4>
-									@if($data->m_level == 0)
-									{{ "Admin"}}
-									@endif
+									{{ $data->nama }}
 									</h4>
 									<small>
 										@if($data->m_address == null)
@@ -91,7 +92,7 @@
 								</td>
 								<td>
 									@foreach($user as $key => $data)
-									{{ $data->m_comp }}
+									{{ $data->c_name }}
 									
 								</td>
 
@@ -214,6 +215,8 @@
 <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+
+<script src="{{ asset('template_asset/js/waitingfor.js') }}"></script>
 <script type="text/javascript">
 	function handleChange(checkbox) {
 		if (checkbox.checked) {
@@ -240,13 +243,18 @@
         });
         $.ajax({
             url: '{{ url('pengaturan/akses-pengguna/simpan') }}',
-            type: 'post',
+            type: 'get',
             data: $('.form-akses').serialize(),
             success: function(response){
-                if (response.status == 'sukses') {
+				if (response.status == 'sukses') {
                     waitingDialog.hide();
                     location.reload();
                 }
+				else if(response.status == 'gagal') {	
+					alert('Data Gagal di Update');
+					waitingDialog.hide();
+					location.reload();
+				}
             }, error:function(x, e) {
                 waitingDialog.hide();
                 if (x.status == 0) {

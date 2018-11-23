@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Input;
+use Crypt;
 //use App\Model\pengaturan\order as order;
 use DB;
 use Session;
@@ -24,7 +25,9 @@ class PengaturanController extends Controller
     public function edit_akses(Request $request)
     {
         $user = DB::table('d_mem')
-                        ->select('m_comp', 'm_id', 'm_name', 'm_username', 'm_level', 'm_lastlogin', 'm_lastlogout','m_address')
+                        ->join('d_jabatan', 'id', '=', 'm_level')
+                        ->join('m_company', 'c_id', '=', 'm_comp')
+                        ->select('d_mem.*', 'd_jabatan.nama', 'm_company.c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
                         ->where('m_id', $request->id)->get();
 
         if(count($user) == 0){
@@ -40,13 +43,14 @@ class PengaturanController extends Controller
 
     public function simpan(Request $request)
     {
+        //dd($request);
         DB::beginTransaction();
         try {
             $read = $request->read;
             $insert = $request->insert;
             $update = $request->update;
             $delete = $request->delete;
-            $id = $request->id;
+            $id = Crypt::decrypt($request->id);
 
             $akses = DB::table('d_access')
                 ->select('a_id')
@@ -134,7 +138,6 @@ class PengaturanController extends Controller
                         'ma_delete' => 'Y'
                     ]);
             }
-
             DB::commit();
             return response()->json([
                 'status' => 'sukses'

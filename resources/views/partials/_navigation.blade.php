@@ -10,7 +10,6 @@
 				<span>
 					{{ (!is_null(auth()->user()->id_karyawan)) ? auth()->user()->karyawan->m_username.' '.auth()->user()->karyawan->nama_lengkap : auth()->user()->m_username }}
 				</span>
-				<i class="fa fa-angle-down"></i>
 			</a> 
 			
 		</span>

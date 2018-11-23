@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
 
-<title> Plasmaphone | @yield('title') </title>
+<title> Plasmafone | @yield('title') </title>
 <meta name="description" content="">
 <meta name="author" content="">
 	
@@ -9,6 +9,7 @@
 
 <!-- Basic Styles -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap.min.css') }}">
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
 {{-- <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap4.css') }}"> --}}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/plugins/font-awesome_4_7/css/font-awesome.min.css') }}">
