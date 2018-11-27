@@ -10,6 +10,7 @@ use DB;
 use Session;
 use PDF;
 use Auth;
+use DataTable;
 
 class PengaturanController extends Controller
 {
@@ -23,8 +24,27 @@ class PengaturanController extends Controller
         return view('pengaturan.akses_pengguna.index')->with(compact('data_users'));
     }
 
+    public function dataUser()
+    {
+        $user = DB::table('d_mem')
+            ->join('d_jabatan', 'm_level', '=', 'id')
+            ->select('d_mem.*', 'd_jabatan.nama')
+            ->orderBy('m_id')
+            ->get();
+
+        $user = collect($user);
+        return Datatables::of($user)
+            ->addColumn('aksi', function ($user){      
+                return '<div class="">
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-xs" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
+                        </div>';
+            })
+            ->make(true);
+    }
+
     public function edit_akses(Request $request)
     {
+        // $idm = Crypt::decrypt($id);
         $user = DB::table('d_mem')
                         ->join('d_jabatan', 'id', '=', 'm_level')
                         ->join('m_company', 'c_id', '=', 'm_comp')
