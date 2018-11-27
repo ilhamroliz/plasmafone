@@ -33,7 +33,7 @@ class PengaturanController extends Controller
             ->get();
 
         $user = collect($user);
-        return Datatables::of($user)
+        return DataTable::of($user)
             ->addColumn('aksi', function ($user){      
                 return '<div class="">
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-xs" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
