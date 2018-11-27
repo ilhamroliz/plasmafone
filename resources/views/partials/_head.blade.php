@@ -33,8 +33,8 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/your_style.css') }}"> 
 
 <!-- FAVICONS -->
-<link rel="shortcut icon" href="{{ asset('template_asset/img/favicon/favicon.ico') }}" type="image/x-icon">
-<link rel="icon" href="{{ asset('template_asset/img/favicon/favicon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ asset('template_asset/img/favicon/logo_small.png') }}" type="image/x-icon">
+<link rel="icon" href="{{ asset('template_asset/img/logo_small.png') }}" type="image/x-icon">
 
 <!-- GOOGLE FONT -->
 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">

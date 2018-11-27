@@ -9,6 +9,7 @@ use Crypt;
 use DB;
 use Session;
 use PDF;
+use Auth;
 
 class PengaturanController extends Controller
 {
@@ -43,14 +44,13 @@ class PengaturanController extends Controller
 
     public function simpan(Request $request)
     {
-        //dd($request);
         DB::beginTransaction();
         try {
             $read = $request->read;
             $insert = $request->insert;
             $update = $request->update;
             $delete = $request->delete;
-            $id = Crypt::decrypt($request->id);
+            $id = $request->id;
 
             $akses = DB::table('d_access')
                 ->select('a_id')
@@ -71,33 +71,38 @@ class PengaturanController extends Controller
                         'ma_delete' => 'N'
                     ]);
 
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $read)
-                    ->update([
-                        'ma_read' => 'Y'
-                    ]);
-
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $insert)
-                    ->update([
-                        'ma_insert' => 'Y'
-                    ]);
-
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $update)
-                    ->update([
-                        'ma_update' => 'Y'
-                    ]);
-
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $delete)
-                    ->update([
-                        'ma_delete' => 'Y'
-                    ]);
+                if(count($read) > 0){
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $read)
+                        ->update([
+                            'ma_read' => 'Y'
+                        ]);
+                }
+                if (count($insert) > 0) {
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $insert)
+                        ->update([
+                            'ma_insert' => 'Y'
+                        ]);
+                }
+                if (count($update) > 0) {
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $update)
+                        ->update([
+                            'ma_update' => 'Y'
+                        ]);                
+                }
+                if (count($delete) > 0) {
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $delete)
+                        ->update([
+                            'ma_delete' => 'Y'
+                        ]);
+                }
             } else {
                 //== create data
                 $addAkses = [];
@@ -110,44 +115,51 @@ class PengaturanController extends Controller
                 }
                 DB::table('d_mem_access')->insert($addAkses);
 
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $read)
-                    ->update([
-                        'ma_read' => 'Y'
-                    ]);
-
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $insert)
-                    ->update([
-                        'ma_insert' => 'Y'
-                    ]);
-
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $update)
-                    ->update([
-                        'ma_update' => 'Y'
-                    ]);
-
-                DB::table('d_mem_access')
-                    ->where('ma_mem', '=', $id)
-                    ->whereIn('ma_access', $delete)
-                    ->update([
-                        'ma_delete' => 'Y'
-                    ]);
+                if (count($read) > 0) {
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $read)
+                        ->update([
+                            'ma_read' => 'Y'
+                        ]);
+                }
+                if (count($insert) > 0) {
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $insert)
+                        ->update([
+                            'ma_insert' => 'Y'
+                        ]);            
+                }
+                if (count($update) > 0) {
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $update)
+                        ->update([
+                            'ma_update' => 'Y'
+                        ]);
+                }
+                if (count($delete) > 0) {
+                    DB::table('d_mem_access')
+                        ->where('ma_mem', '=', $id)
+                        ->whereIn('ma_access', $delete)
+                        ->update([
+                            'ma_delete' => 'Y'
+                        ]);
+                }
             }
+
             DB::commit();
             return response()->json([
                 'status' => 'sukses'
             ]);
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::commit();
             return response()->json([
                 'status' => 'gagal',
                 'data' => $e
             ]);
         }
+        
     }
 }

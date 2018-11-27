@@ -68,15 +68,10 @@
 										{{ $data->m_name }}
 									</h2>
 									<h4>
-									{{ $data->nama }}
+										{{ $data->nama }}
 									</h4>
 									<small>
-										@if($data->m_address == null)
-										{{ "Surabaya" }}
-										@elseif($data->m_address != null)
 										{{ $data->m_address }}
-										@endif
-
 										@endforeach
 									</small>
 								</div>
@@ -93,9 +88,7 @@
 								<td>
 									@foreach($user as $key => $data)
 									{{ $data->c_name }}
-									
 								</td>
-
 							</tr>
 							<tr>
 								<td>
@@ -120,7 +113,7 @@
 						<small>Username</small>
 						<h2 class="no-margins">{{ $data->m_username }}</h2>
 						<div id="sparkline1"><canvas style="display: inline-block; width: 247px; height: 50px; vertical-align: top;" width="247" height="50"></canvas></div>
-					</div>@endforeach
+					</div>
 				</div>
 				<div class="ibox">
 					<div class="ibox-title">
@@ -128,7 +121,7 @@
 					</div>
 					<div class="ibox-content">
 						<form class="row form-akses" style="padding-right: 18px; padding-left: 18px;" action="{{ action('PengaturanController@simpan') }}">
-							<input type="hidden" name="id" value="eyJpdiI6Ikhpc2pKTHg4Q1BIZk83NW00dTJ2ckE9PSIsInZhbHVlIjoiSUcxT3BXSjRaOW5YODQraG5hWWRXUHNoMWJiQzlpRnB1NFhjOERoOU55RT0iLCJtYWMiOiJiZGI2YTYyYzM0ODM3ODBlYWFjZTRmYTQ5MzMzZWJmNzVmNzUyYzEzMzIyMjU1NjFhMTRiMzcwNzY0ZTJmNGZjIn0=">
+							<input type="hidden" name="id" value="{{ $data->m_id }}">@endforeach
 							<table class="table table-bordered table-striped" id="table-akses">
 								<thead>
 								<tr>
@@ -193,7 +186,7 @@
 							</table>
 							<button style="float: right;" class="btn btn-primary" onclick="simpan()" type="button">Simpan
 							</button>
-							<a style="float: right; margin-right: 10px;" type="button" class="btn btn-white" href="http://localhost/plasmaphone/pengaturan/akses-pengguna">Kembali</a>
+							<a style="float: right; margin-right: 10px;" type="button" class="btn btn-white" href="{{ url('pengaturan/akses-pengguna') }}">Kembali</a>
 						</form>
 					</div>
 				</div>
@@ -250,8 +243,8 @@
                     waitingDialog.hide();
                     location.reload();
                 }
-				else if(response.status == 'gagal') {	
-					alert('Data Gagal di Update');
+				else if(response.status == 'gagal') {
+					alert(response.data);	
 					waitingDialog.hide();
 					location.reload();
 				}
