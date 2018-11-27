@@ -1,7 +1,7 @@
 <div class="page-footer">
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">
-			<span class="txt-color-white">Plasmafone <span class="hidden-xs"></span> © 2018</span>
+			<span class="txt-color-white">Sistem Informasi Plasmafone <span class="hidden-xs"></span> © {{ Carbon\Carbon::now('Asia/Jakarta')->format('Y') }}</span>
 		</div>
 
 		<div class="col-xs-6 col-sm-6 text-right hidden-xs">
