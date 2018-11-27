@@ -236,7 +236,7 @@
         });
         $.ajax({
             url: '{{ url('pengaturan/akses-pengguna/simpan') }}',
-            type: 'get',
+            type: 'post',
             data: $('.form-akses').serialize(),
             success: function(response){
 				if (response.status == 'sukses') {

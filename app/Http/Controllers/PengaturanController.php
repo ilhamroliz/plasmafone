@@ -36,7 +36,7 @@ class PengaturanController extends Controller
         return DataTables::of($user)
             ->addColumn('aksi', function ($user){      
                 return '<div class="text-center">
-                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-xs" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
                         </div>';
             })
             ->rawColumns(['aksi'])

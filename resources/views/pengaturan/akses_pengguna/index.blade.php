@@ -52,41 +52,26 @@
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Pengelolaan Pengguna <span>> User</span></h1>
 				</div>
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
-					<!-- <form id="table-form" method="post" action="{{ url('/pengaturan/akses-pengguna/edit') }}"> -->
-						{!! csrf_field() !!}
-						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-							<thead>			                
-                                <tr>
-                                    <th class="text-center">Nama User</th>
-                                    <th class="text-center">Username</th>
-                                    <th class="text-center">Jabatan</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-							</thead>
-							<!-- <tbody>
-								@foreach($data_users as $key => $data_user)
-                                <tr>
-                                    <td>{{ $data_user->m_id }}</td>
-                                    <td>{{ $data_user->m_name }}</td>
-                                    <td>{{ $data_user->m_username }}</td>
-                                    <td>{{ $data_user->nama }}</td>
-                                    <td class="text-center">
-                                        <button type="button" 
-                                                class="btn btn-xs btn-warning btn-circle edit" 
-                                                data-toggle="tooltip" 
-                                                data-placement="top"
-                                                data-id="{{ $data_user->m_id }}"
-                                                data-title="Edit Hak Akses">
-                                        <i class="fa fa-wrench"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-								@endforeach
-							</tbody> -->
-						</table>
-					<!-- </form> -->
-				</div>
+				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="jarviswidget" role="widget">
+						<header role="heading">
+							<h2><strong>Pengelolaan Pengguna</strong></h2>
+						</header>
+						<div role="content">
+							{!! csrf_field() !!}
+							<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+								<thead>			                
+									<tr>
+										<th class="text-center">Nama User</th>
+										<th class="text-center">Username</th>
+										<th class="text-center">Jabatan</th>
+										<th class="text-center">Aksi</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</article>
 			</div>
 			<!-- end row -->
 		</section>
@@ -127,7 +112,7 @@
 				}
 			});
 			user = $('#dt_basic').DataTable({
-				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+
 				"t"+
 				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
 				"autoWidth" : true,
@@ -149,7 +134,7 @@
 				serverSide: true,
 				"ajax": {
 					"url": "{{ url('pengaturan/akses-pengguna/dataUser') }}",
-					"type": "get",
+					"type": "post",
 				},
 				columns: [
 					{data: 'm_name', name: 'm_name'},
