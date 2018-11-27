@@ -67,22 +67,33 @@
 								</span>
 							</legend>
 
-							<div class="row ">
+							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Kelompok</label>
+										<label class="col-xs-4 col-lg-4 control-label text-left">Nama Barang</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<div class="input-group" id="select_kelompok">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
-												<kelompok :options="data_I_kelompok" @change="i_kelompok_change" v-model="form_data.i_kelompok">
+											<input type="text" class="form-control" name="i_detail" id="i_detail" placeholder="Masukkan Nama Barang" v-model='form_data.i_detail' />
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="col-xs-4 col-lg-4 control-label text-left">Jenis Barang</label>
+										<div class="col-xs-7 col-lg-7 inputGroupContainer">
+											<div class="input-group" id="select_jenis">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_jenis"><i class="fa fa-exchange"></i></span>
+												<jenis :options="data_I_jenis" @change="i_jenis_change" v-model="form_data.i_jenis">
 											      
-											    </kelompok>
+											    </jenis>
 											</div>
 
-											<div class="input-group" id="input_kelompok" style="display: none;">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
+											<div class="input-group" id="input_jenis" style="display: none;">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_jenis"><i class="fa fa-exchange"></i></span>
 
-												<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Jenis Barang">
+												<input type="text" class="form-control" name="i_jenis" v-model="form_data.i_jenis" placeholder="Tambahkan Jenis Barang">
 											</div>
 										</div>
 									</div>
@@ -90,28 +101,19 @@
 
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Kode Barang</label>
+										<label class="col-xs-4 col-lg-4 control-label text-left">Sub Jenis 1</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code"/>
-										</div>
-									</div>
-								</div>
-
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Group</label>
-										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<div class="input-group" id="select_group">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_group"><i class="fa fa-exchange"></i></span>
-												<group :options="data_I_group" @change="i_group_change" v-model="form_data.i_group">
+											<div class="input-group" id="select_sub_jenis_1">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subjenis1"><i class="fa fa-exchange"></i></span>
+												<jenissub :options="data_I_jenissub" :filter="form_data.i_jenis" @change="i_jenissub_change" v-model="form_data.i_jenissub">
 											      
-											    </group>
+											    </jenissub>
 											</div>
 
-											<div class="input-group" id="input_group" style="display: none;">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_group"><i class="fa fa-exchange"></i></span>
+											<div class="input-group" id="input_sub_jenis_1" style="display: none;">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subjenis1"><i class="fa fa-exchange"></i></span>
 
-												<input type="text" class="form-control" name="i_group" v-model="form_data.i_group" placeholder="Tambahkan Group Barang">
+												<input type="text" class="form-control" name="i_jenissub" v-model="form_data.i_jenissub" placeholder="Tambahkan Sub Jenis 1 Barang">
 											</div>
 										</div>
 									</div>
@@ -119,32 +121,49 @@
 
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
-										<div class="col-xs-7 col-lg-7 inputGroupContainer" v-model="form_data.i_isactive" name="i_isactive">
-											<select class="form-control">
-												<option value="Y">Aktif</option>
-												<option value="N">Tidak</option>
-											</select>
-										</div>
-									</div>
-								</div>
-
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Sub Group</label>
+										<label class="col-xs-4 col-lg-4 control-label text-left">Sub Jenis 2</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<div class="input-group" id="select_subgroup">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subgroup"><i class="fa fa-exchange"></i></span>
-												<subgroup :options="data_I_subgroup" @change="i_subgroup_change" v-model="form_data.i_subgroup">
+											<div class="input-group" id="select_sub_jenis_2">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subjenis2"><i class="fa fa-exchange"></i></span>
+												<class :options="data_class" :filter="form_data.i_jenissub" @change="i_class_change" v-model="form_data.i_class">
 											      
-											    </subgroup>
+											    </class>
 											</div>
 
-											<div class="input-group" id="input_subgroup" style="display: none;">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subgroup"><i class="fa fa-exchange"></i></span>
+											<div class="input-group" id="input_sub_jenis_2" style="display: none;">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subjenis2"><i class="fa fa-exchange"></i></span>
 
-												<input type="text" class="form-control" name="i_subgroup" v-model="form_data.i_subgroup" placeholder="Tambahkan Sub Group Barang">
+												<input type="text" class="form-control" name="i_class" v-model="form_data.i_class" placeholder="Tambahkan Sub Jenis 2 Barang">
 											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="col-xs-4 col-lg-4 control-label text-left">Sub Jenis 3</label>
+										<div class="col-xs-7 col-lg-7 inputGroupContainer">
+											<div class="input-group" id="select_sub_jenis_3">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subjenis3"><i class="fa fa-exchange"></i></span>
+												<classsub :options="data_classsub" :filter="form_data.i_class"  @change="i_classsub_change" v-model="form_data.i_classsub">
+											      
+											    </classsub>
+											</div>
+
+											<div class="input-group" id="input_sub_jenis_3" style="display: none;">
+												<span class="input-group-addon" style="cursor: pointer;" @click="switch_subjenis3"><i class="fa fa-exchange"></i></span>
+
+												<input type="text" class="form-control" name="i_classub" v-model="form_data.i_classsub" placeholder="Tambahkan Sub Jenis 3 Barang">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="col-xs-4 col-lg-4 control-label text-left">Satuan Barang</label>
+										<div class="col-xs-7 col-lg-7 inputGroupContainer">
+											<input type="text" class="form-control" name="i_satuan" id="i_satuan" placeholder="Masukkan Satuan Barang" v-model="form_data.i_satuan"/>
 										</div>
 									</div>
 								</div>
@@ -160,26 +179,6 @@
 
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Merk</label>
-										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<div class="input-group" id="select_merk">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_merk"><i class="fa fa-exchange"></i></span>
-												<merk :options="data_I_merk" @change="i_merk_change" v-model="form_data.i_merk">
-											      
-											    </merk>
-											</div>
-
-											<div class="input-group" id="input_merk" style="display: none;">
-												<span class="input-group-addon" style="cursor: pointer;" @click="switch_merk"><i class="fa fa-exchange"></i></span>
-
-												<input type="text" class="form-control" name="i_merk" v-model="form_data.i_merk" placeholder="Tambahkan Merk Barang">
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="col-md-6">
-									<div class="form-group">
 										<label class="col-xs-4 col-lg-4 control-label text-left">Berat Satuan (gram)</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
 											<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' />
@@ -189,16 +188,7 @@
 
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Nama Barang</label>
-										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" v-model='form_data.i_nama' />
-										</div>
-									</div>
-								</div>
-
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Specific Code</label>
+										<label class="col-xs-4 col-lg-4 control-label text-left">Memiliki IMEI</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
 											<select class="form-control" v-model="form_data.i_specificcode" name="i_specificcode">
 												<option value="Y">Ya</option>
@@ -210,11 +200,50 @@
 
 								<div class="col-md-6">
 									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
+										<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
+										<div class="col-xs-7 col-lg-7 inputGroupContainer" v-model="form_data.i_isactive" name="i_isactive">
+											<select class="form-control">
+												<option value="Y">Aktif</option>
+												<option value="N">Tidak</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</fieldset>
+
+						<fieldset style="margin-top: 20px;">
+							<legend>
+								<b>Informasi Harga Barang Di Berbagai Supplier</b>
+
+								<button type="button" class="btn btn-success pull-right" @click="add_supplier"><i class="fa fa-plus"></i></button>
+							</legend>
+
+							<div :class="'row '+'row_'+n" v-for="(n, idx) in supplier_count">
+
+								<div class="col-md-1">
+									<button type="button" class="btn btn-danger btn-xs" @click="remove_supplier(n)" v-if="idx != 0"><i class="fa fa-eraser"></i></button>
+								</div>
+
+								<div class="col-md-5">
+									<div class="form-group">
+										<label class="col-xs-4 col-lg-4 control-label text-left">Supplier</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<!-- <input type="file" class="form-control" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' /> -->
-											<div class="input input-file">
-												<span class="button"><input type="file" id="file" name="i_img" v-model='form_data.i_img' onchange="this.parentNode.nextSibling.value = this.value">Pilih</span><input type="text" placeholder="Masukkan Gambar Barang" readonly="">
+											<select class="form-control" name="id_supplier[]">
+												<option v-for="supplier in data_supplier" :value="supplier.s_id">@{{ supplier.s_name }}</option>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="col-xs-4 col-lg-4 control-label text-left">Harga</label>
+										<div class="col-xs-7 col-lg-7 inputGroupContainer">
+											<div class="input-group">
+												<span class="input-group-addon">Rp.</span>
+												<input type="number" class="form-control" name="harga_supplier[]" placeholder="Harga Di Supplier Ini" />
 											</div>
 										</div>
 									</div>
@@ -260,7 +289,6 @@
 @section('extra_script')
 	
 	<!-- PAGE RELATED PLUGIN(S) -->
-	<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script type="text/x-template" id="select2-template">
 	  <select style="width:100%" name="i_jenis" required>
@@ -370,7 +398,7 @@
 				});
 			}
 
-			Vue.component('kelompok', {
+			Vue.component('jenis', {
 			  props: ['options'],
 			  template: '#select2-template',
 			  mounted: function () {
@@ -394,11 +422,11 @@
 			  }
 			})
 
-			Vue.component('group', {
-			  props: ['options'],
-			  template: '#select2-template',
+			Vue.component('jenissub', {
+			  props: ['options', 'filter'],
+			  template: '#select2-template-jenissub',
 			  mounted: function () {
-			    var vm = this
+			    var vm = this;
 			    $(this.$el).select2().on('change', function () {
 			        vm.$emit('change', this.value)
 			    })
@@ -407,6 +435,9 @@
 			    value: function (value) {
 			      // update value
 			      $(this.$el).val(value);
+			    },
+			    filter: function(){
+			    	$(this.$el).val('').select2()
 			    },
 			    options: function (options) {
 			      // update options
@@ -418,11 +449,11 @@
 			  }
 			})
 
-			Vue.component('subgroup', {
-			  props: ['options'],
-			  template: '#select2-template',
+			Vue.component('class', {
+			  props: ['options', 'filter'],
+			  template: '#select2-template-class',
 			  mounted: function () {
-			    var vm = this
+			    var vm = this;
 			    $(this.$el).select2().on('change', function () {
 			        vm.$emit('change', this.value)
 			    })
@@ -431,6 +462,9 @@
 			    value: function (value) {
 			      // update value
 			      $(this.$el).val(value);
+			    },
+			    filter: function(){
+			    	$(this.$el).val('').select2()
 			    },
 			    options: function (options) {
 			      // update options
@@ -442,11 +476,11 @@
 			  }
 			})
 
-			Vue.component('merk', {
-			  props: ['options'],
-			  template: '#select2-template',
+			Vue.component('classsub', {
+			  props: ['options', 'filter'],
+			  template: '#select2-template-classsub',
 			  mounted: function () {
-			    var vm = this
+			    var vm = this;
 			    $(this.$el).select2().on('change', function () {
 			        vm.$emit('change', this.value)
 			    })
@@ -455,6 +489,9 @@
 			    value: function (value) {
 			      // update value
 			      $(this.$el).val(value);
+			    },
+			    filter: function(){
+			    	$(this.$el).val('').select2()
 			    },
 			    options: function (options) {
 			      // update options
@@ -470,10 +507,7 @@
 			var app = new Vue({
 				el 		: '#content',
 				data 	: {
-					kelompok : 'select',
-					group : 'select',
-					subgroup : 'select',
-					merk : 'select',
+
 					jenis : 'select',
 					subjenis1: 'select',
 					subjenis2: 'select',
@@ -481,19 +515,19 @@
 					btn_save_disabled 	: false,
 					supplier_count: 1,
 
-					data_I_kelompok: [],
-					data_I_group: [],
-					data_I_subgroup: [],
-					data_I_merk: [],
+					data_I_jenis: [],
+					data_I_jenissub: [],
+					data_class: [],
+					data_classsub: [],
 					data_supplier: [],
 
 					// jenissub : 'okee',
 
 					form_data : {
-						i_kelompok: '',
-						i_group: '',
-						i_subgroup: '',
-						i_merk: '',
+						i_jenis: '',
+						i_jenissub: '',
+						i_class: '',
+						i_classsub: '',
 						i_detail: '',
 						i_satuan: '',
 						i_minstock: '',
@@ -515,14 +549,14 @@
 					axios.get(baseUrl+'/master/barang/get/form-resource')
 							.then(response => {
 								// console.log(response.data);
-								this.data_I_kelompok = response.data.kelompok;
-								// this.data_I_jenis = response.data.jenis;
-								// this.data_I_jenissub = response.data.subjenis;
-								// this.data_class = response.data.class;
-								// this.data_classsub = response.data.classsub;
-								// this.data_supplier = response.data.suplier;
 
-								// console.log(this.data_classsub);
+								this.data_I_jenis = response.data.jenis;
+								this.data_I_jenissub = response.data.subjenis;
+								this.data_class = response.data.class;
+								this.data_classsub = response.data.classsub;
+								this.data_supplier = response.data.suplier;
+
+								console.log(this.data_classsub);
 								$("#overlay").fadeOut(200);
 							})
 				},
@@ -576,80 +610,74 @@
 						}
 					},
 
-					switch_kelompok: function(){
-						if(this.kelompok == 'select'){
-							this.kelompok = 'input';
-							$('#select_kelompok').hide();
-							$("#input_kelompok").show();
+					switch_jenis: function(){
+						if(this.jenis == 'select'){
+							this.jenis = 'input';
+							$('#select_jenis').hide();
+							$("#input_jenis").show();
 						}else{
-							this.kelompok = 'select';
-							$('#input_kelompok').hide();
-							$("#select_kelompok").show();
+							this.jenis = 'select';
+							$('#input_jenis').hide();
+							$("#select_jenis").show();
 						}
 					},
 
-					switch_group: function(){
-						if(this.group == 'select'){
-							this.group = 'input';
-							$('#select_group').hide();
-							$("#input_group").show();
+					switch_subjenis1: function(){
+						if(this.subjenis1 == 'select'){
+							this.subjenis1 = 'input';
+							$('#select_sub_jenis_1').hide();
+							$("#input_sub_jenis_1").show();
 						}else{
-							this.group = 'select';
-							$('#input_group').hide();
-							$("#select_group").show();
+							this.subjenis1 = 'select';
+							$('#input_sub_jenis_1').hide();
+							$("#select_sub_jenis_1").show();
 						}
 					},
 
-					switch_subgroup: function(){
-						if(this.subgroup == 'select'){
-							this.subgroup = 'input';
-							$('#select_subgroup').hide();
-							$("#input_subgroup").show();
+					switch_subjenis2: function(){
+						if(this.subjenis2 == 'select'){
+							this.subjenis2 = 'input';
+							$('#select_sub_jenis_2').hide();
+							$("#input_sub_jenis_2").show();
 						}else{
-							this.subgroup = 'select';
-							$('#input_subgroup').hide();
-							$("#select_subgroup").show();
+							this.subjenis2 = 'select';
+							$('#input_sub_jenis_2').hide();
+							$("#select_sub_jenis_2").show();
 						}
 					},
 
-					switch_merk: function(){
-						if(this.merk == 'select'){
-							this.merk = 'input';
-							$('#select_merk').hide();
-							$("#input_merk").show();
+					switch_subjenis3: function(){
+						if(this.subjenis3 == 'select'){
+							this.subjenis3 = 'input';
+							$('#select_sub_jenis_3').hide();
+							$("#input_sub_jenis_3").show();
 						}else{
-							this.merk = 'select';
-							$('#input_merk').hide();
-							$("#select_merk").show();
+							this.subjenis3 = 'select';
+							$('#input_sub_jenis_3').hide();
+							$("#select_sub_jenis_3").show();
 						}
 					},
 
-					i_kelompok_change: function(v){
-						this.form_data.i_kelompok = v;
-						this.form_data.i_group = '';
-						this.form_data.i_subgroup = '';
-						this.form_data.i_merk = '';
+					i_jenis_change: function(v){
+						this.form_data.i_jenis = v;
+						this.form_data.i_jenissub = '';
+						this.form_data.i_class = '';
+						this.form_data.i_classsub = '';
 					},
 
-					i_group_change: function(v){
-						this.form_data.i_kelompok = '';
-						this.form_data.i_group = v;
-						this.form_data.i_subgroup = '';
-						this.form_data.i_merk = '';
+					i_jenissub_change: function(v){
+						this.form_data.i_jenissub = v;
+						this.form_data.i_class = '';
+						this.form_data.i_classsub = '';
 					},
 
-					i_subgroup_change: function(v){
-						this.form_data.i_kelompok = '';
-						this.form_data.i_group = '';
-						this.form_data.i_subgroup = v;
-						this.form_data.i_merk = '';
+					i_class_change: function(v){
+						this.form_data.i_class = v;
+						this.form_data.i_classsub = '';
 					},
 
-					i_merk_change: function(v){
-						this.form_data.i_kelompok = '';
-						this.form_data.i_group = '';
-						this.form_data.i_subgroup = '';
-						this.form_data.i_merk = v;
+					i_classsub_change: function(v){
+						this.form_data.i_classsub = v;
 					},
 
 					add_supplier: function(){

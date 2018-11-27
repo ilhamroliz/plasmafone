@@ -46,10 +46,10 @@
 	<div id="content">
 
 		<div class="row">
-			<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<ul class="menu-table hide-on-small">
 					<li class="active">
-						<a href="#">
+						<a href="{{ url('/master/barang') }}">
 							<i class="fa fa-table"></i> &nbsp;Data Table</li>
 						</a>
 					<li>
@@ -72,24 +72,6 @@
 					<li class="right"><i class="fa fa-bars"></i></li>
 				</ul>
 			</div>
-
-			<div class="col-xs-12 col-sm-5 col-md-5 col-lg-5">
-				<ul id="sparks" class="">
-					<li class="sparks-info">
-						<h5> My Income <span class="txt-color-blue">$47,171</span></h5>
-						<div class="sparkline txt-color-blue hidden-mobile hidden-md hidden-sm">
-							1300, 1877, 2500, 2577, 2000, 2100, 3000, 2700, 3631, 2471, 2700, 3631, 2471
-						</div>
-					</li>
-					<li class="sparks-info">
-						<h5> Site Traffic <span class="txt-color-purple"><i class="fa fa-arrow-circle-up" data-rel="bootstrap-tooltip" title="Increased"></i>&nbsp;45%</span></h5>
-						<div class="sparkline txt-color-purple hidden-mobile hidden-md hidden-sm">
-							110,150,300,130,400,240,220,310,220,300, 270, 210
-						</div>
-					</li>
-				</ul>
-			</div>
-
 		</div>
 
 		<!-- widget grid -->
@@ -120,63 +102,168 @@
 			<!-- row -->
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
+					
 					<form id="table-form" method="post" action="{{ url('/master/karyawan/edit-multiple') }}">
 						{!! csrf_field() !!}
-						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-							<thead>			                
-								<tr>
-									<th class="text-center" data-hide="phone" width="4%">*</th>
-									<th class="text-center" width="5%" style="vertical-align: middle;">
-										---
-									</th>
-									<th data-class="expand" width="10%"><i class="fa fa-fw fa-address-book text-muted hidden-md hidden-sm hidden-xs"></i> 
-										&nbsp;NIK
-									</th>
-									<th data-class="expand" width="15%"><i class="fa fa-fw fa-address-book text-muted hidden-md hidden-sm hidden-xs"></i> 
-										&nbsp;Nama Karyawan
-									</th>
-									<th data-hide="phone" width="15%"><i class="fa fa-fw fa-code-fork text-muted hidden-md hidden-sm hidden-xs"></i> 
-										&nbsp;Jabatan
-									</th>
-									<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-										&nbsp;Alamat
-									</th>
-									<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-										&nbsp;Nomor Telp
-									</th>
-									<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-flag txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-										&nbsp;Warga Negara
-									</th>
-									<th class="text-center" data-hide="phone,tablet" width="15%"> 
-										Aksi
-									</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($data as $key => $datanya)
-									<tr>
-										<td class="text-center">{{ $key+1 }}</td>
-										<td class="text-center">
-											<input type="checkbox" class="check-me" name="data_check[]" data-id="{{$datanya->id_karyawan}}" value="{{ $datanya->id_karyawan }}"/>
-										</td>
-										<td>{{ $datanya->nik_karyawan }}</td>
-		                                <td>{{ $datanya->nama_lengkap }}</td>
-		                                <td>{{ $datanya->jabatan->nama.' '.$datanya->posisi->nama_posisi }}</td>
-		                                <td>
-		                                	<span data-toggle="tooltip" data-placement="top" title="{{ $datanya->kota->nama_kota }}, {{ $datanya->kota->provinsi->nama_provinsi }}">
-		                                		{{ $datanya->alamat_rumah }}
-		                                	</span>
-		                                </td>
-		                                <td>{{ $datanya->nomor_telp }}</td>
-		                                <td>{{ $datanya->kewarganegaraan }}</td>
-		                                <td class="text-center">
-		                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $datanya->id_karyawan }}"><i class="glyphicon glyphicon-edit"></i></button>
-		                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $datanya->id_karyawan }}"><i class="glyphicon glyphicon-trash"></i></button>
-		                                </td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
+
+						<div id="tabs">
+							<ul>
+								<li>
+									<a href="#tabs-a">Aktif</a>
+								</li>
+								<li>
+									<a href="#tabs-b">Semua</a>
+								</li>
+								<li>
+									<a href="#tabs-c">Non Aktif</a>
+								</li>
+							</ul>
+							<div id="tabs-a">
+								<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+									<thead>			                
+										<tr>
+											<th class="text-center" data-hide="phone" width="4%">*</th>
+											<th class="text-center" width="5%" style="vertical-align: middle;">
+												---
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Merk
+											</th>
+											<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Nama
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Kode
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Berat
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-picture-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Gambar
+											</th>
+											<th class="text-center" data-hide="phone,tablet" width="15%"> 
+												Aksi
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="text-center"></td>
+											<td class="text-center">
+												<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
+											</td>
+			                                <td></td>
+			                                <td></td>
+			                                 <td></td>
+			                                <td></td>
+			                                <td></td>
+			                                <td class="text-center">
+			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
+			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
+			                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id=""><i class="glyphicon glyphicon-trash"></i></button>
+			                                </td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div id="tabs-b">
+								<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
+									<thead>			                
+										<tr>
+											<th class="text-center" data-hide="phone" width="4%">*</th>
+											<th class="text-center" width="5%" style="vertical-align: middle;">
+												---
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Merk
+											</th>
+											<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Nama
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Kode
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Berat
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-picture-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Gambar
+											</th>
+											<th class="text-center" data-hide="phone,tablet" width="15%"> 
+												Aksi
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="text-center"></td>
+											<td class="text-center">
+												<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
+											</td>
+			                                <td></td>
+			                                <td></td>
+			                                 <td></td>
+			                                <td></td>
+			                                <td></td>
+			                                <td class="text-center">
+			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
+			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
+			                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id=""><i class="glyphicon glyphicon-trash"></i></button>
+			                                </td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div id="tabs-c">
+								<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
+									<thead>			                
+										<tr>
+											<th class="text-center" data-hide="phone" width="4%">*</th>
+											<th class="text-center" width="5%" style="vertical-align: middle;">
+												---
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Merk
+											</th>
+											<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Nama
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Kode
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Berat
+											</th>
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-picture-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+												&nbsp;Gambar
+											</th>
+											<th class="text-center" data-hide="phone,tablet" width="15%"> 
+												Aksi
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td class="text-center"></td>
+											<td class="text-center">
+												<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
+											</td>
+			                                <td></td>
+			                                <td></td>
+			                                 <td></td>
+			                                <td></td>
+			                                <td></td>
+			                                <td class="text-center">
+			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
+			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
+			                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id=""><i class="glyphicon glyphicon-trash"></i></button>
+			                                </td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
 					</form>
 				</div>
 			</div>
@@ -209,7 +296,7 @@
 
 		<script type="text/javascript">
 			$(document).ready(function(){
-
+				$('#tabs').tabs();
 				let selected = [];
 
 				/* BASIC ;*/
@@ -223,7 +310,7 @@
 						phone : 480
 					};
 		
-					$('#dt_basic').dataTable({
+					$('#dt_active').dataTable({
 						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
 							"t"+
 							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
@@ -231,7 +318,45 @@
 						"preDrawCallback" : function() {
 							// Initialize the responsive datatables helper once.
 							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+							}
+						},
+						"rowCallback" : function(nRow) {
+							responsiveHelper_dt_basic.createExpandIcon(nRow);
+						},
+						"drawCallback" : function(oSettings) {
+							responsiveHelper_dt_basic.respond();
+						}
+					});
+
+					$('#dt_all').dataTable({
+						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
+							"t"+
+							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+						"autoWidth" : true,
+						"preDrawCallback" : function() {
+							// Initialize the responsive datatables helper once.
+							if (!responsiveHelper_dt_basic) {
+								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+							}
+						},
+						"rowCallback" : function(nRow) {
+							responsiveHelper_dt_basic.createExpandIcon(nRow);
+						},
+						"drawCallback" : function(oSettings) {
+							responsiveHelper_dt_basic.respond();
+						}
+					});
+
+					$('#dt_inactive').dataTable({
+						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
+							"t"+
+							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+						"autoWidth" : true,
+						"preDrawCallback" : function() {
+							// Initialize the responsive datatables helper once.
+							if (!responsiveHelper_dt_basic) {
+								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
 							}
 						},
 						"rowCallback" : function(nRow) {
