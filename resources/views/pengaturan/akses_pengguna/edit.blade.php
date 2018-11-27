@@ -50,8 +50,8 @@
 			<!-- row -->
 			<div class="wrapper wrapper-content animated fadeInRight">
 				<div class="row m-b-lg m-t-lg">
-					<div class="col-md-12">
-						<h1>AKSES PENGGUNA</h1>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Pengelolaan Pengguna <span>> Hak Akses</span></h1>
 					</div>
 					<div class="col-md-6">
 						<div class="profile-image col-md-4">

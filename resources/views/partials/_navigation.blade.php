@@ -20,7 +20,7 @@
 	<nav>
 		<ul>
 			<li class="{{ Request::is('dashboard') ? 'active' : '' }}">
-				<a href="index.html" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+				<a href="{{ url('dashboard') }}" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
 			</li>
 			<li class="{{ Request::is('master/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-asterisk"></i> <span class="menu-item-parent">Data Master</span></a>

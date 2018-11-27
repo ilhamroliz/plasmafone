@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Input;
-use Crypt;
+use Illuminate\Support\Facades\Crypt;
 //use App\Model\pengaturan\order as order;
 use DB;
 use Session;
@@ -35,7 +35,7 @@ class PengaturanController extends Controller
             return view('errors.data_not_found');
         }
 
-        $id = $request->id;
+        $id = Crypt::encrypt($request->id);
 
         $akses = DB::select("select * from d_access left join d_mem_access on a_id = ma_access and ma_mem = '".$request->id."' order by a_order");
 
@@ -50,7 +50,7 @@ class PengaturanController extends Controller
             $insert = $request->insert;
             $update = $request->update;
             $delete = $request->delete;
-            $id = $request->id;
+            $id = Crypt::decrypt($request->id);
 
             $akses = DB::table('d_access')
                 ->select('a_id')

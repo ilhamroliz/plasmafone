@@ -49,8 +49,8 @@
 
 			<!-- row -->
 			<div class="row">
-				<div class="col-md-12">
-					<h1>AKSES PENGGUNA</h1>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Pengelolaan Pengguna <span>> User</span></h1>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
 					<form id="table-form" method="post" action="{{ url('/pengaturan/akses-pengguna/edit') }}">
@@ -58,11 +58,11 @@
 						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 							<thead>			                
                                 <tr>
-                                    <td class="text-center">ID User</td>
-                                    <td class="text-center">Nama User</td>
-                                    <td class="text-center">Username</td>
-                                    <td class="text-center">Jabatan</td>
-                                    <td class="text-center">Aksi</td>
+                                    <th class="text-center">ID User</th>
+                                    <th class="text-center">Nama User</th>
+                                    <th class="text-center">Username</th>
+                                    <th class="text-center">Jabatan</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
 							</thead>
 							<tbody>
