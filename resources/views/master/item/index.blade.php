@@ -77,14 +77,14 @@
 		<div class="row hidden-mobile">
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				<h1 class="page-title txt-color-blueDark">
-					<i class="fa-fw fa fa-puzzle-piece"></i> 
+					<i class="fa-fw fa fa-asterisk"></i> 
 					Master <span>>
 					Barang </span></h1>
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 				<div class="page-title">
-					<a href="{{ url('/master/barang/add') }}" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+					<a href="{{ url('/master/barang/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
 				</div>
 			</div>
 		</div>
@@ -121,147 +121,195 @@
 					<form id="table-form" method="post" action="{{ url('/master/karyawan/edit-multiple') }}">
 						{!! csrf_field() !!}
 
-						<div id="tabs">
-							<ul>
-								<li>
-									<a href="#tabs-a">Aktif</a>
-								</li>
-								<li>
-									<a href="#tabs-b">Semua</a>
-								</li>
-								<li>
-									<a href="#tabs-c">Non Aktif</a>
-								</li>
-							</ul>
-							<div id="tabs-a">
-								<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
-									<thead>			                
-										<tr>
-											<th class="text-center" data-hide="phone" width="4%">*</th>
-											<th class="text-center" width="5%" style="vertical-align: middle;">
-												---
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Merk
-											</th>
-											<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Nama
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Kode
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Berat
-											</th>
-											<th class="text-center" data-hide="phone,tablet" width="15%"> 
-												Aksi
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td class="text-center"></td>
-											<td class="text-center">
-												<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-											</td>
-			                                <td></td>
-			                                <td></td>
-			                                <td></td>
-			                                <td></td>
-			                                <td class="text-center">
-			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
-			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-			                                </td>
-										</tr>
-									</tbody>
-								</table>
+						<div class="jarviswidget" id="wid-id-11" data-widget-colorbutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false">
+
+							<header>
+								<span class="widget-icon"> <i class="fa fa-asterisk"></i> </span>
+								<h2>Data Master Barang </h2>
+							</header>
+							<header>
+								
+								<ul id="widget-tab-1" class="nav nav-tabs pull-left">
+
+									<li class="active">
+
+										<a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-arrow-circle-o-down"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
+
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-arrow-circle-o-up"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
+									</li>
+
+									<li>
+										<a data-toggle="tab" href="#hr3"> <i class="fa fa-lg fa-arrow-circle-o-up"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
+									</li>
+
+								</ul>	
+								
+							</header>
+
+							<!-- widget div-->
+							<div>
+								
+								<!-- widget content -->
+								<div class="widget-body no-padding">
+
+									<!-- widget body text-->
+									
+									<div class="tab-content padding-10">
+										<div class="tab-pane fade in active" id="hr1">
+											
+											<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+												<thead>			                
+													<tr>
+														<th class="text-center" data-hide="phone" width="4%">*</th>
+														<th class="text-center" width="5%" style="vertical-align: middle;">
+															---
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Merk
+														</th>
+														<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Nama
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Kode
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Berat
+														</th>
+														<th class="text-center" data-hide="phone,tablet" width="15%"> 
+															Aksi
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td class="text-center"></td>
+														<td class="text-center">
+															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
+														</td>
+											            <td></td>
+											            <td></td>
+											            <td></td>
+											            <td></td>
+											            <td class="text-center">
+											            	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
+											            	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
+											            </td>
+													</tr>
+												</tbody>
+											</table>
+											
+										</div>
+										<div class="tab-pane fade" id="hr2">
+											
+											<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
+												<thead>			                
+													<tr>
+														<th class="text-center" data-hide="phone" width="4%">*</th>
+														<th class="text-center" width="5%" style="vertical-align: middle;">
+															---
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Merk
+														</th>
+														<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Nama
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Kode
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Berat
+														</th>
+														<th class="text-center" data-hide="phone,tablet" width="15%"> 
+															Aksi
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td class="text-center"></td>
+														<td class="text-center">
+															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
+														</td>
+						                                <td></td>
+						                                <td></td>
+						                                <td></td>
+						                                <td></td>
+						                                <td class="text-center">
+						                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
+						                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
+						                                </td>
+													</tr>
+												</tbody>
+											</table>
+
+										</div>
+										<div class="tab-pane fade" id="hr3">
+											
+											<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
+												<thead>			                
+													<tr>
+														<th class="text-center" data-hide="phone" width="4%">*</th>
+														<th class="text-center" width="5%" style="vertical-align: middle;">
+															---
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Merk
+														</th>
+														<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Nama
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Kode
+														</th>
+														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+															&nbsp;Berat
+														</th>
+														<th class="text-center" data-hide="phone,tablet" width="15%"> 
+															Aksi
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td class="text-center"></td>
+														<td class="text-center">
+															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
+														</td>
+						                                <td></td>
+						                                <td></td>
+						                                <td></td>
+						                                <td></td>
+						                                <td class="text-center">
+						                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
+						                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
+						                                </td>
+													</tr>
+												</tbody>
+											</table>
+																						
+										</div>
+									</div>
+									
+									<!-- end widget body text-->
+									
+									<!-- widget footer -->
+									<div class="widget-footer text-right">
+										
+										
+									</div>
+									<!-- end widget footer -->
+									
+								</div>
+								<!-- end widget content -->
+								
 							</div>
-							<div id="tabs-b">
-								<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
-									<thead>			                
-										<tr>
-											<th class="text-center" data-hide="phone" width="4%">*</th>
-											<th class="text-center" width="5%" style="vertical-align: middle;">
-												---
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Merk
-											</th>
-											<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Nama
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Kode
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Berat
-											</th>
-											<th class="text-center" data-hide="phone,tablet" width="15%"> 
-												Aksi
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td class="text-center"></td>
-											<td class="text-center">
-												<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-											</td>
-			                                <td></td>
-			                                <td></td>
-			                                <td></td>
-			                                <td></td>
-			                                <td class="text-center">
-			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
-			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-			                                </td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<div id="tabs-c">
-								<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
-									<thead>			                
-										<tr>
-											<th class="text-center" data-hide="phone" width="4%">*</th>
-											<th class="text-center" width="5%" style="vertical-align: middle;">
-												---
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Merk
-											</th>
-											<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Nama
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Kode
-											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Berat
-											</th>
-											<th class="text-center" data-hide="phone,tablet" width="15%"> 
-												Aksi
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td class="text-center"></td>
-											<td class="text-center">
-												<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-											</td>
-			                                <td></td>
-			                                <td></td>
-			                                <td></td>
-			                                <td></td>
-			                                <td class="text-center">
-			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
-			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-			                                </td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
+							<!-- end widget div -->
+								
 						</div>
 						
 					</form>

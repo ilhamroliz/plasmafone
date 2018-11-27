@@ -219,9 +219,15 @@
 									</div>
 								</div>
 
+							</div>
+
+							<div class="row">
 								<div class="col-md-6">
-									<div id="preview" class="preview thumbnail" style="width: 100%; height: 150px; line-height: 150px;">
+									<div id="preview" style="margin-bottom: 0;" class="preview thumbnail">
 										Preview Image
+									</div>
+									<div style="top: 0; display: none" id="delete_preview">
+										<a onclick="delete_image()" style="width: 100%;" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Hapus</a>
 									</div>
 								</div>
 							</div>
@@ -298,19 +304,17 @@
 	<script type="text/javascript">
 		var loadFile = function(event) {
 			$("#preview").html("");
-			
-			$("#preview").append("<img id='img_prev' style='z-index:1000;' src='"+URL.createObjectURL(event.target.files[0])+"'>");
-			$("#preview").append('<div class="transparant"><button type="button" id="delete_preview" class="btn btn-danger btn-circle" style="display: block; margin: 0px auto; text-align: center; z-index: 2000;"><i class="glyphicon glyphicon-remove"></i></button></div>');
-		    
+			$("#preview").append("<img id='img_prev' src='"+URL.createObjectURL(event.target.files[0])+"'>");
+			$("#delete_preview").show();
 		};
 
-		$(document).ready(function () {
-		    $('#preview').mouseover(function() {
-		    	$('.transparant').show();
-		    }).mouseout(function(){
-		    	$('.transparant').hide();
-		    })
-		});
+		function delete_image(){
+			$('#i_img').val('');
+			$("#preview img:last-child").remove();
+			$('#delete_preview').hide();
+			$("#preview").html("Preview Image");
+
+		}
 	</script>
 
 		<script type="text/javascript">

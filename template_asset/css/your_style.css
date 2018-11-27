@@ -19,7 +19,7 @@
  */
 
 .preview {
-  margin-right: 10px;
+  /*margin-right: 10px;*/
   text-align: center;
 }
 .thumbnail {
@@ -33,36 +33,9 @@
   margin-bottom: 5px;
   vertical-align: middle;
   text-align: center;
-  width: 100%;
-  height: 150px;
+  max-height: 190px;
   padding: 10px 0px 0px 10px;
 }
-
-#img_prev {
-  height: 100%;
-}
-
-/*.preview:hover,.thumbnail:hover > img{
-  background-color:rgba(0, 0, 0, 0.5);
-  opacity: 0.5;
-}*/
-
-.preview:hover,.thumbnail:hover > button {
-   display: block;
-}
-
-.transparant {
-  width: 100%;
-  height: 100%;
-  padding-top: 70px;
-  text-align: center;
-  background-color:rgba(0, 0, 0, 0.5);
-  opacity: 0.5;
-  z-index: 3000;
-  display: none;
-}
-
-/*================================================*/
 
 #overlay {
     position: fixed;
