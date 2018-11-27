@@ -123,7 +123,7 @@
 										<div class="col-xs-7 col-lg-7 inputGroupContainer" v-model="form_data.i_isactive" name="i_isactive">
 											<select class="form-control">
 												<option value="Y">Aktif</option>
-												<option value="N">Tidak</option>
+												<option value="N">Non Aktif</option>
 											</select>
 										</div>
 									</div>

@@ -65,12 +65,27 @@
 					</li>
 					<li>
 						<a href="#" id="multiple_delete">
-							<i class="fa fa-eraser"></i> &nbsp;Hapus Data
+							<i class="fa fa-ban"></i> &nbsp;Non Aktifkan
 						</a>
 					</li>
 
 					<li class="right"><i class="fa fa-bars"></i></li>
 				</ul>
+			</div>
+		</div>
+
+		<div class="row hidden-mobile">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<h1 class="page-title txt-color-blueDark">
+					<i class="fa-fw fa fa-puzzle-piece"></i> 
+					Master <span>>
+					Barang </span></h1>
+			</div>
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+				<div class="page-title">
+					<a href="{{ url('/master/barang/add') }}" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+				</div>
 			</div>
 		</div>
 
@@ -138,9 +153,6 @@
 											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 												&nbsp;Berat
 											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-picture-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Gambar
-											</th>
 											<th class="text-center" data-hide="phone,tablet" width="15%"> 
 												Aksi
 											</th>
@@ -154,13 +166,11 @@
 											</td>
 			                                <td></td>
 			                                <td></td>
-			                                 <td></td>
 			                                <td></td>
 			                                <td></td>
 			                                <td class="text-center">
 			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
 			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-			                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id=""><i class="glyphicon glyphicon-trash"></i></button>
 			                                </td>
 										</tr>
 									</tbody>
@@ -186,9 +196,6 @@
 											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 												&nbsp;Berat
 											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-picture-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Gambar
-											</th>
 											<th class="text-center" data-hide="phone,tablet" width="15%"> 
 												Aksi
 											</th>
@@ -202,13 +209,11 @@
 											</td>
 			                                <td></td>
 			                                <td></td>
-			                                 <td></td>
 			                                <td></td>
 			                                <td></td>
 			                                <td class="text-center">
 			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
 			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-			                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id=""><i class="glyphicon glyphicon-trash"></i></button>
 			                                </td>
 										</tr>
 									</tbody>
@@ -234,9 +239,6 @@
 											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 												&nbsp;Berat
 											</th>
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-picture-o txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-												&nbsp;Gambar
-											</th>
 											<th class="text-center" data-hide="phone,tablet" width="15%"> 
 												Aksi
 											</th>
@@ -250,13 +252,11 @@
 											</td>
 			                                <td></td>
 			                                <td></td>
-			                                 <td></td>
 			                                <td></td>
 			                                <td></td>
 			                                <td class="text-center">
 			                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
 			                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-			                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id=""><i class="glyphicon glyphicon-trash"></i></button>
 			                                </td>
 										</tr>
 									</tbody>
