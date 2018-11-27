@@ -190,7 +190,7 @@
 									<!-- <a style="margin-right: 10px;" type="button" class="btn btn-white" href="{{ url('pengaturan/akses-pengguna') }}">Kembali</a> -->
 								</li>
 								<li>
-									<button class="btn btn-primary" onclick="simpan()" id="submit-akses" type="button">
+									<button class="btn btn-primary" id="submit-akses" type="button">
 										<i class="fa fa-save"></i> Simpan
 									</button>
 								</li>
@@ -221,6 +221,7 @@
 
 <!-- CUSTOM NOTIFICATION -->
 <script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
 
 <script src="{{ asset('template_asset/js/waitingfor.js') }}"></script>
 <script type="text/javascript">
@@ -240,45 +241,45 @@
 		}
 	}
 
-	function simpan(){
-        waitingDialog.show();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: '{{ url('pengaturan/akses-pengguna/simpan') }}',
-            type: 'post',
-            data: $('.form-akses').serialize(),
-            success: function(response){
-				if (response.status == 'sukses') {
-                    waitingDialog.hide();
-                    location.reload();
-                }
-				else if(response.status == 'gagal') {
-					alert('Data Gagal Di Update');	
-					waitingDialog.hide();
-					location.reload();
-				}
-            }, error:function(x, e) {
-                waitingDialog.hide();
-                if (x.status == 0) {
-                    alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-                } else if (x.status == 404) {
-                    alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-                } else if (x.status == 500) {
-                    alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-                } else if (e == 'parsererror') {
-                    alert('Error.\nParsing JSON Request failed.');
-                } else if (e == 'timeout'){
-                    alert('Request Time out. Harap coba lagi nanti');
-                } else {
-                    alert('Unknow Error.\n' + x.responseText);
-                }
-            }
-        })
-    }
+	// function simpan(){
+    //     waitingDialog.show();
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //     });
+    //     $.ajax({
+    //         url: '{{ url('pengaturan/akses-pengguna/simpan') }}',
+    //         type: 'post',
+    //         data: $('.form-akses').serialize(),
+    //         success: function(response){
+	// 			if (response.status == 'sukses') {
+    //                 waitingDialog.hide();
+    //                 location.reload();
+    //             }
+	// 			else if(response.status == 'gagal') {
+	// 				alert('Data Gagal Di Update');	
+	// 				waitingDialog.hide();
+	// 				location.reload();
+	// 			}
+    //         }, error:function(x, e) {
+    //             waitingDialog.hide();
+    //             if (x.status == 0) {
+    //                 alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+    //             } else if (x.status == 404) {
+    //                 alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+    //             } else if (x.status == 500) {
+    //                 alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+    //             } else if (e == 'parsererror') {
+    //                 alert('Error.\nParsing JSON Request failed.');
+    //             } else if (e == 'timeout'){
+    //                 alert('Request Time out. Harap coba lagi nanti');
+    //             } else {
+    //                 alert('Unknow Error.\n' + x.responseText);
+    //             }
+    //         }
+    //     })
+    // }
 </script>
 
 <script type="text/javascript">
@@ -338,7 +339,7 @@ $(document).ready(function(){
 
 			axios.post(baseUrl+'/pengaturan/akses-pengguna/simpan', $('#form-akses').serialize())
 				.then((response) => {
-					if(response.data.status == 'berhasil'){
+					if(response.status == 'sukses'){
 						$('#submit-akses').click(function(){
 							$.smallBox({
 								title : "SUKSES",
@@ -348,7 +349,7 @@ $(document).ready(function(){
 								timeout : 5000
 							});
 						})
-					}else if(response.data.status == 'gagal'){
+					}else if(response.status == 'gagal'){
 						$('#submit-akses').click(function(){
 							$.smallBox({
 								title : "GAGAL",
@@ -361,6 +362,16 @@ $(document).ready(function(){
 					}
 			})
 		}
+	})
+
+	$('#submit-akses').click(function(){
+		$.smallBox({
+			title : "SUKSES",
+			content : "Data Akses Berhasil Diperbarui",
+			color : "#739E73",
+			iconSmall : "fa fa-check animated",
+			timeout : 5000
+		});
 	})
 
 })
