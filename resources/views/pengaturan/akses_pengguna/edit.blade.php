@@ -51,7 +51,7 @@
 			<div class="wrapper wrapper-content animated fadeInRight">
 				<div class="row m-b-lg m-t-lg">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Pengelolaan Pengguna <span>> Hak Akses</span></h1>
+						<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-cog"></i> Pengelolaan Pengguna <span>> Hak Akses</span></h1>
 					</div>
 					<div class="col-md-6">
 						<div class="profile-image col-md-4">
@@ -120,7 +120,7 @@
 						<h5>Akses Pengguna</h5>
 					</div>
 					<div class="ibox-content">
-						<form class="row form-akses" style="padding-right: 18px; padding-left: 18px;" action="{{ action('PengaturanController@simpan') }}">
+						<form class="row form-akses" id="form-akses" style="padding-right: 18px; padding-left: 18px;" action="{{ action('PengaturanController@simpan') }}">
 							<input type="hidden" name="id" value="{{ $id }}">
 							<table class="table table-bordered table-striped" id="table-akses">
 								<thead>
@@ -184,9 +184,19 @@
 								@endforeach							
 								</tbody>
 							</table>
-							<button style="float: right;" class="btn btn-primary" onclick="simpan()" type="button"><i class="fa fa-save"></i> Simpan
-							</button>
-							<a style="float: right; margin-right: 10px;" type="button" class="btn btn-white" href="{{ url('pengaturan/akses-pengguna') }}">Kembali</a>
+							<ul class="demo-btns pull-right" >
+								<li>
+									<button type="button" class="btn btn-default"> <a href="{{ url('pengaturan/akses-pengguna') }}">Kembali</a></button>
+									<!-- <a style="margin-right: 10px;" type="button" class="btn btn-white" href="{{ url('pengaturan/akses-pengguna') }}">Kembali</a> -->
+								</li>
+								<li>
+									<button class="btn btn-primary" onclick="simpan()" id="submit-akses" type="button">
+										<i class="fa fa-save"></i> Simpan
+									</button>
+								</li>
+							</ul>
+							
+							
 						</form>
 					</div>
 				</div>
@@ -208,6 +218,9 @@
 <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+
+<!-- CUSTOM NOTIFICATION -->
+<script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
 
 <script src="{{ asset('template_asset/js/waitingfor.js') }}"></script>
 <script type="text/javascript">
@@ -315,13 +328,39 @@ $(document).ready(function(){
 		// console.log(selected);
 	})
 
-	// edit 1 click
+	$('#form-akses').submit(function(){
+		evt.preventDefault();
 
-	$(".edit").click(function(evt){
-		evt.preventDefault(); 
-		context = $(this);
+		if($(this).data('bootstrapValidator').validate().isValid()){
+			let btn = $('#submit-akses');
+			btn.attr('disabled', 'disabled');
+			btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...')
 
-		window.location = baseUrl+'/pembelian/rencana-pembelian/rencana-pembelian/edit?id='+context.data('id');
+			axios.post(baseUrl+'/pengaturan/akses-pengguna/simpan', $('#form-akses').serialize())
+				.then((response) => {
+					if(response.data.status == 'berhasil'){
+						$('#submit-akses').click(function(){
+							$.smallBox({
+								title : "SUKSES",
+								content : "Data Akses Berhasil Diperbarui",
+								color : "#739E73",
+								iconSmall : "fa fa-check animated",
+								timeout : 5000
+							});
+						})
+					}else if(response.data.status == 'gagal'){
+						$('#submit-akses').click(function(){
+							$.smallBox({
+								title : "GAGAL",
+								content : "Data Akses Gagal Diperbarui",
+								color : "#C46A69",
+								iconSmall : "fa fa-times animated",
+								timeout : 5000
+							});
+						})
+					}
+			})
+		}
 	})
 
 })
