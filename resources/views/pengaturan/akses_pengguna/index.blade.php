@@ -58,7 +58,6 @@
 						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 							<thead>			                
                                 <tr>
-                                    <th class="text-center">ID User</th>
                                     <th class="text-center">Nama User</th>
                                     <th class="text-center">Username</th>
                                     <th class="text-center">Jabatan</th>
@@ -128,41 +127,38 @@
 				}
 			});
 			user = $('#dt_basic').DataTable({
-				// "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-				// "t"+
-				// "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-				// "autoWidth" : true,
-				// "preDrawCallback" : function() {
-				// 	// Initialize the responsive datatables helper once.
-				// 	if (!responsiveHelper_dt_basic) {
-				// 		responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-				// 	}
-				// },
-				// "rowCallback" : function(nRow) {
-				// 	responsiveHelper_dt_basic.createExpandIcon(nRow);
-				// },
-				// "drawCallback" : function(oSettings) {
-				// 	responsiveHelper_dt_basic.respond();
-				// },
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
+				"t"+
+				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+				"autoWidth" : true,
+				"preDrawCallback" : function() {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_dt_basic) {
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+					}
+				},
+				"rowCallback" : function(nRow) {
+					responsiveHelper_dt_basic.createExpandIcon(nRow);
+				},
+				"drawCallback" : function(oSettings) {
+					responsiveHelper_dt_basic.respond();
+				},
 
 				processing: true,
 				searching: true,
-				paging: false,
-				ordering: false,
 				serverSide: true,
 				"ajax": {
 					"url": "{{ url('pengaturan/akses-pengguna/dataUser') }}",
-					"type": "get"
+					"type": "get",
 				},
 				columns: [
-					{data: 'm_id', name: 'm_id'},
 					{data: 'm_name', name: 'm_name'},
 					{data: 'm_username', name: 'm_username'},
 					{data: 'nama', name: 'nama'},
 					{data: 'aksi', name: 'aksi'}
 				],
 				responsive: false,
-				// "language": dataTableLanguage,
+				//"language": dataTableLanguage,
 			});
 		}, 500);
 	});
@@ -174,40 +170,6 @@
 
 <script type="text/javascript">
 $(document).ready(function(){
-
-	// let selected = [];
-
-	// /* BASIC ;*/
-	// var responsiveHelper_dt_basic = undefined;
-	// var responsiveHelper_datatable_fixed_column = undefined;
-	// var responsiveHelper_datatable_col_reorder = undefined;
-	// var responsiveHelper_datatable_tabletools = undefined;
-
-	// var breakpointDefinition = {
-	// 	tablet : 1024,
-	// 	phone : 480
-	// };
-
-	// $('#dt_basic').dataTable({
-	// 	"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-	// 	"t"+
-	// 	"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-	// 	"autoWidth" : true,
-	// 	"preDrawCallback" : function() {
-	// 		// Initialize the responsive datatables helper once.
-	// 		if (!responsiveHelper_dt_basic) {
-	// 			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-	// 		}
-	// 	},
-	// 	"rowCallback" : function(nRow) {
-	// 		responsiveHelper_dt_basic.createExpandIcon(nRow);
-	// 	},
-	// 	"drawCallback" : function(oSettings) {
-	// 		responsiveHelper_dt_basic.respond();
-	// 	}
-	// });
-
-	/* END BASIC */
 
 	$('.check-me').change(function(evt){
 		evt.preventDefault(); context = $(this);
