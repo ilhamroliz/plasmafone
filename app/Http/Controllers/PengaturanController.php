@@ -10,7 +10,7 @@ use DB;
 use Session;
 use PDF;
 use Auth;
-use DataTable;
+use Yajra\DataTables\DataTables;
 
 class PengaturanController extends Controller
 {
