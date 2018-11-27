@@ -212,11 +212,16 @@
 									<div class="form-group">
 										<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<!-- <input type="file" class="form-control" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' /> -->
-											<div class="input input-file">
-												<span class="button"><input type="file" id="file" name="i_img" v-model='form_data.i_img' onchange="this.parentNode.nextSibling.value = this.value">Pilih</span><input type="text" placeholder="Masukkan Gambar Barang" readonly="">
+											<div class="form-control" style="padding: 0; align-items: center; align-self: center; cursor: pointer;">
+												<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' onchange="loadFile(event)" />
 											</div>
 										</div>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div id="preview" class="preview thumbnail" style="width: 100%; height: 150px; line-height: 150px;">
+										Preview Image
 									</div>
 								</div>
 							</div>
@@ -226,7 +231,7 @@
 						<div class="form-actions">
 							<div class="row">
 								<div class="col-md-12">
-									<button class="btn btn-default" type="button" @click="submit_form" :disabled="btn_save_disabled">
+									<button class="btn btn-primary" type="button" @click="submit_form" :disabled="btn_save_disabled">
 										<i class="fa fa-floppy-o"></i>
 										&nbsp;Simpan
 									</button>
@@ -288,6 +293,24 @@
 	  	<option value="">-- Pilih Jenis Barang</option>
 	    <option v-for="option in options" :value="option.i_classsub" v-if="option.i_class == filter">@{{ option.i_classsub }}</option>
 	  </select>
+	</script>
+
+	<script type="text/javascript">
+		var loadFile = function(event) {
+			$("#preview").html("");
+			
+			$("#preview").append("<img id='img_prev' style='z-index:1000;' src='"+URL.createObjectURL(event.target.files[0])+"'>");
+			$("#preview").append('<div class="transparant"><button type="button" id="delete_preview" class="btn btn-danger btn-circle" style="display: block; margin: 0px auto; text-align: center; z-index: 2000;"><i class="glyphicon glyphicon-remove"></i></button></div>');
+		    
+		};
+
+		$(document).ready(function () {
+		    $('#preview').mouseover(function() {
+		    	$('.transparant').show();
+		    }).mouseout(function(){
+		    	$('.transparant').hide();
+		    })
+		});
 	</script>
 
 		<script type="text/javascript">
