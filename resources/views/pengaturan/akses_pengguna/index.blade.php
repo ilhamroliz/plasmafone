@@ -53,7 +53,7 @@
 					<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Pengelolaan Pengguna <span>> User</span></h1>
 				</div>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
-					<form id="table-form" method="post" action="{{ url('/pengaturan/akses-pengguna/edit') }}">
+					<!-- <form id="table-form" method="post" action="{{ url('/pengaturan/akses-pengguna/edit') }}"> -->
 						{!! csrf_field() !!}
 						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 							<thead>			                
@@ -65,7 +65,7 @@
                                     <th class="text-center">Aksi</th>
                                 </tr>
 							</thead>
-							<tbody>
+							<!-- <tbody>
 								@foreach($data_users as $key => $data_user)
                                 <tr>
                                     <td>{{ $data_user->m_id }}</td>
@@ -84,14 +84,12 @@
                                     </td>
                                 </tr>
 								@endforeach
-							</tbody>
+							</tbody> -->
 						</table>
-					</form>
+					<!-- </form> -->
 				</div>
 			</div>
 			<!-- end row -->
-
-
 		</section>
 		<!-- end widget grid -->
 
@@ -109,8 +107,6 @@
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 <script type="text/javascript">
-$(document).ready(function(){
-
 	let selected = [];
 
 	/* BASIC ;*/
@@ -123,25 +119,93 @@ $(document).ready(function(){
 		tablet : 1024,
 		phone : 480
 	};
+  	var user;
+	$(document).ready(function(){
+		setTimeout(function () {
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+			user = $('#dt_basic').DataTable({
+				// "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
+				// "t"+
+				// "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+				// "autoWidth" : true,
+				// "preDrawCallback" : function() {
+				// 	// Initialize the responsive datatables helper once.
+				// 	if (!responsiveHelper_dt_basic) {
+				// 		responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+				// 	}
+				// },
+				// "rowCallback" : function(nRow) {
+				// 	responsiveHelper_dt_basic.createExpandIcon(nRow);
+				// },
+				// "drawCallback" : function(oSettings) {
+				// 	responsiveHelper_dt_basic.respond();
+				// },
 
-	$('#dt_basic').dataTable({
-		"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-		"t"+
-		"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-		"autoWidth" : true,
-		"preDrawCallback" : function() {
-			// Initialize the responsive datatables helper once.
-			if (!responsiveHelper_dt_basic) {
-				responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-			}
-		},
-		"rowCallback" : function(nRow) {
-			responsiveHelper_dt_basic.createExpandIcon(nRow);
-		},
-		"drawCallback" : function(oSettings) {
-			responsiveHelper_dt_basic.respond();
-		}
+				processing: true,
+				searching: true,
+				paging: false,
+				ordering: false,
+				serverSide: true,
+				"ajax": {
+					"url": "{{ url('pengaturan/akses-pengguna/dataUser') }}",
+					"type": "get"
+				},
+				columns: [
+					{data: 'm_id', name: 'm_id'},
+					{data: 'm_name', name: 'm_name'},
+					{data: 'm_username', name: 'm_username'},
+					{data: 'nama', name: 'nama'},
+					{data: 'aksi', name: 'aksi'}
+				],
+				responsive: false,
+				// "language": dataTableLanguage,
+			});
+		}, 500);
 	});
+
+  function akses(id){
+    location.href = ('{{ url('pengaturan/akses-pengguna/edit') }}/' + id);
+  }
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	// let selected = [];
+
+	// /* BASIC ;*/
+	// var responsiveHelper_dt_basic = undefined;
+	// var responsiveHelper_datatable_fixed_column = undefined;
+	// var responsiveHelper_datatable_col_reorder = undefined;
+	// var responsiveHelper_datatable_tabletools = undefined;
+
+	// var breakpointDefinition = {
+	// 	tablet : 1024,
+	// 	phone : 480
+	// };
+
+	// $('#dt_basic').dataTable({
+	// 	"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
+	// 	"t"+
+	// 	"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+	// 	"autoWidth" : true,
+	// 	"preDrawCallback" : function() {
+	// 		// Initialize the responsive datatables helper once.
+	// 		if (!responsiveHelper_dt_basic) {
+	// 			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+	// 		}
+	// 	},
+	// 	"rowCallback" : function(nRow) {
+	// 		responsiveHelper_dt_basic.createExpandIcon(nRow);
+	// 	},
+	// 	"drawCallback" : function(oSettings) {
+	// 		responsiveHelper_dt_basic.respond();
+	// 	}
+	// });
 
 	/* END BASIC */
 
@@ -155,46 +219,6 @@ $(document).ready(function(){
 		// console.log(selected);
 	})
 
-	// Hapus Click
-
-	$("#multiple_delete").click(function(evt){
-		evt.preventDefault();
-
-		if(selected.length == 0){
-			alert('Tidak Ada Data Yang Anda Pilih')
-		}
-		else{
-			let ask = confirm(selected.length+' Data Akan Dihapus Apakah Anda Yakin . ?');
-			if(ask){
-				$('#overlay').fadeIn(300);
-				axios.post(baseUrl+'/master/suplier/suplier/multiple-delete', {
-					data 	: selected,
-					_token 	: '{{ csrf_token() }}'
-				})
-				.then((response) => {
-					if(response.data.status == 'berhasil'){
-						location.reload();
-					}
-				}).catch((error) => {
-					console.log(error);
-				})
-			}
-		}
-
-	})
-
-	// Edit Click
-
-	$("#multiple_edit").click(function(evt){
-		evt.preventDefault();
-
-		if(selected.length == 0){
-			alert('Tidak Ada Data Yang Anda Pilih')
-		}else{
-			$("#table-form").submit();
-		}
-	})
-
 	// edit 1 click
 
 	$(".edit").click(function(evt){
@@ -203,115 +227,6 @@ $(document).ready(function(){
 		window.location = baseUrl+'/pengaturan/akses-pengguna/edit?id='+context.data('id');
 	})
 
-		// hapus 1 click
-	$(".hapus").click(function(evt){
-		evt.preventDefault(); context = $(this);
-
-		let ask = confirm('Apakah Anda Yakin . ?');
-		if(ask){
-			$('#overlay').fadeIn(300);
-			axios.post(baseUrl+'/master/suplier/suplier/multiple-delete', {
-				data 	: [context.data('id')],
-				_token 	: '{{ csrf_token() }}'
-			})
-			.then((response) => {
-				if(response.data.status == 'berhasil'){
-					location.reload();
-				}
-			}).catch((error) => {
-				console.log(error);
-			})
-		}
-	})
-
-	$('.status').on('change', function(e){
-		var value = $(this).val();
-		var no = $(this).attr('rel');
-		var rdt_req = $(this).attr('rel1');
-		// window.location = baseUrl+'/pembelian/rencana-pembelian/request-order-status?status='+value+'&&rdt_no='+no;
-		$('#overlay').fadeIn(300);
-		axios.post(baseUrl+'/pembelian/rencana-pembelian/request-order-status', {
-			status 	: value,
-			rdt_no 	: no,
-			rdt_request : rdt_req,
-			_token 	: '{{ csrf_token() }}'
-		})
-		.then((response) => {
-			if(response.data.status == 'rencana pembelian'){
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Rencana Pembelian".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			} else if (response.data.status == 'ditunda') {
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Ditunda".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			} else if (response.data.status == 'dibatalkan') {
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Dibatalkan".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			} else if (response.data.status == 'pending') {
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Pending".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			}
-		}).catch((error) => {
-			console.log(error);
-		})
-	});
-
-	// view click
-	$(".view").click(function(evt){
-		evt.preventDefault(); context = $(this);
-		axios.get(baseUrl+'/pembelian/request-order/get/'+context.data('id'))
-		.then((response) => {
-			if(response.data == null){
-				context.children('option:selected').attr('disabled', 'disabled');
-				context.val(state);
-				$.toast({
-					text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-					showHideTransition: 'fade',
-					icon: 'error'
-				})
-				$('#form-load-section-status').fadeOut(200);
-			}else{
-				initiate(response.data);
-			}
-		})
-		.catch((err) => {
-			console.log(err);
-		})
-		
-	});
-
-	function initiate(data){
-		$('#ro_no').val(data.ro_no);
-		$('#ro_cabang').val(data.c_nama);
-		$('#rdt_no').val(data.rdt_no);
-		$('#kode_barang').val(data.rdt_kode_barang);
-		$('#kuantitas').val(data.rdt_kuantitas);
-		$('#kuantitas_approv').val(data.rdt_kuantitas_approv);
-		$('#status').val(data.rdt_status);
-		var supp;
-		if (data.rdt_supplier == "0") {
-			supp = "Belum Ada";
-		}else{
-			supp = data.s_name;
-		}
-		$('#supplier').val(supp);
-		$('#myModal').modal('show');
-	}
 })
 </script>
 
