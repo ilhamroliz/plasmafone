@@ -33,37 +33,40 @@ class PengaturanController extends Controller
             ->get();
 
         $user = collect($user);
-        return Datatables::of($user)
+        return DataTables::of($user)
             ->addColumn('aksi', function ($user){      
-                return '<div class="">
-                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-xs" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
+                return '<div class="text-center">
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
                         </div>';
             })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
 
-    public function edit_akses(Request $request)
+    public function edit_akses($id)
     {
-        // $idm = Crypt::decrypt($id);
+        $idm = Crypt::decrypt($id);
         $user = DB::table('d_mem')
                         ->join('d_jabatan', 'id', '=', 'm_level')
                         ->join('m_company', 'c_id', '=', 'm_comp')
                         ->select('d_mem.*', 'd_jabatan.nama', 'm_company.c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
-                        ->where('m_id', $request->id)->get();
+                        ->where('m_id', $idm)->get();
 
         if(count($user) == 0){
             return view('errors.data_not_found');
         }
 
-        $id = Crypt::encrypt($request->id);
+        $id = Crypt::encrypt($idm);
 
-        $akses = DB::select("select * from d_access left join d_mem_access on a_id = ma_access and ma_mem = '".$request->id."' order by a_order");
+        $akses = DB::select("select * from d_access left join d_mem_access on a_id = ma_access and ma_mem = '".$idm."' order by a_order");
 
         return view('pengaturan.akses_pengguna.edit')->with(compact('user', 'akses', 'id'));
     }
 
     public function simpan(Request $request)
     {
+
+        // dd($id);
         DB::beginTransaction();
         try {
             $read = $request->read;

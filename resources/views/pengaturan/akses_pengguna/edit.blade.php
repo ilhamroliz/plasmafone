@@ -113,7 +113,7 @@
 						<small>Username</small>
 						<h2 class="no-margins">{{ $data->m_username }}</h2>
 						<div id="sparkline1"><canvas style="display: inline-block; width: 247px; height: 50px; vertical-align: top;" width="247" height="50"></canvas></div>
-					</div>
+					</div>@endforeach
 				</div>
 				<div class="ibox">
 					<div class="ibox-title">
@@ -121,7 +121,7 @@
 					</div>
 					<div class="ibox-content">
 						<form class="row form-akses" style="padding-right: 18px; padding-left: 18px;" action="{{ action('PengaturanController@simpan') }}">
-							<input type="hidden" name="id" value="{{ $data->m_id }}">@endforeach
+							<input type="hidden" name="id" value="{{ $id }}">
 							<table class="table table-bordered table-striped" id="table-akses">
 								<thead>
 								<tr>
@@ -236,7 +236,7 @@
         });
         $.ajax({
             url: '{{ url('pengaturan/akses-pengguna/simpan') }}',
-            type: 'get',
+            type: 'post',
             data: $('.form-akses').serialize(),
             success: function(response){
 				if (response.status == 'sukses') {
@@ -244,7 +244,7 @@
                     location.reload();
                 }
 				else if(response.status == 'gagal') {
-					alert(response.data);	
+					alert('Data Gagal Di Update');	
 					waitingDialog.hide();
 					location.reload();
 				}
@@ -323,53 +323,6 @@ $(document).ready(function(){
 
 		window.location = baseUrl+'/pembelian/rencana-pembelian/rencana-pembelian/edit?id='+context.data('id');
 	})
-
-	$('.status').on('change', function(e){
-		var value = $(this).val();
-		var no = $(this).attr('rel');
-		var rdt_req = $(this).attr('rel1');
-		// window.location = baseUrl+'/pembelian/rencana-pembelian/request-order-status?status='+value+'&&rdt_no='+no;
-		$('#overlay').fadeIn(300);
-		axios.post(baseUrl+'/pembelian/rencana-pembelian/request-order-status', {
-			status 	: value,
-			rdt_no 	: no,
-			rdt_request : rdt_req,
-			_token 	: '{{ csrf_token() }}'
-		})
-		.then((response) => {
-			if(response.data.status == 'rencana pembelian'){
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Rencana Pembelian".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			} else if (response.data.status == 'ditunda') {
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Ditunda".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			} else if (response.data.status == 'dibatalkan') {
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Dibatalkan".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			} else if (response.data.status == 'pending') {
-				$.toast({
-					text: 'Status untuk Request Detail "'+no+'" berhasil diubah ke "Pending".',
-					showHideTransition: 'fade',
-					icon: 'success'
-				});
-				location.reload();
-			}
-		}).catch((error) => {
-			console.log(error);
-		})
-	});
 
 })
 </script>
