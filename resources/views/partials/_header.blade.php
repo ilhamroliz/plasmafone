@@ -54,25 +54,24 @@
 	<div class="project-context hidden-xs">
 
 		<span class="label">
-			{{ Auth::user()->m_name }}
+			{{ App\Http\Controllers\PlasmafoneController::getHari() }}
 		</span>
-		<span class="project-selector dropdown-toggle" data-toggle="dropdown">
-			{{ Auth::user()->m_username }}
-			<i class="fa fa-angle-down"></i></span>
+		<span class="project-selector">
+			{{ App\Http\Controllers\PlasmafoneController::getTanggal() }} </span>
 
 		<!-- Suggestion: populate this list with fetch and push technique -->
-		<ul class="dropdown-menu">
+		{{-- <ul class="dropdown-menu">
 			<li>
 				<a href="#">Lihat Informasi Profil Anda</a>
 			</li>
-			{{-- <li>
+			<li>
 				<a href="#">Notes on pipeline upgradee</a>
-			</li> --}}
+			</li>
 			<li class="divider"></li>
 			<li>
 				<a href="{{ route('auth.logout') }}" class="padding-10 padding-top-5 padding-bottom-5" data-action="userLogout"><i class="fa fa-power-off"></i> &nbsp;Log Out</a>
 			</li>
-		</ul>
+		</ul> --}}
 		<!-- end dropdown-menu-->
 
 	</div>
