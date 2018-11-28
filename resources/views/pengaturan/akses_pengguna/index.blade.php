@@ -49,29 +49,68 @@
 
 			<!-- row -->
 			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Pengelolaan Pengguna <span>> User</span></h1>
-				</div>
+				
+				<!-- NEW WIDGET START -->
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<div class="jarviswidget" role="widget">
-						<header role="heading">
-							<h2><strong>Pengelolaan Pengguna</strong></h2>
+					<!-- Widget ID (each widget will need unique ID)-->
+					<div class="jarviswidget" id="wid-id-0" 
+						data-widget-colorbutton="false" 
+						data-widget-deletebutton="false" 
+						data-widget-editbutton="false"
+						data-widget-custombutton="false"
+						data-widget-sortable="false">
+						<!-- widget options:
+							usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+							
+							data-widget-colorbutton="false"	
+							data-widget-editbutton="false"
+							data-widget-togglebutton="false"
+							data-widget-deletebutton="false"
+							data-widget-fullscreenbutton="false"
+							data-widget-custombutton="false"
+							data-widget-collapsed="true" 
+							data-widget-sortable="false"
+							
+						-->
+						<header>
+							<h2><strong>Pengelolaan Pengguna</strong></h2>											
 						</header>
-						<div role="content">
-							{!! csrf_field() !!}
-							<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-								<thead>			                
-									<tr>
-										<th class="text-center">Nama User</th>
-										<th class="text-center">Username</th>
-										<th class="text-center">Jabatan</th>
-										<th class="text-center">Aksi</th>
-									</tr>
-								</thead>
-							</table>
+
+						<!-- widget div-->
+						<div>
+							
+							<!-- widget edit box -->
+							<div class="jarviswidget-editbox">
+								<!-- This area used as dropdown edit box -->
+								<input class="form-control" type="text">
+								<span class="note"><i class="fa fa-check text-success"></i> Change title to update and save instantly!</span>
+								
+							</div>
+							<!-- end widget edit box -->
+							
+							<!-- widget content -->
+							<div class="widget-body">
+								{!! csrf_field() !!}
+								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+									<thead>			                
+										<tr>
+											<th class="text-center">Nama User</th>
+											<th class="text-center">Username</th>
+											<th class="text-center">Jabatan</th>
+											<th class="text-center">Aksi</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+							<!-- end widget content -->
+							
 						</div>
+						<!-- end widget div -->
+						
 					</div>
+					<!-- end widget -->
 				</article>
+
 			</div>
 			<!-- end row -->
 		</section>
