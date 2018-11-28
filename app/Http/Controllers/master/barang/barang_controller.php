@@ -21,24 +21,24 @@ class barang_controller extends Controller
     }
 
     public function get_form_resources(){
-        $kelompok = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->get();
-    	// $jenis = DB::table('d_item')->distinct('i_jenis')->select('i_jenis')->get();
-    	// $subjenis = DB::table('d_item')->distinct('i_jenissub')->whereNotNull('i_jenissub')->select('i_jenis', 'i_jenissub')->get();
-    	// $class = DB::table('d_item')->distinct('i_class')->whereNotNull('i_class')->select('i_jenissub', 'i_class')->get();
-    	// $classsub = DB::table('d_item')->distinct('i_classsub')->whereNotNull('i_classsub')->select('i_class', 'i_classsub')->get();
-     //    $supplier = DB::table('d_supplier')->select('s_id', 's_name')->orderBy('s_name', 'asc')->get();
+        $kelompok       = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->get();
+        $group          = DB::table('d_item')->distinct('i_group')->select('i_group')->get();
+        $subgroup       = DB::table('d_item')->distinct('i_sub_group')->select('i_sub_group')->get();
+        $merk           = DB::table('d_item')->distinct('i_merk')->select('i_merk')->get();
 
     	return response()->json([
-            'kelompok' => $kelompok
-    		// 'jenis' 	=> $jenis,
-    		// 'subjenis'	=> $subjenis,
-    		// 'class'		=> $class,
-    		// 'classsub'	=> $classsub,
-      //       'suplier'   => $supplier,
+            'kelompok'  => $kelompok,
+            'group'     => $group,
+            'subgroup'  => $subgroup,
+            'merk'      => $merk
     	]);
     }
 
     public function insert(Request $request){
         return json_encode($request->all());
+    }
+
+    public function edit(){
+        return view('master.item.edit');
     }
 }

@@ -20,7 +20,7 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Tambah Data Barang</li>
+			<li>Home</li><li>Master</li><li>Edit Data Barang</li>
 		</ol>
 		<!-- end breadcrumb -->
 
@@ -46,7 +46,7 @@
 					<!-- Widget ID (each widget will need unique ID)-->
 					<div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 						<header>
-							<h2><strong>Master</strong> &gt; <i>Tambah Data Barang</i></h2>				
+							<h2><strong>Master</strong> &gt; <i>Edit Data Barang</i></h2>				
 							
 						</header>
 
@@ -60,7 +60,7 @@
 									{{ csrf_field() }}
 									<fieldset>
 										<legend>
-											Form Tambah Data Barang
+											Form Edit Data Barang
 
 											<span class="pull-right" style="font-size: 0.6em; font-weight: 600">
 												<a href="{{ url('/master/barang') }}">
@@ -84,7 +84,7 @@
 														<div class="input-group" id="input_kelompok" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Jenis Barang">
+															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Kelompok Barang">
 														</div>
 													</div>
 												</div>
@@ -232,6 +232,11 @@
 													<a onclick="delete_image()" style="width: 100%;" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Hapus</a>
 												</div>
 											</div>
+											<div class="col-md-6">
+												<div id="current_img" style="margin-bottom: 0;" class="preview thumbnail">
+													<img src="{{ asset('img/item/coba.jpg') }}">
+												</div>
+											</div>
 										</div>
 
 									</fieldset>
@@ -283,28 +288,28 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
-	<script type="text/x-template" id="select2-template-kelompok">
-	  <select style="width:100%" name="i_kelompok" required>
-	  	<option value="">-- Pilih Kelompok Barang</option>
-	    <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option>
+	<script type="text/x-template" id="select2-template">
+	  <select style="width:100%" name="i_jenis" required>
+	  	<option value="">-- Pilih Jenis Barang</option>
+	    <option v-for="option in options" :value="option.i_jenis">@{{ option.i_jenis }}</option>
 	  </select>
 	</script>
 
-	<script type="text/x-template" id="select2-template-group">
-	  <select style="width:100%" name="i_group">
-	  	<option value="">-- Pilih Group Barang</option>
-	    <option v-for="option in options" :value="option.i_group">@{{ option.i_group }}</option>
+	<script type="text/x-template" id="select2-template-jenissub">
+	  <select style="width:100%" name="i_jenissub">
+	  	<option value="">-- Pilih Jenis Barang</option>
+	    <option v-for="option in options" :value="option.i_jenissub" v-if="option.i_jenis == filter">@{{ option.i_jenissub }}</option>
 	  </select>
 	</script>
 
-	<script type="text/x-template" id="select2-template-subgroup">
-	  <select style="width:100%" name="i_subgroup">
-	  	<option value="">-- Pilih Sub Group Barang</option>
-	    <option v-for="option in options" :value="option.i_subgroup">@{{ option.i_subgroup }}</option>
+	<script type="text/x-template" id="select2-template-class">
+	  <select style="width:100%" name="i_class">
+	  	<option value="">-- Pilih Jenis Barang</option>
+	    <option v-for="option in options" :value="option.i_class" v-if="option.i_jenissub == filter">@{{ option.i_class }}</option>
 	  </select>
 	</script>
 
-	<script type="text/x-template" id="select2-template-merk">
+	<script type="text/x-template" id="select2-template-classsub">
 	  <select style="width:100%" name="i_classub">
 	  	<option value="">-- Pilih Jenis Barang</option>
 	    <option v-for="option in options" :value="option.i_classsub" v-if="option.i_class == filter">@{{ option.i_classsub }}</option>
@@ -339,39 +344,7 @@
 						validating : 'glyphicon glyphicon-refresh'
 					},
 					fields : {
-						i_kelompok : {
-							validators : {
-								notEmpty : {
-									message : 'Kelompok Barang Tidak Boleh Kosong',
-								}
-							}
-						},
-
-						i_group : {
-							validators : {
-								notEmpty : {
-									message : 'Group Barang Tidak Boleh Kosong',
-								}
-							}
-						},
-
-						i_subgroup : {
-							validators : {
-								notEmpty : {
-									message : 'Sub-Group Barang Tidak Boleh Kosong',
-								}
-							}
-						},
-
-						i_merk : {
-							validators : {
-								notEmpty : {
-									message : 'Merk Barang Tidak Boleh Kosong',
-								}
-							}
-						},
-
-						i_nama : {
+						i_detail : {
 							validators : {
 								notEmpty : {
 									message : 'Nama Barang Tidak Boleh Kosong',
@@ -379,10 +352,18 @@
 							}
 						},
 
-						i_code : {
+						i_jenis : {
 							validators : {
 								notEmpty : {
-									message : 'Kode Barang Tidak Boleh Kosong',
+									message : 'Inputan Jenis Tidak Boleh Kosong',
+								}
+							}
+						},
+
+						i_satuan : {
+							validators : {
+								notEmpty : {
+									message : 'Satuan Tidak Boleh Kosong',
 								}
 							}
 						},
@@ -390,11 +371,19 @@
 						i_minstock : {
 							validators : {
 								notEmpty : {
-									message : 'Min Stock Tidak Boleh Kosong',
+									message : 'Minimal Stok Tidak Boleh Kosong',
 								},
 
 								numeric: {
-									message : 'Tampaknya Ada Yang Salah Dengan Inputan Min Stock Anda'
+									message : 'Tampaknya Ada Yang Salah Dengan Inputan Minimal Stok Anda'
+								}
+							}
+						},
+
+						i_detail : {
+							validators : {
+								notEmpty : {
+									message : 'Nama Barang Tidak Boleh Kosong',
 								}
 							}
 						},
@@ -402,11 +391,19 @@
 						i_berat : {
 							validators : {
 								notEmpty : {
-									message : 'Berat Barang Tidak Boleh Kosong',
+									message : 'Berat Tidak Boleh Kosong',
+								}
+							}
+						},
+
+						i_berat : {
+							validators : {
+								notEmpty : {
+									message : 'Nama Barang Tidak Boleh Kosong',
 								},
 
 								numeric: {
-									message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Barang Anda'
+									message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Anda'
 								}
 							}
 						},
@@ -417,7 +414,7 @@
 
 			Vue.component('kelompok', {
 			  props: ['options'],
-			  template: '#select2-template-kelompok',
+			  template: '#select2-template',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -441,7 +438,7 @@
 
 			Vue.component('group', {
 			  props: ['options'],
-			  template: '#select2-template-group',
+			  template: '#select2-template',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -465,7 +462,7 @@
 
 			Vue.component('subgroup', {
 			  props: ['options'],
-			  template: '#select2-template-subgroup',
+			  template: '#select2-template',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -489,7 +486,7 @@
 
 			Vue.component('merk', {
 			  props: ['options'],
-			  template: '#select2-template-merk',
+			  template: '#select2-template',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -519,12 +516,18 @@
 					group : 'select',
 					subgroup : 'select',
 					merk : 'select',
+					jenis : 'select',
+					subjenis1: 'select',
+					subjenis2: 'select',
+					subjenis3: 'select',
 					btn_save_disabled 	: false,
+					supplier_count: 1,
 
 					data_I_kelompok: [],
 					data_I_group: [],
 					data_I_subgroup: [],
 					data_I_merk: [],
+					data_supplier: [],
 
 					// jenissub : 'okee',
 
@@ -533,9 +536,8 @@
 						i_group: '',
 						i_subgroup: '',
 						i_merk: '',
-						i_nama: '',
-						i_code: '',
-						i_img: '',
+						i_detail: '',
+						i_satuan: '',
 						i_minstock: '',
 						i_berat: '',
 						i_specificcode: 'Y',
@@ -555,17 +557,21 @@
 					axios.get(baseUrl+'/master/barang/get/form-resource')
 							.then(response => {
 								// console.log(response.data);
-								this.data_I_kelompok 	= response.data.kelompok;
-								this.data_I_group 		= response.data.group;
-								this.data_I_subgroup 	= response.data.subgroup;
-								this.data_I_merk 		= response.data.merk;
+								this.data_I_kelompok = response.data.kelompok;
+								// this.data_I_jenis = response.data.jenis;
+								// this.data_I_jenissub = response.data.subjenis;
+								// this.data_class = response.data.class;
+								// this.data_classsub = response.data.classsub;
+								// this.data_supplier = response.data.suplier;
+
+								// console.log(this.data_classsub);
 								$("#overlay").fadeOut(200);
 							})
 				},
 				methods: {
 					submit_form: function(e){
 						e.preventDefault();
-						$('#overlay').fadeIn(200);
+
 						if($('#data-form').data('bootstrapValidator').validate().isValid()){
 							this.btn_save_disabled = true;
 
@@ -573,37 +579,30 @@
 								$('#data-form').serialize()
 							).then((response) => {
 								console.log(response.data);
-								$("#overlay").fadeOut(200);
-								// if(response.data.status == 'berhasil'){
-								// 	$.toast({
-								// 	    text: 'Data Barang Terbaru Anda Berhasil Tersimpan...!',
-								// 	    showHideTransition: 'fade',
-								// 	    icon: 'success'
-								// 	})
+								if(response.data.status == 'berhasil'){
+									$.toast({
+									    text: 'Data Karyawan Terbaru Anda Berhasil Kami Simpan..',
+									    showHideTransition: 'fade',
+									    icon: 'success'
+									})
 
-								// 	this.reset_form();
+									this.reset_form();
 
-								// }else if(response.data.status == 'jabatan_not_found'){
-								// 	$.toast({
-								// 	    text: 'Ada Kesalahan Jabatan Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
-								// 	    showHideTransition: 'fade',
-								// 	    icon: 'error'
-								// 	})
-								// }else if(response.data.status == 'posisi_not_found'){
-								// 	$.toast({
-								// 	    text: 'Ada Kesalahan Posisi Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
-								// 	    showHideTransition: 'fade',
-								// 	    icon: 'error'
-								// 	})
-								// }
+								}else if(response.data.status == 'jabatan_not_found'){
+									$.toast({
+									    text: 'Ada Kesalahan Jabatan Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
+									    showHideTransition: 'fade',
+									    icon: 'error'
+									})
+								}else if(response.data.status == 'posisi_not_found'){
+									$.toast({
+									    text: 'Ada Kesalahan Posisi Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
+									    showHideTransition: 'fade',
+									    icon: 'error'
+									})
+								}
 
 							}).catch((err) => {
-								$("#overlay").fadeOut(200);
-								$.toast({
-								    text: err,
-								    showHideTransition: 'fade',
-								    icon: 'error'
-								})
 								console.log(err);
 							}).then(() => {
 								this.btn_save_disabled = false;
@@ -611,9 +610,8 @@
 
 							return false;
 						}else{
-							$("#overlay").fadeOut(200);
 							$.toast({
-							    text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang...!',
+							    text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang..',
 							    showHideTransition: 'fade',
 							    icon: 'error'
 							})
@@ -670,44 +668,59 @@
 
 					i_kelompok_change: function(v){
 						this.form_data.i_kelompok = v;
-						// this.form_data.i_group = '';
-						// this.form_data.i_subgroup = '';
-						// this.form_data.i_merk = '';
+						this.form_data.i_group = '';
+						this.form_data.i_subgroup = '';
+						this.form_data.i_merk = '';
 					},
 
 					i_group_change: function(v){
-						// this.form_data.i_kelompok = '';
+						this.form_data.i_kelompok = '';
 						this.form_data.i_group = v;
-						// this.form_data.i_subgroup = '';
-						// this.form_data.i_merk = '';
+						this.form_data.i_subgroup = '';
+						this.form_data.i_merk = '';
 					},
 
 					i_subgroup_change: function(v){
-						// this.form_data.i_kelompok = '';
-						// this.form_data.i_group = '';
+						this.form_data.i_kelompok = '';
+						this.form_data.i_group = '';
 						this.form_data.i_subgroup = v;
-						// this.form_data.i_merk = '';
+						this.form_data.i_merk = '';
 					},
 
 					i_merk_change: function(v){
-						// this.form_data.i_kelompok = '';
-						// this.form_data.i_group = '';
-						// this.form_data.i_subgroup = '';
+						this.form_data.i_kelompok = '';
+						this.form_data.i_group = '';
+						this.form_data.i_subgroup = '';
 						this.form_data.i_merk = v;
 					},
 
+					add_supplier: function(){
+						this.supplier_count++;
+					},
+
+					remove_supplier: function(id){
+						if(this.supplier_count == 1){
+							alert('Barang Minimal Harus Memiliki 1 Harga Dari Supplier')
+							return false;
+						}
+						$('div.row.row_'+id).remove();
+						// this.supplier_count--;
+					},
+
 					reset_form:function(){
-						this.form_data.i_kelompok 		= '';
-						this.form_data.i_group 			= '';
-						this.form_data.i_subgroup 		= '';
-						this.form_data.i_merk 			= '';
-						this.form_data.i_nama 			= '';
-						this.form_data.i_img 			= '';
-						this.form_data.i_code 			= '';
-						this.form_data.i_status 		= 'Y';
-						this.form_data.i_minstock 		= '';
-						this.form_data.i_berat 			= '';
-						this.form_data.i_specificcode 	= 'Y';
+						this.form_data.nama_lengkap 		= '';
+						this.form_data.id_jabatan 			= this.jabatan[0].id;
+						this.form_data.id_posisi 			= this.posisi[0].id_posisi;
+						this.form_data.id_kota 				= this.kota[0].id;
+						this.form_data.alamat_rumah 		= '';
+						this.form_data.nomor_telp 			= '';
+						this.form_data.Kewarganegaraan		= '';
+						this.form_data.agama 				= '';
+						this.form_data.status_pernikahan	= 0;
+						this.form_data.pendidikan_sd 		= '';
+						this.form_data.pendidikan_smp 		= '';
+						this.form_data.pendidikan_sma 		= '';
+						this.form_data.pendidikan_kuliah 	= '';
 						$('#data-form').data('bootstrapValidator').resetForm();
 					}
 				}

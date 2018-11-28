@@ -24,17 +24,6 @@
 		</ol>
 		<!-- end breadcrumb -->
 
-		<!-- You can also add more buttons to the
-		ribbon for further usability
-
-		Example below:
-
-		<span class="ribbon-button-alignment pull-right">
-		<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-		<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-		<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-		</span> -->
-
 	</div>
 	<!-- END RIBBON -->
 @endsection
@@ -44,35 +33,6 @@
 
 	<!-- MAIN CONTENT -->
 	<div id="content">
-
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<ul class="menu-table hide-on-small">
-					<li class="active">
-						<a href="{{ url('/master/barang') }}">
-							<i class="fa fa-table"></i> &nbsp;Data Table</li>
-						</a>
-					<li>
-						<a href="{{ url('/master/barang/add') }}">
-							<i class="fa fa-plus"></i> &nbsp;Tambahkan Data
-						</a>
-					</li>
-
-					<li>
-						<a href="#" id="multiple_edit">
-							<i class="fa fa-pencil-square"></i> &nbsp;Edit Data
-						</a>
-					</li>
-					<li>
-						<a href="#" id="multiple_delete">
-							<i class="fa fa-ban"></i> &nbsp;Non Aktifkan
-						</a>
-					</li>
-
-					<li class="right"><i class="fa fa-bars"></i></li>
-				</ul>
-			</div>
-		</div>
 
 		<div class="row hidden-mobile">
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -121,28 +81,24 @@
 					<form id="table-form" method="post" action="{{ url('/master/karyawan/edit-multiple') }}">
 						{!! csrf_field() !!}
 
-						<div class="jarviswidget" id="wid-id-11" data-widget-colorbutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-togglebutton="false" data-widget-deletebutton="false" data-widget-fullscreenbutton="false" data-widget-custombutton="false">
+						<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-							<header>
-								<span class="widget-icon"> <i class="fa fa-asterisk"></i> </span>
-								<h2>Data Master Barang </h2>
-							</header>
 							<header>
 								
 								<ul id="widget-tab-1" class="nav nav-tabs pull-left">
 
 									<li class="active">
 
-										<a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-arrow-circle-o-down"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
+										<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
 
 									</li>
 
 									<li>
-										<a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-arrow-circle-o-up"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
+										<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
 									</li>
 
 									<li>
-										<a data-toggle="tab" href="#hr3"> <i class="fa fa-lg fa-arrow-circle-o-up"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
+										<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
 									</li>
 
 								</ul>	
@@ -164,9 +120,9 @@
 												<thead>			                
 													<tr>
 														<th class="text-center" data-hide="phone" width="4%">*</th>
-														<th class="text-center" width="5%" style="vertical-align: middle;">
+														<!-- <th class="text-center" width="5%" style="vertical-align: middle;">
 															---
-														</th>
+														</th> -->
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Merk
 														</th>
@@ -187,16 +143,16 @@
 												<tbody>
 													<tr>
 														<td class="text-center"></td>
-														<td class="text-center">
+														<!-- <td class="text-center">
 															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-														</td>
+														</td> -->
 											            <td></td>
 											            <td></td>
 											            <td></td>
 											            <td></td>
 											            <td class="text-center">
 											            	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
-											            	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
+											            	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="1"><i class="glyphicon glyphicon-edit"></i></button>
 											            </td>
 													</tr>
 												</tbody>
@@ -209,9 +165,9 @@
 												<thead>			                
 													<tr>
 														<th class="text-center" data-hide="phone" width="4%">*</th>
-														<th class="text-center" width="5%" style="vertical-align: middle;">
+														<!-- <th class="text-center" width="5%" style="vertical-align: middle;">
 															---
-														</th>
+														</th> -->
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Merk
 														</th>
@@ -232,9 +188,9 @@
 												<tbody>
 													<tr>
 														<td class="text-center"></td>
-														<td class="text-center">
+														<!-- <td class="text-center">
 															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-														</td>
+														</td> -->
 						                                <td></td>
 						                                <td></td>
 						                                <td></td>
@@ -254,9 +210,9 @@
 												<thead>			                
 													<tr>
 														<th class="text-center" data-hide="phone" width="4%">*</th>
-														<th class="text-center" width="5%" style="vertical-align: middle;">
+														<!-- <th class="text-center" width="5%" style="vertical-align: middle;">
 															---
-														</th>
+														</th> -->
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Merk
 														</th>
@@ -277,9 +233,9 @@
 												<tbody>
 													<tr>
 														<td class="text-center"></td>
-														<td class="text-center">
+														<!-- <td class="text-center">
 															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-														</td>
+														</td> -->
 						                                <td></td>
 						                                <td></td>
 						                                <td></td>
@@ -474,7 +430,7 @@
 				$(".edit").click(function(evt){
 					evt.preventDefault(); context = $(this);
 
-					window.location = baseUrl+'/master/karyawan/edit?id='+context.data('id');
+					window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
 				})
 
 				// hapus 1 click
