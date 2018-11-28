@@ -65,14 +65,25 @@ class PengaturanController extends Controller
 
     public function simpan(Request $request)
     {
-
-        // dd($id);
+        // dd($request);
         DB::beginTransaction();
         try {
-            $read = $request->read;
-            $insert = $request->insert;
-            $update = $request->update;
-            $delete = $request->delete;
+            $read = [];
+            if($request->read != null){
+                $read = $request->read;
+            }
+            $insert = [];
+            if($request->insert != null){
+                $insert = $request->insert;
+            }
+            $update = [];
+            if($request->update != null){
+                $update = $request->update;
+            }
+            $delete = [];
+            if($request->delete != null){
+                $delete = $request->delete;
+            }
             $id = Crypt::decrypt($request->id);
 
             $akses = DB::table('d_access')
@@ -82,7 +93,7 @@ class PengaturanController extends Controller
             $cek = DB::table('d_mem_access')
                 ->where('ma_mem', '=', $id)
                 ->get();
-
+                
             if (count($cek) > 0){
                 //== update data
                 DB::table('d_mem_access')
@@ -173,11 +184,19 @@ class PengaturanController extends Controller
             }
 
             DB::commit();
+            // $response = [
+            //     'status' => 'sukses'
+            // ];
+            // return json_encode($response);
             return response()->json([
                 'status' => 'sukses'
             ]);
         } catch (\Exception $e) {
-            DB::commit();
+            DB::rollback();
+            // $response = [
+            //     'status' => 'gagal'
+            // ];
+            // return json_encode($response);
             return response()->json([
                 'status' => 'gagal',
                 'data' => $e
