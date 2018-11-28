@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master karyawan')
+@section('title', 'Master Barang')
 
 
 @section('extra_style')
@@ -34,6 +34,21 @@
 	<!-- MAIN CONTENT -->
 	<div id="content">
 
+		<div class="row hidden-mobile">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<h1 class="page-title txt-color-blueDark">
+					<i class="fa-fw fa fa-asterisk"></i> 
+					Master <span>>
+					Barang </span></h1>
+			</div>
+
+			<!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+				<div class="page-title">
+					<a href="{{ url('/master/barang/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+				</div>
+			</div> -->
+		</div>
+
 		<!-- widget grid -->
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
 
@@ -56,7 +71,7 @@
 					</div>
 				</div>
 			@endif
-			
+
 			<!-- row -->
 			<div class="row">
 
@@ -155,17 +170,17 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Sub Group</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<div class="input-group" id="select_subgroup">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_subgroup"><i class="fa fa-exchange"></i></span>
-															<subgroup :options="data_I_subgroup" @change="i_subgroup_change" v-model="form_data.i_subgroup">
+														<div class="input-group" id="select_sub_group">
+															<span class="input-group-addon" style="cursor: pointer;" @click="switch_sub_group"><i class="fa fa-exchange"></i></span>
+															<subgroup :options="data_I_sub_group" @change="i_sub_group_change" v-model="form_data.i_sub_group">
 														      
 														    </subgroup>
 														</div>
 
-														<div class="input-group" id="input_subgroup" style="display: none;">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_subgroup"><i class="fa fa-exchange"></i></span>
+														<div class="input-group" id="input_sub_group" style="display: none;">
+															<span class="input-group-addon" style="cursor: pointer;" @click="switch_sub_group"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_subgroup" v-model="form_data.i_subgroup" placeholder="Tambahkan Sub Group Barang">
+															<input type="text" class="form-control" name="i_sub_group" v-model="form_data.i_sub_group" placeholder="Tambahkan Sub Group Barang">
 														</div>
 													</div>
 												</div>
@@ -235,7 +250,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<div class="form-control" style="padding: 0; align-items: center; align-self: center; cursor: pointer;">
-															<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' @change="onFileChange" onchange="loadFile(event)" />
+															<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' onchange="loadFile(event)" />
 														</div>
 													</div>
 												</div>
@@ -318,9 +333,9 @@
 	</script>
 
 	<script type="text/x-template" id="select2-template-subgroup">
-	  <select style="width:100%" name="i_subgroup">
+	  <select style="width:100%" name="i_sub_group">
 	  	<option value="">-- Pilih Sub Group Barang</option>
-	    <option v-for="option in options" :value="option.i_subgroup">@{{ option.i_subgroup }}</option>
+	    <option v-for="option in options" :value="option.i_sub_group">@{{ option.i_sub_group }}</option>
 	  </select>
 	</script>
 
@@ -375,7 +390,7 @@
 							}
 						},
 
-						i_subgroup : {
+						i_sub_group : {
 							validators : {
 								notEmpty : {
 									message : 'Sub-Group Barang Tidak Boleh Kosong',
@@ -537,13 +552,13 @@
 				data 	: {
 					kelompok : 'select',
 					group : 'select',
-					subgroup : 'select',
+					sub_group : 'select',
 					merk : 'select',
 					btn_save_disabled 	: false,
 
 					data_I_kelompok: [],
 					data_I_group: [],
-					data_I_subgroup: [],
+					data_I_sub_group: [],
 					data_I_merk: [],
 
 					// jenissub : 'okee',
@@ -551,7 +566,7 @@
 					form_data : {
 						i_kelompok: '',
 						i_group: '',
-						i_subgroup: '',
+						i_sub_group: '',
 						i_merk: '',
 						i_nama: '',
 						i_code: '',
@@ -574,93 +589,15 @@
 				created: function(){
 					axios.get(baseUrl+'/master/barang/get/form-resource')
 							.then(response => {
-								// console.log(response.data);
+								// console.log(response);
 								this.data_I_kelompok 	= response.data.kelompok;
 								this.data_I_group 		= response.data.group;
-								this.data_I_subgroup 	= response.data.subgroup;
+								this.data_I_sub_group 	= response.data.subgroup;
 								this.data_I_merk 		= response.data.merk;
 								$("#overlay").fadeOut(200);
 							})
 				},
 				methods: {
-					onFileChange(e) {
-						console.log(e.target.files[0])
-		                var fileReader = new FileReader()
-		                fileReader.onload = (e) => {
-		                	this.form_data.i_img = e.target.result
-		                }
-		                console.log(this.form_data)
-		            },
-					submit_form: function(e){
-						// e.preventDefault(e);
-						console.log(this.form_data.i_img);
-						$('#overlay').fadeIn(200);
-						$('#load-status-text').text('Sedang memproses penyimpanan data...!');
-						if($('#data-form').data('bootstrapValidator').validate().isValid()){
-							this.btn_save_disabled = true;
-							let data = new FormData();
-							data.append('kelompok', this.form_data.i_kelompok);
-							data.append('group', this.form_data.i_group);
-							data.append('subgroup', this.form_data.i_subgroup);
-							data.append('merk', this.form_data.i_merk);
-							data.append('nama', this.form_data.i_nama);
-							data.append('kode', this.form_data.i_code);
-							data.append('status', this.form_data.i_isactive);
-							data.append('minstock', this.form_data.i_minstock);
-							data.append('berat', this.form_data.i_berat);
-							data.append('specificcode', this.form_data.i_specificcode);
-							data.append('image', this.form_data.i_img);
-							data.append('_method', 'post');
-							// data.append('data', $('#data-form').serialize());
-
-							axios.post(baseUrl+'/master/barang/insert', data).then((response) => {
-								console.log(response.data);
-								$("#overlay").fadeOut(200);
-								// if(response.data.status == 'berhasil'){
-								// 	$.toast({
-								// 	    text: 'Data Barang Terbaru Anda Berhasil Tersimpan...!',
-								// 	    showHideTransition: 'fade',
-								// 	    icon: 'success'
-								// 	})
-
-								// 	this.reset_form();
-
-								// }else if(response.data.status == 'jabatan_not_found'){
-								// 	$.toast({
-								// 	    text: 'Ada Kesalahan Jabatan Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
-								// 	    showHideTransition: 'fade',
-								// 	    icon: 'error'
-								// 	})
-								// }else if(response.data.status == 'posisi_not_found'){
-								// 	$.toast({
-								// 	    text: 'Ada Kesalahan Posisi Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
-								// 	    showHideTransition: 'fade',
-								// 	    icon: 'error'
-								// 	})
-								// }
-
-							}).catch((err) => {
-								$("#overlay").fadeOut(200);
-								$.toast({
-								    text: err,
-								    showHideTransition: 'fade',
-								    icon: 'error'
-								})
-								console.log(err);
-							}).then(() => {
-								this.btn_save_disabled = false;
-							})
-
-							return false;
-						}else{
-							$("#overlay").fadeOut(200);
-							$.toast({
-							    text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang...!',
-							    showHideTransition: 'fade',
-							    icon: 'error'
-							})
-						}
-					},
 
 					switch_kelompok: function(){
 						if(this.kelompok == 'select'){
@@ -686,15 +623,15 @@
 						}
 					},
 
-					switch_subgroup: function(){
-						if(this.subgroup == 'select'){
-							this.subgroup = 'input';
-							$('#select_subgroup').hide();
-							$("#input_subgroup").show();
+					switch_sub_group: function(){
+						if(this.sub_group == 'select'){
+							this.sub_group = 'input';
+							$('#select_sub_group').hide();
+							$("#input_sub_group").show();
 						}else{
 							this.subgroup = 'select';
-							$('#input_subgroup').hide();
-							$("#select_subgroup").show();
+							$('#input_sub_group').hide();
+							$("#select_sub_group").show();
 						}
 					},
 
@@ -724,10 +661,10 @@
 						// this.form_data.i_merk = '';
 					},
 
-					i_subgroup_change: function(v){
+					i_sub_group_change: function(v){
 						// this.form_data.i_kelompok = '';
 						// this.form_data.i_group = '';
-						this.form_data.i_subgroup = v;
+						this.form_data.i_sub_group = v;
 						// this.form_data.i_merk = '';
 					},
 
@@ -738,20 +675,20 @@
 						this.form_data.i_merk = v;
 					},
 
-					reset_form:function(){
-						this.form_data.i_kelompok 		= '';
-						this.form_data.i_group 			= '';
-						this.form_data.i_subgroup 		= '';
-						this.form_data.i_merk 			= '';
-						this.form_data.i_nama 			= '';
-						this.form_data.i_img 			= '';
-						this.form_data.i_code 			= '';
-						this.form_data.i_isactive 		= 'Y';
-						this.form_data.i_minstock 		= '';
-						this.form_data.i_berat 			= '';
-						this.form_data.i_specificcode 	= 'Y';
-						$('#data-form').data('bootstrapValidator').resetForm();
-					}
+					// reset_form:function(){
+					// 	this.form_data.i_kelompok 		= '';
+					// 	this.form_data.i_group 			= '';
+					// 	this.form_data.i_subgroup 		= '';
+					// 	this.form_data.i_merk 			= '';
+					// 	this.form_data.i_nama 			= '';
+					// 	this.form_data.i_img 			= '';
+					// 	this.form_data.i_code 			= '';
+					// 	this.form_data.i_isactive 		= 'Y';
+					// 	this.form_data.i_minstock 		= '';
+					// 	this.form_data.i_berat 			= '';
+					// 	this.form_data.i_specificcode 	= 'Y';
+					// 	$('#data-form').data('bootstrapValidator').resetForm();
+					// }
 				}
 			});
 
