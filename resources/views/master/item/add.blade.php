@@ -37,6 +37,26 @@
 		<!-- widget grid -->
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
 
+			@if(Session::has('flash_message_success'))
+				<?php $mt = '0px'; ?>
+				<div class="col-md-8" style="margin-top: 20px;">
+					<div class="alert alert-success alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
+						{{ Session::get('flash_message_success') }} 
+					</div>
+				</div>
+			@elseif(Session::has('flash_message_error'))
+				<?php $mt = '0px'; ?>
+				<div class="col-md-8" style="margin-top: 20px;">
+					<div class="alert alert-danger alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
+						{{ Session::get('flash_message_error') }}
+					</div>
+				</div>
+			@endif
+			
 			<!-- row -->
 			<div class="row">
 
@@ -56,7 +76,7 @@
 							<!-- widget content -->
 							<div class="widget-body">
 								
-								<form id="data-form" class="form-horizontal" method="post">
+								<form id="data-form" class="form-horizontal" action="{{ route('barang.insert') }}" method="post" enctype="multipart/form-data">
 									{{ csrf_field() }}
 									<fieldset>
 										<legend>
@@ -84,7 +104,7 @@
 														<div class="input-group" id="input_kelompok" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Jenis Barang">
+															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Kelompok Barang">
 														</div>
 													</div>
 												</div>
@@ -122,8 +142,8 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
-													<div class="col-xs-7 col-lg-7 inputGroupContainer" v-model="form_data.i_isactive" name="i_isactive">
-														<select class="form-control">
+													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+														<select class="form-control" v-model="form_data.i_isactive" name="i_isactive">
 															<option value="Y">Aktif</option>
 															<option value="N">Non Aktif</option>
 														</select>
@@ -215,7 +235,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<div class="form-control" style="padding: 0; align-items: center; align-self: center; cursor: pointer;">
-															<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' onchange="loadFile(event)" />
+															<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' @change="onFileChange" onchange="loadFile(event)" />
 														</div>
 													</div>
 												</div>
@@ -239,7 +259,7 @@
 									<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
-												<button class="btn btn-primary" type="button" @click="submit_form" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -305,14 +325,14 @@
 	</script>
 
 	<script type="text/x-template" id="select2-template-merk">
-	  <select style="width:100%" name="i_classub">
-	  	<option value="">-- Pilih Jenis Barang</option>
-	    <option v-for="option in options" :value="option.i_classsub" v-if="option.i_class == filter">@{{ option.i_classsub }}</option>
+	  <select style="width:100%" name="i_merk">
+	  	<option value="">-- Pilih Merk Barang</option>
+	    <option v-for="option in options" :value="option.i_merk">@{{ option.i_merk }}</option>
 	  </select>
 	</script>
 
 	<script type="text/javascript">
-		var loadFile = function(event) {
+		function loadFile(event) {
 			$("#preview").html("");
 			$("#preview").append("<img id='img_prev' src='"+URL.createObjectURL(event.target.files[0])+"'>");
 			$("#delete_preview").show();
@@ -539,7 +559,7 @@
 						i_minstock: '',
 						i_berat: '',
 						i_specificcode: 'Y',
-						i_status: 'Y'
+						i_isactive: 'Y'
 						
 					}
 
@@ -563,15 +583,37 @@
 							})
 				},
 				methods: {
+					onFileChange(e) {
+						console.log(e.target.files[0])
+		                var fileReader = new FileReader()
+		                fileReader.onload = (e) => {
+		                	this.form_data.i_img = e.target.result
+		                }
+		                console.log(this.form_data)
+		            },
 					submit_form: function(e){
-						e.preventDefault();
+						// e.preventDefault(e);
+						console.log(this.form_data.i_img);
 						$('#overlay').fadeIn(200);
+						$('#load-status-text').text('Sedang memproses penyimpanan data...!');
 						if($('#data-form').data('bootstrapValidator').validate().isValid()){
 							this.btn_save_disabled = true;
+							let data = new FormData();
+							data.append('kelompok', this.form_data.i_kelompok);
+							data.append('group', this.form_data.i_group);
+							data.append('subgroup', this.form_data.i_subgroup);
+							data.append('merk', this.form_data.i_merk);
+							data.append('nama', this.form_data.i_nama);
+							data.append('kode', this.form_data.i_code);
+							data.append('status', this.form_data.i_isactive);
+							data.append('minstock', this.form_data.i_minstock);
+							data.append('berat', this.form_data.i_berat);
+							data.append('specificcode', this.form_data.i_specificcode);
+							data.append('image', this.form_data.i_img);
+							data.append('_method', 'post');
+							// data.append('data', $('#data-form').serialize());
 
-							axios.post(baseUrl+'/master/barang/insert', 
-								$('#data-form').serialize()
-							).then((response) => {
+							axios.post(baseUrl+'/master/barang/insert', data).then((response) => {
 								console.log(response.data);
 								$("#overlay").fadeOut(200);
 								// if(response.data.status == 'berhasil'){
@@ -704,7 +746,7 @@
 						this.form_data.i_nama 			= '';
 						this.form_data.i_img 			= '';
 						this.form_data.i_code 			= '';
-						this.form_data.i_status 		= 'Y';
+						this.form_data.i_isactive 		= 'Y';
 						this.form_data.i_minstock 		= '';
 						this.form_data.i_berat 			= '';
 						this.form_data.i_specificcode 	= 'Y';
