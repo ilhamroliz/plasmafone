@@ -126,25 +126,31 @@ Route::group(['middleware' => 'auth'], function(){
 		'uses'	=> 'master\barang\barang_controller@insert',
 	])->name('barang.insert');
 
+	Route::get('master/barang/edit', [
+		'uses'	=> 'master\barang\barang_controller@edit',
+	])->name('barang.edit');
+
+	// End Master Barang
+
 	Route::post('master/karyawan/edit-multiple', [
-		'uses'	=> 'master\barang\barang_controller@edit_multiple',
+		'uses'	=> 'master\barang\karyawan_controller@edit_multiple',
 	])->name('karyawan.edit_multiple');
 
 	Route::post('master/karyawan/update', [
-		'uses'	=> 'master\barang\barang_controller@update',
+		'uses'	=> 'master\barang\karyawan_controller@update',
 	])->name('karyawan.update');
 
 	Route::get('master/karyawan/edit', [
-		'uses'	=> 'master\barang\barang_controller@edit',
+		'uses'	=> 'master\barang\karyawan_controller@edit',
 	])->name('karyawan.edit');
 
 	Route::post('master/karyawan/multiple-delete', [
-		'uses'	=> 'master\barang\barang_controller@multiple_delete',
+		'uses'	=> 'master\barang\karyawan_controller@multiple_delete',
 	])->name('karyawan.multiple_delete');
 
 
 	Route::get('master/karyawan/grab/{id}', [
-		'uses'	=> 'master\barang\barang_controller@get',
+		'uses'	=> 'master\barang\karyawan_controller@get',
 	])->name('karyawan.get');
 
 	Route::get('master/barang/get/form-resource', [
