@@ -176,7 +176,7 @@
 				searching: true,
 				serverSide: true,
 				"ajax": {
-					"url": "{{ url('pengaturan/akses-pengguna/dataUser') }}",
+					"url": "{{ url('/pengaturan/akses-pengguna/dataUser') }}",
 					"type": "post",
 				},
 				columns: [
@@ -192,7 +192,7 @@
 	});
 
   function akses(id){
-    location.href = ('{{ url('pengaturan/akses-pengguna/edit') }}/' + id);
+    location.href = ('{{ url('/pengaturan/akses-pengguna/edit') }}/' + id);
   }
 </script>
 
