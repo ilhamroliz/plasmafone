@@ -118,6 +118,18 @@ Route::group(['middleware' => 'auth'], function(){
 		'uses'	=> 'master\barang\barang_controller@index',
 	])->name('barang.index');
 
+	Route::get('master/barang/getdataactive', [
+		'uses'	=> 'master\barang\barang_controller@getdataactive',
+	])->name('barang.getdataactive');
+
+	Route::get('master/barang/getdataall', [
+		'uses'	=> 'master\barang\barang_controller@getdataall',
+	])->name('barang.getdataall');
+
+	Route::get('master/barang/getdatanonactive', [
+		'uses'	=> 'master\barang\barang_controller@getdatanonactive',
+	])->name('barang.getdatanonactive');
+
 	Route::get('master/barang/add', [
 		'uses'	=> 'master\barang\barang_controller@add',
 	])->name('barang.add');

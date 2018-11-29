@@ -119,21 +119,17 @@
 											<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 												<thead>			                
 													<tr>
-														<th class="text-center" data-hide="phone" width="4%">*</th>
-														<!-- <th class="text-center" width="5%" style="vertical-align: middle;">
-															---
-														</th> -->
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Merk
 														</th>
-														<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Nama
 														</th>
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Kode
 														</th>
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Berat
+															&nbsp;Berat (Gram)
 														</th>
 														<th class="text-center" data-hide="phone,tablet" width="15%"> 
 															Aksi
@@ -141,20 +137,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td class="text-center"></td>
-														<!-- <td class="text-center">
-															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-														</td> -->
-											            <td></td>
-											            <td></td>
-											            <td></td>
-											            <td></td>
-											            <td class="text-center">
-											            	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
-											            	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="1"><i class="glyphicon glyphicon-edit"></i></button>
-											            </td>
-													</tr>
+													
 												</tbody>
 											</table>
 											
@@ -164,21 +147,17 @@
 											<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
 												<thead>			                
 													<tr>
-														<th class="text-center" data-hide="phone" width="4%">*</th>
-														<!-- <th class="text-center" width="5%" style="vertical-align: middle;">
-															---
-														</th> -->
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Merk
 														</th>
-														<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Nama
 														</th>
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Kode
 														</th>
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Berat
+															&nbsp;Berat (Gram)
 														</th>
 														<th class="text-center" data-hide="phone,tablet" width="15%"> 
 															Aksi
@@ -186,20 +165,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td class="text-center"></td>
-														<!-- <td class="text-center">
-															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-														</td> -->
-						                                <td></td>
-						                                <td></td>
-						                                <td></td>
-						                                <td></td>
-						                                <td class="text-center">
-						                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
-						                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-						                                </td>
-													</tr>
+													
 												</tbody>
 											</table>
 
@@ -209,21 +175,17 @@
 											<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
 												<thead>			                
 													<tr>
-														<th class="text-center" data-hide="phone" width="4%">*</th>
-														<!-- <th class="text-center" width="5%" style="vertical-align: middle;">
-															---
-														</th> -->
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Merk
 														</th>
-														<th data-hide="phone,tablet" width="10%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Nama
 														</th>
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
 															&nbsp;Kode
 														</th>
 														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Berat
+															&nbsp;Berat (Gram)
 														</th>
 														<th class="text-center" data-hide="phone,tablet" width="15%"> 
 															Aksi
@@ -231,20 +193,7 @@
 													</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td class="text-center"></td>
-														<!-- <td class="text-center">
-															<input type="checkbox" class="check-me" name="data_check[]" data-id="" value=""/>
-														</td> -->
-						                                <td></td>
-						                                <td></td>
-						                                <td></td>
-						                                <td></td>
-						                                <td class="text-center">
-						                                	<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-list-alt"></i></button>
-						                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id=""><i class="glyphicon glyphicon-edit"></i></button>
-						                                </td>
-													</tr>
+													
 												</tbody>
 											</table>
 																						
@@ -291,170 +240,76 @@
 
 @section('extra_script')
 	
-	<!-- PAGE RELATED PLUGIN(S) -->
-		<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+<!-- PAGE RELATED PLUGIN(S) -->
+	<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$('#tabs').tabs();
-				let selected = [];
+	<script type="text/javascript">
+		var aktif, semua, inaktif;
+		$(document).ready(function(){
+			$('#tabs').tabs();
+			let selected = [];
 
-				/* BASIC ;*/
-					var responsiveHelper_dt_basic = undefined;
-					var responsiveHelper_datatable_fixed_column = undefined;
-					var responsiveHelper_datatable_col_reorder = undefined;
-					var responsiveHelper_datatable_tabletools = undefined;
+			setTimeout(function () {
+				aktif = $('#dt_active').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"ajax": "{{ route('barang.getdataactive') }}",
+					"columns":[
+						{"data": "i_merk"},
+						{"data": "i_nama"},
+						{"data": "i_code"},
+						{"data": "i_berat"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
 					
-					var breakpointDefinition = {
-						tablet : 1024,
-						phone : 480
-					};
-		
-					$('#dt_active').dataTable({
-						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-							"t"+
-							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-						"autoWidth" : true,
-						"preDrawCallback" : function() {
-							// Initialize the responsive datatables helper once.
-							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-							}
-						},
-						"rowCallback" : function(nRow) {
-							responsiveHelper_dt_basic.createExpandIcon(nRow);
-						},
-						"drawCallback" : function(oSettings) {
-							responsiveHelper_dt_basic.respond();
-						}
-					});
+				});
+			}, 500);
 
-					$('#dt_all').dataTable({
-						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-							"t"+
-							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-						"autoWidth" : true,
-						"preDrawCallback" : function() {
-							// Initialize the responsive datatables helper once.
-							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-							}
-						},
-						"rowCallback" : function(nRow) {
-							responsiveHelper_dt_basic.createExpandIcon(nRow);
-						},
-						"drawCallback" : function(oSettings) {
-							responsiveHelper_dt_basic.respond();
-						}
-					});
+			setTimeout(function () {
+				semua = $('#dt_all').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"ajax": "{{ route('barang.getdataall') }}",
+					"columns":[
+						{"data": "i_merk"},
+						{"data": "i_nama"},
+						{"data": "i_code"},
+						{"data": "i_berat"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+				});
+			}, 1000);
 
-					$('#dt_inactive').dataTable({
-						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-							"t"+
-							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-						"autoWidth" : true,
-						"preDrawCallback" : function() {
-							// Initialize the responsive datatables helper once.
-							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
-							}
-						},
-						"rowCallback" : function(nRow) {
-							responsiveHelper_dt_basic.createExpandIcon(nRow);
-						},
-						"drawCallback" : function(oSettings) {
-							responsiveHelper_dt_basic.respond();
-						}
-					});
-		
-				/* END BASIC */
+			setTimeout(function () {
+				inaktif = $('#dt_inactive').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"ajax": "{{ route('barang.getdatanonactive') }}",
+					"columns":[
+						{"data": "i_merk"},
+						{"data": "i_nama"},
+						{"data": "i_code"},
+						{"data": "i_berat"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+				});
+			}, 1500);
 
-				$('.check-me').change(function(evt){
-					evt.preventDefault(); context = $(this);
-					if(context.is(':checked'))
-						selected.push(context.val());
-					else
-						selected.splice(_.findIndex(selected, function(o) { return o == context.val() }), 1);
+			// edit 1 click
 
-					console.log(selected);
-				})
+			$(".edit").click(function(evt){
+				evt.preventDefault(); context = $(this);
 
-
-				// Hapus Click
-
-				$("#multiple_delete").click(function(evt){
-					evt.preventDefault();
-
-					if(selected.length == 0){
-						alert('Tidak Ada Data Yang Anda Pilih')
-					}
-					else{
-						let ask = confirm(selected.length+' Data Akan Dihapus Apakah Anda Yakin . ?');
-						if(ask){
-							$('#overlay').fadeIn(300);
-							$('#load-status-text').text('Sedang Menghapus Data');
-							axios.post(baseUrl+'/master/karyawan/multiple-delete', {
-								data 	: selected,
-								_token 	: '{{ csrf_token() }}'
-							})
-							.then((response) => {
-								if(response.data.status == 'berhasil'){
-									location.reload();
-								}
-							}).catch((error) => {
-								$('#load-status-text').text('Internal Server Error');
-							})
-						}
-					}
-
-				})
-
-				// Edit Click
-
-				$("#multiple_edit").click(function(evt){
-					evt.preventDefault();
-
-					if(selected.length == 0){
-						alert('Tidak Ada Data Yang Anda Pilih')
-					}else{
-						$("#table-form").submit();
-					}
-				})
-
-				// edit 1 click
-
-				$(".edit").click(function(evt){
-					evt.preventDefault(); context = $(this);
-
-					window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
-				})
-
-				// hapus 1 click
-				$(".hapus").click(function(evt){
-					evt.preventDefault(); context = $(this);
-
-					let ask = confirm('Apakah Anda Yakin . ?');
-					if(ask){
-						$('#overlay').fadeIn(300);
-						$('#load-status-text').text('Sedang Menghapus Data')
-						axios.post(baseUrl+'/master/karyawan/multiple-delete', {
-							data 	: [context.data('id')],
-							_token 	: '{{ csrf_token() }}'
-						})
-						.then((response) => {
-							if(response.data.status == 'berhasil'){
-								location.reload();
-							}
-						}).catch((error) => {
-							$('#load-status-text').text('Internal Server Error')
-						})
-					}
-				})
+				window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
 			})
-		</script>
+		})
+	</script>
 
 @endsection

@@ -42,19 +42,18 @@
 					Barang </span></h1>
 			</div>
 
-			<!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 				<div class="page-title">
-					<a href="{{ url('/master/barang/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+					<a href="{{ url('/master/barang') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 				</div>
-			</div> -->
+			</div>
 		</div>
 
 		<!-- widget grid -->
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
 
 			@if(Session::has('flash_message_success'))
-				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
+				<div class="col-md-12" style="margin-top: 20px;">
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
@@ -62,8 +61,7 @@
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
-				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
+				<div class="col-md-12" style="margin-top: 20px;">
 					<div class="alert alert-danger alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
@@ -119,7 +117,7 @@
 														<div class="input-group" id="input_kelompok" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Kelompok Barang">
+															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Kelompok Barang" id="kelompok" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -129,7 +127,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code"/>
+														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code" style="text-transform: uppercase"/>
 													</div>
 												</div>
 											</div>
@@ -148,7 +146,7 @@
 														<div class="input-group" id="input_group" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_group"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_group" v-model="form_data.i_group" placeholder="Tambahkan Group Barang">
+															<input type="text" class="form-control" name="i_group" v-model="form_data.i_group" placeholder="Tambahkan Group Barang" id="group" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -159,8 +157,8 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<select class="form-control" v-model="form_data.i_isactive" name="i_isactive">
-															<option value="Y">Aktif</option>
-															<option value="N">Non Aktif</option>
+															<option value="Y">AKTIF</option>
+															<option value="N">NON AKTIF</option>
 														</select>
 													</div>
 												</div>
@@ -180,7 +178,7 @@
 														<div class="input-group" id="input_sub_group" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_sub_group"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_sub_group" v-model="form_data.i_sub_group" placeholder="Tambahkan Sub Group Barang">
+															<input type="text" class="form-control" name="i_sub_group" v-model="form_data.i_sub_group" placeholder="Tambahkan Sub Group Barang" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -190,7 +188,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Minimun Stok</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" v-model='form_data.i_minstock' />
+														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" v-model='form_data.i_minstock' style="text-transform: uppercase" />
 													</div>
 												</div>
 											</div>
@@ -209,7 +207,7 @@
 														<div class="input-group" id="input_merk" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_merk"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_merk" v-model="form_data.i_merk" placeholder="Tambahkan Merk Barang">
+															<input type="text" class="form-control" name="i_merk" v-model="form_data.i_merk" placeholder="Tambahkan Merk Barang" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -219,7 +217,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Berat Satuan (gram)</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' />
+														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' style="text-transform: uppercase" />
 													</div>
 												</div>
 											</div>
@@ -228,7 +226,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" v-model='form_data.i_nama' />
+														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" v-model='form_data.i_nama' style="text-transform: uppercase"/>
 													</div>
 												</div>
 											</div>
@@ -238,8 +236,8 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Specific Code</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<select class="form-control" v-model="form_data.i_specificcode" name="i_specificcode">
-															<option value="Y">Ya</option>
-															<option value="N">Tidak</option>
+															<option value="Y">YA</option>
+															<option value="N">TIDAK</option>
 														</select>
 													</div>
 												</div>
@@ -252,6 +250,15 @@
 														<div class="form-control" style="padding: 0; align-items: center; align-self: center; cursor: pointer;">
 															<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' onchange="loadFile(event)" />
 														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Harga Jual</label>
+													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" v-model="form_data.i_harga" onkeypress="return isNumberKey(event)"/>
 													</div>
 												</div>
 											</div>
@@ -320,28 +327,28 @@
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script type="text/x-template" id="select2-template-kelompok">
 	  <select style="width:100%" name="i_kelompok" required>
-	  	<option value="">-- Pilih Kelompok Barang</option>
+	  	<option value="">-- PILIH KELOMPOK</option>
 	    <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option>
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-group">
 	  <select style="width:100%" name="i_group">
-	  	<option value="">-- Pilih Group Barang</option>
+	  	<option value="">-- PILIH GROUP</option>
 	    <option v-for="option in options" :value="option.i_group">@{{ option.i_group }}</option>
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-subgroup">
 	  <select style="width:100%" name="i_sub_group">
-	  	<option value="">-- Pilih Sub Group Barang</option>
+	  	<option value="">-- PILIH SUB GROUP</option>
 	    <option v-for="option in options" :value="option.i_sub_group">@{{ option.i_sub_group }}</option>
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-merk">
 	  <select style="width:100%" name="i_merk">
-	  	<option value="">-- Pilih Merk Barang</option>
+	  	<option value="">-- PILIH MERK</option>
 	    <option v-for="option in options" :value="option.i_merk">@{{ option.i_merk }}</option>
 	  </select>
 	</script>
@@ -351,7 +358,7 @@
 			$("#preview").html("");
 			$("#preview").append("<img id='img_prev' src='"+URL.createObjectURL(event.target.files[0])+"'>");
 			$("#delete_preview").show();
-		};
+		}
 
 		function delete_image(){
 			$('#i_img').val('');
@@ -360,6 +367,43 @@
 			$("#preview").html("Lihat Gambar");
 
 		}
+
+		function isNumberKey(evt) {
+		    var charCode = (evt.which) ? evt.which : evt.keyCode;
+		    if (charCode > 31 && (charCode < 48 || charCode > 57))
+		        return false;
+		    return true;
+		}
+
+		$(document).ready(function(){
+			var i_harga = document.getElementById('i_harga');
+
+			i_harga.addEventListener('keyup', function(e)
+			{
+				i_harga.value = formatRupiah(this.value, 'Rp');
+			});
+
+			function formatRupiah(angka, prefix)
+			{
+				var number_string = angka.replace(/[^,\d]/g, '').toString(),
+				split	= number_string.split(','),
+				sisa 	= split[0].length % 3,
+				rupiah 	= split[0].substr(0, sisa),
+				ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
+
+				if (ribuan) {
+					separator = sisa ? '.' : '';
+					rupiah += separator + ribuan.join('.');
+				}
+
+				rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+				return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
+			}
+		})
+
+		
+
+		
 	</script>
 
 		<script type="text/javascript">
@@ -442,6 +486,14 @@
 
 								numeric: {
 									message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Barang Anda'
+								}
+							}
+						},
+
+						i_harga : {
+							validators : {
+								notEmpty : {
+									message : 'Harga Jual Tidak Boleh Kosong',
 								}
 							}
 						},
