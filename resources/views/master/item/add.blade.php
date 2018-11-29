@@ -39,7 +39,7 @@
 				<h1 class="page-title txt-color-blueDark">
 					<i class="fa-fw fa fa-asterisk"></i> 
 					Master <span>>
-					Barang </span></h1>
+					Tambah Data Barang </span></h1>
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
@@ -73,9 +73,7 @@
 			<!-- row -->
 			<div class="row">
 
-				<!-- NEW WIDGET START -->
-				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<!-- Widget ID (each widget will need unique ID)-->
 					<div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 						<header>
@@ -298,9 +296,8 @@
 						
 					</div>
 					<!-- end widget -->
+				</div>
 
-				</article>
-				<!-- WIDGET END -->
 			</div>
 
 			<!-- end row -->

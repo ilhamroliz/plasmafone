@@ -23,7 +23,7 @@ class barang_controller extends Controller
     }
 
     public function getdataactive(){
-        $items_active       = Item::where('i_isactive', 'Y')->get();
+        $items_active = Item::where('i_isactive', 'Y')->get();
 
         $items_active = collect($items_active);
         return DataTables::of($items_active)

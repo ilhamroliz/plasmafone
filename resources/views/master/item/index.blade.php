@@ -76,148 +76,143 @@
 
 			<!-- row -->
 			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					
-					<form id="table-form" method="post" action="{{ url('/master/karyawan/edit-multiple') }}">
-						{!! csrf_field() !!}
+					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-						<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header>
+							
+							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
 
-							<header>
+								<li class="active">
+
+									<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
+
+								</li>
+
+								<li>
+									<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
+								</li>
+
+								<li>
+									<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
+								</li>
+
+							</ul>	
+							
+						</header>
+
+						<!-- widget div-->
+						<div>
+							
+							<!-- widget content -->
+							<div class="widget-body no-padding">
+
+								<!-- widget body text-->
 								
-								<ul id="widget-tab-1" class="nav nav-tabs pull-left">
-
-									<li class="active">
-
-										<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
-
-									</li>
-
-									<li>
-										<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
-									</li>
-
-									<li>
-										<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
-									</li>
-
-								</ul>	
-								
-							</header>
-
-							<!-- widget div-->
-							<div>
-								
-								<!-- widget content -->
-								<div class="widget-body no-padding">
-
-									<!-- widget body text-->
-									
-									<div class="tab-content padding-10">
-										<div class="tab-pane fade in active" id="hr1">
-											
-											<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
-												<thead>			                
-													<tr>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Merk
-														</th>
-														<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Nama
-														</th>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Kode
-														</th>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Berat (Gram)
-														</th>
-														<th class="text-center" data-hide="phone,tablet" width="15%"> 
-															Aksi
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													
-												</tbody>
-											</table>
-											
-										</div>
-										<div class="tab-pane fade" id="hr2">
-											
-											<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
-												<thead>			                
-													<tr>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Merk
-														</th>
-														<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Nama
-														</th>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Kode
-														</th>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Berat (Gram)
-														</th>
-														<th class="text-center" data-hide="phone,tablet" width="15%"> 
-															Aksi
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													
-												</tbody>
-											</table>
-
-										</div>
-										<div class="tab-pane fade" id="hr3">
-											
-											<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
-												<thead>			                
-													<tr>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Merk
-														</th>
-														<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Nama
-														</th>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Kode
-														</th>
-														<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-															&nbsp;Berat (Gram)
-														</th>
-														<th class="text-center" data-hide="phone,tablet" width="15%"> 
-															Aksi
-														</th>
-													</tr>
-												</thead>
-												<tbody>
-													
-												</tbody>
-											</table>
-																						
-										</div>
-									</div>
-									
-									<!-- end widget body text-->
-									
-									<!-- widget footer -->
-									<div class="widget-footer text-right">
+								<div class="tab-content padding-10">
+									<div class="tab-pane fade in active" id="hr1">
 										
+										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+											<thead>			                
+												<tr>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Merk
+													</th>
+													<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Nama
+													</th>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Kode
+													</th>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Berat (Gram)
+													</th>
+													<th class="text-center" data-hide="phone,tablet" width="15%"> 
+														Aksi
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												
+											</tbody>
+										</table>
 										
 									</div>
-									<!-- end widget footer -->
+									<div class="tab-pane fade" id="hr2">
+										
+										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
+											<thead>			                
+												<tr>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Merk
+													</th>
+													<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Nama
+													</th>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Kode
+													</th>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Berat (Gram)
+													</th>
+													<th class="text-center" data-hide="phone,tablet" width="15%"> 
+														Aksi
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												
+											</tbody>
+										</table>
+
+									</div>
+									<div class="tab-pane fade" id="hr3">
+										
+										<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
+											<thead>			                
+												<tr>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Merk
+													</th>
+													<th data-hide="phone,tablet" width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Nama
+													</th>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Kode
+													</th>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Berat (Gram)
+													</th>
+													<th class="text-center" data-hide="phone,tablet" width="15%"> 
+														Aksi
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												
+											</tbody>
+										</table>
+																					
+									</div>
+								</div>
+								
+								<!-- end widget body text-->
+								
+								<!-- widget footer -->
+								<div class="widget-footer text-right">
+									
 									
 								</div>
-								<!-- end widget content -->
+								<!-- end widget footer -->
 								
 							</div>
-							<!-- end widget div -->
-								
+							<!-- end widget content -->
+							
 						</div>
-						
-					</form>
+						<!-- end widget div -->
+							
+					</div>
 				</div>
 			</div>
 
@@ -253,6 +248,17 @@
 			$('#tabs').tabs();
 			let selected = [];
 
+			/* BASIC ;*/
+			var responsiveHelper_dt_basic = undefined;
+			var responsiveHelper_datatable_fixed_column = undefined;
+			var responsiveHelper_datatable_col_reorder = undefined;
+			var responsiveHelper_datatable_tabletools = undefined;
+
+			var breakpointDefinition = {
+				tablet : 1024,
+				phone : 480
+			};
+
 			setTimeout(function () {
 				aktif = $('#dt_active').dataTable({
 					"processing": true,
@@ -266,6 +272,21 @@
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"autoWidth" : true,
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					},
 					
 				});
 			}, 500);
@@ -283,6 +304,21 @@
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"autoWidth" : true,
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					},
 				});
 			}, 1000);
 
@@ -299,15 +335,31 @@
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"autoWidth" : true,
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					},
 				});
 			}, 1500);
 
 			// edit 1 click
 
 			$(".edit").click(function(evt){
-				evt.preventDefault(); context = $(this);
+				return alert($(this).data('id'));
+				// evt.preventDefault(); context = $(this);
 
-				window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
+				// window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
 			})
 		})
 	</script>
