@@ -243,6 +243,7 @@
 	function simpan(){
 		// --- AXIOS USE ----//
 		$('#overlay').fadeIn(200);
+		$('#load-status-text').text('Penyimpanan Database Sedang di Proses');
 		let btn = $('#submit-akses');
 		btn.attr('disabled', 'disabled');
 		btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
