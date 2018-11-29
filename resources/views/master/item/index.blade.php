@@ -355,13 +355,15 @@
 
 			// edit 1 click
 
-			$(".edit").click(function(evt){
-				return alert($(this).data('id'));
-				// evt.preventDefault(); context = $(this);
-
-				// window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
-			})
+			
 		})
+
+		function edit(val){
+			return alert(val);
+			// evt.preventDefault(); context = $(this);
+
+			// window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
+		}
 	</script>
 
 @endsection

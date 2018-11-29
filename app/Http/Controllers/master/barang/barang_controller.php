@@ -28,7 +28,7 @@ class barang_controller extends Controller
         $items_active = collect($items_active);
         return DataTables::of($items_active)
         ->addColumn('aksi', function ($items_active){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_active->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="'.Crypt::encrypt($items_active->i_id).'"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_active->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit('\'.Crypt::encrypt($items_active->i_id).'\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
