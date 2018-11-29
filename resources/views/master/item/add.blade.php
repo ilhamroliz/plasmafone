@@ -245,8 +245,9 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<div class="form-control" style="padding: 0; align-items: center; align-self: center; cursor: pointer;">
-															<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' onchange="loadFile(event)" />
+														<div class="upload-btn-wrapper">
+														  <button class="btn-upload">Upload Gambar</button>
+														  <input type="file" accept="image/*" name="i_img" id="i_img" v-model='form_data.i_img' onchange="loadFile(event)" />
 														</div>
 													</div>
 												</div>
@@ -265,7 +266,7 @@
 
 										<div class="row">
 											<div class="col-md-6">
-												<div id="preview" style="margin-bottom: 0;" class="preview thumbnail">
+												<div id="preview" style="margin-bottom: 0; margin-top: 3px;" class="preview thumbnail">
 													Lihat Gambar
 												</div>
 												<div style="top: 0; display: none" id="delete_preview">
