@@ -56,7 +56,7 @@
 
 			@if(Session::has('flash_message_success'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
+				<div class="col-md-12" style="margin-top: 20px;">
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
@@ -65,7 +65,7 @@
 				</div>
 			@elseif(Session::has('flash_message_error'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
+				<div class="col-md-12" style="margin-top: 20px;">
 					<div class="alert alert-danger alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
@@ -244,6 +244,7 @@
 
 	<script type="text/javascript">
 		var aktif, semua, inaktif;
+		var baseUrl = '{{ url('/') }}';
 		$(document).ready(function(){
 			$('#tabs').tabs();
 			let selected = [];
@@ -359,10 +360,8 @@
 		})
 
 		function edit(val){
-			return alert(val);
-			// evt.preventDefault(); context = $(this);
-
-			// window.location = baseUrl+'/master/barang/edit?id='+context.data('id');
+			// return alert(val);
+			window.location = baseUrl+'/master/barang/edit?id='+val;
 		}
 	</script>
 

@@ -127,12 +127,31 @@ class barang_controller extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             // something went wrong
-            return redirect('master/barang/add')->with('flash_message_error', 'Data barang gagal disimpan...!. Mohon coba lagi');
+            return redirect('master/barang/add')->with('flash_message_error', 'Data barang gagal disimpan...! Mohon coba lagi');
         }
     }
 
-    public function edit(){
-        return view('master.item.edit');
+    public function edit(Request $request){
+        dd(Crypt::decryptString($request->id));
+        DB::beginTransaction();
+
+        try {
+            $check = Item::where('i_id', Crypt::decryptString($data['id']))->count();
+            dd($check);
+            if ($check > 0) {
+                $items = Item::where('i_id', Crypt::decryptString($data['id']))->get();
+                DB::commit();
+                dd($items);
+                return view('master.item.edit')->with(compact('items'));
+            } else {
+                return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
+            return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
+        }
+        
     }
 
     function formatPrice($data)
