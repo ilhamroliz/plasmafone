@@ -38,7 +38,7 @@
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 				<h1 class="page-title txt-color-blueDark">
 					<i class="fa-fw fa fa-asterisk"></i> 
-					Master <span>>
+					Data Master <span>>
 					Tambah Data Barang </span></h1>
 			</div>
 
