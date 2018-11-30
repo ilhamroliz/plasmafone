@@ -20,7 +20,7 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Tambah Data Barang</li>
+			<li>Home</li><li>Data Master</li><li>Tambah Data Barang</li>
 		</ol>
 		<!-- end breadcrumb -->
 

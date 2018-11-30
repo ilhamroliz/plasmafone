@@ -132,16 +132,13 @@ class barang_controller extends Controller
     }
 
     public function edit(Request $request){
-        dd(Crypt::decryptString($request->id));
         DB::beginTransaction();
 
         try {
-            $check = Item::where('i_id', Crypt::decryptString($data['id']))->count();
-            dd($check);
+            $check = Item::where('i_id', Crypt::decrypt($request->id))->count();
             if ($check > 0) {
-                $items = Item::where('i_id', Crypt::decryptString($data['id']))->get();
-                DB::commit();
-                dd($items);
+                $items = Item::where('i_id', Crypt::decrypt($request->id))->get();
+                DB::commit();           
                 return view('master.item.edit')->with(compact('items'));
             } else {
                 return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');

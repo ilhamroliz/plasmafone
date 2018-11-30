@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master karyawan')
+@section('title', 'Master Barang')
 
 
 @section('extra_style')
@@ -20,7 +20,7 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Edit Data Barang</li>
+			<li>Home</li><li>Data Master</li><li>Edit Data Barang</li>
 		</ol>
 		<!-- end breadcrumb -->
 
@@ -34,15 +34,46 @@
 	<!-- MAIN CONTENT -->
 	<div id="content">
 
+		<div class="row hidden-mobile">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+				<h1 class="page-title txt-color-blueDark">
+					<i class="fa-fw fa fa-asterisk"></i> 
+					Master <span>>
+					Edit Data Barang </span></h1>
+			</div>
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+				<div class="page-title">
+					<a href="{{ url('/master/barang') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+				</div>
+			</div>
+		</div>
+
 		<!-- widget grid -->
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
+
+			@if(Session::has('flash_message_success'))
+				<div class="col-md-12" style="margin-top: 20px;">
+					<div class="alert alert-success alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
+						{{ Session::get('flash_message_success') }} 
+					</div>
+				</div>
+			@elseif(Session::has('flash_message_error'))
+				<div class="col-md-12" style="margin-top: 20px;">
+					<div class="alert alert-danger alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
+						{{ Session::get('flash_message_error') }}
+					</div>
+				</div>
+			@endif
 
 			<!-- row -->
 			<div class="row">
 
-				<!-- NEW WIDGET START -->
-				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<!-- Widget ID (each widget will need unique ID)-->
 					<div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 						<header>
@@ -56,7 +87,7 @@
 							<!-- widget content -->
 							<div class="widget-body">
 								
-								<form id="data-form" class="form-horizontal" method="post">
+								<form id="data-form" class="form-horizontal" action="{{ route('barang.insert') }}" method="post" enctype="multipart/form-data">
 									{{ csrf_field() }}
 									<fieldset>
 										<legend>
@@ -68,7 +99,7 @@
 												</a>
 											</span>
 										</legend>
-
+										
 										<div class="row ">
 											<div class="col-md-6">
 												<div class="form-group">
@@ -84,7 +115,7 @@
 														<div class="input-group" id="input_kelompok" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Kelompok Barang">
+															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Kelompok Barang" id="kelompok" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -94,7 +125,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code"/>
+														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code" style="text-transform: uppercase"/>
 													</div>
 												</div>
 											</div>
@@ -113,7 +144,7 @@
 														<div class="input-group" id="input_group" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_group"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_group" v-model="form_data.i_group" placeholder="Tambahkan Group Barang">
+															<input type="text" class="form-control" name="i_group" v-model="form_data.i_group" placeholder="Tambahkan Group Barang" id="group" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -122,10 +153,10 @@
 											<div class="col-md-6">
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
-													<div class="col-xs-7 col-lg-7 inputGroupContainer" v-model="form_data.i_isactive" name="i_isactive">
-														<select class="form-control">
-															<option value="Y">Aktif</option>
-															<option value="N">Non Aktif</option>
+													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+														<select class="form-control" v-model="form_data.i_isactive" name="i_isactive">
+															<option value="Y">AKTIF</option>
+															<option value="N">NON AKTIF</option>
 														</select>
 													</div>
 												</div>
@@ -135,17 +166,17 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Sub Group</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<div class="input-group" id="select_subgroup">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_subgroup"><i class="fa fa-exchange"></i></span>
-															<subgroup :options="data_I_subgroup" @change="i_subgroup_change" v-model="form_data.i_subgroup">
+														<div class="input-group" id="select_sub_group">
+															<span class="input-group-addon" style="cursor: pointer;" @click="switch_sub_group"><i class="fa fa-exchange"></i></span>
+															<subgroup :options="data_I_sub_group" @change="i_sub_group_change" v-model="form_data.i_sub_group">
 														      
 														    </subgroup>
 														</div>
 
-														<div class="input-group" id="input_subgroup" style="display: none;">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_subgroup"><i class="fa fa-exchange"></i></span>
+														<div class="input-group" id="input_sub_group" style="display: none;">
+															<span class="input-group-addon" style="cursor: pointer;" @click="switch_sub_group"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_subgroup" v-model="form_data.i_subgroup" placeholder="Tambahkan Sub Group Barang">
+															<input type="text" class="form-control" name="i_sub_group" v-model="form_data.i_sub_group" placeholder="Tambahkan Sub Group Barang" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -155,7 +186,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Minimun Stok</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" v-model='form_data.i_minstock' />
+														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" v-model='form_data.i_minstock' style="text-transform: uppercase" />
 													</div>
 												</div>
 											</div>
@@ -174,7 +205,7 @@
 														<div class="input-group" id="input_merk" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_merk"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_merk" v-model="form_data.i_merk" placeholder="Tambahkan Merk Barang">
+															<input type="text" class="form-control" name="i_merk" v-model="form_data.i_merk" placeholder="Tambahkan Merk Barang" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -184,7 +215,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Berat Satuan (gram)</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' />
+														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' style="text-transform: uppercase" />
 													</div>
 												</div>
 											</div>
@@ -193,7 +224,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" v-model='form_data.i_nama' />
+														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" v-model='form_data.i_nama' style="text-transform: uppercase"/>
 													</div>
 												</div>
 											</div>
@@ -203,8 +234,8 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Specific Code</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<select class="form-control" v-model="form_data.i_specificcode" name="i_specificcode">
-															<option value="Y">Ya</option>
-															<option value="N">Tidak</option>
+															<option value="Y">YA</option>
+															<option value="N">TIDAK</option>
 														</select>
 													</div>
 												</div>
@@ -214,9 +245,19 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<div class="form-control" style="padding: 0; align-items: center; align-self: center; cursor: pointer;">
-															<input type="file" accept="image/*" style="cursor: pointer;" class="input-xs" name="i_img" id="i_img" placeholder="Masukkan Gambar Barang" v-model='form_data.i_img' onchange="loadFile(event)" />
+														<div class="upload-btn-wrapper">
+														  <button class="btn-upload">Upload Gambar</button>
+														  <input type="file" accept="image/*" name="i_img" id="i_img" v-model='form_data.i_img' onchange="loadFile(event)" />
 														</div>
+													</div>
+												</div>
+											</div>
+
+											<div class="col-md-6">
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Harga Jual</label>
+													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" v-model="form_data.i_harga" onkeypress="return isNumberKey(event)"/>
 													</div>
 												</div>
 											</div>
@@ -225,7 +266,7 @@
 
 										<div class="row">
 											<div class="col-md-6">
-												<div id="preview" style="margin-bottom: 0;" class="preview thumbnail">
+												<div id="preview" style="margin-bottom: 0; margin-top: 3px;" class="preview thumbnail">
 													Lihat Gambar
 												</div>
 												<div style="top: 0; display: none" id="delete_preview">
@@ -234,6 +275,7 @@
 											</div>
 											<div class="col-md-6">
 												<div id="current_img" style="margin-bottom: 0;" class="preview thumbnail">
+													<input type="hidden" name="current_img" id="current_img">
 													<img src="{{ asset('img/item/coba.jpg') }}">
 												</div>
 											</div>
@@ -244,7 +286,7 @@
 									<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
-												<button class="btn btn-primary" type="button" @click="submit_form" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -261,9 +303,8 @@
 						
 					</div>
 					<!-- end widget -->
+				</div>
 
-				</article>
-				<!-- WIDGET END -->
 			</div>
 
 			<!-- end row -->
@@ -288,40 +329,40 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
-	<script type="text/x-template" id="select2-template">
-	  <select style="width:100%" name="i_jenis" required>
-	  	<option value="">-- Pilih Jenis Barang</option>
-	    <option v-for="option in options" :value="option.i_jenis">@{{ option.i_jenis }}</option>
+	<script type="text/x-template" id="select2-template-kelompok">
+	  <select style="width:100%" name="i_kelompok" required>
+	  	<option value="">-- PILIH KELOMPOK</option>
+	    <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option>
 	  </select>
 	</script>
 
-	<script type="text/x-template" id="select2-template-jenissub">
-	  <select style="width:100%" name="i_jenissub">
-	  	<option value="">-- Pilih Jenis Barang</option>
-	    <option v-for="option in options" :value="option.i_jenissub" v-if="option.i_jenis == filter">@{{ option.i_jenissub }}</option>
+	<script type="text/x-template" id="select2-template-group">
+	  <select style="width:100%" name="i_group">
+	  	<option value="">-- PILIH GROUP</option>
+	    <option v-for="option in options" :value="option.i_group">@{{ option.i_group }}</option>
 	  </select>
 	</script>
 
-	<script type="text/x-template" id="select2-template-class">
-	  <select style="width:100%" name="i_class">
-	  	<option value="">-- Pilih Jenis Barang</option>
-	    <option v-for="option in options" :value="option.i_class" v-if="option.i_jenissub == filter">@{{ option.i_class }}</option>
+	<script type="text/x-template" id="select2-template-subgroup">
+	  <select style="width:100%" name="i_sub_group">
+	  	<option value="">-- PILIH SUB GROUP</option>
+	    <option v-for="option in options" :value="option.i_sub_group">@{{ option.i_sub_group }}</option>
 	  </select>
 	</script>
 
-	<script type="text/x-template" id="select2-template-classsub">
-	  <select style="width:100%" name="i_classub">
-	  	<option value="">-- Pilih Jenis Barang</option>
-	    <option v-for="option in options" :value="option.i_classsub" v-if="option.i_class == filter">@{{ option.i_classsub }}</option>
+	<script type="text/x-template" id="select2-template-merk">
+	  <select style="width:100%" name="i_merk">
+	  	<option value="">-- PILIH MERK</option>
+	    <option v-for="option in options" :value="option.i_merk">@{{ option.i_merk }}</option>
 	  </select>
 	</script>
 
 	<script type="text/javascript">
-		var loadFile = function(event) {
+		function loadFile(event) {
 			$("#preview").html("");
 			$("#preview").append("<img id='img_prev' src='"+URL.createObjectURL(event.target.files[0])+"'>");
 			$("#delete_preview").show();
-		};
+		}
 
 		function delete_image(){
 			$('#i_img').val('');
@@ -330,6 +371,43 @@
 			$("#preview").html("Lihat Gambar");
 
 		}
+
+		function isNumberKey(evt) {
+		    var charCode = (evt.which) ? evt.which : evt.keyCode;
+		    if (charCode > 31 && (charCode < 48 || charCode > 57))
+		        return false;
+		    return true;
+		}
+
+		$(document).ready(function(){
+			var i_harga = document.getElementById('i_harga');
+
+			i_harga.addEventListener('keyup', function(e)
+			{
+				i_harga.value = formatRupiah(this.value, 'Rp');
+			});
+
+			function formatRupiah(angka, prefix)
+			{
+				var number_string = angka.replace(/[^,\d]/g, '').toString(),
+				split	= number_string.split(','),
+				sisa 	= split[0].length % 3,
+				rupiah 	= split[0].substr(0, sisa),
+				ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
+
+				if (ribuan) {
+					separator = sisa ? '.' : '';
+					rupiah += separator + ribuan.join('.');
+				}
+
+				rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+				return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
+			}
+		})
+
+		
+
+		
 	</script>
 
 		<script type="text/javascript">
@@ -344,7 +422,39 @@
 						validating : 'glyphicon glyphicon-refresh'
 					},
 					fields : {
-						i_detail : {
+						i_kelompok : {
+							validators : {
+								notEmpty : {
+									message : 'Kelompok Barang Tidak Boleh Kosong',
+								}
+							}
+						},
+
+						i_group : {
+							validators : {
+								notEmpty : {
+									message : 'Group Barang Tidak Boleh Kosong',
+								}
+							}
+						},
+
+						i_sub_group : {
+							validators : {
+								notEmpty : {
+									message : 'Sub-Group Barang Tidak Boleh Kosong',
+								}
+							}
+						},
+
+						i_merk : {
+							validators : {
+								notEmpty : {
+									message : 'Merk Barang Tidak Boleh Kosong',
+								}
+							}
+						},
+
+						i_nama : {
 							validators : {
 								notEmpty : {
 									message : 'Nama Barang Tidak Boleh Kosong',
@@ -352,18 +462,10 @@
 							}
 						},
 
-						i_jenis : {
+						i_code : {
 							validators : {
 								notEmpty : {
-									message : 'Inputan Jenis Tidak Boleh Kosong',
-								}
-							}
-						},
-
-						i_satuan : {
-							validators : {
-								notEmpty : {
-									message : 'Satuan Tidak Boleh Kosong',
+									message : 'Kode Barang Tidak Boleh Kosong',
 								}
 							}
 						},
@@ -371,19 +473,11 @@
 						i_minstock : {
 							validators : {
 								notEmpty : {
-									message : 'Minimal Stok Tidak Boleh Kosong',
+									message : 'Min Stock Tidak Boleh Kosong',
 								},
 
 								numeric: {
-									message : 'Tampaknya Ada Yang Salah Dengan Inputan Minimal Stok Anda'
-								}
-							}
-						},
-
-						i_detail : {
-							validators : {
-								notEmpty : {
-									message : 'Nama Barang Tidak Boleh Kosong',
+									message : 'Tampaknya Ada Yang Salah Dengan Inputan Min Stock Anda'
 								}
 							}
 						},
@@ -391,19 +485,19 @@
 						i_berat : {
 							validators : {
 								notEmpty : {
-									message : 'Berat Tidak Boleh Kosong',
+									message : 'Berat Barang Tidak Boleh Kosong',
+								},
+
+								numeric: {
+									message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Barang Anda'
 								}
 							}
 						},
 
-						i_berat : {
+						i_harga : {
 							validators : {
 								notEmpty : {
-									message : 'Nama Barang Tidak Boleh Kosong',
-								},
-
-								numeric: {
-									message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Anda'
+									message : 'Harga Jual Tidak Boleh Kosong',
 								}
 							}
 						},
@@ -414,7 +508,7 @@
 
 			Vue.component('kelompok', {
 			  props: ['options'],
-			  template: '#select2-template',
+			  template: '#select2-template-kelompok',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -438,7 +532,7 @@
 
 			Vue.component('group', {
 			  props: ['options'],
-			  template: '#select2-template',
+			  template: '#select2-template-group',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -462,7 +556,7 @@
 
 			Vue.component('subgroup', {
 			  props: ['options'],
-			  template: '#select2-template',
+			  template: '#select2-template-subgroup',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -486,7 +580,7 @@
 
 			Vue.component('merk', {
 			  props: ['options'],
-			  template: '#select2-template',
+			  template: '#select2-template-merk',
 			  mounted: function () {
 			    var vm = this
 			    $(this.$el).select2().on('change', function () {
@@ -514,34 +608,29 @@
 				data 	: {
 					kelompok : 'select',
 					group : 'select',
-					subgroup : 'select',
+					sub_group : 'select',
 					merk : 'select',
-					jenis : 'select',
-					subjenis1: 'select',
-					subjenis2: 'select',
-					subjenis3: 'select',
 					btn_save_disabled 	: false,
-					supplier_count: 1,
 
 					data_I_kelompok: [],
 					data_I_group: [],
-					data_I_subgroup: [],
+					data_I_sub_group: [],
 					data_I_merk: [],
-					data_supplier: [],
 
 					// jenissub : 'okee',
 
 					form_data : {
 						i_kelompok: '',
 						i_group: '',
-						i_subgroup: '',
+						i_sub_group: '',
 						i_merk: '',
-						i_detail: '',
-						i_satuan: '',
+						i_nama: '',
+						i_code: '',
+						i_img: '',
 						i_minstock: '',
 						i_berat: '',
 						i_specificcode: 'Y',
-						i_status: 'Y'
+						i_isactive: 'Y'
 						
 					}
 
@@ -556,67 +645,15 @@
 				created: function(){
 					axios.get(baseUrl+'/master/barang/get/form-resource')
 							.then(response => {
-								// console.log(response.data);
-								this.data_I_kelompok = response.data.kelompok;
-								// this.data_I_jenis = response.data.jenis;
-								// this.data_I_jenissub = response.data.subjenis;
-								// this.data_class = response.data.class;
-								// this.data_classsub = response.data.classsub;
-								// this.data_supplier = response.data.suplier;
-
-								// console.log(this.data_classsub);
+								// console.log(response);
+								this.data_I_kelompok 	= response.data.kelompok;
+								this.data_I_group 		= response.data.group;
+								this.data_I_sub_group 	= response.data.subgroup;
+								this.data_I_merk 		= response.data.merk;
 								$("#overlay").fadeOut(200);
 							})
 				},
 				methods: {
-					submit_form: function(e){
-						e.preventDefault();
-
-						if($('#data-form').data('bootstrapValidator').validate().isValid()){
-							this.btn_save_disabled = true;
-
-							axios.post(baseUrl+'/master/barang/insert', 
-								$('#data-form').serialize()
-							).then((response) => {
-								console.log(response.data);
-								if(response.data.status == 'berhasil'){
-									$.toast({
-									    text: 'Data Karyawan Terbaru Anda Berhasil Kami Simpan..',
-									    showHideTransition: 'fade',
-									    icon: 'success'
-									})
-
-									this.reset_form();
-
-								}else if(response.data.status == 'jabatan_not_found'){
-									$.toast({
-									    text: 'Ada Kesalahan Jabatan Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
-									    showHideTransition: 'fade',
-									    icon: 'error'
-									})
-								}else if(response.data.status == 'posisi_not_found'){
-									$.toast({
-									    text: 'Ada Kesalahan Posisi Yang Anda Pilih Sudah Tidak Bisa Kami Temukan. Cobalah Untuk Memuat Ulang Halaman..',
-									    showHideTransition: 'fade',
-									    icon: 'error'
-									})
-								}
-
-							}).catch((err) => {
-								console.log(err);
-							}).then(() => {
-								this.btn_save_disabled = false;
-							})
-
-							return false;
-						}else{
-							$.toast({
-							    text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang..',
-							    showHideTransition: 'fade',
-							    icon: 'error'
-							})
-						}
-					},
 
 					switch_kelompok: function(){
 						if(this.kelompok == 'select'){
@@ -642,15 +679,15 @@
 						}
 					},
 
-					switch_subgroup: function(){
-						if(this.subgroup == 'select'){
-							this.subgroup = 'input';
-							$('#select_subgroup').hide();
-							$("#input_subgroup").show();
+					switch_sub_group: function(){
+						if(this.sub_group == 'select'){
+							this.sub_group = 'input';
+							$('#select_sub_group').hide();
+							$("#input_sub_group").show();
 						}else{
 							this.subgroup = 'select';
-							$('#input_subgroup').hide();
-							$("#select_subgroup").show();
+							$('#input_sub_group').hide();
+							$("#select_sub_group").show();
 						}
 					},
 
@@ -668,61 +705,46 @@
 
 					i_kelompok_change: function(v){
 						this.form_data.i_kelompok = v;
-						this.form_data.i_group = '';
-						this.form_data.i_subgroup = '';
-						this.form_data.i_merk = '';
+						// this.form_data.i_group = '';
+						// this.form_data.i_subgroup = '';
+						// this.form_data.i_merk = '';
 					},
 
 					i_group_change: function(v){
-						this.form_data.i_kelompok = '';
+						// this.form_data.i_kelompok = '';
 						this.form_data.i_group = v;
-						this.form_data.i_subgroup = '';
-						this.form_data.i_merk = '';
+						// this.form_data.i_subgroup = '';
+						// this.form_data.i_merk = '';
 					},
 
-					i_subgroup_change: function(v){
-						this.form_data.i_kelompok = '';
-						this.form_data.i_group = '';
-						this.form_data.i_subgroup = v;
-						this.form_data.i_merk = '';
+					i_sub_group_change: function(v){
+						// this.form_data.i_kelompok = '';
+						// this.form_data.i_group = '';
+						this.form_data.i_sub_group = v;
+						// this.form_data.i_merk = '';
 					},
 
 					i_merk_change: function(v){
-						this.form_data.i_kelompok = '';
-						this.form_data.i_group = '';
-						this.form_data.i_subgroup = '';
+						// this.form_data.i_kelompok = '';
+						// this.form_data.i_group = '';
+						// this.form_data.i_subgroup = '';
 						this.form_data.i_merk = v;
 					},
 
-					add_supplier: function(){
-						this.supplier_count++;
-					},
-
-					remove_supplier: function(id){
-						if(this.supplier_count == 1){
-							alert('Barang Minimal Harus Memiliki 1 Harga Dari Supplier')
-							return false;
-						}
-						$('div.row.row_'+id).remove();
-						// this.supplier_count--;
-					},
-
-					reset_form:function(){
-						this.form_data.nama_lengkap 		= '';
-						this.form_data.id_jabatan 			= this.jabatan[0].id;
-						this.form_data.id_posisi 			= this.posisi[0].id_posisi;
-						this.form_data.id_kota 				= this.kota[0].id;
-						this.form_data.alamat_rumah 		= '';
-						this.form_data.nomor_telp 			= '';
-						this.form_data.Kewarganegaraan		= '';
-						this.form_data.agama 				= '';
-						this.form_data.status_pernikahan	= 0;
-						this.form_data.pendidikan_sd 		= '';
-						this.form_data.pendidikan_smp 		= '';
-						this.form_data.pendidikan_sma 		= '';
-						this.form_data.pendidikan_kuliah 	= '';
-						$('#data-form').data('bootstrapValidator').resetForm();
-					}
+					// reset_form:function(){
+					// 	this.form_data.i_kelompok 		= '';
+					// 	this.form_data.i_group 			= '';
+					// 	this.form_data.i_subgroup 		= '';
+					// 	this.form_data.i_merk 			= '';
+					// 	this.form_data.i_nama 			= '';
+					// 	this.form_data.i_img 			= '';
+					// 	this.form_data.i_code 			= '';
+					// 	this.form_data.i_isactive 		= 'Y';
+					// 	this.form_data.i_minstock 		= '';
+					// 	this.form_data.i_berat 			= '';
+					// 	this.form_data.i_specificcode 	= 'Y';
+					// 	$('#data-form').data('bootstrapValidator').resetForm();
+					// }
 				}
 			});
 

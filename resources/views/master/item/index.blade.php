@@ -20,7 +20,7 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Barang</li>
+			<li>Home</li><li>Data Master</li><li>Master Barang</li>
 		</ol>
 		<!-- end breadcrumb -->
 
@@ -272,7 +272,6 @@
 						{"data": "i_berat"},
 						{"data": "aksi"}
 					],
-					"autoWidth" : true,
 					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
 					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
 					"autoWidth" : true,
@@ -304,7 +303,6 @@
 						{"data": "i_berat"},
 						{"data": "aksi"}
 					],
-					"autoWidth" : true,
 					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
 					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
 					"autoWidth" : true,
@@ -335,7 +333,6 @@
 						{"data": "i_berat"},
 						{"data": "aksi"}
 					],
-					"autoWidth" : true,
 					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
 					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
 					"autoWidth" : true,
