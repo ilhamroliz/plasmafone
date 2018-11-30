@@ -705,12 +705,12 @@ class PembelianController extends Controller
     }
     public function request_order()
     {
-        $r_orders_dt = DB::table('d_request_order_dt')
+        /*$r_orders_dt = DB::table('d_request_order_dt')
                         ->select('d_request_order_dt.*', 'd_request_order.ro_cabang', 'd_cabang.*')
                         ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
                         ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
-                        ->get();
-        return view('pembelian/request_order/view_request_order')->with(compact('r_orders_dt'));
+                        ->get();*/
+        return view('pembelian/request_order/view_request_order');
     }
 
     public function request_order_add(Request $request)
