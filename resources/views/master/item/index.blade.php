@@ -67,7 +67,7 @@
 
 			@if(Session::has('flash_message_success'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-12" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
@@ -76,7 +76,7 @@
 				</div>
 			@elseif(Session::has('flash_message_error'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-12" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-danger alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>

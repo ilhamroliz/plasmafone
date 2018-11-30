@@ -7,6 +7,12 @@
 
 @endsection
 
+<?php 
+	function rupiah($angka){
+		$hasil_rupiah = "Rp" . number_format($angka,0,',','.');
+		return $hasil_rupiah;
+	}
+?>
 
 @section('ribbon')
 	<!-- RIBBON -->
@@ -99,7 +105,7 @@
 												</a>
 											</span>
 										</legend>
-										
+										@foreach($items as $item)
 										<div class="row ">
 											<div class="col-md-6">
 												<div class="form-group">
@@ -115,7 +121,7 @@
 														<div class="input-group" id="input_kelompok" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_kelompok" v-model="form_data.i_kelompok" placeholder="Tambahkan Kelompok Barang" id="kelompok" style="text-transform: uppercase">
+															<input type="text" class="form-control" name="i_kelompok" placeholder="Tambahkan Kelompok Barang" id="kelompok" value="{{ $item->i_kelompok }}" style="text-transform: uppercase">
 														</div>
 													</div>
 												</div>
@@ -125,7 +131,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code" style="text-transform: uppercase"/>
+														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" style="text-transform: uppercase" value="{{ $item->i_code }}" />
 													</div>
 												</div>
 											</div>
@@ -144,7 +150,7 @@
 														<div class="input-group" id="input_group" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_group"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_group" v-model="form_data.i_group" placeholder="Tambahkan Group Barang" id="group" style="text-transform: uppercase">
+															<input type="text" class="form-control" name="i_group" placeholder="Tambahkan Group Barang" id="group" style="text-transform: uppercase" value="{{ $item->i_group }}" />
 														</div>
 													</div>
 												</div>
@@ -154,9 +160,9 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<select class="form-control" v-model="form_data.i_isactive" name="i_isactive">
-															<option value="Y">AKTIF</option>
-															<option value="N">NON AKTIF</option>
+														<select class="form-control" name="i_isactive">
+															<option value="Y" @if($item->i_isactive == "Y") selected @endif>AKTIF</option>
+															<option value="N" @if($item->i_isactive == "N") selected @endif>NON AKTIF</option>
 														</select>
 													</div>
 												</div>
@@ -176,7 +182,7 @@
 														<div class="input-group" id="input_sub_group" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_sub_group"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_sub_group" v-model="form_data.i_sub_group" placeholder="Tambahkan Sub Group Barang" style="text-transform: uppercase">
+															<input type="text" class="form-control" name="i_sub_group" placeholder="Tambahkan Sub Group Barang" style="text-transform: uppercase" value="{{ $item->i_sub_group }}" />
 														</div>
 													</div>
 												</div>
@@ -186,7 +192,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Minimun Stok</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" v-model='form_data.i_minstock' style="text-transform: uppercase" />
+														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" style="text-transform: uppercase" value="{{ $item->i_minstock }}" />
 													</div>
 												</div>
 											</div>
@@ -205,7 +211,7 @@
 														<div class="input-group" id="input_merk" style="display: none;">
 															<span class="input-group-addon" style="cursor: pointer;" @click="switch_merk"><i class="fa fa-exchange"></i></span>
 
-															<input type="text" class="form-control" name="i_merk" v-model="form_data.i_merk" placeholder="Tambahkan Merk Barang" style="text-transform: uppercase">
+															<input type="text" class="form-control" name="i_merk" placeholder="Tambahkan Merk Barang" style="text-transform: uppercase" value="{{ $item->i_merk }}" />
 														</div>
 													</div>
 												</div>
@@ -215,7 +221,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Berat Satuan (gram)</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' style="text-transform: uppercase" />
+														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" style="text-transform: uppercase" value="{{ $item->i_berat }}" />
 													</div>
 												</div>
 											</div>
@@ -224,7 +230,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Barang</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" v-model='form_data.i_nama' style="text-transform: uppercase"/>
+														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" style="text-transform: uppercase" value="{{ $item->i_nama }}" />
 													</div>
 												</div>
 											</div>
@@ -233,9 +239,9 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Specific Code</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<select class="form-control" v-model="form_data.i_specificcode" name="i_specificcode">
-															<option value="Y">YA</option>
-															<option value="N">TIDAK</option>
+														<select class="form-control" name="i_specificcode">
+															<option value="Y" @if($item->i_specificcode == "Y") selected @endif>YA</option>
+															<option value="N" @if($item->i_specificcode == "N") selected @endif>TIDAK</option>
 														</select>
 													</div>
 												</div>
@@ -247,7 +253,7 @@
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<div class="upload-btn-wrapper">
 														  <button class="btn-upload">Upload Gambar</button>
-														  <input type="file" accept="image/*" name="i_img" id="i_img" v-model='form_data.i_img' onchange="loadFile(event)" />
+														  <input type="file" accept="image/*" name="i_img" id="i_img" onchange="loadFile(event)" />
 														</div>
 													</div>
 												</div>
@@ -257,7 +263,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Harga Jual</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" v-model="form_data.i_harga" onkeypress="return isNumberKey(event)"/>
+														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" onkeypress="return isNumberKey(event)" value="{{ rupiah($item->i_price) }}"/>
 													</div>
 												</div>
 											</div>
@@ -275,12 +281,16 @@
 											</div>
 											<div class="col-md-6">
 												<div id="current_img" style="margin-bottom: 0;" class="preview thumbnail">
-													<input type="hidden" name="current_img" id="current_img">
-													<img src="{{ asset('img/items/2018113011115139538.jpg') }}">
+													<input type="hidden" name="current_img" id="current_img" value="{{ $item->i_img }}">
+													@if($item->i_img == "")
+													<img src="{{ asset('img/image-not-found.png') }}">
+													@else
+													<img src="{{ asset('img/items/'.$item->i_img) }}">
+													@endif
 												</div>
 											</div>
 										</div>
-
+										@endforeach
 									</fieldset>
 
 									<div class="form-actions">
@@ -332,28 +342,36 @@
 	<script type="text/x-template" id="select2-template-kelompok">
 	  <select style="width:100%" name="i_kelompok" required>
 	  	<option value="">-- PILIH KELOMPOK</option>
-	    <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option>
+	  	@foreach($items as $item)
+	    <option v-for="option in options" :value="option.i_kelompok" @if($item->i_kelompok != "") selected @endif>@{{ option.i_kelompok }}</option>
+	    @endforeach
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-group">
 	  <select style="width:100%" name="i_group">
 	  	<option value="">-- PILIH GROUP</option>
-	    <option v-for="option in options" :value="option.i_group">@{{ option.i_group }}</option>
+	  	@foreach($items as $item)
+	    <option v-for="option in options" :value="option.i_group" @if($item->i_group != "") selected @endif>@{{ option.i_group }}</option>
+	    @endforeach
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-subgroup">
 	  <select style="width:100%" name="i_sub_group">
 	  	<option value="">-- PILIH SUB GROUP</option>
-	    <option v-for="option in options" :value="option.i_sub_group">@{{ option.i_sub_group }}</option>
+	  	@foreach($items as $item)
+	    <option v-for="option in options" :value="option.i_sub_group" @if($item->i_sub_group != "") selected @endif>@{{ option.i_sub_group }}</option>
+	    @endforeach
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-merk">
 	  <select style="width:100%" name="i_merk">
 	  	<option value="">-- PILIH MERK</option>
-	    <option v-for="option in options" :value="option.i_merk">@{{ option.i_merk }}</option>
+	  	@foreach($items as $item)
+	    <option v-for="option in options" :value="option.i_merk" @if($item->i_merk != "") selected @endif>@{{ option.i_merk }}</option>
+	    @endforeach
 	  </select>
 	</script>
 
@@ -386,6 +404,7 @@
 			{
 				i_harga.value = formatRupiah(this.value, 'Rp');
 			});
+			// i_harga.value = formatRupiah($('#i_harga').val(), 'Rp');
 
 			function formatRupiah(angka, prefix)
 			{
@@ -623,14 +642,7 @@
 						i_kelompok: '',
 						i_group: '',
 						i_sub_group: '',
-						i_merk: '',
-						i_nama: '',
-						i_code: '',
-						i_img: '',
-						i_minstock: '',
-						i_berat: '',
-						i_specificcode: 'Y',
-						i_isactive: 'Y'
+						i_merk: ''
 						
 					}
 
@@ -705,29 +717,17 @@
 
 					i_kelompok_change: function(v){
 						this.form_data.i_kelompok = v;
-						// this.form_data.i_group = '';
-						// this.form_data.i_subgroup = '';
-						// this.form_data.i_merk = '';
 					},
 
 					i_group_change: function(v){
-						// this.form_data.i_kelompok = '';
 						this.form_data.i_group = v;
-						// this.form_data.i_subgroup = '';
-						// this.form_data.i_merk = '';
 					},
 
 					i_sub_group_change: function(v){
-						// this.form_data.i_kelompok = '';
-						// this.form_data.i_group = '';
 						this.form_data.i_sub_group = v;
-						// this.form_data.i_merk = '';
 					},
 
 					i_merk_change: function(v){
-						// this.form_data.i_kelompok = '';
-						// this.form_data.i_group = '';
-						// this.form_data.i_subgroup = '';
 						this.form_data.i_merk = v;
 					},
 

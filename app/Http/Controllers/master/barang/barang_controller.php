@@ -40,7 +40,7 @@ class barang_controller extends Controller
         $items_all = collect($items_all);
         return DataTables::of($items_all)
         ->addColumn('aksi', function ($items_all){      
-            return '<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_all->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="'.Crypt::encrypt($items_all->i_id).'"><i class="glyphicon glyphicon-edit"></i></button>';
+            return '<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_all->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
@@ -53,7 +53,7 @@ class barang_controller extends Controller
 
         return DataTables::of($items_nonactive)
         ->addColumn('aksi', function ($items_nonactive){      
-            return '<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_nonactive->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="'.Crypt::encrypt($items_nonactive->i_id).'"><i class="glyphicon glyphicon-edit"></i></button>';
+            return '<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_nonactive->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
@@ -146,7 +146,8 @@ class barang_controller extends Controller
             $check = Item::where('i_id', Crypt::decrypt($request->id))->count();
             if ($check > 0) {
                 $items = Item::where('i_id', Crypt::decrypt($request->id))->get();
-                DB::commit();           
+                DB::commit();
+                // dd($items);
                 return view('master.item.edit')->with(compact('items'));
             } else {
                 return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');

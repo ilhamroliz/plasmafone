@@ -53,7 +53,7 @@
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
 
 			@if(Session::has('flash_message_success'))
-				<div class="col-md-12" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
@@ -61,7 +61,7 @@
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
-				<div class="col-md-12" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-danger alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
