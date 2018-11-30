@@ -4,7 +4,17 @@
 
 
 @section('extra_style')
-
+	<style type="text/css">
+		.dataTables_length {
+			float: right;
+		}
+		.dt-toolbar-footer > :last-child, .dt-toolbar > :last-child {
+    		padding-right: 0 !important;
+		}
+		.col-sm-1.col-xs-12.hidden-xs {
+		    padding: 0px;
+		}
+	</style>
 @endsection
 
 
@@ -39,7 +49,8 @@
 				<h1 class="page-title txt-color-blueDark">
 					<i class="fa-fw fa fa-asterisk"></i> 
 					Data Master <span>>
-					Barang </span></h1>
+					Master Barang </span>
+				</h1>
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
@@ -234,13 +245,6 @@
 @endsection
 
 @section('extra_script')
-	
-<!-- PAGE RELATED PLUGIN(S) -->
-	<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
 		var aktif, semua, inaktif;
@@ -248,17 +252,6 @@
 		$(document).ready(function(){
 			$('#tabs').tabs();
 			let selected = [];
-
-			/* BASIC ;*/
-			var responsiveHelper_dt_basic = undefined;
-			var responsiveHelper_datatable_fixed_column = undefined;
-			var responsiveHelper_datatable_col_reorder = undefined;
-			var responsiveHelper_datatable_tabletools = undefined;
-
-			var breakpointDefinition = {
-				tablet : 1024,
-				phone : 480
-			};
 
 			setTimeout(function () {
 				aktif = $('#dt_active').dataTable({
@@ -272,8 +265,9 @@
 						{"data": "i_berat"},
 						{"data": "aksi"}
 					],
+					"autoWidth" : true,
 					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
 					"autoWidth" : true,
 					"preDrawCallback" : function() {
 						// Initialize the responsive datatables helper once.
@@ -303,6 +297,7 @@
 						{"data": "i_berat"},
 						{"data": "aksi"}
 					],
+					"autoWidth" : true,
 					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
 					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
 					"autoWidth" : true,
@@ -333,6 +328,7 @@
 						{"data": "i_berat"},
 						{"data": "aksi"}
 					],
+					"autoWidth" : true,
 					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-11'f><'col-sm-1 col-xs-12 hidden-xs'l>r>"+"t"+
 					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
 					"autoWidth" : true,

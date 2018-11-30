@@ -9,21 +9,26 @@
 
 <!-- Basic Styles -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap.min.css') }}">
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
-{{-- <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap4.css') }}"> --}}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/plugins/font-awesome_4_7/css/font-awesome.min.css') }}">
-
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/plugins/toast/dist/jquery.toast.min.css') }}">
 
 <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-production-plugins.min.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-production.min.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-skins.min.css') }}">
-<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/chosen.css') }}">
+
+<!-- Checkbox style -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
+{{-- <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap4.css') }}"> --}}
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
 
 <!-- SmartAdmin RTL Support  -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-rtl.min.css') }}">
+
+<!-- Toast  -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/plugins/toast/dist/jquery.toast.min.css') }}">
+
+<!-- Choosen  -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/chosen.css') }}">
 
 <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/demo.min.css') }}">
@@ -54,3 +59,15 @@
 <link rel="apple-touch-startup-image" href="{{ asset('template_asset/img/splash/ipad-landscape.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
 <link rel="apple-touch-startup-image" href="{{ asset('template_asset/img/splash/ipad-portrait.png') }}" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
 <link rel="apple-touch-startup-image" href="{{ asset('template_asset/img/splash/iphone.png') }}" media="screen and (max-device-width: 320px)">
+
+<style type="text/css">
+	.dataTables_length {
+		float: right;
+	}
+	.dt-toolbar-footer > :last-child, .dt-toolbar > :last-child {
+		padding-right: 0 !important;
+	}
+	.col-sm-1.col-xs-12.hidden-xs {
+	    padding: 0px;
+	}
+</style>
