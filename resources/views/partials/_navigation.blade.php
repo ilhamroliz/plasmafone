@@ -29,7 +29,7 @@
 						<a href="{{ url('master/suplier/suplier') }}">Master Supplier</a>
 					</li>
 
-					<li class="{{ (Request::is('master/gudang/*') || Request::is('master/gudang')) ? 'active' : '' }}">
+{{-- 					<li class="{{ (Request::is('master/gudang/*') || Request::is('master/gudang')) ? 'active' : '' }}">
 						<a href="{{ route('gudang.index') }}">Master Gudang</a>
 					</li>
 
@@ -43,13 +43,13 @@
 
 					<li class="{{ (Request::is('master/satuan-barang/*') || Request::is('master/satuan-barang')) ? 'active' : '' }}">
 						<a href="{{ route('satuan-barang.index') }}">Master Satuan Barang</a>
-					</li>
+					</li> --}}
 
 					<li class="{{ (Request::is('master/barang/*') || Request::is('master/barang')) ? 'active' : '' }}">
 						<a href="{{ route('barang.index') }}">Master Barang</a>
 					</li>
 
-					<li class="{{ (Request::is('master/karyawan/*') || Request::is('master/karyawan')) ? 'active' : '' }}">
+{{-- 					<li class="{{ (Request::is('master/karyawan/*') || Request::is('master/karyawan')) ? 'active' : '' }}">
 						<a href="{{ route('karyawan.index') }}">Master karyawan</a>
 					</li>
 
@@ -59,7 +59,7 @@
 
 					<li class="{{ (Request::is('/master/posisi*') || Request::is('/master/posisi')) ? 'active' : '' }}">
 						<a href="{{ url('/master/posisi') }}">Master Posisi</a>
-					</li>
+					</li> --}}
 
 					<li>
 						<a href="flot.html">Master Member</a>
