@@ -104,18 +104,24 @@ class barang_controller extends Controller
 
                 if ($request->hasFile('i_img')) {
                     $image_tmp = Input::file('i_img');
-                    // $image_size = $image_tmp->getSize();
+                    $image_size = $image_tmp->getSize(); //getClientSize()
                     $maxsize    = '2097152';
-                    if ($image_tmp->isValid()) {
-                        $extension = $image_tmp->getClientOriginalExtension();
-                        $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
-                        $image_path = 'img/items/'.$filename;
-                        //Resize images
-                        Image::make($image_tmp)->resize(250, 190)->save($image_path);
-                        ImageOptimizer::optimize($image_path);
-                        //Store image name in products table
-                        $barang->i_img = $filename;
+                    if ($image_size < $maxsize) {
+                       if ($image_tmp->isValid()) {
+                            $extension = $image_tmp->getClientOriginalExtension();
+                            $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
+                            $image_path = 'img/items/'.$filename;
+                            //Resize images
+                            ini_set('memory_limit', '256M');
+                            Image::make($image_tmp)->resize(250, 190)->save($image_path);
+                            ImageOptimizer::optimize($image_path);
+                            //Store image name in products table
+                            $barang->i_img = $filename;
+                        }
+                    } else {
+                        return redirect()->back()->with('flash_message_error', 'Data barang gagal disimpan...! Ukuran file terlalu besar');
                     }
+                    
                 }else{
                     $barang->i_img = '';
                 }
@@ -125,7 +131,6 @@ class barang_controller extends Controller
                 DB::commit();
                 // all good
                 return redirect('master/barang/add')->with('flash_message_success', 'Data barang berhasil tersimpan...!');
-                    }
             }
         } catch (\Exception $e) {
             DB::rollback();
