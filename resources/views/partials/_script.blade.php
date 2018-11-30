@@ -71,16 +71,30 @@
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.ui.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.manager.min.js') }}"></script>
 		
-		<!-- PAGE RELATED PLUGIN(S) -->
+		<!-- Datatables -->
+		<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
+		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
+		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
+		<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 		<script>
+		var responsiveHelper_dt_basic = undefined;
+		var responsiveHelper_datatable_fixed_column = undefined;
+		var responsiveHelper_datatable_col_reorder = undefined;
+		var responsiveHelper_datatable_tabletools = undefined;
+		
+		var breakpointDefinition = {
+			tablet : 1024,
+			phone : 480
+		};
 			$(document).ready(function() {
 
 				baseUrl = '{{ url('/') }}';
 				// DO NOT REMOVE : GLOBAL FUNCTIONS!
 				pageSetUp();
 
-				$('[data-toggle="tooltip"]').tooltip()
+				$('[data-toggle="tooltip"]').tooltip();
 
 			});
 
