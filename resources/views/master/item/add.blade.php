@@ -280,7 +280,7 @@
 									<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
-												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled" onclick="overlay()">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -352,6 +352,11 @@
 	</script>
 
 	<script type="text/javascript">
+		function overlay(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+		}
+
 		function loadFile(event) {
 			$("#preview").html("");
 			$("#preview").append("<img id='img_prev' src='"+URL.createObjectURL(event.target.files[0])+"'>");

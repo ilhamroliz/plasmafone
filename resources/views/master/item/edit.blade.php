@@ -59,7 +59,7 @@
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
 
 			@if(Session::has('flash_message_success'))
-				<div class="col-md-12" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
@@ -67,7 +67,7 @@
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
-				<div class="col-md-12" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-danger alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
@@ -93,7 +93,7 @@
 							<!-- widget content -->
 							<div class="widget-body">
 								
-								<form id="data-form" class="form-horizontal" action="{{ route('barang.insert') }}" method="post" enctype="multipart/form-data">
+								<form id="data-form" class="form-horizontal" action="{{ url('/master/barang/edit/'.Crypt::encrypt($items[0]->i_id)) }}" method="post" enctype="multipart/form-data">
 									{{ csrf_field() }}
 									<fieldset>
 										<legend>
@@ -296,7 +296,7 @@
 									<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
-												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled" onclick="overlay()">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -340,42 +340,39 @@
 	<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script type="text/x-template" id="select2-template-kelompok">
-	  <select style="width:100%" name="i_kelompok" required>
+	  <select style="width:100%" name="i_kelompok" id="kelompok_select" required>
 	  	<option value="">-- PILIH KELOMPOK</option>
-	  	@foreach($items as $item)
-	    <option v-for="option in options" :value="option.i_kelompok" @if($item->i_kelompok != "") selected @endif>@{{ option.i_kelompok }}</option>
-	    @endforeach
+	    <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option>
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-group">
-	  <select style="width:100%" name="i_group">
+	  <select style="width:100%" name="i_group" id="group_select" required>
 	  	<option value="">-- PILIH GROUP</option>
-	  	@foreach($items as $item)
-	    <option v-for="option in options" :value="option.i_group" @if($item->i_group != "") selected @endif>@{{ option.i_group }}</option>
-	    @endforeach
+	    <option v-for="option in options" :value="option.i_group">@{{ option.i_group }}</option>
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-subgroup">
-	  <select style="width:100%" name="i_sub_group">
+	  <select style="width:100%" name="i_sub_group" id="sub_group_select" required>
 	  	<option value="">-- PILIH SUB GROUP</option>
-	  	@foreach($items as $item)
-	    <option v-for="option in options" :value="option.i_sub_group" @if($item->i_sub_group != "") selected @endif>@{{ option.i_sub_group }}</option>
-	    @endforeach
+	    <option v-for="option in options" :value="option.i_sub_group">@{{ option.i_sub_group }}</option>
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-merk">
-	  <select style="width:100%" name="i_merk">
+	  <select style="width:100%" name="i_merk" id="merk_select" required>
 	  	<option value="">-- PILIH MERK</option>
-	  	@foreach($items as $item)
-	    <option v-for="option in options" :value="option.i_merk" @if($item->i_merk != "") selected @endif>@{{ option.i_merk }}</option>
-	    @endforeach
+	    <option v-for="option in options" :value="option.i_merk">@{{ option.i_merk }}</option>
 	  </select>
 	</script>
 
 	<script type="text/javascript">
+		function overlay(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+		}
+
 		function loadFile(event) {
 			$("#preview").html("");
 			$("#preview").append("<img id='img_prev' src='"+URL.createObjectURL(event.target.files[0])+"'>");
@@ -404,7 +401,23 @@
 			{
 				i_harga.value = formatRupiah(this.value, 'Rp');
 			});
-			// i_harga.value = formatRupiah($('#i_harga').val(), 'Rp');
+			
+			// $("#select_kelompok").val($('#select_kelompok :selected').text());
+			setTimeout(function () {
+				$('select#kelompok_select').val("{{ $items[0]->i_kelompok }}").select2();
+				$('select#group_select').val("{{ $items[0]->i_group }}").select2();
+				$('select#sub_group_select').val("{{ $items[0]->i_sub_group }}").select2();
+				$('select#merk_select').val("{{ $items[0]->i_merk }}").select2();
+				var kel 	= $('#select_kelompok :selected').text();
+				var grp 	= $('#select_group :selected').text();
+				var sbgrp 	= $('#select_sub_group :selected').text();
+				var mrk 	= $('#select_merk :selected').text();
+				$('#select_kelompok').find('#select2-chosen-1').html(kel);
+				$('#select_group').find('#select2-chosen-3').html(grp);
+				$('#select_sub_group').find('#select2-chosen-5').html(sbgrp);
+				$('#select_merk').find('#select2-chosen-7').html(mrk);
+			}, 2000);
+			
 
 			function formatRupiah(angka, prefix)
 			{

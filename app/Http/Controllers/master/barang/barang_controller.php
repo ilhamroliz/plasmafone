@@ -28,7 +28,7 @@ class barang_controller extends Controller
         $items_active = collect($items_active);
         return DataTables::of($items_active)
         ->addColumn('aksi', function ($items_active){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_active->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_active->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
@@ -40,7 +40,7 @@ class barang_controller extends Controller
         $items_all = collect($items_all);
         return DataTables::of($items_all)
         ->addColumn('aksi', function ($items_all){      
-            return '<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_all->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_all->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
@@ -53,7 +53,7 @@ class barang_controller extends Controller
 
         return DataTables::of($items_nonactive)
         ->addColumn('aksi', function ($items_nonactive){      
-            return '<button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_nonactive->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button><button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_nonactive->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
@@ -139,13 +139,79 @@ class barang_controller extends Controller
         }
     }
 
-    public function edit(Request $request){
+    public function edit(Request $request, $id = null){
+        if ($request->isMethod('post')) {
+            $data       = $request->all();
+
+            DB::beginTransaction();
+
+            try {
+                if ($request->hasFile('i_img')) {
+                    $image_tmp = Input::file('i_img');
+                    $image_size = $image_tmp->getSize(); //getClientSize()
+                    $maxsize    = '2097152';
+                    if ($image_size < $maxsize) {
+                       if ($image_tmp->isValid()) {
+
+                            $namefile = $data['current_img'];
+
+                            if ($namefile != "") {
+                                $path = 'img/items/'.$namefile;
+                                if (File::exists($path)) {
+                                    # code...
+                                    File::delete($path);
+                                }
+                            }
+                            
+                            $extension = $image_tmp->getClientOriginalExtension();
+                            $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
+                            $image_path = 'img/items/'.$filename;
+                            //Resize images
+                            ini_set('memory_limit', '256M');
+                            Image::make($image_tmp)->resize(250, 190)->save($image_path);
+                            ImageOptimizer::optimize($image_path);
+                            //Store image name in products table
+                            $image = $filename;
+                        }
+                    } else {
+                        return redirect()->back()->with('flash_message_error', 'Data barang gagal disimpan...! Ukuran file terlalu besar');
+                    }
+                    
+                }else{
+                    $image = $data['current_img'];
+                }
+
+                Item::where(['i_id' => Crypt::decrypt($id)])->update([
+                    'i_kelompok'    => $data['i_kelompok'],
+                    'i_group'       => $data['i_group'],
+                    'i_sub_group'   => $data['i_sub_group'],
+                    'i_merk'        => $data['i_merk'],
+                    'i_nama'        => $data['i_nama'],
+                    'i_specificcode'=> $data['i_specificcode'],
+                    'i_code'        => $data['i_code'],
+                    'i_isactive'    => $data['i_isactive'],
+                    'i_minstock'    => $data['i_minstock'],
+                    'i_berat'       => $data['i_berat'],
+                    'i_price'       => $this->formatPrice($data['i_harga']),
+                    'i_img'         => $image
+                ]);
+
+                DB::commit();
+                // all good
+                return redirect('/master/barang/edit/'.$id)->with('flash_message_success', 'Data barang berhasil diubah...!');
+            } catch (\Exception $e) {
+                DB::rollback();
+                // something went wrong
+                return redirect()->back()->with('flash_message_error', 'Data barang gagal diubah...! Mohon coba lagi');
+            }
+        }
+        // ============================================================
         DB::beginTransaction();
 
         try {
-            $check = Item::where('i_id', Crypt::decrypt($request->id))->count();
+            $check = Item::where('i_id', Crypt::decrypt($id))->count();
             if ($check > 0) {
-                $items = Item::where('i_id', Crypt::decrypt($request->id))->get();
+                $items = Item::where('i_id', Crypt::decrypt($id))->get();
                 DB::commit();
                 // dd($items);
                 return view('master.item.edit')->with(compact('items'));

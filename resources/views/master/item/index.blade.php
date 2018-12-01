@@ -353,8 +353,9 @@
 		})
 
 		function edit(val){
-			// return alert(val);
-			window.location = baseUrl+'/master/barang/edit?id='+val;
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+			window.location = baseUrl+'/master/barang/edit/'+val;
 		}
 	</script>
 

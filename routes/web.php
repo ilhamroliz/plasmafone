@@ -138,9 +138,10 @@ Route::group(['middleware' => 'auth'], function(){
 		'uses'	=> 'master\barang\barang_controller@insert',
 	])->name('barang.insert');
 
-	Route::get('master/barang/edit', [
-		'uses'	=> 'master\barang\barang_controller@edit',
-	])->name('barang.edit');
+	Route::match(['get', 'post'], '/master/barang/edit/{id}', 'master\barang\barang_controller@edit')->name('barang.edit');
+	// Route::get('master/barang/edit', [
+	// 	'uses'	=> 'master\barang\barang_controller@edit',
+	// ])->name('barang.edit');
 
 	// End Master Barang
 
