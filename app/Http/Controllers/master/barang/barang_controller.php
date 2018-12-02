@@ -18,52 +18,64 @@ use DataTables;
 
 class barang_controller extends Controller
 {
-    public function index(){
+    public function index()
+    {
     	return view('master.item.index');
     }
 
-    public function getdataactive(){
-        $items_active = Item::where('i_isactive', 'Y')->get();
+    public function detail($id)
+    {
+        $item = Item::where(['i_id' => Crypt::decrypt($id)])->first();
+        return response()->json($item);
+    }
+
+    public function getdataactive()
+    {
+        $items_active = Item::where('i_isactive', 'Y')->orderBy('created_at', 'desc')->get();
 
         $items_active = collect($items_active);
         return DataTables::of($items_active)
         ->addColumn('aksi', function ($items_active){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_active->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
     }
 
-    public function getdataall(){
-        $items_all = Item::get();
+    public function getdataall()
+    {
+        $items_all = Item::orderBy('created_at', 'desc')->get();
 
         $items_all = collect($items_all);
         return DataTables::of($items_all)
         ->addColumn('aksi', function ($items_all){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_all->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
     }
 
-    public function getdatanonactive(){
-        $items_nonactive = Item::where('i_isactive', 'N')->get();
+    public function getdatanonactive()
+    {
+        $items_nonactive = Item::where('i_isactive', 'N')->orderBy('created_at', 'desc')->get();
 
         $items_nonactive = collect($items_nonactive);
 
         return DataTables::of($items_nonactive)
         ->addColumn('aksi', function ($items_nonactive){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" data-id="'.Crypt::encrypt($items_nonactive->i_id).'"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
         ->rawColumns(['aksi'])
         ->make(true);
     }
 
-    public function add(){
+    public function add()
+    {
     	return view('master.item.add');
     }
 
-    public function get_form_resources(){
+    public function get_form_resources()
+    {
         $kelompok       = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->get();
         $group          = DB::table('d_item')->distinct('i_group')->select('i_group')->get();
         $subgroup       = DB::table('d_item')->distinct('i_sub_group')->select('i_sub_group')->get();
@@ -77,7 +89,8 @@ class barang_controller extends Controller
     	]);
     }
 
-    public function insert(Request $request){
+    public function insert(Request $request)
+    {
         $data       = $request->all();
         $harga      = $this->formatPrice($data['i_harga']);
 
@@ -139,7 +152,8 @@ class barang_controller extends Controller
         }
     }
 
-    public function edit(Request $request, $id = null){
+    public function edit(Request $request, $id = null)
+    {
         if ($request->isMethod('post')) {
             $data       = $request->all();
 
@@ -224,6 +238,34 @@ class barang_controller extends Controller
             return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
         }
         
+    }
+
+    function deleteimage($id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+            $check = Item::where('i_id', Crypt::decrypt($id))->count();
+            if ($check > 0) {
+                $item = Item::where('i_id', Crypt::decrypt($id))->first();
+                $filename = $item->i_img;
+                $path = 'img/items/'.$filename;
+                if (File::exists($path)) {
+                    # code...
+                    File::delete($path);
+                }
+                Item::where(['i_id' => Crypt::decrypt($id)])->update(['i_img' => ""]);
+                DB::commit();
+                
+                return redirect()->back()->with('flash_message_success', 'Data gambar dari barang "'.$item->i_nama.'" berhasil dihapus...!');
+            } else {
+                return redirect()->back()->with('flash_message_error', 'Data yang ingin anda hapus tidak ada didalam basis data...! Mulai ulang halaman');
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            // something went wrong
+            return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
+        }
     }
 
     function formatPrice($data)

@@ -39,7 +39,8 @@
 /*
  * GLOBAL: Sound Config (define sound path, enable or disable all sounds)
  */
-	$.sound_path = "sound/";
+ 	var base_url = window.location.origin+"/"+window.location.pathname.split('/')[1];
+	$.sound_path = base_url+"/sound/";
 	$.sound_on = true; 
 /*
  * SAVE INSTANCE REFERENCE (DO NOT CHANGE)

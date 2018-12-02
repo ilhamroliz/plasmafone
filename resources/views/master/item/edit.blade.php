@@ -280,13 +280,16 @@
 												</div>
 											</div>
 											<div class="col-md-6">
-												<div id="current_img" style="margin-bottom: 0;" class="preview thumbnail">
+												<div style="margin-bottom: 0;" class="preview thumbnail">
 													<input type="hidden" name="current_img" id="current_img" value="{{ $item->i_img }}">
 													@if($item->i_img == "")
 													<img src="{{ asset('img/image-not-found.png') }}">
 													@else
 													<img src="{{ asset('img/items/'.$item->i_img) }}">
 													@endif
+												</div>
+												<div style="top: 0; display: none;" id="deleteimg_preview">
+													<a onclick="delete_img('{{ Crypt::encrypt($item->i_id) }}')" style="width: 100%;" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Hapus</a>
 												</div>
 											</div>
 										</div>
@@ -329,6 +332,7 @@
 
 		</section>
 		<!-- end widget grid -->
+		
 
 	</div>
 	<!-- END MAIN CONTENT -->
@@ -387,6 +391,39 @@
 
 		}
 
+		function delete_img(id){
+			// /master/barang/delete-image/{id}
+
+			$.SmartMessageBox({
+				title : "Konfirmasi!",
+				content : 'Apakah Anda yakin akan menghapus data gambar dari barang "'+$('#i_nama').val()+'"?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+					overlay();
+					window.location = baseUrl+'/master/barang/delete-image/'+id;
+					// $.smallBox({
+					// 	title : "Callback function",
+					// 	content : "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
+					// 	color : "#659265",
+					// 	iconSmall : "fa fa-check fa-2x fadeInRight animated",
+					// 	timeout : 4000
+					// });
+				}
+				// if (ButtonPressed === "Batal") {
+				// 	$.smallBox({
+				// 		title : "Callback function",
+				// 		content : "<i class='fa fa-clock-o'></i> <i>You pressed No...</i>",
+				// 		color : "#C46A69",
+				// 		iconSmall : "fa fa-times fa-2x fadeInRight animated",
+				// 		timeout : 4000
+				// 	});
+				// }
+	
+			});
+			
+		}
+
 		function isNumberKey(evt) {
 		    var charCode = (evt.which) ? evt.which : evt.keyCode;
 		    if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -401,6 +438,12 @@
 			{
 				i_harga.value = formatRupiah(this.value, 'Rp');
 			});
+
+			if ($('#current_img').val() != "") {
+				$('#deleteimg_preview').show();
+			}else{
+				$('#deleteimg_preview').hide();
+			}
 			
 			// $("#select_kelompok").val($('#select_kelompok :selected').text());
 			setTimeout(function () {

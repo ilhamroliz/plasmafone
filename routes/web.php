@@ -139,9 +139,10 @@ Route::group(['middleware' => 'auth'], function(){
 	])->name('barang.insert');
 
 	Route::match(['get', 'post'], '/master/barang/edit/{id}', 'master\barang\barang_controller@edit')->name('barang.edit');
-	// Route::get('master/barang/edit', [
-	// 	'uses'	=> 'master\barang\barang_controller@edit',
-	// ])->name('barang.edit');
+
+	Route::get('/master/barang/delete-image/{id}', 'master\barang\barang_controller@deleteimage')->name('barang.delete.img');
+
+	Route::get('/master/barang/detail/{id}', 'master\barang\barang_controller@detail')->name('barang.detail');
 
 	// End Master Barang
 

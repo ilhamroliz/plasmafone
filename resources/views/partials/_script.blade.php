@@ -66,6 +66,7 @@
 
 		<!-- MAIN APP JS FILE -->
 		<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
+		<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
 
 		<!-- SmartChat UI : plugin -->
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.ui.min.js') }}"></script>
