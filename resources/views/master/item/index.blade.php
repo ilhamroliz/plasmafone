@@ -379,6 +379,8 @@
 		var aktif, semua, inaktif;
 		var baseUrl = '{{ url('/') }}';
 		$(document).ready(function(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Menyiapkan...');
 			$('#tabs').tabs();
 			let selected = [];
 
@@ -474,6 +476,7 @@
 						responsiveHelper_dt_basic.respond();
 					},
 				});
+				$('#overlay').fadeOut(200);
 			}, 1500);
 
 			// edit 1 click

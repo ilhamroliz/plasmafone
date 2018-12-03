@@ -92,12 +92,6 @@
 									<fieldset>
 										<legend>
 											Form Tambah Data Barang
-
-											<span class="pull-right" style="font-size: 0.6em; font-weight: 600">
-												<a href="{{ url('/master/barang') }}">
-													<i class="fa fa-arrow-left"></i> &nbsp;Kembali Ke Halaman Data Table
-												</a>
-											</span>
 										</legend>
 
 										<div class="row ">
@@ -106,7 +100,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kelompok</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<div class="input-group" id="select_kelompok">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_kelompok"><i class="fa fa-exchange"></i></span>
+															<span class="input-group-addon" style="cursor: pointer;" title="Tambah Kelompok" @click="switch_kelompok"><i class="fa fa-plus"></i></span>
 															<kelompok :options="data_I_kelompok" @change="i_kelompok_change" v-model="form_data.i_kelompok">
 														      
 														    </kelompok>
@@ -135,7 +129,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Group</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<div class="input-group" id="select_group">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_group"><i class="fa fa-exchange"></i></span>
+															<span class="input-group-addon" style="cursor: pointer;" title="Tambah Group" @click="switch_group"><i class="fa fa-plus"></i></span>
 															<group :options="data_I_group" @change="i_group_change" v-model="form_data.i_group">
 														      
 														    </group>
@@ -167,7 +161,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Sub Group</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<div class="input-group" id="select_sub_group">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_sub_group"><i class="fa fa-exchange"></i></span>
+															<span class="input-group-addon" style="cursor: pointer;" title="Tambah Sub Group" @click="switch_sub_group"><i class="fa fa-plus"></i></span>
 															<subgroup :options="data_I_sub_group" @change="i_sub_group_change" v-model="form_data.i_sub_group">
 														      
 														    </subgroup>
@@ -196,7 +190,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Merk</label>
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 														<div class="input-group" id="select_merk">
-															<span class="input-group-addon" style="cursor: pointer;" @click="switch_merk"><i class="fa fa-exchange"></i></span>
+															<span class="input-group-addon" style="cursor: pointer;" title="Tambah Merk" @click="switch_merk"><i class="fa fa-plus"></i></span>
 															<merk :options="data_I_merk" @change="i_merk_change" v-model="form_data.i_merk">
 														      
 														    </merk>
