@@ -31,12 +31,18 @@
 	<div id="content">
 
         <div class="row hidden-mobile">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-cog"></i> 
                     Pengelolaan Pengguna<span>>
-                    Tambah User</span></h1>
+                    Tambah Data User</span></h1>
             </div>
+
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+				<div class="page-title">
+					<a href="{{ url('/pengaturan/akses-pengguna') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+				</div>
+			</div>
 
         </div>
 
@@ -67,141 +73,91 @@
             <div class="row">
 
                 <!-- NEW WIDGET START -->
-                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
 
                     <!-- Widget ID (each widget will need unique ID)-->
                     <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
-                            <h2><strong>Tambah User</strong></h2>				  
+                            <h2><strong>Tambah Data User</strong></h2>				  
                         </header>
 
                         <!-- widget div-->
                         <div>
                             
                             <!-- widget content -->
-                            <div class="weight-body ibox-content">
-                                <form id="form-tambah" class="smart-form" action="{{ url('/pengaturan/akses-pengguna/simpan-tambah') }}" method="post">
+                            <div class="weight-body">
+                                <form id="form-tambah" class="form-horizontal" action="{{ url('/pengaturan/akses-pengguna/simpan-tambah') }}" method="post">
                                     {{ csrf_field() }}
                                     <fieldset>
                                         <legend>
                                             Form Tambah User
                                         </legend>
 
-                                        <div class="row form-group">
-                                            <section class="col col-6">
-                                                <label class="input"> <i class="icon-prepend fa fa-user"></i>
-                                                    <input type="text" name="name" placeholder="Nama">
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <label class="input"> <i class="icon-prepend fa fa-user"></i>
-                                                    <input type="text" name="uname" placeholder="Username">
-                                                </label>
-                                            </section>
-                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sortable-grid ui-sortable">
+                                                
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Nama User</label>
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                        <input type="text" class="form-control" name="namaUser" id="namaUser" placeholder="Nama User" style="text-transform: uppercase">
+                                                    </div>
+                                                </div>
 
-                                        <div class="row form-group">
-                                            <section class="col col-6">
-                                                <label class="input"> <i class="icon-prepend fa fa-key"></i>
-                                                    <input type="text" name="pass" placeholder="Password">
-                                                </label>
-                                            </section>
-                                            <section class="col col-6">
-                                                <label class="input"> <i class="icon-prepend fa fa-key"></i>
-                                                    <input type="text" name="passconf" placeholder="Konfirmasi Password">
-                                                </label>
-                                            </section>
-                                        </div>
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Username</label>
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                        <input type="text" class="form-control" name="username" id="username" placeholder="USERNAME">
+                                                    </div>                                                
+                                                </div>
 
-                                        <div class="form-group row">
-                                        <!-- <div class="col col-6"> -->
-                                            <section class="col col-2">
-                                                <label class="select">
-                                                    <select name="day">
-                                                        <option value="0" selected="" disabled="">Tanggal</option>
-                                                        <option value="1">1</option>
-                                                        <option value="1">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                        <option value="5">5</option>
-                                                        <option value="6">6</option>
-                                                        <option value="7">7</option>
-                                                        <option value="8">8</option>
-                                                        <option value="9">9</option>
-                                                        <option value="10">10</option>
-                                                        <option value="11">11</option>
-                                                        <option value="12">12</option>
-                                                        <option value="13">13</option>
-                                                        <option value="14">14</option>
-                                                        <option value="15">15</option>
-                                                        <option value="16">16</option>
-                                                        <option value="17">17</option>
-                                                        <option value="18">18</option>
-                                                        <option value="19">19</option>
-                                                        <option value="20">20</option>
-                                                        <option value="21">21</option>
-                                                        <option value="22">22</option>
-                                                        <option value="23">23</option>
-                                                        <option value="24">24</option>
-                                                        <option value="25">25</option>
-                                                        <option value="26">26</option>
-                                                        <option value="27">27</option>
-                                                        <option value="28">28</option>
-                                                        <option value="29">29</option>
-                                                        <option value="30">30</option>
-                                                        <option value="31">31</option>
-                                                    </select> <i></i> 
-                                                </label>
-                                            </section>
-                                            <section class="col col-2">
-                                                <label class="select">
-                                                    <select name="month">
-                                                        <option value="0" selected="" disabled="">Bulan</option>
-                                                        <option value="1">January</option>
-                                                        <option value="1">February</option>
-                                                        <option value="3">March</option>
-                                                        <option value="4">April</option>
-                                                        <option value="5">May</option>
-                                                        <option value="6">June</option>
-                                                        <option value="7">July</option>
-                                                        <option value="8">August</option>
-                                                        <option value="9">September</option>
-                                                        <option value="10">October</option>
-                                                        <option value="11">November</option>
-                                                        <option value="12">December</option>
-                                                    </select> <i></i> 
-                                                </label>
-                                            </section>
-                                            <section class="col col-2">
-                                                <label class="select">
-                                                    <select name="month">
-                                                        <option value="0" selected="" disabled="">Bulan</option>
-                                                        <option value="1960">1960</option>
-                                                        <option value="1961">1961</option>
-                                                        <option value="3">March</option>
-                                                        <option value="4">April</option>
-                                                        <option value="5">May</option>
-                                                        <option value="6">June</option>
-                                                        <option value="7">July</option>
-                                                        <option value="8">August</option>
-                                                        <option value="9">September</option>
-                                                        <option value="10">October</option>
-                                                        <option value="11">November</option>
-                                                        <option value="12">December</option>
-                                                    </select> <i></i> 
-                                                </label>
-                                            </section>
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Password</label>
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                        <input type="text" class="form-control" name="pass" id="pass" placeholder="PASSWORD">
+                                                    </div>                                                
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Konfirmasi Password</label>
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                        <input type="text" class="form-control" name="passConf" id="passConf" placeholder="KONFIRMASI PASSWORD">
+                                                    </div>                                                
+                                                </div>
+                                               
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sortable-grid ui-sortable">
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Jabatan</label>
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                        <input type="text" class="form-control" name="jabatan" id="jabatan" placeholder="JABATAN USER">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Alamat User</label>
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer textarea">
+                                                        <textarea name="alamatUser" id="alamatUser" class="custom-scroll" rows="3"></textarea>
+                                                    </div>                                                
+                                                </div>
+
+                                            </div>
+                                            
                                         </div>
                                         
                                     </fieldset>
-                                    <footer>
-                                        <div class="col-md-12">
-                                            <button class="pull-right btn btn-primary btn-outlinebtn-flat simpan" type="submit" style="margin-left: 5px;">
-                                                <i class="fa fa-floppy-o"></i> Simpan
-                                            </button>
-                                            <a href="{{url('/pengaturan/akses-pengguna')}}" class="btn btn-default btn-flat pull-right">Kembali</a>
+                                    
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-primary" type="submit" style="margin-left: 5px;">
+                                                    <i class="fa fa-floppy-o"></i> 
+                                                    &nbsp;Simpan
+                                                </button>
+                                            </div>
                                         </div>
-                                    </footer>
+                                    </div>
 
                                 </form>
                             </div>
@@ -213,7 +169,7 @@
                     </div>
                     <!-- end widget -->
 
-                </article>
+                </div>
                 <!-- WIDGET END -->
             </div>
 
