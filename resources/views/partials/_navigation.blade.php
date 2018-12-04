@@ -22,6 +22,7 @@
 			<li class="{{ Request::is('dashboard') ? 'active' : '' }}">
 				<a href="{{ url('dashboard') }}" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
 			</li>
+
 			<li class="{{ Request::is('master/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-asterisk"></i> <span class="menu-item-parent">Data Master</span></a>
 				<ul>
@@ -150,6 +151,36 @@
 						<a href="flot.html">Analisa Penjualan</a>
 					</li>
 
+				</ul>
+			</li>
+
+			<li>
+				<a href="#">
+					<i class="fa fa-lg fa-fw fa-wrench"></i> 
+					<span class="menu-item-parent">Perbaikan</span>
+				</a>
+				<ul>
+					<li>
+						<a href="flot.html">Perbaikan Barang</a>
+					</li>
+				</ul>
+			</li>
+
+			<li>
+				<a href="#">
+					<i class="fa fa-lg fa-fw fa-sliders"></i> 
+					<span class="menu-item-parent">Manajemen Penjualan</span>
+				</a>
+				<ul>
+					<li>
+						<a href="flot.html">Pembuatan Rencana Penjualan</a>
+					</li>
+					<li>
+						<a href="flot.html">Monitoring Penjualan</a>
+					</li>
+					<li>
+						<a href="flot.html">Analisis Penjualan</a>
+					</li>
 				</ul>
 			</li>
 
