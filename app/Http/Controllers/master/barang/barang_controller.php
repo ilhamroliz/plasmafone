@@ -37,7 +37,7 @@ class barang_controller extends Controller
 
         return DataTables::of($items_active)
         ->addColumn('harga', function($items_active){
-            return '<div class="text-right">Rp'.number_format($items_active->i_harga,2,',','.').'</div>';
+            return '<div class="text-right">Rp'.number_format($items_active->i_price,2,',','.').'</div>';
         })
         ->addColumn('aksi', function ($items_active){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
@@ -54,7 +54,7 @@ class barang_controller extends Controller
 
         return DataTables::of($items_all)
         ->addColumn('harga', function($items_all){
-            return '<div class="text-right">Rp'.number_format($items_all->i_harga,2,',','.').'</div>';
+            return '<div class="text-right">Rp'.number_format($items_all->i_price,2,',','.').'</div>';
         })
         ->addColumn('aksi', function ($items_all){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
@@ -71,7 +71,7 @@ class barang_controller extends Controller
 
         return DataTables::of($items_nonactive)
         ->addColumn('harga', function($items_nonactive){
-            return '<div class="text-right">Rp'.number_format($items_nonactive->i_harga,2,',','.').'</div>';
+            return '<div class="text-right">Rp'.number_format($items_nonactive->i_price,2,',','.').'</div>';
         })
         ->addColumn('aksi', function ($items_nonactive){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
@@ -245,17 +245,23 @@ class barang_controller extends Controller
 
                 }
 
+                if($data['i_code'] == ""){
+                    $code = "";
+                }else{
+                    $code = strtoupper($data['i_code']);
+                }
+
                 Item::where(['i_id' => Crypt::decrypt($id)])->update([
-                    'i_kelompok'    => $data['i_kelompok'],
-                    'i_group'       => $data['i_group'],
-                    'i_sub_group'   => $data['i_sub_group'],
-                    'i_merk'        => $data['i_merk'],
-                    'i_nama'        => $data['i_nama'],
-                    'i_specificcode'=> $data['i_specificcode'],
-                    'i_code'        => $data['i_code'],
-                    'i_isactive'    => $data['i_isactive'],
-                    'i_minstock'    => $data['i_minstock'],
-                    'i_berat'       => $data['i_berat'],
+                    'i_kelompok'    => strtoupper($data['i_kelompok']),
+                    'i_group'       => strtoupper($data['i_group']),
+                    'i_sub_group'   => strtoupper($data['i_sub_group']),
+                    'i_merk'        => strtoupper($data['i_merk']),
+                    'i_nama'        => strtoupper($data['i_nama']),
+                    'i_specificcode'=> strtoupper($data['i_specificcode']),
+                    'i_code'        => $code,
+                    'i_isactive'    => strtoupper($data['i_isactive']),
+                    'i_minstock'    => strtoupper($data['i_minstock']),
+                    'i_berat'       => strtoupper($data['i_berat']),
                     'i_price'       => $this->formatPrice($data['i_harga']),
                     'i_img'         => $image
                 ]);

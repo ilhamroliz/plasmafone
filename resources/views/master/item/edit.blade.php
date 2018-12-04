@@ -686,14 +686,6 @@
 						}
 					},
 
-					i_code : {
-						validators : {
-							notEmpty : {
-								message : 'Kode Barang Tidak Boleh Kosong',
-							}
-						}
-					},
-
 					i_minstock : {
 						validators : {
 							notEmpty : {
