@@ -86,7 +86,7 @@
                             
                             <!-- widget content -->
                             <div class="weight-body">
-                                <form id="form-tambah" class="form-horizontal" action="{{ url('/pengaturan/akses-pengguna/simpan-tambah') }}" method="post">
+                                <form id="form-tambah" class="form-horizontal" action="{{ url('/pengaturan/akses-pengguna/simpan-pengguna') }}" method="post">
                                     {{ csrf_field() }}
                                     <fieldset>
                                         <legend>
@@ -99,7 +99,14 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Nama User</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="text" class="form-control" name="namaUser" id="namaUser" placeholder="Nama User" style="text-transform: uppercase">
+                                                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama User" style="text-transform: uppercase">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Outlet</label>
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                        <input type="text" class="form-control" name="outlet" id="outlet" placeholder="Pilih Outlet" style="text-transform: uppercase">
                                                     </div>
                                                 </div>
 
@@ -120,7 +127,7 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Konfirmasi Password</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="text" class="form-control" name="passConf" id="passConf" placeholder="KONFIRMASI PASSWORD">
+                                                        <input type="text" class="form-control" name="passconf" id="passconf" placeholder="KONFIRMASI PASSWORD">
                                                     </div>                                                
                                                 </div>
                                                
@@ -136,9 +143,30 @@
                                                 </div>
 
                                                 <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Tanggal Lahir</label>
+                                                    <div class="col-xs-8 col-lg-8">
+                                                        <select id="dobday" class="form-control col-sm-2" style="width: 30%;" name="tanggal"></select>
+                                                        <select id="dobmonth" class="form-control col-sm-4" style="width: 30%; margin-left: 10px" name="bulan"></select>
+                                                        <select id="dobyear" class="form-control col-sm-3" style="width: 30%; margin-left: 10px" name="tahun"></select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Alamat User</label>
-                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer textarea">
-                                                        <textarea name="alamatUser" id="alamatUser" class="custom-scroll" rows="3"></textarea>
+                                                    <div class="col-xs-8 col-lg-8 textarea">
+                                                        <textarea name="alamatUser" id="alamatUser" class="custom-scroll" rows="3" style="width: 100%"></textarea>
+                                                    </div>                                                
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
+                                                    <div class="col-xs-8 col-lg-8 textarea">
+                                                        <div class="upload-btn-wrapper">
+
+                                                            <button class="btn btn-default"><i class="fa fa-file-picture-o"></i>&nbsp;Upload Gambar</button>
+                                                            <input type="file" accept="image/*" name="i_img" id="i_img" v-model='form_data.i_img' onchange="loadFile(event)" />
+
+														</div>
                                                     </div>                                                
                                                 </div>
 
@@ -188,4 +216,32 @@
 
     </div>
     <!-- END MAIN CONTENT -->
+@endsection
+
+@section('extra_script')
+
+<script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.dobPicker({
+        // Selectopr IDs
+        daySelector: '#dobday',
+        monthSelector: '#dobmonth',
+        yearSelector: '#dobyear',
+
+        // Default option values
+        dayDefault: 'Tangal',
+        monthDefault: 'Bulan',
+        yearDefault: 'Tahun',
+
+        // Minimum age
+        minimumAge: 10,
+
+        // Maximum age
+        maximumAge: 80
+        });
+
+    });
+
+</script>
 @endsection
