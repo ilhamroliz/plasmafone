@@ -46,7 +46,7 @@ class suplier_controller extends Controller
             }
             
         }
-        return view('master.suplier.tambah_suplier');
+        return view('master.suplier.add');
     }
 
     public function multiple_delete(Request $request){

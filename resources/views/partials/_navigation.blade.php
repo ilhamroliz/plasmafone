@@ -26,8 +26,8 @@
 			<li class="{{ Request::is('master/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-asterisk"></i> <span class="menu-item-parent">Data Master</span></a>
 				<ul>
-					<li class="{{ (Request::is('master/suplier/suplier/*') || Request::is('master/suplier/suplier')) ? 'active' : '' }}">
-						<a href="{{ url('master/suplier/suplier') }}">Master Supplier</a>
+					<li class="{{ (Request::is('master/supplier/*') || Request::is('master/supplier')) ? 'active' : '' }}">
+						<a href="{{ url('master/supplier') }}">Master Supplier</a>
 					</li>
 
 					<li class="{{ (Request::is('master/barang/*') || Request::is('master/barang')) ? 'active' : '' }}">
