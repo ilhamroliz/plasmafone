@@ -48,6 +48,9 @@
 		<!-- browser msie issue fix -->
 		<script src="{{ asset('template_asset/js/plugin/msie-fix/jquery.mb.browser.min.js') }}"></script>
 
+		<!-- JQUERY Mask Money -->
+		<script src="{{ asset('template_asset/js/plugin/mask-money/jquery.maskMoney.js') }}"></script>
+
 		<!-- FastClick: For mobile devices -->
 		<script src="{{ asset('template_asset/js/plugin/fastclick/fastclick.min.js') }}"></script>
 
