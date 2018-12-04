@@ -354,7 +354,7 @@
 
 														<div class="upload-btn-wrapper">
 
-														  <button class="btn-upload">Upload Gambar</button>
+														  <button class="btn btn-default"><i class="fa fa-file-picture-o"></i>&nbsp;Upload Gambar</button>
 
 														  <input type="file" accept="image/*" name="i_img" id="i_img" v-model='form_data.i_img' onchange="loadFile(event)" />
 
@@ -374,7 +374,7 @@
 
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 
-														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" v-model="form_data.i_harga" onkeypress="return isNumberKey(event)"/>
+														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" v-model="form_data.i_harga"/>
 
 													</div>
 
@@ -517,12 +517,14 @@
 
 		$(document).ready(function(){
 
-			var i_harga = document.getElementById('i_harga');
+			// var i_harga = document.getElementById('i_harga');
 
-			i_harga.addEventListener('keyup', function(e)
-			{
-				i_harga.value = formatRupiah(this.value, 'Rp');
-			});
+			// i_harga.addEventListener('keyup', function(e)
+			// {
+			// 	i_harga.value = formatRupiah(this.value, 'Rp');
+			// });
+
+			$("#i_harga").maskMoney({allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
 
 			function formatRupiah(angka, prefix)
 			{
