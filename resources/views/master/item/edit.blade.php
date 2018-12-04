@@ -8,7 +8,7 @@
 
 <?php 
 	function rupiah($angka){
-		$hasil_rupiah = "Rp" . number_format($angka,0,',','.');
+		$hasil_rupiah = number_format($angka,2,',','.');
 		return $hasil_rupiah;
 	}
 ?>
@@ -374,7 +374,7 @@
 
 													<div class="col-xs-7 col-lg-7 inputGroupContainer">
 
-														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" onkeypress="return isNumberKey(event)" value="{{ rupiah($item->i_price) }}"/>
+														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" value="{{ rupiah($item->i_price) }}"/>
 
 													</div>
 
@@ -571,12 +571,13 @@
 
 		$(document).ready(function(){
 
-			var i_harga = document.getElementById('i_harga');
+			// var i_harga = document.getElementById('i_harga');
 
-			i_harga.addEventListener('keyup', function(e)
-			{
-				i_harga.value = formatRupiah(this.value, 'Rp');
-			});
+			// i_harga.addEventListener('keyup', function(e)
+			// {
+			// 	i_harga.value = formatRupiah(this.value, 'Rp');
+			// });
+			$("#i_harga").maskMoney({thousands:'.', precision: 0});
 
 			if ($('#current_img').val() != "") {
 

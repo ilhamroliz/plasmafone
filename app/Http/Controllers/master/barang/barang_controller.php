@@ -124,7 +124,12 @@ class barang_controller extends Controller
                 $barang->i_merk         = strtoupper($data['i_merk']);
                 $barang->i_nama         = strtoupper($data['i_nama']);
                 $barang->i_specificcode = strtoupper($data['i_specificcode']);
-                $barang->i_code         = strtoupper($data['i_code']);
+                if($data['i_code'] == ""){
+                    $code = "";
+                }else{
+                    $code = strtoupper($data['i_code']);
+                }
+                $barang->i_code         = $code;
                 $barang->i_isactive     = strtoupper($data['i_isactive']);
                 $barang->i_minstock     = strtoupper($data['i_minstock']);
                 $barang->i_berat        = strtoupper($data['i_berat']);
@@ -347,8 +352,7 @@ class barang_controller extends Controller
 
     function formatPrice($data)
     {
-        $explode_rp =  implode("", explode("Rp", $data));
-        return implode("", explode(".", $explode_rp));
+        return implode("", explode(".", $data));
     }
 
     

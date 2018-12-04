@@ -524,7 +524,7 @@
 			// 	i_harga.value = formatRupiah(this.value, 'Rp');
 			// });
 
-			$("#i_harga").maskMoney({allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
+			$("#i_harga").maskMoney({thousands:'.', precision: 0});
 
 			function formatRupiah(angka, prefix)
 			{
@@ -596,14 +596,6 @@
 						validators : {
 							notEmpty : {
 								message : 'Nama Barang Tidak Boleh Kosong',
-							}
-						}
-					},
-
-					i_code : {
-						validators : {
-							notEmpty : {
-								message : 'Kode Barang Tidak Boleh Kosong',
 							}
 						}
 					},
