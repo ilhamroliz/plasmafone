@@ -168,7 +168,7 @@
 
 			<li>
 				<a href="#">
-					<i class="fa fa-lg fa-fw fa-wrench"></i> 
+					<i class="fa fa-lg fa-fw fa-sliders"></i> 
 					<span class="menu-item-parent">Manajemen Penjualan</span>
 				</a>
 				<ul>
