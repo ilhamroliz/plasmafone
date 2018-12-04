@@ -60,7 +60,7 @@
 				</ul>
 			</li>
 
-			<li <?php if(preg_match("/request-order/i", $url)) { ?> class="active open" <?php } ?>>
+			<li>
 				<a href="#"><i class="fa fa-lg fa-fw fa-credit-card"></i> <span class="menu-item-parent">Pembelian</span></a>
 				<ul <?php if(preg_match("/request-order/i", $url) || preg_match("/rencana-pembelian/i", $url) || preg_match("/konfirmasi-pembelian/i", $url) || preg_match("/purchase-order/i", $url) || preg_match("/purchase-return/i", $url)) { ?> style="display: block;" <?php } ?>>
 					<li <?php if(preg_match("/request-order/i", $url)) { ?> class="active" <?php } ?>>
