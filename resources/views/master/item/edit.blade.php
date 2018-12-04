@@ -867,6 +867,8 @@
 						$("#input_kelompok").show();
 					}else{
 						this.kelompok = 'select';
+						this.form_data.i_kelompok = '';
+						$('#data-form').data('bootstrapValidator').resetForm();
 						$('#input_kelompok').hide();
 						$("#select_kelompok").show();
 					}
@@ -879,6 +881,8 @@
 						$("#input_group").show();
 					}else{
 						this.group = 'select';
+						this.form_data.i_group = '';
+						$('#data-form').data('bootstrapValidator').resetForm();
 						$('#input_group').hide();
 						$("#select_group").show();
 					}
@@ -891,6 +895,9 @@
 						$("#input_sub_group").show();
 					}else{
 						this.subgroup = 'select';
+						this.form_data.i_sub_group = '';
+						$('#data-form').data('bootstrapValidator').resetForm();
+						$('#input_sub_group').hide();
 						$('#input_sub_group').hide();
 						$("#select_sub_group").show();
 					}
@@ -903,6 +910,8 @@
 						$("#input_merk").show();
 					}else{
 						this.merk = 'select';
+						this.form_data.i_merk = '';
+						$('#data-form').data('bootstrapValidator').resetForm();
 						$('#input_merk').hide();
 						$("#select_merk").show();
 					}

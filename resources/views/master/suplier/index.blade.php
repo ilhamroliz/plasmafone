@@ -86,46 +86,53 @@
 
 			<!-- row -->
 			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
-					<form id="table-form" method="post" action="{{ url('/master/suplier/suplier/edit-multiple') }}">
-						{!! csrf_field() !!}
-						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-							<thead>			                
-								<tr>
-									<th class="text-center" data-hide="phone" width="4%">*</th>
-									<th class="text-center" width="5%" style="vertical-align: middle;">
-										---
-									</th>
-									<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Perusahaan</th>
-									<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Suplier</th>
-									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Alamat</th>
-									<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;No.Telephone</th>
-									<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-fax txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Faximily</th>
-									<th class="text-center" data-hide="phone,tablet" width="15%"> Aksi</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($suppliers as $key => $supplier)
-									<tr>
-										<td class="text-center">{{ $key+1 }}</td>
-										<td class="text-center">
-											<input type="checkbox" class="check-me" name="data_check[]" data-id="{{$supplier->s_id}}" value="{{ $supplier->s_id }}"/>
-										</td>
-		                                <td>{{ $supplier->s_company }}</td>
-		                                <td>{{ $supplier->s_name }}</td>
-		                                <td>{{ $supplier->s_address }}</td>
-		                                <td>{{ $supplier->s_phone }}</td>
-		                                <td>{{ $supplier->s_fax }}</td>
-		                                <td class="text-center">
-		                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $supplier->s_id }}"><i class="glyphicon glyphicon-edit"></i></button>
-		                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $supplier->s_id }}"><i class="glyphicon glyphicon-trash"></i></button>
-		                                </td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</form>
+
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+						<header>
+							<h2><strong>Master Supplier</strong></h2>
+						</header>
+
+						<div>
+							
+							<div class="widget-body">
+
+								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+
+									<thead>		
+
+										<tr>
+
+											<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Perusahaan</th>
+
+											<th><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Suplier</th>
+
+											<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;No.Telephone</th>
+
+											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Limit</th>
+
+											<th class="text-center" width="15%"> Aksi</th>
+
+										</tr>
+
+									</thead>
+
+									<tbody>
+
+									</tbody>
+
+								</table>
+
+							</div>
+
+						</div>
+
+					</div>
+
 				</div>
+
 			</div>
 
 			<!-- end row -->
@@ -185,58 +192,6 @@
 					});
 		
 				/* END BASIC */
-
-				$('.check-me').change(function(evt){
-					evt.preventDefault(); context = $(this);
-					if(context.is(':checked'))
-						selected.push(context.val());
-					else
-						selected.splice(_.findIndex(selected, function(o) { return o == context.val() }), 1);
-
-					console.log(selected);
-				})
-
-
-				// Hapus Click
-
-				$("#multiple_delete").click(function(evt){
-					evt.preventDefault();
-
-					if(selected.length == 0){
-						alert('Tidak Ada Data Yang Anda Pilih')
-					}
-					else{
-						let ask = confirm(selected.length+' Data Akan Dihapus Apakah Anda Yakin . ?');
-						if(ask){
-							$('#overlay').fadeIn(300);
-							$('#load-status-text').text('Sedang Menghapus Data')
-							axios.post(baseUrl+'/master/suplier/suplier/multiple-delete', {
-								data 	: selected,
-								_token 	: '{{ csrf_token() }}'
-							})
-							.then((response) => {
-								if(response.data.status == 'berhasil'){
-									location.reload();
-								}
-							}).catch((error) => {
-								$('#load-status-text').text('Internal Server Error')
-							})
-						}
-					}
-
-				})
-
-				// Edit Click
-
-				$("#multiple_edit").click(function(evt){
-					evt.preventDefault();
-
-					if(selected.length == 0){
-						alert('Tidak Ada Data Yang Anda Pilih')
-					}else{
-						$("#table-form").submit();
-					}
-				})
 
 				// edit 1 click
 
