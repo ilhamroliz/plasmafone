@@ -170,8 +170,8 @@
 														&nbsp;Kode
 													</th>
 
-													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-														&nbsp;Berat (Gram)
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Harga
 													</th>
 
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue hidden-md hidden-sm hidden-xs"></i>
@@ -210,8 +210,8 @@
 														&nbsp;Kode
 													</th>
 
-													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-														&nbsp;Berat (Gram)
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Harga
 													</th>
 
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue hidden-md hidden-sm hidden-xs"></i>
@@ -250,8 +250,8 @@
 														&nbsp;Kode
 													</th>
 
-													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-balance-scale txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
-														&nbsp;Berat (Gram)
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+														&nbsp;Harga
 													</th>
 
 													<th class="text-center" data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue hidden-md hidden-sm hidden-xs"></i>
@@ -493,7 +493,7 @@
 						{"data": "i_merk"},
 						{"data": "i_nama"},
 						{"data": "i_code"},
-						{"data": "i_berat"},
+						{"data": "harga"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -525,7 +525,7 @@
 						{"data": "i_merk"},
 						{"data": "i_nama"},
 						{"data": "i_code"},
-						{"data": "i_berat"},
+						{"data": "harga"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -557,7 +557,7 @@
 						{"data": "i_merk"},
 						{"data": "i_nama"},
 						{"data": "i_code"},
-						{"data": "i_berat"},
+						{"data": "harga"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,

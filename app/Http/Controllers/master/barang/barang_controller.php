@@ -36,10 +36,13 @@ class barang_controller extends Controller
         $items_active = collect($items_active);
 
         return DataTables::of($items_active)
+        ->addColumn('harga', function($items_active){
+            return '<div class="text-right">Rp'.number_format($items_active->i_harga,2,',','.').'</div>';
+        })
         ->addColumn('aksi', function ($items_active){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
-        ->rawColumns(['aksi'])
+        ->rawColumns(['aksi', 'harga'])
         ->make(true);
     }
 
@@ -50,10 +53,13 @@ class barang_controller extends Controller
         $items_all = collect($items_all);
 
         return DataTables::of($items_all)
+        ->addColumn('harga', function($items_all){
+            return '<div class="text-right">Rp'.number_format($items_all->i_harga,2,',','.').'</div>';
+        })
         ->addColumn('aksi', function ($items_all){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
-        ->rawColumns(['aksi'])
+        ->rawColumns(['aksi', 'harga'])
         ->make(true);
     }
 
@@ -64,10 +70,13 @@ class barang_controller extends Controller
         $items_nonactive = collect($items_nonactive);
 
         return DataTables::of($items_nonactive)
+        ->addColumn('harga', function($items_nonactive){
+            return '<div class="text-right">Rp'.number_format($items_nonactive->i_harga,2,',','.').'</div>';
+        })
         ->addColumn('aksi', function ($items_nonactive){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
         })
-        ->rawColumns(['aksi'])
+        ->rawColumns(['aksi', 'harga'])
         ->make(true);
     }
 
