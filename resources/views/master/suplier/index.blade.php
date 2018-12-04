@@ -146,13 +146,6 @@
 @endsection
 
 @section('extra_script')
-	
-	<!-- PAGE RELATED PLUGIN(S) -->
-		<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 		<script type="text/javascript">
 			$(document).ready(function(){
@@ -176,6 +169,7 @@
 							"t"+
 							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
 						"autoWidth" : true,
+						"language": dataTableLanguage,
 						"preDrawCallback" : function() {
 							// Initialize the responsive datatables helper once.
 							if (!responsiveHelper_dt_basic) {

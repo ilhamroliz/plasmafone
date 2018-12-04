@@ -119,4 +119,17 @@
 				s.parentNode.insertBefore(ga, s);
 			})();
 
+			var dataTableLanguage = {
+	           	"emptyTable": "Tidak ada data",
+	           	"sInfo": "Menampilkan _START_ - _END_ Dari _TOTAL_ Data",
+	           	"sSearch": 'Pencarian',
+	           	"sLengthMenu": "Menampilkan &nbsp; _MENU_ &nbsp; Data",
+	           	"infoEmpty": "",
+	           	"paginate": {
+	               "previous": "Sebelumnya",
+	               "next": "Selanjutnya",
+	            },
+	            "processing":"<img src='http://alamraya.site/sub_perwita/assets/vendors/jQuery-Smart-Wizard/images/loader.gif' width='30px'>"
+	        }
+
 		</script>
