@@ -20,20 +20,9 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Supplier</li><li>Tambah</li>
+			<li>Home</li><li>Data Master</li><li>Tambah Data Supplier</li>
 		</ol>
 		<!-- end breadcrumb -->
-
-		<!-- You can also add more buttons to the
-		ribbon for further usability
-
-		Example below:
-
-		<span class="ribbon-button-alignment pull-right">
-		<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-		<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-		<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-		</span> -->
 
 	</div>
 	<!-- END RIBBON -->
@@ -44,6 +33,32 @@
 
 	<!-- MAIN CONTENT -->
 	<div id="content">
+
+		<div class="row hidden-mobile">
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+				<h1 class="page-title txt-color-blueDark">
+
+					<i class="fa-fw fa fa-asterisk"></i>
+
+					Data Supplier <span><i class="fa fa-angle-double-right"></i> Tambah Data Supplier </span>
+
+				</h1>
+
+			</div>
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+				<div class="page-title">
+
+					<a href="{{ url('/master/supplier') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+
+				</div>
+
+			</div>
+
+		</div>
 
 		<!-- widget grid -->
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
@@ -59,12 +74,6 @@
 						<fieldset>
 							<legend>
 								Form Tambah Supplier
-
-								<span class="pull-right" style="font-size: 0.6em; font-weight: 600">
-									<a href="{{ url('/master/suplier/suplier') }}">
-										<i class="fa fa-arrow-left"></i> &nbsp;Kembali Ke Halaman Data Table
-									</a>
-								</span>
 							</legend>
 
 							<div class="row">
@@ -72,7 +81,10 @@
 									<div class="form-group">
 										<label class="col-xs-4 col-lg-4 control-label text-left">Nama Perusahaan</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<input type="text" class="form-control" name="nama_perusahaan" v-model="form_data.nama_perusahaan" placeholder="Masukkan Nama Perusahaan" />
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-building"></i></span>
+												<input type="text" class="form-control" name="nama_perusahaan" v-model="form_data.nama_perusahaan" placeholder="Masukkan Nama Perusahaan" style="text-transform: uppercase" />
+											</div>
 										</div>
 									</div>
 								</div>
@@ -83,7 +95,10 @@
 									<div class="form-group">
 										<label class="col-xs-4 col-lg-4 control-label text-left">Nama Supplier</label>
 										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<input type="text" class="form-control" name="nama_suplier" v-model="form_data.nama_suplier" placeholder="Masukkan Nama Supplier" />
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-user"></i></span>
+												<input type="text" class="form-control" name="nama_suplier" v-model="form_data.nama_suplier" placeholder="Masukkan Nama Supplier" style="text-transform: uppercase" />
+											</div>
 										</div>
 									</div>
 								</div>
@@ -92,7 +107,10 @@
 									<div class="form-group">
 										<label class="col-xs-3 col-lg-3 control-label text-left">Limit</label>
 										<div class="col-xs-8 col-lg-8 inputGroupContainer">
-											<input type="number" min="1" class="form-control" name="limit" v-model="form_data.limit" placeholder="Masukkan Limitation" />
+											<div class="input-group">
+												<span class="input-group-addon"><i class="fa fa-money"></i></span>
+												<input type="text" class="form-control" id="limit" name="limit" v-model="form_data.limit" placeholder="Masukkan Limitation" />
+											</div>
 										</div>
 									</div>
 								</div>
@@ -190,6 +208,8 @@
 				// product form
 				var baseUrl = '{{ url('/') }}';
 
+				$("#limit").maskMoney({thousands:'.', precision: 0});
+
 				function validation_regis(){
 					$('#data-form').bootstrapValidator({
 						feedbackIcons : {
@@ -209,16 +229,6 @@
 								validators : {
 									notEmpty : {
 										message : 'Nama Supplier Tidak Boleh Kosong'
-									}
-								}
-							},
-							limit : {
-								validators : {
-									notEmpty : {
-										message : 'Form Limit Tidak Boleh Kosong'
-									},
-									numeric : {
-										message : 'Limit Hanya Boleh Inputan Angka'
 									}
 								}
 							},

@@ -114,13 +114,13 @@
 
 										<div class="row ">
 
-											<div class="col-md-6">
+											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kelompok</label>
 
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group" id="select_kelompok">
 
@@ -144,31 +144,11 @@
 
 												</div>
 
-											</div>
-
-											<div class="col-md-6">
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Barang</label>
-
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-
-														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code" style="text-transform: uppercase"/>
-
-													</div>
-
-												</div>
-
-											</div>
-
-											<div class="col-md-6">
-
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Group</label>
 
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group" id="select_group">
 
@@ -192,34 +172,11 @@
 
 												</div>
 
-											</div>
-
-											<div class="col-md-6">
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
-
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-
-														<select class="form-control" v-model="form_data.i_isactive" name="i_isactive">
-															<option value="Y">AKTIF</option>
-															<option value="N">NON AKTIF</option>
-														</select>
-
-													</div>
-
-												</div>
-
-											</div>
-
-											<div class="col-md-6">
-
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Sub Group</label>
 
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group" id="select_sub_group">
 
@@ -243,31 +200,11 @@
 
 												</div>
 
-											</div>
-
-											<div class="col-md-6">
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Minimun Stok</label>
-
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-
-														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" v-model='form_data.i_minstock' style="text-transform: uppercase" />
-
-													</div>
-
-												</div>
-
-											</div>
-
-											<div class="col-md-6">
-
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Merk</label>
 
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group" id="select_merk">
 
@@ -291,31 +228,11 @@
 
 												</div>
 
-											</div>
-
-											<div class="col-md-6">
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Berat Satuan (gram)</label>
-
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-
-														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' style="text-transform: uppercase" />
-
-													</div>
-
-												</div>
-
-											</div>
-
-											<div class="col-md-6">
-
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Barang</label>
 
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="Masukkan Nama Barang" v-model='form_data.i_nama' style="text-transform: uppercase"/>
 
@@ -323,34 +240,11 @@
 
 												</div>
 
-											</div>
-
-											<div class="col-md-6">
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Specific Code</label>
-
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
-
-														<select class="form-control" v-model="form_data.i_specificcode" name="i_specificcode">
-															<option value="Y">YA</option>
-															<option value="N">TIDAK</option>
-														</select>
-
-													</div>
-
-												</div>
-
-											</div>
-
-											<div class="col-md-6">
-
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
 
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="upload-btn-wrapper">
 
@@ -364,15 +258,95 @@
 
 												</div>
 
-											</div>
+												<div class="col-xs-12 col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 15px;">
 
-											<div class="col-md-6">
+													<div id="preview" style="margin-bottom: 0; margin-top: 3px;" class="preview thumbnail">
+														Lihat Gambar
+													</div>
+
+													<div style="top: 0; display: none" id="delete_preview">
+
+														<a onclick="delete_image()" style="width: 100%;" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Hapus</a>
+
+													</div>
+
+												</div>
+
+											</article>
+
+											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Barang</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<input type="text" class="form-control" name="i_code" id="i_code" placeholder="Masukkan Kode Barang" v-model="form_data.i_code" style="text-transform: uppercase"/>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Status Barang</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<select class="form-control" v-model="form_data.i_isactive" name="i_isactive">
+															<option value="Y">AKTIF</option>
+															<option value="N">NON AKTIF</option>
+														</select>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Minimun Stok</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<input type="text" class="form-control" name="i_minstock" id="i_minstock" placeholder="Masukkan Minimum Stok Barang" v-model='form_data.i_minstock' style="text-transform: uppercase" />
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Berat Satuan (gram)</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<input type="text" class="form-control" name="i_berat" id="i_berat" placeholder="Masukkan Berat Satuan Barang (gram)" v-model='form_data.i_berat' style="text-transform: uppercase" />
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Specific Code</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<select class="form-control" v-model="form_data.i_specificcode" name="i_specificcode">
+															<option value="Y">YA</option>
+															<option value="N">TIDAK</option>
+														</select>
+
+													</div>
+
+												</div>
 
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Harga Jual</label>
 
-													<div class="col-xs-7 col-lg-7 inputGroupContainer">
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<input type="text" class="form-control" name="i_harga" id="i_harga" placeholder="Masukkan Harga Jual Barang" v-model="form_data.i_harga"/>
 
@@ -380,25 +354,7 @@
 
 												</div>
 
-											</div>
-
-										</div>
-
-										<div class="row">
-
-											<div class="col-md-6">
-
-												<div id="preview" style="margin-bottom: 0; margin-top: 3px;" class="preview thumbnail">
-													Lihat Gambar
-												</div>
-
-												<div style="top: 0; display: none" id="delete_preview">
-
-													<a onclick="delete_image()" style="width: 100%;" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Hapus</a>
-
-												</div>
-
-											</div>
+											</article>
 
 										</div>
 
