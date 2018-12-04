@@ -34,6 +34,7 @@ class barang_controller extends Controller
         $items_active = Item::where('i_isactive', 'Y')->orderBy('created_at', 'desc')->get();
 
         $items_active = collect($items_active);
+
         return DataTables::of($items_active)
         ->addColumn('aksi', function ($items_active){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
@@ -47,6 +48,7 @@ class barang_controller extends Controller
         $items_all = Item::orderBy('created_at', 'desc')->get();
 
         $items_all = collect($items_all);
+
         return DataTables::of($items_all)
         ->addColumn('aksi', function ($items_all){      
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
@@ -97,11 +99,15 @@ class barang_controller extends Controller
         DB::beginTransaction();
 
         try {
-            $check = Item::where(['i_kelompok'=>$data['i_kelompok'], 'i_group'=>$data['i_group'], 'i_sub_group'=>$data['i_sub_group'], 'i_merk'=>$data['i_merk'], 'i_nama'=>$data['i_nama'], 'i_code'=>$data['i_code']])->count();
+
+            $check = Item::where(['i_kelompok'=>$data['i_kelompok'], 'i_group'=>$data['i_group'], 'i_sub_group'=>$data['i_sub_group'], 'i_merk'=>$data['i_merk'], 'i_nama'=>$data['i_nama']])->count();
 
             if ($check > 0) {
+
                 return redirect('master/barang/add')->with('flash_message_error', 'Data barang yang Anda masukkan sudah ada didalam basis data!');
+
             } else {
+
                 $barang = new Item();
                 $barang->i_kelompok     = strtoupper($data['i_kelompok']);
                 $barang->i_group        = strtoupper($data['i_group']);
@@ -116,83 +122,113 @@ class barang_controller extends Controller
                 $barang->i_price        = $harga;
 
                 if ($request->hasFile('i_img')) {
+
                     $image_tmp = Input::file('i_img');
                     $image_size = $image_tmp->getSize(); //getClientSize()
                     $maxsize    = '2097152';
+
                     if ($image_size < $maxsize) {
+
                        if ($image_tmp->isValid()) {
+
                             $extension = $image_tmp->getClientOriginalExtension();
                             $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
                             $image_path = 'img/items/'.$filename;
+
                             //Resize images
                             ini_set('memory_limit', '256M');
                             Image::make($image_tmp)->resize(250, 190)->save($image_path);
                             ImageOptimizer::optimize($image_path);
-                            //Store image name in products table
+
+                            //Store image name in item table
                             $barang->i_img = $filename;
+
                         }
                     } else {
+
                         return redirect()->back()->with('flash_message_error', 'Data barang gagal disimpan...! Ukuran file terlalu besar');
+
                     }
                     
                 }else{
+
                     $barang->i_img = '';
+
                 }
 
                 $barang->save();
 
                 DB::commit();
+
                 // all good
                 return redirect('master/barang/add')->with('flash_message_success', 'Data barang berhasil tersimpan...!');
             }
         } catch (\Exception $e) {
+
             DB::rollback();
+
             // something went wrong
             return redirect('master/barang/add')->with('flash_message_error', 'Data barang gagal disimpan...! Mohon coba lagi');
+
         }
     }
 
     public function edit(Request $request, $id = null)
     {
         if ($request->isMethod('post')) {
+
             $data       = $request->all();
 
             DB::beginTransaction();
 
             try {
+
                 if ($request->hasFile('i_img')) {
+
                     $image_tmp = Input::file('i_img');
                     $image_size = $image_tmp->getSize(); //getClientSize()
                     $maxsize    = '2097152';
+
                     if ($image_size < $maxsize) {
+
                        if ($image_tmp->isValid()) {
 
                             $namefile = $data['current_img'];
 
                             if ($namefile != "") {
+
                                 $path = 'img/items/'.$namefile;
+
                                 if (File::exists($path)) {
                                     # code...
                                     File::delete($path);
                                 }
+
                             }
                             
                             $extension = $image_tmp->getClientOriginalExtension();
                             $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
                             $image_path = 'img/items/'.$filename;
+
                             //Resize images
                             ini_set('memory_limit', '256M');
                             Image::make($image_tmp)->resize(250, 190)->save($image_path);
                             ImageOptimizer::optimize($image_path);
-                            //Store image name in products table
+
+                            //Store image name in item table
                             $image = $filename;
+
                         }
                     } else {
+
                         return redirect()->back()->with('flash_message_error', 'Data barang gagal disimpan...! Ukuran file terlalu besar');
+
                     }
                     
                 }else{
+
                     $image = $data['current_img'];
+
                 }
 
                 Item::where(['i_id' => Crypt::decrypt($id)])->update([
@@ -211,31 +247,48 @@ class barang_controller extends Controller
                 ]);
 
                 DB::commit();
+
                 // all good
                 return redirect('/master/barang/edit/'.$id)->with('flash_message_success', 'Data barang berhasil diubah...!');
+
             } catch (\Exception $e) {
+
                 DB::rollback();
+
                 // something went wrong
                 return redirect()->back()->with('flash_message_error', 'Data barang gagal diubah...! Mohon coba lagi');
+
             }
         }
-        // ============================================================
+
+        // ======================Method Get================================
         DB::beginTransaction();
 
         try {
+
             $check = Item::where('i_id', Crypt::decrypt($id))->count();
+
             if ($check > 0) {
+
                 $items = Item::where('i_id', Crypt::decrypt($id))->get();
+
                 DB::commit();
-                // dd($items);
+                
                 return view('master.item.edit')->with(compact('items'));
+
             } else {
+
                 return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');
+
             }
+
         } catch (\Exception $e) {
+
             DB::rollback();
+
             // something went wrong
             return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
+
         }
         
     }
@@ -245,27 +298,42 @@ class barang_controller extends Controller
         DB::beginTransaction();
 
         try {
+
             $check = Item::where('i_id', Crypt::decrypt($id))->count();
+
             if ($check > 0) {
+
                 $item = Item::where('i_id', Crypt::decrypt($id))->first();
+
                 $filename = $item->i_img;
                 $path = 'img/items/'.$filename;
+
                 if (File::exists($path)) {
                     # code...
                     File::delete($path);
                 }
+
                 Item::where(['i_id' => Crypt::decrypt($id)])->update(['i_img' => ""]);
+
                 DB::commit();
                 
                 return redirect()->back()->with('flash_message_success', 'Data gambar dari barang "'.$item->i_nama.'" berhasil dihapus...!');
+
             } else {
+
                 return redirect()->back()->with('flash_message_error', 'Data yang ingin anda hapus tidak ada didalam basis data...! Mulai ulang halaman');
+
             }
+
         } catch (\Exception $e) {
+
             DB::rollback();
             // something went wrong
+
             return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
+
         }
+        
     }
 
     function formatPrice($data)

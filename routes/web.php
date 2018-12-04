@@ -112,7 +112,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// end master jabatan
 
-	// master barang
+	// ==============================Master Barang===============================
 
 	Route::get('master/barang', [
 		'uses'	=> 'master\barang\barang_controller@index',
@@ -134,6 +134,10 @@ Route::group(['middleware' => 'auth'], function(){
 		'uses'	=> 'master\barang\barang_controller@add',
 	])->name('barang.add');
 
+	Route::get('master/barang/get/form-resource', [
+		'uses'	=> 'master\barang\barang_controller@get_form_resources',
+	])->name('barang.get_form_resources');
+
 	Route::post('master/barang/insert', [
 		'uses'	=> 'master\barang\barang_controller@insert',
 	])->name('barang.insert');
@@ -144,44 +148,23 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/master/barang/detail/{id}', 'master\barang\barang_controller@detail')->name('barang.detail');
 
-	// End Master Barang
+	// ============================End Master Barang==========================
 
-	Route::post('master/karyawan/edit-multiple', [
-		'uses'	=> 'master\barang\karyawan_controller@edit_multiple',
-	])->name('karyawan.edit_multiple');
-
-	Route::post('master/karyawan/update', [
-		'uses'	=> 'master\barang\karyawan_controller@update',
-	])->name('karyawan.update');
-
-	Route::get('master/karyawan/edit', [
-		'uses'	=> 'master\barang\karyawan_controller@edit',
-	])->name('karyawan.edit');
-
-	Route::post('master/karyawan/multiple-delete', [
-		'uses'	=> 'master\barang\karyawan_controller@multiple_delete',
-	])->name('karyawan.multiple_delete');
-
-
-	Route::get('master/karyawan/grab/{id}', [
-		'uses'	=> 'master\barang\karyawan_controller@get',
-	])->name('karyawan.get');
-
-	Route::get('master/barang/get/form-resource', [
-		'uses'	=> 'master\barang\barang_controller@get_form_resources',
-	])->name('barang.get_form_resources');
-
-	// master barang end
-
-	// master gudang
+	// =============================Master Gudang=============================
 	Route::get('/master/gudang', 'master\gudang\gudang_controller@gudang')->name('gudang.index');
-	Route::match(['get', 'post'],'/master/gudang/add', 'master\gudang\gudang_controller@add_gudang');
+
+	Route::match(['get', 'post'],'/master/gudang/add', 'master\gudang\gudang_controller@add_gudang')->name('gudang.add');
+
 	Route::match(['get', 'post'], '/master/gudang/multiple-delete', 'master\gudang\gudang_controller@multiple_delete');
+
 	Route::post('/master/gudang/edit-multiple', 'master\gudang\gudang_controller@edit_multiple');
+
 	Route::get('/master/gudang/edit', 'master\gudang\gudang_controller@edit');
+
 	Route::post('/master/gudang/update', 'master\gudang\gudang_controller@update');
+	
 	Route::match(['get', 'post'], '/master/gudang/get/{id}', 'master\gudang\gudang_controller@get_gudang');
-	// master gudang end
+	// ===========================Master Gudang End===========================
 
 	// master jenis barang
 	Route::get('/master/jenis-barang', 'master\jenisbarang\jenisbarang_controller@index')->name('jenis-barang.index');
