@@ -19,20 +19,9 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Supplier</li>
+			<li>Home</li><li>Data Master</li><li>Master Supplier</li>
 		</ol>
 		<!-- end breadcrumb -->
-
-		<!-- You can also add more buttons to the
-		ribbon for further usability
-
-		Example below:
-
-		<span class="ribbon-button-alignment pull-right">
-		<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-		<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-		<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-		</span> -->
 
 	</div>
 	<!-- END RIBBON -->
@@ -45,32 +34,27 @@
 	<div id="content">
 
 		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<ul class="menu-table hide-on-small">
-					<li class="active">
-						<a href="#">
-							<i class="fa fa-table"></i> &nbsp;Data Table
-						</a>
-					</li>
-					<li>
-						<a href="{{ url('/master/suplier/suplier/add') }}">
-							<i class="fa fa-plus"></i> &nbsp;Tambahkan Data
-						</a>
-					</li>
 
-					<li>
-						<a href="#" id="multiple_edit">
-							<i class="fa fa-pencil-square"></i> &nbsp;Edit Data
-						</a>
-					</li>
-					<li>
-						<a href="#" id="multiple_delete">
-							<i class="fa fa-eraser"></i> &nbsp;Hapus Data
-						</a>
-					</li>
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-					<li class="right"><i class="fa fa-bars"></i></li>
-				</ul>
+				<h1 class="page-title txt-color-blueDark">
+
+					<i class="fa-fw fa fa-asterisk"></i>
+
+					Data Master <span><i class="fa fa-angle-double-right"></i> Master Supplier </span>
+
+				</h1>
+
+			</div>
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+				<div class="page-title">
+
+					<a href="{{ url('/master/supplier/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+
+				</div>
+
 			</div>
 
 		</div>
@@ -82,7 +66,7 @@
 
 			@if(Session::has('flash_message_success'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
+				<div class="col-md-12">
 						<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
@@ -91,7 +75,7 @@
 				</div>
 			@elseif(Session::has('flash_message_error'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-danger alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>

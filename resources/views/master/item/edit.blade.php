@@ -354,7 +354,7 @@
 
 														<div class="upload-btn-wrapper">
 
-														  <button class="btn-upload">Upload Gambar</button>
+														  <button class="btn btn-default"><i class="fa fa-file-picture-o"></i>&nbsp;Upload Gambar</button>
 
 														  <input type="file" accept="image/*" name="i_img" id="i_img" onchange="loadFile(event)" />
 
