@@ -364,9 +364,13 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::get('/pengaturan/akses-pengguna/edit/{id}', 'PengaturanController@edit_akses');
 	Route::post('/pengaturan/akses-pengguna/simpan', 'PengaturanController@simpan');
 	Route::post('/pengaturan/akses-pengguna/dataUser', 'PengaturanController@dataUser');
-	Route::get('/pengaturan/akses-pengguna/tambah', 'PengaturanController@tambah_pengguna');
+
 	// End Akses Pengguna
 
+	// Manajemen Pengguna
+	Route::get('/pengaturan/kelola-pengguna/tambah-pengguna', 'manajemenPenggunaController@tambah_pengguna');
+	Route::get('/pengaturan/kelola-pengguna/simpan-pengguna', 'manajemenPenggunaController@simpan_pengguna');
+	// End Manajemen Pengguna
 	// End Setting Application
 
 	// main route end

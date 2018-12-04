@@ -24,10 +24,6 @@ class PengaturanController extends Controller
         return view('pengaturan.akses_pengguna.index')->with(compact('data_users'));
     }
 
-    public function tambah_pengguna(){
-        return view('pengaturan.akses_pengguna.tambah');
-    }
-
     public function dataUser()
     {
         $user = DB::table('d_mem')
