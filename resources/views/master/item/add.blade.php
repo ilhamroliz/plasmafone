@@ -580,14 +580,6 @@
 						}
 					},
 
-					i_harga : {
-						validators : {
-							notEmpty : {
-								message : 'Harga Jual Tidak Boleh Kosong',
-							}
-						}
-					},
-
 				}
 			});
 		}
