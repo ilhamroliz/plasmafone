@@ -584,9 +584,6 @@
 
 			}, 1500);
 
-			// edit 1 click
-
-			
 		})
 
 		function edit(val){
