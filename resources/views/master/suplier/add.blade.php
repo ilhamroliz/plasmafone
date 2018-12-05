@@ -243,6 +243,11 @@
 
 											<div class="col-md-12">
 
+												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/supplier")}}'">
+													<i class="fa fa-times"></i>
+													&nbsp;Batal
+												</button>
+
 												<button class="btn btn-primary" type="button" @click="submit_form" :disabled="btn_save_disabled">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
@@ -380,37 +385,73 @@
 								).then((response) => {
 									if(response.data.status == 'berhasil'){
 										out();
-										$.toast({
-										    text: 'Data Supplier terbaru Anda berhasil disimpan...!',
-										    showHideTransition: 'fade',
-										    icon: 'success'
-										})
+										$.smallBox({
+											title : "Berhasil",
+											content : "Data Supplier terbaru Anda berhasil disimpan...!",
+											color : "#739E73",
+											timeout: 4000,
+											icon : "fa fa-check bounce animated"
+										});
+
+										// Toast
+										// $.toast({
+										//     text: 'Data Supplier terbaru Anda berhasil disimpan...!',
+										//     showHideTransition: 'fade',
+										//     icon: 'success'
+										// })
 
 										this.reset_form();
 
 									} else if(response.data.status == 'ada') {
 										out();
-										$.toast({
-										    text: 'Data perusahaan "'+response.data.company+'" sudah ada!',
-										    showHideTransition: 'fade',
-										    icon: 'error'
-										})
+										$.smallBox({
+											title : "Gagal",
+											content : 'Data perusahaan <i>"'+response.data.company+'"</i> sudah ada!',
+											color : "#A90329",
+											timeout: 4000,
+											icon : "fa fa-times bounce animated"
+										});
+
+										// Toast
+										// $.toast({
+										//     text: 'Data perusahaan "'+response.data.company+'" sudah ada!',
+										//     showHideTransition: 'fade',
+										//     icon: 'error'
+										// })
 									}else {
 										out();
-										$.toast({
-										    text: 'Ada kesalahan dalam proses input data, coba lagi...!',
-										    showHideTransition: 'fade',
-										    icon: 'error'
-										})
+										$.smallBox({
+											title : "Gagal",
+											content : "Ada kesalahan dalam proses input data, coba lagi...!",
+											color : "#A90329",
+											timeout: 4000,
+											icon : "fa fa-times bounce animated"
+										});
+
+										// Toast
+										// $.toast({
+										//     text: 'Ada kesalahan dalam proses input data, coba lagi...!',
+										//     showHideTransition: 'fade',
+										//     icon: 'error'
+										// })
 									}
 
 								}).catch((err) => {
 									out();
-									$.toast({
-									    text: 'Ada kesalahan dalam proses input data, coba lagi...!',
-									    showHideTransition: 'fade',
-									    icon: 'error'
-									})
+									$.smallBox({
+										title : "Gagal",
+										content : "Ada kesalahan jaringan, coba lagi...!",
+										color : "#A90329",
+										timeout: 4000,
+										icon : "fa fa-times bounce animated"
+									});
+
+									// Toast
+									// $.toast({
+									//     text: 'Ada kesalahan dalam proses input data, coba lagi...!',
+									//     showHideTransition: 'fade',
+									//     icon: 'error'
+									// })
 								}).then(() => {
 									this.btn_save_disabled = false;
 								})
@@ -418,11 +459,20 @@
 								return false;
 							}else{
 								out();
-								$.toast({
-								    text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang..',
-								    showHideTransition: 'fade',
-								    icon: 'error'
-								})
+								$.smallBox({
+									title : "Gagal",
+									content : "Ada kesalahan dengan inputan Anda. Harap mengecek ulang...!",
+									color : "#A90329",
+									timeout: 4000,
+									icon : "fa fa-times bounce animated"
+								});
+
+								// Toast
+								// $.toast({
+								//     text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang..',
+								//     showHideTransition: 'fade',
+								//     icon: 'error'
+								// })
 							}
 						},
 

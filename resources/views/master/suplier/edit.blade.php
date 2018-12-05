@@ -169,6 +169,10 @@
 						<div class="form-actions">
 							<div class="row">
 								<div class="col-md-12">
+									<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/supplier")}}'">
+										<i class="fa fa-times"></i>
+										&nbsp;Batal
+									</button>
 									<button class="btn btn-primary" id="submit">
 										<i class="fa fa-floppy-o"></i>
 										&nbsp;Simpan

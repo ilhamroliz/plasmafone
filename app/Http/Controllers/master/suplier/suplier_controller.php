@@ -19,6 +19,48 @@ class suplier_controller extends Controller
     	return view('master/suplier/index')->with(compact('suppliers'));
     }
 
+    public function getdataactive()
+    {
+        $supplier_active = suplier::where('s_isactive', 'Y')->orderBy('s_insert', 'desc')->get();
+
+        $supplier_active = collect($supplier_active);
+
+        return DataTables::of($supplier_active)
+        ->addColumn('aksi', function ($supplier_active){      
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
+    }
+
+    public function getdataall()
+    {
+        $supplier_all = suplier::orderBy('s_insert', 'desc')->get();
+
+        $supplier_all = collect($supplier_all);
+
+        return DataTables::of($supplier_all)
+        ->addColumn('aksi', function ($supplier_all){      
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
+    }
+
+    public function getdatanonactive()
+    {
+        $supplier_nonactive = suplier::where('s_isactive', 'N')->orderBy('s_insert', 'desc')->get();
+
+        $supplier_nonactive = collect($supplier_nonactive);
+
+        return DataTables::of($supplier_nonactive)
+        ->addColumn('aksi', function ($supplier_nonactive){      
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
+    }
+
     public function add_suplier(Request $request)
     {
         if ($request->isMethod('post'))
@@ -28,12 +70,12 @@ class suplier_controller extends Controller
             DB::beginTransaction();
 
             try {
-                $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->count();
+                $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
 
                 if ($check > 0) {
                     return  json_encode([
                         'status'    => 'ada',
-                        'company'   => $data['nama_perusahaan']
+                        'company'   => strtoupper($data['nama_perusahaan'])
                     ]);
                 } else {
                     
@@ -46,7 +88,7 @@ class suplier_controller extends Controller
                     if ($data['keterangan'] == "") {
                         $note = "";
                     } else {
-                        $note = $data['keterangan'];
+                        $note = strtoupper($data['keterangan']);
                     }
 
                     if ($data['limit'] == "") {
@@ -56,9 +98,9 @@ class suplier_controller extends Controller
                     }
 
                     DB::table('d_supplier')->insert([
-                        's_company' => $data['nama_perusahaan'],
-                        's_name'    => $data['nama_suplier'],
-                        's_address' => $data['alamat_suplier'],
+                        's_company' => strtoupper($data['nama_perusahaan']),
+                        's_name'    => strtoupper($data['nama_suplier']),
+                        's_address' => strtoupper($data['alamat_suplier']),
                         's_phone'   => $data['telp_suplier'],
                         's_fax'     => $fax,
                         's_note'    => $note,
@@ -130,16 +172,4 @@ class suplier_controller extends Controller
         }
     }
 
-    public function get_supplier(){
-        $data = suplier::get();
-        return DataTables::of($items_active)
-        ->addColumn('harga', function($items_active){
-            return '<div class="text-right">Rp'.number_format($items_active->i_price,2,',','.').'</div>';
-        })
-        ->addColumn('aksi', function ($items_active){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
-        })
-        ->rawColumns(['aksi', 'harga'])
-        ->make(true);
-    }
 }

@@ -189,6 +189,18 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/master/supplier', 'master\suplier\suplier_controller@suplier');
 
+	Route::get('/master/supplier/getdataactive', [
+		'uses'	=> 'master\suplier\suplier_controller@getdataactive',
+	])->name('supplier.getdataactive');
+
+	Route::get('/master/supplier/getdataall', [
+		'uses'	=> 'master\suplier\suplier_controller@getdataall',
+	])->name('supplier.getdataall');
+
+	Route::get('/master/supplier/getdatanonactive', [
+		'uses'	=> 'master\suplier\suplier_controller@getdatanonactive',
+	])->name('supplier.getdatanonactive');
+
 	Route::match(['get', 'post'],'/master/supplier/add', 'master\suplier\suplier_controller@add_suplier');
 
 	Route::match(['get', 'post'], '/master/supplier/delete/{id}', 'MasterController@delete_supplier');

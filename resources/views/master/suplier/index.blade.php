@@ -92,38 +92,128 @@
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
-							<h2><strong>Master Supplier</strong></h2>
+							
+							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
+
+								<li class="active">
+
+									<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
+
+								</li>
+
+								<li>
+
+									<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
+
+								</li>
+
+								<li>
+
+									<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
+
+								</li>
+
+							</ul>
+
 						</header>
 
 						<div>
 							
-							<div class="widget-body">
+							<div class="widget-body no-padding">
 
-								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+								<div class="tab-content padding-10">
 
-									<thead>		
+									<div class="tab-pane fade in active" id="hr1">
 
-										<tr>
+										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
-											<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Perusahaan</th>
+											<thead>		
 
-											<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Suplier</th>
+												<tr>
 
-											<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Perusahaan</th>
 
-											<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Limit</th>
+													<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Suplier</th>
 
-											<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
 
-										</tr>
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Limit</th>
 
-									</thead>
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
-									<tbody>
+												</tr>
 
-									</tbody>
+											</thead>
 
-								</table>
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+									<div class="tab-pane fade" id="hr2">
+
+										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>		
+
+												<tr>
+
+													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Perusahaan</th>
+
+													<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Suplier</th>
+
+													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Limit</th>
+
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+
+												</tr>
+
+											</thead>
+
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+									<div class="tab-pane fade" id="hr3">
+
+										<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>		
+
+												<tr>
+
+													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Perusahaan</th>
+
+													<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Suplier</th>
+
+													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Limit</th>
+
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+
+												</tr>
+
+											</thead>
+
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+								</div>
 
 							</div>
 
@@ -156,6 +246,10 @@
 
 		<script type="text/javascript">
 			$(document).ready(function(){
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Menyiapkan...');
+
+				var aktif, semua, inaktif;
 				var baseUrl = '{{ url('/') }}';
 
 				let selected = [];
@@ -171,25 +265,106 @@
 						phone : 480
 					};
 		
-					$('#dt_basic').dataTable({
-						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-							"t"+
-							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-						"autoWidth" : true,
-						"language": dataTableLanguage,
-						"preDrawCallback" : function() {
-							// Initialize the responsive datatables helper once.
-							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+					setTimeout(function () {
+
+						aktif = $('#dt_active').dataTable({
+							"processing": true,
+							"serverSide": true,
+							"ajax": "{{ route('supplier.getdataactive') }}",
+							"columns":[
+								{"data": "s_company"},
+								{"data": "s_name"},
+								{"data": "s_phone"},
+								{"data": "s_limit"},
+								{"data": "aksi"}
+							],
+							"autoWidth" : true,
+							"language" : dataTableLanguage,
+							"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+							"preDrawCallback" : function() {
+								// Initialize the responsive datatables helper once.
+								if (!responsiveHelper_dt_basic) {
+									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+								}
+							},
+							"rowCallback" : function(nRow) {
+								responsiveHelper_dt_basic.createExpandIcon(nRow);
+							},
+							"drawCallback" : function(oSettings) {
+								responsiveHelper_dt_basic.respond();
 							}
-						},
-						"rowCallback" : function(nRow) {
-							responsiveHelper_dt_basic.createExpandIcon(nRow);
-						},
-						"drawCallback" : function(oSettings) {
-							responsiveHelper_dt_basic.respond();
-						}
-					});
+						});
+
+					}, 500);
+
+					setTimeout(function () {
+
+						semua = $('#dt_all').dataTable({
+							"processing": true,
+							"serverSide": true,
+							"ajax": "{{ route('supplier.getdataall') }}",
+							"columns":[
+								{"data": "s_company"},
+								{"data": "s_name"},
+								{"data": "s_phone"},
+								{"data": "s_limit"},
+								{"data": "aksi"}
+							],
+							"autoWidth" : true,
+							"language" : dataTableLanguage,
+							"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+							"preDrawCallback" : function() {
+								// Initialize the responsive datatables helper once.
+								if (!responsiveHelper_dt_basic) {
+									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+								}
+							},
+							"rowCallback" : function(nRow) {
+								responsiveHelper_dt_basic.createExpandIcon(nRow);
+							},
+							"drawCallback" : function(oSettings) {
+								responsiveHelper_dt_basic.respond();
+							}
+						});
+
+					}, 1000);
+
+					setTimeout(function () {
+
+						inaktif = $('#dt_inactive').dataTable({
+							"processing": true,
+							"serverSide": true,
+							"ajax": "{{ route('supplier.getdatanonactive') }}",
+							"columns":[
+								{"data": "s_company"},
+								{"data": "s_name"},
+								{"data": "s_phone"},
+								{"data": "s_limit"},
+								{"data": "aksi"}
+							],
+							"autoWidth" : true,
+							"language" : dataTableLanguage,
+							"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+							"preDrawCallback" : function() {
+								// Initialize the responsive datatables helper once.
+								if (!responsiveHelper_dt_basic) {
+									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
+								}
+							},
+							"rowCallback" : function(nRow) {
+								responsiveHelper_dt_basic.createExpandIcon(nRow);
+							},
+							"drawCallback" : function(oSettings) {
+								responsiveHelper_dt_basic.respond();
+							}
+						});
+
+						$('#overlay').fadeOut(200);
+
+					}, 1500);
 		
 				/* END BASIC */
 

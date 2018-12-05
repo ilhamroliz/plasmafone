@@ -394,6 +394,11 @@
 
 											<div class="col-md-12">
 
+												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/barang")}}'">
+													<i class="fa fa-times"></i>
+													&nbsp;Batal
+												</button>
+
 												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled" onclick="overlay()">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan

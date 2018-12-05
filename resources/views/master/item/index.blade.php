@@ -468,7 +468,7 @@
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Menyiapkan...');
 
-			$('#tabs').tabs();
+			// $('#tabs').tabs();
 
 			let selected = [];
 
