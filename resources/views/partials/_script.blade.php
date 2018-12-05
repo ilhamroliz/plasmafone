@@ -129,7 +129,7 @@
 	               "previous": "Sebelumnya",
 	               "next": "Selanjutnya",
 	            },
-	            "processing":"<img src='http://alamraya.site/sub_perwita/assets/vendors/jQuery-Smart-Wizard/images/loader.gif' width='30px'>"
+	            "processing":"<img src='{{ asset('template_asset/images/loader.gif') }}' width='30px'>"
 	        }
 
 		</script>
