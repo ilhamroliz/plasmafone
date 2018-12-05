@@ -4,10 +4,12 @@ namespace App\Http\Controllers\master\suplier;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 use App\Model\master\suplier as suplier;
 
 use DB;
 use Session;
+use DataTables;
 
 class suplier_controller extends Controller
 {
@@ -22,47 +24,67 @@ class suplier_controller extends Controller
         if ($request->isMethod('post'))
         {
             $data = $request->all();
-            $sql = DB::table('d_supplier')->insert([
-                's_company' => $data['nama_perusahaan'],
-                's_name'    => $data['nama_suplier'],
-                's_address' => $data['alamat_suplier'],
-                's_phone'   => $data['telp_suplier'],
-                's_fax'     => $data['fax_suplier'],
-                's_note'    => $data['keterangan'],
-                's_insert'  => date('Y-m-d H:m:s'),
-                's_update'  => date('Y-m-d H:m:s'),
-                's_limit'   => $data['limit']
-            ]);
-            if ($sql) {
-                // return redirect('master/suplier/suplier')->with('flash_message_success','Semua Data Supplier Yang Terakhir Anda Input Berhasil Tersimpan Di Database!');
+
+            DB::beginTransaction();
+
+            try {
+                $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->count();
+
+                if ($check > 0) {
+                    return  json_encode([
+                        'status'    => 'ada',
+                        'company'   => $data['nama_perusahaan']
+                    ]);
+                } else {
+                    
+                    if ($data['fax_suplier'] == "") {
+                        $fax = "";
+                    } else {
+                        $fax = $data['fax_suplier'];
+                    }
+
+                    if ($data['keterangan'] == "") {
+                        $note = "";
+                    } else {
+                        $note = $data['keterangan'];
+                    }
+
+                    if ($data['limit'] == "") {
+                        $limit = 0;
+                    } else {
+                        $limit = $data['limit'];
+                    }
+
+                    DB::table('d_supplier')->insert([
+                        's_company' => $data['nama_perusahaan'],
+                        's_name'    => $data['nama_suplier'],
+                        's_address' => $data['alamat_suplier'],
+                        's_phone'   => $data['telp_suplier'],
+                        's_fax'     => $fax,
+                        's_note'    => $note,
+                        's_limit'   => $limit
+                    ]);
+                    
+                    DB::commit();
+
+                    return  json_encode([
+                        'status'    => 'berhasil'
+                    ]);
+                }
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                // something went wrong
                 return  json_encode([
-                    'status'    => 'berhasil'
+                    'status'    => 'gagal',
+                    'msg'       => $e
                 ]);
-            }else{
-                // return redirect('master/suplier/suplier')->with('flash_message_error','Semua Data Supplier Yang Terakhir Anda Input Gagal Tersimpan Di Database!');
-                return  json_encode([
-                    'status'    => 'gagal'
-                ]);
+
             }
             
         }
         return view('master.suplier.add');
-    }
-
-    public function multiple_delete(Request $request){
-        // return json_encode($request->data);
-
-        DB::table('d_supplier')->whereIn('s_id', $request->data)->delete();
-        Session::flash('flash_message_success', 'Semua Data Yang Anda Pilih Berhasil Dihapus.');
-
-        return  json_encode([
-                    'status'    => 'berhasil'
-                ]);
-    }
-
-    public function edit_multiple(Request $request){
-        $data = suplier::whereIn('s_id', $request->data_check)->get();
-        return view('master.suplier.edit_suplier', compact('data'));
     }
 
     public function edit(Request $request){
@@ -108,9 +130,16 @@ class suplier_controller extends Controller
         }
     }
 
-    public function get_supplier($id){
-        $data = suplier::find($id);
-
-        return json_encode($data);
+    public function get_supplier(){
+        $data = suplier::get();
+        return DataTables::of($items_active)
+        ->addColumn('harga', function($items_active){
+            return '<div class="text-right">Rp'.number_format($items_active->i_price,2,',','.').'</div>';
+        })
+        ->addColumn('aksi', function ($items_active){      
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+        })
+        ->rawColumns(['aksi', 'harga'])
+        ->make(true);
     }
 }

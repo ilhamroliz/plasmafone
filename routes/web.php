@@ -195,7 +195,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::match(['get', 'post'], '/master/supplier/edit/{id}', 'master\suplier\suplier_controller@edit');
 
-	Route::match(['get', 'post'], '/master/supplier/get/{id}', 'master\suplier\suplier_controller@get_supplier');
+	Route::match(['get', 'post'], '/master/supplier/get', 'master\suplier\suplier_controller@get_supplier');
 
 	// master Suppplier end
 

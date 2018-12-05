@@ -295,6 +295,18 @@
 				var baseUrl = '{{ url('/') }}';
 
 				$("#limit").maskMoney({thousands:'.', precision: 0});
+
+				function overlay()
+				{
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Memproses...');
+				}
+
+				function out()
+				{
+					$('#overlay').fadeOut(200);
+				}
+
 				function validation_regis(){
 					$('#data-form').bootstrapValidator({
 						feedbackIcons : {
@@ -321,19 +333,6 @@
 								validators : {
 									notEmpty : {
 										message : 'Nomor Telepon Tidak Boleh Kosong'
-									},
-									numeric : {
-										message : 'Nomor Telepon Ini Tampaknya Salah'
-									}
-								}
-							},
-							fax_suplier : {
-								validators : {
-									notEmpty : {
-										message : 'Nomor Fax Tidak Boleh Kosong'
-									},
-									numeric : {
-										message : 'Nomor Fax Ini Tampaknya Salah'
 									}
 								}
 							},
@@ -375,12 +374,12 @@
 
 							if($('#data-form').data('bootstrapValidator').validate().isValid()){
 								this.btn_save_disabled = true;
-
-								axios.post(baseUrl+'/master/suplier/suplier/add', 
+								overlay();
+								axios.post(baseUrl+'/master/supplier/add', 
 									$('#data-form').serialize()
 								).then((response) => {
-
 									if(response.data.status == 'berhasil'){
+										out();
 										$.toast({
 										    text: 'Data Supplier terbaru Anda berhasil disimpan...!',
 										    showHideTransition: 'fade',
@@ -389,7 +388,15 @@
 
 										this.reset_form();
 
-									} else {
+									} else if(response.data.status == 'ada') {
+										out();
+										$.toast({
+										    text: 'Data perusahaan "'+response.data.company+'" sudah ada!',
+										    showHideTransition: 'fade',
+										    icon: 'error'
+										})
+									}else {
+										out();
 										$.toast({
 										    text: 'Ada kesalahan dalam proses input data, coba lagi...!',
 										    showHideTransition: 'fade',
@@ -398,13 +405,19 @@
 									}
 
 								}).catch((err) => {
-									console.log(err);
+									out();
+									$.toast({
+									    text: 'Ada kesalahan dalam proses input data, coba lagi...!',
+									    showHideTransition: 'fade',
+									    icon: 'error'
+									})
 								}).then(() => {
 									this.btn_save_disabled = false;
 								})
 
 								return false;
 							}else{
+								out();
 								$.toast({
 								    text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang..',
 								    showHideTransition: 'fade',
