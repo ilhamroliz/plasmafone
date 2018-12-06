@@ -244,7 +244,8 @@ class suplier_controller extends Controller
                         's_phone'       => $data['telp_suplier'],
                         's_fax'         => $fax,
                         's_note'        => $note,
-                        's_limit'       => $limit
+                        's_limit'       => $limit,
+                        's_isactive'    => strtoupper($data['isactive'])
                     ]);
 
                      DB::commit();

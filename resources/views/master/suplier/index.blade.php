@@ -326,6 +326,18 @@
 														<td id="dt_keterangan"></td>
 													</tr>
 
+													<tr class="info">
+														<td><strong>Status</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_status"></td>
+													</tr>
+
+													<tr class="success">
+														<td><strong>Dibuat</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_created"></td>
+													</tr>
+
 												</tbody>
 
 											</table>
@@ -496,6 +508,8 @@
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
 
+			var status;
+
 			axios.get(baseUrl+'/master/supplier/detail/'+id).then(response => {
 
 				$('#title_detail').html('<strong>Detail Supplier "'+response.data.s_name+'"</strong>');
@@ -511,6 +525,17 @@
 					i = parseFloat(iLimit.match(/\d+\.\d{2}/)),
 					dec = limit.split(".");
 
+				if(response.data.s_isactive == "Y"){
+
+					status = "AKTIF";
+
+				}else{
+
+					status = "NON AKTIF";
+
+				}
+
+				$('#dt_status').text(status);
 				$('#dt_limit').text(formatRupiah(i, "Rp", dec[1]));
 				$('#dt_created').text(response.data.s_insert);
 				$('#overlay').fadeOut(200);
