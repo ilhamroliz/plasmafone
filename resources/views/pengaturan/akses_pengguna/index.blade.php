@@ -56,7 +56,7 @@
 
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 					<div class="page-title">
-						<a href="{{ url('/pengaturan/akses-pengguna/tambah') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+						<a href="{{ url('/pengaturan/kelola-pengguna/tambah') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
 					</div>
 				</div>
 				

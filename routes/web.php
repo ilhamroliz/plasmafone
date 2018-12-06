@@ -380,8 +380,8 @@ Route::group(['middleware' => 'auth'], function(){
 	// End Akses Pengguna
 
 	// Manajemen Pengguna
-	Route::get('/pengaturan/kelola-pengguna/tambah-pengguna', 'manajemenPenggunaController@tambah_pengguna');
-	Route::get('/pengaturan/kelola-pengguna/simpan-pengguna', 'manajemenPenggunaController@simpan_pengguna');
+	Route::get('/pengaturan/kelola-pengguna/tambah', 'manajemenPenggunaController@tambah_pengguna');
+	Route::get('/pengaturan/kelola-pengguna/simpan', 'manajemenPenggunaController@simpan_pengguna');
 	// End Manajemen Pengguna
 	// End Setting Application
 

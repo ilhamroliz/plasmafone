@@ -64,7 +64,7 @@
 
 		<!-- widget grid -->
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
-
+			
 			@if(Session::has('flash_message_success'))
 				<div class="col-md-12">
 					<div class="alert alert-success alert-block">
