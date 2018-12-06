@@ -381,7 +381,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	// Manajemen Pengguna
 	Route::get('/pengaturan/kelola-pengguna/tambah', 'manajemenPenggunaController@tambah_pengguna');
-	Route::get('/pengaturan/kelola-pengguna/simpan', 'manajemenPenggunaController@simpan_pengguna');
+	Route::post('/pengaturan/kelola-pengguna/simpan', 'manajemenPenggunaController@simpan_pengguna');
 	// End Manajemen Pengguna
 	// End Setting Application
 
