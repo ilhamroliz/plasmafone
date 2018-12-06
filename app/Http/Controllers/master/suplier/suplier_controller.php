@@ -33,7 +33,7 @@ class suplier_controller extends Controller
             return '<p class="text-right">Rp'.number_format($supplier_active->s_limit,2,',','.').'</p>';
 
         })
-        
+
         ->addColumn('aksi', function ($supplier_active){ 
 
             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
@@ -180,8 +180,87 @@ class suplier_controller extends Controller
         return view('master.suplier.add');
     }
 
-    public function edit(Request $request, $id = null){
-        
+    public function edit(Request $request, $id = null)
+    {
+        if ($request->isMethod('post')) {
+
+            $data       = $request->all();
+
+            DB::beginTransaction();
+
+            try {
+
+                $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+
+                if ($check == 0) {
+                    
+                    return  json_encode([
+                        'status'    => 'tidak ada',
+                        'msg'       => $data['nama_perusahaan']
+                    ]);
+
+                } else {
+
+                    if ($data['fax_suplier'] == "") {
+
+                        $fax = "";
+
+                    } else {
+
+                        $fax = $data['fax_suplier'];
+
+                    }
+
+                    if ($data['keterangan'] == "") {
+
+                        $note = "";
+
+                    } else {
+
+                        $note = strtoupper($data['keterangan']);
+
+                    }
+
+                    if ($data['limit'] == "" || $data['limit'] == 0) {
+
+                        $limit = 0;
+
+                    } else {
+
+                        $limit = $this->formatPrice($data['limit']);
+
+                    }
+
+                    suplier::where(['s_id' => Crypt::decrypt($id)])->update([
+                        's_company'     => strtoupper($data['nama_perusahaan']),
+                        's_name'        => strtoupper($data['nama_suplier']),
+                        's_address'     => strtoupper($data['alamat_suplier']),
+                        's_phone'       => $data['telp_suplier'],
+                        's_fax'         => $fax,
+                        's_note'        => $note,
+                        's_limit'       => $limit
+                    ]);
+
+                     DB::commit();
+
+                    // all good
+                    return  json_encode([
+                            'status'    => 'berhasil'
+                        ]);
+
+                }
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                // something went wrong
+                return  json_encode([
+                            'status'    => 'gagal'
+                        ]);
+
+            }
+        }   
 
         // ======================Method Get================================
         DB::beginTransaction();

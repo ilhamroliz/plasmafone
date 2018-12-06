@@ -109,6 +109,8 @@
 
 										@foreach($suppliers as $supplier)
 
+										<input type="hidden" id="sid" name="sid" value="{{ Crypt::encrypt($supplier->s_id) }}">
+
 										<div class="row">
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -141,7 +143,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-															<input type="text" class="form-control" name="nama_suplier" v-model="form_data.nama_suplier" placeholder="Masukkan Nama Supplier" style="text-transform: uppercase" />
+															<input type="text" class="form-control" name="nama_suplier" v-model="form_data.nama_suplier" placeholder="Masukkan Nama Supplier" value="{{ $supplier->s_name }}" style="text-transform: uppercase" />
 
 														</div>
 
@@ -159,7 +161,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-phone"></i></span>
 
-															<input type="text" class="form-control" name="telp_suplier" v-model="form_data.telp_suplier" placeholder="Masukkan Nomor Telepon" />
+															<input type="text" class="form-control" name="telp_suplier" v-model="form_data.telp_suplier" placeholder="Masukkan Nomor Telepon" value="{{ $supplier->s_phone }}" />
 
 														</div>
 
@@ -177,7 +179,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-fax"></i></span>
 
-															<input type="text" class="form-control" name="fax_suplier" v-model="form_data.fax_suplier" placeholder="Masukkan Nomor Fax Supplier" />
+															<input type="text" class="form-control" name="fax_suplier" v-model="form_data.fax_suplier" placeholder="Masukkan Nomor Fax Supplier" value="{{ $supplier->s_fax }}" />
 
 														</div>
 
@@ -199,7 +201,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-money"></i></span>
 															
-															<input type="text" class="form-control" id="limit" name="limit" v-model="form_data.limit" placeholder="Masukkan Limitation"/>
+															<input type="text" class="form-control" id="limit" name="limit" v-model="form_data.limit" placeholder="Masukkan Limitation" value="{{ number_format($supplier->s_limit,0,',','.') }}"/>
 
 														</div>
 
@@ -213,7 +215,7 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Supplier" name="alamat_suplier" v-model="form_data.alamat_suplier"></textarea>
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Supplier" name="alamat_suplier" v-model="form_data.alamat_suplier">{{ $supplier->s_address }}</textarea>
 
 													</div>
 
@@ -225,7 +227,7 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Supplier" name="keterangan" v-model="form_data.keterangan"></textarea>
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Supplier" name="keterangan" v-model="form_data.keterangan">{{ $supplier->s_note }}</textarea>
 
 													</div>
 
@@ -250,7 +252,7 @@
 													&nbsp;Batal
 												</button>
 
-												<button class="btn btn-primary" type="button" @click="submit_form" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="button" id="submit">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -295,149 +297,157 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 
-		<script type="text/javascript">
-			$(document).ready(function(){
+	<script type="text/javascript">
+		$(document).ready(function(){
 
-				var state = '';
+			var baseUrl = '{{ url('/') }}';
 
-				// validator
+			$('#limit').maskMoney({thousands:'.', precision: 0, decimal:','});
 
-				$('#form-edit').bootstrapValidator({
-					feedbackIcons : {
-						valid : 'glyphicon glyphicon-ok',
-						invalid : 'glyphicon glyphicon-remove',
-						validating : 'glyphicon glyphicon-refresh'
+			function overlay()
+			{
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Memproses...');
+			}
+
+			function out()
+			{
+				$('#overlay').fadeOut(200);
+			}
+
+			// validator
+
+			$('#data-form').bootstrapValidator({
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : {
+					s_company : {
+						validators : {
+							notEmpty : {
+								message : 'Nama Perusahaan Tidak Boleh Kosong'
+							}
+						}
 					},
-					fields : {
-						s_company : {
-							validators : {
-								notEmpty : {
-									message : 'Nama Perusahaan Tidak Boleh Kosong'
-								}
+					s_name : {
+						validators : {
+							notEmpty : {
+								message : 'Nama Supplier Tidak Boleh Kosong'
 							}
-						},
-						s_name : {
-							validators : {
-								notEmpty : {
-									message : 'Nama Supplier Tidak Boleh Kosong'
-								}
+						}
+					},
+					s_phone : {
+						validators : {
+							notEmpty : {
+								message : 'Nomor Telepon Tidak Boleh Kosong'
+							},
+							numeric : {
+								message : 'Nomor Telepon Ini Tampaknya Salah'
 							}
-						},
-						s_limit : {
-							validators : {
-								notEmpty : {
-									message : 'Form Limit Tidak Boleh Kosong'
-								},
-								numeric : {
-									message : 'Limit Hanya Boleh Inputan Angka'
-								}
-							}
-						},
-						s_phone : {
-							validators : {
-								notEmpty : {
-									message : 'Nomor Telepon Tidak Boleh Kosong'
-								},
-								numeric : {
-									message : 'Nomor Telepon Ini Tampaknya Salah'
-								}
-							}
-						},
-						s_fax : {
-							validators : {
-								notEmpty : {
-									message : 'Nomor Fax Tidak Boleh Kosong'
-								},
-								numeric : {
-									message : 'Nomor Fax Ini Tampaknya Salah'
-								}
-							}
-						},
-						s_address : {
-							validators : {
-								notEmpty : {
-									message : 'Alamat Tidak Boleh Kosong'
-								}
+						}
+					},
+					s_address : {
+						validators : {
+							notEmpty : {
+								message : 'Alamat Tidak Boleh Kosong'
 							}
 						}
 					}
-				});
+				}
+			});
 
-				// end validator
+			// end validator
 
-				$('#id').change(function(evt){
-					evt.preventDefault(); let context = $(this);
-					$('#form-load-section-status').fadeIn(200);
+			$('#submit').click(function(evt){
 
-					axios.get(baseUrl+'/master/suplier/suplier/get/'+context.val())
-						.then((response) => {
-							if(response.data == null){
-								context.children('option:selected').attr('disabled', 'disabled');
-								context.val(state);
-								$.toast({
-								    text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-								    showHideTransition: 'fade',
-								    icon: 'error'
-								})
-								$('#form-load-section-status').fadeOut(200);
-							}else{
-								$('#form-edit').data('bootstrapValidator').resetForm();
-								state = response.data.s_id;
-								initiate(response.data);
-								$('#form-load-section-status').fadeOut(200);
-							}
-						})
-						.catch((err) => {
-							console.log(err);
-						})
-					
-				})
+				evt.preventDefault();
 
-				$('#form-edit').submit(function(evt){
-					evt.preventDefault();
+				var btn = $('#submit');
+				btn.attr('disabled', 'disabled');
+				btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
 
-					if($(this).data('bootstrapValidator').validate().isValid()){
-						
-						let btn = $('#submit');
-						btn.attr('disabled', 'disabled');
-						btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+				overlay();
 
-						axios.post(baseUrl+'/master/suplier/suplier/update', $('#form-edit').serialize())
-							.then((response) => {
-								if(response.data.status == 'berhasil'){
-									$("#id").children('option:selected').text($('#id').val()+' - '+$('#s_name').val());
-									$.toast({
-									    text: 'Data Ini berhasil Diupdate',
-									    showHideTransition: 'fade',
-									    icon: 'success'
-									})
-								}else if(response.data.status == 'tidak ada'){
-									$("#id").children('option:selected').attr('disabled', 'disabled');
-									$.toast({
-									    text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-									    showHideTransition: 'fade',
-									    icon: 'error'
-									})
-								}
-							}).catch((err) => {
-								console.log(err);
-							}).then(function(){
-								btn.removeAttr('disabled');
-								btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');
-							})
+				axios.post(baseUrl+'/master/supplier/edit/'+ $('#sid').val(), $('#data-form').serialize()).then((response) => {
+
+					if(response.data.status == 'berhasil'){
+						out();
+
+						$.smallBox({
+							title : "Berhasil",
+							content : "Data Supplier berhasil diubah...!",
+							color : "#739E73",
+							timeout: 4000,
+							icon : "fa fa-check bounce animated"
+						});
+
+						// Toast
+						// $.toast({
+						//     text: 'Data Ini berhasil Diupdate',
+						//     showHideTransition: 'fade',
+						//     icon: 'success'
+						// })
+					}else if(response.data.status == 'tidak ada'){
+						out();
+
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Data yang ingin Anda ubah sudah tidak ada...!",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+
+						// Toast
+						// $.toast({
+						//     text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
+						//     showHideTransition: 'fade',
+						//     icon: 'error'
+						// })
+					}else{
+						out();
+
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal mengedit data...! Coba lagi",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+
+						// Toast
+						// $.toast({
+						//     text: 'Ups . Gagal mengedit data...! Periksa koneksi internet Anda',
+						//     showHideTransition: 'fade',
+						//     icon: 'error'
+						// })
 					}
 
+				}).catch((err) => {
+					out();
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Gagal mengedit data...! Coba lagi",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+					// $.toast({
+					//     text: 'Ups . Gagal mengedit data...! Periksa koneksi internet Anda => '+err,
+					//     showHideTransition: 'fade',
+					//     icon: 'error'
+					// })
+				}).then(function(){
+					btn.removeAttr('disabled');
+					btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');
+					out();
 				})
 
-				function initiate(data){
-					$("#s_name").val(data.s_name);
-					$("#s_limit").val(data.s_limit);
-					$("#s_phone").val(data.s_phone);
-					$("#s_fax").val(data.s_fax);
-					$("#s_address").text(data.s_address);
-					$("#s_note").text(data.s_name);
-				}
 			})
-		</script>
+
+		})
+	</script>
 
 @endsection

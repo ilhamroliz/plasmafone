@@ -371,7 +371,7 @@
 				mounted: function(){
 					validation_regis();
 					// console.log(this.form_data.nama_lengkap);
-					$('#limit').maskMoney({thousands:'.', precision: 0});
+					$('#limit').maskMoney({thousands:'.', precision: 0, decimal:','});
 				},
 				methods: {
 					submit_form: function(e){
