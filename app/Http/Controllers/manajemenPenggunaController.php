@@ -82,7 +82,7 @@ class manajemenPenggunaController extends Controller
 
 
     public function simpan_pengguna(Request $request){
-        dd($request);
+        // dd($request);
         DB::beginTransaction();
         try {
             $id = $this->getDataId();
@@ -98,10 +98,16 @@ class manajemenPenggunaController extends Controller
             $cek = $this->cekUsername($request);
             $cek = $cek->getData('status')['status'];
             if($cek == 'gagal'){
-                return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Username Tidak Tersedia');
+                return response()->json([
+                    'status' => 'gagalUser'
+                ]);
+                // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Username Tidak Tersedia');
             }
             if ($pass != $passconf) {
-                return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai');
+                return response()->json([
+                    'status' => 'gagalPass'
+                ]);
+                // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai');
             }
 
             $pass = sha1(md5('passwordAllah') . $request->pass);
@@ -148,12 +154,18 @@ class manajemenPenggunaController extends Controller
             DB::commit();
             // Session::flash('sukses', 'Data berhasil disimpan');
             // return redirect('manajemen-pengguna/pengguna');
-            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_success', 'Data pengguna berhasil tersimpan...!');
+            // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_success', 'Data pengguna berhasil tersimpan...!');
+            return response()->json([
+                'status' => 'sukses'
+            ]);
         } catch (\Throwable $e) {
             DB::rollback();
             // Session::flash('gagal', 'Data gagal disimpan, cobalah sesaat lagi');
             // return redirect('manajemen-pengguna/pengguna');
-            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', ''.$e.'');
+            // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', ''.$e.'');
+            return response()->json([
+                'status' => 'gagal'
+            ]);
         }
 
     }

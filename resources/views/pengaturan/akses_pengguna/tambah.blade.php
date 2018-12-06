@@ -84,7 +84,7 @@
                             
                             <!-- widget content -->
                             <div class="weight-body">
-                                <form id="form-tambah" class="form-horizontal" action="{{ url('/pengaturan/kelola-pengguna/simpan') }}" method="post">
+                                <form id="form-tambah" class="form-horizontal">
                                     {{ csrf_field() }}
                                     <fieldset>
                                         <legend>
@@ -198,7 +198,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary" type="submit" style="margin-left: 5px;">
+                                                <button class="btn btn-primary" id="submit-tambah" type="button" onclick=simpan() style="margin-left: 5px;">
                                                     <i class="fa fa-floppy-o"></i> 
                                                     &nbsp;Simpan
                                                 </button>
@@ -238,7 +238,9 @@
 @endsection
 
 @section('extra_script')
-
+<script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
+<script src="{{ asset('template_asset/js/waitingfor.js') }}"></script>
 <script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -263,31 +265,84 @@
     });
 
     $(".uploadGambar").on('change', function () {
-      $('.save').attr('disabled', false);
-      if (typeof (FileReader) != "undefined") {
-          var image_holder = $(".image-holder");
-          image_holder.empty();
-          var reader = new FileReader();
-          reader.onload = function (e) {
-              image_holder.html('<img src="{{ asset('template_asset/img/loading1.gif') }}" class="img-responsive" width="60px">');
-              $('.save').attr('disabled', true);
-              setTimeout(function(){
-                  image_holder.empty();
-                  $("<img />", {
-                      "src": e.target.result,
-                      "class": "thumb-image img-responsive",
-                      "height": "80px",
-                  }).appendTo(image_holder);
-                  $('.save').attr('disabled', false);
-              }, 2000)
-          }
-          image_holder.show();
-          reader.readAsDataURL($(this)[0].files[0]);
-      } else {
-          alert("This browser does not support FileReader.");
-      }
-  });
+        $('.save').attr('disabled', false);
+        if (typeof (FileReader) != "undefined") {
+            var image_holder = $(".image-holder");
+            image_holder.empty();
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                image_holder.html('<img src="{{ asset('template_asset/img/loading1.gif') }}" class="img-responsive" width="60px">');
+                $('.save').attr('disabled', true);
+                setTimeout(function(){
+                    image_holder.empty();
+                    $("<img />", {
+                        "src": e.target.result,
+                        "class": "thumb-image img-responsive",
+                        "height": "80px",
+                    }).appendTo(image_holder);
+                    $('.save').attr('disabled', false);
+                }, 2000)
+            }
+            image_holder.show();
+            reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+            alert("This browser does not support FileReader.");
+        }
+    });
 
+    function simpan(){
+        // --- AXIOS USE ----//
+        $('#overlay').fadeIn(200);
+        $('#load-status-text').text('Penyimpanan Database Sedang di Proses');
+        let btn = $('#submit-tambah');
+        btn.attr('disabled', 'disabled');
+        btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+
+        axios.post(baseUrl+'/pengaturan/kelola-pengguna/simpan', $('#form-tambah').serialize())
+            .then((response) => {
+                if(response.data.status == 'sukses'){
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "SUKSES",
+                        content : "Data Pengguna Berhasil Disimpan",
+                        color : "#739E73",
+                        iconSmall : "fa fa-check animated",
+                        timeout : 5000
+                    });
+                    location.reload();
+                }else if(response.data.status == 'gagal'){
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "GAGAL",
+                        content : "Data Pengguna Gagal Disimpan",
+                        color : "#C46A69",
+                        iconSmall : "fa fa-times animated",
+                        timeout : 5000
+                    });
+                    // location.reload();
+                }else if(response.data.status == 'gagalUser'){
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "GAGAL",
+                        content : "Username tidak tersedia",
+                        color : "#C46A69",
+                        iconSmall : "fa fa-times animated",
+                        timeout : 5000
+                    });
+                    // location.reload();
+                }else if(response.data.status == 'gagalPass'){
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "GAGAL",
+                        content : "Password Tidak Sesuai",
+                        color : "#C46A69",
+                        iconSmall : "fa fa-times animated",
+                        timeout : 5000
+                    });
+                    // location.reload();
+                }
+        })
+    }
 
 </script>
 @endsection
