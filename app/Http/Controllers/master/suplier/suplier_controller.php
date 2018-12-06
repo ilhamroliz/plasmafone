@@ -20,6 +20,12 @@ class suplier_controller extends Controller
     	return view('master/suplier/index')->with(compact('suppliers'));
     }
 
+    public function detail($id)
+    {
+        $supplier = suplier::where(['s_id' => Crypt::decrypt($id)])->first();
+        return response()->json($supplier);
+    }
+
     public function getdataactive()
     {
         $supplier_active = suplier::where('s_isactive', 'Y')->orderBy('s_insert', 'desc')->get();
@@ -292,39 +298,6 @@ class suplier_controller extends Controller
 
         }
         
-    }
-
-    public function update(Request $request){
-        // return json_encode($request->all());
-
-        $data = DB::table('d_supplier')->where('s_id', $request->s_id);
-
-        if(!$data->first()){
-            $response = [
-                'status'    => 'tidak ada',
-                'content'   => 'null'
-            ];
-
-            return json_encode($response);
-        }else{
-            $data->update([
-                's_name'        => $request->s_name,
-                's_company'     => $request->s_company,
-                's_phone'       => $request->s_phone,
-                's_fax'         => $request->s_fax,
-                's_address'     => $request->s_address,
-                's_note'        => $request->s_note,
-                's_limit'       => $request->s_limit
-            ]);
-
-            Session::flash('flash_message_success', 'Semua Data Yang Telah Anda Ubah Berhasil Tersimpan.');
-            $response = [
-                'status'    => 'berhasil',
-                'content'   => null
-            ];
-
-            return json_encode($response);
-        }
     }
 
     function formatPrice($data)

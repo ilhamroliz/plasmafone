@@ -240,6 +240,117 @@
 		</section>
 		<!-- end widget grid -->
 
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+
+					<div class="modal-header">
+
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+
+						<h4 class="modal-title" id="myModalLabel">Detail Supplier</h4>
+
+					</div>
+
+					<div class="modal-body">
+		
+						<div class="row">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+								<header>
+
+									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+									<h2 id="title_detail"></h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget content -->
+									<div class="widget-body no-padding">
+										
+										<div class="table-responsive">
+											
+											<table class="table">
+
+												<tbody>
+
+													<tr class="success">
+														<td><strong>Perusahaan</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_perusahaan"></td>
+													</tr>
+
+													<tr class="danger">
+														<td><strong>Supplier</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_supplier"></td>
+													</tr>
+
+													<tr class="warning">
+														<td><strong>Telephone</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_telephone"></td>
+													</tr>
+
+													<tr class="info">
+														<td><strong>Fax</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_fax"></td>
+													</tr>
+
+													<tr class="success">
+														<td><strong>Limit</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_limit"></td>
+													</tr>
+
+													<tr class="danger">
+														<td><strong>Alamat</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_alamat"></td>
+													</tr>
+
+													<tr class="warning">
+														<td><strong>Keterangan</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_keterangan"></td>
+													</tr>
+
+												</tbody>
+
+											</table>
+											
+										</div>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+						</div>
+		
+					</div>
+
+				</div><!-- /.modal-content -->
+
+			</div><!-- /.modal-dialog -->
+
+		</div>
+		<!-- /.modal -->
+
 	</div>
 	<!-- END MAIN CONTENT -->
 @endsection
@@ -379,6 +490,53 @@
 
 			window.location = baseUrl+'/master/supplier/edit/'+val;
 
+		}
+
+		function detail(id){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Mengambil data...');
+
+			axios.get(baseUrl+'/master/supplier/detail/'+id).then(response => {
+
+				$('#title_detail').html('<strong>Detail Supplier "'+response.data.s_name+'"</strong>');
+				$('#dt_perusahaan').text(response.data.s_company);
+				$('#dt_supplier').text(response.data.s_name);
+				$('#dt_telephone').text(response.data.s_phone);
+				$('#dt_fax').text(response.data.s_fax);
+				$('#dt_alamat').text(response.data.s_address);
+				$('#dt_keterangan').text(response.data.s_note);
+
+				var limit = response.data.s_limit,
+					iLimit = limit + '',
+					i = parseFloat(iLimit.match(/\d+\.\d{2}/)),
+					dec = limit.split(".");
+
+				$('#dt_limit').text(formatRupiah(i, "Rp", dec[1]));
+				$('#dt_created').text(response.data.s_insert);
+				$('#overlay').fadeOut(200);
+				$('#myModal').modal('show');
+
+			})
+		}
+
+		function formatRupiah(angka, prefix, dec)
+		{
+			var number_string = angka.toString(),
+			split	= number_string.split(','),
+			sisa 	= split[0].length % 3,
+			rupiah 	= split[0].substr(0, sisa),
+			ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
+
+			if (ribuan) {
+
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.') + "," + dec;
+
+			}
+
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
 		}
 
 	</script>
