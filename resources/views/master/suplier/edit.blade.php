@@ -187,6 +187,21 @@
 
 												</div>
 
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Status Supplier</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<select class="form-control" name="isactive">
+															<option value="Y" @if($supplier->s_isactive == "Y") selected @endif>AKTIF</option>
+															<option value="N" @if($supplier->s_isactive == "N") selected @endif>NON AKTIF</option>
+														</select>
+
+													</div>
+
+												</div>
+
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
