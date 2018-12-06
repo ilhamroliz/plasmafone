@@ -16,6 +16,7 @@ class suplier_controller extends Controller
     public function suplier()
     {
         $suppliers = DB::table('d_supplier')->get();
+
     	return view('master/suplier/index')->with(compact('suppliers'));
     }
 
@@ -26,10 +27,21 @@ class suplier_controller extends Controller
         $supplier_active = collect($supplier_active);
 
         return DataTables::of($supplier_active)
-        ->addColumn('aksi', function ($supplier_active){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+        ->addColumn('limit', function($supplier_active){
+
+            return '<p class="text-right">Rp'.number_format($supplier_active->s_limit,2,',','.').'</p>';
+
         })
-        ->rawColumns(['aksi'])
+        
+        ->addColumn('aksi', function ($supplier_active){ 
+
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+        })
+
+        ->rawColumns(['aksi', 'limit'])
+
         ->make(true);
     }
 
@@ -40,10 +52,21 @@ class suplier_controller extends Controller
         $supplier_all = collect($supplier_all);
 
         return DataTables::of($supplier_all)
-        ->addColumn('aksi', function ($supplier_all){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+        ->addColumn('limit', function($supplier_all){
+
+            return '<p class="text-right">Rp'.number_format($supplier_all->s_limit,2,',','.').'</p>';
+
         })
-        ->rawColumns(['aksi'])
+
+        ->addColumn('aksi', function ($supplier_all){    
+
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+        })
+
+        ->rawColumns(['aksi', 'limit'])
+
         ->make(true);
     }
 
@@ -54,10 +77,21 @@ class suplier_controller extends Controller
         $supplier_nonactive = collect($supplier_nonactive);
 
         return DataTables::of($supplier_nonactive)
-        ->addColumn('aksi', function ($supplier_nonactive){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+        ->addColumn('limit', function($supplier_nonactive){
+
+            return '<p class="text-right">Rp'.number_format($supplier_nonactive->s_limit,2,',','.').'</p>';
+
         })
-        ->rawColumns(['aksi'])
+
+        ->addColumn('aksi', function ($supplier_nonactive){     
+
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+        })
+
+        ->rawColumns(['aksi', 'limit'])
+
         ->make(true);
     }
 
@@ -70,31 +104,46 @@ class suplier_controller extends Controller
             DB::beginTransaction();
 
             try {
+
                 $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
 
                 if ($check > 0) {
+
                     return  json_encode([
                         'status'    => 'ada',
                         'company'   => strtoupper($data['nama_perusahaan'])
                     ]);
+
                 } else {
                     
                     if ($data['fax_suplier'] == "") {
+
                         $fax = "";
+
                     } else {
+
                         $fax = $data['fax_suplier'];
+
                     }
 
                     if ($data['keterangan'] == "") {
+
                         $note = "";
+
                     } else {
+
                         $note = strtoupper($data['keterangan']);
+
                     }
 
-                    if ($data['limit'] == "") {
+                    if ($data['limit'] == "" || $data['limit'] == 0) {
+
                         $limit = 0;
+
                     } else {
-                        $limit = $data['limit'];
+
+                        $limit = $this->formatPrice($data['limit']);
+
                     }
 
                     DB::table('d_supplier')->insert([
@@ -112,7 +161,9 @@ class suplier_controller extends Controller
                     return  json_encode([
                         'status'    => 'berhasil'
                     ]);
+
                 }
+
             } catch (\Exception $e) {
 
                 DB::rollback();
@@ -129,14 +180,39 @@ class suplier_controller extends Controller
         return view('master.suplier.add');
     }
 
-    public function edit(Request $request){
-        $data = suplier::where('s_id', $request->id)->get();
+    public function edit(Request $request, $id = null){
+        
 
-        if(count($data) == 0){
-            return view('errors.data_not_found');
+        // ======================Method Get================================
+        DB::beginTransaction();
+
+        try {
+
+            $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+
+            if ($check > 0) {
+
+                $suppliers = suplier::where('s_id', Crypt::decrypt($id))->get();
+
+                DB::commit();
+                
+                return view('master.suplier.edit')->with(compact('suppliers'));
+
+            } else {
+
+                return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');
+
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            // something went wrong
+            return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
+
         }
-
-        return view('master.suplier.edit_suplier', compact('data'));
+        
     }
 
     public function update(Request $request){
@@ -170,6 +246,11 @@ class suplier_controller extends Controller
 
             return json_encode($response);
         }
+    }
+
+    function formatPrice($data)
+    {
+        return implode("", explode(".", $data));
     }
 
 }

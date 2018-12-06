@@ -4,6 +4,8 @@
 
 @section('extra_style')
 
+
+
 @endsection
 
 
@@ -244,160 +246,141 @@
 
 @section('extra_script')
 
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$('#overlay').fadeIn(200);
-				$('#load-status-text').text('Sedang Menyiapkan...');
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Menyiapkan...');
 
-				var aktif, semua, inaktif;
-				var baseUrl = '{{ url('/') }}';
+			var aktif, semua, inaktif;
+			var baseUrl = '{{ url('/') }}';
 
-				let selected = [];
+			let selected = [];
 
-				/* BASIC ;*/
-					var responsiveHelper_dt_basic = undefined;
-					var responsiveHelper_datatable_fixed_column = undefined;
-					var responsiveHelper_datatable_col_reorder = undefined;
-					var responsiveHelper_datatable_tabletools = undefined;
-					
-					var breakpointDefinition = {
-						tablet : 1024,
-						phone : 480
-					};
-		
-					setTimeout(function () {
+			/* BASIC ;*/
+				var responsiveHelper_dt_basic = undefined;
+				var responsiveHelper_datatable_fixed_column = undefined;
+				var responsiveHelper_datatable_col_reorder = undefined;
+				var responsiveHelper_datatable_tabletools = undefined;
+				
+				var breakpointDefinition = {
+					tablet : 1024,
+					phone : 480
+				};
+	
+				setTimeout(function () {
 
-						aktif = $('#dt_active').dataTable({
-							"processing": true,
-							"serverSide": true,
-							"ajax": "{{ route('supplier.getdataactive') }}",
-							"columns":[
-								{"data": "s_company"},
-								{"data": "s_name"},
-								{"data": "s_phone"},
-								{"data": "s_limit"},
-								{"data": "aksi"}
-							],
-							"autoWidth" : true,
-							"language" : dataTableLanguage,
-							"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-							"preDrawCallback" : function() {
-								// Initialize the responsive datatables helper once.
-								if (!responsiveHelper_dt_basic) {
-									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-								}
-							},
-							"rowCallback" : function(nRow) {
-								responsiveHelper_dt_basic.createExpandIcon(nRow);
-							},
-							"drawCallback" : function(oSettings) {
-								responsiveHelper_dt_basic.respond();
+					aktif = $('#dt_active').dataTable({
+						"processing": true,
+						"serverSide": true,
+						"aasorting" : [], 
+						"ajax": "{{ route('supplier.getdataactive') }}",
+						"columns":[
+							{"data": "s_company"},
+							{"data": "s_name"},
+							{"data": "s_phone"},
+							{"data": "limit"},
+							{"data": "aksi"}
+						],
+						"autoWidth" : true,
+						"language" : dataTableLanguage,
+						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+						"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+						"preDrawCallback" : function() {
+							// Initialize the responsive datatables helper once.
+							if (!responsiveHelper_dt_basic) {
+								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
 							}
-						});
+						},
+						"rowCallback" : function(nRow) {
+							responsiveHelper_dt_basic.createExpandIcon(nRow);
+						},
+						"drawCallback" : function(oSettings) {
+							responsiveHelper_dt_basic.respond();
+						}
+					});
 
-					}, 500);
+				}, 500);
 
-					setTimeout(function () {
+				setTimeout(function () {
 
-						semua = $('#dt_all').dataTable({
-							"processing": true,
-							"serverSide": true,
-							"ajax": "{{ route('supplier.getdataall') }}",
-							"columns":[
-								{"data": "s_company"},
-								{"data": "s_name"},
-								{"data": "s_phone"},
-								{"data": "s_limit"},
-								{"data": "aksi"}
-							],
-							"autoWidth" : true,
-							"language" : dataTableLanguage,
-							"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-							"preDrawCallback" : function() {
-								// Initialize the responsive datatables helper once.
-								if (!responsiveHelper_dt_basic) {
-									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-								}
-							},
-							"rowCallback" : function(nRow) {
-								responsiveHelper_dt_basic.createExpandIcon(nRow);
-							},
-							"drawCallback" : function(oSettings) {
-								responsiveHelper_dt_basic.respond();
+					semua = $('#dt_all').dataTable({
+						"processing": true,
+						"serverSide": true,
+						"ajax": "{{ route('supplier.getdataall') }}",
+						"columns":[
+							{"data": "s_company"},
+							{"data": "s_name"},
+							{"data": "s_phone"},
+							{"data": "limit"},
+							{"data": "aksi"}
+						],
+						"autoWidth" : true,
+						"language" : dataTableLanguage,
+						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+						"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+						"preDrawCallback" : function() {
+							// Initialize the responsive datatables helper once.
+							if (!responsiveHelper_dt_basic) {
+								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
 							}
-						});
+						},
+						"rowCallback" : function(nRow) {
+							responsiveHelper_dt_basic.createExpandIcon(nRow);
+						},
+						"drawCallback" : function(oSettings) {
+							responsiveHelper_dt_basic.respond();
+						}
+					});
 
-					}, 1000);
+				}, 1000);
 
-					setTimeout(function () {
+				setTimeout(function () {
 
-						inaktif = $('#dt_inactive').dataTable({
-							"processing": true,
-							"serverSide": true,
-							"ajax": "{{ route('supplier.getdatanonactive') }}",
-							"columns":[
-								{"data": "s_company"},
-								{"data": "s_name"},
-								{"data": "s_phone"},
-								{"data": "s_limit"},
-								{"data": "aksi"}
-							],
-							"autoWidth" : true,
-							"language" : dataTableLanguage,
-							"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-							"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-							"preDrawCallback" : function() {
-								// Initialize the responsive datatables helper once.
-								if (!responsiveHelper_dt_basic) {
-									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
-								}
-							},
-							"rowCallback" : function(nRow) {
-								responsiveHelper_dt_basic.createExpandIcon(nRow);
-							},
-							"drawCallback" : function(oSettings) {
-								responsiveHelper_dt_basic.respond();
+					inaktif = $('#dt_inactive').dataTable({
+						"processing": true,
+						"serverSide": true,
+						"ajax": "{{ route('supplier.getdatanonactive') }}",
+						"columns":[
+							{"data": "s_company"},
+							{"data": "s_name"},
+							{"data": "s_phone"},
+							{"data": "limit"},
+							{"data": "aksi"}
+						],
+						"autoWidth" : true,
+						"language" : dataTableLanguage,
+						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+						"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+						"preDrawCallback" : function() {
+							// Initialize the responsive datatables helper once.
+							if (!responsiveHelper_dt_basic) {
+								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
 							}
-						});
+						},
+						"rowCallback" : function(nRow) {
+							responsiveHelper_dt_basic.createExpandIcon(nRow);
+						},
+						"drawCallback" : function(oSettings) {
+							responsiveHelper_dt_basic.respond();
+						}
+					});
 
-						$('#overlay').fadeOut(200);
+					$('#overlay').fadeOut(200);
 
-					}, 1500);
-		
-				/* END BASIC */
+				}, 1500);
+	
+			/* END BASIC */
+		})
 
-				// edit 1 click
+		function edit(val){
 
-				$(".edit").click(function(evt){
-					evt.preventDefault(); context = $(this);
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
 
-					window.location = baseUrl+'/master/suplier/suplier/edit?id='+context.data('id');
-				})
+			window.location = baseUrl+'/master/supplier/edit/'+val;
 
-				// hapus 1 click
-				$(".hapus").click(function(evt){
-					evt.preventDefault(); context = $(this);
+		}
 
-					let ask = confirm('Apakah Anda Yakin . ?');
-					if(ask){
-						$('#overlay').fadeIn(300);
-						$('#load-status-text').text('Sedang Menghapus Data')
-						axios.post(baseUrl+'/master/suplier/suplier/multiple-delete', {
-							data 	: [context.data('id')],
-							_token 	: '{{ csrf_token() }}'
-						})
-						.then((response) => {
-							if(response.data.status == 'berhasil'){
-								location.reload();
-							}
-						}).catch((error) => {
-							$('#load-status-text').text('Internal Server Error')
-						})
-					}
-				})
-			})
-		</script>
+	</script>
 
 @endsection

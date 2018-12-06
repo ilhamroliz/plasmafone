@@ -199,7 +199,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-money"></i></span>
 															
-															<input type="text" class="form-control" id="limit" name="limit" v-model="form_data.limit" placeholder="Masukkan Limitation"/>
+															<input type="text" class="form-control" id="limit" name="limit" placeholder="Masukkan Limitation"/>
 
 														</div>
 
@@ -293,154 +293,136 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 
-		<script type="text/javascript">
+	<script type="text/javascript">
 
-			$(document).ready(function(){
-				// product form
-				var baseUrl = '{{ url('/') }}';
+		$(document).ready(function(){
+			// product form
+			var baseUrl = '{{ url('/') }}';
 
-				$("#limit").maskMoney({thousands:'.', precision: 0});
+			
 
-				function overlay()
-				{
-					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Memproses...');
-				}
+			function overlay()
+			{
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Memproses...');
+			}
 
-				function out()
-				{
-					$('#overlay').fadeOut(200);
-				}
+			function out()
+			{
+				$('#overlay').fadeOut(200);
+			}
 
-				function validation_regis(){
-					$('#data-form').bootstrapValidator({
-						feedbackIcons : {
-							valid : 'glyphicon glyphicon-ok',
-							invalid : 'glyphicon glyphicon-remove',
-							validating : 'glyphicon glyphicon-refresh'
+			function validation_regis(){
+				$('#data-form').bootstrapValidator({
+					feedbackIcons : {
+						valid : 'glyphicon glyphicon-ok',
+						invalid : 'glyphicon glyphicon-remove',
+						validating : 'glyphicon glyphicon-refresh'
+					},
+					fields : {
+						nama_perusahaan : {
+							validators : {
+								notEmpty : {
+									message : 'Nama Perusahaan Tidak Boleh Kosong'
+								}
+							}
 						},
-						fields : {
-							nama_perusahaan : {
-								validators : {
-									notEmpty : {
-										message : 'Nama Perusahaan Tidak Boleh Kosong'
-									}
+						nama_suplier : {
+							validators : {
+								notEmpty : {
+									message : 'Nama Supplier Tidak Boleh Kosong'
 								}
-							},
-							nama_suplier : {
-								validators : {
-									notEmpty : {
-										message : 'Nama Supplier Tidak Boleh Kosong'
-									}
+							}
+						},
+						telp_suplier : {
+							validators : {
+								notEmpty : {
+									message : 'Nomor Telepon Tidak Boleh Kosong'
 								}
-							},
-							telp_suplier : {
-								validators : {
-									notEmpty : {
-										message : 'Nomor Telepon Tidak Boleh Kosong'
-									}
-								}
-							},
-							alamat_suplier : {
-								validators : {
-									notEmpty : {
-										message : 'Alamat Tidak Boleh Kosong'
-									}
+							}
+						},
+						alamat_suplier : {
+							validators : {
+								notEmpty : {
+									message : 'Alamat Tidak Boleh Kosong'
 								}
 							}
 						}
-					});
-				}
+					}
+				});
+			}
 
-				var app = new Vue({
-					el 		: '#content',
-					data 	: {
+			var app = new Vue({
+				el 		: '#content',
+				data 	: {
 
-						btn_save_disabled 	: false,
+					btn_save_disabled 	: false,
 
-						form_data : {
-							nama_perusahaan 		: '',
-							nama_suplier 			: '',
-							limit 					: '',
-							telp_suplier 			: '',
-							fax_suplier 			: '',
-							alamat_suplier 			: '',
-							keterangan				: ''
-						}
+					form_data : {
+						nama_perusahaan 		: '',
+						nama_suplier 			: '',
+						telp_suplier 			: '',
+						fax_suplier 			: '',
+						alamat_suplier 			: '',
+						keterangan				: ''
+					}
 
-					},
-					mounted: function(){
-						validation_regis();
-						// console.log(this.form_data.nama_lengkap);
-					},
-					methods: {
-						submit_form: function(e){
-							e.preventDefault();
+				},
+				mounted: function(){
+					validation_regis();
+					// console.log(this.form_data.nama_lengkap);
+					$('#limit').maskMoney({thousands:'.', precision: 0});
+				},
+				methods: {
+					submit_form: function(e){
+						e.preventDefault();
 
-							if($('#data-form').data('bootstrapValidator').validate().isValid()){
-								this.btn_save_disabled = true;
-								overlay();
-								axios.post(baseUrl+'/master/supplier/add', 
-									$('#data-form').serialize()
-								).then((response) => {
-									if(response.data.status == 'berhasil'){
-										out();
-										$.smallBox({
-											title : "Berhasil",
-											content : "Data Supplier terbaru Anda berhasil disimpan...!",
-											color : "#739E73",
-											timeout: 4000,
-											icon : "fa fa-check bounce animated"
-										});
+						if($('#data-form').data('bootstrapValidator').validate().isValid()){
+							this.btn_save_disabled = true;
+							overlay();
+							axios.post(baseUrl+'/master/supplier/add', 
+								$('#data-form').serialize()
+							).then((response) => {
+								if(response.data.status == 'berhasil'){
+									out();
+									$.smallBox({
+										title : "Berhasil",
+										content : "Data Supplier terbaru Anda berhasil disimpan...!",
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+									});
 
-										// Toast
-										// $.toast({
-										//     text: 'Data Supplier terbaru Anda berhasil disimpan...!',
-										//     showHideTransition: 'fade',
-										//     icon: 'success'
-										// })
+									// Toast
+									// $.toast({
+									//     text: 'Data Supplier terbaru Anda berhasil disimpan...!',
+									//     showHideTransition: 'fade',
+									//     icon: 'success'
+									// })
 
-										this.reset_form();
+									this.reset_form();
 
-									} else if(response.data.status == 'ada') {
-										out();
-										$.smallBox({
-											title : "Gagal",
-											content : 'Data perusahaan <i>"'+response.data.company+'"</i> sudah ada!',
-											color : "#A90329",
-											timeout: 4000,
-											icon : "fa fa-times bounce animated"
-										});
-
-										// Toast
-										// $.toast({
-										//     text: 'Data perusahaan "'+response.data.company+'" sudah ada!',
-										//     showHideTransition: 'fade',
-										//     icon: 'error'
-										// })
-									}else {
-										out();
-										$.smallBox({
-											title : "Gagal",
-											content : "Ada kesalahan dalam proses input data, coba lagi...!",
-											color : "#A90329",
-											timeout: 4000,
-											icon : "fa fa-times bounce animated"
-										});
-
-										// Toast
-										// $.toast({
-										//     text: 'Ada kesalahan dalam proses input data, coba lagi...!',
-										//     showHideTransition: 'fade',
-										//     icon: 'error'
-										// })
-									}
-
-								}).catch((err) => {
+								} else if(response.data.status == 'ada') {
 									out();
 									$.smallBox({
 										title : "Gagal",
-										content : "Ada kesalahan jaringan, coba lagi...!",
+										content : 'Data perusahaan <i>"'+response.data.company+'"</i> sudah ada!',
+										color : "#A90329",
+										timeout: 4000,
+										icon : "fa fa-times bounce animated"
+									});
+
+									// Toast
+									// $.toast({
+									//     text: 'Data perusahaan "'+response.data.company+'" sudah ada!',
+									//     showHideTransition: 'fade',
+									//     icon: 'error'
+									// })
+								}else {
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : "Ada kesalahan dalam proses input data, coba lagi...!",
 										color : "#A90329",
 										timeout: 4000,
 										icon : "fa fa-times bounce animated"
@@ -452,16 +434,13 @@
 									//     showHideTransition: 'fade',
 									//     icon: 'error'
 									// })
-								}).then(() => {
-									this.btn_save_disabled = false;
-								})
+								}
 
-								return false;
-							}else{
+							}).catch((err) => {
 								out();
 								$.smallBox({
 									title : "Gagal",
-									content : "Ada kesalahan dengan inputan Anda. Harap mengecek ulang...!",
+									content : "Ada kesalahan jaringan, coba lagi...!",
 									color : "#A90329",
 									timeout: 4000,
 									icon : "fa fa-times bounce animated"
@@ -469,28 +448,49 @@
 
 								// Toast
 								// $.toast({
-								//     text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang..',
+								//     text: 'Ada kesalahan dalam proses input data, coba lagi...!',
 								//     showHideTransition: 'fade',
 								//     icon: 'error'
 								// })
-							}
-						},
+							}).then(() => {
+								this.btn_save_disabled = false;
+							})
 
-						reset_form:function(){
-							this.form_data.nama_perusahaan 		= '';
-							this.form_data.nama_suplier 		= '';
-							this.form_data.limit 				= '';
-							this.form_data.telp_suplier			= '';
-							this.form_data.fax_suplier 			= '';
-							this.form_data.alamat_suplier 		= '';
-							this.form_data.keterangan 			= '';
-							$('#data-form').data('bootstrapValidator').resetForm();
+							return false;
+						}else{
+							out();
+							$.smallBox({
+								title : "Gagal",
+								content : "Ada kesalahan dengan inputan Anda. Harap mengecek ulang...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+							// Toast
+							// $.toast({
+							//     text: 'Ada Kesalahan Dengan Inputan Anda. Harap Mengecek Ulang..',
+							//     showHideTransition: 'fade',
+							//     icon: 'error'
+							// })
 						}
-					}
-				});
+					},
 
-				// end product form
-			})
-		</script>
+					reset_form:function(){
+						this.form_data.nama_perusahaan 		= '';
+						this.form_data.nama_suplier 		= '';
+						$("#limit").val("");
+						this.form_data.telp_suplier			= '';
+						this.form_data.fax_suplier 			= '';
+						this.form_data.alamat_suplier 		= '';
+						this.form_data.keterangan 			= '';
+						$('#data-form').data('bootstrapValidator').resetForm();
+					}
+				}
+			});
+
+			// end product form
+		})
+	</script>
 
 @endsection
