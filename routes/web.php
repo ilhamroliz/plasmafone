@@ -217,21 +217,9 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::match(['get', 'post'], '/master/outlet/add','master\outlet\outlet_controller@add');
 
-	Route::get('/master/outlet/get-kecamatan','master\outlet\outlet_controller@get_kecamatan');
-
-	Route::get('/master/outlet/get-kota','master\outlet\outlet_controller@get_kota');
-
-	Route::get('/master/outlet/get-provinsi','master\outlet\outlet_controller@get_provinsi');
-
-	Route::post('/master/outlet/add-outlet','master\outlet\outlet_controller@add_outlet');
-
-	Route::get('/master/outlet/get-outlet/{id}','master\outlet\outlet_controller@get_outlet');
+	Route::get('/master/getcode', 'master\outlet\outlet_controller@getcode');
 
 	Route::get('/master/outlet/edit','master\outlet\outlet_controller@outlet_edit');
-
-	Route::post('/master/outlet/update-outlet','master\outlet\outlet_controller@update_outlet');
-
-	Route::post('/master/outlet/edit-multiple', 'master\outlet\outlet_controller@multiple_edit_outlet');
 
 	Route::match(['get', 'post'], '/master/outlet/multiple-delete', 'master\outlet\outlet_controller@multiple_delete_outlet');
 

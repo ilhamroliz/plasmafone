@@ -45,8 +45,79 @@ class outlet_controller extends Controller
         return response()->json($kode);
     }
 
-    public function add()
+    public function add(Request $request)
     {
+        if ($request->isMethod('post'))
+        {
+           
+            $data = $request->all();
+
+            DB::beginTransaction();
+
+            try {
+
+                $check_code = Outlet::where('c_id', '=', $data['code'])->count();
+                $check_name = Outlet::where('c_name', '=', $data['name'])->count();
+
+                if ($check_code > 0) {
+
+                    return  json_encode([
+                        'status'    => 'kode ada',
+                        'code'      => $data['code']
+                    ]);
+
+                } else if($check_name > 0) {
+
+                    return  json_encode([
+                        'status'    => 'nama ada',
+                        'name'      => strtoupper($data['name'])
+                    ]);
+
+                }else {
+
+                    if ($data['note'] == "") {
+
+                        $note = "";
+
+                    } else {
+
+                        $note = strtoupper($data['note']);
+
+                    }
+
+                    $outlet = new Outlet();
+
+                    $outlet->c_id = $data['code'];
+                    $outlet->c_name = strtoupper($data['name']);
+                    $outlet->c_tlp = $data['telp'];
+                    $outlet->c_address = strtoupper($data['address']);
+                    $outlet->c_note = $note;
+
+                    $outlet->save();
+                    
+                    DB::commit();
+
+                    return  json_encode([
+                        'status'    => 'berhasil',
+                        'code'      => GenerateCode::code('m_company', 'c_id', 8, 'PF')
+                    ]);
+
+                }
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                // something went wrong
+                return  json_encode([
+                    'status'    => 'gagal',
+                    'msg'       => $e
+                ]);
+
+            }
+
+        }
+
     	return view('master.outlet.add');
     }
 }

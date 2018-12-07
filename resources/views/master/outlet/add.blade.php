@@ -106,7 +106,7 @@
 									<fieldset>
 
 										<legend>
-											Form Tambah Supplier
+											Form Tambah Outlet
 										</legend>
 
 										<div class="row">
@@ -115,7 +115,25 @@
 
 												<div class="form-group">
 
-													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Perusahaan</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Outlet</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<div class="input-group">
+
+															<span class="input-group-addon"><i class="fa fa-barcode"></i></span>
+
+															<input type="text" class="form-control" id="code" name="code" v-model="form_data.code" placeholder="Masukkan Kode Outlet" style="text-transform: uppercase" readonly />
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Outlet</label>
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
@@ -123,7 +141,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-building"></i></span>
 
-															<input type="text" class="form-control" name="nama_perusahaan" v-model="form_data.nama_perusahaan" placeholder="Masukkan Nama Perusahaan" style="text-transform: uppercase" />
+															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Outlet" style="text-transform: uppercase" />
 
 														</div>
 
@@ -133,25 +151,7 @@
 
 												<div class="form-group">
 
-													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Supplier</label>
-
-													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-														<div class="input-group">
-
-															<span class="input-group-addon"><i class="fa fa-user"></i></span>
-
-															<input type="text" class="form-control" name="nama_suplier" v-model="form_data.nama_suplier" placeholder="Masukkan Nama Supplier" style="text-transform: uppercase" />
-
-														</div>
-
-													</div>
-
-												</div>
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">No Telephone</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">No. Telephone</label>
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
@@ -159,7 +159,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-phone"></i></span>
 
-															<input type="text" class="form-control" name="telp_suplier" v-model="form_data.telp_suplier" placeholder="Masukkan Nomor Telepon" />
+															<input type="text" class="form-control" id="telp" name="telp" v-model="form_data.telp" placeholder="Masukkan Nomor Telepon" />
 
 														</div>
 
@@ -169,17 +169,11 @@
 
 												<div class="form-group">
 
-													<label class="col-xs-4 col-lg-4 control-label text-left">Fax</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Outlet</label>
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<div class="input-group">
-
-															<span class="input-group-addon"><i class="fa fa-fax"></i></span>
-
-															<input type="text" class="form-control" name="fax_suplier" v-model="form_data.fax_suplier" placeholder="Masukkan Nomor Fax Supplier" />
-
-														</div>
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Outlet" id="address" name="address" v-model="form_data.address"></textarea>
 
 													</div>
 
@@ -191,41 +185,11 @@
 
 												<div class="form-group">
 
-													<label class="col-xs-4 col-lg-4 control-label text-left">Limit</label>
-
-													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-														<div class="input-group">
-
-															<span class="input-group-addon"><i class="fa fa-money"></i></span>
-															
-															<input type="text" class="form-control" id="limit" name="limit" placeholder="Masukkan Limitation"/>
-
-														</div>
-
-													</div>
-
-												</div>
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Supplier</label>
-
-													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Supplier" name="alamat_suplier" v-model="form_data.alamat_suplier"></textarea>
-
-													</div>
-
-												</div>
-
-												<div class="form-group">
-
 													<label class="col-xs-4 col-lg-4 control-label text-left">Keterangan</label>
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Supplier" name="keterangan" v-model="form_data.keterangan"></textarea>
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Outlet" id="note" name="note" v-model="form_data.note"></textarea>
 
 													</div>
 
@@ -286,109 +250,179 @@
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
 	<!-- <script src="{{ asset('template_asset/js/plugin/choosen/init.js') }}"></script> -->
 
-		<script type="text/javascript">
+	<script type="text/javascript">
 
-			function isNumber(evt) {
-			    evt = (evt) ? evt : window.event;
-			    var charCode = (evt.which) ? evt.which : evt.keyCode;
-			    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-			        return false;
-			    }
-			    return true;
+		$(document).ready(function(){
+
+			var baseUrl = '{{ url('/') }}';
+
+			function overlay()
+			{
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Memproses...');
 			}
 
-			$(document).ready(function(){
+			function out()
+			{
+				$('#overlay').fadeOut(200);
+			}
 
-				// $('select').selectstyle();
-				// $('.chosen-select').chosen();
-
-				// Get kecamatan
-				$.get(baseUrl+'/master/outlet/get-kecamatan', function(data){
-					// console.log(data);
-					$.each(JSON.parse(data),function(idx, val){
-						var opt = "<option value='"+ val.id + "'>"+ val.nama_kecamatan + "</option>";
-						$('#kecamatan').append(opt);
-					});
-				});
-
-				// Get kota
-				$.get(baseUrl+'/master/outlet/get-kota', function(data){
-					// console.log(data);
-					$.each(JSON.parse(data),function(idx, val){
-						var opt = "<option value='"+ val.id + "'>"+ val.nama_kota + "</option>";
-						$('#kota').append(opt);
-					});
-				});
-
-				// Get provinsi
-				$.get(baseUrl+'/master/outlet/get-provinsi', function(data){
-					// console.log(data);
-					$.each(JSON.parse(data),function(idx, val){
-						var opt = "<option value='"+ val.id + "'>"+ val.nama_provinsi + "</option>";
-						$('#provinsi').append(opt);
-					});
-				});
-				
-
-				// product form
-
-				$('#outlet-form').bootstrapValidator({
+			function validation_regis()
+			{
+				$('#data-form').bootstrapValidator({
 					feedbackIcons : {
 						valid : 'glyphicon glyphicon-ok',
 						invalid : 'glyphicon glyphicon-remove',
 						validating : 'glyphicon glyphicon-refresh'
 					},
 					fields : {
-						nama_outlet : {
+						code : {
+							validators : {
+								notEmpty : {
+									message : 'Isi kode outlet'
+								}
+							}
+						},
+						name : {
 							validators : {
 								notEmpty : {
 									message : 'Isi nama outlet'
 								}
 							}
 						},
-						telephone : {
+						telp : {
 							validators : {
 								notEmpty : {
-									message : 'Isi nomor telephone outlet'
+									message : 'Isi telephone outlet'
 								}
 							}
 						},
-						alamat : {
+						address : {
 							validators : {
 								notEmpty : {
 									message : 'Isi alamat outlet'
 								}
 							}
-						},
-						kecamatan : {
-							validators : {
-								notEmpty : {
-									message : 'Pilih kecamatan outlet'
-								}
-							}
-						},
-						kota : {
-							validators : {
-								notEmpty : {
-									message : 'Pilih kota outlet'
-								}
-							}
-						},
-						provinsi : {
-							validators : {
-								notEmpty : {
-									message : 'Pilih provinsi outlet'
-								}
-							}
 						}
 					}
 				});
+			}
 
-				// end product form
+			var app = new Vue({
+				el 		: '#content',
+				data 	: {
 
+					btn_save_disabled 	: false,
 
-				// End select order
-			})
-		</script>
+					form_data : {
+						code 	: '',
+						name 	: '',
+						telp 	: '',
+						address : '',
+						note 	: ''
+					}
+
+				},
+				mounted: function(){
+					validation_regis();
+					overlay();
+				},
+				created: function(){
+					axios.get(baseUrl+'/master/getcode')
+					.then(response => {
+						this.form_data.code = response.data;
+						out();
+					})
+				},
+				methods: {
+					submit_form: function(e){
+						e.preventDefault();
+
+						if($('#data-form').data('bootstrapValidator').validate().isValid()){
+							this.btn_save_disabled = true;
+							overlay();
+							axios.post(baseUrl+'/master/outlet/add', 
+								$('#data-form').serialize()
+							).then((response) => {
+								if(response.data.status == 'berhasil'){
+									out();
+									$.smallBox({
+										title : "Berhasil",
+										content : "Data outlet terbaru Anda berhasil tersimpan...!",
+										color : "#739E73",
+										timeout: 5000,
+										icon : "fa fa-check bounce animated"
+									});
+
+									this.reset_form();
+									this.form_data.code = response.data.code;
+
+								} else if(response.data.status == 'kode ada') {
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : 'Kode outlet <i>"'+response.data.code+'"</i> sudah ada! Mulai ulang halaman...',
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+								} else if(response.data.status == 'nama ada') {
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : 'Nama outlet <i>"'+response.data.name+'"</i> sudah ada! Masukkan nama selain <i>"'+response.data.name+'"</i>',
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+								} else {
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : "Ada kesalahan dalam proses input data, coba lagi...!",
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+								}
+
+							}).catch((err) => {
+								out();
+								$.smallBox({
+									title : "Gagal",
+									content : "Ada kesalahan jaringan, coba lagi...!",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+							}).then(() => {
+								this.btn_save_disabled = false;
+							})
+
+							return false;
+						}else{
+							out();
+							$.smallBox({
+								title : "Gagal",
+								content : "Ada kesalahan dengan inputan Anda. Harap mengecek ulang...!",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+						}
+					},
+					reset_form:function(){
+						this.form_data.code 		= '';
+						this.form_data.name 		= '';
+						this.form_data.telp			= '';
+						this.form_data.address 		= '';
+						this.form_data.note 		= '';
+						$('#data-form').data('bootstrapValidator').resetForm();
+					}
+				}
+			});
+
+		})
+	</script>
 
 @endsection
