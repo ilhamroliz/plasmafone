@@ -20,20 +20,9 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Master Outlet</li><li>Edit</li>
+			<li>Home</li><li>Data Master</li><li>Edit Master Outlet</li>
 		</ol>
 		<!-- end breadcrumb -->
-
-		<!-- You can also add more buttons to the
-		ribbon for further usability
-
-		Example below:
-
-		<span class="ribbon-button-alignment pull-right">
-		<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-		<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-		<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-		</span> -->
 
 	</div>
 	<!-- END RIBBON -->
@@ -45,153 +34,219 @@
 	<!-- MAIN CONTENT -->
 	<div id="content">
 
-		@if(Session::has('flash_message_success'))
-			<?php $mt = '0px'; ?>
-			<div class="col-md-8" style="margin-top: 20px;">
-				<div class="alert alert-success alert-block">
-					<a class="close" data-dismiss="alert" href="#">×</a>
-					<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-					{{ Session::get('flash_message_success') }} 
-				</div>
+		<div class="row hidden-mobile">
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+				<h1 class="page-title txt-color-blueDark">
+
+					<i class="fa-fw fa fa-asterisk"></i>
+
+					Data Outlet <span><i class="fa fa-angle-double-right"></i> Edit Data Outlet </span>
+
+				</h1>
+
 			</div>
-		@elseif(Session::has('flash_message_error'))
-			<?php $mt = '0px'; ?>
-			<div class="col-md-8" style="margin-top: 20px;">
-				<div class="alert alert-danger alert-block">
-					<a class="close" data-dismiss="alert" href="#">×</a>
-					<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
-					{{ Session::get('flash_message_error') }}
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+				<div class="page-title">
+
+					<a href="{{ url('/master/outlet') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+
 				</div>
+
 			</div>
-		@endif
+
+		</div>
 
 		<!-- widget grid -->
 		<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
 
+			@if(Session::has('flash_message_success'))
+				<div class="col-md-12">
+					<div class="alert alert-success alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
+						{{ Session::get('flash_message_success') }} 
+					</div>
+				</div>
+			@elseif(Session::has('flash_message_error'))
+				<div class="col-md-12">
+					<div class="alert alert-danger alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
+						{{ Session::get('flash_message_error') }}
+					</div>
+				</div>
+			@endif
+
 			<!-- row -->
 			<div class="row">
 
-				<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-md-offset-1" style="padding: 10px 20px; margin-top: 20px; background: #fff;">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
+					<div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-					{{-- FormTemplate .. --}}
+						<header>
 
-					<form id="outlet-form" class="form-horizontal" method="post">
-						{{ csrf_field() }}
-						<fieldset>
-							<legend>
-								Form Tambah Master Outlet
+							<h2><strong>Master Supplier</strong></h2>				
+							
+						</header>
 
-								<span class="pull-right" style="font-size: 0.6em; font-weight: 600">
-									<a href="{{ url('/master/outlet') }}">
-										<i class="fa fa-arrow-left"></i> &nbsp;Kembali Ke Halaman Data Table
-									</a>
-								</span>
-							</legend>
+						<div>
+							
+							<div class="widget-body">
 
-							<div class="row" style="border-bottom: 1px dotted #aaa; margin-bottom: 20px;">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="col-xs-4 col-lg-4 control-label text-left">Pilih Data Yang Diedit</label>
-										<div class="col-xs-7 col-lg-7 inputGroupContainer">
-											<select class="form-control" name="select_cabang" id="select_cabang">
-												@foreach($data as $key => $outlet)
-													<option value="{{ $outlet->c_id }}">{{ $outlet->c_nama }}</option>
-												@endforeach
-											</select>
+								<form id="data-form" class="form-horizontal" method="post">
+									{{ csrf_field() }}
+
+									<fieldset>
+
+										<legend>
+											Form Edit Outlet
+										</legend>
+
+										@foreach($outlets as $outlet)
+
+										<div class="row">
+
+											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Outlet</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<div class="input-group">
+
+															<span class="input-group-addon"><i class="fa fa-barcode"></i></span>
+
+															<input type="text" class="form-control" id="code" name="code" v-model="form_data.code" placeholder="Masukkan Kode Outlet" style="text-transform: uppercase" readonly value="{{ $outlet->c_id }}" />
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Outlet</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<div class="input-group">
+
+															<span class="input-group-addon"><i class="fa fa-building"></i></span>
+
+															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Outlet" style="text-transform: uppercase" value="{{ $outlet->c_name }}" />
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">No. Telephone</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<div class="input-group">
+
+															<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+
+															<input type="text" class="form-control" id="telp" name="telp" v-model="form_data.telp" placeholder="Masukkan Nomor Telepon" value="{{ $outlet->c_tlp }}" />
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Outlet</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Outlet" id="address" name="address" v-model="form_data.address">{{ $outlet->c_address }}</textarea>
+
+													</div>
+
+												</div>
+
+											</article>
+
+											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Keterangan</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Outlet" id="note" name="note" v-model="form_data.note">{{ $outlet->c_note }}</textarea>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Status Outlet</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<select class="form-control" name="isactive">
+															<option value="Y" @if($outlet->c_isactive == "Y") selected @endif>AKTIF</option>
+															<option value="N" @if($outlet->c_isactive == "N") selected @endif>NON AKTIF</option>
+														</select>
+
+													</div>
+
+												</div>
+
+											</article>
+											
 										</div>
+
+										@endforeach
+
+									</fieldset>
+
+									<div class="form-actions">
+
+										<div class="row">
+
+											<div class="col-md-12">
+
+												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/outlet")}}'">
+													<i class="fa fa-times"></i>
+													&nbsp;Batal
+												</button>
+
+												<button class="btn btn-primary" type="submit" id="submit">
+													<i class="fa fa-floppy-o"></i>
+													&nbsp;Simpan
+												</button>
+
+											</div>
+
+										</div>
+
 									</div>
-								</div>
 
-								<div class="col-md-6 text-left" style="padding: 10px 0px; display: none;" id="form-load-section-status">
-									<i class="fa fa-cog fa-spin fa-fw"></i> &nbsp;
-									<small>Sedang Mengambil Data Baru...</small>
-								</div>
+								</form>
+
 							</div>
 
-							<div class="field_wrapper">
-								<div class="row" style="margin-top:15px;">
-
-									<div>
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="col-xs-3 col-lg-3 control-label text-left">Nama Outlet</label>
-												<div class="col-xs-8 col-lg-8 inputGroupContainer">
-													<input type="text" class="form-control" name="nama_outlet" id="nama_outlet" placeholder="Masukkan nama outlet" />
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="col-xs-3 col-lg-3 control-label text-left">Telephone</label>
-												<div class="col-xs-8 col-lg-8 inputGroupContainer">
-													<input type="text" class="form-control" name="telephone" id="telephone" placeholder="Masukkan nomor telephone" onkeypress="return isNumber(event)" />
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="col-xs-3 col-lg-3 control-label text-left">Alamat</label>
-												<div class="col-xs-8 col-lg-8 inputGroupContainer">
-													<textarea class="form-control" name="alamat" id="alamat" placeholder="Alamat" rows="4"></textarea>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="col-xs-3 col-lg-3 control-label text-left">Kecamatan</label>
-												<div class="col-xs-8 col-lg-8 inputGroupContainer">
-													<select class="form-control chosen-select" tabindex="2" placeholder="Pilih kecamatan" name="kecamatan" id="kecamatan">
-														<option value="">---Pilih Kecamatan---</option>
-													</select>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="col-xs-3 col-lg-3 control-label text-left">Kota</label>
-												<div class="col-xs-8 col-lg-8 inputGroupContainer">
-													<select data-search="true" class="form-control" placeholder = "Pilih kota" name="kota" id="kota">
-														<option value="">---Pilih Kota---</option>
-													</select>
-												</div>
-											</div>
-										</div>
-
-										<div class="col-md-6">
-											<div class="form-group">
-												<label class="col-xs-3 col-lg-3 control-label text-left">Provinsi</label>
-												<div class="col-xs-8 col-lg-8 inputGroupContainer">
-													<select data-search="true" class="form-control" placeholder = "Pilih provinsi" name="provinsi" id="provinsi">
-														<option value="">---Pilih Provinsi---</option>
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>								
-
-								</div>
-							</div>
-
-						</fieldset>
-
-						<div class="form-actions">
-							<div class="row">
-								<div class="col-md-12">
-									<button class="btn btn-default" type="submit" id="submit">
-										<i class="fa fa-floppy-o"></i>
-										&nbsp;Submit
-									</button>
-								</div>
-							</div>
 						</div>
-					</form>
 
-					{{-- FormTemplate End .. --}}
+					</div>
 
 				</div>
 			</div>
@@ -212,241 +267,142 @@
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
 	<!-- <script src="{{ asset('template_asset/js/plugin/choosen/init.js') }}"></script> -->
 
-		<script type="text/javascript">
+	<script type="text/javascript">
 
-			var select_cabang = document.getElementById('select_cabang').value;
+		var baseUrl = '{{ url('/') }}';
 
-			function isNumber(evt) {
-			    evt = (evt) ? evt : window.event;
-			    var charCode = (evt.which) ? evt.which : evt.keyCode;
-			    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-			        return false;
-			    }
-			    return true;
-			}
+		function overlay()
+		{
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+		}
 
-			function get_outlet(){
-				axios.get(baseUrl+'/master/outlet/get-outlet/'+select_cabang)
-				.then((response) => {
-					if(response.data == null){
-						$.toast({
-						    text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-						    showHideTransition: 'fade',
-						    icon: 'error'
-						})
-						$('#form-load-section-status').fadeOut(200);
-					}else{
-						$('#outlet-form').data('bootstrapValidator').resetForm();
-						initiate(response.data);
-						$('#form-load-section-status').fadeOut(200);
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-				})
-			}
+		function out()
+		{
+			$('#overlay').fadeOut(200);
+		}
 
-			document.getElementById('select_cabang').addEventListener("change", function(evt){
-				// alert(this.value);
-				$('#form-load-section-status').fadeIn(200);
-				axios.get(baseUrl+'/master/outlet/get-outlet/'+this.value)
-				.then((response) => {
-					console.log(response.data);
-					if(response.data == null){
-						$.toast({
-						    text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-						    showHideTransition: 'fade',
-						    icon: 'error'
-						})
-						$('#form-load-section-status').fadeOut(200);
-					}else{
-						$('#outlet-form').data('bootstrapValidator').resetForm();
-						initiate2(response.data);
-						$('#form-load-section-status').fadeOut(200);
-					}
-				})
-				.catch((err) => {
-					console.log(err);
-				})
-			});
+		// validator
 
-			function initiate(data){
-				// alert(data.c_kecamatan);
-				$('#kecamatan option[value='+data.c_kecamatan+']').attr('selected','selected');
-				$('#kota option[value='+data.c_kota+']').attr('selected','selected');
-				$('#provinsi option[value='+data.c_provinsi+']').attr('selected','selected');
-				$('#nama_outlet').val(data.c_nama);
-				$('#telephone').val(data.c_telephone);
-				$('#alamat').val(data.c_alamat);
-				
-			}
-			function initiate2(data){
-				// alert(data.c_kecamatan);
-				document.getElementById('kecamatan').value = data.c_kecamatan;
-				document.getElementById('kota').value = data.c_kota;
-				document.getElementById('provinsi').value = data.c_provinsi;
-				$('#nama_outlet').val(data.c_nama);
-				$('#telephone').val(data.c_telephone);
-				$('#alamat').val(data.c_alamat);
-				
-			}
-
-			$(document).ready(function(){
-				let g_k = get_kec();
-				get_kota();
-				get_prov();
-				// Get kecamatan
-				function get_kec(){
-					$.get(baseUrl+'/master/outlet/get-kecamatan', function(data){
-						// console.log(data);
-						$.each(JSON.parse(data),function(idx, val){
-							var opt = "<option value='"+ val.id + "'>"+ val.nama_kecamatan + "</option>";
-							$('#kecamatan').append(opt);
-						});
-					});
-				}
-
-				// Get kota
-				function get_kota(){
-					$.get(baseUrl+'/master/outlet/get-kota', function(data){
-						// console.log(data);
-						$.each(JSON.parse(data),function(idx, val){
-							var opt = "<option value='"+ val.id + "'>"+ val.nama_kota + "</option>";
-							$('#kota').append(opt);
-						});
-					});
-				}
-				
-
-				// Get provinsi
-				function get_prov(){
-					$.get(baseUrl+'/master/outlet/get-provinsi', function(data){
-						// console.log(data);
-						$.each(JSON.parse(data),function(idx, val){
-							var opt = "<option value='"+ val.id + "'>"+ val.nama_provinsi + "</option>";
-							$('#provinsi').append(opt);
-						});
-					});
-				}
-				
-				// $('#select_cabang').change(function(evt){
-				// 	evt.preventDefault(); let context = $(this);
-				// 	$('#form-load-section-status').fadeIn(200);
-
-				// 	axios.get(baseUrl+'/master/outlet/get-outlet/'+context.val())
-				// 	.then((response) => {
-				// 		if(response.data == null){
-				// 		$.toast({
-				// 		    text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-				// 		    showHideTransition: 'fade',
-				// 		    icon: 'error'
-				// 		})
-				// 		$('#form-load-section-status').fadeOut(200);
-				// 	}else{
-				// 		$('#outlet-form').data('bootstrapValidator').resetForm();
-				// 		initiate(response.data);
-				// 		$('#form-load-section-status').fadeOut(200);
-				// 	}
-				// 	})
-				// 	.catch((err) => {
-				// 		console.log(err);
-				// 	})
-					
-				// })
-
-				// product form
-
-				$('#outlet-form').bootstrapValidator({
-					feedbackIcons : {
-						valid : 'glyphicon glyphicon-ok',
-						invalid : 'glyphicon glyphicon-remove',
-						validating : 'glyphicon glyphicon-refresh'
-					},
-					fields : {
-						nama_outlet : {
-							validators : {
-								notEmpty : {
-									message : 'Isi nama outlet'
-								}
-							}
-						},
-						telephone : {
-							validators : {
-								notEmpty : {
-									message : 'Isi nomor telephone outlet'
-								}
-							}
-						},
-						alamat : {
-							validators : {
-								notEmpty : {
-									message : 'Isi alamat outlet'
-								}
-							}
-						},
-						kecamatan : {
-							validators : {
-								notEmpty : {
-									message : 'Pilih kecamatan outlet'
-								}
-							}
-						},
-						kota : {
-							validators : {
-								notEmpty : {
-									message : 'Pilih kota outlet'
-								}
-							}
-						},
-						provinsi : {
-							validators : {
-								notEmpty : {
-									message : 'Pilih provinsi outlet'
-								}
-							}
+		$('#data-form').bootstrapValidator({
+			feedbackIcons : {
+				valid : 'glyphicon glyphicon-ok',
+				invalid : 'glyphicon glyphicon-remove',
+				validating : 'glyphicon glyphicon-refresh'
+			},
+			fields : {
+				code : {
+					validators : {
+						notEmpty : {
+							message : 'Isi kode outlet'
 						}
 					}
-				});
+				},
+				name : {
+					validators : {
+						notEmpty : {
+							message : 'Isi nama outlet'
+						}
+					}
+				},
+				telp : {
+					validators : {
+						notEmpty : {
+							message : 'Isi telephone outlet'
+						}
+					}
+				},
+				address : {
+					validators : {
+						notEmpty : {
+							message : 'Isi alamat outlet'
+						}
+					}
+				}
+			}
+		});
 
-				// end product form
-				// var select_cabang = $('#select_cabang').val();
+		// end validator
 
-				if (select_cabang != "") {
-					setTimeout('get_outlet()', 6000);
+		$('#submit').click(function(evt){
+
+			evt.preventDefault();
+
+			var btn = $('#submit');
+			btn.attr('disabled', 'disabled');
+			btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+
+			overlay();
+
+			axios.post(baseUrl+'/master/outlet/edit/'+ $('#code').val(), $('#data-form').serialize()).then((response) => {
+
+				if(response.data.status == 'berhasil'){
+
+					out();
+
+					$.smallBox({
+						title : "Berhasil",
+						content : 'Data outlet <i>"'+response.data.code+'"</i> berhasil diubah...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+					});
+
+				}else if(response.data.status == 'tidak ada'){
+
+					out();
+
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Data yang ingin Anda ubah sudah tidak ada...!",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				}else if(response.data.status == 'nama ada'){
+
+					out();
+
+					$.smallBox({
+						title : "Gagal",
+						content : 'Upsss. Data outlet <i>"'+response.data.name+'"</i> sudah ada...!',
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				}else{
+					out();
+
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Gagal mengedit data...! Coba lagi dengan mulai ulang halaman",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+
 				}
 
-				
-
-				$('#outlet-form').submit(function(evt){
-					evt.preventDefault();
-
-					let btn = $('#submit');
-					btn.attr('disabled', 'disabled');
-
-					axios.post(baseUrl+'/master/outlet/update-outlet', $('#outlet-form').serialize())
-					.then((response) => {
-						if(response.data.status == 'berhasil'){
-							$.toast({
-							    text: 'Data Ini berhasil Diupdate',
-							    showHideTransition: 'fade',
-							    icon: 'success'
-							})
-						}else if(response.data.status == 'tidak ada'){
-							$.toast({
-							    text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-							    showHideTransition: 'fade',
-							    icon: 'error'
-							})
-						}
-					}).catch((err) => {
-						console.log(err);
-					}).then(function(){
-						btn.removeAttr('disabled');
-					})
+			}).catch((err) => {
+				out();
+				$.smallBox({
+					title : "Gagal",
+					content : "Upsss. Gagal mengedit data...! Coba lagi dengan mulai ulang halaman",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
 				});
-
-				// End select order
+				
+			}).then(function(){
+				btn.removeAttr('disabled');
+				btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');
+				out();
 			})
-		</script>
+
+		})
+
+	</script>
 
 @endsection

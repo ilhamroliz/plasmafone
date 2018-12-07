@@ -92,7 +92,7 @@
 
 						<header>
 
-							<h2><strong>Master Supplier</strong></h2>				
+							<h2><strong>Master Outlet</strong></h2>				
 							
 						</header>
 
@@ -207,7 +207,7 @@
 
 											<div class="col-md-12">
 
-												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/supplier")}}'">
+												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/outlet")}}'">
 													<i class="fa fa-times"></i>
 													&nbsp;Batal
 												</button>

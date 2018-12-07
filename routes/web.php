@@ -203,8 +203,6 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::match(['get', 'post'],'/master/supplier/add', 'master\suplier\suplier_controller@add_suplier');
 
-	Route::match(['get', 'post'], '/master/supplier/delete/{id}', 'MasterController@delete_supplier');
-
 	Route::match(['get', 'post'], '/master/supplier/edit/{id}', 'master\suplier\suplier_controller@edit');
 
 	Route::match(['get', 'post'], '/master/supplier/detail/{id}', 'master\suplier\suplier_controller@detail');
@@ -215,13 +213,27 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/master/outlet','master\outlet\outlet_controller@index');
 
+	Route::get('/master/outlet/getdataactive', [
+		'uses'	=> 'master\outlet\outlet_controller@getdataactive',
+	])->name('outlet.getdataactive');
+
+	Route::get('/master/outlet/getdataall', [
+		'uses'	=> 'master\outlet\outlet_controller@getdataall',
+	])->name('outlet.getdataall');
+
+	Route::get('/master/outlet/getdatanonactive', [
+		'uses'	=> 'master\outlet\outlet_controller@getdatanonactive',
+	])->name('outlet.getdatanonactive');
+
+	Route::get('/master/outlet/detail/{id}', 'master\outlet\outlet_controller@detail');
+
 	Route::match(['get', 'post'], '/master/outlet/add','master\outlet\outlet_controller@add');
 
 	Route::get('/master/getcode', 'master\outlet\outlet_controller@getcode');
 
-	Route::get('/master/outlet/edit','master\outlet\outlet_controller@outlet_edit');
+	Route::match(['get', 'post'], '/master/outlet/edit/{id}', 'master\outlet\outlet_controller@edit');
 
-	Route::match(['get', 'post'], '/master/outlet/multiple-delete', 'master\outlet\outlet_controller@multiple_delete_outlet');
+	Route::get('/master/outlet/delete/{id}', 'master\outlet\outlet_controller@delete');
 
 	// End Master Outlet
 
