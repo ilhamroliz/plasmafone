@@ -16,12 +16,10 @@ class PengaturanController extends Controller
 {
     public function akses_pengguna()
     {
-        $data_users = DB::table('d_mem')
-                        ->join('d_jabatan','id', '=', 'm_level')
-                        ->select('d_mem.*', 'd_jabatan.nama')
-                        ->orderBy('m_id')
+        $state = DB::table('d_mem')
+                        ->select('m_state')
                         ->get();
-        return view('pengaturan.akses_pengguna.index')->with(compact('data_users'));
+        return view('pengaturan.akses_pengguna.index')->with(compact('state'));
     }
 
     public function dataUser()
@@ -33,13 +31,22 @@ class PengaturanController extends Controller
             ->get();
 
         $user = collect($user);
+        // dd($user);
         return DataTables::of($user)
-            ->addColumn('aksi', function ($user){      
-                return '<div class="text-center">
+            ->addColumn('aksi', function ($user){
+                if ($user->m_state == "ACTIVE") {
+                    return '<div class="text-center">
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
                         <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>
-                        <button style="margin-left:5px;" title="Hapus" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>
+                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="triggerOff(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>
                         </div>';
+                }else{
+                    return '<div class="text-center">
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Set Active" type="button" class="btn btn-primary btn-circle btn-xs" onclick="triggerOn(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>
+                        </div>';
+                }                      
             })
             ->rawColumns(['aksi'])
             ->make(true);
