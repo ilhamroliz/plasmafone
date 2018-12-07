@@ -384,7 +384,7 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::post('/pengaturan/kelola-pengguna/simpan', 'manajemenPenggunaController@simpan_pengguna');
 	Route::match(['get', 'post'],'/pengaturan/kelola-pengguna/edit/{id}', 'manajemenPenggunaController@edit_pengguna');
 	Route::match(['get', 'post'],'/pengaturan/kelola-pengguna/simpanEdit', 'manajemenPenggunaController@simpan_edit');
-	Route::match(['get', 'post'],'/pengaturan/kelola-pengguna/hapus{id}', 'manajemenPenggunaController@hapus_pengguna');
+	Route::match(['get', 'post'],'/pengaturan/kelola-pengguna/hapus/{id}', 'manajemenPenggunaController@hapus_pengguna');
 	Route::match(['get', 'post'],'/pengaturan/kelola-pengguna/getDataEdit', 'manajemenPenggunaController@get_data_edit');
 	// End Manajemen Pengguna
 	// End Setting Application
