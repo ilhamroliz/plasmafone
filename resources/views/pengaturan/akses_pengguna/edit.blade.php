@@ -252,22 +252,23 @@
 		// --- AXIOS USE ----//
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Penyimpanan Database Sedang di Proses');
-		let btn = $('#submit-akses');
-		btn.attr('disabled', 'disabled');
-		btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+		// let btn = $('#submit-akses');
+		// btn.attr('disabled', 'disabled');
+		// btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
 
 		axios.post(baseUrl+'/pengaturan/akses-pengguna/simpan', $('#form-akses').serialize())
 			.then((response) => {
 				if(response.data.status == 'sukses'){
 					$('#overlay').fadeOut(200);
+					// location.reload();
 					$.smallBox({
 						title : "SUKSES",
 						content : "Data Akses Berhasil Diperbarui",
 						color : "#739E73",
 						iconSmall : "fa fa-check animated",
-						timeout : 5000
+						timeout : 4000
 					});
-					location.reload();
+					// location.reload();
 				}else if(response.data.status == 'gagal'){
 					$('#overlay').fadeOut(200);
 					$.smallBox({
@@ -275,9 +276,9 @@
 						content : "Data Akses Gagal Diperbarui",
 						color : "#C46A69",
 						iconSmall : "fa fa-times animated",
-						timeout : 5000
+						timeout : 4000
 					});
-					location.reload();
+					// location.reload();
 				}
 		})
 

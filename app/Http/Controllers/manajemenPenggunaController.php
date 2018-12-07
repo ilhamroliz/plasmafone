@@ -58,7 +58,31 @@ class manajemenPenggunaController extends Controller
     }
 
     public function hapus_pengguna($id){
+        DB::beginTransaction();
+        try {
+            $idm = Crypt::decrypt($id);
+            $cek = DB::table('d_mem')
+                    ->select('m_state')
+                    ->where('m_id', $idm)
+                    ->first();
+            // dd($idm);
+            if($cek->m_state == "ACTIVE"){
+                DB::table('d_mem')
+                    ->where('m_id', $idm)
+                    ->update(['m_state' => 'NONACTIVE']);
+            }else{
+                DB::table('d_mem')
+                    ->where('m_id', $idm)
+                    ->update(['m_state' => 'ACTIVE']);
+            }
+            
+            DB::commit();
+            return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Set Aktivasi User '.$idm.' berhasil tersimpan !!');
+        } catch (\Throwable $e) {
 
+            DB::rollback();
+            return redirect('/pengaturan/akses-pengguna')->with('flash_message_error', ''.$e.'');
+        }
     }
 
     public function getDataId()
@@ -145,25 +169,6 @@ class manajemenPenggunaController extends Controller
             $pass = Hash::make("secret_".$pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
-            // $folder = $tgl->year . $tgl->month . $tgl->timestamp;
-            // $dir = 'template_asset/img/user/' . $id;
-            // $this->deleteDir($dir);
-            // $childPath = $dir . '/';
-            // $path = $childPath;
-            // $file = $request->file('imageUpload');
-            // $name = null;
-            // if ($file != null) {
-            //     $name = $folder . '.' . $file->getClientOriginalExtension();
-            //     if (!File::exists($path)) {
-            //         if (File::makeDirectory($path, 0777, true)) {
-            //             $file->move($path, $name);
-            //             $imgPath = $childPath . $name;
-            //         } else
-            //             $imgPath = null;
-            //     } else {
-            //         return 'already exist';
-            //     }
-            // }
             
             if ($request->hasFile('imageUpload')) {
 
