@@ -2,11 +2,9 @@
 
 @section('title', 'Master Outlet')
 
-
 @section('extra_style')
 
 @endsection
-
 
 @section('ribbon')
 	<!-- RIBBON -->
@@ -20,20 +18,8 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Master</li><li>Master Outlet</li>
+			<li>Home</li><li>Data Master</li><li>Master Outlet</li>
 		</ol>
-		<!-- end breadcrumb -->
-
-		<!-- You can also add more buttons to the
-		ribbon for further usability
-
-		Example below:
-
-		<span class="ribbon-button-alignment pull-right">
-		<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-		<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-		<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-		</span> -->
 
 	</div>
 	<!-- END RIBBON -->
@@ -46,33 +32,29 @@
 	<div id="content">
 
 		<div class="row">
-			<div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
-				<ul class="menu-table hide-on-small">
-					<li class="">
-						<a href="#">
-							<i class="fa fa-table"></i> &nbsp;Master Outlet
-						</a>
-					</li>
-					<li>
-						<a href="{{ url('/master/outlet/add') }}">
-							<i class="fa fa-plus"></i> &nbsp;Tambahkan Data
-						</a>
-					</li>
 
-					<li>
-						<a href="#" id="multiple_edit">
-							<i class="fa fa-pencil-square"></i> &nbsp;Edit Data
-						</a>
-					</li>
-					<li>
-						<a href="#" id="multiple_delete">
-							<i class="fa fa-eraser"></i> &nbsp;Hapus Data
-						</a>
-					</li>
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-					<li class="right"><i class="fa fa-bars"></i></li>
-				</ul>
+				<h1 class="page-title txt-color-blueDark">
+
+					<i class="fa-fw fa fa-asterisk"></i>
+
+					Data Master <span><i class="fa fa-angle-double-right"></i> Master Outlet </span>
+
+				</h1>
+
 			</div>
+
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+				<div class="page-title">
+
+					<a href="{{ url('/master/outlet/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+
+				</div>
+
+			</div>
+
 		</div>
 
 		<!-- widget grid -->
@@ -82,8 +64,8 @@
 
 			@if(Session::has('flash_message_success'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
-					<div class="alert alert-success alert-block">
+				<div class="col-md-12">
+						<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
 						{{ Session::get('flash_message_success') }} 
@@ -91,7 +73,7 @@
 				</div>
 			@elseif(Session::has('flash_message_error'))
 				<?php $mt = '0px'; ?>
-				<div class="col-md-8" style="margin-top: 20px;">
+				<div class="col-md-12">
 					<div class="alert alert-danger alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
@@ -102,48 +84,141 @@
 
 			<!-- row -->
 			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
-					<form id="table-form" method="post" action="{{ url('/master/outlet/edit-multiple') }}">
-						{!! csrf_field() !!}
-						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-							<thead>			                
-								<tr>
-									<th class="text-center" data-hide="phone" width="4%">*</th>
-									<th class="text-center" width="5%" style="vertical-align: middle;">
-										---
-									</th>
-									<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama</th>
-									<th data-hide="phone"><i class="fa fa-fw fa-phone text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Telephone</th>
-									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Alamat</th>
-									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Kecamatan</th>
-									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Kota/Kabupaten</th>
-									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Provinsi</th>
-									<th class="text-center" data-hide="phone,tablet" width="15%"> Aksi</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($data as $cabang)
-									<tr>
-										<td class="text-center"></td>
-										<td class="text-center">
-											<input type="checkbox" class="check-me" name="data_check[]" value="{{ $cabang->c_id }}"/>
-										</td>
-										<td>{{ $cabang->c_nama }}</td>
-										<td>{{ $cabang->c_telephone }}</td>
-		                                <td>{{ $cabang->c_alamat }}</td>
-		                                <td>{{ $cabang->nama_kecamatan }}</td>
-		                                <td>{{ $cabang->nama_kota }}</td>
-		                                <td>{{ $cabang->nama_provinsi }}</td>
-		                                <td class="text-center">
-		                                	<button type="button" class="btn btn-xs btn-success btn-circle view" data-toggle="tooltip" data-placement="top" title="View Data" data-id="{{ $cabang->c_id }}"><i class="glyphicon glyphicon-folder-open"></i></button>
-		                                	<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $cabang->c_id }}"><i class="glyphicon glyphicon-edit"></i></button>
-		                                	<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $cabang->c_id }}"><i class="glyphicon glyphicon-trash"></i></button>
-		                                </td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</form>
+
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+						<header>
+							
+							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
+
+								<li class="active">
+
+									<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
+
+								</li>
+
+								<li>
+
+									<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
+
+								</li>
+
+								<li>
+
+									<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
+
+								</li>
+
+							</ul>
+
+						</header>
+
+						<div>
+							
+							<div class="widget-body no-padding">
+
+								<div class="tab-content padding-10">
+
+									<div class="tab-pane fade in active" id="hr1">
+
+										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>		
+
+												<tr>
+
+													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Perusahaan</th>
+
+													<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Suplier</th>
+
+													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Limit</th>
+
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+
+												</tr>
+
+											</thead>
+
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+									<div class="tab-pane fade" id="hr2">
+
+										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>		
+
+												<tr>
+
+													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Perusahaan</th>
+
+													<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Suplier</th>
+
+													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Limit</th>
+
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+
+												</tr>
+
+											</thead>
+
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+									<div class="tab-pane fade" id="hr3">
+
+										<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>		
+
+												<tr>
+
+													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Perusahaan</th>
+
+													<th><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Suplier</th>
+
+													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+
+													<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Limit</th>
+
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+
+												</tr>
+
+											</thead>
+
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+					
 				</div>
 			</div>
 
