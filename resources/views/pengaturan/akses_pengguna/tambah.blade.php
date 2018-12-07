@@ -84,7 +84,7 @@
                             
                             <!-- widget content -->
                             <div class="weight-body">
-                                <form id="form-tambah" class="form-horizontal">
+                                <form id="form-tambah" class="form-horizontal" action="{{ url('/pengaturan/kelola-pengguna/simpan') }}" method="post" enctype="multipart/form-data">
                                     {{ csrf_field() }}
                                     <fieldset>
                                         <legend>
@@ -176,7 +176,7 @@
                                                             </label> -->
 
                                                             <button class="btn btn-default"><i class="fa fa-file-picture-o"></i>&nbsp;Upload Gambar</button>
-                                                            <input type="file" name="imageUpload" id="upload-file-selector" class="uploadGambar"/>
+                                                            <input type="file" name="imageUpload" id="imageUpload" class="uploadGambar"/>
                                                             <label> &nbsp Maksimal 2 MB</label>
 														</div>
                                                     </div>                                                
@@ -198,7 +198,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary" id="submit-tambah" type="button" onclick=simpan() style="margin-left: 5px;">
+                                                <button class="btn btn-primary" id="submit-tambah" type="submit" style="margin-left: 5px;">
                                                     <i class="fa fa-floppy-o"></i> 
                                                     &nbsp;Simpan
                                                 </button>
@@ -290,59 +290,72 @@
         }
     });
 
-    function simpan(){
-        // --- AXIOS USE ----//
-        $('#overlay').fadeIn(200);
-        $('#load-status-text').text('Penyimpanan Database Sedang di Proses');
-        let btn = $('#submit-tambah');
-        btn.attr('disabled', 'disabled');
-        btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+    // function simpan(){
+    //     // --- AXIOS USE ----//
+    //     $('#overlay').fadeIn(200);
+    //     $('#load-status-text').text('Penyimpanan Database Sedang di Proses');
+    //     let btn = $('#submit-tambah');
+    //     btn.attr('disabled', 'disabled');
+    //     btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
 
-        axios.post(baseUrl+'/pengaturan/kelola-pengguna/simpan', $('#form-tambah').serialize())
-            .then((response) => {
-                if(response.data.status == 'sukses'){
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title : "SUKSES",
-                        content : "Data Pengguna Berhasil Disimpan",
-                        color : "#739E73",
-                        iconSmall : "fa fa-check animated",
-                        timeout : 5000
-                    });
-                    location.reload();
-                }else if(response.data.status == 'gagal'){
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title : "GAGAL",
-                        content : "Data Pengguna Gagal Disimpan",
-                        color : "#C46A69",
-                        iconSmall : "fa fa-times animated",
-                        timeout : 5000
-                    });
+    //     axios.post(baseUrl+'/pengaturan/kelola-pengguna/simpan', $('#form-tambah').serialize(), {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data'
+    //         }
+    //     })
+    //         .then((response) => {
+                // if(response.data.status == 'sukses'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "SUKSES",
+                //         content : "Data Pengguna Berhasil Disimpan",
+                //         color : "#739E73",
+                //         iconSmall : "fa fa-check animated",
+                //         timeout : 5000
+                //     });
+                //     location.reload();
+                // }else if(response.data.status == 'gagal'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Data Pengguna Gagal Disimpan !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
+                //     // location.reload();
+                // }else if(response.data.status == 'gagalUser'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Username Tidak Tersedia !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
+                //     // location.reload();
+                // }else if(response.data.status == 'gagalPass'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Password Tidak Sesuai !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
+                //     // location.reload();
+                // }else if(response.data.status == 'gagalImg'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Ukuran File Gambar Terlalu Besar !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
                     // location.reload();
-                }else if(response.data.status == 'gagalUser'){
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title : "GAGAL",
-                        content : "Username tidak tersedia",
-                        color : "#C46A69",
-                        iconSmall : "fa fa-times animated",
-                        timeout : 5000
-                    });
-                    // location.reload();
-                }else if(response.data.status == 'gagalPass'){
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title : "GAGAL",
-                        content : "Password Tidak Sesuai",
-                        color : "#C46A69",
-                        iconSmall : "fa fa-times animated",
-                        timeout : 5000
-                    });
-                    // location.reload();
-                }
-        })
-    }
+    //     })
+    // }
 
 </script>
 @endsection

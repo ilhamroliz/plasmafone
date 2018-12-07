@@ -45,6 +45,24 @@
 		<!-- widget grid -->
 		<section id="widget-grid" class="">
 
+			@if(Session::has('flash_message_success'))
+				<div class="col-md-12">
+					<div class="alert alert-success alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
+						{{ Session::get('flash_message_success') }} 
+					</div>
+				</div>
+			@elseif(Session::has('flash_message_error'))
+				<div class="col-md-12">
+					<div class="alert alert-danger alert-block">
+						<a class="close" data-dismiss="alert" href="#">×</a>
+						<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
+						{{ Session::get('flash_message_error') }}
+					</div>
+				</div>
+			@endif
+
 			<?php $mt = '20px'; ?>
 
 			<!-- row -->
@@ -200,6 +218,14 @@
 
   function akses(id){
     location.href = ('{{ url('/pengaturan/akses-pengguna/edit') }}/' + id);
+  }
+
+  function edit(id){
+    location.href = ('{{ url('/pengaturan/kelola-pengguna/edit') }}/' + id);
+  }
+
+  function trigger(id){
+    location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
   }
 </script>
 

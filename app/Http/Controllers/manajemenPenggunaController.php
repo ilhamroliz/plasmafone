@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use App\Model\pengaturan\pengguna as Member;
-use App\Model\pengaturan\jabatan as Jabatan;
-use App\Model\pengaturan\outlet as Outlet;
+// use App\Model\pengaturan\pengguna as Member;
+// use App\Model\pengaturan\jabatan as Jabatan;
+// use App\Model\pengaturan\outlet as Outlet;
 
 use DB;
 use Auth;
@@ -98,39 +98,72 @@ class manajemenPenggunaController extends Controller
             $cek = $this->cekUsername($request);
             $cek = $cek->getData('status')['status'];
             if($cek == 'gagal'){
-                return response()->json([
-                    'status' => 'gagalUser'
-                ]);
-                // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Username Tidak Tersedia');
+                // return response()->json([
+                //     'status' => 'gagalUser'
+                // ]);
+                return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Username Tidak Tersedia !!');
             }
             if ($pass != $passconf) {
-                return response()->json([
-                    'status' => 'gagalPass'
-                ]);
-                // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai');
+                // return response()->json([
+                //     'status' => 'gagalPass'
+                // ]);
+                return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
             }
 
             $pass = sha1(md5('passwordAllah') . $request->pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
-            $folder = $tgl->year . $tgl->month . $tgl->timestamp;
-            $dir = 'template_asset/img/user/' . $id;
-            $this->deleteDir($dir);
-            $childPath = $dir . '/';
-            $path = $childPath;
-            $file = $request->file('imageUpload');
-            $name = null;
-            if ($file != null) {
-                $name = $folder . '.' . $file->getClientOriginalExtension();
-                if (!File::exists($path)) {
-                    if (File::makeDirectory($path, 0777, true)) {
-                        $file->move($path, $name);
-                        $imgPath = $childPath . $name;
-                    } else
-                        $imgPath = null;
+            // $folder = $tgl->year . $tgl->month . $tgl->timestamp;
+            // $dir = 'template_asset/img/user/' . $id;
+            // $this->deleteDir($dir);
+            // $childPath = $dir . '/';
+            // $path = $childPath;
+            // $file = $request->file('imageUpload');
+            // $name = null;
+            // if ($file != null) {
+            //     $name = $folder . '.' . $file->getClientOriginalExtension();
+            //     if (!File::exists($path)) {
+            //         if (File::makeDirectory($path, 0777, true)) {
+            //             $file->move($path, $name);
+            //             $imgPath = $childPath . $name;
+            //         } else
+            //             $imgPath = null;
+            //     } else {
+            //         return 'already exist';
+            //     }
+            // }
+            
+            if ($request->hasFile('imageUpload')) {
+
+                $image_tmp = Input::file('imageUpload');
+                $image_size = $image_tmp->getSize(); //getClientSize()
+                $maxsize    = '2097152';
+
+                if ($image_size < $maxsize) {
+
+                   if ($image_tmp->isValid()) {
+
+                        $extension = $image_tmp->getClientOriginalExtension();
+                        $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
+                        $image_path = 'img/user/'.$filename;
+
+                        //Resize images
+                        ini_set('memory_limit', '256M');
+                        Image::make($image_tmp)->resize(250, 190)->save($image_path);
+                        // ImageOptimizer::optimize($image_path);
+
+                        //Store image name in item table
+                        $imgPath = $filename;
+
+                    }
                 } else {
-                    return 'already exist';
-                }
+                    // return response()->json([
+                    //     'status' => 'gagalImg'
+                    // ]);
+                    return redirect()->back()->with('flash_message_error', 'Ukuran file terlalu besar !!');
+                }                
+            }else{
+                $imgPath = '';
             }
 
             DB::table('d_mem')
@@ -154,27 +187,27 @@ class manajemenPenggunaController extends Controller
             DB::commit();
             // Session::flash('sukses', 'Data berhasil disimpan');
             // return redirect('manajemen-pengguna/pengguna');
-            // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_success', 'Data pengguna berhasil tersimpan...!');
-            return response()->json([
-                'status' => 'sukses'
-            ]);
+            return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Data pengguna berhasil tersimpan !!');
+            // return response()->json([
+            //     'status' => 'sukses'
+            // ]);
         } catch (\Throwable $e) {
             DB::rollback();
             // Session::flash('gagal', 'Data gagal disimpan, cobalah sesaat lagi');
             // return redirect('manajemen-pengguna/pengguna');
-            // return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', ''.$e.'');
-            return response()->json([
-                'status' => 'gagal'
-            ]);
+            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', ''.$e.'');
+            // return response()->json([
+            //     'status' => 'gagal'
+            // ]);
         }
 
     }
 
-    public function editUser(){
+    public function edit_pengguna(){
 
     }
 
-    public function getUser(){
-
+    public function get_data_edit($id){
+        
     }
 }
