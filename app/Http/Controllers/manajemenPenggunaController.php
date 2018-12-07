@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+
 // use App\Model\pengaturan\pengguna as Member;
 // use App\Model\pengaturan\jabatan as Jabatan;
 // use App\Model\pengaturan\outlet as Outlet;
@@ -37,8 +39,22 @@ class manajemenPenggunaController extends Controller
                         ->join('m_company', 'c_id', '=', 'm_comp')
                         ->select('d_mem.*', 'd_jabatan.nama', 'm_company.c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
                         ->where('m_id', $idm)->get();
-
-        return view('pengaturan.manajemen_pengguna.edit')->with(compact('user'));
+        $getJabatan = DB::table('d_jabatan')
+                ->select('id', 'nama')
+                ->get();
+        $getOutlet = DB::table('m_company')
+                ->select('c_id', 'c_name')
+                ->get();
+        $tgllahir = DB::table('d_mem')
+                ->select('m_birth')
+                ->where('m_id', $idm)->first();
+        $date = [];
+        $date = explode('-', $tgllahir->m_birth);
+        $day = $date[2]; $month = $date[1]; $year = $date[0];
+        
+        $id = Crypt::encrypt($idm);
+        // dd($user);
+        return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getJabatan', 'getOutlet','id', 'year', 'month', 'day'));
     }
 
     public function hapus_pengguna($id){
@@ -126,7 +142,7 @@ class manajemenPenggunaController extends Controller
                 return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
             }
 
-            $pass = sha1(md5('passwordAllah') . $request->pass);
+            $pass = Hash::make("secret_".$pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
             // $folder = $tgl->year . $tgl->month . $tgl->timestamp;
@@ -165,7 +181,7 @@ class manajemenPenggunaController extends Controller
 
                         //Resize images
                         ini_set('memory_limit', '256M');
-                        Image::make($image_tmp)->resize(250, 190)->save($image_path);
+                        Image::make($image_tmp)->resize(300, 300)->save($image_path);
                         // ImageOptimizer::optimize($image_path);
 
                         //Store image name in item table
@@ -219,7 +235,110 @@ class manajemenPenggunaController extends Controller
 
     }
 
-    public function simpan_edit(){
+    public function simpan_edit(Request $request){
+        DB::beginTransaction();
+        try {
+            $id = Crypt::decrypt($request->id);
+            $nama = $request->nama;
+            $outlet = $request->outlet;
+            $jabatan = $request->jabatan;
+            $username = $request->username;
+            $pass = $request->pass;
+            $passconf = $request->passconf;
+            $alamat = $request->alamat;
+            $tgllahir = $request->tahun.'-'.$request->bulan.'-'.$request->tanggal;
+            
+            if ($pass != $passconf) {
+                // return response()->json([
+                //     'status' => 'gagalPass'
+                // ]);
+                return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
+            }
 
+            $pass = Hash::make("secret_".$pass);
+            $imgPath = null;
+            $tgl = Carbon::now('Asia/Jakarta');
+            
+            if ($request->hasFile('imageUpload')) {
+
+                $image_tmp = Input::file('imageUpload');
+                $image_size = $image_tmp->getSize(); //getClientSize()
+                $maxsize    = '2097152';
+
+                if ($image_size < $maxsize) {
+
+                    if ($image_tmp->isValid()) {
+
+                        $namefile = $request->imageUpload;
+
+                        if ($namefile != "") {
+
+                            $path = 'img/user/'.$namefile;
+
+                            if (File::exists($path)) {
+                                # code...
+                                File::delete($path);
+                            }
+
+                        }
+
+                        $extension = $image_tmp->getClientOriginalExtension();
+                        $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
+                        $image_path = 'img/user/'.$filename;
+
+                        //Resize images
+                        ini_set('memory_limit', '256M');
+                        Image::make($image_tmp)->resize(300, 300)->save($image_path);
+                        // ImageOptimizer::optimize($image_path);
+
+                        //Store image name in item table
+                        $imgPath = $filename;
+
+                    }
+                } else {
+                    // return response()->json([
+                    //     'status' => 'gagalImg'
+                    // ]);
+                    return redirect()->back()->with('flash_message_error', 'Ukuran file terlalu besar !!');
+                }                
+            }else{
+                $namefile = $request->imageUpload;
+            }
+
+            DB::table('d_mem')
+                ->where('m_id', '=', $id)
+                ->update([
+                    'm_comp' => $outlet,
+                    'm_id' => $id,
+                    'm_username' => $username,
+                    'm_img' => $imgPath,
+                    'm_password' => $pass,
+                    'm_name' => $nama,
+                    'm_level' => $jabatan,
+                    'm_birth' => $tgllahir,
+                    'm_address' => $alamat,
+                    'm_state' => 'ACTIVE',
+                    'm_lastlogin' => $tgl,
+                    'm_lastlogout' => $tgl,
+                    'created_at' => $tgl,
+                    'updated_at' => $tgl,
+                ]);
+            
+            DB::commit();
+            // Session::flash('sukses', 'Data berhasil disimpan');
+            // return redirect('manajemen-pengguna/pengguna');
+            return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Data pengguna berhasil diperbarui !!');
+            // return response()->json([
+            //     'status' => 'sukses'
+            // ]);
+        } catch (\Throwable $e) {
+            DB::rollback();
+            // Session::flash('gagal', 'Data gagal disimpan, cobalah sesaat lagi');
+            // return redirect('manajemen-pengguna/pengguna');
+            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', ''.$e.'');
+            // return response()->json([
+            //     'status' => 'gagal'
+            // ]);
+        }
     }
 }

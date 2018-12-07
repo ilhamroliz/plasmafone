@@ -55,16 +55,24 @@
 					</div>
 					<div class="col-md-6">
 						<div class="profile-image col-md-4">
-							<img src="{{ asset('template_asset/img/Logo_Plasmafone.png') }}" 
-							class="img-circle circle-border m-b-md"
-							alt="profile"
-							style="width: 100%; heigth: 100%; margin: 20px 0;">
+						@foreach($user as $key => $data)
+							@if($data->m_img != '' || $data->m_img != null)
+								<img src="{{ asset('img/user/'.$data->m_img) }}" 
+								class="img-circle circle-border m-b-md"
+								alt="profile"
+								style="width: 100%; heigth: 100%; margin: 20px 0;">
+							@else
+								<img src="{{ asset('img/user/default.jpg') }}" 
+								class="img-circle circle-border m-b-md"
+								alt="profile"
+								style="width: 100%; heigth: 100%; margin: 20px 0;">
+							@endif
 						</div>
 						<div class="profile-info col-md-8">
 							<div class="">
 								<div>
 									<h2 class="no-margins">
-										@foreach($user as $key => $data)
+										
 										{{ $data->m_name }}
 									</h2>
 									<h4>
