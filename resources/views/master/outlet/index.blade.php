@@ -346,128 +346,135 @@
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
+		var aktif, semua, inaktif;
 		$(document).ready(function(){
 
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Menyiapkan...');
-
-			var aktif, semua, inaktif;
-			var baseUrl = '{{ url('/') }}';
-
-			let selected = [];
-
-			/* BASIC ;*/
-				var responsiveHelper_dt_basic = undefined;
-				var responsiveHelper_datatable_fixed_column = undefined;
-				var responsiveHelper_datatable_col_reorder = undefined;
-				var responsiveHelper_datatable_tabletools = undefined;
-				
-				var breakpointDefinition = {
-					tablet : 1024,
-					phone : 480
-				};
-	
-				setTimeout(function () {
-
-					aktif = $('#dt_active').dataTable({
-						"processing": true,
-						"serverSide": true,
-						"ajax": "{{ route('outlet.getdataactive') }}",
-						"columns":[
-							{"data": "c_id"},
-							{"data": "c_name"},
-							{"data": "c_tlp"},
-							{"data": "aksi"}
-						],
-						"autoWidth" : true,
-						"language" : dataTableLanguage,
-						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-						"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-						"preDrawCallback" : function() {
-							// Initialize the responsive datatables helper once.
-							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-							}
-						},
-						"rowCallback" : function(nRow) {
-							responsiveHelper_dt_basic.createExpandIcon(nRow);
-						},
-						"drawCallback" : function(oSettings) {
-							responsiveHelper_dt_basic.respond();
-						}
-					});
-
-				}, 500);
-
-				setTimeout(function () {
-
-					semua = $('#dt_all').dataTable({
-						"processing": true,
-						"serverSide": true,
-						"ajax": "{{ route('outlet.getdataall') }}",
-						"columns":[
-							{"data": "c_id"},
-							{"data": "c_name"},
-							{"data": "c_tlp"},
-							{"data": "aksi"}
-						],
-						"autoWidth" : true,
-						"language" : dataTableLanguage,
-						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-						"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-						"preDrawCallback" : function() {
-							// Initialize the responsive datatables helper once.
-							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-							}
-						},
-						"rowCallback" : function(nRow) {
-							responsiveHelper_dt_basic.createExpandIcon(nRow);
-						},
-						"drawCallback" : function(oSettings) {
-							responsiveHelper_dt_basic.respond();
-						}
-					});
-
-				}, 1000);
-
-				setTimeout(function () {
-
-					inaktif = $('#dt_inactive').dataTable({
-						"processing": true,
-						"serverSide": true,
-						"ajax": "{{ route('outlet.getdatanonactive') }}",
-						"columns":[
-							{"data": "c_id"},
-							{"data": "c_name"},
-							{"data": "c_tlp"},
-							{"data": "aksi"}
-						],
-						"autoWidth" : true,
-						"language" : dataTableLanguage,
-						"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-						"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-						"preDrawCallback" : function() {
-							// Initialize the responsive datatables helper once.
-							if (!responsiveHelper_dt_basic) {
-								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
-							}
-						},
-						"rowCallback" : function(nRow) {
-							responsiveHelper_dt_basic.createExpandIcon(nRow);
-						},
-						"drawCallback" : function(oSettings) {
-							responsiveHelper_dt_basic.respond();
-						}
-					});
-
-					$('#overlay').fadeOut(200);
-
-				}, 1500);
-	
-			/* END BASIC */
+			
 			
 		})
+
+		$('#overlay').fadeIn(200);
+		$('#load-status-text').text('Sedang Menyiapkan...');
+
+		
+		var baseUrl = '{{ url('/') }}';
+
+		/* BASIC ;*/
+			var responsiveHelper_dt_basic = undefined;
+			var responsiveHelper_datatable_fixed_column = undefined;
+			var responsiveHelper_datatable_col_reorder = undefined;
+			var responsiveHelper_datatable_tabletools = undefined;
+			
+			var breakpointDefinition = {
+				tablet : 1024,
+				phone : 480
+			};
+
+			setTimeout(function () {
+
+				aktif = $('#dt_active').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"ajax": "{{ route('outlet.getdataactive') }}",
+					"columns":[
+						{"data": "c_id"},
+						{"data": "c_name"},
+						{"data": "c_tlp"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+					"language" : dataTableLanguage,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					}
+				});
+
+			}, 500);
+
+			setTimeout(function () {
+
+				semua = $('#dt_all').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"ajax": "{{ route('outlet.getdataall') }}",
+					"columns":[
+						{"data": "c_id"},
+						{"data": "c_name"},
+						{"data": "c_tlp"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+					"language" : dataTableLanguage,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					}
+				});
+
+			}, 1000);
+
+			setTimeout(function () {
+
+				inaktif = $('#dt_inactive').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"ajax": "{{ route('outlet.getdatanonactive') }}",
+					"columns":[
+						{"data": "c_id"},
+						{"data": "c_name"},
+						{"data": "c_tlp"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+					"language" : dataTableLanguage,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					}
+				});
+
+				$('#overlay').fadeOut(200);
+
+			}, 1500);
+
+		/* END BASIC */
+
+		function refresh_tab(){
+		    aktif.api().ajax.reload();
+		    semua.api().ajax.reload();
+		    inaktif.api().ajax.reload();
+		}
 
 		function hapus(val){
 
@@ -484,7 +491,7 @@
 					axios.get(baseUrl+'/master/outlet/delete/'+val).then((response) => {
 
 						if(response.data.status == 'berhasil'){
-
+							refresh_tab();
 							$('#overlay').fadeOut(200);
 
 							$.smallBox({
@@ -494,10 +501,6 @@
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
 							});
-
-							aktif.ajax.reload();
-							semua.ajax.reload();
-							inaktif.ajax.reload();
 
 						}else if(response.data.status == 'tidak ada'){
 
