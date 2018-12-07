@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Crypt;
 // use App\Model\pengaturan\pengguna as Member;
 // use App\Model\pengaturan\jabatan as Jabatan;
 // use App\Model\pengaturan\outlet as Outlet;
@@ -26,7 +27,22 @@ class manajemenPenggunaController extends Controller
         $getOutlet = DB::table('m_company')
                 ->select('c_id', 'c_name')
                 ->get();
-        return view('pengaturan.akses_pengguna.tambah', compact('getJabatan', 'getOutlet'));
+        return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
+    }
+
+    public function edit_pengguna($id){
+        $idm = Crypt::decrypt($id);
+        $user = DB::table('d_mem')
+                        ->join('d_jabatan', 'id', '=', 'm_level')
+                        ->join('m_company', 'c_id', '=', 'm_comp')
+                        ->select('d_mem.*', 'd_jabatan.nama', 'm_company.c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
+                        ->where('m_id', $idm)->get();
+
+        return view('pengaturan.manajemen_pengguna.edit')->with(compact('user'));
+    }
+
+    public function hapus_pengguna($id){
+
     }
 
     public function getDataId()
@@ -203,11 +219,7 @@ class manajemenPenggunaController extends Controller
 
     }
 
-    public function edit_pengguna(){
+    public function simpan_edit(){
 
-    }
-
-    public function get_data_edit($id){
-        
     }
 }
