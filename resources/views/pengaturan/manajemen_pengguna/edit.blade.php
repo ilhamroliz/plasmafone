@@ -84,7 +84,8 @@
                             
                             <!-- widget content -->
                             <div class="weight-body">
-                                <form id="form-tambah" class="form-horizontal" action="{{ url('/pengaturan/kelola-pengguna/simpan') }}" method="post" enctype="multipart/form-data">
+                                <form id="form-tambah" class="form-horizontal" action="{{ url('/pengaturan/kelola-pengguna/simpanEdit') }}" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="id" value="{{ $id }}">
                                     {{ csrf_field() }}
                                     <fieldset>
                                         <legend>
@@ -97,7 +98,9 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Nama User</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama User" style="text-transform: uppercase">
+                                                    @foreach($user as $dataUser)
+                                                        <input type="text" value="{{ $dataUser->m_name }}" class="form-control" name="nama" id="nama" placeholder="Nama User" style="text-transform: uppercase">
+                                                    
                                                     </div>
                                                 </div>
 
@@ -105,9 +108,13 @@
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Outlet</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <select name="outlet" class="form-control outlet" id="outlet">
-                                                            <option value="-" selected disabled>-- PILIH OUTLET</option>
+                                                            <option value="-" disabled>-- PILIH OUTLET</option>
                                                             @foreach($getOutlet as $data)
-                                                            <option value="{{ $data->c_id }}">{{ $data->c_name }}</option>
+                                                                @if($data->c_id == $dataUser->m_comp)
+                                                                <option value="{{ $data->c_id }}" selected>{{ $data->c_name }}</option>
+                                                                @else
+                                                                <option value="{{ $data->c_id }}">{{ $data->c_name }}</option>
+                                                                @endif
                                                             @endforeach
                                                         </select>                                                    
                                                     </div>
@@ -116,13 +123,16 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Username</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="text" class="form-control" name="username" id="username" placeholder="USERNAME">
+                                                        
+                                                        <input type="text" value="{{ $dataUser->m_username }}" class="form-control" name="username" id="username" placeholder="USERNAME" readonly>
+                                                    
                                                     </div>                                                
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Password</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
+
                                                         <input type="password" class="form-control" name="pass" id="pass" placeholder="PASSWORD">
                                                     </div>                                                
                                                 </div>
@@ -130,7 +140,9 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Konfirmasi Password</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
+
                                                         <input type="password" class="form-control" name="passconf" id="passconf" placeholder="KONFIRMASI PASSWORD">
+                                                    
                                                     </div>                                                
                                                 </div>
                                                
@@ -142,9 +154,13 @@
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Jabatan</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <select name="jabatan" class="form-control jabatan" id="jabatan">
-                                                            <option value="-" selected disabled>-- PILIH JABATAN</option>
+                                                            <option value="-" disabled>-- PILIH JABATAN</option>
                                                             @foreach($getJabatan as $data)
-                                                            <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                                @if($data->id == $dataUser->m_level)
+                                                                <option value="{{ $data->id }}" selected >{{ $data->nama }}</option>
+                                                                @else
+                                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                                @endif
                                                             @endforeach
                                                         </select>                                                       
                                                     </div>
@@ -161,8 +177,9 @@
 
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Alamat User</label>
-                                                    <div class="col-xs-8 col-lg-8 textarea">
-                                                        <textarea name="alamat" id="alamat" class="custom-scroll" rows="3" style="width: 100%"></textarea>
+                                                    <div class="col-xs-8 col-lg-8 textarea">                                                        
+                                                        <textarea value="{{ $dataUser->m_address }}" name="alamat" id="alamat" class="custom-scroll text-area form-control" rows="3" style="width: 100%">{{ $dataUser->m_address }}</textarea>
+                                                        <!-- <input type="text" name="alamat" id="alamat" value="{{ $dataUser->m_address }}" class="custom-scroll"> -->
                                                     </div>                                                
                                                 </div>
 
@@ -186,9 +203,18 @@
                                                     <label class="col-xs-4 col-lg-4 control-label"></label>
                                                     <div class="col-xs-8 col-lg-8">
                                                         <div class="col-sm-12 image-holder" style="padding:0px;">
-                                                    </div>                                                
-                                                </div>
-
+                                                        <!-- <img src="{{ asset('img/user/'.$dataUser->m_img) }}" 
+                                                            class="img-circle circle-border m-b-md"
+                                                            alt="profile"
+                                                            style="width: 100%; heigth: 100%; margin: 20px 0;"> -->
+                                                        
+                                                        @if($dataUser->m_img != '')
+                                                        <img src="{{ asset('img/user/'.$dataUser->m_img) }}" class="img-responsive" width="60px">
+                                                        @else
+                                                        <img src="{{ asset('img/user/default.jpg') }}" class="img-responsive" width="60px">
+                                                        @endif
+                                                        
+                                                </div>@endforeach
                                             </div>
                                             
                                         </div>
@@ -235,4 +261,131 @@
 
     </div>
     <!-- END MAIN CONTENT -->
+@endsection
+
+@section('extra_script')
+<script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
+<script src="{{ asset('template_asset/js/waitingfor.js') }}"></script>
+<script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.dobPicker({
+        // Selectopr IDs
+        daySelector: '#dobday',
+        monthSelector: '#dobmonth',
+        yearSelector: '#dobyear',
+
+        // Default option values
+        dayDefault: 'Tangal',
+        monthDefault: 'Bulan',
+        yearDefault: 'Tahun',
+
+        // Minimum age
+        minimumAge: 10,
+
+        // Maximum age
+        maximumAge: 80
+        });
+
+        $('#dobday').val('{{ $day }}');
+        $('#dobmonth').val('{{ $month }}');
+        $('#dobyear').val('{{ $year }}');
+
+    });
+
+    $(".uploadGambar").on('change', function () {
+        $('.save').attr('disabled', false);
+        if (typeof (FileReader) != "undefined") {
+            var image_holder = $(".image-holder");
+            image_holder.empty();
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                image_holder.html('<img src="{{ asset('template_asset/img/loading1.gif') }}" class="img-responsive" width="60px">');
+                $('.save').attr('disabled', true);
+                setTimeout(function(){
+                    image_holder.empty();
+                    $("<img />", {
+                        "src": e.target.result,
+                        "class": "thumb-image img-responsive",
+                        "height": "80px",
+                    }).appendTo(image_holder);
+                    $('.save').attr('disabled', false);
+                }, 2000)
+            }
+            image_holder.show();
+            reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+            alert("This browser does not support FileReader.");
+        }
+    });
+
+    // function simpan(){
+    //     // --- AXIOS USE ----//
+    //     $('#overlay').fadeIn(200);
+    //     $('#load-status-text').text('Penyimpanan Database Sedang di Proses');
+    //     let btn = $('#submit-tambah');
+    //     btn.attr('disabled', 'disabled');
+    //     btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+
+    //     axios.post(baseUrl+'/pengaturan/kelola-pengguna/simpan', $('#form-tambah').serialize(), {
+    //         headers: {
+    //             'Content-Type': 'multipart/form-data'
+    //         }
+    //     })
+    //         .then((response) => {
+                // if(response.data.status == 'sukses'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "SUKSES",
+                //         content : "Data Pengguna Berhasil Disimpan",
+                //         color : "#739E73",
+                //         iconSmall : "fa fa-check animated",
+                //         timeout : 5000
+                //     });
+                //     location.reload();
+                // }else if(response.data.status == 'gagal'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Data Pengguna Gagal Disimpan !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
+                //     // location.reload();
+                // }else if(response.data.status == 'gagalUser'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Username Tidak Tersedia !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
+                //     // location.reload();
+                // }else if(response.data.status == 'gagalPass'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Password Tidak Sesuai !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
+                //     // location.reload();
+                // }else if(response.data.status == 'gagalImg'){
+                //     $('#overlay').fadeOut(200);
+                //     $.smallBox({
+                //         title : "GAGAL",
+                //         content : "Ukuran File Gambar Terlalu Besar !!",
+                //         color : "#C46A69",
+                //         iconSmall : "fa fa-times animated",
+                //         timeout : 5000
+                //     });
+                    // location.reload();
+    //     })
+    // }
+
+</script>
 @endsection
