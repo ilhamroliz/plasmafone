@@ -15,9 +15,7 @@ class suplier_controller extends Controller
 {
     public function suplier()
     {
-        $suppliers = DB::table('d_supplier')->get();
-
-    	return view('master/suplier/index')->with(compact('suppliers'));
+    	return view('master/suplier/index');
     }
 
     public function detail($id)

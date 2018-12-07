@@ -215,7 +215,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/master/outlet','master\outlet\outlet_controller@index');
 
-	Route::get('/master/outlet/add','master\outlet\outlet_controller@outlet_add');
+	Route::match(['get', 'post'], '/master/outlet/add','master\outlet\outlet_controller@add');
 
 	Route::get('/master/outlet/get-kecamatan','master\outlet\outlet_controller@get_kecamatan');
 
