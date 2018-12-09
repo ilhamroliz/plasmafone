@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/.fuse_hidden0000036200000001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/master/suplier/.fuse_hidden000000a100000001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/partials/.fuse_hidden0000009f00000002" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +18,9 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="9" />
+          <entry key="project.closed" value="10" />
           <entry key="project.open.time.2" value="2" />
+          <entry key="project.open.time.223" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.31" value="1" />
           <entry key="project.open.time.32" value="1" />
@@ -27,7 +28,7 @@
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.60" value="1" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -124,8 +125,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/master/item/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17157">
-              <caret line="817" selection-start-line="817" selection-end-line="817" />
+            <state relative-caret-position="15897">
+              <caret line="757" selection-start-line="757" selection-end-line="757" />
             </state>
           </provider>
         </entry>
@@ -305,7 +306,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -392,6 +392,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -435,16 +436,17 @@
       <workItem from="1543458942033" duration="8339000" />
       <workItem from="1543550993645" duration="644000" />
       <workItem from="1543984004905" duration="586000" />
+      <workItem from="1544088630319" duration="561000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28820000" />
+    <option name="totallyTimeSpent" value="29381000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.225" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22878788" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -651,8 +653,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/master/item/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17157">
-          <caret line="817" selection-start-line="817" selection-end-line="817" />
+        <state relative-caret-position="15897">
+          <caret line="757" selection-start-line="757" selection-end-line="757" />
         </state>
       </provider>
     </entry>
