@@ -38,7 +38,7 @@
 						<a href="flot.html">Master Member</a>
 					</li>
 
-					<li>
+					<li class="{{ (Request::is('master/outlet/*') || Request::is('master/outlet')) ? 'active' : '' }}">
 						<a href="{{ url('/master/outlet') }}">Master Outlet</a>
 					</li>
 
