@@ -233,7 +233,11 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::match(['get', 'post'], '/master/outlet/edit/{id}', 'master\outlet\outlet_controller@edit');
 
-	Route::get('/master/outlet/delete/{id}', 'master\outlet\outlet_controller@delete');
+	Route::get('/master/outlet/active/{id}', 'master\outlet\outlet_controller@active');
+
+	Route::get('/master/outlet/nonactive/{id}', 'master\outlet\outlet_controller@nonactive');
+
+	// Route::get('/master/outlet/delete/{id}', 'master\outlet\outlet_controller@delete');
 
 	// End Master Outlet
 
