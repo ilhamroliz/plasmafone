@@ -241,7 +241,15 @@ class barang_controller extends Controller
                     
                 }else{
 
-                    $image = $data['current_img'];
+                    if ($data['current_img'] == "") {
+                        
+                        $image = "";
+
+                    } else {
+
+                        $image = $data['current_img'];
+                        
+                    }
 
                 }
 
@@ -276,7 +284,7 @@ class barang_controller extends Controller
                 DB::rollback();
 
                 // something went wrong
-                return redirect()->back()->with('flash_message_error', 'Data barang gagal diubah...! Mohon coba lagi');
+                return redirect()->back()->with('flash_message_error', 'Data barang gagal diubah...! Mohon coba lagi => '.$e);
 
             }
         }

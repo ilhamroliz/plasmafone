@@ -299,8 +299,6 @@
 			// product form
 			var baseUrl = '{{ url('/') }}';
 
-			
-
 			function overlay()
 			{
 				$('#overlay').fadeIn(200);

@@ -540,7 +540,6 @@
 				$('#dt_created').text(response.data.s_insert);
 				$('#overlay').fadeOut(200);
 				$('#myModal').modal('show');
-
 			})
 		}
 
