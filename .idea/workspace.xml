@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/resources/views/master/suplier/.fuse_hidden000000a100000001" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/.fuse_hidden0000009f00000002" beforeDir="false" />
-    </list>
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +25,8 @@
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.60" value="1" />
-          <entry key="project.opened" value="10" />
+          <entry key="project.open.time.66" value="1" />
+          <entry key="project.opened" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -126,7 +124,7 @@
         <entry file="file://$PROJECT_DIR$/resources/views/master/item/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15897">
-              <caret line="757" selection-start-line="757" selection-end-line="757" />
+              <caret line="761" selection-start-line="761" selection-end-line="761" />
             </state>
           </provider>
         </entry>
@@ -306,6 +304,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -392,7 +391,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -437,16 +435,18 @@
       <workItem from="1543550993645" duration="644000" />
       <workItem from="1543984004905" duration="586000" />
       <workItem from="1544088630319" duration="561000" />
+      <workItem from="1544410341589" duration="574000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29381000" />
+    <option name="totallyTimeSpent" value="29955000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22878788" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23257576" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -654,7 +654,7 @@
     <entry file="file://$PROJECT_DIR$/resources/views/master/item/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15897">
-          <caret line="757" selection-start-line="757" selection-end-line="757" />
+          <caret line="761" selection-start-line="761" selection-end-line="761" />
         </state>
       </provider>
     </entry>
