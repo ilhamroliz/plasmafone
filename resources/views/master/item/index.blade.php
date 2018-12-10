@@ -214,6 +214,8 @@
 														&nbsp;Harga
 													</th>
 
+													<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
+
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue hidden-md hidden-sm hidden-xs"></i>
 														&nbsp;Aksi
 													</th>
@@ -527,6 +529,7 @@
 						{"data": "i_nama"},
 						{"data": "i_code"},
 						{"data": "harga"},
+						{"data": "active"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -585,6 +588,150 @@
 			}, 1500);
 
 		})
+
+		function refresh_tab(){
+		    aktif.api().ajax.reload();
+		    semua.api().ajax.reload();
+		    inaktif.api().ajax.reload();
+		}
+
+		function statusactive(id, name){
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan mengaktifkan data barang <i>"'+name+'"</i>',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Memproses...');
+
+					axios.get(baseUrl+'/master/barang/active/'+id).then((response) => {
+
+						if(response.data.status == 'berhasil'){
+							refresh_tab();
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data barang <i>"'+name+'"</i> berhasil diaktifkan...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+
+						}else if(response.data.status == 'tidak ada'){
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Data yang ingin Anda aktifkan sudah tidak ada...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else{
+							$('#overlay').fadeOut(200);
+							// console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}
+
+					}).catch((err) => {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
+
+				}
+	
+			});
+		}
+
+		function statusnonactive(id, name){
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan menonaktifkan data barang <i>"'+name+'"</i>',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Memproses...');
+
+					axios.get(baseUrl+'/master/barang/nonactive/'+id).then((response) => {
+
+						if(response.data.status == 'berhasil'){
+							refresh_tab();
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data barang <i>"'+name+'"</i> berhasil dinonaktifkan...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+
+						}else if(response.data.status == 'tidak ada'){
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Data yang ingin Anda nonaktifkan sudah tidak ada...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else{
+							$('#overlay').fadeOut(200);
+							console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}
+
+					}).catch((err) => {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
+
+				}
+	
+			});
+		}
 
 		function edit(val){
 

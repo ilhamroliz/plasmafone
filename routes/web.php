@@ -148,6 +148,10 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/master/barang/detail/{id}', 'master\barang\barang_controller@detail')->name('barang.detail');
 
+	Route::get('/master/barang/active/{id}', 'master\barang\barang_controller@active');
+
+	Route::get('/master/barang/nonactive/{id}', 'master\barang\barang_controller@nonactive');
+
 	// ============================End Master Barang==========================
 
 	// =============================Master Gudang=============================

@@ -40,7 +40,7 @@ class barang_controller extends Controller
             return '<div class="text-right">Rp'.number_format($items_active->i_price,2,',','.').'</div>';
         })
         ->addColumn('aksi', function ($items_active){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($items_active->i_id) . '\', \'' . $items_active->i_nama . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
         })
         ->rawColumns(['aksi', 'harga'])
         ->make(true);
@@ -53,13 +53,41 @@ class barang_controller extends Controller
         $items_all = collect($items_all);
 
         return DataTables::of($items_all)
+
         ->addColumn('harga', function($items_all){
             return '<div class="text-right">Rp'.number_format($items_all->i_price,2,',','.').'</div>';
         })
-        ->addColumn('aksi', function ($items_all){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+        ->addColumn('active', function($items_all){
+
+            if ($items_all->i_isactive == "Y") {
+                
+                return '<span class="label label-success">AKTIF</span>';
+
+            } else {
+
+                return '<span class="label label-danger">NON AKTIF</span>';
+
+            }
+
         })
-        ->rawColumns(['aksi', 'harga'])
+
+        ->addColumn('aksi', function ($items_all){
+
+            if ($items_all->i_isactive == "Y") {
+                
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($items_all->i_id) . '\', \'' . $items_all->i_nama . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+            } else {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($items_all->i_id) . '\', \'' . $items_all->i_nama . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+            }  
+            
+        })
+
+        ->rawColumns(['aksi', 'harga', 'active'])
+
         ->make(true);
     }
 
@@ -74,7 +102,7 @@ class barang_controller extends Controller
             return '<div class="text-right">Rp'.number_format($items_nonactive->i_price,2,',','.').'</div>';
         })
         ->addColumn('aksi', function ($items_nonactive){      
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($items_nonactive->i_id) . '\', \'' . $items_nonactive->i_nama . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
         })
         ->rawColumns(['aksi', 'harga'])
         ->make(true);
@@ -362,6 +390,86 @@ class barang_controller extends Controller
 
         }
         
+    }
+
+    public function active($id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $check = Item::where('i_id', Crypt::decrypt($id))->count();
+
+            if ($check == 0) {
+                
+                return  json_encode([
+                    'status'    => 'tidak ada'
+                ]);
+
+            } else {
+
+                Item::where(['i_id' => Crypt::decrypt($id)])->update(['i_isactive' => 'Y']);
+
+                DB::commit();
+
+                // all good
+                return  json_encode([
+                    'status'    => 'berhasil'
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            
+            // something went wrong
+            return  json_encode([
+                'status'    => 'gagal',
+                'msg'       => $e
+            ]);
+
+        }
+    }
+
+    public function nonactive($id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $check = Item::where('i_id', Crypt::decrypt($id))->count();
+
+            if ($check == 0) {
+                
+                return  json_encode([
+                    'status'    => 'tidak ada'
+                ]);
+
+            } else {
+
+                Item::where(['i_id' => Crypt::decrypt($id)])->update(['i_isactive' => 'N']);
+
+                DB::commit();
+
+                // all good
+                return  json_encode([
+                    'status'    => 'berhasil'
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            
+            // something went wrong
+            return  json_encode([
+                'status'    => 'gagal',
+                'msg'       => $e
+            ]);
+
+        }
     }
 
     function formatPrice($data)
