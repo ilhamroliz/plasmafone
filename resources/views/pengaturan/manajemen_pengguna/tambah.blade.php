@@ -97,14 +97,14 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Nama User</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama User" style="text-transform: uppercase">
+                                                        <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama User" style="text-transform: uppercase" required>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Outlet</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <select name="outlet" class="form-control outlet" id="outlet">
+                                                        <select name="outlet" class="form-control outlet" id="outlet" required>
                                                             <option value="-" selected disabled>-- PILIH OUTLET</option>
                                                             @foreach($getOutlet as $data)
                                                             <option value="{{ $data->c_id }}">{{ $data->c_name }}</option>

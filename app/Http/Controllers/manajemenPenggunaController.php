@@ -142,7 +142,7 @@ class manajemenPenggunaController extends Controller
         DB::beginTransaction();
         try {
             $id = $this->getDataId();
-            $nama = $request->nama;
+            $nama = ucwords($request->nama);
             $outlet = $request->outlet;
             $jabatan = $request->jabatan;
             $username = $request->username;

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php" afterDir="false" />
-    </list>
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,32 +84,19 @@
                 <element signature="e#54#82#0#PHP" expanded="true" />
                 <element signature="e#241#247#1" expanded="true" />
                 <element signature="e#451#457#1" expanded="true" />
-                <element signature="e#240#246#1" expanded="true" />
-                <element signature="e#449#455#1" expanded="true" />
-                <element signature="e#244#250#1" expanded="true" />
-                <element signature="e#457#463#1" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
-              <folding>
-                <element signature="e#40#58#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/config/auth.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="89" column="25" selection-start-line="89" selection-start-column="25" selection-end-line="89" selection-end-column="25" />
+            <state relative-caret-position="-1327">
+              <caret line="11" column="40" lean-forward="true" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+              <folding>
+                <element signature="e#40#58#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -456,12 +440,12 @@
       <workItem from="1543550993645" duration="644000" />
       <workItem from="1543984004905" duration="586000" />
       <workItem from="1544088630319" duration="561000" />
-      <workItem from="1544410341589" duration="3471000" />
+      <workItem from="1544410341589" duration="4264000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32852000" />
+    <option name="totallyTimeSpent" value="33645000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
@@ -683,10 +667,6 @@
             <element signature="e#54#82#0#PHP" expanded="true" />
             <element signature="e#241#247#1" expanded="true" />
             <element signature="e#451#457#1" expanded="true" />
-            <element signature="e#240#246#1" expanded="true" />
-            <element signature="e#449#455#1" expanded="true" />
-            <element signature="e#244#250#1" expanded="true" />
-            <element signature="e#457#463#1" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -712,20 +692,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
+    <entry file="file://$PROJECT_DIR$/config/auth.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
-          <folding>
-            <element signature="e#40#58#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="734">
+          <caret line="89" column="25" selection-start-line="89" selection-start-column="25" selection-end-line="89" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/auth.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="89" column="25" selection-start-line="89" selection-start-column="25" selection-end-line="89" selection-end-column="25" />
+        <state relative-caret-position="-1327">
+          <caret line="11" column="40" lean-forward="true" selection-start-line="11" selection-start-column="40" selection-end-line="11" selection-end-column="40" />
+          <folding>
+            <element signature="e#40#58#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
