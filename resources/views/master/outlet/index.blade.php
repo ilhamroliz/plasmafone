@@ -474,88 +474,88 @@
 		    inaktif.api().ajax.reload();
 		}
 
-		function hapus(val){
+		// function hapus(val){
 
-			$.SmartMessageBox({
-				title : "Pesan!",
-				content : 'Apakah Anda yakin akan manghapus data outlet <i>"'+val+'"</i>',
-				buttons : '[Batal][Ya]'
-			}, function(ButtonPressed) {
-				if (ButtonPressed === "Ya") {
+		// 	$.SmartMessageBox({
+		// 		title : "Pesan!",
+		// 		content : 'Apakah Anda yakin akan manghapus data outlet <i>"'+val+'"</i>',
+		// 		buttons : '[Batal][Ya]'
+		// 	}, function(ButtonPressed) {
+		// 		if (ButtonPressed === "Ya") {
 
-					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
+		// 			$('#overlay').fadeIn(200);
+		// 			$('#load-status-text').text('Sedang Menghapus...');
 
-					axios.get(baseUrl+'/master/outlet/delete/'+val).then((response) => {
+		// 			axios.get(baseUrl+'/master/outlet/delete/'+val).then((response) => {
 
-						if(response.data.status == 'berhasil'){
-							refresh_tab();
-							$('#overlay').fadeOut(200);
+		// 				if(response.data.status == 'berhasil'){
+		// 					refresh_tab();
+		// 					$('#overlay').fadeOut(200);
 
-							$.smallBox({
-								title : "Berhasil",
-								content : 'Data outlet <i>"'+val+'"</i> berhasil dihapus...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-							});
+		// 					$.smallBox({
+		// 						title : "Berhasil",
+		// 						content : 'Data outlet <i>"'+val+'"</i> berhasil dihapus...!',
+		// 						color : "#739E73",
+		// 						timeout: 4000,
+		// 						icon : "fa fa-check bounce animated"
+		// 					});
 
-						}else if(response.data.status == 'tidak ada'){
+		// 				}else if(response.data.status == 'tidak ada'){
 
-							$('#overlay').fadeOut(200);
+		// 					$('#overlay').fadeOut(200);
 
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
+		// 					$.smallBox({
+		// 						title : "Gagal",
+		// 						content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
+		// 						color : "#A90329",
+		// 						timeout: 4000,
+		// 						icon : "fa fa-times bounce animated"
+		// 					});
 
-						}else if(response.data.status == 'd_mem ada'){
+		// 				}else if(response.data.status == 'd_mem ada'){
 
-							$('#overlay').fadeOut(200);
+		// 					$('#overlay').fadeOut(200);
 
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda hapus masih dipakai oleh member...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
+		// 					$.smallBox({
+		// 						title : "Gagal",
+		// 						content : "Upsss. Data yang ingin Anda hapus masih dipakai oleh member...!",
+		// 						color : "#A90329",
+		// 						timeout: 4000,
+		// 						icon : "fa fa-times bounce animated"
+		// 					});
 
-						}else{
-							$('#overlay').fadeOut(200);
-							console.log(response);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
+		// 				}else{
+		// 					$('#overlay').fadeOut(200);
+		// 					console.log(response);
+		// 					$.smallBox({
+		// 						title : "Gagal",
+		// 						content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+		// 						color : "#A90329",
+		// 						timeout: 4000,
+		// 						icon : "fa fa-times bounce animated"
+		// 					});
 
-						}
+		// 				}
 
-					}).catch((err) => {
-						out();
-						$.smallBox({
-							title : "Gagal",
-							content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-							color : "#A90329",
-							timeout: 4000,
-							icon : "fa fa-times bounce animated"
-						});
+		// 			}).catch((err) => {
+		// 				out();
+		// 				$.smallBox({
+		// 					title : "Gagal",
+		// 					content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+		// 					color : "#A90329",
+		// 					timeout: 4000,
+		// 					icon : "fa fa-times bounce animated"
+		// 				});
 						
-					}).then(function(){
-						$('#overlay').fadeOut(200);
-					})
+		// 			}).then(function(){
+		// 				$('#overlay').fadeOut(200);
+		// 			})
 
-				}
+		// 		}
 	
-			});
+		// 	});
 
-		}
+		// }
 
 		function edit(val){
 
@@ -608,7 +608,7 @@
 				if (ButtonPressed === "Ya") {
 
 					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
+					$('#load-status-text').text('Sedang Memproses...');
 
 					axios.get(baseUrl+'/master/outlet/active/'+id).then((response) => {
 
@@ -638,7 +638,7 @@
 
 						}else{
 							$('#overlay').fadeOut(200);
-							console.log(response);
+							// console.log(response);
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
@@ -650,7 +650,7 @@
 						}
 
 					}).catch((err) => {
-						out();
+						$('#overlay').fadeOut(200);
 						$.smallBox({
 							title : "Gagal",
 							content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
@@ -677,7 +677,7 @@
 				if (ButtonPressed === "Ya") {
 
 					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
+					$('#load-status-text').text('Sedang Memproses...');
 
 					axios.get(baseUrl+'/master/outlet/nonactive/'+id).then((response) => {
 
@@ -719,7 +719,7 @@
 						}
 
 					}).catch((err) => {
-						out();
+						$('#overlay').fadeOut(200);
 						$.smallBox({
 							title : "Gagal",
 							content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",

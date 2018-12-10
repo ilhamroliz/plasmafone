@@ -207,6 +207,10 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::match(['get', 'post'], '/master/supplier/detail/{id}', 'master\suplier\suplier_controller@detail');
 
+	Route::get('/master/supplier/active/{id}', 'master\suplier\suplier_controller@active');
+
+	Route::get('/master/supplier/nonactive/{id}', 'master\suplier\suplier_controller@nonactive');
+
 	// master Suppplier end
 
 	// Master Outlet

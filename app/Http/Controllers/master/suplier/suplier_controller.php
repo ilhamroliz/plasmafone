@@ -40,7 +40,7 @@ class suplier_controller extends Controller
 
         ->addColumn('aksi', function ($supplier_active){ 
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_active->s_id) . '\', \'' . $supplier_active->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
         })
 
@@ -63,13 +63,35 @@ class suplier_controller extends Controller
 
         })
 
-        ->addColumn('aksi', function ($supplier_all){    
+        ->addColumn('active', function($supplier_all){
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            if ($supplier_all->s_isactive == "Y") {
+                
+                return '<span class="label label-success">AKTIF</span>';
+
+            } else {
+
+                return '<span class="label label-danger">NON AKTIF</span>';
+
+            }
 
         })
 
-        ->rawColumns(['aksi', 'limit'])
+        ->addColumn('aksi', function ($supplier_all){    
+
+            if ($supplier_all->s_isactive == "Y") {
+                
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+            } else {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+            }
+
+        })
+
+        ->rawColumns(['aksi', 'limit', 'active'])
 
         ->make(true);
     }
@@ -90,7 +112,7 @@ class suplier_controller extends Controller
 
         ->addColumn('aksi', function ($supplier_nonactive){     
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\', \'' . $supplier_nonactive->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
 
         })
 
@@ -297,6 +319,86 @@ class suplier_controller extends Controller
 
         }
         
+    }
+
+    public function active($id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+
+            if ($check == 0) {
+                
+                return  json_encode([
+                    'status'    => 'tidak ada'
+                ]);
+
+            } else {
+
+                suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'Y']);
+
+                DB::commit();
+
+                // all good
+                return  json_encode([
+                    'status'    => 'berhasil'
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            
+            // something went wrong
+            return  json_encode([
+                'status'    => 'gagal',
+                'msg'       => $e
+            ]);
+
+        }
+    }
+
+    public function nonactive($id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+
+            if ($check == 0) {
+                
+                return  json_encode([
+                    'status'    => 'tidak ada'
+                ]);
+
+            } else {
+
+                suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'N']);
+
+                DB::commit();
+
+                // all good
+                return  json_encode([
+                    'status'    => 'berhasil'
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            
+            // something went wrong
+            return  json_encode([
+                'status'    => 'gagal',
+                'msg'       => $e
+            ]);
+
+        }
     }
 
     function formatPrice($data)

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Model\master\outlet as Outlet;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\CodeGenerator as GenerateCode;
+use App\Http\Controllers\PlasmafoneController as Access;
 use DataTables;
 use DB;
 use Session;
@@ -16,6 +17,9 @@ class outlet_controller extends Controller
 {
     public function index()
     {
+        // if (Access::checkAkses('', 'read') == false) {
+        //     return view('errors.405');
+        // }
     	return view('master.outlet.index');
     }
 
