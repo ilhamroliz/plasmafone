@@ -6,7 +6,7 @@
 		<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
 			
 			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
-				<img src="{{ asset('template_asset/img/avatars/sunny.png') }}" alt="me" class="online" /> 
+				<img src="{{ asset('img/user/'.auth()->user()->m_img) }}" alt="me" class="online" /> 
 				<span>
 					{{ (!is_null(auth()->user()->id_karyawan)) ? auth()->user()->karyawan->m_username.' '.auth()->user()->karyawan->nama_lengkap : auth()->user()->m_name }}
 				</span>
