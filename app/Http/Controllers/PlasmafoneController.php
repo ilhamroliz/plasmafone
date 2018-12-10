@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
 
-class PlasmafoneController extends Controller
+class PlasmafoneController
 {
     public static function getActivity()
     {
@@ -53,5 +53,42 @@ class PlasmafoneController extends Controller
     public static function getTanggal(){
         $date = Carbon::now('Asia/Jakarta')->format('d M Y');
         return $date;
+    }
+
+    public static function checkAkses($a_id, $aksi)
+    {
+        $m_id = Auth::user()->m_id;
+        $cek = null;
+        if ($aksi == 'read'){
+            $cek = DB::table('d_mem_access')
+                ->where('ma_mem', '=', $m_id)
+                ->where('ma_access', '=', $a_id)
+                ->where('ma_read', '=', 'Y')
+                ->get();
+        } elseif ($aksi == 'insert'){
+            $cek = DB::table('d_mem_access')
+                ->where('ma_mem', '=', $m_id)
+                ->where('ma_access', '=', $a_id)
+                ->where('ma_insert', '=', 'Y')
+                ->get();
+        } elseif ($aksi == 'update'){
+            $cek = DB::table('d_mem_access')
+                ->where('ma_mem', '=', $m_id)
+                ->where('ma_access', '=', $a_id)
+                ->where('ma_update', '=', 'Y')
+                ->get();
+        } elseif ($aksi == 'delete'){
+            $cek = DB::table('d_mem_access')
+                ->where('ma_mem', '=', $m_id)
+                ->where('ma_access', '=', $a_id)
+                ->where('ma_delete', '=', 'Y')
+                ->get();
+        }
+
+        if (count($cek) > 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
