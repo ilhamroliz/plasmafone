@@ -113,7 +113,7 @@
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-												<div class="form-group">
+												<!-- <div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Outlet</label>
 
@@ -129,7 +129,7 @@
 
 													</div>
 
-												</div>
+												</div> -->
 
 												<div class="form-group">
 
@@ -276,13 +276,13 @@
 						validating : 'glyphicon glyphicon-refresh'
 					},
 					fields : {
-						code : {
-							validators : {
-								notEmpty : {
-									message : 'Isi kode outlet'
-								}
-							}
-						},
+						// code : {
+						// 	validators : {
+						// 		notEmpty : {
+						// 			message : 'Isi kode outlet'
+						// 		}
+						// 	}
+						// },
 						name : {
 							validators : {
 								notEmpty : {
@@ -315,7 +315,7 @@
 					btn_save_disabled 	: false,
 
 					form_data : {
-						code 	: '',
+						// code 	: '',
 						name 	: '',
 						telp 	: '',
 						address : '',
@@ -325,15 +325,15 @@
 				},
 				mounted: function(){
 					validation_regis();
-					overlay();
+					// overlay();
 				},
-				created: function(){
-					axios.get(baseUrl+'/master/getcode')
-					.then(response => {
-						this.form_data.code = response.data;
-						out();
-					})
-				},
+				// created: function(){
+				// 	axios.get(baseUrl+'/master/getcode')
+				// 	.then(response => {
+				// 		this.form_data.code = response.data;
+				// 		out();
+				// 	})
+				// },
 				methods: {
 					submit_form: function(e){
 						e.preventDefault();
@@ -355,18 +355,20 @@
 									});
 
 									this.reset_form();
-									this.form_data.code = response.data.code;
+									// this.form_data.code = response.data.code;
 
-								} else if(response.data.status == 'kode ada') {
-									out();
-									$.smallBox({
-										title : "Gagal",
-										content : 'Kode outlet <i>"'+response.data.code+'"</i> sudah ada! Mulai ulang halaman...',
-										color : "#A90329",
-										timeout: 5000,
-										icon : "fa fa-times bounce animated"
-									});
-								} else if(response.data.status == 'nama ada') {
+								}
+								//  else if(response.data.status == 'kode ada') {
+								// 	out();
+								// 	$.smallBox({
+								// 		title : "Gagal",
+								// 		content : 'Kode outlet <i>"'+response.data.code+'"</i> sudah ada! Mulai ulang halaman...',
+								// 		color : "#A90329",
+								// 		timeout: 5000,
+								// 		icon : "fa fa-times bounce animated"
+								// 	});
+								// } 
+								else if(response.data.status == 'nama ada') {
 									out();
 									$.smallBox({
 										title : "Gagal",
@@ -412,7 +414,7 @@
 						}
 					},
 					reset_form:function(){
-						this.form_data.code 		= '';
+						// this.form_data.code 		= '';
 						this.form_data.name 		= '';
 						this.form_data.telp			= '';
 						this.form_data.address 		= '';

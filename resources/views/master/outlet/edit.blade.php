@@ -90,7 +90,7 @@
 
 						<header>
 
-							<h2><strong>Master Supplier</strong></h2>				
+							<h2><strong>Master Outlet</strong></h2>				
 							
 						</header>
 
@@ -113,7 +113,9 @@
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-												<div class="form-group">
+												<input type="hidden" name="code" id="code" value="{{ $outlet->c_id }}">
+
+												<!-- <div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Outlet</label>
 
@@ -129,7 +131,7 @@
 
 													</div>
 
-												</div>
+												</div> -->
 
 												<div class="form-group">
 
@@ -291,13 +293,13 @@
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-				code : {
-					validators : {
-						notEmpty : {
-							message : 'Isi kode outlet'
-						}
-					}
-				},
+				// code : {
+				// 	validators : {
+				// 		notEmpty : {
+				// 			message : 'Isi kode outlet'
+				// 		}
+				// 	}
+				// },
 				name : {
 					validators : {
 						notEmpty : {
