@@ -122,7 +122,7 @@
 			var dataTableLanguage = {
 	           	"emptyTable": "Tidak ada data",
 	           	"sInfo": "Menampilkan _START_ - _END_ Dari _TOTAL_ Data",
-	           	"sSearch": 'Pencarian',
+	           	"sSearch": 'Pencarian &nbsp',
 	           	"sLengthMenu": "Menampilkan &nbsp; _MENU_ &nbsp; Data",
 	           	"infoEmpty": "",
 	           	"paginate": {

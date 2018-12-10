@@ -225,32 +225,37 @@
   }
 
   function trigger(id){
-    location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
+    // location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
+
+	$.SmartMessageBox({
+		title : "PERHATIAN !",
+		content : "Apakah Anda yakin ingin mengubah status Aktivasi User ?",
+		buttons : '[No][Yes]'
+	}, function(ButtonPressed) {
+		if (ButtonPressed === "Yes") {
+			$.smallBox({
+				title : "Pemberitahuan",
+				content : "<i class='fa fa-clock-o'></i> <i>Perubahan Status Aktivasi Disetujui</i>",
+				color : "#659265",
+				iconSmall : "fa fa-check fa-2x fadeInRight animated",
+				timeout : 4000
+			});
+			location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
+
+		}
+		if (ButtonPressed === "No") {
+			$.smallBox({
+				title : "Pemberitahuan",
+				content : "<i class='fa fa-clock-o'></i> <i>Perubahan Status Aktivasi Dibatalkan</i>",
+				color : "#C46A69",
+				iconSmall : "fa fa-times fa-2x fadeInRight animated",
+				timeout : 4000
+			});
+		}
+
+	});
+	e.preventDefault();
   }
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-
-	$('.check-me').change(function(evt){
-		evt.preventDefault(); context = $(this);
-		if(context.is(':checked'))
-			selected.push(context.val());
-		else
-			selected.splice(_.findIndex(selected, function(o) { return o == context.val() }), 1);
-
-		// console.log(selected);
-	})
-
-	// edit 1 click
-
-	$(".edit").click(function(evt){
-		evt.preventDefault(); context = $(this);
-
-		window.location = baseUrl+'/pengaturan/akses-pengguna/edit?id='+context.data('id');
-	})
-
-})
 </script>
 
 @endsection
