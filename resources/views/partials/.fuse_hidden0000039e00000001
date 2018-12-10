@@ -8,7 +8,7 @@
 			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
 				<img src="{{ asset('template_asset/img/avatars/sunny.png') }}" alt="me" class="online" /> 
 				<span>
-					{{ (!is_null(auth()->user()->id_karyawan)) ? auth()->user()->karyawan->m_username.' '.auth()->user()->karyawan->nama_lengkap : auth()->user()->m_name }}
+					{{ (!is_null(auth()->user()->id_karyawan)) ? auth()->user()->karyawan->m_username.' '.auth()->user()->karyawan->nama_lengkap : auth()->user()->m_username }}
 				</span>
 			</a> 
 			
@@ -38,7 +38,7 @@
 						<a href="flot.html">Master Member</a>
 					</li>
 
-					<li class="{{ (Request::is('master/outlet/*') || Request::is('master/outlet')) ? 'active' : '' }}">
+					<li>
 						<a href="{{ url('/master/outlet') }}">Master Outlet</a>
 					</li>
 

@@ -35,7 +35,7 @@ class outlet_controller extends Controller
 
         ->addColumn('aksi', function ($outlet_active){ 
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
         })
 
@@ -52,13 +52,35 @@ class outlet_controller extends Controller
 
         return DataTables::of($outlet_all)
 
-        ->addColumn('aksi', function ($supplier_all){    
+        ->addColumn('active', function($outlet_all){
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $supplier_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $supplier_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . $supplier_all->c_id . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+            if ($outlet_all->c_isactive == "Y") {
+                
+                return '<span class="label label-success">AKTIF</span>';
+
+            } else {
+
+                return '<span class="label label-danger">NON AKTIF</span>';
+
+            }
 
         })
 
-        ->rawColumns(['aksi'])
+        ->addColumn('aksi', function ($outlet_all){
+
+            if ($outlet_all->c_isactive == "Y") {
+                
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+            } else {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+            }
+
+        })
+
+        ->rawColumns(['aksi', 'active'])
 
         ->make(true);
     }
@@ -73,7 +95,7 @@ class outlet_controller extends Controller
 
         ->addColumn('aksi', function ($outlet_nonactive){     
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
 
         })
 
@@ -291,6 +313,86 @@ class outlet_controller extends Controller
             } else {
 
                 Outlet::where(['c_id' => $id])->delete();
+
+                DB::commit();
+
+                // all good
+                return  json_encode([
+                    'status'    => 'berhasil'
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            
+            // something went wrong
+            return  json_encode([
+                'status'    => 'gagal',
+                'msg'       => $e
+            ]);
+
+        }
+    }
+
+    public function active($id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $check = Outlet::where('c_id', $id)->count();
+
+            if ($check == 0) {
+                
+                return  json_encode([
+                    'status'    => 'tidak ada'
+                ]);
+
+            } else {
+
+                Outlet::where(['c_id' => $id])->update(['c_isactive' => 'Y']);
+
+                DB::commit();
+
+                // all good
+                return  json_encode([
+                    'status'    => 'berhasil'
+                ]);
+
+            }
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            
+            // something went wrong
+            return  json_encode([
+                'status'    => 'gagal',
+                'msg'       => $e
+            ]);
+
+        }
+    }
+
+    public function nonactive($id = null)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $check = Outlet::where('c_id', $id)->count();
+
+            if ($check == 0) {
+                
+                return  json_encode([
+                    'status'    => 'tidak ada'
+                ]);
+
+            } else {
+
+                Outlet::where(['c_id' => $id])->update(['c_isactive' => 'N']);
 
                 DB::commit();
 
