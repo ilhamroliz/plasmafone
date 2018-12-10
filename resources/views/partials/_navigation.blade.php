@@ -6,7 +6,11 @@
 		<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
 			
 			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
-				<img src="{{ asset('img/user/'.auth()->user()->m_img) }}" alt="me" class="online" /> 
+				@if(auth()->user()->m_img != '' || auth()->user()->m_img != null)
+				<img src="{{ asset('img/user/'.auth()->user()->m_img) }}" alt="me" class="online" />
+				@else
+				<img src="{{ asset('img/user/default.jpg') }}" alt="me" class="online" />
+				@endif
 				<span>
 					{{ (!is_null(auth()->user()->id_karyawan)) ? auth()->user()->karyawan->m_username.' '.auth()->user()->karyawan->nama_lengkap : auth()->user()->m_name }}
 				</span>
