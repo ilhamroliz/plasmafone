@@ -122,24 +122,25 @@ class outlet_controller extends Controller
 
             try {
 
-                $check_code = Outlet::where('c_id', '=', $data['code'])->count();
+                // $check_code = Outlet::where('c_id', '=', $data['code'])->count();
                 $check_name = Outlet::where('c_name', '=', $data['name'])->count();
 
-                if ($check_code > 0) {
+                // if ($check_code > 0) {
 
-                    return  json_encode([
-                        'status'    => 'kode ada',
-                        'code'      => $data['code']
-                    ]);
+                //     return  json_encode([
+                //         'status'    => 'kode ada',
+                //         'code'      => $data['code']
+                //     ]);
 
-                } else if($check_name > 0) {
+                // } else 
+                if($check_name > 0) {
 
                     return  json_encode([
                         'status'    => 'nama ada',
                         'name'      => strtoupper($data['name'])
                     ]);
 
-                }else {
+                } else {
 
                     if ($data['note'] == "") {
 
@@ -153,7 +154,8 @@ class outlet_controller extends Controller
 
                     $outlet = new Outlet();
 
-                    $outlet->c_id = $data['code'];
+                    // $outlet->c_id = $data['code'];
+                    $outlet->c_id = GenerateCode::code('m_company', 'c_id', 8, 'PF');
                     $outlet->c_name = strtoupper($data['name']);
                     $outlet->c_tlp = $data['telp'];
                     $outlet->c_address = strtoupper($data['address']);
