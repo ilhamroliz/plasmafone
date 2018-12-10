@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Input;
 use Illuminate\Support\Facades\Crypt;
+use App\Http\Controllers\PlasmafoneController as Plasmafone;
 //use App\Model\pengaturan\order as order;
 use DB;
 use Session;
@@ -19,7 +20,12 @@ class PengaturanController extends Controller
         $state = DB::table('d_mem')
                         ->select('m_state')
                         ->get();
-        return view('pengaturan.akses_pengguna.index')->with(compact('state'));
+        if(Plasmafone::checkAkses(42, 'read') == true){
+            return view('pengaturan.akses_pengguna.index')->with(compact('state'));
+        }else{
+            return view('dashboard')->with('flash_message_error', 'Maaf, Anda tidak memiliki Akses Ke Fitur Pengelolaan Pengguna');
+        }
+        // return view('pengaturan.akses_pengguna.index')->with(compact('state'));
     }
 
     public function dataUser()
