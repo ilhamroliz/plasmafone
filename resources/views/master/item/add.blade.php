@@ -370,7 +370,7 @@
 													<i class="fa fa-times"></i>
 													&nbsp;Batal
 												</button>
-												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled" onclick="overlay()">
+												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -586,6 +586,7 @@
 
 				}
 			});
+
 		}
 
 		Vue.component('kelompok', {
