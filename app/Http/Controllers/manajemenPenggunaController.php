@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\PlasmafoneController as Plasmafone;
 
 // use App\Model\pengaturan\pengguna as Member;
 // use App\Model\pengaturan\jabatan as Jabatan;
@@ -22,6 +23,7 @@ use Carbon\Carbon;
 
 class manajemenPenggunaController extends Controller
 {
+
     public function tambah_pengguna(){
         $getJabatan = DB::table('d_jabatan')
                 ->select('id', 'nama')
@@ -29,7 +31,15 @@ class manajemenPenggunaController extends Controller
         $getOutlet = DB::table('m_company')
                 ->select('c_id', 'c_name')
                 ->get();
-        return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
+        if(Plasmafone::checkAkses(42, 'insert') == true){
+            return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
+        }else{
+            return response()->json([
+                'status' => 'gagal'
+            ]);
+        }
+        // return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
+
     }
 
     public function edit_pengguna($id){
@@ -54,34 +64,46 @@ class manajemenPenggunaController extends Controller
         
         $id = Crypt::encrypt($idm);
         // dd($user);
-        return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getJabatan', 'getOutlet','id', 'year', 'month', 'day'));
+        if(Plasmafone::checkAkses(42, 'update') == true){
+            return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getJabatan', 'getOutlet','id', 'year', 'month', 'day'));
+        }else{
+            return response()->json([
+                'status' => 'gagal'
+            ]);
+        }
     }
 
     public function hapus_pengguna($id){
-        DB::beginTransaction();
-        try {
-            $idm = Crypt::decrypt($id);
-            $cek = DB::table('d_mem')
-                    ->select('m_state')
-                    ->where('m_id', $idm)
-                    ->first();
-            // dd($idm);
-            if($cek->m_state == "ACTIVE"){
-                DB::table('d_mem')
-                    ->where('m_id', $idm)
-                    ->update(['m_state' => 'NONACTIVE']);
-            }else{
-                DB::table('d_mem')
-                    ->where('m_id', $idm)
-                    ->update(['m_state' => 'ACTIVE']);
-            }
-            
-            DB::commit();
-            return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Set Aktivasi User '.$idm.' berhasil tersimpan !!');
-        } catch (\Throwable $e) {
+        if(Plasmafone::checkAkses(42, 'delete') == false){
+            return response()->json([
+                'status' => 'gagal'
+            ]);        
+        }else{
+            DB::beginTransaction();
+            try {
+                $idm = Crypt::decrypt($id);
+                $cek = DB::table('d_mem')
+                        ->select('m_state')
+                        ->where('m_id', $idm)
+                        ->first();
+                // dd($idm);
+                if($cek->m_state == "ACTIVE"){
+                    DB::table('d_mem')
+                        ->where('m_id', $idm)
+                        ->update(['m_state' => 'NONACTIVE']);
+                }else{
+                    DB::table('d_mem')
+                        ->where('m_id', $idm)
+                        ->update(['m_state' => 'ACTIVE']);
+                }
+                
+                DB::commit();
+                return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Set Aktivasi User '.$idm.' berhasil tersimpan !!');
+            } catch (\Throwable $e) {
 
-            DB::rollback();
-            return redirect('/pengaturan/akses-pengguna')->with('flash_message_error', ''.$e.'');
+                DB::rollback();
+                return redirect('/pengaturan/akses-pengguna')->with('flash_message_error', ''.$e.'');
+            }    
         }
     }
 
@@ -248,8 +270,8 @@ class manajemenPenggunaController extends Controller
             $outlet = $request->outlet;
             $jabatan = $request->jabatan;
             $username = $request->username;
-            $pass = $request->pass;
-            $passconf = $request->passconf;
+            // $pass = $request->pass;
+            // $passconf = $request->passconf;
             $alamat = $request->alamat;
             $tgllahir = $request->tahun.'-'.$request->bulan.'-'.$request->tanggal;
             

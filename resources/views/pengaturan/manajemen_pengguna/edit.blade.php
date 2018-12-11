@@ -130,27 +130,6 @@
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Password</label>
-                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-                                                        <input type="password" class="form-control" name="pass" id="pass" placeholder="PASSWORD">
-                                                    </div>                                                
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Konfirmasi Password</label>
-                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-                                                        <input type="password" class="form-control" name="passconf" id="passconf" placeholder="KONFIRMASI PASSWORD">
-                                                    
-                                                    </div>                                                
-                                                </div>
-                                               
-                                            </div>
-
-                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sortable-grid ui-sortable">
-
-                                                <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Jabatan</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <select name="jabatan" class="form-control jabatan" id="jabatan">
@@ -165,6 +144,12 @@
                                                         </select>                                                       
                                                     </div>
                                                 </div>
+                                               
+                                            </div>
+
+                                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sortable-grid ui-sortable">
+
+                                                
 
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Tanggal Lahir</label>
