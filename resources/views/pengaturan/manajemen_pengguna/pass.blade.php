@@ -240,7 +240,7 @@ function simpan(){
     $.ajax({
         url: '{{ url('/pengaturan/kelola-pengguna/simpanPass') }}',
         type: 'get',
-        data: $('.form-pass').serialize(),
+        data: $('#form-pass').serialize(),
         success: function(response){
             if (response.status == 'sukses') {
                 // waitingDialog.hide();

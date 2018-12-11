@@ -148,6 +148,77 @@
 		</section>
 		<!-- end widget grid -->
 
+		<!-- Modal -->
+		<div class="modal fade" id="modalPass" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4>Form Ganti Password</h4>
+						<!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+						<h4 class="modal-title">
+							<img src="img/logo.png" width="150" alt="SmartAdmin">
+						</h4> -->
+					</div>
+					<div class="modal-body no-padding">
+
+						<form id="pass-form" class="smart-form">
+
+							<fieldset>
+								<section>
+									<div class="row">
+										<label class="label col col-4">Password Lama</label>
+										<div class="col col-8">
+											<label class="input"> <i class="icon-append fa fa-lock"></i>
+												<input type="password" name="passLama">
+											</label>
+										</div>
+									</div>
+								</section>
+
+								<section>
+									<div class="row">
+										<label class="label col col-4">Password Baru</label>
+										<div class="col col-8">
+											<label class="input"> <i class="icon-append fa fa-lock"></i>
+												<input type="password" name="passBaru">
+											</label>
+										</div>
+									</div>
+								</section>
+
+								<section>
+									<div class="row">
+										<label class="label col col-4">Konfirmasi Password Baru</label>
+										<div class="col col-8">
+											<label class="input"> <i class="icon-append fa fa-lock"></i>
+												<input type="password" name="passconf">
+											</label>
+										</div>
+									</div>
+								</section>
+
+							</fieldset>
+							
+							<footer>
+								<button type="submit" class="btn btn-primary" onclick=""><i class="fa fa-floppy-o"></i>
+									Simpan
+								</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">
+									Kembali
+								</button>
+
+							</footer>
+						</form>						
+								
+
+					</div>
+
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
 	</div>
 <!-- END MAIN CONTENT -->
 @endsection

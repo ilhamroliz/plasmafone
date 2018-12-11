@@ -368,7 +368,7 @@ class manajemenPenggunaController extends Controller
     }
 
     public function simpan_pass(Request $request){
-        dd($request);
+        // dd($request);
         DB::beginTransaction();
         try {
             $idm = Crypt::decrypt($request->id);
@@ -376,9 +376,12 @@ class manajemenPenggunaController extends Controller
             $passB = $request->passBaru;
             $passC = $request->passconf;
 
-            $cekPassL = DB::table('d_mem')->select('m_password')->where('m_id', $idm)->get();
-
-            if(Hash::check('secret_'.$passL, $cekPassL->m_password)){
+            $cekPassL = DB::table('d_mem')
+                ->select('m_password')
+                ->where('m_id', $idm)
+                ->first();
+            // dd($cekPassL);
+            if(sha1(md5('secret_').$passL) == $cekPassL->m_password){
                 if($passB == $passC){
                     $codePass = sha1(md5('secret_').$passB);
                     DB::table('d_mem')->where('m_id', $idm)->update(['m_password' => $codePass]);
@@ -396,12 +399,13 @@ class manajemenPenggunaController extends Controller
                     'status' => 'gagalPassL'
                 ]);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $th) {
             DB::rollback();
+            return $th;
             // return response()->json([
             //     'status' => 'gagal'
             // ]);
-            return redirect('/pengaturan/kelola-pengguna/pass')->with('flash_message_error', ''.$th.'');
+            //return redirect('/pengaturan/kelola-pengguna/pass')->with('flash_message_error', ''.$th.'');
 
         }
     }

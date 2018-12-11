@@ -16,7 +16,8 @@ class authController extends Controller
 
 		$member = d_mem::where(DB::raw('BINARY m_username'), $request->username)->first();
 
-		if($member && Hash::check('secret_'.$request->password, $member->m_password)){
+		// if($member && Hash::check('secret_'.$request->password, $member->m_password)){
+        if($member && sha1(md5('secret_').$request->password) == $member->m_password){
 			Auth::login($member);
             DB::table('d_mem')
                 ->where('m_id', '=', Auth::user()->m_id)

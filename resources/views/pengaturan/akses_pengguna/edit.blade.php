@@ -268,7 +268,7 @@
 						iconSmall : "fa fa-check animated",
 						timeout : 4000
 					});
-					// location.reload();
+					location.reload();
 				}else if(response.data.status == 'gagal'){
 					$('#overlay').fadeOut(200);
 					$.smallBox({
