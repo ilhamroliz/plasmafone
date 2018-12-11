@@ -74,7 +74,11 @@
 
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 					<div class="page-title">
-						<button class="btn btn-success" onclick=cekAksesTambah()><i class="fa fa-plus"></i>&nbsp;Tambah Data</button>
+						@if($dis == 'denied')
+						<button class="btn btn-success" onclick=tambah() disabled><i class="fa fa-plus"></i>&nbsp;Tambah Data</button>
+						@else
+						<button class="btn btn-success" onclick=tambah()><i class="fa fa-plus"></i>&nbsp;Tambah Data</button>
+						@endif
 					</div>
 				</div>
 				
@@ -217,131 +221,70 @@
 	});
 
 	function akses(id){
-		$.ajax({
-			url: '{{ url('/pengaturan/akses-pengguna/edit') }}/' + id,
-			type: 'get',
-			success: function(response){
-				if(response.status == 'gagal') {
-					// alert('Data Gagal Di Update');	
-					// waitingDialog.hide();
-					// $('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "PERHATIAN !",
-						content : "Anda tidak memiliki akses untuk mengubah Akses Pengguna",
-						color : "#C46A69",
-						iconSmall : "fa fa-times animated",
-						timeout : 3000
-					});
-					// location.reload();
-				}else{
-					location.href = ('{{ url('/pengaturan/akses-pengguna/edit') }}/' + id);
-				}
-			}
-		})
-		// location.href = ('{{ url('/pengaturan/akses-pengguna/edit') }}/' + id);
+		location.href = ('{{ url('/pengaturan/akses-pengguna/edit') }}/' + id);
 	}
 
-  function edit(id){
-	$.ajax({
-		url: '{{ url('/pengaturan/kelola-pengguna/edit') }}/' + id,
-		type: 'get',
-		success: function(response){
-			if(response.status == 'gagal') {
-				// alert('Data Gagal Di Update');	
-				// waitingDialog.hide();
-				// $('#overlay').fadeOut(200);
+	function edit(id){
+		location.href = ('{{ url('/pengaturan/kelola-pengguna/edit') }}/' + id);
+	}
+
+	function trigger(id){
+		// location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
+		
+		$.SmartMessageBox({
+			title : "PERHATIAN !",
+			content : "Apakah Anda yakin ingin mengubah status Aktivasi User ?",
+			buttons : '[No][Yes]'
+		}, function(ButtonPressed) {
+			if (ButtonPressed === "Yes") {
 				$.smallBox({
-					title : "PERHATIAN !",
-					content : "Anda tidak memiliki akses untuk mengubah Data Pengguna",
-					color : "#C46A69",
-					iconSmall : "fa fa-times animated",
+					title : "Pemberitahuan",
+					content : "<i class='fa fa-clock-o'></i> <i>Perubahan Status Aktivasi Disetujui</i>",
+					color : "#659265",
+					iconSmall : "fa fa-check fa-2x fadeInRight animated",
 					timeout : 3000
 				});
-				// location.reload();
-			}else{
-				location.href = ('{{ url('/pengaturan/kelola-pengguna/edit') }}/' + id);
+				location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
+				// location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
 			}
-		}
-	})
-    // location.href = ('{{ url('/pengaturan/kelola-pengguna/edit') }}/' + id);
-  }
-
-  function trigger(id){
-    // location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
-	
-	$.SmartMessageBox({
-		title : "PERHATIAN !",
-		content : "Apakah Anda yakin ingin mengubah status Aktivasi User ?",
-		buttons : '[No][Yes]'
-	}, function(ButtonPressed) {
-		if (ButtonPressed === "Yes") {
-			$.ajax({
-				url: '{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id,
-				type: 'get',
-				success: function(response){
-					if(response.status == 'gagal') {
-						// alert('Data Gagal Di Update');	
-						// waitingDialog.hide();
-						// $('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "PERHATIAN !",
-							content : "Anda tidak memiliki akses untuk menghapus Data Pengguna",
-							color : "#C46A69",
-							iconSmall : "fa fa-times animated",
-							timeout : 3000
-						});
-						// location.reload();
-					}else{
-						$.smallBox({
-							title : "Pemberitahuan",
-							content : "<i class='fa fa-clock-o'></i> <i>Perubahan Status Aktivasi Disetujui</i>",
-							color : "#659265",
-							iconSmall : "fa fa-check fa-2x fadeInRight animated",
-							timeout : 3000
-						});
-						location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
-					}
-				}
-			})
-			// location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
-
-		}
-		if (ButtonPressed === "No") {
-			$.smallBox({
-				title : "Pemberitahuan",
-				content : "<i class='fa fa-clock-o'></i> <i>Perubahan Status Aktivasi Dibatalkan</i>",
-				color : "#C46A69",
-				iconSmall : "fa fa-times fa-2x fadeInRight animated",
-				timeout : 3000
-			});
-		}
-
-	});
-	e.preventDefault();
-  }
-
-  function cekAksesTambah() {
-	$.ajax({
-		url: '{{ url('/pengaturan/kelola-pengguna/tambah') }}',
-		success: function(response){
-			if(response.status == 'gagal') {
-				// alert('Data Gagal Di Update');	
-				// waitingDialog.hide();
-				// $('#overlay').fadeOut(200);
+			if (ButtonPressed === "No") {
 				$.smallBox({
-					title : "PERHATIAN !",
-					content : "Anda tidak memiliki akses untuk menambahkan Data Pengguna",
+					title : "Pemberitahuan",
+					content : "<i class='fa fa-clock-o'></i> <i>Perubahan Status Aktivasi Dibatalkan</i>",
 					color : "#C46A69",
-					iconSmall : "fa fa-times animated",
+					iconSmall : "fa fa-times fa-2x fadeInRight animated",
 					timeout : 3000
 				});
-				// location.reload();
-			}else{
-				location.href = ('{{ url('/pengaturan/kelola-pengguna/tambah') }}');
 			}
-		}
-	})
-  }
+		});
+		e.preventDefault();
+	}
+
+	function tambah(){
+		location.href = ('{{ url('/pengaturan/kelola-pengguna/tambah') }}');
+	}
+//   function cekAksesTambah() {
+// 	$.ajax({
+// 		url: '{{ url('/pengaturan/kelola-pengguna/tambah') }}',
+// 		success: function(response){
+// 			if(response.status == 'gagal') {
+// 				// alert('Data Gagal Di Update');	
+// 				// waitingDialog.hide();
+// 				// $('#overlay').fadeOut(200);
+// 				$.smallBox({
+// 					title : "PERHATIAN !",
+// 					content : "Anda tidak memiliki akses untuk menambahkan Data Pengguna",
+// 					color : "#C46A69",
+// 					iconSmall : "fa fa-times animated",
+// 					timeout : 3000
+// 				});
+// 				// location.reload();
+// 			}else{
+// 				location.href = ('{{ url('/pengaturan/kelola-pengguna/tambah') }}');
+// 			}
+// 		}
+// 	})
+//   }
 </script>
 
 @endsection

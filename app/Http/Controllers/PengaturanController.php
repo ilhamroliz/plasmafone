@@ -21,9 +21,15 @@ class PengaturanController extends Controller
         //                 ->select('m_state')
         //                 ->get();
         if(Plasmafone::checkAkses(42, 'read') == true){
-            return view('pengaturan.akses_pengguna.index');
+            $dis = '';
+            if(Plasmafone::checkAkses(42, 'insert') == true){
+                return view('pengaturan.akses_pengguna.index')->with(compact('dis'));
+            }else{
+                $dis = 'denied';
+                return view('pengaturan.akses_pengguna.index')->with(compact('dis'));
+            }
         }else{
-            return view('dashboard')->with('flash_message_error', 'Maaf, Anda tidak memiliki Akses Ke Fitur Pengelolaan Pengguna');
+            return view('errors.access_denied');       
         }
         // return view('pengaturan.akses_pengguna.index');
     }
@@ -35,23 +41,57 @@ class PengaturanController extends Controller
             ->select('d_mem.*', 'd_jabatan.nama')
             ->orderBy('m_id')
             ->get();
-
         $user = collect($user);
         // dd($user);
         return DataTables::of($user)
             ->addColumn('aksi', function ($user){
                 if ($user->m_state == "ACTIVE") {
-                    return '<div class="text-center">
+                    if(Plasmafone::checkAkses(42, 'update') == true && Plasmafone::checkAkses(42, 'delete') == true){
+                        return '<div class="text-center">
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
                         <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="fa fa-exchange"></i></button>
                         <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>
                         </div>';
-                }else{
-                    return '<div class="text-center">
+                    }else if(Plasmafone::checkAkses(42, 'update') == false && Plasmafone::checkAkses(42, 'delete') == true){
+                        return '<div class="text-center">
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-wrench"></i></button>
                         <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="fa fa-exchange"></i></button>
+                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>
+                        </div>';
+                    }else if(Plasmafone::checkAkses(42, 'delete') == false && Plasmafone::checkAkses(42, 'update') == true){
+                        return '<div class="text-center">
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="fa fa-exchange"></i></button>
+                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-trash"></i></button>
+                        </div>';
+                    }
+                    else{
+                        return '<div class="text-center">
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="fa fa-exchange"></i></button>
+                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-trash"></i></button>
+                        </div>';
+                    }                  
+                }else{
+                    if(Plasmafone::checkAkses(42, 'delete') == false){
+                        return '<div class="text-center">
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="fa fa-exchange"></i></button>
+                        <button style="margin-left:5px;" title="Set Active" type="button" class="btn btn-primary btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-check"></i></button>
+                        </div>';
+                    }else{
+                        return '<div class="text-center">
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="fa fa-exchange"></i></button>
                         <button style="margin-left:5px;" title="Set Active" type="button" class="btn btn-primary btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>
                         </div>';
+                    }                    
                 }                      
             })
             ->rawColumns(['aksi'])
@@ -78,9 +118,7 @@ class PengaturanController extends Controller
         if(Plasmafone::checkAkses(42, 'update') == true){
             return view('pengaturan.akses_pengguna.edit')->with(compact('user', 'akses', 'id'));
         }else{
-            return response()->json([
-                'status' => 'gagal'
-            ]);
+            return view('errors.access_denied');       
         }
         // return view('pengaturan.akses_pengguna.edit')->with(compact('user', 'akses', 'id'));
     }

@@ -57,7 +57,7 @@
 	<body>
 	    
 	    <div class="col-md-12 text-center" style="margin-top: 30px;">
-			<h1 style="font-size: 85pt; font-weight: bold;">AKSES DITOLAK !</h1> <small style="font-size: 14pt;">Anda Tidak Meliliki Akses ke Fitur Tersebut !!<i class="fa fa-frown-o"></i></small>
+			<h1 style="font-size: 85pt; font-weight: bold;">AKSES DITOLAK !</h1> <small style="font-size: 14pt;">Anda Tidak Meliliki Akses ke Fitur Tersebut !! <i class="fa fa-frown-o"></i></small>
 	    </div>
 
 	    <div class="col-md-12 text-center" style="margin-top: 30px;">
