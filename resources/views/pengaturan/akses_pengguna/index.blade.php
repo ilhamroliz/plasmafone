@@ -228,6 +228,10 @@
 		location.href = ('{{ url('/pengaturan/kelola-pengguna/edit') }}/' + id);
 	}
 
+	function pass(id){
+		location.href = ('{{ url('/pengaturan/kelola-pengguna/pass') }}/' + id);
+	}
+
 	function trigger(id){
 		// location.href = ('{{ url('/pengaturan/kelola-pengguna/hapus') }}/' + id);
 		
