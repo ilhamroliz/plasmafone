@@ -703,7 +703,7 @@
 								icon : "fa fa-times bounce animated"
 							});
 
-						}elseif(response.data.status == 'berhasil'){
+						}else if(response.data.status == 'berhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 
@@ -789,24 +789,24 @@
 
 				} else {
 
-					if (response.data.i_img == "") {
+					if (response.data.data.i_img == "") {
 
 						$('img#dt_image').attr("src", "{{asset('img/image-not-found.png')}}");
 
 					}else{
 
-						$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+response.data.i_img);
+						$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+response.data.data.i_img);
 
 					}
 
-					$('#title_detail').html('<strong>Detail Barang "'+response.data.i_nama+'"</strong>');
-					$('#dt_kelompok').text(response.data.i_kelompok);
-					$('#dt_group').text(response.data.i_group);
-					$('#dt_subgroup').text(response.data.i_sub_group);
-					$('#dt_merk').text(response.data.i_merk);
-					$('#dt_nama').text(response.data.i_nama);
+					$('#title_detail').html('<strong>Detail Barang "'+response.data.data.i_nama+'"</strong>');
+					$('#dt_kelompok').text(response.data.data.i_kelompok);
+					$('#dt_group').text(response.data.data.i_group);
+					$('#dt_subgroup').text(response.data.data.i_sub_group);
+					$('#dt_merk').text(response.data.data.i_merk);
+					$('#dt_nama').text(response.data.data.i_nama);
 
-					if(response.data.i_specificcode == "Y"){
+					if(response.data.data.i_specificcode == "Y"){
 
 						spesifik = "YA";
 
@@ -817,9 +817,9 @@
 					}
 
 					$('#dt_specificcode').text(spesifik);
-					$('#dt_code').text(response.data.i_code);
+					$('#dt_code').text(response.data.data.i_code);
 
-					if(response.data.i_isactive == "Y"){
+					if(response.data.data.i_isactive == "Y"){
 
 						status = "AKTIF";
 
@@ -830,16 +830,16 @@
 					}
 
 					$('#dt_isactive').text(status);
-					$('#dt_minstock').text(response.data.i_minstock);
-					$('#dt_berat').text(response.data.i_berat);
+					$('#dt_minstock').text(response.data.data.i_minstock);
+					$('#dt_berat').text(response.data.data.i_berat);
 
-					var harga = response.data.i_price,
+					var harga = response.data.data.i_price,
 						iHarga = harga + '',
 						i = parseFloat(iHarga.match(/\d+\.\d{2}/)),
 						dec = harga.split(".");
 
 					$('#dt_price').text(formatRupiah(i, "Rp", dec[1]));
-					$('#dt_created').text(response.data.created_at);
+					$('#dt_created').text(response.data.data.created_at);
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 

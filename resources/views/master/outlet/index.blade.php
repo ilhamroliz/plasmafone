@@ -593,14 +593,14 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 				} else {
 
-					$('#title_detail').html('<strong>Detail Outlet "'+response.data.c_name+'"</strong>');
-					$('#dt_code').text(response.data.c_id);
-					$('#dt_name').text(response.data.c_name);
-					$('#dt_phone').text(response.data.c_tlp);
-					$('#dt_address').text(response.data.c_address);
-					$('#dt_note').text(response.data.c_note);
+					$('#title_detail').html('<strong>Detail Outlet "'+response.data.data.c_name+'"</strong>');
+					$('#dt_code').text(response.data.data.c_id);
+					$('#dt_name').text(response.data.data.c_name);
+					$('#dt_phone').text(response.data.data.c_tlp);
+					$('#dt_address').text(response.data.data.c_address);
+					$('#dt_note').text(response.data.data.c_note);
 
-					if(response.data.c_isactive == "Y"){
+					if(response.data.data.c_isactive == "Y"){
 
 						status = "AKTIF";
 
@@ -611,7 +611,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					}
 
 					$('#dt_isactive').text(status);
-					$('#dt_created').text(response.data.created_at);
+					$('#dt_created').text(response.data.data.created_at);
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 

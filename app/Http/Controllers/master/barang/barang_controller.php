@@ -32,7 +32,7 @@ class barang_controller extends Controller
     {
         if(Access::checkAkses(45, 'read') == true){
             $item = Item::where(['i_id' => Crypt::decrypt($id)])->first();
-            return response()->json(['status' => 'OK', $item]);
+            return response()->json(['status' => 'OK', 'data' => $item]);
         }else{
             return  json_encode([
                 'status'    => 'Access denied'

@@ -91,4 +91,11 @@ class PlasmafoneController
             return false;
         }
     }
+
+    public static function aksesSidebar()
+    {
+        $m_id = Auth::user()->m_id;
+        $cek = DB::select("select ma_access, ma_read, a_name, a_order from d_mem_access join d_access on a_id = ma_access where ma_mem = '".$m_id."' group by a_parrent order by a_order");
+        return $cek;
+    }
 }

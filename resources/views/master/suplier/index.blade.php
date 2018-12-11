@@ -538,20 +538,20 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 				} else {
 
-					$('#title_detail').html('<strong>Detail Supplier "'+response.data.s_name+'"</strong>');
-					$('#dt_perusahaan').text(response.data.s_company);
-					$('#dt_supplier').text(response.data.s_name);
-					$('#dt_telephone').text(response.data.s_phone);
-					$('#dt_fax').text(response.data.s_fax);
-					$('#dt_alamat').text(response.data.s_address);
-					$('#dt_keterangan').text(response.data.s_note);
+					$('#title_detail').html('<strong>Detail Supplier "'+response.data.data.s_name+'"</strong>');
+					$('#dt_perusahaan').text(response.data.data.s_company);
+					$('#dt_supplier').text(response.data.data.s_name);
+					$('#dt_telephone').text(response.data.data.s_phone);
+					$('#dt_fax').text(response.data.data.s_fax);
+					$('#dt_alamat').text(response.data.data.s_address);
+					$('#dt_keterangan').text(response.data.data.s_note);
 
-					var limit = response.data.s_limit,
+					var limit = response.data.data.s_limit,
 						iLimit = limit + '',
 						i = parseFloat(iLimit.match(/\d+\.\d{2}/)),
 						dec = limit.split(".");
 
-					if(response.data.s_isactive == "Y"){
+					if(response.data.data.s_isactive == "Y"){
 
 						status = "AKTIF";
 
@@ -563,7 +563,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					$('#dt_status').text(status);
 					$('#dt_limit').text(formatRupiah(i, "Rp", dec[1]));
-					$('#dt_created').text(response.data.s_insert);
+					$('#dt_created').text(response.data.data.s_insert);
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 

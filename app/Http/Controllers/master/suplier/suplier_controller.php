@@ -27,7 +27,7 @@ class suplier_controller extends Controller
     {
         if(Access::checkAkses(46, 'read') == true){
             $supplier = suplier::where(['s_id' => Crypt::decrypt($id)])->first();
-            return response()->json(['status' => 'OK', $supplier]);
+            return response()->json(['status' => 'OK', 'data' => $supplier]);
         }else{
             return  json_encode([
                 'status'    => 'Access denied'

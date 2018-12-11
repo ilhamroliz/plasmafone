@@ -70,7 +70,12 @@ class manajemenPenggunaController extends Controller
     }
 
     public function ganti_pass($id){
-        
+        $idm = $id;
+        if(Plasmafone::checkAkses(42, 'update') == true){
+            return view('pengaturan.manajemen_pengguna.pass')->with(compact('idm'));
+        }else{
+            return view('errors.access_denied');
+        }
     }
 
     public function hapus_pengguna($id){
@@ -186,7 +191,8 @@ class manajemenPenggunaController extends Controller
                 return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
             }
 
-            $pass = Hash::make("secret_".$pass);
+            $pass = sha1(md5('secret_').$pass);
+            // $pass = Hash::make("secret_".$pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
             
@@ -273,14 +279,14 @@ class manajemenPenggunaController extends Controller
             $alamat = $request->alamat;
             $tgllahir = $request->tahun.'-'.$request->bulan.'-'.$request->tanggal;
             
-            if ($pass != $passconf) {
-                // return response()->json([
-                //     'status' => 'gagalPass'
-                // ]);
-                return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
-            }
+            // if ($pass != $passconf) {
+            //     // return response()->json([
+            //     //     'status' => 'gagalPass'
+            //     // ]);
+            //     return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
+            // }
 
-            $pass = Hash::make("secret_".$pass);
+            // $pass = Hash::make("secret_".$pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
             
@@ -334,19 +340,13 @@ class manajemenPenggunaController extends Controller
                 ->where('m_id', '=', $id)
                 ->update([
                     'm_comp' => $outlet,
-                    'm_id' => $id,
                     'm_username' => $username,
                     'm_img' => $imgPath,
-                    'm_password' => $pass,
                     'm_name' => $nama,
                     'm_level' => $jabatan,
                     'm_birth' => $tgllahir,
                     'm_address' => $alamat,
-                    'm_state' => 'ACTIVE',
-                    'm_lastlogin' => $tgl,
-                    'm_lastlogout' => $tgl,
-                    'created_at' => $tgl,
-                    'updated_at' => $tgl,
+                    
                 ]);
             
             DB::commit();
@@ -364,6 +364,45 @@ class manajemenPenggunaController extends Controller
             // return response()->json([
             //     'status' => 'gagal'
             // ]);
+        }
+    }
+
+    public function simpan_pass(Request $request){
+        dd($request);
+        DB::beginTransaction();
+        try {
+            $idm = Crypt::decrypt($request->id);
+            $passL = $request->passLama;
+            $passB = $request->passBaru;
+            $passC = $request->passconf;
+
+            $cekPassL = DB::table('d_mem')->select('m_password')->where('m_id', $idm)->get();
+
+            if(Hash::check('secret_'.$passL, $cekPassL->m_password)){
+                if($passB == $passC){
+                    $codePass = sha1(md5('secret_').$passB);
+                    DB::table('d_mem')->where('m_id', $idm)->update(['m_password' => $codePass]);
+                    DB::commit();
+                    return response()->json([
+                        'status' => 'sukses'
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 'gagalPassB'
+                    ]);
+                }
+            }else{
+                return response()->json([
+                    'status' => 'gagalPassL'
+                ]);
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            // return response()->json([
+            //     'status' => 'gagal'
+            // ]);
+            return redirect('/pengaturan/kelola-pengguna/pass')->with('flash_message_error', ''.$th.'');
+
         }
     }
 }

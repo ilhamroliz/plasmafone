@@ -36,7 +36,7 @@ class outlet_controller extends Controller
         } else {
 
             $outlet = Outlet::where(['c_id' => $id])->first();
-            return response()->json(['status' => 'OK', $outlet]);
+            return response()->json(['status' => 'OK', 'data' => $outlet]);
 
         }
         
