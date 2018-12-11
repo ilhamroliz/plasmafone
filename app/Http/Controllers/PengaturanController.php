@@ -17,15 +17,15 @@ class PengaturanController extends Controller
 {
     public function akses_pengguna()
     {
-        $state = DB::table('d_mem')
-                        ->select('m_state')
-                        ->get();
+        // $state = DB::table('d_mem')
+        //                 ->select('m_state')
+        //                 ->get();
         if(Plasmafone::checkAkses(42, 'read') == true){
-            return view('pengaturan.akses_pengguna.index')->with(compact('state'));
+            return view('pengaturan.akses_pengguna.index');
         }else{
             return view('dashboard')->with('flash_message_error', 'Maaf, Anda tidak memiliki Akses Ke Fitur Pengelolaan Pengguna');
         }
-        // return view('pengaturan.akses_pengguna.index')->with(compact('state'));
+        // return view('pengaturan.akses_pengguna.index');
     }
 
     public function dataUser()
@@ -75,7 +75,14 @@ class PengaturanController extends Controller
 
         $akses = DB::select("select * from d_access left join d_mem_access on a_id = ma_access and ma_mem = '".$idm."' order by a_order");
 
-        return view('pengaturan.akses_pengguna.edit')->with(compact('user', 'akses', 'id'));
+        if(Plasmafone::checkAkses(42, 'update') == true){
+            return view('pengaturan.akses_pengguna.edit')->with(compact('user', 'akses', 'id'));
+        }else{
+            return response()->json([
+                'status' => 'gagal'
+            ]);
+        }
+        // return view('pengaturan.akses_pengguna.edit')->with(compact('user', 'akses', 'id'));
     }
 
     public function simpan(Request $request)
