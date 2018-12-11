@@ -24,54 +24,45 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<!-- end user info -->
 
 	<!-- NAVIGATION : This navigation is also responsive-->
+	<?php $sidebar = App\Http\Controllers\PlasmafoneController::aksesSidebar();?>
 	<nav>
 		<ul>
+			@if($sidebar['Dashboard Financial'] == 'Y')
 			<li class="{{ Request::is('dashboard') ? 'active' : '' }}">
 				<a href="{{ url('dashboard') }}" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
 			</li>
+			@endif
 
+			@if($sidebar['Data Master'] == 'Y')
 			<li class="{{ Request::is('master/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-asterisk"></i> <span class="menu-item-parent">Data Master</span></a>
 				<ul>
-					@if(Access::checkAkses(46, 'read') == true)
+					@if($sidebar['Master Supplier'] == 'Y')
 					<li class="{{ (Request::is('master/supplier/*') || Request::is('master/supplier')) ? 'active' : '' }}">
 						<a href="{{ url('master/supplier') }}">Master Supplier</a>
 					</li>
 					@endif
 
-					@if(Access::checkAkses(45, 'read') == true)
+					@if($sidebar['Master Barang'] == 'Y')
 					<li class="{{ (Request::is('master/barang/*') || Request::is('master/barang')) ? 'active' : '' }}">
 						<a href="{{ route('barang.index') }}">Master Barang</a>
 					</li>
 					@endif
 
+					@if($sidebar['Master Member'] == 'Y')
 					<li>
 						<a href="flot.html">Master Member</a>
 					</li>
+					@endif
 
-					@if(Access::checkAkses(48, 'read') == true)
+					@if($sidebar['Master Outlet'] == 'Y')
 					<li class="{{ (Request::is('master/outlet/*') || Request::is('master/outlet')) ? 'active' : '' }}">
 						<a href="{{ url('/master/outlet') }}">Master Outlet</a>
 					</li>
 					@endif
-
-					<li>
-						<a href="#">Master Keuangan</a>
-						<ul>
-							<li>
-								<a href="glyph.html">Akun Keuangan</a>
-							</li>	
-							<li>
-								<a href="flags.html">Transaksi keuangan</a>
-							</li>
-						</ul>
-					</li>
-
-					<li>
-						<a href="flot.html">Master Hak Akses</a>
-					</li>
 				</ul>
 			</li>
+			@endif
 
 			<li>
 				<a href="#"><i class="fa fa-lg fa-fw fa-credit-card"></i> <span class="menu-item-parent">Pembelian</span></a>
@@ -121,7 +112,15 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					</li>
 
 					<li>
-						<a href="flot.html">Opname Barang</a>
+						<a href="">Opname Barang</a>
+						<ul>
+							<li>
+								<a href="">Pusat</a>
+							</li>	
+							<li>
+								<a href="">Outlet</a>
+							</li>
+						</ul>
 					</li>
 
 					<li>
@@ -132,14 +131,14 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</li>
 
 			<li>
-				<a href="#"><i class="fa fa-lg fa-fw fa-handshake-o"></i> <span class="menu-item-parent">Penjualan</span></a>
+				<a href=""><i class="fa fa-lg fa-fw fa-handshake-o"></i> <span class="menu-item-parent">Penjualan</span></a>
 				<ul>
 					<li>
 						<a href="flot.html">Rencana Penjualan</a>
 					</li>
 
 					<li>
-						<a href="#">Aktivitas Penjualan</a>
+						<a href="">Aktivitas Penjualan</a>
 						<ul>
 							<li>
 								<a href="glyph.html">Proses Penjualan</a>
