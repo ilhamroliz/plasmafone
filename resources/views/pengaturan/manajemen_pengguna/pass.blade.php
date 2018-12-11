@@ -85,7 +85,7 @@
                             <!-- widget content -->
                             <div class="weight-body">
                                 <form id="form-pass" class="form-horizontal">
-                                    <input type="hidden" name="id" value="{{ $id }}">
+                                    <input type="hidden" name="id" value="{{ $idm }}">
                                     {{ csrf_field() }}
                                     <fieldset>
                                         <legend>
@@ -129,7 +129,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary" id="submit-tambah" type="submit" style="margin-left: 5px;">
+                                                <button class="btn btn-primary" id="submit-tambah" type="button" onclick="simpan()" style="margin-left: 5px;">
                                                     <i class="fa fa-floppy-o"></i> 
                                                     &nbsp;Simpan
                                                 </button>
@@ -174,58 +174,128 @@
 <script src="{{ asset('template_asset/js/waitingfor.js') }}"></script>
 <script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
 <script type="text/javascript">
-    // --- AXIOS USE ----//
-		$('#overlay').fadeIn(200);
-		$('#load-status-text').text('Penyimpanan Database Sedang di Proses');
-		// let btn = $('#submit-akses');
-		// btn.attr('disabled', 'disabled');
-		// btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
 
-		axios.post(baseUrl+'/pengaturan/akses-pengguna/simpanPass', $('#form-pass').serialize())
-			.then((response) => {
-				if(response.data.status == 'sukses'){
-					$('#overlay').fadeOut(200);
-					// location.reload();
-					$.smallBox({
-						title : "SUKSES",
-						content : "Password User Berhasil Diperbarui",
-						color : "#739E73",
-						iconSmall : "fa fa-check animated",
-						timeout : 3000
-					});
-					// location.reload();
-				}else if(response.data.status == 'gagalPassL'){
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "GAGAL",
-						content : "Password Lama Salah",
-						color : "#C46A69",
-						iconSmall : "fa fa-times animated",
-						timeout : 3000
-					});
-					// location.reload();
-				}else if(response.data.status == 'gagalPassB'){
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "GAGAL",
-						content : "Password Baru Tidak Sesuai",
-						color : "#C46A69",
-						iconSmall : "fa fa-times animated",
-						timeout : 3000
-					});
-					// location.reload();
-                }else if(response.data.status == 'gagal'){
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "GAGAL",
-						content : "Password User Gagal Diperbarui",
-						color : "#C46A69",
-						iconSmall : "fa fa-times animated",
-						timeout : 3000
-					});
-					// location.reload();
-                }
-		})
+function simpan(){
+    // --- AXIOS USE ----//
+    // $('#overlay').fadeIn(200);
+    // $('#load-status-text').text('Penyimpanan Database Sedang di Proses');
+    // // let btn = $('#submit-akses');
+    // // btn.attr('disabled', 'disabled');
+    // // btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+
+    // axios.post(baseUrl+'/pengaturan/kelola-pengguna/simpanPass', $('#form-pass').serialize())
+    //     .then((response) => {
+    //         if(response.data.status == 'sukses'){
+    //             $('#overlay').fadeOut(200);
+    //             // location.reload();
+    //             $.smallBox({
+    //                 title : "SUKSES",
+    //                 content : "Password User Berhasil Diperbarui",
+    //                 color : "#739E73",
+    //                 iconSmall : "fa fa-check animated",
+    //                 timeout : 3000
+    //             });
+    //             // location.reload();
+    //         }else if(response.data.status == 'gagalPassL'){
+    //             $('#overlay').fadeOut(200);
+    //             $.smallBox({
+    //                 title : "GAGAL",
+    //                 content : "Password Lama Salah",
+    //                 color : "#C46A69",
+    //                 iconSmall : "fa fa-times animated",
+    //                 timeout : 3000
+    //             });
+    //             // location.reload();
+    //         }else if(response.data.status == 'gagalPassB'){
+    //             $('#overlay').fadeOut(200);
+    //             $.smallBox({
+    //                 title : "GAGAL",
+    //                 content : "Password Baru Tidak Sesuai",
+    //                 color : "#C46A69",
+    //                 iconSmall : "fa fa-times animated",
+    //                 timeout : 3000
+    //             });
+    //             // location.reload();
+    //         }else if(response.data.status == 'gagal'){
+    //             $('#overlay').fadeOut(200);
+    //             $.smallBox({
+    //                 title : "GAGAL",
+    //                 content : "Password User Gagal Diperbarui",
+    //                 color : "#C46A69",
+    //                 iconSmall : "fa fa-times animated",
+    //                 timeout : 3000
+    //             });
+    //             // location.reload();
+    //         }
+    // })
+
+    $('#overlay').fadeIn(200);
+    $('#load-status-text').text('Silahkan Memproses Penyimpanan Data');
+    // waitingDialog.show();
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $.ajax({
+        url: '{{ url('/pengaturan/kelola-pengguna/simpanPass') }}',
+        type: 'get',
+        data: $('.form-pass').serialize(),
+        success: function(response){
+            if (response.status == 'sukses') {
+                // waitingDialog.hide();
+                $('#overlay').fadeOut(200);
+                $.smallBox({
+                    title : "SUKSES",
+                    content : "Data Akses Berhasil Diperbarui",
+                    color : "#739E73",
+                    iconSmall : "fa fa-check animated",
+                    timeout : 5000
+                });
+                location.reload();
+            }
+            else if(response.status == 'gagal') {
+                // alert('Data Gagal Di Update');	
+                // waitingDialog.hide();
+                $('#overlay').fadeOut(200);
+                $.smallBox({
+                    title : "GAGAL",
+                    content : "Data Akses Gagal Diperbarui",
+                    color : "#C46A69",
+                    iconSmall : "fa fa-times animated",
+                    timeout : 5000
+                });
+                // location.reload();
+            }
+            else if(response.status == 'gagalPassL') {
+                // alert('Data Gagal Di Update');	
+                // waitingDialog.hide();
+                $('#overlay').fadeOut(200);
+                $.smallBox({
+                    title : "GAGAL",
+                    content : "Password Lama Tidak Sesuai",
+                    color : "#C46A69",
+                    iconSmall : "fa fa-times animated",
+                    timeout : 5000
+                });
+                // location.reload();
+            }
+            else if(response.status == 'gagalPassB') {
+                // alert('Data Gagal Di Update');	
+                // waitingDialog.hide();
+                $('#overlay').fadeOut(200);
+                $.smallBox({
+                    title : "GAGAL",
+                    content : "Password Baru Tidak Sesuai",
+                    color : "#C46A69",
+                    iconSmall : "fa fa-times animated",
+                    timeout : 5000
+                });
+                // location.reload();
+            }
+        }
+    })
+}
 </script>
 
 @endsection

@@ -70,8 +70,9 @@ class manajemenPenggunaController extends Controller
     }
 
     public function ganti_pass($id){
+        $idm = $id;
         if(Plasmafone::checkAkses(42, 'update') == true){
-            return view('pengaturan.manajemen_pengguna.pass');
+            return view('pengaturan.manajemen_pengguna.pass')->with(compact('idm'));
         }else{
             return view('errors.access_denied');
         }
@@ -278,12 +279,12 @@ class manajemenPenggunaController extends Controller
             $alamat = $request->alamat;
             $tgllahir = $request->tahun.'-'.$request->bulan.'-'.$request->tanggal;
             
-            if ($pass != $passconf) {
-                // return response()->json([
-                //     'status' => 'gagalPass'
-                // ]);
-                return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
-            }
+            // if ($pass != $passconf) {
+            //     // return response()->json([
+            //     //     'status' => 'gagalPass'
+            //     // ]);
+            //     return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
+            // }
 
             // $pass = Hash::make("secret_".$pass);
             $imgPath = null;
@@ -367,6 +368,7 @@ class manajemenPenggunaController extends Controller
     }
 
     public function simpan_pass(Request $request){
+        dd($request);
         DB::beginTransaction();
         try {
             $idm = Crypt::decrypt($request->id);
@@ -399,7 +401,7 @@ class manajemenPenggunaController extends Controller
             // return response()->json([
             //     'status' => 'gagal'
             // ]);
-            return redirect('/pengaturan/kelola-pengguna/pass')->with('flash_message_error', ''.$e.'');
+            return redirect('/pengaturan/kelola-pengguna/pass')->with('flash_message_error', ''.$th.'');
 
         }
     }
