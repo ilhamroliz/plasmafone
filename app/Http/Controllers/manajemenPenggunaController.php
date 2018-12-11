@@ -34,9 +34,7 @@ class manajemenPenggunaController extends Controller
         if(Plasmafone::checkAkses(42, 'insert') == true){
             return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
         }else{
-            return response()->json([
-                'status' => 'gagal'
-            ]);
+            return view('errors.access_denied');
         }
         // return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
 
@@ -67,18 +65,16 @@ class manajemenPenggunaController extends Controller
         if(Plasmafone::checkAkses(42, 'update') == true){
             return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getJabatan', 'getOutlet','id', 'year', 'month', 'day'));
         }else{
-            return response()->json([
-                'status' => 'gagal'
-            ]);
+            return view('errors.access_denied');
         }
     }
 
+    public function ganti_pass($id){
+        
+    }
+
     public function hapus_pengguna($id){
-        if(Plasmafone::checkAkses(42, 'delete') == false){
-            return response()->json([
-                'status' => 'gagal'
-            ]);        
-        }else{
+        if(Plasmafone::checkAkses(42, 'delete') == true){
             DB::beginTransaction();
             try {
                 $idm = Crypt::decrypt($id);
@@ -103,7 +99,9 @@ class manajemenPenggunaController extends Controller
 
                 DB::rollback();
                 return redirect('/pengaturan/akses-pengguna')->with('flash_message_error', ''.$e.'');
-            }    
+            } 
+        }else{
+            return view('errors.access_denied');       
         }
     }
 
