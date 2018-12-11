@@ -39,17 +39,21 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					</li>
 					@endif
 
+					@if(Access::checkAkses(45, 'read') == true)
 					<li class="{{ (Request::is('master/barang/*') || Request::is('master/barang')) ? 'active' : '' }}">
 						<a href="{{ route('barang.index') }}">Master Barang</a>
 					</li>
+					@endif
 
 					<li>
 						<a href="flot.html">Master Member</a>
 					</li>
 
+					@if(Access::checkAkses(48, 'read') == true)
 					<li class="{{ (Request::is('master/outlet/*') || Request::is('master/outlet')) ? 'active' : '' }}">
 						<a href="{{ url('/master/outlet') }}">Master Outlet</a>
 					</li>
+					@endif
 
 					<li>
 						<a href="#">Master Keuangan</a>

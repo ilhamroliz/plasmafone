@@ -338,7 +338,18 @@
 
 			axios.post(baseUrl+'/master/outlet/edit/'+ $('#code').val(), $('#data-form').serialize()).then((response) => {
 
-				if(response.data.status == 'berhasil'){
+				if (response.data.status == 'Access denied') {
+
+					out();
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				}else if(response.data.status == 'berhasil'){
 
 					out();
 

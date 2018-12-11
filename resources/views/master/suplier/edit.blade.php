@@ -387,7 +387,18 @@
 
 				axios.post(baseUrl+'/master/supplier/edit/'+ $('#sid').val(), $('#data-form').serialize()).then((response) => {
 
-					if(response.data.status == 'berhasil'){
+					if (response.data.status == 'Access denied') {
+
+						out();
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+							color : "#A90329",
+							timeout: 5000,
+							icon : "fa fa-times bounce animated"
+						});
+
+					}else if(response.data.status == 'berhasil'){
 						out();
 
 						$.smallBox({
@@ -398,12 +409,6 @@
 							icon : "fa fa-check bounce animated"
 						});
 
-						// Toast
-						// $.toast({
-						//     text: 'Data Ini berhasil Diupdate',
-						//     showHideTransition: 'fade',
-						//     icon: 'success'
-						// })
 					}else if(response.data.status == 'tidak ada'){
 						out();
 
@@ -415,12 +420,6 @@
 							icon : "fa fa-times bounce animated"
 						});
 
-						// Toast
-						// $.toast({
-						//     text: 'Ups . Data Yang Ingin Anda Edit Sudah Tidak Ada..',
-						//     showHideTransition: 'fade',
-						//     icon: 'error'
-						// })
 					}else{
 						out();
 
@@ -432,12 +431,6 @@
 							icon : "fa fa-times bounce animated"
 						});
 
-						// Toast
-						// $.toast({
-						//     text: 'Ups . Gagal mengedit data...! Periksa koneksi internet Anda',
-						//     showHideTransition: 'fade',
-						//     icon: 'error'
-						// })
 					}
 
 				}).catch((err) => {
@@ -449,11 +442,7 @@
 						timeout: 4000,
 						icon : "fa fa-times bounce animated"
 					});
-					// $.toast({
-					//     text: 'Ups . Gagal mengedit data...! Periksa koneksi internet Anda => '+err,
-					//     showHideTransition: 'fade',
-					//     icon: 'error'
-					// })
+					
 				}).then(function(){
 					btn.removeAttr('disabled');
 					btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');

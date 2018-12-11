@@ -381,7 +381,18 @@
 							axios.post(baseUrl+'/master/supplier/add', 
 								$('#data-form').serialize()
 							).then((response) => {
-								if(response.data.status == 'berhasil'){
+								if (response.data.status == 'Access denied') {
+
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+
+								}else if(response.data.status == 'berhasil'){
 									out();
 									$.smallBox({
 										title : "Berhasil",
@@ -390,13 +401,6 @@
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
 									});
-
-									// Toast
-									// $.toast({
-									//     text: 'Data Supplier terbaru Anda berhasil disimpan...!',
-									//     showHideTransition: 'fade',
-									//     icon: 'success'
-									// })
 
 									this.reset_form();
 

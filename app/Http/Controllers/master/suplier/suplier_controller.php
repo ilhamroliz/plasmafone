@@ -25,8 +25,14 @@ class suplier_controller extends Controller
 
     public function detail($id)
     {
-        $supplier = suplier::where(['s_id' => Crypt::decrypt($id)])->first();
-        return response()->json($supplier);
+        if(Access::checkAkses(46, 'read') == true){
+            $supplier = suplier::where(['s_id' => Crypt::decrypt($id)])->first();
+            return response()->json(['status' => 'OK', $supplier]);
+        }else{
+            return  json_encode([
+                'status'    => 'Access denied'
+            ]);
+        }
     }
 
     public function getdataactive()
@@ -169,80 +175,90 @@ class suplier_controller extends Controller
 
             if ($request->isMethod('post'))
             {
-                $data = $request->all();
+                if(Access::checkAkses(46, 'insert') == false){
 
-                DB::beginTransaction();
+                    return  json_encode([
+                        'status'    => 'Access denied'
+                    ]);
 
-                try {
+                } else {
 
-                    $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
+                    $data = $request->all();
 
-                    if ($check > 0) {
+                    DB::beginTransaction();
 
+                    try {
+
+                        $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
+
+                        if ($check > 0) {
+
+                            return  json_encode([
+                                'status'    => 'ada',
+                                'company'   => strtoupper($data['nama_perusahaan'])
+                            ]);
+
+                        } else {
+                            
+                            if ($data['fax_suplier'] == "") {
+
+                                $fax = "";
+
+                            } else {
+
+                                $fax = $data['fax_suplier'];
+
+                            }
+
+                            if ($data['keterangan'] == "") {
+
+                                $note = "";
+
+                            } else {
+
+                                $note = strtoupper($data['keterangan']);
+
+                            }
+
+                            if ($data['limit'] == "" || $data['limit'] == 0) {
+
+                                $limit = 0;
+
+                            } else {
+
+                                $limit = $this->formatPrice($data['limit']);
+
+                            }
+
+                            DB::table('d_supplier')->insert([
+                                's_company' => strtoupper($data['nama_perusahaan']),
+                                's_name'    => strtoupper($data['nama_suplier']),
+                                's_address' => strtoupper($data['alamat_suplier']),
+                                's_phone'   => $data['telp_suplier'],
+                                's_fax'     => $fax,
+                                's_note'    => $note,
+                                's_limit'   => $limit
+                            ]);
+                            
+                            DB::commit();
+
+                            return  json_encode([
+                                'status'    => 'berhasil'
+                            ]);
+
+                        }
+
+                    } catch (\Exception $e) {
+
+                        DB::rollback();
+
+                        // something went wrong
                         return  json_encode([
-                            'status'    => 'ada',
-                            'company'   => strtoupper($data['nama_perusahaan'])
-                        ]);
-
-                    } else {
-                        
-                        if ($data['fax_suplier'] == "") {
-
-                            $fax = "";
-
-                        } else {
-
-                            $fax = $data['fax_suplier'];
-
-                        }
-
-                        if ($data['keterangan'] == "") {
-
-                            $note = "";
-
-                        } else {
-
-                            $note = strtoupper($data['keterangan']);
-
-                        }
-
-                        if ($data['limit'] == "" || $data['limit'] == 0) {
-
-                            $limit = 0;
-
-                        } else {
-
-                            $limit = $this->formatPrice($data['limit']);
-
-                        }
-
-                        DB::table('d_supplier')->insert([
-                            's_company' => strtoupper($data['nama_perusahaan']),
-                            's_name'    => strtoupper($data['nama_suplier']),
-                            's_address' => strtoupper($data['alamat_suplier']),
-                            's_phone'   => $data['telp_suplier'],
-                            's_fax'     => $fax,
-                            's_note'    => $note,
-                            's_limit'   => $limit
-                        ]);
-                        
-                        DB::commit();
-
-                        return  json_encode([
-                            'status'    => 'berhasil'
+                            'status'    => 'gagal',
+                            'msg'       => $e
                         ]);
 
                     }
-
-                } catch (\Exception $e) {
-
-                    DB::rollback();
-
-                    // something went wrong
-                    return  json_encode([
-                        'status'    => 'gagal',
-                        'msg'       => $e
-                    ]);
 
                 }
                 
@@ -264,83 +280,94 @@ class suplier_controller extends Controller
 
             if ($request->isMethod('post')) {
 
-                $data       = $request->all();
+                if(Access::checkAkses(46, 'update') == false){
 
-                DB::beginTransaction();
+                    return  json_encode([
+                        'status'    => 'Access denied'
+                    ]);
 
-                try {
+                } else {
 
-                    $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+                    $data       = $request->all();
 
-                    if ($check == 0) {
-                        
-                        return  json_encode([
-                            'status'    => 'tidak ada',
-                            'msg'       => $data['nama_perusahaan']
-                        ]);
+                    DB::beginTransaction();
 
-                    } else {
+                    try {
 
-                        if ($data['fax_suplier'] == "") {
+                        $check = suplier::where('s_id', Crypt::decrypt($id))->count();
 
-                            $fax = "";
-
-                        } else {
-
-                            $fax = $data['fax_suplier'];
-
-                        }
-
-                        if ($data['keterangan'] == "") {
-
-                            $note = "";
-
-                        } else {
-
-                            $note = strtoupper($data['keterangan']);
-
-                        }
-
-                        if ($data['limit'] == "" || $data['limit'] == 0) {
-
-                            $limit = 0;
-
-                        } else {
-
-                            $limit = $this->formatPrice($data['limit']);
-
-                        }
-
-                        suplier::where(['s_id' => Crypt::decrypt($id)])->update([
-                            's_company'     => strtoupper($data['nama_perusahaan']),
-                            's_name'        => strtoupper($data['nama_suplier']),
-                            's_address'     => strtoupper($data['alamat_suplier']),
-                            's_phone'       => $data['telp_suplier'],
-                            's_fax'         => $fax,
-                            's_note'        => $note,
-                            's_limit'       => $limit,
-                            's_isactive'    => strtoupper($data['isactive'])
-                        ]);
-
-                         DB::commit();
-
-                        // all good
-                        return  json_encode([
-                                'status'    => 'berhasil'
+                        if ($check == 0) {
+                            
+                            return  json_encode([
+                                'status'    => 'tidak ada',
+                                'msg'       => $data['nama_perusahaan']
                             ]);
+
+                        } else {
+
+                            if ($data['fax_suplier'] == "") {
+
+                                $fax = "";
+
+                            } else {
+
+                                $fax = $data['fax_suplier'];
+
+                            }
+
+                            if ($data['keterangan'] == "") {
+
+                                $note = "";
+
+                            } else {
+
+                                $note = strtoupper($data['keterangan']);
+
+                            }
+
+                            if ($data['limit'] == "" || $data['limit'] == 0) {
+
+                                $limit = 0;
+
+                            } else {
+
+                                $limit = $this->formatPrice($data['limit']);
+
+                            }
+
+                            suplier::where(['s_id' => Crypt::decrypt($id)])->update([
+                                's_company'     => strtoupper($data['nama_perusahaan']),
+                                's_name'        => strtoupper($data['nama_suplier']),
+                                's_address'     => strtoupper($data['alamat_suplier']),
+                                's_phone'       => $data['telp_suplier'],
+                                's_fax'         => $fax,
+                                's_note'        => $note,
+                                's_limit'       => $limit,
+                                's_isactive'    => strtoupper($data['isactive'])
+                            ]);
+
+                             DB::commit();
+
+                            // all good
+                            return  json_encode([
+                                    'status'    => 'berhasil'
+                                ]);
+
+                        }
+
+                    } catch (\Exception $e) {
+
+                        DB::rollback();
+
+                        // something went wrong
+                        return  json_encode([
+                                    'status'    => 'gagal'
+                                ]);
 
                     }
 
-                } catch (\Exception $e) {
-
-                    DB::rollback();
-
-                    // something went wrong
-                    return  json_encode([
-                                'status'    => 'gagal'
-                            ]);
-
                 }
+
             }   
 
             // ======================Method Get================================
@@ -382,7 +409,9 @@ class suplier_controller extends Controller
 
         if(Access::checkAkses(46, 'update') == false){
 
-            return view('errors/405');
+            return  json_encode([
+                'status'    => 'Access denied'
+            ]);
 
         }else{
 
@@ -432,7 +461,9 @@ class suplier_controller extends Controller
 
         if(Access::checkAkses(46, 'update') == false){
 
-            return view('errors/405');
+            return  json_encode([
+                'status'    => 'Access denied'
+            ]);
 
         }else{
 

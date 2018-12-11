@@ -525,34 +525,50 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			axios.get(baseUrl+'/master/supplier/detail/'+id).then(response => {
 
-				$('#title_detail').html('<strong>Detail Supplier "'+response.data.s_name+'"</strong>');
-				$('#dt_perusahaan').text(response.data.s_company);
-				$('#dt_supplier').text(response.data.s_name);
-				$('#dt_telephone').text(response.data.s_phone);
-				$('#dt_fax').text(response.data.s_fax);
-				$('#dt_alamat').text(response.data.s_address);
-				$('#dt_keterangan').text(response.data.s_note);
+				if (response.data.status == 'Access denied') {
 
-				var limit = response.data.s_limit,
-					iLimit = limit + '',
-					i = parseFloat(iLimit.match(/\d+\.\d{2}/)),
-					dec = limit.split(".");
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
 
-				if(response.data.s_isactive == "Y"){
+				} else {
 
-					status = "AKTIF";
+					$('#title_detail').html('<strong>Detail Supplier "'+response.data.s_name+'"</strong>');
+					$('#dt_perusahaan').text(response.data.s_company);
+					$('#dt_supplier').text(response.data.s_name);
+					$('#dt_telephone').text(response.data.s_phone);
+					$('#dt_fax').text(response.data.s_fax);
+					$('#dt_alamat').text(response.data.s_address);
+					$('#dt_keterangan').text(response.data.s_note);
 
-				}else{
+					var limit = response.data.s_limit,
+						iLimit = limit + '',
+						i = parseFloat(iLimit.match(/\d+\.\d{2}/)),
+						dec = limit.split(".");
 
-					status = "NON AKTIF";
+					if(response.data.s_isactive == "Y"){
+
+						status = "AKTIF";
+
+					}else{
+
+						status = "NON AKTIF";
+
+					}
+
+					$('#dt_status').text(status);
+					$('#dt_limit').text(formatRupiah(i, "Rp", dec[1]));
+					$('#dt_created').text(response.data.s_insert);
+					$('#overlay').fadeOut(200);
+					$('#myModal').modal('show');
 
 				}
-
-				$('#dt_status').text(status);
-				$('#dt_limit').text(formatRupiah(i, "Rp", dec[1]));
-				$('#dt_created').text(response.data.s_insert);
-				$('#overlay').fadeOut(200);
-				$('#myModal').modal('show');
+					
 			})
 		}
 
@@ -569,7 +585,18 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					axios.get(baseUrl+'/master/supplier/active/'+id).then((response) => {
 
-						if(response.data.status == 'berhasil'){
+						if (response.data.status == 'Access denied') {
+
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						} else if(response.data.status == 'berhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 
@@ -638,7 +665,18 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					axios.get(baseUrl+'/master/supplier/nonactive/'+id).then((response) => {
 
-						if(response.data.status == 'berhasil'){
+						if (response.data.status == 'Access denied') {
+
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else if(response.data.status == 'berhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 

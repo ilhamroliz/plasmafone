@@ -6,6 +6,10 @@
 
 @endsection
 
+<?php 
+use App\Http\Controllers\PlasmafoneController as Access;
+?>
+
 @section('ribbon')
 	<!-- RIBBON -->
 	<div id="ribbon">
@@ -45,6 +49,7 @@
 
 			</div>
 
+			@if(Access::checkAkses(48, 'insert') == true)
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 
 				<div class="page-title">
@@ -54,6 +59,7 @@
 				</div>
 
 			</div>
+			@endif
 
 		</div>
 
@@ -574,27 +580,42 @@
 
 			axios.get(baseUrl+'/master/outlet/detail/'+id).then(response => {
 
-				$('#title_detail').html('<strong>Detail Outlet "'+response.data.c_name+'"</strong>');
-				$('#dt_code').text(response.data.c_id);
-				$('#dt_name').text(response.data.c_name);
-				$('#dt_phone').text(response.data.c_tlp);
-				$('#dt_address').text(response.data.c_address);
-				$('#dt_note').text(response.data.c_note);
+				if (response.data.status == 'Access denied') {
 
-				if(response.data.c_isactive == "Y"){
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
 
-					status = "AKTIF";
+				} else {
 
-				}else{
+					$('#title_detail').html('<strong>Detail Outlet "'+response.data.c_name+'"</strong>');
+					$('#dt_code').text(response.data.c_id);
+					$('#dt_name').text(response.data.c_name);
+					$('#dt_phone').text(response.data.c_tlp);
+					$('#dt_address').text(response.data.c_address);
+					$('#dt_note').text(response.data.c_note);
 
-					status = "NON AKTIF";
+					if(response.data.c_isactive == "Y"){
+
+						status = "AKTIF";
+
+					}else{
+
+						status = "NON AKTIF";
+
+					}
+
+					$('#dt_isactive').text(status);
+					$('#dt_created').text(response.data.created_at);
+					$('#overlay').fadeOut(200);
+					$('#myModal').modal('show');
 
 				}
-
-				$('#dt_isactive').text(status);
-				$('#dt_created').text(response.data.created_at);
-				$('#overlay').fadeOut(200);
-				$('#myModal').modal('show');
 
 			})
 		}
@@ -612,7 +633,18 @@
 
 					axios.get(baseUrl+'/master/outlet/active/'+id).then((response) => {
 
-						if(response.data.status == 'berhasil'){
+						if (response.data.status == 'Access denied') {
+
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						} else if(response.data.status == 'berhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 
@@ -681,7 +713,18 @@
 
 					axios.get(baseUrl+'/master/outlet/nonactive/'+id).then((response) => {
 
-						if(response.data.status == 'berhasil'){
+						if (response.data.status == 'Access denied') {
+
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else if(response.data.status == 'berhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 

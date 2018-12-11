@@ -724,11 +724,27 @@
 			created: function(){
 				axios.get(baseUrl+'/master/barang/get/form-resource')
 						.then(response => {
-							this.data_I_kelompok 	= response.data.kelompok;
-							this.data_I_group 		= response.data.group;
-							this.data_I_sub_group 	= response.data.subgroup;
-							this.data_I_merk 		= response.data.merk;
-							$("#overlay").fadeOut(200);
+							if (response.data.status == 'Access denied') {
+
+								$('#overlay').fadeOut(200);
+								$.smallBox({
+									title : "Gagal",
+									content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+
+							}else{
+
+								this.data_I_kelompok 	= response.data.kelompok;
+								this.data_I_group 		= response.data.group;
+								this.data_I_sub_group 	= response.data.subgroup;
+								this.data_I_merk 		= response.data.merk;
+								$("#overlay").fadeOut(200);
+								
+							}
+							
 						})
 			},
 			methods: {
