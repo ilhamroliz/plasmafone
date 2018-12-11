@@ -443,9 +443,6 @@
 
 @section('extra_script')
 	
-	<!-- PAGE RELATED PLUGIN(S) -->
-	<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script type="text/x-template" id="select2-template-kelompok">
 	  <select style="width:100%" name="i_kelompok" id="kelompok_select" required>
 	  	<option value="">-- PILIH KELOMPOK</option>
