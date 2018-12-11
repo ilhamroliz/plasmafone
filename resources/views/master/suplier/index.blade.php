@@ -4,10 +4,11 @@
 
 @section('extra_style')
 
-
-
 @endsection
 
+<?php 
+use App\Http\Controllers\PlasmafoneController as Access;
+?>
 
 @section('ribbon')
 	<!-- RIBBON -->
@@ -49,6 +50,8 @@
 
 			</div>
 
+			@if(Access::checkAkses(46, 'insert') == true)
+
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 
 				<div class="page-title">
@@ -58,6 +61,8 @@
 				</div>
 
 			</div>
+
+			@endif
 
 		</div>
 

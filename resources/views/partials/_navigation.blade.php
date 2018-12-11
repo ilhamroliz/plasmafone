@@ -1,4 +1,7 @@
-<?php $url = url()->current(); ?>
+<?php
+$url = url()->current();
+use App\Http\Controllers\PlasmafoneController as Access;
+?>
 <aside id="left-panel">
 
 	<!-- User info -->
@@ -30,9 +33,11 @@
 			<li class="{{ Request::is('master/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-asterisk"></i> <span class="menu-item-parent">Data Master</span></a>
 				<ul>
+					@if(Access::checkAkses(46, 'read') == true)
 					<li class="{{ (Request::is('master/supplier/*') || Request::is('master/supplier')) ? 'active' : '' }}">
 						<a href="{{ url('master/supplier') }}">Master Supplier</a>
 					</li>
+					@endif
 
 					<li class="{{ (Request::is('master/barang/*') || Request::is('master/barang')) ? 'active' : '' }}">
 						<a href="{{ route('barang.index') }}">Master Barang</a>

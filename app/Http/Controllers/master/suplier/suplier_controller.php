@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use App\Model\master\suplier as suplier;
+use App\Http\Controllers\PlasmafoneController as Access;
 
 use DB;
 use Session;
@@ -15,7 +16,11 @@ class suplier_controller extends Controller
 {
     public function suplier()
     {
-    	return view('master/suplier/index');
+        if(Access::checkAkses(46, 'read') == false){
+            return view('errors/405');
+        }else{
+            return view('master/suplier/index');
+        }
     }
 
     public function detail($id)
@@ -38,9 +43,17 @@ class suplier_controller extends Controller
 
         })
 
-        ->addColumn('aksi', function ($supplier_active){ 
+        ->addColumn('aksi', function ($supplier_active){
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_active->s_id) . '\', \'' . $supplier_active->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            if(Access::checkAkses(46, 'update') == false){
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            }else{
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_active->s_id) . '\', \'' . $supplier_active->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+            }
 
         })
 
@@ -80,12 +93,28 @@ class suplier_controller extends Controller
         ->addColumn('aksi', function ($supplier_all){    
 
             if ($supplier_all->s_isactive == "Y") {
-                
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                if(Access::checkAkses(46, 'update') == false){
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                }else{
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                }
 
             } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                if(Access::checkAkses(46, 'update') == false){
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                }else{
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+                }
 
             }
 
@@ -110,9 +139,17 @@ class suplier_controller extends Controller
 
         })
 
-        ->addColumn('aksi', function ($supplier_nonactive){     
+        ->addColumn('aksi', function ($supplier_nonactive){
 
-            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\', \'' . $supplier_nonactive->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+            if(Access::checkAkses(46, 'update') == false){
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            }else{
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\', \'' . $supplier_nonactive->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+            }
 
         })
 
@@ -123,70 +160,207 @@ class suplier_controller extends Controller
 
     public function add_suplier(Request $request)
     {
-        if ($request->isMethod('post'))
-        {
-            $data = $request->all();
 
+        if(Access::checkAkses(46, 'insert') == false){
+
+            return view('errors/405');
+
+        }else{
+
+            if ($request->isMethod('post'))
+            {
+                $data = $request->all();
+
+                DB::beginTransaction();
+
+                try {
+
+                    $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
+
+                    if ($check > 0) {
+
+                        return  json_encode([
+                            'status'    => 'ada',
+                            'company'   => strtoupper($data['nama_perusahaan'])
+                        ]);
+
+                    } else {
+                        
+                        if ($data['fax_suplier'] == "") {
+
+                            $fax = "";
+
+                        } else {
+
+                            $fax = $data['fax_suplier'];
+
+                        }
+
+                        if ($data['keterangan'] == "") {
+
+                            $note = "";
+
+                        } else {
+
+                            $note = strtoupper($data['keterangan']);
+
+                        }
+
+                        if ($data['limit'] == "" || $data['limit'] == 0) {
+
+                            $limit = 0;
+
+                        } else {
+
+                            $limit = $this->formatPrice($data['limit']);
+
+                        }
+
+                        DB::table('d_supplier')->insert([
+                            's_company' => strtoupper($data['nama_perusahaan']),
+                            's_name'    => strtoupper($data['nama_suplier']),
+                            's_address' => strtoupper($data['alamat_suplier']),
+                            's_phone'   => $data['telp_suplier'],
+                            's_fax'     => $fax,
+                            's_note'    => $note,
+                            's_limit'   => $limit
+                        ]);
+                        
+                        DB::commit();
+
+                        return  json_encode([
+                            'status'    => 'berhasil'
+                        ]);
+
+                    }
+
+                } catch (\Exception $e) {
+
+                    DB::rollback();
+
+                    // something went wrong
+                    return  json_encode([
+                        'status'    => 'gagal',
+                        'msg'       => $e
+                    ]);
+
+                }
+                
+            }
+
+            return view('master.suplier.add');
+        }
+            
+    }
+
+    public function edit(Request $request, $id = null)
+    {
+
+        if(Access::checkAkses(46, 'update') == false){
+
+            return view('errors/405');
+
+        }else{
+
+            if ($request->isMethod('post')) {
+
+                $data       = $request->all();
+
+                DB::beginTransaction();
+
+                try {
+
+                    $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+
+                    if ($check == 0) {
+                        
+                        return  json_encode([
+                            'status'    => 'tidak ada',
+                            'msg'       => $data['nama_perusahaan']
+                        ]);
+
+                    } else {
+
+                        if ($data['fax_suplier'] == "") {
+
+                            $fax = "";
+
+                        } else {
+
+                            $fax = $data['fax_suplier'];
+
+                        }
+
+                        if ($data['keterangan'] == "") {
+
+                            $note = "";
+
+                        } else {
+
+                            $note = strtoupper($data['keterangan']);
+
+                        }
+
+                        if ($data['limit'] == "" || $data['limit'] == 0) {
+
+                            $limit = 0;
+
+                        } else {
+
+                            $limit = $this->formatPrice($data['limit']);
+
+                        }
+
+                        suplier::where(['s_id' => Crypt::decrypt($id)])->update([
+                            's_company'     => strtoupper($data['nama_perusahaan']),
+                            's_name'        => strtoupper($data['nama_suplier']),
+                            's_address'     => strtoupper($data['alamat_suplier']),
+                            's_phone'       => $data['telp_suplier'],
+                            's_fax'         => $fax,
+                            's_note'        => $note,
+                            's_limit'       => $limit,
+                            's_isactive'    => strtoupper($data['isactive'])
+                        ]);
+
+                         DB::commit();
+
+                        // all good
+                        return  json_encode([
+                                'status'    => 'berhasil'
+                            ]);
+
+                    }
+
+                } catch (\Exception $e) {
+
+                    DB::rollback();
+
+                    // something went wrong
+                    return  json_encode([
+                                'status'    => 'gagal'
+                            ]);
+
+                }
+            }   
+
+            // ======================Method Get================================
             DB::beginTransaction();
 
             try {
 
-                $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
+                $check = suplier::where('s_id', Crypt::decrypt($id))->count();
 
                 if ($check > 0) {
 
-                    return  json_encode([
-                        'status'    => 'ada',
-                        'company'   => strtoupper($data['nama_perusahaan'])
-                    ]);
+                    $suppliers = suplier::where('s_id', Crypt::decrypt($id))->get();
+
+                    DB::commit();
+                    
+                    return view('master.suplier.edit')->with(compact('suppliers'));
 
                 } else {
-                    
-                    if ($data['fax_suplier'] == "") {
 
-                        $fax = "";
-
-                    } else {
-
-                        $fax = $data['fax_suplier'];
-
-                    }
-
-                    if ($data['keterangan'] == "") {
-
-                        $note = "";
-
-                    } else {
-
-                        $note = strtoupper($data['keterangan']);
-
-                    }
-
-                    if ($data['limit'] == "" || $data['limit'] == 0) {
-
-                        $limit = 0;
-
-                    } else {
-
-                        $limit = $this->formatPrice($data['limit']);
-
-                    }
-
-                    DB::table('d_supplier')->insert([
-                        's_company' => strtoupper($data['nama_perusahaan']),
-                        's_name'    => strtoupper($data['nama_suplier']),
-                        's_address' => strtoupper($data['alamat_suplier']),
-                        's_phone'   => $data['telp_suplier'],
-                        's_fax'     => $fax,
-                        's_note'    => $note,
-                        's_limit'   => $limit
-                    ]);
-                    
-                    DB::commit();
-
-                    return  json_encode([
-                        'status'    => 'berhasil'
-                    ]);
+                    return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');
 
                 }
 
@@ -195,22 +369,22 @@ class suplier_controller extends Controller
                 DB::rollback();
 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
-                ]);
+                return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
 
             }
-            
+
         }
-        return view('master.suplier.add');
+        
     }
 
-    public function edit(Request $request, $id = null)
+    public function active($id = null)
     {
-        if ($request->isMethod('post')) {
 
-            $data       = $request->all();
+        if(Access::checkAkses(46, 'update') == false){
+
+            return view('errors/405');
+
+        }else{
 
             DB::beginTransaction();
 
@@ -221,184 +395,86 @@ class suplier_controller extends Controller
                 if ($check == 0) {
                     
                     return  json_encode([
-                        'status'    => 'tidak ada',
-                        'msg'       => $data['nama_perusahaan']
+                        'status'    => 'tidak ada'
                     ]);
 
                 } else {
 
-                    if ($data['fax_suplier'] == "") {
+                    suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'Y']);
 
-                        $fax = "";
-
-                    } else {
-
-                        $fax = $data['fax_suplier'];
-
-                    }
-
-                    if ($data['keterangan'] == "") {
-
-                        $note = "";
-
-                    } else {
-
-                        $note = strtoupper($data['keterangan']);
-
-                    }
-
-                    if ($data['limit'] == "" || $data['limit'] == 0) {
-
-                        $limit = 0;
-
-                    } else {
-
-                        $limit = $this->formatPrice($data['limit']);
-
-                    }
-
-                    suplier::where(['s_id' => Crypt::decrypt($id)])->update([
-                        's_company'     => strtoupper($data['nama_perusahaan']),
-                        's_name'        => strtoupper($data['nama_suplier']),
-                        's_address'     => strtoupper($data['alamat_suplier']),
-                        's_phone'       => $data['telp_suplier'],
-                        's_fax'         => $fax,
-                        's_note'        => $note,
-                        's_limit'       => $limit,
-                        's_isactive'    => strtoupper($data['isactive'])
-                    ]);
-
-                     DB::commit();
+                    DB::commit();
 
                     // all good
                     return  json_encode([
-                            'status'    => 'berhasil'
-                        ]);
+                        'status'    => 'berhasil'
+                    ]);
 
                 }
 
             } catch (\Exception $e) {
 
                 DB::rollback();
-
+                
                 // something went wrong
                 return  json_encode([
-                            'status'    => 'gagal'
-                        ]);
+                    'status'    => 'gagal',
+                    'msg'       => $e
+                ]);
 
             }
-        }   
-
-        // ======================Method Get================================
-        DB::beginTransaction();
-
-        try {
-
-            $check = suplier::where('s_id', Crypt::decrypt($id))->count();
-
-            if ($check > 0) {
-
-                $suppliers = suplier::where('s_id', Crypt::decrypt($id))->get();
-
-                DB::commit();
-                
-                return view('master.suplier.edit')->with(compact('suppliers'));
-
-            } else {
-
-                return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');
-
-            }
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
-
-            // something went wrong
-            return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
 
         }
-        
-    }
-
-    public function active($id = null)
-    {
-        DB::beginTransaction();
-
-        try {
-
-            $check = suplier::where('s_id', Crypt::decrypt($id))->count();
-
-            if ($check == 0) {
-                
-                return  json_encode([
-                    'status'    => 'tidak ada'
-                ]);
-
-            } else {
-
-                suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'Y']);
-
-                DB::commit();
-
-                // all good
-                return  json_encode([
-                    'status'    => 'berhasil'
-                ]);
-
-            }
-
-        } catch (\Exception $e) {
-
-            DB::rollback();
             
-            // something went wrong
-            return  json_encode([
-                'status'    => 'gagal',
-                'msg'       => $e
-            ]);
-
-        }
     }
 
     public function nonactive($id = null)
     {
-        DB::beginTransaction();
 
-        try {
+        if(Access::checkAkses(46, 'update') == false){
 
-            $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+            return view('errors/405');
 
-            if ($check == 0) {
+        }else{
+
+            DB::beginTransaction();
+
+            try {
+
+                $check = suplier::where('s_id', Crypt::decrypt($id))->count();
+
+                if ($check == 0) {
+                    
+                    return  json_encode([
+                        'status'    => 'tidak ada'
+                    ]);
+
+                } else {
+
+                    suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'N']);
+
+                    DB::commit();
+
+                    // all good
+                    return  json_encode([
+                        'status'    => 'berhasil'
+                    ]);
+
+                }
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
                 
+                // something went wrong
                 return  json_encode([
-                    'status'    => 'tidak ada'
-                ]);
-
-            } else {
-
-                suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'N']);
-
-                DB::commit();
-
-                // all good
-                return  json_encode([
-                    'status'    => 'berhasil'
+                    'status'    => 'gagal',
+                    'msg'       => $e
                 ]);
 
             }
 
-        } catch (\Exception $e) {
-
-            DB::rollback();
-            
-            // something went wrong
-            return  json_encode([
-                'status'    => 'gagal',
-                'msg'       => $e
-            ]);
-
         }
+            
     }
 
     function formatPrice($data)
