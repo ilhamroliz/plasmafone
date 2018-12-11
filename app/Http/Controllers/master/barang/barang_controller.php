@@ -181,10 +181,10 @@ class barang_controller extends Controller
                 'status'    => 'Access denied'
             ]);
         } else {
-            $kelompok       = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->get();
-            $group          = DB::table('d_item')->distinct('i_group')->select('i_group')->get();
-            $subgroup       = DB::table('d_item')->distinct('i_sub_group')->select('i_sub_group')->get();
-            $merk           = DB::table('d_item')->distinct('i_merk')->select('i_merk')->get();
+            $kelompok       = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->orderBy('i_kelompok', 'asc')->get();
+            $group          = DB::table('d_item')->distinct('i_group')->select('i_group')->orderBy('i_group', 'asc')->get();
+            $subgroup       = DB::table('d_item')->distinct('i_sub_group')->select('i_sub_group')->orderBy('i_sub_group', 'asc')->get();
+            $merk           = DB::table('d_item')->distinct('i_merk')->select('i_merk')->orderBy('i_merk', 'asc')->get();
 
             return response()->json([
                 'status'    => 'OK',
