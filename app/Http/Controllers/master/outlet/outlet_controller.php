@@ -18,7 +18,7 @@ class outlet_controller extends Controller
     public function index()
     {
         if(Access::checkAkses(48, 'read') == false){
-            return view('errors/405');
+            return view('errors/access_denied');
         }else{
             return view('master.outlet.index');
         }
@@ -164,7 +164,7 @@ class outlet_controller extends Controller
     {
         if(Access::checkAkses(48, 'insert') == false){
 
-            return view('errors/405');
+            return view('errors/access_denied');
 
         } else{
 
@@ -251,7 +251,7 @@ class outlet_controller extends Controller
     {
         if(Access::checkAkses(48, 'update') == false){
 
-            return view('errors/405');
+            return view('errors/access_denied');
 
         } else {
 

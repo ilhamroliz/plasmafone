@@ -17,7 +17,7 @@ class suplier_controller extends Controller
     public function suplier()
     {
         if(Access::checkAkses(46, 'read') == false){
-            return view('errors/405');
+            return view('errors/access_denied');
         }else{
             return view('master/suplier/index');
         }
@@ -169,7 +169,7 @@ class suplier_controller extends Controller
 
         if(Access::checkAkses(46, 'insert') == false){
 
-            return view('errors/405');
+            return view('errors/access_denied');
 
         }else{
 
@@ -274,7 +274,7 @@ class suplier_controller extends Controller
 
         if(Access::checkAkses(46, 'update') == false){
 
-            return view('errors/405');
+            return view('errors/access_denied');
 
         }else{
 

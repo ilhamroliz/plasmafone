@@ -194,7 +194,7 @@
 							</table>
 							<ul class="demo-btns pull-right" >
 								<li>
-									<button type="button" class="btn btn-default"> <a href="{{ url('pengaturan/akses-pengguna') }}">Kembali</a></button>
+									<button type="button" class="btn btn-default"> <a href="{{ url('/pengaturan/akses-pengguna') }}">Kembali</a></button>
 									<!-- <a style="margin-right: 10px;" type="button" class="btn btn-white" href="{{ url('pengaturan/akses-pengguna') }}">Kembali</a> -->
 								</li>
 								<li>

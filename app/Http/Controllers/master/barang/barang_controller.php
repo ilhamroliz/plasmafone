@@ -22,7 +22,7 @@ class barang_controller extends Controller
     public function index()
     {
         if(Access::checkAkses(45, 'read') == false){
-            return view('errors/405');
+            return view('errors/access_denied');
         }else{
             return view('master.item.index');
         }
@@ -167,7 +167,7 @@ class barang_controller extends Controller
     {
 
         if(Access::checkAkses(45, 'insert') == false){
-            return view('errors/405');
+            return view('errors/access_denied');
         }else{
             return view('master.item.add');
         }
@@ -201,7 +201,7 @@ class barang_controller extends Controller
     {
         if(Access::checkAkses(45, 'insert') == false){
 
-            return view('errors/405');
+            return view('errors/access_denied');
 
         }else{
 
@@ -297,7 +297,7 @@ class barang_controller extends Controller
     {
         if(Access::checkAkses(45, 'update') == false){
 
-            return view('errors/405');
+            return view('errors/access_denied');
 
         }else{
 
@@ -305,7 +305,7 @@ class barang_controller extends Controller
 
                 if(Access::checkAkses(45, 'update') == false){
 
-                    return view('errors/405');
+                    return view('errors/access_denied');
 
                 } else {
 
@@ -448,7 +448,7 @@ class barang_controller extends Controller
     {
         if(Access::checkAkses(45, 'delete') == false){
 
-            return view('errors/405');
+            return view('errors/access_denied');
 
         }else{
 
