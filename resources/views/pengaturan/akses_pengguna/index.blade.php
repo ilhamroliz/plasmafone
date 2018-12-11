@@ -3,7 +3,20 @@
 @section('title', 'Akses Pengguna')
 
 @section('extra_style')
-
+<style>
+	#passLama + .glyphicon {
+       cursor: pointer;
+       pointer-events: all;
+    }
+	#passBaru + .glyphicon {
+       cursor: pointer;
+       pointer-events: all;
+    }
+	#passconf + .glyphicon {
+       cursor: pointer;
+       pointer-events: all;
+    }
+</style>
 @endsection
 
 @section('ribbon')
@@ -164,14 +177,16 @@
 					<div class="modal-body no-padding">
 
 						<form id="pass-form" class="smart-form">
+							<input type="hidden" name="id" id="id">
 
 							<fieldset>
 								<section>
 									<div class="row">
 										<label class="label col col-4">Password Lama</label>
-										<div class="col col-8">
-											<label class="input"> <i class="icon-append fa fa-lock"></i>
-												<input type="password" name="passLama">
+										<div class="col col-8 has-feedback">
+											<label class="input">
+												<input type="password" name="passLama" id="passLama">
+												<i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
 											</label>
 										</div>
 									</div>
@@ -180,9 +195,10 @@
 								<section>
 									<div class="row">
 										<label class="label col col-4">Password Baru</label>
-										<div class="col col-8">
-											<label class="input"> <i class="icon-append fa fa-lock"></i>
-												<input type="password" name="passBaru">
+										<div class="col col-8 has-feedback">
+											<label class="input">
+												<input type="password" name="passBaru" id="passBaru">
+												<i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
 											</label>
 										</div>
 									</div>
@@ -191,9 +207,10 @@
 								<section>
 									<div class="row">
 										<label class="label col col-4">Konfirmasi Password Baru</label>
-										<div class="col col-8">
-											<label class="input"> <i class="icon-append fa fa-lock"></i>
-												<input type="password" name="passconf">
+										<div class="col col-8 has-feedback">
+											<label class="input">
+												<input type="password" name="passconf" id="passconf">
+												<i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
 											</label>
 										</div>
 									</div>
@@ -202,7 +219,7 @@
 							</fieldset>
 							
 							<footer>
-								<button type="submit" class="btn btn-primary" onclick="simpan_pass()"><i class="fa fa-floppy-o"></i>
+								<button type="button" class="btn btn-primary" onclick="simpan_pass()"><i class="fa fa-floppy-o"></i>
 									Simpan
 								</button>
 								<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -291,10 +308,42 @@
 		}, 500);
 	});
 
-	$(document).on("click", "#passM", function () {
-		var myId = $(this).data('id');
-		$(".modal-body #id").val( myId );
+	//// Untuk memasukkan Encrypted Id dari controller ke modal
+	$(document).ready(function () {
+		$('body').on('click', '#passM',function(){
+		document.getElementById("id").value = $(this).attr('data-id');
+		// console.log($(this).attr('data-id'));
+		});
 	});
+
+	//// Untuk set visibility Password
+	$('#passLama + .glyphicon').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+		//$('#password').password('toggle'); // activate the hideShowPassword plugin
+		if (document.getElementById('passLama').type == 'text') {
+			document.getElementById('passLama').type = 'password';
+		} else {
+			document.getElementById('passLama').type = 'text';
+		}
+    });
+	$('#passBaru + .glyphicon').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+		//$('#password').password('toggle'); // activate the hideShowPassword plugin
+		if (document.getElementById('passBaru').type == 'text') {
+			document.getElementById('passBaru').type = 'password';
+		} else {
+			document.getElementById('passBaru').type = 'text';
+		}
+    });
+	$('#passconf + .glyphicon').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+		//$('#password').password('toggle'); // activate the hideShowPassword plugin
+		if (document.getElementById('passconf').type == 'text') {
+			document.getElementById('passconf').type = 'password';
+		} else {
+			document.getElementById('passconf').type = 'text';
+		}
+    });
 
 	function akses(id){
 		location.href = ('{{ url('/pengaturan/akses-pengguna/edit') }}/' + id);
@@ -431,7 +480,7 @@ function simpan_pass(){
     $.ajax({
         url: '{{ url('/pengaturan/kelola-pengguna/simpanPass') }}',
         type: 'get',
-        data: $('#form-pass').serialize(),
+        data: $('#pass-form').serialize(),
         success: function(response){
             if (response.status == 'sukses') {
                 // waitingDialog.hide();

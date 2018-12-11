@@ -3,7 +3,16 @@
 @section('title', 'Tambah User')
 
 @section('extra_style')
-
+<style>
+    #pass + .glyphicon {
+       cursor: pointer;
+       pointer-events: all;
+    }
+    #passconf + .glyphicon {
+       cursor: pointer;
+       pointer-events: all;
+    }
+</style>
 @endsection
 
 @section('ribbon')
@@ -124,6 +133,7 @@
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Password</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <input type="password" class="form-control" name="pass" id="pass" placeholder="PASSWORD">
+                                                        <i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
                                                     </div>                                                
                                                 </div>
 
@@ -131,6 +141,7 @@
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Konfirmasi Password</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <input type="password" class="form-control" name="passconf" id="passconf" placeholder="KONFIRMASI PASSWORD">
+                                                        <i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
                                                     </div>                                                
                                                 </div>
                                                
@@ -288,6 +299,26 @@
         } else {
             alert("This browser does not support FileReader.");
         }
+    });
+
+    //// Untuk set visibility Password
+	$('#pass + .glyphicon').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+		//$('#password').password('toggle'); // activate the hideShowPassword plugin
+		if (document.getElementById('pass').type == 'text') {
+			document.getElementById('pass').type = 'password';
+		} else {
+			document.getElementById('pass').type = 'text';
+		}
+    });
+	$('#passconf + .glyphicon').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+		//$('#password').password('toggle'); // activate the hideShowPassword plugin
+		if (document.getElementById('passconf').type == 'text') {
+			document.getElementById('passconf').type = 'password';
+		} else {
+			document.getElementById('passconf').type = 'text';
+		}
     });
 
     // function simpan(){
