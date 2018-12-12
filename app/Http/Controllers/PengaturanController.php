@@ -23,6 +23,7 @@ class PengaturanController extends Controller
         if(Plasmafone::checkAkses(42, 'read') == true){
             $dis = '';
             if(Plasmafone::checkAkses(42, 'insert') == true){
+                Plasmafone::logActivity('Akse Data Pengguna');
                 return view('pengaturan.akses_pengguna.index')->with(compact('dis'));
             }else{
                 $dis = 'denied';
@@ -45,9 +46,28 @@ class PengaturanController extends Controller
 
     public function data_log()
     {
-        $log = DB::table('d_log_activity')->select('d_log_activity.*')->get();
-        $data = collect($user);
-        return DataTables::of($data)->make(true);
+        $log = DB::table('d_log_activity')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_log_activity.la_mem')
+                    ->join('m_company', 'm_company.c_id', '=', 'd_log_activity.la_comp')
+                    ->select('d_log_activity.*', 'd_mem.m_name', 'm_company.c_name')
+                    ->get();
+
+        $la = [];
+        $la = exlpode(' ', $log->la_date);
+        $date = $la[0];
+        $tanggal = [];
+        $tanggal = explode('-', $date);
+        $day = $date[2]; $month = $date[1]; $year = $date[0];
+        $fixdate = $day.'-'.$month.'-'.$year.' '.$la[1];
+
+        $data = collect($log);
+
+        return DataTables::of($data)
+                ->addColumn('date', function($data){
+                    return $fixdate;
+                })
+                ->rawColumns(['date'])
+                ->make(true);
     }
 
     public function dataUser()
@@ -71,9 +91,9 @@ class PengaturanController extends Controller
                         </div>';
                     }else if(Plasmafone::checkAkses(42, 'update') == false && Plasmafone::checkAkses(42, 'delete') == true){
                         return '<div class="text-center">
-                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-wrench"></i></button>
-                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-edit"></i></button>
-                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="fa fa-exchange"></i></button>
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" disabled><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" disabled><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" disabled><i class="fa fa-exchange"></i></button>
                         <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>
                         </div>';
                     }else if(Plasmafone::checkAkses(42, 'delete') == false && Plasmafone::checkAkses(42, 'update') == true){
@@ -81,15 +101,15 @@ class PengaturanController extends Controller
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
                         <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>
                         <a href="#modalPass" id="passM" data-toggle="modal" style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" data-id="'.Crypt::encrypt($user->m_id).'"><i class="fa fa-exchange"></i></a>
-                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-trash"></i></button>
+                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" disabled><i class="glyphicon glyphicon-trash"></i></button>
                         </div>';
                     }
                     else{
                         return '<div class="text-center">
-                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-wrench"></i></button>
-                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-edit"></i></button>
-                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" onclick="pass(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="fa fa-exchange"></i></button>
-                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')" disabled><i class="glyphicon glyphicon-trash"></i></button>
+                        <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" disabled><i class="glyphicon glyphicon-wrench"></i></button>
+                        <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" disabled><i class="glyphicon glyphicon-edit"></i></button>
+                        <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" disabled><i class="fa fa-exchange"></i></button>
+                        <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" disabled><i class="glyphicon glyphicon-trash"></i></button>
                         </div>';
                     }                  
                 }else{
