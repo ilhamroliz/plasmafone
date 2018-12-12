@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Input;
 use Illuminate\Support\Facades\Crypt;
@@ -47,24 +48,12 @@ class PengaturanController extends Controller
     public function data_log()
     {
         $log = DB::table('d_log_activity')
-                    ->join('d_mem', 'd_mem.m_id', '=', 'd_log_activity.la_mem')
-                    ->join('m_company', 'm_company.c_id', '=', 'd_log_activity.la_comp')
-                    ->select('d_log_activity.*', 'd_mem.m_name', 'm_company.c_name')
                     ->get();
 
-        $la = [];
-        $la = exlpode(' ', $log->la_date);
-        $date = $la[0];
-        $tanggal = [];
-        $tanggal = explode('-', $date);
-        $day = $date[2]; $month = $date[1]; $year = $date[0];
-        $fixdate = $day.'-'.$month.'-'.$year.' '.$la[1];
-
         $data = collect($log);
-
         return DataTables::of($data)
                 ->addColumn('date', function($data){
-                    return $fixdate;
+                    return Carbon::parse($data->la_date)->format('d-m-Y G:i');
                 })
                 ->rawColumns(['date'])
                 ->make(true);
@@ -78,11 +67,12 @@ class PengaturanController extends Controller
             ->orderBy('m_id')
             ->get();
         $user = collect($user);
-        // dd($user);
+        $cekUpdate = Plasmafone::checkAkses(42, 'update');
+        $cekDelete = Plasmafone::checkAkses(42, 'delete');
         return DataTables::of($user)
-            ->addColumn('aksi', function ($user){
+            ->addColumn('aksi', function ($user) use ($cekDelete, $cekUpdate){
                 if ($user->m_state == "ACTIVE") {
-                    if(Plasmafone::checkAkses(42, 'update') == true && Plasmafone::checkAkses(42, 'delete') == true){
+                    if($cekUpdate == true && $cekDelete == true){
                         return '<div class="text-center">
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
                         <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>
