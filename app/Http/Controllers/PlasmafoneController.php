@@ -102,4 +102,17 @@ class PlasmafoneController
         }
         return $data;
     }
+
+    public static function logActivity($action)
+    {
+        $time = Carbon::now('Asia/Jakarta');
+        $m_id = Auth::user()->m_id;
+        $data = DB::table('log_activity')
+                ->insert([
+                    'la_mem' => $m_id,
+                    'la_keg' => $action,
+                    'la_time' => $time
+                    ]);
+    }
+  
 }

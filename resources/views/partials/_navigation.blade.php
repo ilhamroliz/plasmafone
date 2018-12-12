@@ -7,7 +7,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<!-- User info -->
 	<div class="login-info">
 		<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
-			
 			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
 				@if(auth()->user()->m_img != '' || auth()->user()->m_img != null)
 				<img src="{{ asset('img/user/'.auth()->user()->m_img) }}" alt="me" class="online" />
@@ -27,6 +26,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<?php $sidebar = App\Http\Controllers\PlasmafoneController::aksesSidebar();?>
 	<nav>
 		<ul>
+
 			@if($sidebar['Dashboard Financial'] == 'Y')
 			<li class="{{ Request::is('dashboard') ? 'active' : '' }}">
 				<a href="{{ url('dashboard') }}" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
