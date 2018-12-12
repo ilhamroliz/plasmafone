@@ -3,7 +3,16 @@
 @section('title', 'Tambah User')
 
 @section('extra_style')
-
+<style>
+    #pass + .glyphicon {
+       cursor: pointer;
+       pointer-events: all;
+    }
+    #passconf + .glyphicon {
+       cursor: pointer;
+       pointer-events: all;
+    }
+</style>
 @endsection
 
 @section('ribbon')
@@ -105,7 +114,7 @@
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Outlet</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <select name="outlet" class="form-control outlet" id="outlet" required>
-                                                            <option value="-" selected disabled>-- PILIH OUTLET</option>
+                                                            <option value="" selected disabled>-- PILIH OUTLET</option>
                                                             @foreach($getOutlet as $data)
                                                             <option value="{{ $data->c_id }}">{{ $data->c_name }}</option>
                                                             @endforeach
@@ -116,21 +125,23 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Username</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="text" class="form-control" name="username" id="username" placeholder="USERNAME">
+                                                        <input type="text" class="form-control" name="username" id="username" placeholder="USERNAME" required>
                                                     </div>                                                
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Password</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="password" class="form-control" name="pass" id="pass" placeholder="PASSWORD">
+                                                        <input type="password" class="form-control" name="pass" id="pass" placeholder="PASSWORD" required>
+                                                        <i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
                                                     </div>                                                
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Konfirmasi Password</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <input type="password" class="form-control" name="passconf" id="passconf" placeholder="KONFIRMASI PASSWORD">
+                                                        <input type="password" class="form-control" name="passconf" id="passconf" placeholder="KONFIRMASI PASSWORD" required>
+                                                        <i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
                                                     </div>                                                
                                                 </div>
                                                
@@ -141,8 +152,8 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Jabatan</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
-                                                        <select name="jabatan" class="form-control jabatan" id="jabatan">
-                                                            <option value="-" selected disabled>-- PILIH JABATAN</option>
+                                                        <select name="jabatan" class="form-control jabatan" id="jabatan" required>
+                                                            <option value="" selected disabled>-- PILIH JABATAN</option>
                                                             @foreach($getJabatan as $data)
                                                             <option value="{{ $data->id }}">{{ $data->nama }}</option>
                                                             @endforeach
@@ -162,7 +173,7 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Alamat User</label>
                                                     <div class="col-xs-8 col-lg-8 textarea">
-                                                        <textarea name="alamat" id="alamat" class="custom-scroll" rows="3" style="width: 100%"></textarea>
+                                                        <textarea name="alamat" id="alamat" class="custom-scroll" rows="3" style="width: 100%" required></textarea>
                                                     </div>                                                
                                                 </div>
 
@@ -176,7 +187,7 @@
                                                             </label> -->
 
                                                             <button class="btn btn-default"><i class="fa fa-file-picture-o"></i>&nbsp;Upload Gambar</button>
-                                                            <input type="file" name="imageUpload" id="imageUpload" class="uploadGambar"/>
+                                                            <input type="file" name="imageUpload" id="imageUpload" class="uploadGambar" />
                                                             <label> &nbsp Maksimal 2 MB</label>
 														</div>
                                                     </div>                                                
@@ -238,6 +249,8 @@
 @endsection
 
 @section('extra_script')
+<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
+
 <script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/app.config.js') }}"></script>
 <script src="{{ asset('template_asset/js/waitingfor.js') }}"></script>
@@ -251,7 +264,7 @@
         yearSelector: '#dobyear',
 
         // Default option values
-        dayDefault: 'Tangal',
+        dayDefault: 'Tanggal',
         monthDefault: 'Bulan',
         yearDefault: 'Tahun',
 
@@ -290,72 +303,27 @@
         }
     });
 
-    // function simpan(){
-    //     // --- AXIOS USE ----//
-    //     $('#overlay').fadeIn(200);
-    //     $('#load-status-text').text('Penyimpanan Database Sedang di Proses');
-    //     let btn = $('#submit-tambah');
-    //     btn.attr('disabled', 'disabled');
-    //     btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+    //// Untuk set visibility Password
+	$('#pass + .glyphicon').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+		//$('#password').password('toggle'); // activate the hideShowPassword plugin
+		if (document.getElementById('pass').type == 'text') {
+			document.getElementById('pass').type = 'password';
+		} else {
+			document.getElementById('pass').type = 'text';
+		}
+    });
+	$('#passconf + .glyphicon').on('click', function() {
+		$(this).toggleClass('glyphicon-eye-close').toggleClass('glyphicon-eye-open'); // toggle our classes for the eye icon
+		//$('#password').password('toggle'); // activate the hideShowPassword plugin
+		if (document.getElementById('passconf').type == 'text') {
+			document.getElementById('passconf').type = 'password';
+		} else {
+			document.getElementById('passconf').type = 'text';
+		}
+    });
 
-    //     axios.post(baseUrl+'/pengaturan/kelola-pengguna/simpan', $('#form-tambah').serialize(), {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data'
-    //         }
-    //     })
-    //         .then((response) => {
-                // if(response.data.status == 'sukses'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "SUKSES",
-                //         content : "Data Pengguna Berhasil Disimpan",
-                //         color : "#739E73",
-                //         iconSmall : "fa fa-check animated",
-                //         timeout : 5000
-                //     });
-                //     location.reload();
-                // }else if(response.data.status == 'gagal'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Data Pengguna Gagal Disimpan !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                //     // location.reload();
-                // }else if(response.data.status == 'gagalUser'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Username Tidak Tersedia !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                //     // location.reload();
-                // }else if(response.data.status == 'gagalPass'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Password Tidak Sesuai !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                //     // location.reload();
-                // }else if(response.data.status == 'gagalImg'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Ukuran File Gambar Terlalu Besar !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                    // location.reload();
-    //     })
-    // }
+
 
 </script>
 @endsection

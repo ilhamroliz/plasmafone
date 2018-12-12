@@ -191,7 +191,7 @@ class manajemenPenggunaController extends Controller
                 return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', 'Password Tidak Sesuai !!');
             }
 
-            $pass = sha1(md5('secret_').$pass);
+            $pass = sha1(md5('لا إله إلاّ الله') . $pass);
             // $pass = Hash::make("secret_".$pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
@@ -246,6 +246,24 @@ class manajemenPenggunaController extends Controller
                     'created_at' => $tgl,
                     'updated_at' => $tgl,
                 ]);
+            
+            ///== create data Akses Member
+
+            $akses = DB::table('d_access')
+                ->select('a_id')
+                ->get();
+
+            $addAkses = [];
+            for ($i = 0; $i < count($akses); $i++){
+                $temp = [
+                    'ma_mem' => $id,
+                    'ma_access' => $akses[$i]->a_id
+                ];
+                array_push($addAkses, $temp);
+            }
+            DB::table('d_mem_access')->insert($addAkses);
+
+            /////////////////////////////////////////////
             
             DB::commit();
             // Session::flash('sukses', 'Data berhasil disimpan');

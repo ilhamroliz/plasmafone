@@ -442,6 +442,8 @@
 @endsection
 
 @section('extra_script')
+
+	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	
 	<script type="text/x-template" id="select2-template-kelompok">
 	  <select style="width:100%" name="i_kelompok" id="kelompok_select" required>
@@ -535,7 +537,7 @@
 			// {
 			// 	i_harga.value = formatRupiah(this.value, 'Rp');
 			// });
-			$("#i_harga").maskMoney({thousands:'.', precision: 0});
+			$("#i_harga").maskMoney({thousands:'.', precision: 0, decimal:','});
 
 			if ($('#current_img').val() != "") {
 

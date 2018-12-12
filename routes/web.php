@@ -401,6 +401,9 @@ Route::group(['middleware' => 'auth'], function(){
 	Route::match(['get', 'post'],'/pengaturan/kelola-pengguna/hapus/{id}', 'manajemenPenggunaController@hapus_pengguna');
 	Route::match(['get', 'post'],'/pengaturan/kelola-pengguna/getDataEdit', 'manajemenPenggunaController@get_data_edit');
 	// End Manajemen Pengguna
+
+	Route::get('/pengaturan/log-kegiatan', 'PengaturanController@log_kegiatan');
+	Route::match(['get', 'post'],'/pengaturan/log-kegiatan/dataLog', 'PengaturanController@data_log');
 	// End Setting Application
 
 	// main route end

@@ -34,6 +34,22 @@ class PengaturanController extends Controller
         // return view('pengaturan.akses_pengguna.index');
     }
 
+    public function log_kegiatan()
+    {
+        if(Plasmafone::checkAkses(43, 'read') == true){
+            return view('pengaturan.log_activity.index');
+        }else{
+            return view('errors.access_denied');       
+        }
+    }
+
+    public function data_log()
+    {
+        $log = DB::table('d_log_activity')->select('d_log_activity.*')->get();
+        $data = collect($user);
+        return DataTables::of($data)->make(true);
+    }
+
     public function dataUser()
     {
         $user = DB::table('d_mem')

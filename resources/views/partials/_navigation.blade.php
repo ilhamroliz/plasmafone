@@ -7,7 +7,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<!-- User info -->
 	<div class="login-info">
 		<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
-			
 			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
 				@if(auth()->user()->m_img != '' || auth()->user()->m_img != null)
 				<img src="{{ asset('img/user/'.auth()->user()->m_img) }}" alt="me" class="online" />
@@ -27,6 +26,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<?php $sidebar = App\Http\Controllers\PlasmafoneController::aksesSidebar();?>
 	<nav>
 		<ul>
+
 			@if($sidebar['Dashboard Financial'] == 'Y')
 			<li class="{{ Request::is('dashboard') ? 'active' : '' }}">
 				<a href="{{ url('dashboard') }}" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
@@ -64,7 +64,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</li>
 			@endif
 
-			<li>
+			<li class="{{ Request::is('pembelian/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-credit-card"></i> <span class="menu-item-parent">Pembelian</span></a>
 				<ul <?php if(preg_match("/request-order/i", $url) || preg_match("/rencana-pembelian/i", $url) || preg_match("/konfirmasi-pembelian/i", $url) || preg_match("/purchase-order/i", $url) || preg_match("/purchase-return/i", $url)) { ?> style="display: block;" <?php } ?>>
 					<li <?php if(preg_match("/request-order/i", $url)) { ?> class="active" <?php } ?>>
@@ -277,11 +277,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						
 					</li>
 
-				</ul>
-			</li>
+					<li <?php if(preg_match("/log-kegiatan/i", $url)) { ?> class="active" <?php } ?>>
+						<a href="{{ url('/pengaturan/log-kegiatan') }}">Log Kegiatan Pengguna</a>
+						
+					</li>
 
-			<li>
-				<a href="#" style="color: #00C851"><i class="fa fa-lg fa-fw fa-exchange"></i> <span class="menu-item-parent">Log Activity</span></a>
+				</ul>
 			</li>
 			
 		</ul>
