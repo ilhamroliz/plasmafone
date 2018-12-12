@@ -135,7 +135,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 								<a href="#">Pusat</a>
 							</li>
 							@endif
-							@if($sidebar['Distribusi Outlet'] == 'Y')
+							@if($sidebar['Opname Barang Outlet'] == 'Y')
 							<li>
 								<a href="#">Outlet</a>
 							</li>
@@ -144,7 +144,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					</li>
 					@endif
 
-					@if($sidebar['Minimum Stok'] == 'Y')
+					@if($sidebar['Manajemen Minimum Stock'] == 'Y')
 					<li>
 						<a href="#">Minimun Stok</a>
 					</li>
@@ -158,139 +158,174 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			<li>
 				<a href="#"><i class="fa fa-lg fa-fw fa-handshake-o"></i> <span class="menu-item-parent">Penjualan</span></a>
 				<ul>
+					@if($sidebar['Setting Harga'] == 'Y')
 					<li>
-						<a href="flot.html">Rencana Penjualan</a>
+						<a href="flot.html">Setting Harga</a>
 					</li>
+					@endif
 
+					@if($sidebar['Penjualan Reguler'] == 'Y')
 					<li>
-						<a href="">Aktivitas Penjualan</a>
-						<ul>
-							<li>
-								<a href="glyph.html">Proses Penjualan</a>
-							</li>	
-							<li>
-								<a href="flags.html">Pemesanan Barang</a>
-							</li>
-							<li>
-								<a href="flags.html">Pembelian Via Website</a>
-							</li>
-							<li>
-								<a href="flags.html">Return Penjualan</a>
-							</li>
-						</ul>
+						<a href="flot.html">Penjualan Reguler</a>
 					</li>
+					@endif
 
+					@if($sidebar['Penjualan Tempo'] == 'Y')
 					<li>
-						<a href="flot.html">Monitoring Penjualan</a>
+						<a href="flot.html">Penjualan Tempo</a>
 					</li>
+					@endif
 
+					@if($sidebar['Pemesanan Barang'] == 'Y')
 					<li>
-						<a href="flot.html">Analisa Penjualan</a>
+						<a href="flot.html">Pemesanan Barang</a>
 					</li>
+					@endif
+
+					@if($sidebar['Onlineshop'] == 'Y')
+					<li>
+						<a href="flot.html">Onlineshop</a>
+					</li>
+					@endif
+
+					@if($sidebar['Return Penjualan'] == 'Y')
+					<li>
+						<a href="flot.html">Return Penjualan</a>
+					</li>
+					@endif
+
+					@if($sidebar['Service Barang'] == 'Y')
+					<li>
+						<a href="flot.html">Service Barang</a>
+					</li>
+					@endif
+
+					@if($sidebar['Pengelolaan Member'] == 'Y')
+					<li>
+						<a href="flot.html">Pengelolaan Member</a>
+					</li>
+					@endif
 
 				</ul>
 			</li>
 			@endif
 
+			@if($sidebar['Layanan Perbaikan'] == 'Y')
 			<li>
 				<a href="#">
 					<i class="fa fa-lg fa-fw fa-wrench"></i> 
-					<span class="menu-item-parent">Perbaikan</span>
+					<span class="menu-item-parent">Layanan Perbaikan</span>
 				</a>
 				<ul>
+					@if($sidebar['Perbaikan Barang'] == 'Y')
 					<li>
 						<a href="flot.html">Perbaikan Barang</a>
 					</li>
+					@endif
 				</ul>
 			</li>
+			@endif
 
+			@if($sidebar['Manajemen Penjualan'] == 'Y')
 			<li>
 				<a href="#">
 					<i class="fa fa-lg fa-fw fa-sliders"></i> 
 					<span class="menu-item-parent">Manajemen Penjualan</span>
 				</a>
 				<ul>
+					@if($sidebar['Pembuatan Rencana Penjualan'] == 'Y')
 					<li>
 						<a href="flot.html">Pembuatan Rencana Penjualan</a>
 					</li>
+					@endif
+
+					@if($sidebar['Monitoring Penjualan'] == 'Y')
 					<li>
 						<a href="flot.html">Monitoring Penjualan</a>
 					</li>
+					@endif
+
+					@if($sidebar['Analisis Penjualan'] == 'Y')
 					<li>
 						<a href="flot.html">Analisis Penjualan</a>
 					</li>
+					@endif
 				</ul>
 			</li>
+			@endif
 
+			@if($sidebar['Manajemen Keuangan'] == 'Y')
 			<li>
-				<a href="#"><i class="fa fa-lg fa-fw fa-money"></i> <span class="menu-item-parent">Keuangan</span></a>
+				<a href="#"><i class="fa fa-lg fa-fw fa-money"></i> <span class="menu-item-parent">Manajemen Keuangan</span></a>
 				<ul>
+					@if($sidebar['Master Akun Keuangan'] == 'Y')
 					<li>
-						<a href="flot.html">Dashboard Keuangan</a>
+						<a href="flot.html">Master Akun Keuangan</a>
 					</li>
+					@endif
 
+					@if($sidebar['Master Transaksi'] == 'Y')
 					<li>
-						<a href="#">Transaksi Keuangan</a>
-						<ul>
-							<li>
-								<a href="glyph.html">Transaksi Kas</a>
-							</li>	
-							<li>
-								<a href="flags.html">Transaksi Bank</a>
-							</li>
-							<li>
-								<a href="flags.html">Transaksi Memorial</a>
-							</li>
-						</ul>
+						<a href="flot.html">Master Transaksi</a>
 					</li>
+					@endif
 
+					@if($sidebar['Penganggaran'] == 'Y')
 					<li>
-						<a href="flot.html">Akun Hutang</a>
+						<a href="flot.html">Penganggaran</a>
 					</li>
+					@endif
 
+					@if($sidebar['Dashboard Finansial'] == 'Y')
 					<li>
-						<a href="flot.html">Akun Piutang</a>
+						<a href="flot.html">Dashboard Finansial</a>
 					</li>
+					@endif
 
+					@if($sidebar['Pencatatan Transaksi Harian'] == 'Y')
+					<li>
+						<a href="flot.html">Pencatatan Transaksi Harian</a>
+					</li>
+					@endif
+
+					@if($sidebar['Pengelolaan Akun Payable'] == 'Y')
+					<li>
+						<a href="flot.html">Pengelolaan Akun Payable</a>
+					</li>
+					@endif
+
+					@if($sidebar['Pengelolaan Akun Receivable'] == 'Y')
+					<li>
+						<a href="flot.html">Pengelolaan Akun Receivable</a>
+					</li>
+					@endif
+
+					@if($sidebar['Pengelolaan Pajak'] == 'Y')
 					<li>
 						<a href="flot.html">Pengelolaan Pajak</a>
 					</li>
+					@endif
 
+					@if($sidebar['Pembuatan Laporan Keuangan'] == 'Y')
 					<li>
-						<a href="#">Analisa Keuangan</a>
-						<ul>
-							<li>
-								<a href="glyph.html">Sub Menu 1</a>
-							</li>
-						</ul>
+						<a href="flot.html">Pembuatan Laporan Keuangan</a>
 					</li>
+					@endif
 
+					@if($sidebar['Pembuatan Index Finansial'] == 'Y')
+					<li>
+						<a href="flot.html">Pembuatan Index Finansial</a>
+					</li>
+					@endif
+
+					@if($sidebar['Analisis Keuangan'] == 'Y')
+					<li>
+						<a href="flot.html">Analisis Keuangan</a>
+					</li>
+					@endif
 				</ul>
 			</li>
-
-			<li>
-				<a href="#">
-					<i class="fa fa-lg fa-fw fa-file-text"></i> 
-					<span class="menu-item-parent">Laporan</span>
-				</a>
-				<ul>
-					<li>
-						<a href="#">Laporan Keuangan</a>
-						<ul>
-							<li>
-								<a href="glyph.html">Laporan Neraca</a>
-							</li>	
-							<li>
-								<a href="flags.html">Laporan Laba Rugi</a>
-							</li>
-							<li>
-								<a href="flags.html">Laporan Arus Kas</a>
-							</li>
-						</ul>
-					</li>
-
-				</ul>
-			</li>
+			@endif
 
 			<li>
 				<a href="#">

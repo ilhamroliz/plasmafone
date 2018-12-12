@@ -58,6 +58,9 @@ class PlasmafoneController
     public static function checkAkses($a_id, $aksi)
     {
         $m_id = Auth::user()->m_id;
+        if ($m_id == null){
+            return redirect()->route('login');
+        }
         $cek = null;
         if ($aksi == 'read'){
             $cek = DB::table('d_mem_access')
