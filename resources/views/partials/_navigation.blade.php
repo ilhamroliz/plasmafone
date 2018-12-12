@@ -277,11 +277,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						
 					</li>
 
-				</ul>
-			</li>
+					<li <?php if(preg_match("/log-kegiatan/i", $url)) { ?> class="active" <?php } ?>>
+						<a href="{{ url('/pengaturan/log-kegiatan') }}">Log Kegiatan Pengguna</a>
+						
+					</li>
 
-			<li>
-				<a href="#" style="color: #00C851"><i class="fa fa-lg fa-fw fa-exchange"></i> <span class="menu-item-parent">Log Activity</span></a>
+				</ul>
 			</li>
 			
 		</ul>

@@ -116,6 +116,7 @@
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>			                
 										<tr>
+                                            <th class="text-center">Outlet Member</th>
 											<th class="text-center">ID Member</th>
 											<th class="text-center">Aktivitas</th>
 											<th class="text-center">Waktu Akses</th>
@@ -194,10 +195,11 @@ $(document).ready(function(){
             searching: true,
             serverSide: true,
             "ajax": {
-                "url": "{{ url('/pengaturan/akses-pengguna/dataUser') }}",
+                "url": "{{ url('/pengaturan/log-kegiatan/dataLog') }}",
                 "type": "post",
             },
             columns: [
+                {data: 'la_comp', name: 'compMem'},
                 {data: 'la_mem', name: 'idMem'},
                 {data: 'la_keg', name: 'aktivitas'},
                 {data: 'la_time', name: 'waktu'}
