@@ -88,17 +88,28 @@ class manajemenPenggunaController extends Controller
                         ->where('m_id', $idm)
                         ->first();
                 // dd($idm);
+                $data = '';
                 if($cek->m_state == "ACTIVE"){
                     DB::table('d_mem')
                         ->where('m_id', $idm)
                         ->update(['m_state' => 'NONACTIVE']);
+                    $data = 'NONACTIVE';
                 }else{
                     DB::table('d_mem')
                         ->where('m_id', $idm)
                         ->update(['m_state' => 'ACTIVE']);
+                    $data = 'ACTIVE';
                 }
-                
+
+                $getNama = DB::table('d_mem')
+                        ->select('m_name')
+                        ->where('m_id', $idm)
+                        ->first();
+
+                $log = 'Mengganti Status User '. $getNama->m_name .' = '.$data;
+
                 DB::commit();
+                Plasmafone::logActivity($log);
                 return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Set Aktivasi User '.$idm.' berhasil tersimpan !!');
             } catch (\Throwable $e) {
 
@@ -266,6 +277,7 @@ class manajemenPenggunaController extends Controller
             /////////////////////////////////////////////
             
             DB::commit();
+            Plasmafone::logActivity('Menambahkan User '.$nama);
             // Session::flash('sukses', 'Data berhasil disimpan');
             // return redirect('manajemen-pengguna/pengguna');
             return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Data pengguna berhasil tersimpan !!');
@@ -368,6 +380,7 @@ class manajemenPenggunaController extends Controller
                 ]);
             
             DB::commit();
+            Plasmafone::logActivity('Edit Data User '.$nama);
             // Session::flash('sukses', 'Data berhasil disimpan');
             // return redirect('manajemen-pengguna/pengguna');
             return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Data pengguna berhasil diperbarui !!');
@@ -399,11 +412,16 @@ class manajemenPenggunaController extends Controller
                 ->where('m_id', $idm)
                 ->first();
             // dd($cekPassL);
-            if(sha1(md5('secret_').$passL) == $cekPassL->m_password){
+            $getNama = DB::table('d_mem')->select('m_name')->where('m_id', $idm)->first();
+            
+            if(sha1(md5('لا إله إلاّ الله') . $passL) == $cekPassL->m_password){
                 if($passB == $passC){
-                    $codePass = sha1(md5('secret_').$passB);
+
+                    $codePass = sha1(md5('لا إله إلاّ الله') . $passB);
                     DB::table('d_mem')->where('m_id', $idm)->update(['m_password' => $codePass]);
                     DB::commit();
+                    $log = 'Mengganti Password User '.$getNama->m_name;
+                    Plasmafone::logActivity($log);
                     return response()->json([
                         'status' => 'sukses'
                     ]);

@@ -25,7 +25,7 @@ class authController extends Controller
                 ->update([
                     'm_lastlogin' => Carbon::now('Asia/Jakarta')
                 ]);
-            Plasmafone::logActivity('login');
+            Plasmafone::logActivity('Login');
 			return redirect()->route('home');
 		}else{
 			Session::flash('gagal', 'Kombinasi Username dan Password Tidak Bisa Kami Temukan Di Dalam Database. Silahkan Coba Lagi !');
@@ -39,7 +39,8 @@ class authController extends Controller
             ->update([
                 'm_lastlogout' => Carbon::now('Asia/Jakarta')
             ]);
-    	Auth::logout();
+        Plasmafone::logActivity('Logout');
+        Auth::logout();
     	return redirect()->route('login');
     }
 

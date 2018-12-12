@@ -24,7 +24,6 @@ class PengaturanController extends Controller
         if(Plasmafone::checkAkses(42, 'read') == true){
             $dis = '';
             if(Plasmafone::checkAkses(42, 'insert') == true){
-                Plasmafone::logActivity('Akse Data Pengguna');
                 return view('pengaturan.akses_pengguna.index')->with(compact('dis'));
             }else{
                 $dis = 'denied';
@@ -48,6 +47,9 @@ class PengaturanController extends Controller
     public function data_log()
     {
         $log = DB::table('d_log_activity')
+                    ->join('d_mem', 'm_id', '=', 'la_mem')
+                    ->join('m_company', 'c_id', '=', 'la_comp')
+                    ->select('d_log_activity.*', 'm_name', 'c_name')
                     ->get();
 
         $data = collect($log);
@@ -79,14 +81,14 @@ class PengaturanController extends Controller
                         <a href="#modalPass" id="passM" data-toggle="modal" style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" data-id="'.Crypt::encrypt($user->m_id).'"><i class="fa fa-exchange"></i></a>
                         <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>
                         </div>';
-                    }else if(Plasmafone::checkAkses(42, 'update') == false && Plasmafone::checkAkses(42, 'delete') == true){
+                    }else if($cekUpdate == false && $cekDelete == true){
                         return '<div class="text-center">
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" disabled><i class="glyphicon glyphicon-wrench"></i></button>
                         <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" disabled><i class="glyphicon glyphicon-edit"></i></button>
                         <button style="margin-left:5px;" title="Ganti Password" type="button" class="btn btn-primary btn-circle btn-xs edit" disabled><i class="fa fa-exchange"></i></button>
                         <button style="margin-left:5px;" title="Set Nonactive" type="button" class="btn btn-danger btn-circle btn-xs" onclick="trigger(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>
                         </div>';
-                    }else if(Plasmafone::checkAkses(42, 'delete') == false && Plasmafone::checkAkses(42, 'update') == true){
+                    }else if($cekDelete == false && $cekUpdate == true){
                         return '<div class="text-center">
                         <button style="margin-left:5px;" title="Akses" type="button" class="btn btn-warning btn-circle btn-xs edit" onclick="akses(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button>
                         <button style="margin-left:5px;" title="Edit" type="button" class="btn btn-success btn-circle btn-xs edit" onclick="edit(\'' . Crypt::encrypt($user->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>
@@ -274,6 +276,7 @@ class PengaturanController extends Controller
             //     'status' => 'sukses'
             // ];
             // return json_encode($response);
+            Plasmafone::logActivity('Mengganti Hak Akses User '.$id);
             return response()->json([
                 'status' => 'sukses'
             ]);
