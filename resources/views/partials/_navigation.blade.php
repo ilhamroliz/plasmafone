@@ -131,7 +131,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</li>
 
 			<li>
-				<a href=""><i class="fa fa-lg fa-fw fa-handshake-o"></i> <span class="menu-item-parent">Penjualan</span></a>
+				<a href="#"><i class="fa fa-lg fa-fw fa-handshake-o"></i> <span class="menu-item-parent">Penjualan</span></a>
 				<ul>
 					<li>
 						<a href="flot.html">Rencana Penjualan</a>
