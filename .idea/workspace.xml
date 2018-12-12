@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/dashboard.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/dashboard.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,7 +18,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="12" />
+          <entry key="project.closed" value="13" />
           <entry key="project.open.time.2" value="3" />
           <entry key="project.open.time.223" value="1" />
           <entry key="project.open.time.3" value="1" />
@@ -78,47 +79,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="501">
-              <caret line="725" selection-start-line="725" selection-end-line="725" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="58" column="29" lean-forward="true" selection-start-line="58" selection-start-column="29" selection-end-line="58" selection-end-column="29" />
-              <folding>
-                <element signature="e#40#58#0#PHP" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#a#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#3;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#a#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#3;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2520">
+            <state relative-caret-position="210">
+              <caret line="143" column="47" lean-forward="true" selection-start-line="143" selection-start-column="47" selection-end-line="143" selection-end-column="47" />
               <folding>
                 <element signature="e#256#262#1" expanded="true" />
                 <element signature="e#481#487#1" expanded="true" />
@@ -451,16 +416,15 @@
       <workItem from="1544088630319" duration="561000" />
       <workItem from="1544410341589" duration="4842000" />
       <workItem from="1544501054480" duration="4120000" />
-      <workItem from="1544585688559" duration="3186000" />
+      <workItem from="1544585688559" duration="3990000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="41529000" />
+    <option name="totallyTimeSpent" value="42333000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24015151" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -704,28 +668,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="501">
-          <caret line="725" selection-start-line="725" selection-end-line="725" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2520">
-          <folding>
-            <element signature="e#256#262#1" expanded="true" />
-            <element signature="e#481#487#1" expanded="true" />
-            <element signature="e#253#259#1" expanded="true" />
-            <element signature="e#480#486#1" expanded="true" />
-            <element signature="e#253#259#1" expanded="true" />
-            <element signature="e#480#486#1" expanded="true" />
-            <element signature="e#491#497#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/date/date_c.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-357">
@@ -755,6 +697,29 @@
             <element signature="n#style#0;n#button#1;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#2;n#div#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#button#3;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="501">
+          <caret line="725" selection-start-line="725" selection-end-line="725" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="143" column="47" lean-forward="true" selection-start-line="143" selection-start-column="47" selection-end-line="143" selection-end-column="47" />
+          <folding>
+            <element signature="e#256#262#1" expanded="true" />
+            <element signature="e#481#487#1" expanded="true" />
+            <element signature="e#253#259#1" expanded="true" />
+            <element signature="e#480#486#1" expanded="true" />
+            <element signature="e#253#259#1" expanded="true" />
+            <element signature="e#480#486#1" expanded="true" />
+            <element signature="e#491#497#1" expanded="true" />
           </folding>
         </state>
       </provider>

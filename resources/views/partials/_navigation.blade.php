@@ -23,15 +23,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<!-- end user info -->
 
 	<!-- NAVIGATION : This navigation is also responsive-->
-	<?php $sidebar = App\Http\Controllers\PlasmafoneController::aksesSidebar();?>
+	<?php $sidebar = App\Http\Controllers\PlasmafoneController::aksesSidebar(); //dd($sidebar['Penerimaan Barang Supplier']);?>
 	<nav>
 		<ul>
-
-			@if($sidebar['Dashboard Financial'] == 'Y')
 			<li class="{{ Request::is('dashboard') ? 'active' : '' }}">
 				<a href="{{ url('dashboard') }}" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
 			</li>
-			@endif
 
 			@if($sidebar['Data Master'] == 'Y')
 			<li class="{{ Request::is('master/*') ? 'active' : '' }}">
@@ -64,72 +61,100 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</li>
 			@endif
 
+			@if($sidebar['Pembelian'] == 'Y')
 			<li class="{{ Request::is('pembelian/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-credit-card"></i> <span class="menu-item-parent">Pembelian</span></a>
 				<ul <?php if(preg_match("/request-order/i", $url) || preg_match("/rencana-pembelian/i", $url) || preg_match("/konfirmasi-pembelian/i", $url) || preg_match("/purchase-order/i", $url) || preg_match("/purchase-return/i", $url)) { ?> style="display: block;" <?php } ?>>
-					<li <?php if(preg_match("/request-order/i", $url)) { ?> class="active" <?php } ?>>
-						<a href="{{ url('/pembelian/request-order') }}">Request Order</a>
-					</li>
+					@if($sidebar['Rencana Pembelian'] == 'Y')
 					<li <?php if(preg_match("/rencana-pembelian/i", $url)) { ?> class="active" <?php } ?>>
 						<a href="{{ url('/pembelian/rencana-pembelian') }}">Rencana Pembelian</a>
 					</li>
+					@endif
 
+					@if($sidebar['Konfirmasi Pembelian'] == 'Y')
 					<li <?php if(preg_match("/konfirmasi-pembelian/i", $url)) { ?> class="active" <?php } ?>>
 						<a href="{{ url('/pembelian/konfirmasi-pembelian') }}">Konfirmasi Pembelian</a>
 					</li>
+					@endif
 
+					@if($sidebar['Purchase Order'] == 'Y')
 					<li <?php if(preg_match("/purchase-order/i", $url)) { ?> class="active" <?php } ?>>
 						<a href="{{ url('/pembelian/purchase-order') }}">Purchase Order</a>
 					</li>
+					@endif
 
+					@if($sidebar['Return Barang'] == 'Y')
 					<li <?php if(preg_match("/purchase-return/i", $url)) { ?> class="active" <?php } ?>>
 						<a href="{{ url('/pembelian/purchase-return') }}">Return Barang</a>
 					</li>
+					@endif
 
+					@if($sidebar['Refund'] == 'Y')
 					<li>
 						<a href="#">Refund</a>
 					</li>
+					@endif
 				</ul>
 			</li>
+			@endif
 
+			@if($sidebar['Inventory'] == 'Y')
 			<li>
 				<a href="#"><i class="fa fa-lg fa-fw fa-cube"></i> <span class="menu-item-parent">Inventory</span></a>
 				<ul>
+					@if($sidebar['Penerimaan Barang Supplier'] != 'N' || $sidebar['Penerimaan Barang Pusat'] != 'N')
 					<li>
 						<a href="#">Penerimaan Barang</a>
 						<ul>
+							@if($sidebar['Penerimaan Barang Supplier'] == 'Y')
 							<li>
 								<a href="{{ url('/inventory/penerimaan/supplier') }}">Dari Supplier</a>
-							</li>	
+							</li>
+							@endif
+							@if($sidebar['Penerimaan Barang Pusat'] == 'Y')
 							<li>
 								<a href="{{ url('/inventory/penerimaan/pusat') }}">Kiriman Pusat</a>
 							</li>
+							@endif
 						</ul>
 					</li>
+					@endif
 
+					@if($sidebar['Distribusi Barang'] == 'Y')
 					<li>
 						<a href="{{ url('/inventory/distribusi') }}">Distribusi Barang</a>
 					</li>
+					@endif
 
+					@if($sidebar['Opname Barang'] != 'N' || $sidebar['Opname Barang Outlet'] != 'N')
 					<li>
-						<a href="">Opname Barang</a>
+						<a href="#">Opname Barang</a>
 						<ul>
+							@if($sidebar['Opname Barang'] == 'Y')
 							<li>
-								<a href="">Pusat</a>
-							</li>	
-							<li>
-								<a href="">Outlet</a>
+								<a href="#">Pusat</a>
 							</li>
+							@endif
+							@if($sidebar['Distribusi Outlet'] == 'Y')
+							<li>
+								<a href="#">Outlet</a>
+							</li>
+							@endif
 						</ul>
 					</li>
+					@endif
 
+					@if($sidebar['Minimum Stok'] == 'Y')
 					<li>
-						<a href="flot.html">Minumun Stok</a>
+						<a href="#">Minimun Stok</a>
 					</li>
+					@endif
 
 				</ul>
 			</li>
+			@endif
 
+			@if($sidebar['Penjualan'] == 'Y')
 			<li>
 				<a href="#"><i class="fa fa-lg fa-fw fa-handshake-o"></i> <span class="menu-item-parent">Penjualan</span></a>
 				<ul>
@@ -165,6 +190,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 				</ul>
 			</li>
+			@endif
 
 			<li>
 				<a href="#">
