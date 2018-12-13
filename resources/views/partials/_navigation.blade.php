@@ -327,24 +327,29 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</li>
 			@endif
 
+			@if($sidebar['Manajemen Aplikasi'] == 'Y')
 			<li>
 				<a href="#">
 					<i class="fa fa-lg fa-fw fa-cog"></i> 
 					<span class="menu-item-parent">Manajemen Aplikasi</span>
 				</a>
 				<ul>
+					@if($sidebar['Pengelolaan Pengguna'] == 'Y')
 					<li <?php if(preg_match("/akses-pengguna/i", $url)) { ?> class="active" <?php } ?>>
 						<a href="{{ url('/pengaturan/akses-pengguna') }}">Pengelolaan Pengguna</a>
 						
 					</li>
+					@endif
 
+					@if($sidebar['Log Kegiatan Pengguna'] == 'Y')
 					<li <?php if(preg_match("/log-kegiatan/i", $url)) { ?> class="active" <?php } ?>>
 						<a href="{{ url('/pengaturan/log-kegiatan') }}">Log Kegiatan Pengguna</a>
-						
 					</li>
+					@endif
 
 				</ul>
 			</li>
+			@endif
 			
 		</ul>
 	</nav>
