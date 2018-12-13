@@ -404,6 +404,9 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/pengaturan/log-kegiatan', 'PengaturanController@log_kegiatan');
 	Route::match(['get', 'post'],'/pengaturan/log-kegiatan/dataLog', 'PengaturanController@data_log');
+	Route::match(['get', 'post'],'/pengaturan/log-kegiatan/findLog', 'PengaturanController@find_log');
+	Route::match(['get', 'post'],'/pengaturan/log-kegiatan/cariLog', 'PengaturanController@cari_userLog');
+
 	// End Setting Application
 
 	// main route end

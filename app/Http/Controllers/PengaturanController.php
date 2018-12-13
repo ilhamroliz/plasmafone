@@ -12,6 +12,7 @@ use DB;
 use Session;
 use PDF;
 use Auth;
+use Response;
 use Yajra\DataTables\DataTables;
 
 class PengaturanController extends Controller
@@ -44,28 +45,77 @@ class PengaturanController extends Controller
         }
     }
 
-    public function data_log()
+    public function cari_userLog(Request $request)
     {
-        $log = DB::table('d_log_activity')
-                    ->join('d_mem', 'm_id', '=', 'la_mem')
-                    ->join('m_company', 'c_id', '=', 'la_comp')
-                    ->select('d_log_activity.*', 'm_name', 'c_name')
-                    ->get();
+        $cari = $request->term;
+        $nama = DB::select("select m_id, m_name from d_mem where m_name like '%".$cari."%'");
+        
+        if ($nama == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->m_id, 'label' => $query->m_name ];
+            }
+        }
 
-        $data = collect($log);
-        return DataTables::of($data)
-                ->addColumn('date', function($data){
-                    return Carbon::parse($data->la_date)->format('d-m-Y G:i');
-                })
-                ->rawColumns(['date'])
-                ->make(true);
+        return Response::json($results);
+    }
+
+    public function find_log(Request $request)
+    {
+        // dd($request);
+        if($request->nama == "" && $request->tgl_awal != "" && $request->tgl_akhir != ""){
+            $request->tgl_awal = str_replace('/','-',$request->tgl_awal);
+            $request->tgl_akhir = str_replace('/','-',$request->tgl_akhir);
+
+            $start = Carbon::parse($request->tgl_awal)->startOfDay();  //2016-09-29 00:00:00.000000
+            $end = Carbon::parse($request->tgl_akhir)->endOfDay(); //2016-09-29 23:59:59.000000
+
+            $data = DB::table('d_log_activity')
+                        ->join('d_mem', 'm_id', '=', 'la_mem')
+                        ->join('m_company', 'c_id', '=', 'la_comp')
+                        ->select('d_log_activity.*', 'm_name', 'c_name')
+                        ->where('la_date', '>=', $start)
+                        ->where('la_date', '<=', $end)
+                        ->get();
+        }
+        elseif($request->nama != "" && $request->tgl_awal == "" && $request->tgl_akhir == ""){
+            $data = DB::table('d_log_activity')
+                        ->join('d_mem', 'm_id', '=', 'la_mem')
+                        ->join('m_company', 'c_id', '=', 'la_comp')
+                        ->select('d_log_activity.*', 'm_name', 'c_name')
+                        ->where('la_mem', $request->nama)
+                        ->get();
+        }
+        elseif($request->nama != "" && $request->tgl_awal != "" && $request->tgl_akhir != ""){
+            $request->tgl_awal = str_replace('/','-',$request->tgl_awal);
+            $request->tgl_akhir = str_replace('/','-',$request->tgl_akhir);
+
+            $start = Carbon::parse($request->tgl_awal)->startOfDay();  //2016-09-29 00:00:00.000000
+            $end = Carbon::parse($request->tgl_akhir)->endOfDay(); //2016-09-29 23:59:59.000000
+            
+            $data = DB::table('d_log_activity')
+                        ->join('d_mem', 'm_id', '=', 'la_mem')
+                        ->join('m_company', 'c_id', '=', 'la_comp')
+                        ->select('d_log_activity.*', 'm_name', 'c_name')
+                        ->where('la_date', '>=', $start)
+                        ->where('la_date', '<=', $end)
+                        ->where('la_mem', $request->nama)
+                        ->get();
+        }
+
+        for ($i=0; $i < count($data); $i++) {
+            $data[$i]->la_date = Carbon::parse($data[$i]->la_date)->format('d-m-Y G:i:s');
+        }
+
+        return Response::json($data);
     }
 
     public function dataUser()
     {
         $user = DB::table('d_mem')
-            ->join('d_jabatan', 'm_level', '=', 'id')
-            ->select('d_mem.*', 'd_jabatan.nama')
+            ->join('m_level', 'l_id', '=', 'm_level')
+            ->select('d_mem.*', 'l_name')
             ->orderBy('m_id')
             ->get();
         $user = collect($user);
@@ -154,7 +204,10 @@ class PengaturanController extends Controller
     public function simpan(Request $request)
     {
         // dd($request);
+        $id = Crypt::decrypt($request->id);
         DB::beginTransaction();
+        $nama = DB::table('d_mem')->select('m_name')->where('m_id', $id)->first();
+
         try {
             $read = [];
             if($request->read != null){
@@ -172,7 +225,6 @@ class PengaturanController extends Controller
             if($request->delete != null){
                 $delete = $request->delete;
             }
-            $id = Crypt::decrypt($request->id);
 
             $akses = DB::table('d_access')
                 ->select('a_id')
@@ -276,7 +328,8 @@ class PengaturanController extends Controller
             //     'status' => 'sukses'
             // ];
             // return json_encode($response);
-            Plasmafone::logActivity('Mengganti Hak Akses User '.$id);
+            $log = 'Mengganti Hak Akses User '.$nama->m_name;
+            Plasmafone::logActivity($log);
             return response()->json([
                 'status' => 'sukses'
             ]);

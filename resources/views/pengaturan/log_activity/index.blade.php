@@ -100,6 +100,7 @@
 
 						<!-- widget div-->
 						<div>
+
 							
 							<!-- widget edit box -->
 							<div class="jarviswidget-editbox">
@@ -112,6 +113,30 @@
 							
 							<!-- widget content -->
 							<div class="widget-body">
+								
+								<div class="row form-group">
+									<div class="col-lg-12 col-md-12 col-sm-12">
+										<div class="col-md-4">
+											<div class="input-daterange input-group" id="date-range" style="">
+												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal">
+												<span class="input-group-addon bg-custom text-white b-0">to</span>
+												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<input type="text" id="search" class="form-control" name="search" placeholder="Cari Berdasarkan Nama User">
+											<input type="hidden" name="searchhidden" id="searchhidden">
+										</div>
+										<div class="col-md-2">
+											<span class="input-group-append">
+												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()">
+													<i class="fa fa-search"></i>
+												</button>
+											</span>
+										</div>
+									</div>
+								</div>
+
 								{!! csrf_field() !!}
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>			                
@@ -122,6 +147,9 @@
 											<th class="text-center">Waktu Akses</th>
 										</tr>
 									</thead>
+									<tbody id="showdata">
+										
+									</tbody>
 								</table>
 							</div>
 							<!-- end widget content -->
@@ -151,7 +179,10 @@
 <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
-<script>
+<script src="{{ asset('template_asset/js/plugin/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datapicker/bootstrap-datepicker.js') }}"></script>
+
+{{-- <script>
 let selected = [];
 
 /* BASIC ;*/
@@ -208,5 +239,70 @@ $(document).ready(function(){
         });
     }, 500);
 });
+</script> --}}
+
+<script type="text/javascript">
+	var table;
+	$(document).ready(function(){
+		$( "#search" ).autocomplete({
+			source: baseUrl+'/pengaturan/log-kegiatan/cariLog',
+			minLength: 2,
+			select: function(event, data) {
+				getData(data.item);
+			}
+		});
+
+		table = $('#dt_basic').DataTable({
+			language: dataTableLanguage
+		});
+
+		$('#date-range').datepicker({
+			toggleActive: true,
+			autoclose: true,
+			todayHighlight: true,
+			format: "dd/mm/yyyy"
+		});
+
+	});
+
+	function getData(data){
+		$('#searchhidden').val(data.id);
+	}
+
+	function search(){
+		// waitingDialog.show();
+
+		$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+		var tgl_awal = $('#tgl_awal').val();
+		var tgl_akhir = $('#tgl_akhir').val();
+		var nama = $('#searchhidden').val();
+		
+		$('#overlay').fadeIn(200);
+		$('#load-status-text').text('Sedang Mencari Data');
+		$.ajaxSetup({
+			headers: {
+				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			}
+		});
+		$.ajax({
+		url: '{{ url('/pengaturan/log-kegiatan/findLog') }}',
+		type: 'get',
+		data: {tgl_awal:tgl_awal, tgl_akhir:tgl_akhir, nama:nama},
+		success: function(response){
+			$('#searchhidden').val('');
+			table.clear();
+			for (var i = 0; i < response.length; i++) {
+			table.row.add([
+				response[i].m_name,
+				response[i].c_name,
+				response[i].la_activity,
+				response[i].la_date
+			]).draw( false );
+			}
+		}
+		});
+		$('#overlay').fadeOut(200);
+		// waitingDialog.hide();
+	}
 </script>
 @endsection
