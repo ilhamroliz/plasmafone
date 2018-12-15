@@ -1001,14 +1001,14 @@ class PembelianController extends Controller
 
     public function rencana_pembelian()
     {
-        $r_orders = DB::table('d_request_order_dt')
+        /*$r_orders = DB::table('d_request_order_dt')
                         ->select('d_request_order_dt.*', 'd_request_order.ro_cabang', 'd_supplier.s_name','d_cabang.*')
                         ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
                         ->join('d_supplier', 'd_request_order_dt.rdt_supplier', '=', 'd_supplier.s_id', 'left')
                         ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
                         ->orderBy('d_request_order.created_at', 'desc')
-                        ->get();
-    	return view('pembelian/rencana_pembelian/index')->with(compact('r_orders'));
+                        ->get();*/
+    	return view('pembelian/rencana_pembelian/index');
     }
 
     public function multiple_edit_rencana_pembelian(Request $request)

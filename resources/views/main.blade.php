@@ -1,3 +1,6 @@
+<?php 
+	use App\Http\Controllers\PlasmafoneController as Access;
+?>
 <!DOCTYPE html>
 <html lang="en-us">
 	<head>

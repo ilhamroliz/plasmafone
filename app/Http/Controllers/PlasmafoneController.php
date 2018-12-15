@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
 
-class PlasmafoneController
+class PlasmafoneController extends Controller
 {
     public static function getActivity()
     {
