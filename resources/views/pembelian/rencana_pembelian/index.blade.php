@@ -50,7 +50,7 @@
 
                     <div class="page-title">
 
-                        <a href="{{ url('/master/barang/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah
+                        <a href="{{ url('pembelian/rencana-pembelian/tambah') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah
                             Data</a>
 
                     </div>

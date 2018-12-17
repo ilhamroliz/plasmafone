@@ -272,6 +272,7 @@ Route::group(['middleware' => 'auth'], function(){
 	// Rencana Pembelian
 
 	Route::get('/pembelian/rencana-pembelian','PembelianController@rencana_pembelian');
+	Route::get('/pembelian/rencana-pembelian/tambah','PembelianController@addRencana');
 
 	Route::post('/pembelian/rencana-pembelian/request-order-status','PembelianController@request_order_status');
 

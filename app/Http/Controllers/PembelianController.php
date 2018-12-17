@@ -1011,6 +1011,11 @@ class PembelianController extends Controller
     	return view('pembelian/rencana_pembelian/index');
     }
 
+    public function addRencana()
+    {
+        return view('pembelian/rencana_pembelian/add');
+    }
+
     public function multiple_edit_rencana_pembelian(Request $request)
     {
         // print_r($request->all()); die;
