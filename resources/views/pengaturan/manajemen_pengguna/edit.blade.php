@@ -134,11 +134,11 @@
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <select name="jabatan" class="form-control jabatan" id="jabatan">
                                                             <option value="-" disabled>-- PILIH JABATAN</option>
-                                                            @foreach($getJabatan as $data)
-                                                                @if($data->id == $dataUser->m_level)
-                                                                <option value="{{ $data->id }}" selected >{{ $data->nama }}</option>
+                                                            @foreach($getLevel as $data)
+                                                                @if($data->l_id == $dataUser->m_level)
+                                                                <option value="{{ $data->l_id }}" selected >{{ $data->l_name }}</option>
                                                                 @else
-                                                                <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                                <option value="{{ $data->l_id }}">{{ $data->l_name }}</option>
                                                                 @endif
                                                             @endforeach
                                                         </select>                                                       
@@ -164,7 +164,6 @@
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Alamat User</label>
                                                     <div class="col-xs-8 col-lg-8 textarea">                                                        
                                                         <textarea value="{{ $dataUser->m_address }}" name="alamat" id="alamat" class="custom-scroll text-area form-control" rows="3" style="width: 100%">{{ $dataUser->m_address }}</textarea>
-                                                        <!-- <input type="text" name="alamat" id="alamat" value="{{ $dataUser->m_address }}" class="custom-scroll"> -->
                                                     </div>                                                
                                                 </div>
 
@@ -172,10 +171,6 @@
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
                                                     <div class="col-xs-8 col-lg-8">
                                                         <div class="upload-btn-wrapper">
-                                                            <!-- <label class="btn btn-default" for="upload-file-selector">
-                                                                <input id="upload-file-selector" name="imageUpload" class="uploadGambar" type="file" >
-                                                                <i class="fa fa-file-picture-o margin-correction"></i>&nbsp;Upload Gambar
-                                                            </label> -->
 
                                                             <button class="btn btn-default"><i class="fa fa-file-picture-o"></i>&nbsp;Upload Gambar</button>
                                                             <input type="file" name="imageUpload" id="imageUpload" class="uploadGambar"/>
@@ -188,10 +183,6 @@
                                                     <label class="col-xs-4 col-lg-4 control-label"></label>
                                                     <div class="col-xs-8 col-lg-8">
                                                         <div class="col-sm-12 image-holder" style="padding:0px;">
-                                                        <!-- <img src="{{ asset('img/user/'.$dataUser->m_img) }}" 
-                                                            class="img-circle circle-border m-b-md"
-                                                            alt="profile"
-                                                            style="width: 100%; heigth: 100%; margin: 20px 0;"> -->
                                                         
                                                         @if($dataUser->m_img != '')
                                                         <img src="{{ asset('img/user/'.$dataUser->m_img) }}" class="img-responsive" width="60px">
@@ -304,73 +295,6 @@
             alert("This browser does not support FileReader.");
         }
     });
-
-    // function simpan(){
-    //     // --- AXIOS USE ----//
-    //     $('#overlay').fadeIn(200);
-    //     $('#load-status-text').text('Penyimpanan Database Sedang di Proses');
-    //     let btn = $('#submit-tambah');
-    //     btn.attr('disabled', 'disabled');
-    //     btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
-
-    //     axios.post(baseUrl+'/pengaturan/kelola-pengguna/simpan', $('#form-tambah').serialize(), {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data'
-    //         }
-    //     })
-    //         .then((response) => {
-                // if(response.data.status == 'sukses'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "SUKSES",
-                //         content : "Data Pengguna Berhasil Disimpan",
-                //         color : "#739E73",
-                //         iconSmall : "fa fa-check animated",
-                //         timeout : 5000
-                //     });
-                //     location.reload();
-                // }else if(response.data.status == 'gagal'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Data Pengguna Gagal Disimpan !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                //     // location.reload();
-                // }else if(response.data.status == 'gagalUser'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Username Tidak Tersedia !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                //     // location.reload();
-                // }else if(response.data.status == 'gagalPass'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Password Tidak Sesuai !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                //     // location.reload();
-                // }else if(response.data.status == 'gagalImg'){
-                //     $('#overlay').fadeOut(200);
-                //     $.smallBox({
-                //         title : "GAGAL",
-                //         content : "Ukuran File Gambar Terlalu Besar !!",
-                //         color : "#C46A69",
-                //         iconSmall : "fa fa-times animated",
-                //         timeout : 5000
-                //     });
-                    // location.reload();
-    //     })
-    // }
 
 </script>
 @endsection

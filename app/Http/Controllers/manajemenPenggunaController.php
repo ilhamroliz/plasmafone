@@ -25,30 +25,28 @@ class manajemenPenggunaController extends Controller
 {
 
     public function tambah_pengguna(){
-        $getJabatan = DB::table('d_jabatan')
-                ->select('id', 'nama')
+        $getLevel = DB::table('m_level')
+                ->select('l_id', 'l_name')
                 ->get();
         $getOutlet = DB::table('m_company')
                 ->select('c_id', 'c_name')
                 ->get();
         if(Plasmafone::checkAkses(42, 'insert') == true){
-            return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
+            return view('pengaturan.manajemen_pengguna.tambah', compact('getLevel', 'getOutlet'));
         }else{
             return view('errors.access_denied');
         }
-        // return view('pengaturan.manajemen_pengguna.tambah', compact('getJabatan', 'getOutlet'));
-
     }
 
     public function edit_pengguna($id){
         $idm = Crypt::decrypt($id);
         $user = DB::table('d_mem')
-                        ->join('d_jabatan', 'id', '=', 'm_level')
+                        ->join('m_level', 'l_id', '=', 'm_level')
                         ->join('m_company', 'c_id', '=', 'm_comp')
-                        ->select('d_mem.*', 'd_jabatan.nama', 'm_company.c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
+                        ->select('d_mem.*', 'l_name', 'c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
                         ->where('m_id', $idm)->get();
-        $getJabatan = DB::table('d_jabatan')
-                ->select('id', 'nama')
+        $getLevel = DB::table('m_level')
+                ->select('l_id', 'l_name')
                 ->get();
         $getOutlet = DB::table('m_company')
                 ->select('c_id', 'c_name')
@@ -63,7 +61,7 @@ class manajemenPenggunaController extends Controller
         $id = Crypt::encrypt($idm);
         // dd($user);
         if(Plasmafone::checkAkses(42, 'update') == true){
-            return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getJabatan', 'getOutlet','id', 'year', 'month', 'day'));
+            return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getLevel', 'getOutlet','id', 'year', 'month', 'day'));
         }else{
             return view('errors.access_denied');
         }

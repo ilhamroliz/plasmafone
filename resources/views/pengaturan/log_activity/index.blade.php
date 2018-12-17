@@ -179,9 +179,6 @@
 <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
-{{-- <script src="{{ asset('template_asset/js/plugin/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datapicker/bootstrap-datepicker.js') }}"></script> --}}
-
 <script type="text/javascript">
 	var table;
 	$(document).ready(function(){
@@ -197,16 +194,6 @@
 			language: dataTableLanguage
 		});
 
-		// $('#date-range').datepicker({
-		// 	toggleActive: true,
-		// 	autoclose: true,
-		// 	todayHighlight: true,
-		// 	format: "dd/mm/yyyy"
-		// });
-
-
-
-
 	});
 
 	function getData(data){
@@ -214,8 +201,7 @@
 	}
 
 	function search(){
-		// waitingDialog.show();
-
+		
 		$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 		var tgl_awal = $('#tgl_awal').val();
 		var tgl_akhir = $('#tgl_akhir').val();
@@ -229,24 +215,23 @@
 			}
 		});
 		$.ajax({
-		url: '{{ url('/pengaturan/log-kegiatan/findLog') }}',
-		type: 'get',
-		data: {tgl_awal:tgl_awal, tgl_akhir:tgl_akhir, nama:nama},
-		success: function(response){
-			$('#searchhidden').val('');
-			table.clear();
-			for (var i = 0; i < response.length; i++) {
-			table.row.add([
-				response[i].m_name,
-				response[i].c_name,
-				response[i].la_activity,
-				response[i].la_date
-			]).draw( false );
+			url: '{{ url('/pengaturan/log-kegiatan/findLog') }}',
+			type: 'get',
+			data: {tgl_awal:tgl_awal, tgl_akhir:tgl_akhir, nama:nama},
+			success: function(response){
+				$('#searchhidden').val('');
+				table.clear();
+				for (var i = 0; i < response.length; i++) {
+					table.row.add([
+						response[i].m_name,
+						response[i].c_name,
+						response[i].la_activity,
+						response[i].la_date
+					]).draw( false );
+				}
 			}
-		}
 		});
 		$('#overlay').fadeOut(200);
-		// waitingDialog.hide();
 	}
 </script>
 @endsection
