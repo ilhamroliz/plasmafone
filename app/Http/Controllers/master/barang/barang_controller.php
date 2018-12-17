@@ -276,7 +276,7 @@ class barang_controller extends Controller
                     $barang->save();
 
                     DB::commit();
-
+                    Access::logActivity('Menambahkan Data Barang'.$barang->i_nama);
                     // all good
                     return redirect('master/barang/add')->with('flash_message_success', 'Data barang berhasil tersimpan...!');
                 }
@@ -393,6 +393,7 @@ class barang_controller extends Controller
                         ]);
 
                         DB::commit();
+                        Access::logActivity('Edit Data Barang'.$data['i_nama']);
 
                         // all good
                         return redirect('/master/barang/edit/'.$id)->with('flash_message_success', 'Data barang berhasil diubah...!');
@@ -522,6 +523,9 @@ class barang_controller extends Controller
                     Item::where(['i_id' => Crypt::decrypt($id)])->update(['i_isactive' => 'Y']);
 
                     DB::commit();
+                    $data = Item::select('i_name')->where('i_id', Crypt::decrypt($id))->first();
+                    $log = 'Set Data Barang'.$data->i_nama. ' = ACTIVE';
+                    Access::logActivity($log);
 
                     // all good
                     return  json_encode([
@@ -573,6 +577,9 @@ class barang_controller extends Controller
                     Item::where(['i_id' => Crypt::decrypt($id)])->update(['i_isactive' => 'N']);
 
                     DB::commit();
+                    $data = Item::select('i_name')->where('i_id', Crypt::decrypt($id))->first();
+                    $log = 'Set Data Barang'.$data->i_nama. ' = NONACTIVE';
+                    Access::logActivity($log);
 
                     // all good
                     return  json_encode([

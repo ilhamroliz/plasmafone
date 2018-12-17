@@ -103,7 +103,7 @@
 
 							
 							<!-- widget edit box -->
-							<div class="jarviswidget-editbox">
+						<div class="jarviswidget-editbox">
 								<!-- This area used as dropdown edit box -->
 								<input class="form-control" type="text">
 								<span class="note"><i class="fa fa-check text-success"></i> Change title to update and save instantly!</span>
@@ -117,10 +117,10 @@
 								<div class="row form-group">
 									<div class="col-lg-12 col-md-12 col-sm-12">
 										<div class="col-md-4">
-											<div class="input-daterange input-group" id="date-range" style="">
-												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal">
+											<div class="input-group" id="date-range" style="">
+												<input type="text" class="form-control datepicker" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
 												<span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir">
+												<input type="text" class="form-control datepicker" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 											</div>
 										</div>
 										<div class="col-md-6">
@@ -179,67 +179,8 @@
 <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
-<script src="{{ asset('template_asset/js/plugin/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datapicker/bootstrap-datepicker.js') }}"></script>
-
-{{-- <script>
-let selected = [];
-
-/* BASIC ;*/
-var responsiveHelper_dt_basic = undefined;
-var responsiveHelper_datatable_fixed_column = undefined;
-var responsiveHelper_datatable_col_reorder = undefined;
-var responsiveHelper_datatable_tabletools = undefined;
-
-var breakpointDefinition = {
-    tablet : 1024,
-    phone : 480
-};
-var user;
-$(document).ready(function(){
-    setTimeout(function () {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        user = $('#dt_basic').DataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-            "t"+
-            "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "autoWidth" : true,
-            "language" : dataTableLanguage,
-            "preDrawCallback" : function() {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_dt_basic) {
-                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-                }
-            },
-            "rowCallback" : function(nRow) {
-                responsiveHelper_dt_basic.createExpandIcon(nRow);
-            },
-            "drawCallback" : function(oSettings) {
-                responsiveHelper_dt_basic.respond();
-            },
-
-            processing: true,
-            searching: true,
-            serverSide: true,
-            "ajax": {
-                "url": "{{ url('/pengaturan/log-kegiatan/dataLog') }}",
-                "type": "post",
-            },
-            columns: [
-                {data: 'm_name', name: 'm_name'},
-                {data: 'c_name', name: 'c_name'},
-                {data: 'la_activity', name: 'la_activity'},
-                {data: 'date', name: 'date'}
-            ],
-            responsive: false,
-        });
-    }, 500);
-});
-</script> --}}
+{{-- <script src="{{ asset('template_asset/js/plugin/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datapicker/bootstrap-datepicker.js') }}"></script> --}}
 
 <script type="text/javascript">
 	var table;
@@ -256,12 +197,15 @@ $(document).ready(function(){
 			language: dataTableLanguage
 		});
 
-		$('#date-range').datepicker({
-			toggleActive: true,
-			autoclose: true,
-			todayHighlight: true,
-			format: "dd/mm/yyyy"
-		});
+		// $('#date-range').datepicker({
+		// 	toggleActive: true,
+		// 	autoclose: true,
+		// 	todayHighlight: true,
+		// 	format: "dd/mm/yyyy"
+		// });
+
+
+
 
 	});
 

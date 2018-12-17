@@ -217,6 +217,7 @@ class outlet_controller extends Controller
                             $outlet->save();
                             
                             DB::commit();
+                            Access::logActivity('Menambahkan Outlet '.$outlet->c_name);
 
                             return  json_encode([
                                 'status'    => 'berhasil',
@@ -308,7 +309,8 @@ class outlet_controller extends Controller
                             'c_isactive'    => strtoupper($data['isactive'])
                         ]);
 
-                         DB::commit();
+                        DB::commit();
+                        Access::logActivity('Edit Data Outlet '.strtoupper($data['name']));
 
                         // all good
                         return  json_encode([
@@ -403,6 +405,9 @@ class outlet_controller extends Controller
 
                     DB::commit();
 
+                    $data = Outlet::select('c_name')->where('c_id', $id)->first();
+                    $log = 'Hapus Data Outlet '.$data->c_name;
+                    Access::logActivity($log);
                     // all good
                     return  json_encode([
                         'status'    => 'berhasil'
@@ -454,6 +459,9 @@ class outlet_controller extends Controller
 
                     DB::commit();
 
+                    $data = Outlet::select('c_name')->where('c_id', $id)->first();
+                    $log = 'Set Data Outlet '.$data->c_name. ' = ACTIVE';
+                    Access::logActivity($log);
                     // all good
                     return  json_encode([
                         'status'    => 'berhasil'
@@ -505,6 +513,9 @@ class outlet_controller extends Controller
 
                     DB::commit();
 
+                    $data = Outlet::select('c_name')->where('c_id', $id)->first();
+                    $log = 'Set Data Outlet '.$data->c_name. ' = NONACTIVE';
+                    Access::logActivity($log);
                     // all good
                     return  json_encode([
                         'status'    => 'berhasil'

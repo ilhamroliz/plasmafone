@@ -241,6 +241,7 @@ class suplier_controller extends Controller
                             ]);
                             
                             DB::commit();
+                            Access::logActivity('Menambahkan Data Supplier '.strtoupper($data['nama_suplier']));
 
                             return  json_encode([
                                 'status'    => 'berhasil'
@@ -346,7 +347,8 @@ class suplier_controller extends Controller
                                 's_isactive'    => strtoupper($data['isactive'])
                             ]);
 
-                             DB::commit();
+                            DB::commit();
+                            Access::logActivity('Edit Data Supplier '.strtoupper($data['nama_suplier']));
 
                             // all good
                             return  json_encode([
@@ -432,6 +434,9 @@ class suplier_controller extends Controller
                     suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'Y']);
 
                     DB::commit();
+                    $data = supplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
+                    $log = 'Set Data Supplier '.$data->s_name. ' = ACTIVE';
+                    Access::logActivity($log);
 
                     // all good
                     return  json_encode([
@@ -484,6 +489,9 @@ class suplier_controller extends Controller
                     suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'N']);
 
                     DB::commit();
+                    $data = supplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
+                    $log = 'Set Data Supplier '.$data->s_name. ' = NONACTIVE';
+                    Access::logActivity($log);
 
                     // all good
                     return  json_encode([
