@@ -252,56 +252,46 @@
 			// --- AJAX USE -- //
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Silahkan Memproses Penyimpanan Data');
-			// waitingDialog.show();
 			$.ajaxSetup({
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				}
 			});
 			$.ajax({
-				url: '{{ url('/master/member/add') }}',
-				type: 'post',
+				url: '{{ url('/master/member/simpan-tambah') }}',
+				type: 'get',
 				data: $('#data-form').serialize(),
 				success: function(response){
 					if (response.status == 'berhasil') {
-						// waitingDialog.hide();
 						$('#overlay').fadeOut(200);
 						$.smallBox({
 							title : "SUKSES",
-							content : "Data Akses Berhasil Diperbarui",
+							content : "Data Member Berhasil Diperbarui",
 							color : "#739E73",
 							iconSmall : "fa fa-check animated",
-							timeout : 5000
+							timeout : 3000
 						});
 						location.reload();
 					}
 					else if(response.status == 'gagal') {
-						// alert('Data Gagal Di Update');	
-						// waitingDialog.hide();
 						$('#overlay').fadeOut(200);
 						$.smallBox({
 							title : "GAGAL",
-							content : "Data Akses Gagal Diperbarui",
+							content : "Data Member Gagal Diperbarui",
 							color : "#C46A69",
 							iconSmall : "fa fa-times animated",
-							timeout : 5000
+							timeout : 3000
 						});
-						// location.reload();
 					}
-				}, error:function(x, e) {
-					waitingDialog.hide();
-					if (x.status == 0) {
-						alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-					} else if (x.status == 404) {
-						alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-					} else if (x.status == 500) {
-						alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-					} else if (e == 'parsererror') {
-						alert('Error.\nParsing JSON Request failed.');
-					} else if (e == 'timeout'){
-						alert('Request Time out. Harap coba lagi nanti');
-					} else {
-						alert('Unknow Error.\n' + x.responseText);
+					else if(response.status == 'ada') {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "GAGAL",
+							content : "Data Member Sudah Ada",
+							color : "#C46A69",
+							iconSmall : "fa fa-times animated",
+							timeout : 3000
+						});
 					}
 				}
 			});

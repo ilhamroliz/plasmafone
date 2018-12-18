@@ -267,8 +267,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/master/member/detail/{id}', 'master\member\member_controller@detail');
 
-	Route::match(['get', 'post'], '/master/member/add', 'master\member\member_controller@tambah');
-	Route::match(['get', 'post'], '/master/member/edit/{id}', 'master\member\member_controller@edit');
+	Route::get('/master/member/add', 'master\member\member_controller@tambah');
+	Route::match(['get', 'post'], '/master/member/simpan-tambah', 'master\member\member_controller@simpan_tambah');
+	Route::get('/master/member/edit/{id}', 'master\member\member_controller@edit');
+	Route::match(['get', 'post'], '/master/member/simpan-edit', 'master\member\member_controller@simpan_edit');
+
 
 	Route::get('/master/member/active/{id}', 'master\member\member_controller@active');
 	Route::get('/master/member/nonactive/{id}', 'master\member\member_controller@nonactive');

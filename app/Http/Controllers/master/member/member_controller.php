@@ -100,74 +100,78 @@ class member_controller extends Controller
 
     }
 
-    public function tambah(Request $request)
+    public function tambah()
     {
         if (Plasma::checkAkses(47, 'insert') == true) {
+            return view('master/member/add');
+        } else {
+            return view('errors/407');
+        }
+    }
 
-            if ($request->isMethod('post')) {
-                // dd($request);
-                $data = $request->all();
-                DB::beginTransaction();
-                try {
+    public function simpan_tambah(Request $request)
+    {
+        if (Plasma::checkAkses(47, 'insert') == true) {
+            dd($request);
+            $data = $request->all();
+            DB::beginTransaction();
+            try {
 
-                    $check = member::where('m_nik', '=', $data['nik'])->count();
+                $check = member::where('m_nik', '=', $data['nik'])->count();
 
-                    if ($check == 0) {
+                if ($check == 0) {
 
-                        if ($data['tanggal'] != 'Tanggal' || $data['tanggal'] != '') {
-                            $tanggal = $data['tanggal'];
-                        } else {
-                            $tanggal = "00";
-                        }
-
-                        if ($data['bulan'] != 'Bulan' || $data['bulan'] != '') {
-                            $bulan = $data['bulan'];
-                        } else {
-                            $bulan = "00";
-                        }
-
-                        if ($data['tahun'] != 'Tahun' || $data['tahun'] != '') {
-                            $tahun = $data['tahun'];
-                        } else {
-                            $tahun = "0000";
-                        }
-
-                        $tglnow = Carbon::now('Asia/Jakarta');
-
-                        DB::table('m_mem')->insert([
-                            'm_name' => strtoupper($data['nama']),
-                            'm_nik' => $data['nik'],
-                            'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
-                            'm_telp' => $data['telp'],
-                            'm_address' => $data['alamat'],
-                            'm_email' => $data['email'],
-                            'm_insert' => $tglnow
-                        ]);
-
+                    if ($data['tanggal'] != 'Tanggal' || $data['tanggal'] != '') {
+                        $tanggal = $data['tanggal'];
                     } else {
-                        return json_encode([
-                            'status' => 'ada',
-                            'member' => $data['nik'] . ' (' . $data['telp'] . ')'
-                        ]);
+                        $tanggal = "00";
                     }
-                    DB::commit();
 
-                    Plasma::logActivity('Menambahkan Member ' . $data['nama']);
+                    if ($data['bulan'] != 'Bulan' || $data['bulan'] != '') {
+                        $bulan = $data['bulan'];
+                    } else {
+                        $bulan = "00";
+                    }
 
-                    return json_encode([
-                        'status' => 'berhasil'
+                    if ($data['tahun'] != 'Tahun' || $data['tahun'] != '') {
+                        $tahun = $data['tahun'];
+                    } else {
+                        $tahun = "0000";
+                    }
+
+                    $tglnow = Carbon::now('Asia/Jakarta');
+
+                    DB::table('m_mem')->insert([
+                        'm_name' => strtoupper($data['nama']),
+                        'm_nik' => $data['nik'],
+                        'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
+                        'm_telp' => $data['telp'],
+                        'm_address' => $data['alamat'],
+                        'm_email' => $data['email'],
+                        'm_insert' => $tglnow
                     ]);
-                } catch (\Exception $e) {
-                    DB::rollback();
 
+                } else {
                     return json_encode([
-                        'status' => 'gagal',
-                        'pesan' => $e
+                        'status' => 'ada',
+                        'member' => $data['nik'] . ' (' . $data['telp'] . ')'
                     ]);
                 }
-            }
+                DB::commit();
 
-            return view('master/member/add');
+                Plasma::logActivity('Menambahkan Member ' . $data['nama']);
+
+                return json_encode([
+                    'status' => 'berhasil'
+                ]);
+            } catch (\Exception $e) {
+                DB::rollback();
+
+                return json_encode([
+                    'status' => 'gagal',
+                    'pesan' => $e
+                ]);
+            }
         } else {
             return view('errors/407');
         }
