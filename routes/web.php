@@ -1,5 +1,5 @@
 <?php
-
+ 
 // use Symfony\Component\Routing\Annotation\Route;
 
 /*
@@ -283,9 +283,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Request Order
 
-	Route::get('/pembelian/request-order', 'PembelianController@request_order');
+	Route::get('/pembelian/request-pembelian', 'PembelianController@request_order');
 
-	Route::match(['get', 'post'], '/pembelian/request-order/add', 'PembelianController@request_order_add');
+	Route::match(['get', 'post'], '/pembelian/request-order/add', 'PembelianController@form_add_request');
 
 	Route::post('/pembelian/request-order/edit-multiple', 'PembelianController@edit_multiple');
 

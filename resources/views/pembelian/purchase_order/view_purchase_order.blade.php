@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Request Order')
+@section('title', 'Purchase Order')
 
 @section('extra_style')
 
@@ -22,7 +22,7 @@
         <ol class="breadcrumb">
             <li>Home</li>
             <li>Pembelian</li>
-            <li>Request Order</li>
+            <li>Purchase Order</li>
         </ol>
 
     </div>
@@ -41,7 +41,7 @@
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Request Order
+						 Purchase Order
 					</span>
                 </h1>
             </div>
@@ -50,7 +50,7 @@
 
                     <div class="page-title">
 
-                        <a href="{{ url('/pembelian/request-order/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah
+                        <a href="{{ url('pembelian/request_pembelian/tambah') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah
                             Data</a>
 
                     </div>
@@ -95,12 +95,12 @@
                                 <li class="active">
                                     <a data-toggle="tab" href="#hr1"> <i style="color: #739E73;"
                                                                          class="fa fa-lg fa-rotate-right fa-spin"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Menunggu </span> </a>
+                                            class="hidden-mobile hidden-tablet"> Belum Order </span> </a>
                                 </li>
                                 <li>
                                     <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
                                                                          class="fa fa-lg fa-check"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Diterima </span></a>
+                                            class="hidden-mobile hidden-tablet"> Sudah Order </span></a>
                                 </li>
                                 
                             </ul>
@@ -116,9 +116,11 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                <th data-hide="phone,tablet" width="15%">No</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
+                                                <th data-hide="phone,tablet" width="15%">Harga</th>
+                                                <th data-hide="phone,tablet" width="15%">Status</th>
                                                 <th data-hide="phone,tablet" width="15%">Aksi</th>
                                             </tr>
                                             </thead>
@@ -131,9 +133,12 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                
+                                                <th data-hide="phone,tablet" width="15%">No</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
+                                                <th data-hide="phone,tablet" width="15%">Harga</th>
+                                                <th data-hide="phone,tablet" width="15%">Status</th>
                                                 <th data-hide="phone,tablet" width="15%">Aksi</th>
                                             </tr>
                                             </thead>

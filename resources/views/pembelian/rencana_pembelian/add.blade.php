@@ -25,7 +25,7 @@
             <li>Home</li>
             <li>Pembelian</li>
             <li>Rencana Pembelian</li>
-        </ol>
+        </ol> 
 
     </div>
     <!-- END RIBBON -->

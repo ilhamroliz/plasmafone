@@ -13,14 +13,16 @@ class PembelianController extends Controller
 {
     public function konfirmasi_pembelian()
     {
-        $data = "Null";
-        $data_supplier = DB::table('d_supplier')
-                        ->join('d_request_order_dt', 'd_supplier.s_id', '=', 'd_request_order_dt.rdt_supplier')
-                        ->where('d_request_order_dt.rdt_status', '=', 'Rencana Pembelian')
-                        ->groupBy('d_supplier.s_name')
-                        ->get();
+        // $data = "Null";
+        // $data_supplier = DB::table('d_supplier')
+        //                 ->join('d_request_order_dt', 'd_supplier.s_id', '=', 'd_request_order_dt.rdt_supplier')
+        //                 ->where('d_request_order_dt.rdt_status', '=', 'Rencana Pembelian')
+        //                 ->groupBy('d_supplier.s_name')
+        //                 ->get();
         // print_r($data_supplier);
-    	return view('pembelian/konfirmasi_pembelian/index', compact('data', 'data_supplier'));
+    	// return view('pembelian/konfirmasi_pembelian/index', compact('data', 'data_supplier'));
+
+        return view('pembelian/konfirmasi_pembelian/view_konfirmasi_pembelian');
     }
 
     public function get_data_order($id)
@@ -341,13 +343,14 @@ class PembelianController extends Controller
 
     public function purchase_order()
     {
-        $data = DB::table('d_purchase_order_dt')
-                ->select('d_purchase_order_dt.*', 'd_purchase_order.*', 'd_supplier.*')
-                ->join('d_purchase_order', 'd_purchase_order_dt.podt_purchase', 'd_purchase_order.po_no')
-                ->join('d_supplier', 'd_purchase_order_dt.podt_kode_suplier', '=', 'd_supplier.s_id')
-                ->orderBy('d_purchase_order.po_status', 'desc')
-                ->get();
-    	return view('pembelian/purchase_order/index', compact('data'));
+        // $data = DB::table('d_purchase_order_dt')
+        //         ->select('d_purchase_order_dt.*', 'd_purchase_order.*', 'd_supplier.*')
+        //         ->join('d_purchase_order', 'd_purchase_order_dt.podt_purchase', 'd_purchase_order.po_no')
+        //         ->join('d_supplier', 'd_purchase_order_dt.podt_kode_suplier', '=', 'd_supplier.s_id')
+        //         ->orderBy('d_purchase_order.po_status', 'desc')
+        //         ->get();
+    	// return view('pembelian/purchase_order/index', compact('data'));
+        return view('pembelian/purchase_order/view_purchase_order');
     }
 
     public function purchase_order_add()
@@ -703,7 +706,8 @@ class PembelianController extends Controller
     public function refund()
     {
     	return view('pembelian/refund/refund');
-    }
+    } 
+
     public function request_order()
     {
         /*$r_orders_dt = DB::table('d_request_order_dt')
@@ -712,6 +716,11 @@ class PembelianController extends Controller
                         ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
                         ->get();*/
         return view('pembelian/request_order/view_request_order');
+    }
+
+    public function form_add_request()
+    {
+        return view('pembelian/request_order/tambah_request_order');
     }
 
     public function request_order_add(Request $request)

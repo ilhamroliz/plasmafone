@@ -65,6 +65,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			<li class="{{ Request::is('pembelian/*') ? 'active' : '' }}">
 				<a href="#"><i class="fa fa-lg fa-fw fa-credit-card"></i> <span class="menu-item-parent">Pembelian</span></a>
 				<ul <?php if(preg_match("/request-order/i", $url) || preg_match("/rencana-pembelian/i", $url) || preg_match("/konfirmasi-pembelian/i", $url) || preg_match("/purchase-order/i", $url) || preg_match("/purchase-return/i", $url)) { ?> style="display: block;" <?php } ?>>
+
+					@if($sidebar['Request Order'] == 'Y')
+					<li <?php if(preg_match("/request-pembelian/i", $url)) { ?> class="active" <?php } ?>>
+						<a href="{{ url('/pembelian/request-pembelian') }}">Request Order</a>
+					</li>
+					@endif
+
 					@if($sidebar['Rencana Pembelian'] == 'Y')
 					<li <?php if(preg_match("/rencana-pembelian/i", $url)) { ?> class="active" <?php } ?>>
 						<a href="{{ url('/pembelian/rencana-pembelian') }}">Rencana Pembelian</a>

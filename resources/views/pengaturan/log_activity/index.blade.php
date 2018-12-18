@@ -194,7 +194,7 @@
 			language: dataTableLanguage
 		});
 
-	});
+	}); 
 
 	function getData(data){
 		$('#searchhidden').val(data.id);
