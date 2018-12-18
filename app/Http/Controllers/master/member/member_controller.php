@@ -42,16 +42,16 @@ class member_controller extends Controller
             ->addColumn('aksi', function ($all) {
 
                 if ($all->m_status == "AKTIF") {
-                    if (Access::checkAkses(47, 'update') == true) {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    if (Plasma::checkAkses(47, 'update') == true) {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_id) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                     } else {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     }
                 } else {
-                    if (Access::checkAkses(47, 'update') == true) {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    if (Plasma::checkAkses(47, 'update') == true) {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($all->m_id) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
                     } else {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     }
                 }
             })
@@ -65,11 +65,11 @@ class member_controller extends Controller
         $active = collect($active);
 
         return DataTables::of($active)
-            ->addColumn('aksi', function ($supplier_active) {
-                if (Access::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            ->addColumn('aksi', function ($active) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_active->s_id) . '\', \'' . $supplier_active->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($active->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_id) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -85,10 +85,10 @@ class member_controller extends Controller
 
             ->addColumn('aksi', function ($nonactive) {
 
-                if (Access::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\', \'' . $supplier_nonactive->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($nonactive->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($nonactive->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($nonactive->m_id) . '\', \'' . $nonactive->m_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($nonactive->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -100,157 +100,224 @@ class member_controller extends Controller
 
     }
 
-    public function tambah()
-    {
-        if (Plasma::checkAkses(47, 'insert') == true) {
-            return view('master/member/add');
-        } else {
-            return view('errors/407');
-        }
-    }
+    // public function tambah(Request $request)
+    // {
+
+    // }
 
     public function simpan_tambah(Request $request)
     {
-        if (Plasma::checkAkses(47, 'insert') == true) {
-            dd($request);
-            $data = $request->all();
-            DB::beginTransaction();
-            try {
+        if (Plasma::checkAkses(47, 'insert') == false) {
+            return view('errors/407');
+        } else {
 
-                $check = member::where('m_nik', '=', $data['nik'])->count();
+            if ($request->isMethod('post')) {
 
-                if ($check == 0) {
+                if (Plasma::checkAkses(47, 'insert') == false) {
 
-                    if ($data['tanggal'] != 'Tanggal' || $data['tanggal'] != '') {
-                        $tanggal = $data['tanggal'];
-                    } else {
-                        $tanggal = "00";
-                    }
-
-                    if ($data['bulan'] != 'Bulan' || $data['bulan'] != '') {
-                        $bulan = $data['bulan'];
-                    } else {
-                        $bulan = "00";
-                    }
-
-                    if ($data['tahun'] != 'Tahun' || $data['tahun'] != '') {
-                        $tahun = $data['tahun'];
-                    } else {
-                        $tahun = "0000";
-                    }
-
-                    $tglnow = Carbon::now('Asia/Jakarta');
-
-                    DB::table('m_mem')->insert([
-                        'm_name' => strtoupper($data['nama']),
-                        'm_nik' => $data['nik'],
-                        'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
-                        'm_telp' => $data['telp'],
-                        'm_address' => $data['alamat'],
-                        'm_email' => $data['email'],
-                        'm_insert' => $tglnow
+                    return json_encode([
+                        'status' => 'ditolak'
                     ]);
 
                 } else {
-                    return json_encode([
-                        'status' => 'ada',
-                        'member' => $data['nik'] . ' (' . $data['telp'] . ')'
-                    ]);
-                }
-                DB::commit();
 
-                Plasma::logActivity('Menambahkan Member ' . $data['nama']);
-
-                return json_encode([
-                    'status' => 'berhasil'
-                ]);
-            } catch (\Exception $e) {
-                DB::rollback();
-
-                return json_encode([
-                    'status' => 'gagal',
-                    'pesan' => $e
-                ]);
-            }
-        } else {
-            return view('errors/407');
-        }
-    }
-
-    public function edit(Request $request)
-    {
-        if (Plasma::checkAkses(47, 'update') == true) {
-            if ($request->isMethod('post')) {
-                if (Plasma::checkAkses(47, 'update') == true) {
-
+                    // dd($request);
                     $data = $request->all();
                     DB::beginTransaction();
+
                     try {
 
-                        $cek = member::where('m_id', Crypt::decrypt($id))->count();
+                        $check = member::where('m_nik', '=', $data['nik'])->count();
 
-                        if ($check != 0) {
-
-                            if ($data['tanggal'] != 'Tanggal' || $data['tanggal'] != '') {
-                                $tanggal = $data['tanggal'];
-                            } else {
-                                $tanggal = "00";
-                            }
-
-                            if ($data['bulan'] != 'Bulan' || $data['bulan'] != '') {
-                                $bulan = $data['bulan'];
-                            } else {
-                                $bulan = "00";
-                            }
-
-                            if ($data['tahun'] != 'Tahun' || $data['tahun'] != '') {
-                                $tahun = $data['tahun'];
-                            } else {
-                                $tahun = "0000";
-                            }
-
-                            $tglnow = Carbon::now('Asia/Jakarta');
-
-                            member::where('m_id', Crypt::decrypt($id))->update([
-                                'm_name' => strtoupper($data['nama']),
-                                'm_nik' => $data['nik'],
-                                'm_telp' => $data['telp'],
-                                'm_email' => $data['email'],
-                                'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
-                                'm_alamat' => $data['address'],
-                                'm_update' => $tglnow
-                            ]);
-
-                            DB::commit();
-
-                            Plasma::logActivity('Edit Data Member ' . $data['nama']);
+                        if ($check > 0) {
 
                             return json_encode([
-                                'status' => 'berhasil'
+                                'status' => 'ada',
+                                'name' => strtoupper($data['name'])
                             ]);
 
                         } else {
+
+                            if ($data['email'] == "") {
+                                $email = "";
+                            } else {
+                                $email = $data['email'];
+                            }
+
+                            if ($data['tanggal'] == "Tanggal") {
+                                $tanggal = "00";
+                            } else {
+                                $tanggal = $data['tanggal'];
+                            }
+
+                            if ($data['bulan'] == "Bulan") {
+                                $bulan = "00";
+                            } else {
+                                $bulan = $data['bulan'];
+                            }
+
+                            if ($data['tahun'] == "Tahun") {
+                                $tahun = "0000";
+                            } else {
+                                $tahun = $data['tahun'];
+                            }
+
+                            member::insert([
+                                'm_name' => strtoupper($data['name']),
+                                'm_nik' => $data['nik'],
+                                'm_telp' => $data['telp'],
+                                'm_email' => $email,
+                                'm_address' => $data['address'],
+                                'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
+                                'm_status' => 'AKTIF',
+                                'm_insert' => Carbon::now('Asia/Jakarta'),
+                                'm_update' => Carbon::now('Asia/Jakarta')
+                            ]);
+
+                            DB::commit();
+                            Plasma::logActivity('Menambahkan Member ' . strtoupper($data['name'] . ' (' . $data['telp'] . ')'));
+
                             return json_encode([
-                                'status' => 'tidak ada',
-                                'msg' => $data['nama']
+                                'status' => 'berhasil',
+                                'name' => strtoupper($data['name'])
                             ]);
                         }
                     } catch (\Exception $e) {
+
+                        DB::rollback();
+
+                        // something went wrong
+                        return json_encode([
+                            'status' => 'gagal',
+                            'msg' => $e
+                        ]);
+
+                    }
+                }
+            }
+            return view('master.member.add');
+        }
+    }
+
+    // public function edit(Request $request)
+    // {
+
+    // }
+
+    public function simpan_edit(Request $request, $id = null)
+    {
+
+        if (Plasma::checkAkses(47, 'update') == false) {
+
+            return view('errors/407');
+
+        } else {
+
+            if ($request->isMethod('post')) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+
+                    return json_encode([
+                        'status' => 'ditolak'
+                    ]);
+
+                } else {
+
+                    $data = $request->all();
+                    DB::beginTransaction();
+
+                    try {
+
+                        $check = member::where('m_nik', $data['nik'])->count();
+
+                        if ($check == 0) {
+
+                            return json_encode([
+                                'status' => 'tidak ada',
+                                'name' => $data['name'] . ' (' . $data['telp'] . ')'
+                            ]);
+
+                        } else {
+
+                            if ($data['email'] == "") {
+                                $email = "";
+                            } else {
+                                $email = $data['email'];
+                            }
+
+                            if ($data['tanggal'] == "Tanggal") {
+                                $tanggal = "00";
+                            } else {
+                                $tanggal = $data['tanggal'];
+                            }
+
+                            if ($data['bulan'] == "Bulan") {
+                                $bulan = "00";
+                            } else {
+                                $bulan = $data['bulan'];
+                            }
+
+                            if ($data['tahun'] == "Tahun") {
+                                $tahun = "0000";
+                            } else {
+                                $tahun = $data['tahun'];
+                            }
+
+                            member::where('m_nik', $data['nik'])->update([
+                                'm_name' => strtoupper($data['name']),
+                                'm_telp' => $data['telp'],
+                                'm_email' => $email,
+                                'm_address' => $data['address'],
+                                'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
+                                'm_update' => Carbon::now('Asia/Jakarta')
+                            ]);
+
+                            DB::commit();
+                            Plasma::logActivity('Edit Data Member ' . strtoupper($data['name']) . ' (' . $data['telp'] . ')');
+
+                            return json_encode([
+                                'status' => 'berhasil',
+                                'name' => $data['name'] . ' (' . $data['telp'] . ')'
+                            ]);
+                        }
+
+                    } catch (\Exception $e) {
+
                         DB::rollback();
                         return json_encode([
                             'status' => 'gagal',
                             'msg' => $e
                         ]);
+
                     }
+                }
+            }   
+
+            // ======================Method Get================================
+            DB::beginTransaction();
+
+            try {
+
+                $id = Crypt::decrypt($id);
+                $check = member::where('m_nik', $id)->count();
+
+                if ($check > 0) {
+
+                    $member = member::where('m_nik', $id)->get();
+                    DB::commit();
+                    return view('master.member.edit')->with(compact('member'));
 
                 } else {
-                    return json_encode([
-                        'status' => 'ditolak'
-                    ]);
+
+                    return redirect()->back()->with('flash_message_error', 'Data yang anda edit tidak ada didalam basis data...! Mulai ulang halaman');
+
                 }
+
+            } catch (\Exception $e) {
+
+                DB::rollback();
+                return redirect()->back()->with('flash_message_error', 'Ada yang tidak beres...! Mohon coba lagi');
+
             }
-        } else {
-            return view('errors/407');
         }
     }
 

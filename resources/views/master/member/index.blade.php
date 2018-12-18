@@ -54,7 +54,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 				<div class="page-title">
 
-					<a href="{{ url('/master/member/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+					<a href="{{ url('/master/member/simpan-tambah') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
 
 				</div>
 
@@ -90,9 +90,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			<!-- row -->
 			<div class="row">
-
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
@@ -100,21 +98,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
 
 								<li class="active">
-
 									<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
-
 								</li>
 
 								<li>
-
 									<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
-
 								</li>
 
 								<li>
-
 									<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
-
 								</li>
 
 							</ul>
@@ -122,220 +114,156 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						</header>
 
 						<div>
-							
 							<div class="widget-body no-padding">
-
 								<div class="tab-content padding-10">
-
 									<div class="tab-pane fade in active" id="hr1">
-
 										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>		
-
 												<tr>
-
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
-
 													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
 												</tr>
-
 											</thead>
 
 											<tbody>
-
 											</tbody>
 
 										</table>
-
 									</div>
 
 									<div class="tab-pane fade" id="hr2">
-
 										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>		
-
 												<tr>
-
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
-
 													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-
 													<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
-
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
 												</tr>
-
 											</thead>
 
 											<tbody>
-
 											</tbody>
 
 										</table>
-
 									</div>
 
 									<div class="tab-pane fade" id="hr3">
-
 										<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>		
-
 												<tr>
-
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
-
 													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
 												</tr>
-
 											</thead>
 
 											<tbody>
-
 											</tbody>
 
 										</table>
-
 									</div>
-
 								</div>
-
 							</div>
-
 						</div>
-
 					</div>
-
 				</div>
 			</div>
 
 			<!-- end row -->
 
 			<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
 
-			<div class="modal-dialog">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
 
-				<div class="modal-content">
+							<h4 class="modal-title" id="myModalLabel">Detail Member</h4>
 
-					<div class="modal-header">
-
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-
-						<h4 class="modal-title" id="myModalLabel">Detail Member</h4>
-
-					</div>
-
-					<div class="modal-body">
-		
-						<div class="row">
-
-							<!-- Widget ID (each widget will need unique ID)-->
-							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-
-								<header>
-
-									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
-
-									<h2 id="title_detail"></h2>
-
-								</header>
-
-								<!-- widget div-->
-								<div>
-
-									<!-- widget content -->
-									<div class="widget-body no-padding">
-										
-										<div class="table-responsive">
-											
-											<table class="table">
-
-												<tbody>
-
-													<tr class="success">
-														<td><strong>No. NIK</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_nik"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Nama Member</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_name"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>No. Telepon</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_phone"></td>
-													</tr>
-
-													<tr class="info">
-														<td><strong>Alamat</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_address"></td>
-													</tr>
-
-													<tr class="success">
-														<td><strong>Keterangan</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_note"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Status</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_isactive"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>Dibuat</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_created"></td>
-													</tr>
-
-												</tbody>
-
-											</table>
-											
-										</div>
-
-									</div>
-									<!-- end widget content -->
-
-								</div>
-								<!-- end widget div -->
-
-							</div>
-							<!-- end widget -->
 						</div>
-		
-					</div>
 
-				</div><!-- /.modal-content -->
+						<div class="modal-body">			
+							<div class="row">
 
-			</div><!-- /.modal-dialog -->
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-		</div>
-		<!-- /.modal -->
+									<header>
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<h2 id="title_detail"></h2>
+									</header>
+
+									<!-- widget div-->
+									<div>
+
+										<!-- widget content -->
+										<div class="widget-body no-padding">											
+											<div class="table-responsive">												
+												<table class="table">
+													<tbody>
+
+														<tr class="success">
+															<td><strong>No. NIK</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_nik"></td>
+														</tr>
+
+														<tr class="danger">
+															<td><strong>Nama Member</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_name"></td>
+														</tr>
+
+														<tr class="warning">
+															<td><strong>No. Telepon</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_phone"></td>
+														</tr>
+
+														<tr class="info">
+															<td><strong>Alamat</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_address"></td>
+														</tr>
+
+														<tr class="danger">
+															<td><strong>Status</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_isactive"></td>
+														</tr>
+
+														<tr class="warning">
+															<td><strong>Dibuat</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_created"></td>
+														</tr>
+
+													</tbody>
+												</table>												
+											</div>
+										</div>
+										<!-- end widget content -->
+									</div>
+									<!-- end widget div -->
+								</div>
+								<!-- end widget -->
+							</div>			
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
 
 		</section>
 		<!-- end widget grid -->
@@ -358,7 +286,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
-
 		
 		var baseUrl = '{{ url('/') }}';
 
@@ -568,7 +495,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Memproses...');
 
-			window.location = baseUrl+'/master/member/edit/'+val;
+			window.location = baseUrl+'/master/member/simpan-edit/'+val;
 
 		}
 

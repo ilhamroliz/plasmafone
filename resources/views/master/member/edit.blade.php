@@ -20,7 +20,7 @@
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Data Master</li><li>Edit Master Outlet</li>
+			<li>Home</li><li>Data Master</li><li>Edit Master Member</li>
 		</ol>
 		<!-- end breadcrumb -->
 
@@ -37,25 +37,16 @@
 		<div class="row hidden-mobile">
 
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-
 				<h1 class="page-title txt-color-blueDark">
-
 					<i class="fa-fw fa fa-asterisk"></i>
-
-					Data Outlet <span><i class="fa fa-angle-double-right"></i> Edit Data Outlet </span>
-
+					Data Member <span><i class="fa fa-angle-double-right"></i> Edit Data Member </span>
 				</h1>
-
 			</div>
 
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
-
 				<div class="page-title">
-
-					<a href="{{ url('/master/outlet') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
-
+					<a href="{{ url('/master/member') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 				</div>
-
 			</div>
 
 		</div>
@@ -83,15 +74,11 @@
 
 			<!-- row -->
 			<div class="row">
-
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
 					<div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
-
-							<h2><strong>Master Outlet</strong></h2>				
-							
+							<h2><strong>Master Member</strong></h2>				
 						</header>
 
 						<div>
@@ -104,81 +91,52 @@
 									<fieldset>
 
 										<legend>
-											Form Edit Outlet
+											Form Edit Member
 										</legend>
 
-										@foreach($outlets as $outlet)
+										@foreach($member as $member)
 
 										<div class="row">
-
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-												<input type="hidden" name="code" id="code" value="{{ $outlet->c_id }}">
-
-												<!-- <div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Kode Outlet</label>
-
-													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-														<div class="input-group">
-
-															<span class="input-group-addon"><i class="fa fa-barcode"></i></span>
-
-															<input type="text" class="form-control" id="code" name="code" v-model="form_data.code" placeholder="Masukkan Kode Outlet" style="text-transform: uppercase" readonly value="{{ $outlet->c_id }}" />
-
-														</div>
-
-													</div>
-
-												</div> -->
-
 												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Outlet</label>
-
+													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Member</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
 														<div class="input-group">
-
-															<span class="input-group-addon"><i class="fa fa-building"></i></span>
-
-															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Outlet" style="text-transform: uppercase" value="{{ $outlet->c_name }}" />
-
+															<span class="input-group-addon"><i class="fa fa-user"></i></span>
+															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Member" style="text-transform: uppercase" value="{{ $member->m_name }}" />
 														</div>
-
 													</div>
-
 												</div>
 
 												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">No. ID</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan Nama Member" style="text-transform: uppercase" value="{{ $member->m_id }}" readonly/>
+														</div>
+													</div>
+												</div>
 
+												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">No. Telephone</label>
-
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
 														<div class="input-group">
-
 															<span class="input-group-addon"><i class="fa fa-phone"></i></span>
-
-															<input type="text" class="form-control" id="telp" name="telp" v-model="form_data.telp" placeholder="Masukkan Nomor Telepon" value="{{ $outlet->c_tlp }}" />
-
+															<input type="text" class="form-control" id="telp" name="telp" v-model="form_data.telp" placeholder="Masukkan Nomor Telepon" value="{{ $member->m_telp }}" />
 														</div>
-
 													</div>
-
 												</div>
 
 												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Outlet</label>
-
+													<label class="col-xs-4 col-lg-4 control-label text-left">Email</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Outlet" id="address" name="address" v-model="form_data.address">{{ $outlet->c_address }}</textarea>
-
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+															<input type="text" class="form-control" id="email" name="email" v-model="form_data.email" placeholder="Masukkan Alamat Email" value="{{ $member->m_email }}" />
+														</div>
 													</div>
-
 												</div>
 
 											</article>
@@ -186,30 +144,10 @@
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
 												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Keterangan</label>
-
+													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Member</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Outlet" id="note" name="note" v-model="form_data.note">{{ $outlet->c_note }}</textarea>
-
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Member" id="address" name="address" v-model="form_data.address">{{ $member->m_address }}</textarea>
 													</div>
-
-												</div>
-
-												<div class="form-group">
-
-													<label class="col-xs-4 col-lg-4 control-label text-left">Status Outlet</label>
-
-													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
-														<select class="form-control" name="isactive">
-															<option value="Y" @if($outlet->c_isactive == "Y") selected @endif>AKTIF</option>
-															<option value="N" @if($outlet->c_isactive == "N") selected @endif>NON AKTIF</option>
-														</select>
-
-													</div>
-
 												</div>
 
 											</article>
@@ -221,12 +159,10 @@
 									</fieldset>
 
 									<div class="form-actions">
-
 										<div class="row">
-
 											<div class="col-md-12">
 
-												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/outlet")}}'">
+												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/member")}}'">
 													<i class="fa fa-times"></i>
 													&nbsp;Batal
 												</button>
@@ -237,19 +173,12 @@
 												</button>
 
 											</div>
-
 										</div>
-
 									</div>
-
 								</form>
-
 							</div>
-
 						</div>
-
 					</div>
-
 				</div>
 			</div>
 
@@ -293,13 +222,13 @@
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-				// code : {
-				// 	validators : {
-				// 		notEmpty : {
-				// 			message : 'Isi kode outlet'
-				// 		}
-				// 	}
-				// },
+				code : {
+					validators : {
+						notEmpty : {
+							message : 'Isi kode outlet'
+						}
+					}
+				},
 				name : {
 					validators : {
 						notEmpty : {
