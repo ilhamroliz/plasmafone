@@ -21,24 +21,24 @@ class barang_controller extends Controller
 {
     public function index()
     {
-        if(Access::checkAkses(45, 'read') == false){
-            return view('errors/access_denied');
-        }else{
+        if (Access::checkAkses(45, 'read') == false) {
+            return view('errors/407');
+        } else {
             return view('master.item.index');
         }
     }
 
     public function detail($id)
     {
-        if(Access::checkAkses(45, 'read') == true){
+        if (Access::checkAkses(45, 'read') == true) {
             $item = Item::where(['i_id' => Crypt::decrypt($id)])->first();
             return response()->json(['status' => 'OK', 'data' => $item]);
-        }else{
-            return  json_encode([
-                'status'    => 'Access denied'
+        } else {
+            return json_encode([
+                'status' => 'Access denied'
             ]);
         }
-        
+
     }
 
     public function getdataactive()
@@ -49,29 +49,29 @@ class barang_controller extends Controller
 
         return DataTables::of($items_active)
 
-        ->addColumn('harga', function($items_active){
+            ->addColumn('harga', function ($items_active) {
 
-            return '<div class="text-right">Rp'.number_format($items_active->i_price,2,',','.').'</div>';
+                return '<div class="text-right">Rp' . number_format($items_active->i_price, 2, ',', '.') . '</div>';
 
-        })
+            })
 
-        ->addColumn('aksi', function ($items_active){    
+            ->addColumn('aksi', function ($items_active) {
 
-            if (Access::checkAkses(45, 'update') == false){
+                if (Access::checkAkses(45, 'update') == false) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
-            } else {
+                } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($items_active->i_id) . '\', \'' . $items_active->i_nama . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($items_active->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($items_active->i_id) . '\', \'' . $items_active->i_nama . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
-            }
+                }
 
-        })
+            })
 
-        ->rawColumns(['aksi', 'harga'])
+            ->rawColumns(['aksi', 'harga'])
 
-        ->make(true);
+            ->make(true);
     }
 
     public function getdataall()
@@ -82,57 +82,57 @@ class barang_controller extends Controller
 
         return DataTables::of($items_all)
 
-        ->addColumn('harga', function($items_all){
-            return '<div class="text-right">Rp'.number_format($items_all->i_price,2,',','.').'</div>';
-        })
+            ->addColumn('harga', function ($items_all) {
+                return '<div class="text-right">Rp' . number_format($items_all->i_price, 2, ',', '.') . '</div>';
+            })
 
-        ->addColumn('active', function($items_all){
+            ->addColumn('active', function ($items_all) {
 
-            if ($items_all->i_isactive == "Y") {
-                
-                return '<span class="label label-success">AKTIF</span>';
+                if ($items_all->i_isactive == "Y") {
 
-            } else {
-
-                return '<span class="label label-danger">NON AKTIF</span>';
-
-            }
-
-        })
-
-        ->addColumn('aksi', function ($items_all){
-
-            if ($items_all->i_isactive == "Y") {
-
-                if (Access::checkAkses(45, 'update') == false){
-
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<span class="label label-success">AKTIF</span>';
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($items_all->i_id) . '\', \'' . $items_all->i_nama . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<span class="label label-danger">NON AKTIF</span>';
 
                 }
-                
-            } else {
 
-                if (Access::checkAkses(45, 'update') == false){
+            })
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            ->addColumn('aksi', function ($items_all) {
+
+                if ($items_all->i_isactive == "Y") {
+
+                    if (Access::checkAkses(45, 'update') == false) {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                    } else {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($items_all->i_id) . '\', \'' . $items_all->i_nama . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                    }
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($items_all->i_id) . '\', \'' . $items_all->i_nama . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    if (Access::checkAkses(45, 'update') == false) {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                    } else {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_all->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($items_all->i_id) . '\', \'' . $items_all->i_nama . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+                    }
 
                 }
 
-            }  
-            
-        })
+            })
 
-        ->rawColumns(['aksi', 'harga', 'active'])
+            ->rawColumns(['aksi', 'harga', 'active'])
 
-        ->make(true);
+            ->make(true);
     }
 
     public function getdatanonactive()
@@ -142,77 +142,77 @@ class barang_controller extends Controller
         $items_nonactive = collect($items_nonactive);
 
         return DataTables::of($items_nonactive)
-        ->addColumn('harga', function($items_nonactive){
-            return '<div class="text-right">Rp'.number_format($items_nonactive->i_price,2,',','.').'</div>';
-        })
-        ->addColumn('aksi', function ($items_nonactive){
+            ->addColumn('harga', function ($items_nonactive) {
+                return '<div class="text-right">Rp' . number_format($items_nonactive->i_price, 2, ',', '.') . '</div>';
+            })
+            ->addColumn('aksi', function ($items_nonactive) {
 
-            if (Access::checkAkses(45, 'update') == false){
+                if (Access::checkAkses(45, 'update') == false) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
-            } else {
+                } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($items_nonactive->i_id) . '\', \'' . $items_nonactive->i_nama . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($items_nonactive->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($items_nonactive->i_id) . '\', \'' . $items_nonactive->i_nama . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
 
-            }
+                }
 
-        })
-        ->rawColumns(['aksi', 'harga'])
+            })
+            ->rawColumns(['aksi', 'harga'])
 
-        ->make(true);
+            ->make(true);
     }
 
     public function add()
     {
 
-        if(Access::checkAkses(45, 'insert') == false){
-            return view('errors/access_denied');
-        }else{
+        if (Access::checkAkses(45, 'insert') == false) {
+            return view('errors/407');
+        } else {
             return view('master.item.add');
         }
-    	
+
     }
 
     public function get_form_resources()
     {
-        if(Access::checkAkses(45, 'read') == false){
-            return  json_encode([
-                'status'    => 'Access denied'
+        if (Access::checkAkses(45, 'read') == false) {
+            return json_encode([
+                'status' => 'Access denied'
             ]);
         } else {
-            $kelompok       = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->orderBy('i_kelompok', 'asc')->get();
-            $group          = DB::table('d_item')->distinct('i_group')->select('i_group')->orderBy('i_group', 'asc')->get();
-            $subgroup       = DB::table('d_item')->distinct('i_sub_group')->select('i_sub_group')->orderBy('i_sub_group', 'asc')->get();
-            $merk           = DB::table('d_item')->distinct('i_merk')->select('i_merk')->orderBy('i_merk', 'asc')->get();
+            $kelompok = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->orderBy('i_kelompok', 'asc')->get();
+            $group = DB::table('d_item')->distinct('i_group')->select('i_group')->orderBy('i_group', 'asc')->get();
+            $subgroup = DB::table('d_item')->distinct('i_sub_group')->select('i_sub_group')->orderBy('i_sub_group', 'asc')->get();
+            $merk = DB::table('d_item')->distinct('i_merk')->select('i_merk')->orderBy('i_merk', 'asc')->get();
 
             return response()->json([
-                'status'    => 'OK',
-                'kelompok'  => $kelompok,
-                'group'     => $group,
-                'subgroup'  => $subgroup,
-                'merk'      => $merk
+                'status' => 'OK',
+                'kelompok' => $kelompok,
+                'group' => $group,
+                'subgroup' => $subgroup,
+                'merk' => $merk
             ]);
         }
-            
+
     }
 
     public function insert(Request $request)
     {
-        if(Access::checkAkses(45, 'insert') == false){
+        if (Access::checkAkses(45, 'insert') == false) {
 
-            return view('errors/access_denied');
+            return view('errors/407');
 
-        }else{
+        } else {
 
-            $data       = $request->all();
-            $harga      = $this->formatPrice($data['i_harga']);
+            $data = $request->all();
+            $harga = $this->formatPrice($data['i_harga']);
 
             DB::beginTransaction();
 
             try {
 
-                $check = Item::where(['i_kelompok'=>$data['i_kelompok'], 'i_group'=>$data['i_group'], 'i_sub_group'=>$data['i_sub_group'], 'i_merk'=>$data['i_merk'], 'i_nama'=>$data['i_nama']])->count();
+                $check = Item::where(['i_kelompok' => $data['i_kelompok'], 'i_group' => $data['i_group'], 'i_sub_group' => $data['i_sub_group'], 'i_merk' => $data['i_merk'], 'i_nama' => $data['i_nama']])->count();
 
                 if ($check > 0) {
 
@@ -221,36 +221,36 @@ class barang_controller extends Controller
                 } else {
 
                     $barang = new Item();
-                    $barang->i_kelompok     = strtoupper($data['i_kelompok']);
-                    $barang->i_group        = strtoupper($data['i_group']);
-                    $barang->i_sub_group    = strtoupper($data['i_sub_group']);
-                    $barang->i_merk         = strtoupper($data['i_merk']);
-                    $barang->i_nama         = strtoupper($data['i_nama']);
+                    $barang->i_kelompok = strtoupper($data['i_kelompok']);
+                    $barang->i_group = strtoupper($data['i_group']);
+                    $barang->i_sub_group = strtoupper($data['i_sub_group']);
+                    $barang->i_merk = strtoupper($data['i_merk']);
+                    $barang->i_nama = strtoupper($data['i_nama']);
                     $barang->i_specificcode = strtoupper($data['i_specificcode']);
-                    if($data['i_code'] == ""){
+                    if ($data['i_code'] == "") {
                         $code = "";
-                    }else{
+                    } else {
                         $code = strtoupper($data['i_code']);
                     }
-                    $barang->i_code         = $code;
-                    $barang->i_isactive     = strtoupper($data['i_isactive']);
-                    $barang->i_minstock     = strtoupper($data['i_minstock']);
-                    $barang->i_berat        = strtoupper($data['i_berat']);
-                    $barang->i_price        = $harga;
+                    $barang->i_code = $code;
+                    $barang->i_isactive = strtoupper($data['i_isactive']);
+                    $barang->i_minstock = strtoupper($data['i_minstock']);
+                    $barang->i_berat = strtoupper($data['i_berat']);
+                    $barang->i_price = $harga;
 
                     if ($request->hasFile('i_img')) {
 
                         $image_tmp = Input::file('i_img');
                         $image_size = $image_tmp->getSize(); //getClientSize()
-                        $maxsize    = '2097152';
+                        $maxsize = '2097152';
 
                         if ($image_size < $maxsize) {
 
-                           if ($image_tmp->isValid()) {
+                            if ($image_tmp->isValid()) {
 
                                 $extension = $image_tmp->getClientOriginalExtension();
-                                $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
-                                $image_path = 'img/items/'.$filename;
+                                $filename = date('YmdHms') . rand(111, 99999) . '.' . $extension;
+                                $image_path = 'img/items/' . $filename;
 
                                 //Resize images
                                 ini_set('memory_limit', '256M');
@@ -266,8 +266,8 @@ class barang_controller extends Controller
                             return redirect()->back()->with('flash_message_error', 'Data barang gagal disimpan...! Ukuran file terlalu besar');
 
                         }
-                        
-                    }else{
+
+                    } else {
 
                         $barang->i_img = '';
 
@@ -276,7 +276,7 @@ class barang_controller extends Controller
                     $barang->save();
 
                     DB::commit();
-                    Access::logActivity('Menambahkan Data Barang'.$barang->i_nama);
+                    Access::logActivity('Menambahkan Data Barang' . $barang->i_nama);
                     // all good
                     return redirect('master/barang/add')->with('flash_message_success', 'Data barang berhasil tersimpan...!');
                 }
@@ -290,26 +290,26 @@ class barang_controller extends Controller
             }
 
         }
-            
+
     }
 
     public function edit(Request $request, $id = null)
     {
-        if(Access::checkAkses(45, 'update') == false){
+        if (Access::checkAkses(45, 'update') == false) {
 
-            return view('errors/access_denied');
+            return view('errors/407');
 
-        }else{
+        } else {
 
             if ($request->isMethod('post')) {
 
-                if(Access::checkAkses(45, 'update') == false){
+                if (Access::checkAkses(45, 'update') == false) {
 
-                    return view('errors/access_denied');
+                    return view('errors/407');
 
                 } else {
 
-                    $data       = $request->all();
+                    $data = $request->all();
 
                     DB::beginTransaction();
 
@@ -319,17 +319,17 @@ class barang_controller extends Controller
 
                             $image_tmp = Input::file('i_img');
                             $image_size = $image_tmp->getSize(); //getClientSize()
-                            $maxsize    = '2097152';
+                            $maxsize = '2097152';
 
                             if ($image_size < $maxsize) {
 
-                               if ($image_tmp->isValid()) {
+                                if ($image_tmp->isValid()) {
 
                                     $namefile = $data['current_img'];
 
                                     if ($namefile != "") {
 
-                                        $path = 'img/items/'.$namefile;
+                                        $path = 'img/items/' . $namefile;
 
                                         if (File::exists($path)) {
                                             # code...
@@ -337,10 +337,10 @@ class barang_controller extends Controller
                                         }
 
                                     }
-                                    
+
                                     $extension = $image_tmp->getClientOriginalExtension();
-                                    $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
-                                    $image_path = 'img/items/'.$filename;
+                                    $filename = date('YmdHms') . rand(111, 99999) . '.' . $extension;
+                                    $image_path = 'img/items/' . $filename;
 
                                     //Resize images
                                     ini_set('memory_limit', '256M');
@@ -356,54 +356,54 @@ class barang_controller extends Controller
                                 return redirect()->back()->with('flash_message_error', 'Data barang gagal disimpan...! Ukuran file terlalu besar');
 
                             }
-                            
-                        }else{
+
+                        } else {
 
                             if ($data['current_img'] == "") {
-                                
+
                                 $image = "";
 
                             } else {
 
                                 $image = $data['current_img'];
-                                
+
                             }
 
                         }
 
-                        if($data['i_code'] == ""){
+                        if ($data['i_code'] == "") {
                             $code = "";
-                        }else{
+                        } else {
                             $code = strtoupper($data['i_code']);
                         }
 
                         Item::where(['i_id' => Crypt::decrypt($id)])->update([
-                            'i_kelompok'    => strtoupper($data['i_kelompok']),
-                            'i_group'       => strtoupper($data['i_group']),
-                            'i_sub_group'   => strtoupper($data['i_sub_group']),
-                            'i_merk'        => strtoupper($data['i_merk']),
-                            'i_nama'        => strtoupper($data['i_nama']),
-                            'i_specificcode'=> strtoupper($data['i_specificcode']),
-                            'i_code'        => $code,
-                            'i_isactive'    => strtoupper($data['i_isactive']),
-                            'i_minstock'    => strtoupper($data['i_minstock']),
-                            'i_berat'       => strtoupper($data['i_berat']),
-                            'i_price'       => $this->formatPrice($data['i_harga']),
-                            'i_img'         => $image
+                            'i_kelompok' => strtoupper($data['i_kelompok']),
+                            'i_group' => strtoupper($data['i_group']),
+                            'i_sub_group' => strtoupper($data['i_sub_group']),
+                            'i_merk' => strtoupper($data['i_merk']),
+                            'i_nama' => strtoupper($data['i_nama']),
+                            'i_specificcode' => strtoupper($data['i_specificcode']),
+                            'i_code' => $code,
+                            'i_isactive' => strtoupper($data['i_isactive']),
+                            'i_minstock' => strtoupper($data['i_minstock']),
+                            'i_berat' => strtoupper($data['i_berat']),
+                            'i_price' => $this->formatPrice($data['i_harga']),
+                            'i_img' => $image
                         ]);
 
                         DB::commit();
-                        Access::logActivity('Edit Data Barang'.$data['i_nama']);
+                        Access::logActivity('Edit Data Barang' . $data['i_nama']);
 
                         // all good
-                        return redirect('/master/barang/edit/'.$id)->with('flash_message_success', 'Data barang berhasil diubah...!');
+                        return redirect('/master/barang/edit/' . $id)->with('flash_message_success', 'Data barang berhasil diubah...!');
 
                     } catch (\Exception $e) {
 
                         DB::rollback();
 
                         // something went wrong
-                        return redirect()->back()->with('flash_message_error', 'Data barang gagal diubah...! Mohon coba lagi => '.$e);
+                        return redirect()->back()->with('flash_message_error', 'Data barang gagal diubah...! Mohon coba lagi => ' . $e);
 
                     }
 
@@ -423,7 +423,7 @@ class barang_controller extends Controller
                     $items = Item::where('i_id', Crypt::decrypt($id))->get();
 
                     DB::commit();
-                    
+
                     return view('master.item.edit')->with(compact('items'));
 
                 } else {
@@ -442,16 +442,16 @@ class barang_controller extends Controller
             }
 
         }
-        
+
     }
 
     function deleteimage($id = null)
     {
-        if(Access::checkAkses(45, 'delete') == false){
+        if (Access::checkAkses(45, 'delete') == false) {
 
-            return view('errors/access_denied');
+            return view('errors/407');
 
-        }else{
+        } else {
 
             DB::beginTransaction();
 
@@ -464,7 +464,7 @@ class barang_controller extends Controller
                     $item = Item::where('i_id', Crypt::decrypt($id))->first();
 
                     $filename = $item->i_img;
-                    $path = 'img/items/'.$filename;
+                    $path = 'img/items/' . $filename;
 
                     if (File::exists($path)) {
                         # code...
@@ -474,8 +474,8 @@ class barang_controller extends Controller
                     Item::where(['i_id' => Crypt::decrypt($id)])->update(['i_img' => ""]);
 
                     DB::commit();
-                    
-                    return redirect()->back()->with('flash_message_success', 'Data gambar dari barang "'.$item->i_nama.'" berhasil dihapus...!');
+
+                    return redirect()->back()->with('flash_message_success', 'Data gambar dari barang "' . $item->i_nama . '" berhasil dihapus...!');
 
                 } else {
 
@@ -493,15 +493,15 @@ class barang_controller extends Controller
             }
 
         }
-        
+
     }
 
     public function active($id = null)
     {
-        if(Access::checkAkses(45, 'update') == false){
+        if (Access::checkAkses(45, 'update') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
 
         } else {
@@ -513,9 +513,9 @@ class barang_controller extends Controller
                 $check = Item::where('i_id', Crypt::decrypt($id))->count();
 
                 if ($check == 0) {
-                    
-                    return  json_encode([
-                        'status'    => 'tidak ada'
+
+                    return json_encode([
+                        'status' => 'tidak ada'
                     ]);
 
                 } else {
@@ -524,12 +524,12 @@ class barang_controller extends Controller
 
                     DB::commit();
                     $data = Item::select('i_name')->where('i_id', Crypt::decrypt($id))->first();
-                    $log = 'Set Data Barang'.$data->i_nama. ' = ACTIVE';
+                    $log = 'Set Data Barang' . $data->i_nama . ' = ACTIVE';
                     Access::logActivity($log);
 
                     // all good
-                    return  json_encode([
-                        'status'    => 'berhasil'
+                    return json_encode([
+                        'status' => 'berhasil'
                     ]);
 
                 }
@@ -539,26 +539,26 @@ class barang_controller extends Controller
                 DB::rollback();
                 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
                 ]);
 
             }
 
         }
-            
+
     }
 
     public function nonactive($id = null)
     {
-        if(Access::checkAkses(45, 'update') == false){
+        if (Access::checkAkses(45, 'update') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
 
-        }else{
+        } else {
 
             DB::beginTransaction();
 
@@ -567,9 +567,9 @@ class barang_controller extends Controller
                 $check = Item::where('i_id', Crypt::decrypt($id))->count();
 
                 if ($check == 0) {
-                    
-                    return  json_encode([
-                        'status'    => 'tidak ada'
+
+                    return json_encode([
+                        'status' => 'tidak ada'
                     ]);
 
                 } else {
@@ -578,12 +578,12 @@ class barang_controller extends Controller
 
                     DB::commit();
                     $data = Item::select('i_name')->where('i_id', Crypt::decrypt($id))->first();
-                    $log = 'Set Data Barang'.$data->i_nama. ' = NONACTIVE';
+                    $log = 'Set Data Barang' . $data->i_nama . ' = NONACTIVE';
                     Access::logActivity($log);
 
                     // all good
-                    return  json_encode([
-                        'status'    => 'berhasil'
+                    return json_encode([
+                        'status' => 'berhasil'
                     ]);
 
                 }
@@ -593,15 +593,15 @@ class barang_controller extends Controller
                 DB::rollback();
                 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
                 ]);
 
             }
 
         }
-            
+
     }
 
     function formatPrice($data)
@@ -609,5 +609,5 @@ class barang_controller extends Controller
         return implode("", explode(".", $data));
     }
 
-    
+
 }

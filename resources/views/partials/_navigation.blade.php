@@ -47,8 +47,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Master Member'] == 'Y')
-					<li>
-						<a href="flot.html">Master Member</a>
+					<li class="{{ (Request::is('master/member/*') || Request::is('master/member')) ? 'active' : '' }}">
+						<a href="{{ url('/master/member') }}">Master Member</a>
 					</li>
 					@endif
 

@@ -17,9 +17,9 @@ class outlet_controller extends Controller
 {
     public function index()
     {
-        if(Access::checkAkses(48, 'read') == false){
-            return view('errors/access_denied');
-        }else{
+        if (Access::checkAkses(48, 'read') == false) {
+            return view('errors/407');
+        } else {
             return view('master.outlet.index');
         }
     }
@@ -27,10 +27,10 @@ class outlet_controller extends Controller
     public function detail($id)
     {
 
-        if(Access::checkAkses(48, 'read') == false){
+        if (Access::checkAkses(48, 'read') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
 
         } else {
@@ -39,7 +39,7 @@ class outlet_controller extends Controller
             return response()->json(['status' => 'OK', 'data' => $outlet]);
 
         }
-        
+
     }
 
     public function getdataactive()
@@ -50,23 +50,23 @@ class outlet_controller extends Controller
 
         return DataTables::of($outlet_active)
 
-        ->addColumn('aksi', function ($outlet_active){
+            ->addColumn('aksi', function ($outlet_active) {
 
-            if(Access::checkAkses(48, 'update') == false){
+                if (Access::checkAkses(48, 'update') == false) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
-            } else {
+                } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
-            }
+                }
 
-        })
+            })
 
-        ->rawColumns(['aksi'])
+            ->rawColumns(['aksi'])
 
-        ->make(true);
+            ->make(true);
     }
 
     public function getdataall()
@@ -77,53 +77,53 @@ class outlet_controller extends Controller
 
         return DataTables::of($outlet_all)
 
-        ->addColumn('active', function($outlet_all){
+            ->addColumn('active', function ($outlet_all) {
 
-            if ($outlet_all->c_isactive == "Y") {
-                
-                return '<span class="label label-success">AKTIF</span>';
+                if ($outlet_all->c_isactive == "Y") {
 
-            } else {
-
-                return '<span class="label label-danger">NON AKTIF</span>';
-
-            }
-
-        })
-
-        ->addColumn('aksi', function ($outlet_all){
-
-            if ($outlet_all->c_isactive == "Y") {
-
-                if(Access::checkAkses(48, 'update') == false){
-
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<span class="label label-success">AKTIF</span>';
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<span class="label label-danger">NON AKTIF</span>';
 
                 }
 
-            } else {
+            })
 
-                if(Access::checkAkses(48, 'update') == false){
+            ->addColumn('aksi', function ($outlet_all) {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                if ($outlet_all->c_isactive == "Y") {
+
+                    if (Access::checkAkses(48, 'update') == false) {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                    } else {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                    }
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    if (Access::checkAkses(48, 'update') == false) {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                    } else {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+                    }
 
                 }
 
-            }
+            })
 
-        })
+            ->rawColumns(['aksi', 'active'])
 
-        ->rawColumns(['aksi', 'active'])
-
-        ->make(true);
+            ->make(true);
     }
 
     public function getdatanonactive()
@@ -134,23 +134,23 @@ class outlet_controller extends Controller
 
         return DataTables::of($outlet_nonactive)
 
-        ->addColumn('aksi', function ($outlet_nonactive){     
+            ->addColumn('aksi', function ($outlet_nonactive) {
 
-            if(Access::checkAkses(48, 'update') == false){
+                if (Access::checkAkses(48, 'update') == false) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
-            } else {
+                } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
 
-            }
+                }
 
-        })
+            })
 
-        ->rawColumns(['aksi'])
+            ->rawColumns(['aksi'])
 
-        ->make(true);
+            ->make(true);
     }
 
     public function getcode()
@@ -162,19 +162,18 @@ class outlet_controller extends Controller
 
     public function add(Request $request)
     {
-        if(Access::checkAkses(48, 'insert') == false){
+        if (Access::checkAkses(48, 'insert') == false) {
 
-            return view('errors/access_denied');
+            return view('errors/407');
 
-        } else{
+        } else {
 
-            if ($request->isMethod('post'))
-            {
+            if ($request->isMethod('post')) {
 
-                if(Access::checkAkses(48, 'insert') == false){
+                if (Access::checkAkses(48, 'insert') == false) {
 
-                    return  json_encode([
-                        'status'    => 'Access denied'
+                    return json_encode([
+                        'status' => 'Access denied'
                     ]);
 
                 } else {
@@ -187,11 +186,11 @@ class outlet_controller extends Controller
 
                         $check_name = Outlet::where('c_name', '=', $data['name'])->count();
 
-                        if($check_name > 0) {
+                        if ($check_name > 0) {
 
-                            return  json_encode([
-                                'status'    => 'nama ada',
-                                'name'      => strtoupper($data['name'])
+                            return json_encode([
+                                'status' => 'nama ada',
+                                'name' => strtoupper($data['name'])
                             ]);
 
                         } else {
@@ -215,13 +214,13 @@ class outlet_controller extends Controller
                             $outlet->c_note = $note;
 
                             $outlet->save();
-                            
-                            DB::commit();
-                            Access::logActivity('Menambahkan Outlet '.$outlet->c_name);
 
-                            return  json_encode([
-                                'status'    => 'berhasil',
-                                'code'      => GenerateCode::code('m_company', 'c_id', 8, 'PF')
+                            DB::commit();
+                            Access::logActivity('Menambahkan Outlet ' . $outlet->c_name);
+
+                            return json_encode([
+                                'status' => 'berhasil',
+                                'code' => GenerateCode::code('m_company', 'c_id', 8, 'PF')
                             ]);
 
                         }
@@ -231,9 +230,9 @@ class outlet_controller extends Controller
                         DB::rollback();
 
                         // something went wrong
-                        return  json_encode([
-                            'status'    => 'gagal',
-                            'msg'       => $e
+                        return json_encode([
+                            'status' => 'gagal',
+                            'msg' => $e
                         ]);
 
                     }
@@ -245,92 +244,92 @@ class outlet_controller extends Controller
             return view('master.outlet.add');
 
         }
-            
+
     }
 
     public function edit(Request $request, $id = null)
     {
-        if(Access::checkAkses(48, 'update') == false){
+        if (Access::checkAkses(48, 'update') == false) {
 
-            return view('errors/access_denied');
+            return view('errors/407');
 
         } else {
 
             if ($request->isMethod('post')) {
 
-                if(Access::checkAkses(48, 'update') == false){
+                if (Access::checkAkses(48, 'update') == false) {
 
-                    return  json_encode([
-                        'status'    => 'Access denied'
+                    return json_encode([
+                        'status' => 'Access denied'
                     ]);
 
                 } else {
 
-                    $data       = $request->all();
+                    $data = $request->all();
 
-                DB::beginTransaction();
+                    DB::beginTransaction();
 
-                try {
+                    try {
 
-                    $check_code = Outlet::where('c_id', $data['code'])->count();
-                    $check_name = Outlet::where('c_name', '=', $data['name'])->where('c_id', '!=', $data['code'])->count();
+                        $check_code = Outlet::where('c_id', $data['code'])->count();
+                        $check_name = Outlet::where('c_name', '=', $data['name'])->where('c_id', '!=', $data['code'])->count();
 
-                    if ($check_code == 0) {
-                        
-                        return  json_encode([
-                            'status'    => 'tidak ada',
-                            'code'       => $data['code']
-                        ]);
+                        if ($check_code == 0) {
 
-                    } else if ($check_name > 0){
+                            return json_encode([
+                                'status' => 'tidak ada',
+                                'code' => $data['code']
+                            ]);
 
-                        return  json_encode([
-                            'status'    => 'nama ada',
-                            'name'       => $data['name']
-                        ]);
+                        } else if ($check_name > 0) {
 
-                    } else {
-
-                        if ($data['note'] == "") {
-
-                            $note = "";
+                            return json_encode([
+                                'status' => 'nama ada',
+                                'name' => $data['name']
+                            ]);
 
                         } else {
 
-                            $note = strtoupper($data['note']);
+                            if ($data['note'] == "") {
+
+                                $note = "";
+
+                            } else {
+
+                                $note = strtoupper($data['note']);
+
+                            }
+
+                            Outlet::where(['c_id' => $data['code']])->update([
+                                'c_name' => strtoupper($data['name']),
+                                'c_tlp' => strtoupper($data['telp']),
+                                'c_address' => strtoupper($data['address']),
+                                'c_note' => $note,
+                                'c_isactive' => strtoupper($data['isactive'])
+                            ]);
+
+                            DB::commit();
+                            Access::logActivity('Edit Data Outlet ' . strtoupper($data['name']));
+
+                        // all good
+                            return json_encode([
+                                'status' => 'berhasil',
+                                'code' => $data['code']
+                            ]);
 
                         }
 
-                        Outlet::where(['c_id' => $data['code']])->update([
-                            'c_name'     => strtoupper($data['name']),
-                            'c_tlp'        => strtoupper($data['telp']),
-                            'c_address'     => strtoupper($data['address']),
-                            'c_note'        => $note,
-                            'c_isactive'    => strtoupper($data['isactive'])
-                        ]);
+                    } catch (\Exception $e) {
 
-                        DB::commit();
-                        Access::logActivity('Edit Data Outlet '.strtoupper($data['name']));
-
-                        // all good
-                        return  json_encode([
-                                'status'    => 'berhasil',
-                                'code'      => $data['code']
-                            ]);
-
-                    }
-
-                } catch (\Exception $e) {
-
-                    DB::rollback();
+                        DB::rollback();
 
                     // something went wrong
-                    return  json_encode([
-                                'status'    => 'gagal',
-                                'msg'       => $e
-                            ]);
+                        return json_encode([
+                            'status' => 'gagal',
+                            'msg' => $e
+                        ]);
 
-                }
+                    }
 
                 }
 
@@ -348,7 +347,7 @@ class outlet_controller extends Controller
                     $outlets = Outlet::where('c_id', $id)->get();
 
                     DB::commit();
-                    
+
                     return view('master.outlet.edit')->with(compact('outlets'));
 
                 } else {
@@ -367,17 +366,17 @@ class outlet_controller extends Controller
             }
 
         }
-        
+
     }
 
     public function delete($id = null)
     {
-        if(Access::checkAkses(48, 'delete') == false){
+        if (Access::checkAkses(48, 'delete') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
-            
+
         } else {
 
             DB::beginTransaction();
@@ -388,15 +387,15 @@ class outlet_controller extends Controller
                 $check_d_mem = DB::table('d_mem')->where(['m_comp' => $id])->count();
 
                 if ($check == 0) {
-                    
-                    return  json_encode([
-                        'status'    => 'tidak ada'
+
+                    return json_encode([
+                        'status' => 'tidak ada'
                     ]);
 
-                } else if ($check_d_mem > 0){
+                } else if ($check_d_mem > 0) {
 
-                    return  json_encode([
-                        'status'    => 'd_mem ada'
+                    return json_encode([
+                        'status' => 'd_mem ada'
                     ]);
 
                 } else {
@@ -406,11 +405,11 @@ class outlet_controller extends Controller
                     DB::commit();
 
                     $data = Outlet::select('c_name')->where('c_id', $id)->first();
-                    $log = 'Hapus Data Outlet '.$data->c_name;
+                    $log = 'Hapus Data Outlet ' . $data->c_name;
                     Access::logActivity($log);
                     // all good
-                    return  json_encode([
-                        'status'    => 'berhasil'
+                    return json_encode([
+                        'status' => 'berhasil'
                     ]);
 
                 }
@@ -420,25 +419,25 @@ class outlet_controller extends Controller
                 DB::rollback();
                 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
                 ]);
 
             }
 
         }
-            
+
     }
 
     public function active($id = null)
     {
-        if(Access::checkAkses(48, 'update') == false){
+        if (Access::checkAkses(48, 'update') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
-            
+
         } else {
 
             DB::beginTransaction();
@@ -448,9 +447,9 @@ class outlet_controller extends Controller
                 $check = Outlet::where('c_id', $id)->count();
 
                 if ($check == 0) {
-                    
-                    return  json_encode([
-                        'status'    => 'tidak ada'
+
+                    return json_encode([
+                        'status' => 'tidak ada'
                     ]);
 
                 } else {
@@ -460,11 +459,11 @@ class outlet_controller extends Controller
                     DB::commit();
 
                     $data = Outlet::select('c_name')->where('c_id', $id)->first();
-                    $log = 'Set Data Outlet '.$data->c_name. ' = ACTIVE';
+                    $log = 'Set Data Outlet ' . $data->c_name . ' = ACTIVE';
                     Access::logActivity($log);
                     // all good
-                    return  json_encode([
-                        'status'    => 'berhasil'
+                    return json_encode([
+                        'status' => 'berhasil'
                     ]);
 
                 }
@@ -474,25 +473,25 @@ class outlet_controller extends Controller
                 DB::rollback();
                 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
                 ]);
 
             }
 
         }
-            
+
     }
 
     public function nonactive($id = null)
     {
-        if(Access::checkAkses(48, 'update') == false){
+        if (Access::checkAkses(48, 'update') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
-            
+
         } else {
 
             DB::beginTransaction();
@@ -502,9 +501,9 @@ class outlet_controller extends Controller
                 $check = Outlet::where('c_id', $id)->count();
 
                 if ($check == 0) {
-                    
-                    return  json_encode([
-                        'status'    => 'tidak ada'
+
+                    return json_encode([
+                        'status' => 'tidak ada'
                     ]);
 
                 } else {
@@ -514,11 +513,11 @@ class outlet_controller extends Controller
                     DB::commit();
 
                     $data = Outlet::select('c_name')->where('c_id', $id)->first();
-                    $log = 'Set Data Outlet '.$data->c_name. ' = NONACTIVE';
+                    $log = 'Set Data Outlet ' . $data->c_name . ' = NONACTIVE';
                     Access::logActivity($log);
                     // all good
-                    return  json_encode([
-                        'status'    => 'berhasil'
+                    return json_encode([
+                        'status' => 'berhasil'
                     ]);
 
                 }
@@ -528,15 +527,15 @@ class outlet_controller extends Controller
                 DB::rollback();
                 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
                 ]);
 
             }
-            
+
         }
-            
+
     }
 
 }

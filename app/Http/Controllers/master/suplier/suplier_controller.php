@@ -16,21 +16,21 @@ class suplier_controller extends Controller
 {
     public function suplier()
     {
-        if(Access::checkAkses(46, 'read') == false){
-            return view('errors/access_denied');
-        }else{
+        if (Access::checkAkses(46, 'read') == false) {
+            return view('errors/407');
+        } else {
             return view('master/suplier/index');
         }
     }
 
     public function detail($id)
     {
-        if(Access::checkAkses(46, 'read') == true){
+        if (Access::checkAkses(46, 'read') == true) {
             $supplier = suplier::where(['s_id' => Crypt::decrypt($id)])->first();
             return response()->json(['status' => 'OK', 'data' => $supplier]);
-        }else{
-            return  json_encode([
-                'status'    => 'Access denied'
+        } else {
+            return json_encode([
+                'status' => 'Access denied'
             ]);
         }
     }
@@ -43,29 +43,29 @@ class suplier_controller extends Controller
 
         return DataTables::of($supplier_active)
 
-        ->addColumn('limit', function($supplier_active){
+            ->addColumn('limit', function ($supplier_active) {
 
-            return '<p class="text-right">Rp'.number_format($supplier_active->s_limit,2,',','.').'</p>';
+                return '<p class="text-right">Rp' . number_format($supplier_active->s_limit, 2, ',', '.') . '</p>';
 
-        })
+            })
 
-        ->addColumn('aksi', function ($supplier_active){
+            ->addColumn('aksi', function ($supplier_active) {
 
-            if(Access::checkAkses(46, 'update') == false){
+                if (Access::checkAkses(46, 'update') == false) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
-            }else{
+                } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_active->s_id) . '\', \'' . $supplier_active->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($supplier_active->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_active->s_id) . '\', \'' . $supplier_active->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
-            }
+                }
 
-        })
+            })
 
-        ->rawColumns(['aksi', 'limit'])
+            ->rawColumns(['aksi', 'limit'])
 
-        ->make(true);
+            ->make(true);
     }
 
     public function getdataall()
@@ -76,59 +76,59 @@ class suplier_controller extends Controller
 
         return DataTables::of($supplier_all)
 
-        ->addColumn('limit', function($supplier_all){
+            ->addColumn('limit', function ($supplier_all) {
 
-            return '<p class="text-right">Rp'.number_format($supplier_all->s_limit,2,',','.').'</p>';
+                return '<p class="text-right">Rp' . number_format($supplier_all->s_limit, 2, ',', '.') . '</p>';
 
-        })
+            })
 
-        ->addColumn('active', function($supplier_all){
+            ->addColumn('active', function ($supplier_all) {
 
-            if ($supplier_all->s_isactive == "Y") {
-                
-                return '<span class="label label-success">AKTIF</span>';
+                if ($supplier_all->s_isactive == "Y") {
 
-            } else {
+                    return '<span class="label label-success">AKTIF</span>';
 
-                return '<span class="label label-danger">NON AKTIF</span>';
+                } else {
 
-            }
-
-        })
-
-        ->addColumn('aksi', function ($supplier_all){    
-
-            if ($supplier_all->s_isactive == "Y") {
-
-                if(Access::checkAkses(46, 'update') == false){
-
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-
-                }else{
-
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<span class="label label-danger">NON AKTIF</span>';
 
                 }
 
-            } else {
+            })
 
-                if(Access::checkAkses(46, 'update') == false){
+            ->addColumn('aksi', function ($supplier_all) {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                if ($supplier_all->s_isactive == "Y") {
 
-                }else{
+                    if (Access::checkAkses(46, 'update') == false) {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                    } else {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                    }
+
+                } else {
+
+                    if (Access::checkAkses(46, 'update') == false) {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                    } else {
+
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_all->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_all->s_id) . '\', \'' . $supplier_all->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+                    }
 
                 }
 
-            }
+            })
 
-        })
+            ->rawColumns(['aksi', 'limit', 'active'])
 
-        ->rawColumns(['aksi', 'limit', 'active'])
-
-        ->make(true);
+            ->make(true);
     }
 
     public function getdatanonactive()
@@ -139,46 +139,45 @@ class suplier_controller extends Controller
 
         return DataTables::of($supplier_nonactive)
 
-        ->addColumn('limit', function($supplier_nonactive){
+            ->addColumn('limit', function ($supplier_nonactive) {
 
-            return '<p class="text-right">Rp'.number_format($supplier_nonactive->s_limit,2,',','.').'</p>';
+                return '<p class="text-right">Rp' . number_format($supplier_nonactive->s_limit, 2, ',', '.') . '</p>';
 
-        })
+            })
 
-        ->addColumn('aksi', function ($supplier_nonactive){
+            ->addColumn('aksi', function ($supplier_nonactive) {
 
-            if(Access::checkAkses(46, 'update') == false){
+                if (Access::checkAkses(46, 'update') == false) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
-            }else{
+                } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\', \'' . $supplier_nonactive->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($supplier_nonactive->s_id) . '\', \'' . $supplier_nonactive->s_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
 
-            }
+                }
 
-        })
+            })
 
-        ->rawColumns(['aksi', 'limit'])
+            ->rawColumns(['aksi', 'limit'])
 
-        ->make(true);
+            ->make(true);
     }
 
     public function add_suplier(Request $request)
     {
 
-        if(Access::checkAkses(46, 'insert') == false){
+        if (Access::checkAkses(46, 'insert') == false) {
 
-            return view('errors/access_denied');
+            return view('errors/407');
 
-        }else{
+        } else {
 
-            if ($request->isMethod('post'))
-            {
-                if(Access::checkAkses(46, 'insert') == false){
+            if ($request->isMethod('post')) {
+                if (Access::checkAkses(46, 'insert') == false) {
 
-                    return  json_encode([
-                        'status'    => 'Access denied'
+                    return json_encode([
+                        'status' => 'Access denied'
                     ]);
 
                 } else {
@@ -189,17 +188,17 @@ class suplier_controller extends Controller
 
                     try {
 
-                        $check = suplier::where(['s_company'=>$data['nama_perusahaan'], 's_phone'=>$data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
+                        $check = suplier::where(['s_company' => $data['nama_perusahaan'], 's_phone' => $data['telp_suplier']])->orWhere('s_company', '=', $data['nama_perusahaan'])->count();
 
                         if ($check > 0) {
 
-                            return  json_encode([
-                                'status'    => 'ada',
-                                'company'   => strtoupper($data['nama_perusahaan'])
+                            return json_encode([
+                                'status' => 'ada',
+                                'company' => strtoupper($data['nama_perusahaan'])
                             ]);
 
                         } else {
-                            
+
                             if ($data['fax_suplier'] == "") {
 
                                 $fax = "";
@@ -232,19 +231,19 @@ class suplier_controller extends Controller
 
                             DB::table('d_supplier')->insert([
                                 's_company' => strtoupper($data['nama_perusahaan']),
-                                's_name'    => strtoupper($data['nama_suplier']),
+                                's_name' => strtoupper($data['nama_suplier']),
                                 's_address' => strtoupper($data['alamat_suplier']),
-                                's_phone'   => $data['telp_suplier'],
-                                's_fax'     => $fax,
-                                's_note'    => $note,
-                                's_limit'   => $limit
+                                's_phone' => $data['telp_suplier'],
+                                's_fax' => $fax,
+                                's_note' => $note,
+                                's_limit' => $limit
                             ]);
-                            
-                            DB::commit();
-                            Access::logActivity('Menambahkan Data Supplier '.strtoupper($data['nama_suplier']));
 
-                            return  json_encode([
-                                'status'    => 'berhasil'
+                            DB::commit();
+                            Access::logActivity('Menambahkan Data Supplier ' . strtoupper($data['nama_suplier']));
+
+                            return json_encode([
+                                'status' => 'berhasil'
                             ]);
 
                         }
@@ -254,42 +253,42 @@ class suplier_controller extends Controller
                         DB::rollback();
 
                         // something went wrong
-                        return  json_encode([
-                            'status'    => 'gagal',
-                            'msg'       => $e
+                        return json_encode([
+                            'status' => 'gagal',
+                            'msg' => $e
                         ]);
 
                     }
 
                 }
-                
+
             }
 
             return view('master.suplier.add');
         }
-            
+
     }
 
     public function edit(Request $request, $id = null)
     {
 
-        if(Access::checkAkses(46, 'update') == false){
+        if (Access::checkAkses(46, 'update') == false) {
 
-            return view('errors/access_denied');
+            return view('errors/407');
 
-        }else{
+        } else {
 
             if ($request->isMethod('post')) {
 
-                if(Access::checkAkses(46, 'update') == false){
+                if (Access::checkAkses(46, 'update') == false) {
 
-                    return  json_encode([
-                        'status'    => 'Access denied'
+                    return json_encode([
+                        'status' => 'Access denied'
                     ]);
 
                 } else {
 
-                    $data       = $request->all();
+                    $data = $request->all();
 
                     DB::beginTransaction();
 
@@ -298,10 +297,10 @@ class suplier_controller extends Controller
                         $check = suplier::where('s_id', Crypt::decrypt($id))->count();
 
                         if ($check == 0) {
-                            
-                            return  json_encode([
-                                'status'    => 'tidak ada',
-                                'msg'       => $data['nama_perusahaan']
+
+                            return json_encode([
+                                'status' => 'tidak ada',
+                                'msg' => $data['nama_perusahaan']
                             ]);
 
                         } else {
@@ -337,23 +336,23 @@ class suplier_controller extends Controller
                             }
 
                             suplier::where(['s_id' => Crypt::decrypt($id)])->update([
-                                's_company'     => strtoupper($data['nama_perusahaan']),
-                                's_name'        => strtoupper($data['nama_suplier']),
-                                's_address'     => strtoupper($data['alamat_suplier']),
-                                's_phone'       => $data['telp_suplier'],
-                                's_fax'         => $fax,
-                                's_note'        => $note,
-                                's_limit'       => $limit,
-                                's_isactive'    => strtoupper($data['isactive'])
+                                's_company' => strtoupper($data['nama_perusahaan']),
+                                's_name' => strtoupper($data['nama_suplier']),
+                                's_address' => strtoupper($data['alamat_suplier']),
+                                's_phone' => $data['telp_suplier'],
+                                's_fax' => $fax,
+                                's_note' => $note,
+                                's_limit' => $limit,
+                                's_isactive' => strtoupper($data['isactive'])
                             ]);
 
                             DB::commit();
-                            Access::logActivity('Edit Data Supplier '.strtoupper($data['nama_suplier']));
+                            Access::logActivity('Edit Data Supplier ' . strtoupper($data['nama_suplier']));
 
                             // all good
-                            return  json_encode([
-                                    'status'    => 'berhasil'
-                                ]);
+                            return json_encode([
+                                'status' => 'berhasil'
+                            ]);
 
                         }
 
@@ -362,9 +361,9 @@ class suplier_controller extends Controller
                         DB::rollback();
 
                         // something went wrong
-                        return  json_encode([
-                                    'status'    => 'gagal'
-                                ]);
+                        return json_encode([
+                            'status' => 'gagal'
+                        ]);
 
                     }
 
@@ -384,7 +383,7 @@ class suplier_controller extends Controller
                     $suppliers = suplier::where('s_id', Crypt::decrypt($id))->get();
 
                     DB::commit();
-                    
+
                     return view('master.suplier.edit')->with(compact('suppliers'));
 
                 } else {
@@ -403,19 +402,19 @@ class suplier_controller extends Controller
             }
 
         }
-        
+
     }
 
     public function active($id = null)
     {
 
-        if(Access::checkAkses(46, 'update') == false){
+        if (Access::checkAkses(46, 'update') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
 
-        }else{
+        } else {
 
             DB::beginTransaction();
 
@@ -424,9 +423,9 @@ class suplier_controller extends Controller
                 $check = suplier::where('s_id', Crypt::decrypt($id))->count();
 
                 if ($check == 0) {
-                    
-                    return  json_encode([
-                        'status'    => 'tidak ada'
+
+                    return json_encode([
+                        'status' => 'tidak ada'
                     ]);
 
                 } else {
@@ -435,12 +434,12 @@ class suplier_controller extends Controller
 
                     DB::commit();
                     $data = supplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
-                    $log = 'Set Data Supplier '.$data->s_name. ' = ACTIVE';
+                    $log = 'Set Data Supplier ' . $data->s_name . ' = ACTIVE';
                     Access::logActivity($log);
 
                     // all good
-                    return  json_encode([
-                        'status'    => 'berhasil'
+                    return json_encode([
+                        'status' => 'berhasil'
                     ]);
 
                 }
@@ -450,27 +449,27 @@ class suplier_controller extends Controller
                 DB::rollback();
                 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
                 ]);
 
             }
 
         }
-            
+
     }
 
     public function nonactive($id = null)
     {
 
-        if(Access::checkAkses(46, 'update') == false){
+        if (Access::checkAkses(46, 'update') == false) {
 
-            return  json_encode([
-                'status'    => 'Access denied'
+            return json_encode([
+                'status' => 'Access denied'
             ]);
 
-        }else{
+        } else {
 
             DB::beginTransaction();
 
@@ -479,9 +478,9 @@ class suplier_controller extends Controller
                 $check = suplier::where('s_id', Crypt::decrypt($id))->count();
 
                 if ($check == 0) {
-                    
-                    return  json_encode([
-                        'status'    => 'tidak ada'
+
+                    return json_encode([
+                        'status' => 'tidak ada'
                     ]);
 
                 } else {
@@ -490,12 +489,12 @@ class suplier_controller extends Controller
 
                     DB::commit();
                     $data = supplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
-                    $log = 'Set Data Supplier '.$data->s_name. ' = NONACTIVE';
+                    $log = 'Set Data Supplier ' . $data->s_name . ' = NONACTIVE';
                     Access::logActivity($log);
 
                     // all good
-                    return  json_encode([
-                        'status'    => 'berhasil'
+                    return json_encode([
+                        'status' => 'berhasil'
                     ]);
 
                 }
@@ -505,15 +504,15 @@ class suplier_controller extends Controller
                 DB::rollback();
                 
                 // something went wrong
-                return  json_encode([
-                    'status'    => 'gagal',
-                    'msg'       => $e
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
                 ]);
 
             }
 
         }
-            
+
     }
 
     function formatPrice($data)
