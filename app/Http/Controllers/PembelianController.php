@@ -7,6 +7,7 @@ use App\Model\pembelian\order as order;
 use DB;
 use Session;
 use PDF;
+use Response;
 
 class PembelianController extends Controller
 {
@@ -1014,6 +1015,32 @@ class PembelianController extends Controller
     public function addRencana()
     {
         return view('pembelian/rencana_pembelian/add');
+    }
+
+    public function getItem(Request $request)
+    {
+        $key = $request->term;
+        $nama = DB::table('d_item')
+            ->select('i_id', 'i_nama')
+            ->where(function ($q) use ($key){
+                $q->orWhere('i_nama', 'like', '%'.$key.'%');
+                $q->orWhere('i_code', 'like', '%'.$key.'%');
+                $q->orWhere('i_kelompok', 'like', '%'.$key.'%');
+                $q->orWhere('i_group', 'like', '%'.$key.'%');
+                $q->orWhere('i_sub_group', 'like', '%'.$key.'%');
+                $q->orWhere('i_merk', 'like', '%'.$key.'%');
+            })
+            ->groupBy('i_id')
+            ->get();
+
+        if ($nama == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->i_id, 'label' => $query->i_nama ];
+            }
+        }
+        return Response::json($results);
     }
 
     public function multiple_edit_rencana_pembelian(Request $request)

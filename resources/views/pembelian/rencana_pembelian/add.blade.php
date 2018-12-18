@@ -3,7 +3,9 @@
 @section('title', 'Rencana Pembelian')
 
 @section('extra_style')
-
+    <style type="text/css">
+        
+    </style>
 @endsection
 
 @section('ribbon')
@@ -45,106 +47,82 @@
 					</span>
                 </h1>
             </div>
-            @if(Access::checkAkses(45, 'insert') == true)
-                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 
-                    <div class="page-title">
+                <div class="page-title">
 
-                        <a href="{{ url('pembelian/rencana-pembelian') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Kembali
-                            Data</a>
-
-                    </div>
+                    <a href="{{ url('pembelian/rencana-pembelian') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 
                 </div>
-            @endif
-        </div>
-
-        <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
-
-            <!-- Widget ID (each widget will need unique ID)-->
-            <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false" role="widget">
-                
-                <header role="heading">
-                    <div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
-                    </div>
-                    <h2><strong>Tambah Rencana Pembelian</strong></h2>
-
-                <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
-
-                <!-- widget div-->
-                <div role="content">
-
-                    <!-- widget edit box -->
-                    <div class="jarviswidget-editbox">
-                        <!-- This area used as dropdown edit box -->
-
-                    </div>
-                    <!-- end widget edit box -->
-
-                    <!-- widget content -->
-                    <div class="widget-body">
-                        <form id="checkout-form" class="form-inline" role="form">
-                            <fieldset class="row">
-                                {{-- <div class="form-group">
-                                    <div class="col col-8">
-                                        <label class="input">
-                                            <input type="text" class="form-control" id="autoitem" name="item" placeholder="Masukkan Nama/Kode Barang">
-                                        </label>
-                                    </div>
-                                    <div class="col col-2">
-                                        <label class="input">
-                                            <input type="text" name="kuantitas" placeholder="Qty">
-                                        </label>
-                                    </div>
-                                    <div class="col col-2">
-                                        <button class="btn btn-primary" href="javascript:void(0);">Primary</button>
-                                    </div>
-                                </div> --}}
-                                <div class="form-group col-md-8">
-                                    <label class="sr-only" for="namabarang">Nama Barang</label>
-                                    <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="sr-only" for="kuantitas">QTY</label>
-                                    <input type="text" class="form-control" id="kuantitas" name="kuantitas" placeholder="QTY" style="width: 100%">
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <!-- end widget content -->
-                    {{-- <div class="widget-body">
-                        <p class="alert alert-info">
-                            The icons below are the most basic ones, without any icons or additional css applied to it
-                        </p>
-
-                        <p>
-                            Buttons come in 6 different default color sets
-                            <code>
-                                .btn .btn-*
-                            </code>
-                            <code>
-                                .btn-default, .btn-primary, .btn-success... etc
-                            </code>
-                        </p>
-                        <a href="javascript:void(0);" class="btn btn-default">Default</a>
-                        <a href="javascript:void(0);" class="btn btn-primary">Primary</a>
-                        <a href="javascript:void(0);" class="btn btn-success">Success</a>
-                        <a href="javascript:void(0);" class="btn btn-info">Info</a>
-                        <a href="javascript:void(0);" class="btn btn-warning">Warning</a>
-                        <a href="javascript:void(0);" class="btn btn-danger">Danger</a>
-                        <a href="javascript:void(0);" class="btn btn-default disabled">Disabled</a>
-                        <a href="javascript:void(0);" class="btn btn-link">Link</a>
-                        <button class="btn btn-primary" href="javascript:void(0);">Primary</button>
-
-                    </div>
- --}}
-                </div>
-                <!-- end widget div -->
 
             </div>
-            <!-- end widget -->
+        </div>
 
-        </article>
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false" role="widget">
+                    
+                    <header role="heading">
+                        <div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
+                        </div>
+                        <h2><strong>Tambah Rencana Pembelian</strong></h2>
+
+                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
+
+                    <!-- widget div-->
+                    <div role="content">
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+
+                        </div>
+                        <!-- end widget edit box -->
+
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <form id="checkout-form" class="form-inline" role="form">
+                                <fieldset class="row">
+                                    <div class="form-group col-md-8">
+                                        <label class="sr-only" for="namabarang">Nama Barang</label>
+                                        <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
+                                        <input type="hidden" class="kodeItem">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label class="sr-only" for="kuantitas">QTY</label>
+                                        <input type="text" class="form-control" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="kuantitas" name="kuantitas" placeholder="QTY" style="width: 100%">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <button class="btn btn-primary" onclick="tambah()">Tambah</button>
+                                    </div>
+                                </fieldset>
+                                <fieldset class="row">
+                                    <dir class="col-md-12">
+                                        <table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th data-hide="phone,tablet" width="75%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" width="10%">Qty</th>
+                                                    <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </dir>
+                                </fieldset>
+                            </form>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+
+                </div>
+            <!-- end widget -->
+            </div>
+        </div>
 
     </div>
     <!-- END MAIN CONTENT -->
@@ -154,9 +132,43 @@
 @section('extra_script')
 
     <script type="text/javascript">
+        var table = null;
         $(document).ready(function () {
+            table = $('#table-rencana').dataTable({
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-rencana'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
 
+            $( "#namabarang" ).autocomplete({
+                source: baseUrl+'/pembelian/rencana-pembelian/get-item',
+                minLength: 2,
+                select: function(event, data) {
+                    tanam(data.item);
+                }
+            });
         })
+
+        function tambah(){
+
+        }
+
+        function tanam(item){
+            console.log(item);
+        }
     </script>
 
 @endsection

@@ -273,7 +273,7 @@ Route::group(['middleware' => 'auth'], function(){
 
 	Route::get('/pembelian/rencana-pembelian','PembelianController@rencana_pembelian');
 	Route::get('/pembelian/rencana-pembelian/tambah','PembelianController@addRencana');
-
+	Route::get('/pembelian/rencana-pembelian/get-item','PembelianController@getItem');
 	Route::post('/pembelian/rencana-pembelian/request-order-status','PembelianController@request_order_status');
 
 	Route::get('/pembelian/rencana-pembelian/rencana-pembelian/edit', 'PembelianController@rencana_pembelian_edit');

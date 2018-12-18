@@ -4,7 +4,8 @@
     <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/.fuse_hidden0000001500000001" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/add.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,7 +21,8 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="17" />
+          <entry key="project.closed" value="18" />
+          <entry key="project.open.time.181" value="1" />
           <entry key="project.open.time.2" value="3" />
           <entry key="project.open.time.223" value="1" />
           <entry key="project.open.time.28" value="2" />
@@ -34,7 +36,7 @@
           <entry key="project.open.time.66" value="1" />
           <entry key="project.open.time.69" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="18" />
+          <entry key="project.opened" value="19" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -42,7 +44,7 @@
           <entry key="css" value="3" />
           <entry key="env" value="1" />
           <entry key="js" value="3" />
-          <entry key="php" value="62" />
+          <entry key="php" value="64" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
@@ -51,21 +53,21 @@
           <entry key="Blade" value="10" />
           <entry key="CSS" value="3" />
           <entry key="JavaScript" value="3" />
-          <entry key="PHP" value="52" />
+          <entry key="PHP" value="54" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="5" />
           <entry key="env" value="17" />
-          <entry key="php" value="2003" />
+          <entry key="php" value="2286" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="17" />
           <entry key="Blade" value="2" />
-          <entry key="PHP" value="2001" />
+          <entry key="PHP" value="2284" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
@@ -86,8 +88,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="1015" column="52" selection-start-line="1015" selection-start-column="52" selection-end-line="1015" selection-end-column="52" />
+            <state relative-caret-position="210">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+              <folding>
+                <element signature="e#40#68#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/manajemenPenggunaController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="21" column="7" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -95,7 +109,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="192">
+            <state relative-caret-position="2121">
               <caret line="104" column="9" selection-start-line="104" selection-start-column="9" selection-end-line="104" selection-end-column="9" />
               <folding>
                 <element signature="e#40#58#0#PHP" expanded="true" />
@@ -119,6 +133,8 @@
       <find>rencana_pembelian</find>
       <find>rencana</find>
       <find>rencana_pembelian(</find>
+      <find>cari</find>
+      <find>ca</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -449,18 +465,19 @@
       <workItem from="1544673489367" duration="213000" />
       <workItem from="1544767960636" duration="2623000" />
       <workItem from="1544839409836" duration="1496000" />
-      <workItem from="1545015702891" duration="111000" />
+      <workItem from="1545015702891" duration="3436000" />
+      <workItem from="1545094876501" duration="218000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47496000" />
+    <option name="totallyTimeSpent" value="51039000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2590909" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26363635" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -675,16 +692,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="58" column="18" lean-forward="true" selection-start-line="58" selection-start-column="18" selection-end-line="58" selection-end-column="18" />
-          <folding>
-            <element signature="e#40#58#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/authController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
@@ -748,20 +755,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="104" column="9" selection-start-line="104" selection-start-column="9" selection-end-line="104" selection-end-column="9" />
-          <folding>
-            <element signature="e#40#58#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="429">
+          <caret line="60" column="40" lean-forward="true" selection-start-line="52" selection-start-column="8" selection-end-line="60" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="1015" column="52" selection-start-line="1015" selection-start-column="52" selection-end-line="1015" selection-end-column="52" />
+        <state relative-caret-position="210">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+          <folding>
+            <element signature="e#40#68#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/manajemenPenggunaController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="21" column="7" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2121">
+          <caret line="104" column="9" selection-start-line="104" selection-start-column="9" selection-end-line="104" selection-end-column="9" />
+          <folding>
+            <element signature="e#40#58#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

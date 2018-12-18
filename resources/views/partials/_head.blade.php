@@ -70,4 +70,12 @@
 	.col-sm-1.col-xs-12.hidden-xs {
 	    padding: 0px;
 	}
+	.ui-autocomplete {
+        max-height: 200px;
+        overflow-y: auto;
+        /* prevent horizontal scrollbar */
+        overflow-x: hidden;
+        /* add padding to account for vertical scrollbar */
+        padding-right: 20px;
+    } 
 </style>
