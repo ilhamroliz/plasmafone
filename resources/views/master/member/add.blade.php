@@ -92,7 +92,7 @@
 
 						<header>
 
-							<h2><strong>Master Member</strong></h2>				
+							<h2><strong>Master Master</strong></h2>				
 							
 						</header>
 
@@ -100,63 +100,56 @@
 							
 							<div class="widget-body">
 
-								<form id="data-form" class="form-horizontal">
+								<form id="form-tambah" class="form-horizontal" method="post">
 									{{ csrf_field() }}
 
 									<fieldset>
 
 										<legend>
-											Form Tambah Member
+											Form Tambah Master
 										</legend>
 
 										<div class="row">
+
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Member</label>
-    												<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-user" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Member" style="text-transform: uppercase" />
+															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Outlet" style="text-transform: uppercase" />
 														</div>
-
 													</div>
-                                                </div>
-                                                
-                                                <div class="form-group">
-													<label class="col-xs-4 col-lg-4 control-label text-left">No. NIK</label>
-    												<div class="col-xs-8 col-lg-8 inputGroupContainer">
+												</div>
 
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">No. ID</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan Nomor NIK" />
+															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan Nomor ID Member" />
 														</div>
-
 													</div>
 												</div>
 
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">No. Telephone</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-phone" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="telp" name="telp" v-model="form_data.telp" placeholder="Masukkan Nomor Telepon" />
 														</div>
-
 													</div>
-                                                </div>
-                                                
-                                                <div class="form-group">
+												</div>
+
+												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Email</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-envelope" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="email" name="email" v-model="form_data.email" placeholder="Masukkan Alamat Email" />
+															<input type="text" class="form-control" id="email" name="email" v-model="form_data.email" placeholder="Masukkan Nomor Telepon" />
 														</div>
-
 													</div>
 												</div>
 
@@ -164,28 +157,30 @@
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-                                                <div class="form-group">
+												<div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Tanggal Lahir</label>
                                                     <div class="col-xs-8 col-lg-8">
-                                                        <select id="dobday" class="form-control col-sm-2" style="width: 30%;" name="tanggal" v-model="form_data.tanggal"></select>
-                                                        <select id="dobmonth" class="form-control col-sm-4" style="width: 30%; margin-left: 10px" name="bulan" v-model="form_data.bulan"></select>
-                                                        <select id="dobyear" class="form-control col-sm-3" style="width: 30%; margin-left: 10px" name="tahun" v-model="form_data.tahun"></select>
+                                                        <select id="tanggal" class="form-control col-sm-2" style="width: 30%;" name="tanggal" v-model="form_data.tanggal"></select>
+                                                        <select id="bulan" class="form-control col-sm-4" style="width: 30%; margin-left: 10px" name="bulan" v-model="form_data.bulan"></select>
+                                                        <select id="tahun" class="form-control col-sm-3" style="width: 30%; margin-left: 10px" name="tahun" v-model="form_data.tahun"></select>
                                                     </div>
                                                 </div>
 
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Member</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
-
 														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Member" id="address" name="address" v-model="form_data.address"></textarea>
-
 													</div>
 												</div>
+
 											</article>
+											
 										</div>
-                                    </fieldset>
-                                    
+
+									</fieldset>
+
 									<div class="form-actions">
+
 										<div class="row">
 											<div class="col-md-12">
 												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/member")}}'">
@@ -193,12 +188,13 @@
 													&nbsp;Batal
 												</button>
 
-												<button class="btn btn-primary" type="button" onclick="simpan()" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="button" @click="tambah_form" :disabled="btn_save_disabled">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
 											</div>
 										</div>
+
 									</div>
 								</form>
 							</div>
@@ -221,81 +217,200 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
-    <script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
+	<!-- <script src="{{ asset('template_asset/js/plugin/choosen/init.js') }}"></script> -->
+	<script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
 
 	<script type="text/javascript">
 
 		$(document).ready(function(){
 
-            $.dobPicker({
-                // Selectopr IDs
-                daySelector: '#dobday',
-                monthSelector: '#dobmonth',
-                yearSelector: '#dobyear',
+			var baseUrl = '{{ url('/') }}';
 
-                // Default option values
-                dayDefault: 'Tanggal',
-                monthDefault: 'Bulan',
-                yearDefault: 'Tahun',
+			$.dobPicker({
+				// Selectopr IDs
+				daySelector: '#tanggal',
+				monthSelector: '#bulan',
+				yearSelector: '#tahun',
 
-                // Minimum age
-                minimumAge: 10,
+				// Default option values
+				dayDefault: 'Tanggal',
+				monthDefault: 'Bulan',
+				yearDefault: 'Tahun',
 
-                // Maximum age
-                maximumAge: 80
-            });
-			
-		});
+				// Minimum age
+				minimumAge: 10,
 
-		function simpan(){
+				// Maximum age
+				maximumAge: 80
+			});
 
-			// --- AJAX USE -- //
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Silahkan Memproses Penyimpanan Data');
-			$.ajaxSetup({
-				headers: {
-					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+			function overlay()
+			{
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Memproses...');
+			}
+
+			function out()
+			{
+				$('#overlay').fadeOut(200);
+			}
+
+			function validation_regis()
+			{
+				$('#form-tambah').bootstrapValidator({
+					feedbackIcons : {
+						valid : 'glyphicon glyphicon-ok',
+						invalid : 'glyphicon glyphicon-remove',
+						validating : 'glyphicon glyphicon-refresh'
+					},
+					fields : {
+						nik : {
+							validators : {
+								notEmpty : {
+									message : 'Isi No. ID Member'
+								}
+							}
+						},
+						name : {
+							validators : {
+								notEmpty : {
+									message : 'Isi nama Member'
+								}
+							}
+						},
+						telp : {
+							validators : {
+								notEmpty : {
+									message : 'Isi telepon Member'
+								}
+							}
+						},
+						address : {
+							validators : {
+								notEmpty : {
+									message : 'Isi alamat Member'
+								}
+							}
+						}
+					}
+				});
+			}
+
+			var app = new Vue({
+				el 		: '#content',
+				data 	: {
+
+					btn_save_disabled 	: false,
+
+					form_data : {
+						nik 	: '',
+						name 	: '',
+						telp 	: '',
+						address : '',
+						email 	: '',
+						tanggal : 'Tanggal',
+						bulan	: 'Bulan',
+						tahun	: 'Tahun'
+					}
+
+				},
+				mounted: function(){
+					validation_regis();
+					// overlay();
+				},
+				methods: {
+					tambah_form: function(e){
+						e.preventDefault();
+
+						if($('#form-tambah').data('bootstrapValidator').validate().isValid()){
+							this.btn_save_disabled = true;
+							overlay();
+							axios.post(baseUrl+'/master/member/simpan-tambah', 
+								$('#form-tambah').serialize()
+							).then((response) => {
+								if (response.data.status == 'ditolak') {
+
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+
+								}else if(response.data.status == 'berhasil'){
+									out();
+									$.smallBox({
+										title : "Berhasil",
+										content : "Data member terbaru Anda berhasil tersimpan...!",
+										color : "#739E73",
+										timeout: 5000,
+										icon : "fa fa-check bounce animated"
+									});
+
+									this.reset_form();
+								}
+								else if(response.data.status == 'ada') {
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : 'Data member <i>"'+response.data.name+'"</i> sudah ada!',
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+								} else {
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : "Ada kesalahan dalam proses input data, coba lagi...!",
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+								}
+
+							}).catch((err) => {
+								out();
+								$.smallBox({
+									title : "Gagal",
+									content : "Ada kesalahan jaringan, coba lagi...!",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+							}).then(() => {
+								this.btn_save_disabled = false;
+							})
+
+							return false;
+						}else{
+							out();
+							$.smallBox({
+								title : "Gagal",
+								content : "Ada kesalahan dengan inputan Anda. Harap mengecek ulang...!",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+						}
+					},
+					reset_form:function(){
+						this.form_data.nik 			= '';
+						this.form_data.name 		= '';
+						this.form_data.telp			= '';
+						this.form_data.address 		= '';
+						this.form_data.email 		= '';
+						this.form_data.tanggal 		= '';
+						this.form_data.bulan 		= '';
+						this.form_data.tahun 		= '';
+						
+						$('#form-tambah').data('bootstrapValidator').resetForm();
+					}
 				}
 			});
-			$.ajax({
-				url: '{{ url('/master/member/simpan-tambah') }}',
-				type: 'get',
-				data: $('#data-form').serialize(),
-				success: function(response){
-					if (response.status == 'berhasil') {
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "SUKSES",
-							content : "Data Member Berhasil Diperbarui",
-							color : "#739E73",
-							iconSmall : "fa fa-check animated",
-							timeout : 3000
-						});
-						location.reload();
-					}
-					else if(response.status == 'gagal') {
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "GAGAL",
-							content : "Data Member Gagal Diperbarui",
-							color : "#C46A69",
-							iconSmall : "fa fa-times animated",
-							timeout : 3000
-						});
-					}
-					else if(response.status == 'ada') {
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "GAGAL",
-							content : "Data Member Sudah Ada",
-							color : "#C46A69",
-							iconSmall : "fa fa-times animated",
-							timeout : 3000
-						});
-					}
-				}
-			});
-		}
+		})
 	</script>
 
 @endsection
