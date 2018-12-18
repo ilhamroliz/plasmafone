@@ -105,7 +105,7 @@ class member_controller extends Controller
         if (Plasma::checkAkses(47, 'insert') == true) {
 
             if ($request->isMethod('post')) {
-
+                // dd($request);
                 $data = $request->all();
                 DB::beginTransaction();
                 try {
@@ -114,10 +114,22 @@ class member_controller extends Controller
 
                     if ($check == 0) {
 
-                        if ($data['birth'] != "") {
-                            $birth = $data['birth'];
+                        if ($data['tanggal'] != 'Tanggal' || $data['tanggal'] != '') {
+                            $tanggal = $data['tanggal'];
                         } else {
-                            $birth = "";
+                            $tanggal = "00";
+                        }
+
+                        if ($data['bulan'] != 'Bulan' || $data['bulan'] != '') {
+                            $bulan = $data['bulan'];
+                        } else {
+                            $bulan = "00";
+                        }
+
+                        if ($data['tahun'] != 'Tahun' || $data['tahun'] != '') {
+                            $tahun = $data['tahun'];
+                        } else {
+                            $tahun = "0000";
                         }
 
                         $tglnow = Carbon::now('Asia/Jakarta');
@@ -125,7 +137,7 @@ class member_controller extends Controller
                         DB::table('m_mem')->insert([
                             'm_name' => strtoupper($data['nama']),
                             'm_nik' => $data['nik'],
-                            'm_birth' => $birth,
+                            'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
                             'm_telp' => $data['telp'],
                             'm_address' => $data['alamat'],
                             'm_email' => $data['email'],
@@ -135,10 +147,12 @@ class member_controller extends Controller
                     } else {
                         return json_encode([
                             'status' => 'ada',
-                            'company' => $data['nik']
+                            'member' => $data['nik'] . ' (' . $data['telp'] . ')'
                         ]);
                     }
                     DB::commit();
+
+                    Plasma::logActivity('Menambahkan Member ' . $data['nama']);
 
                     return json_encode([
                         'status' => 'berhasil'
@@ -161,21 +175,185 @@ class member_controller extends Controller
 
     public function edit(Request $request)
     {
+        if (Plasma::checkAkses(47, 'update') == true) {
+            if ($request->isMethod('post')) {
+                if (Plasma::checkAkses(47, 'update') == true) {
 
+                    $data = $request->all();
+                    DB::beginTransaction();
+                    try {
+
+                        $cek = member::where('m_id', Crypt::decrypt($id))->count();
+
+                        if ($check != 0) {
+
+                            if ($data['tanggal'] != 'Tanggal' || $data['tanggal'] != '') {
+                                $tanggal = $data['tanggal'];
+                            } else {
+                                $tanggal = "00";
+                            }
+
+                            if ($data['bulan'] != 'Bulan' || $data['bulan'] != '') {
+                                $bulan = $data['bulan'];
+                            } else {
+                                $bulan = "00";
+                            }
+
+                            if ($data['tahun'] != 'Tahun' || $data['tahun'] != '') {
+                                $tahun = $data['tahun'];
+                            } else {
+                                $tahun = "0000";
+                            }
+
+                            $tglnow = Carbon::now('Asia/Jakarta');
+
+                            member::where('m_id', Crypt::decrypt($id))->update([
+                                'm_name' => strtoupper($data['nama']),
+                                'm_nik' => $data['nik'],
+                                'm_telp' => $data['telp'],
+                                'm_email' => $data['email'],
+                                'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
+                                'm_alamat' => $data['address'],
+                                'm_update' => $tglnow
+                            ]);
+
+                            DB::commit();
+
+                            Plasma::logActivity('Edit Data Member ' . $data['nama']);
+
+                            return json_encode([
+                                'status' => 'berhasil'
+                            ]);
+
+                        } else {
+                            return json_encode([
+                                'status' => 'tidak ada',
+                                'msg' => $data['nama']
+                            ]);
+                        }
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        return json_encode([
+                            'status' => 'gagal',
+                            'msg' => $e
+                        ]);
+                    }
+
+                } else {
+                    return json_encode([
+                        'status' => 'ditolak'
+                    ]);
+                }
+            }
+        } else {
+            return view('errors/407');
+        }
     }
 
     public function active($id)
     {
+        if (Plasma::checkAkses(47, 'update') == true) {
+            DB::beginTransaction();
+            try {
+                $cek = member::where('m_id', Crypt::decrypt($id))->count();
 
+                if ($cek != 0) {
+
+                    member::where('m_id', Crypt::decrypt($id))->update(['m_status' => 'AKTIF']);
+
+                    DB::commit();
+
+                    $data = member::where('m_id', Crypt::decrypt($id))->select('m_name', 'm_telp')->get();
+                    $log = 'Mengubah Status Member ' . $data->m_name . ' (' . $data->m_telp . ') = AKTIF';
+                    Plasma::logActivity($log);
+
+                    return json_encode([
+                        'status' => 'berhasil'
+                    ]);
+                } else {
+                    return json_encode([
+                        'status' => 'tidak ada'
+                    ]);
+                }
+            } catch (\Exception $e) {
+                DB::rollback();
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
+                ]);
+            }
+        } else {
+            return json_encode([
+                'status' => 'ditolak'
+            ]);
+        }
     }
 
     public function nonactive($id)
     {
+        if (Plasma::checkAkses(47, 'update') == true) {
+            DB::beginTransaction();
+            try {
+                $cek = member::where('m_id', Crypt::decrypt($id))->count();
 
+                if ($cek != 0) {
+
+                    member::where('m_id', Crypt::decrypt($id))->update(['m_status' => 'NONAKTIF']);
+
+                    DB::commit();
+
+                    $data = member::where('m_id', Crypt::decrypt($id))->select('m_name', 'm_telp')->get();
+                    $log = 'Mengubah Status Member ' . $data->m_name . ' (' . $data->m_telp . ') = AKTIF';
+                    Plasma::logActivity($log);
+
+                    return json_encode([
+                        'status' => 'berhasil'
+                    ]);
+                } else {
+                    return json_encode([
+                        'status' => 'tidak ada'
+                    ]);
+                }
+            } catch (\Exception $e) {
+                DB::rollback();
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
+                ]);
+            }
+        } else {
+            return json_encode([
+                'status' => 'ditolak'
+            ]);
+        }
     }
 
     public function delete($id)
     {
+        if (Plasma::checkAkses(47, 'delete')) {
+            DB::beginTransaction();
+            try {
 
+                member::where('m_id', Crypt::decrypt($id))->delete();
+
+                DB::commit();
+
+                $data = member::where('m_id', Crypt::decrypt($id))->select('m_name', 'm_telp')->get();
+                $log = 'Hapus Member ' . $data->m_name . ' (' . $data->m_telp . ')';
+                Plasma::logActivity($log);
+
+                return json_encode([
+                    'status' => 'berhasil'
+                ]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
+                ]);
+            }
+        } else {
+
+        }
     }
 }
