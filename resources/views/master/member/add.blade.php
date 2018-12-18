@@ -100,7 +100,7 @@
 							
 							<div class="widget-body">
 
-								<form id="data-form" class="form-horizontal" method="post">
+								<form id="data-form" class="form-horizontal">
 									{{ csrf_field() }}
 
 									<fieldset>
@@ -117,7 +117,7 @@
     												<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-user"></i></span>
+															<span class="input-group-addon"><i class="fa fa-user" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Member" style="text-transform: uppercase" />
 														</div>
 
@@ -129,7 +129,7 @@
     												<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
+															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan Nomor NIK" />
 														</div>
 
@@ -141,7 +141,7 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+															<span class="input-group-addon"><i class="fa fa-phone" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="telp" name="telp" v-model="form_data.telp" placeholder="Masukkan Nomor Telepon" />
 														</div>
 
@@ -153,7 +153,7 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+															<span class="input-group-addon"><i class="fa fa-envelope" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="email" name="email" v-model="form_data.email" placeholder="Masukkan Alamat Email" />
 														</div>
 
@@ -163,6 +163,15 @@
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+                                                <div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Tanggal Lahir</label>
+                                                    <div class="col-xs-8 col-lg-8">
+                                                        <select id="dobday" class="form-control col-sm-2" style="width: 30%;" name="tanggal" v-model="form_data.tanggal"></select>
+                                                        <select id="dobmonth" class="form-control col-sm-4" style="width: 30%; margin-left: 10px" name="bulan" v-model="form_data.bulan"></select>
+                                                        <select id="dobyear" class="form-control col-sm-3" style="width: 30%; margin-left: 10px" name="tahun" v-model="form_data.tahun"></select>
+                                                    </div>
+                                                </div>
 
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Member</label>
@@ -179,12 +188,12 @@
 									<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
-												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/outlet")}}'">
+												<button class="btn btn-default" type="reset" onclick="window.location = '{{url("/master/member")}}'">
 													<i class="fa fa-times"></i>
 													&nbsp;Batal
 												</button>
 
-												<button class="btn btn-primary" type="button" @click="submit_form" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="button" onclick="simpan()" :disabled="btn_save_disabled">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -212,194 +221,91 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
-	<!-- <script src="{{ asset('template_asset/js/plugin/choosen/init.js') }}"></script> -->
+    <script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
 
 	<script type="text/javascript">
 
 		$(document).ready(function(){
 
-			var baseUrl = '{{ url('/') }}';
+            $.dobPicker({
+                // Selectopr IDs
+                daySelector: '#dobday',
+                monthSelector: '#dobmonth',
+                yearSelector: '#dobyear',
 
-			function overlay()
-			{
-				$('#overlay').fadeIn(200);
-				$('#load-status-text').text('Sedang Memproses...');
-			}
+                // Default option values
+                dayDefault: 'Tanggal',
+                monthDefault: 'Bulan',
+                yearDefault: 'Tahun',
 
-			function out()
-			{
-				$('#overlay').fadeOut(200);
-			}
+                // Minimum age
+                minimumAge: 10,
 
-			function validation_regis()
-			{
-				$('#data-form').bootstrapValidator({
-					feedbackIcons : {
-						valid : 'glyphicon glyphicon-ok',
-						invalid : 'glyphicon glyphicon-remove',
-						validating : 'glyphicon glyphicon-refresh'
-					},
-					fields : {
-						// code : {
-						// 	validators : {
-						// 		notEmpty : {
-						// 			message : 'Isi kode outlet'
-						// 		}
-						// 	}
-						// },
-						name : {
-							validators : {
-								notEmpty : {
-									message : 'Isi nama outlet'
-								}
-							}
-						},
-						telp : {
-							validators : {
-								notEmpty : {
-									message : 'Isi telephone outlet'
-								}
-							}
-						},
-						address : {
-							validators : {
-								notEmpty : {
-									message : 'Isi alamat outlet'
-								}
-							}
-						}
+                // Maximum age
+                maximumAge: 80
+            });
+			
+		});
+
+		function simpan(){
+
+			// --- AJAX USE -- //
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Silahkan Memproses Penyimpanan Data');
+			// waitingDialog.show();
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+			$.ajax({
+				url: '{{ url('/master/member/add') }}',
+				type: 'post',
+				data: $('#data-form').serialize(),
+				success: function(response){
+					if (response.status == 'berhasil') {
+						// waitingDialog.hide();
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "SUKSES",
+							content : "Data Akses Berhasil Diperbarui",
+							color : "#739E73",
+							iconSmall : "fa fa-check animated",
+							timeout : 5000
+						});
+						location.reload();
 					}
-				});
-			}
-
-			var app = new Vue({
-				el 		: '#content',
-				data 	: {
-
-					btn_save_disabled 	: false,
-
-					form_data : {
-						// code 	: '',
-						name 	: '',
-						telp 	: '',
-						address : '',
-						note 	: ''
+					else if(response.status == 'gagal') {
+						// alert('Data Gagal Di Update');	
+						// waitingDialog.hide();
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "GAGAL",
+							content : "Data Akses Gagal Diperbarui",
+							color : "#C46A69",
+							iconSmall : "fa fa-times animated",
+							timeout : 5000
+						});
+						// location.reload();
 					}
-
-				},
-				mounted: function(){
-					validation_regis();
-					// overlay();
-				},
-				// created: function(){
-				// 	axios.get(baseUrl+'/master/getcode')
-				// 	.then(response => {
-				// 		this.form_data.code = response.data;
-				// 		out();
-				// 	})
-				// },
-				methods: {
-					submit_form: function(e){
-						e.preventDefault();
-
-						if($('#data-form').data('bootstrapValidator').validate().isValid()){
-							this.btn_save_disabled = true;
-							overlay();
-							axios.post(baseUrl+'/master/outlet/add', 
-								$('#data-form').serialize()
-							).then((response) => {
-								if (response.data.status == 'Access denied') {
-
-									out();
-									$.smallBox({
-										title : "Gagal",
-										content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-										color : "#A90329",
-										timeout: 5000,
-										icon : "fa fa-times bounce animated"
-									});
-
-								}else if(response.data.status == 'berhasil'){
-									out();
-									$.smallBox({
-										title : "Berhasil",
-										content : "Data outlet terbaru Anda berhasil tersimpan...!",
-										color : "#739E73",
-										timeout: 5000,
-										icon : "fa fa-check bounce animated"
-									});
-
-									this.reset_form();
-									// this.form_data.code = response.data.code;
-
-								}
-								//  else if(response.data.status == 'kode ada') {
-								// 	out();
-								// 	$.smallBox({
-								// 		title : "Gagal",
-								// 		content : 'Kode outlet <i>"'+response.data.code+'"</i> sudah ada! Mulai ulang halaman...',
-								// 		color : "#A90329",
-								// 		timeout: 5000,
-								// 		icon : "fa fa-times bounce animated"
-								// 	});
-								// } 
-								else if(response.data.status == 'nama ada') {
-									out();
-									$.smallBox({
-										title : "Gagal",
-										content : 'Nama outlet <i>"'+response.data.name+'"</i> sudah ada! Masukkan nama selain <i>"'+response.data.name+'"</i>',
-										color : "#A90329",
-										timeout: 5000,
-										icon : "fa fa-times bounce animated"
-									});
-								} else {
-									out();
-									$.smallBox({
-										title : "Gagal",
-										content : "Ada kesalahan dalam proses input data, coba lagi...!",
-										color : "#A90329",
-										timeout: 5000,
-										icon : "fa fa-times bounce animated"
-									});
-								}
-
-							}).catch((err) => {
-								out();
-								$.smallBox({
-									title : "Gagal",
-									content : "Ada kesalahan jaringan, coba lagi...!",
-									color : "#A90329",
-									timeout: 5000,
-									icon : "fa fa-times bounce animated"
-								});
-							}).then(() => {
-								this.btn_save_disabled = false;
-							})
-
-							return false;
-						}else{
-							out();
-							$.smallBox({
-								title : "Gagal",
-								content : "Ada kesalahan dengan inputan Anda. Harap mengecek ulang...!",
-								color : "#A90329",
-								timeout: 5000,
-								icon : "fa fa-times bounce animated"
-							});
-						}
-					},
-					reset_form:function(){
-						// this.form_data.code 		= '';
-						this.form_data.name 		= '';
-						this.form_data.telp			= '';
-						this.form_data.address 		= '';
-						this.form_data.note 		= '';
-						$('#data-form').data('bootstrapValidator').resetForm();
+				}, error:function(x, e) {
+					waitingDialog.hide();
+					if (x.status == 0) {
+						alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+					} else if (x.status == 404) {
+						alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+					} else if (x.status == 500) {
+						alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+					} else if (e == 'parsererror') {
+						alert('Error.\nParsing JSON Request failed.');
+					} else if (e == 'timeout'){
+						alert('Request Time out. Harap coba lagi nanti');
+					} else {
+						alert('Unknow Error.\n' + x.responseText);
 					}
 				}
 			});
-
-		})
+		}
 	</script>
 
 @endsection

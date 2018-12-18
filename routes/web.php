@@ -298,6 +298,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Rencana Pembelian
 
+<<<<<<< HEAD
 // <<<<<<< HEAD
 // 	Route::get('/pembelian/rencana-pembelian','PembelianController@rencana_pembelian');
 // 	Route::get('/pembelian/rencana-pembelian/tambah','PembelianController@addRencana');
@@ -309,6 +310,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 // 	Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
 // >>>>>>> ff228b106c4823a9d890f856329d75eab291d36e
+=======
+	Route::get('/pembelian/rencana-pembelian', 'PembelianController@rencana_pembelian');
+	Route::get('/pembelian/rencana-pembelian/tambah', 'PembelianController@addRencana');
+
+	Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
+>>>>>>> 1ed8a9b42e6effebc263da6ea8c03a8cc1b2b362
 
 	Route::get('/pembelian/rencana-pembelian/rencana-pembelian/edit', 'PembelianController@rencana_pembelian_edit');
 
