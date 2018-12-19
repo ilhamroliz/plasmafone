@@ -148,7 +148,22 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-envelope" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="email" name="email" v-model="form_data.email" placeholder="Masukkan Nomor Telepon" />
+															<input type="text" class="form-control" id="email" name="email" v-model="form_data.email" placeholder="Masukkan Alamat Email" />
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Tipe Member</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+														<div class="input-group">
+															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
+																<option value="" selected disabled>== Jenis Member ==</option>
+																<option value="1">Grosir 1</option>
+																<option value="2">Grosir 2</option>
+																<option value="3">Grosir 3</option>
+																<option value="4">Retail</option>
+															</select>
 														</div>
 													</div>
 												</div>
@@ -217,7 +232,7 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
-	<!-- <script src="{{ asset('template_asset/js/plugin/choosen/init.js') }}"></script> -->
+	{{-- <!-- <script src="{{ asset('template_asset/js/plugin/choosen/init.js') }}"></script> --> --}}
 	<script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
 
 	<script type="text/javascript">
@@ -291,6 +306,13 @@
 									message : 'Isi alamat Member'
 								}
 							}
+						},
+						tipe : {
+							validators : {
+								notEmpty : {
+									message : 'Isi alamat Member'
+								}
+							}
 						}
 					}
 				});
@@ -308,6 +330,7 @@
 						telp 	: '',
 						address : '',
 						email 	: '',
+						tipe	: '',
 						tanggal : 'Tanggal',
 						bulan	: 'Bulan',
 						tahun	: 'Tahun'
@@ -402,15 +425,16 @@
 						this.form_data.telp			= '';
 						this.form_data.address 		= '';
 						this.form_data.email 		= '';
-						this.form_data.tanggal 		= '';
-						this.form_data.bulan 		= '';
-						this.form_data.tahun 		= '';
+						this.form_data.tipe 		= '';
+						this.form_data.tanggal 		= 'Tanggal';
+						this.form_data.bulan 		= 'Bulan';
+						this.form_data.tahun 		= 'Tahun';
 						
 						$('#form-tambah').data('bootstrapValidator').resetForm();
 					}
 				}
 			});
-		})
+		});
 	</script>
 
 @endsection

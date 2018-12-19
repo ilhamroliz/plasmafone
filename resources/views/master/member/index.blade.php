@@ -124,7 +124,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
 													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -143,7 +143,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
 													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
 													<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -161,7 +161,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
 													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -407,88 +407,76 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		    inaktif.api().ajax.reload();
 		}
 
-		// function hapus(val){
+		function hapus(val){
 
-		// 	$.SmartMessageBox({
-		// 		title : "Pesan!",
-		// 		content : 'Apakah Anda yakin akan manghapus data outlet <i>"'+val+'"</i>',
-		// 		buttons : '[Batal][Ya]'
-		// 	}, function(ButtonPressed) {
-		// 		if (ButtonPressed === "Ya") {
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan manghapus data member ini ?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
 
-		// 			$('#overlay').fadeIn(200);
-		// 			$('#load-status-text').text('Sedang Menghapus...');
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menghapus...');
 
-		// 			axios.get(baseUrl+'/master/outlet/delete/'+val).then((response) => {
+					axios.get(baseUrl+'/master/member/delete/'+val).then((response) => {
 
-		// 				if(response.data.status == 'berhasil'){
-		// 					refresh_tab();
-		// 					$('#overlay').fadeOut(200);
+						if(response.data.status == 'hapusberhasil'){
+							refresh_tab();
+							$('#overlay').fadeOut(200);
 
-		// 					$.smallBox({
-		// 						title : "Berhasil",
-		// 						content : 'Data outlet <i>"'+val+'"</i> berhasil dihapus...!',
-		// 						color : "#739E73",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-check bounce animated"
-		// 					});
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data member berhasil dihapus...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
 
-		// 				}else if(response.data.status == 'tidak ada'){
+						}else if(response.data.status == 'tidak ada'){
 
-		// 					$('#overlay').fadeOut(200);
+							$('#overlay').fadeOut(200);
 
-		// 					$.smallBox({
-		// 						title : "Gagal",
-		// 						content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
-		// 						color : "#A90329",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-times bounce animated"
-		// 					});
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
 
-		// 				}else if(response.data.status == 'd_mem ada'){
+						}else{
+							$('#overlay').fadeOut(200);
+							console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
 
-		// 					$('#overlay').fadeOut(200);
+						}
 
-		// 					$.smallBox({
-		// 						title : "Gagal",
-		// 						content : "Upsss. Data yang ingin Anda hapus masih dipakai oleh member...!",
-		// 						color : "#A90329",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-times bounce animated"
-		// 					});
-
-		// 				}else{
-		// 					$('#overlay').fadeOut(200);
-		// 					console.log(response);
-		// 					$.smallBox({
-		// 						title : "Gagal",
-		// 						content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-		// 						color : "#A90329",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-times bounce animated"
-		// 					});
-
-		// 				}
-
-		// 			}).catch((err) => {
-		// 				out();
-		// 				$.smallBox({
-		// 					title : "Gagal",
-		// 					content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-		// 					color : "#A90329",
-		// 					timeout: 4000,
-		// 					icon : "fa fa-times bounce animated"
-		// 				});
+					}).catch((err) => {
+						out();
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
 						
-		// 			}).then(function(){
-		// 				$('#overlay').fadeOut(200);
-		// 			})
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
 
-		// 		}
+				}
 	
-		// 	});
+			});
 
-		// }
+		}
 
 		function edit(val){
 
@@ -520,8 +508,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 				} else {
 
-					$('#title_detail').html('<strong>Detail Outlet "'+response.data.data.m_name+'"</strong>');
-					$('#dt_code').text(response.data.data.m_nik);
+					$('#title_detail').html('<strong>Detail Member "'+response.data.data.m_name+'"</strong>');
+					$('#dt_nik').text(response.data.data.m_nik);
 					$('#dt_name').text(response.data.data.m_name);
 					$('#dt_phone').text(response.data.data.m_telp);
 					$('#dt_address').text(response.data.data.m_address);
@@ -549,7 +537,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		function statusactive(id){
 			$.SmartMessageBox({
 				title : "Pesan!",
-				content : 'Apakah Anda yakin akan mengaktifkan data outlet <i>"'+id+'"</i>',
+				content : 'Apakah Anda yakin akan mengaktifkan data member ini ? ',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
 				if (ButtonPressed === "Ya") {
@@ -557,9 +545,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#overlay').fadeIn(200);
 					$('#load-status-text').text('Sedang Memproses...');
 
-					axios.get(baseUrl+'/master/outlet/active/'+id).then((response) => {
+					axios.get(baseUrl+'/master/member/active/'+id).then((response) => {
 
-						if (response.data.status == 'Access denied') {
+						if (response.data.status == 'ditolak') {
 
 							$('#overlay').fadeOut(200);
 							$.smallBox({
@@ -570,13 +558,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								icon : "fa fa-times bounce animated"
 							});
 
-						} else if(response.data.status == 'berhasil'){
+						}else if(response.data.status == 'aktifberhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data outlet <i>"'+id+'"</i> berhasil diaktifkan...!',
+								content : 'Data member <i>"'+response.data.name+'"</i> berhasil diaktifkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
@@ -604,9 +592,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								timeout: 4000,
 								icon : "fa fa-times bounce animated"
 							});
-
 						}
-
 					}).catch((err) => {
 						$('#overlay').fadeOut(200);
 						$.smallBox({
@@ -629,7 +615,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		function statusnonactive(id){
 			$.SmartMessageBox({
 				title : "Pesan!",
-				content : 'Apakah Anda yakin akan menonaktifkan data outlet <i>"'+id+'"</i>',
+				content : 'Apakah Anda yakin akan menonaktifkan data member ini ? ',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
 				if (ButtonPressed === "Ya") {
@@ -637,9 +623,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#overlay').fadeIn(200);
 					$('#load-status-text').text('Sedang Memproses...');
 
-					axios.get(baseUrl+'/master/outlet/nonactive/'+id).then((response) => {
+					axios.get(baseUrl+'/master/member/nonactive/'+id).then((response) => {
 
-						if (response.data.status == 'Access denied') {
+						if (response.data.status == 'ditolak') {
 
 							$('#overlay').fadeOut(200);
 							$.smallBox({
@@ -650,13 +636,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								icon : "fa fa-times bounce animated"
 							});
 
-						}else if(response.data.status == 'berhasil'){
+						}else if(response.data.status == 'nonaktifberhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data outlet <i>"'+id+'"</i> berhasil dinonaktifkan...!',
+								content : 'Data member <i>"'+response.data.name+'"</i> berhasil dinonaktifkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"

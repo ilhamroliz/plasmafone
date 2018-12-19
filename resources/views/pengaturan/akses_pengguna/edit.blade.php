@@ -76,7 +76,7 @@
 										{{ $data->m_name }}
 									</h2>
 									<h4>
-										{{ $data->nama }}
+										{{ $data->l_name }}
 									</h4>
 									<small>
 										{{ $data->m_address }}
