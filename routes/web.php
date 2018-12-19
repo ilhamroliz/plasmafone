@@ -284,6 +284,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Request Order
 
 	Route::get('/pembelian/request-pembelian', 'PembelianController@request_order');
+	Route::get('/pembelian/request-pembelian/tambah', 'PembelianController@request_order_tambah');
 	Route::get('/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
 	Route::get('/pembelian/request-pembelian/getKelompok_item', 'PembelianController@getKelompok_item');
 	Route::get('/pembelian/request-pembelian/getBarang', 'PembelianController@getBarang');

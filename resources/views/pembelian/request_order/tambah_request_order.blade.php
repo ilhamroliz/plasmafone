@@ -105,7 +105,8 @@
 							<!-- widget content -->
 							<div class="widget-body">
 								
-								<form id="data-form" class="form-horizontal"  method="post" enctype="multipart/form-data">
+								<!-- <form id="data-form" class="form-horizontal" action="{{ url('/pembelian/request-pembelian/simpanRequest') }}" method="post" enctype="multipart/form-data"> -->
+								<form id="data-form" class="form-horizontal" >
 									{{ csrf_field() }}
 
 									<fieldset>
@@ -116,7 +117,7 @@
 
 										<div class="row ">
 
-											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+											<article class="col-xs-12 col-sm-10 col-md-10 col-lg-10">
 
 												<div class="form-group">
 
@@ -216,7 +217,7 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<input type="text" class="form-control"  id="i_qty"  />
+														<input type="text" class="form-control"  id="i_qty" name="i_qty" />
 
 													</div>
 
@@ -328,9 +329,9 @@
 													<i class="fa fa-times"></i>
 													&nbsp;Batal
 												</button>
-												<button class="btn btn-primary" onclick="simpanRequest()">
+												<button class="btn btn-primary"  onclick="simpanRequest()">
 													<i class="fa fa-floppy-o"></i>
-													&nbsp;Simpan2
+													&nbsp;SimpanP
 												</button>
 
 											</div>
@@ -374,6 +375,9 @@
 	
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
+
 	<script type="text/x-template" id="select2-template-kelompok">
 	  <select style="width:100%" name="i_kelompok" required id="item_kelompok" onchange="getMerk()">
 	  	<option value="">-- PILIH KELOMPOK</option>
@@ -382,7 +386,7 @@
 	</script>
 
 	<script type="text/x-template" id="select2-template-merk">
-	  <select style="width:100%" name="i_item" required id="merk_id" onchange="getItem()">
+	  <select style="width:100%" name="i_merk" required id="merk_id" onchange="getItem()">
 	  	<option value="">-- PILIH MERK</option>
 	    <!-- <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option> -->
 	  </select>
@@ -459,21 +463,28 @@
 		})
 
 	function simpanRequest(){
-		
 		$.ajax({
-			url : '{{url('/pembelian/request-pembelian/simpanRequset')}}',
+			url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
 			type: "GET",
 			data: { 
-				"item_id" : $('#item_id').val(),
-				"qty" : $('#i_qty').val(),
+				"i_item" : $('#item_id').val(),
+				"i_qty" : $('#i_qty').val(),
 			},
 			dataType: "JSON",
 			success: function(data)
 			{
-				if(data.HASIL =='gagal'){
-					alert('gagal');
+				if(data.status != "SUKSES"){
+					location.reload();
+					$.smallBox({
+						title : "SUKSES",
+						content : "Request Berhasil Di tambah kan ",
+						color : "#739E73",
+						iconSmall : "fa fa-check animated",
+						timeout : 4000
+					});
+					// location.reload();
 				}else{
-					alert('sukses');
+					alert('Gagal');
 				}
 			},
 			

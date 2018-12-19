@@ -50,7 +50,7 @@
 
                     <div class="page-title">
 
-                        <a href="{{ url('/pembelian/request-order/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah
+                        <a href="{{ url('/pembelian/request-pembelian/tambah') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah
                             Data</a>
 
                     </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 // use App\Http\Controllers\Auth;
 use App\Model\pembelian\order as order;
+use Carbon\Carbon;
 use Auth;
 use DB;
 use Session;
@@ -720,6 +721,11 @@ class PembelianController extends Controller
         return view('pembelian/request_order/view_request_order');
     }
 
+    public function request_order_tambah(){
+        return view('pembelian/request_order/tambah_request_order');
+    }
+
+
     public function tampilData(Request $request)
     {
 
@@ -819,27 +825,32 @@ class PembelianController extends Controller
     {
         
         $comp = Auth::user()->m_id;
-        $item = $request->input('item_id');
-        $qty = $request->input('qty');
-        $dateReq = date();
+        $item = $request->input('i_item');
+        $qty = $request->input('i_qty');
+        $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'WAITING';
 
-        if ($request->isMethod('get')) {
+       
 
-            DB::table('purchase_req')->insert([
+         $insert =DB::table('purchase_req')->insert([
 	    		'idComp'                     => $comp,
                 'item_id'                    => $item,
                 'qtyReq'                     => $qty,
                 'dateRequest'                => $dateReq,
                 'status'                     => $status,
                 
-	    	]);
+            ]);
+            
+        if($insert){
+            $status ="SUKSES";
+        }else{
+            $status ="GAGAL";
+        }
 
-	    	return redirect('/pembelian/request-order/add')->with('flash_message_success','Data berhasil ditambahkan!');
+        echo json_encode($status);
 
-         }
-
-         return view('/pembelian/request-order/add');
+	    	// return redirect('/pembelian/request-order/add')->with('flash_message_success','Data berhasil ditambahkan!');
+            // return view('/pembelian/request-order/add');
         
     }
 
