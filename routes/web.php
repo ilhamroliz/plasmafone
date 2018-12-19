@@ -284,11 +284,18 @@ Route::group(['middleware' => 'auth'], function () {
 	// Request Order
 
 	Route::get('/pembelian/request-pembelian', 'PembelianController@request_order');
+	Route::get('/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
+	Route::get('/pembelian/request-pembelian/getKelompok_item', 'PembelianController@getKelompok_item');
+	Route::get('/pembelian/request-pembelian/getBarang', 'PembelianController@getBarang');
+	Route::get('/pembelian/request-pembelian/getMerk', 'PembelianController@getMerk');
+	Route::get('/pembelian/request-pembelian/getOutlet', 'PembelianController@getOutlet');
+	Route::get('/pembelian/request-pembelian/simpanRequest', 'PembelianController@simpanRequest');
+	// Route::match(['get', 'post'], '/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
 
 	Route::match(['get', 'post'], '/pembelian/request-order/add', 'PembelianController@form_add_request');
 
 	Route::post('/pembelian/request-order/edit-multiple', 'PembelianController@edit_multiple');
-
+	
 	Route::get('/pembelian/request-order/edit', 'PembelianController@edit_order');
 
 	Route::match(['get', 'post'], '/pembelian/request-order/get/{id}', 'PembelianController@get_order');

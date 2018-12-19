@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use App\Http\Controllers\Auth;
 use App\Model\pembelian\order as order;
+use Auth;
 use DB;
 use Session;
 use PDF;
@@ -718,9 +720,127 @@ class PembelianController extends Controller
         return view('pembelian/request_order/view_request_order');
     }
 
+    public function tampilData(Request $request)
+    {
+
+        $list  = DB::table('purchase_req')
+                ->select('purchase_req.id_purchaseReq','purchase_req.idComp','purchase_req.item_id','purchase_req.qtyReq','purchase_req.status')
+                ->get();
+                
+                $data = array();
+                foreach ($list as $hasil) {
+                   $row = array();
+                    $row[] = $hasil->id_purchaseReq;
+                    $row[] = $hasil->idComp;
+                    $row[] = $hasil->item_id;
+                    $row[] = $hasil->qtyReq;
+                    if ($hasil->status == 'WAITING') {
+                        $row[] = "<span class='label label-danger'>WAITING...</span>";
+                    }
+                    else if ($hasil->status == 'CONFIRMED') {
+                        $row[] = "<span class='label label-warning'>SUBMITTED...</span>";
+                    }
+                   $data[] = $row;
+               }
+                echo json_encode(array("data"=>$data));
+    }
+
     public function form_add_request()
     {
         return view('pembelian/request_order/tambah_request_order');
+    }
+
+    public function getOutlet(){
+
+        $comp = Auth::user()->m_id;
+
+        $query = DB::table('m_company')
+                ->select('m_company.c_name')
+                ->join('d_mem', 'm_company.c_id', '=', 'd_mem.m_comp')
+                ->where('d_mem.m_id', $comp)->get();
+
+            foreach ($query as $row) {
+                $outlet = $row->c_name;
+            }
+
+            $data = array(
+                "C_NAME"=>$outlet,
+            );
+
+        echo json_encode($data);
+
+
+
+    }
+
+    public function getKelompok_item(){
+        $data  = DB::table('d_item')
+        ->select('d_item.i_kelompok')
+        ->groupBy('d_item.i_kelompok')
+        ->get();
+        echo json_encode($data);
+    }
+
+    public function getMerk(Request $request){
+        $kelompok = $request->input('kelompok');
+
+        $data  = DB::table('d_item')
+        ->select('d_item.i_id','d_item.i_merk')
+        ->where('d_item.i_kelompok',$kelompok)
+        ->groupBy('d_item.i_merk')
+        ->get();
+
+        echo json_encode($data);
+    }
+
+    public function getBarang(Request $req){
+        $kelompok = $req->input('merk');
+
+        $data  = DB::table('d_item')
+        ->select('d_item.i_id','d_item.i_nama')
+        ->where('d_item.i_id',$kelompok)
+        ->get();
+
+        echo json_encode($data);
+    }
+
+    public function showItem(Request $request){
+        $i_id = $request->input('item_id');
+
+        $data =  DB::table('d_item')
+        ->select('d_item.i_merk','d_item.i_nama')
+        ->where('d_item.i_id',$i_id)
+        ->get();
+
+        echo json_encode($data);
+    }
+
+    public function simpanRequest(Request $request)
+    {
+        
+        $comp = Auth::user()->m_id;
+        $item = $request->input('item_id');
+        $qty = $request->input('qty');
+        $dateReq = date();
+        $status = 'WAITING';
+
+        if ($request->isMethod('get')) {
+
+            DB::table('purchase_req')->insert([
+	    		'idComp'                     => $comp,
+                'item_id'                    => $item,
+                'qtyReq'                     => $qty,
+                'dateRequest'                => $dateReq,
+                'status'                     => $status,
+                
+	    	]);
+
+	    	return redirect('/pembelian/request-order/add')->with('flash_message_success','Data berhasil ditambahkan!');
+
+         }
+
+         return view('/pembelian/request-order/add');
+        
     }
 
     public function request_order_add(Request $request)

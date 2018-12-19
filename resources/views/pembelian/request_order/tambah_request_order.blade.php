@@ -105,7 +105,7 @@
 							<!-- widget content -->
 							<div class="widget-body">
 								
-								<form id="data-form" class="form-horizontal" action="{{ route('barang.insert') }}" method="post" enctype="multipart/form-data">
+								<form id="data-form" class="form-horizontal"  method="post" enctype="multipart/form-data">
 									{{ csrf_field() }}
 
 									<fieldset>
@@ -132,7 +132,7 @@
 
 												<div class="form-group">
 
-													<label class="col-xs-4 col-lg-4 control-label text-left">Item</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kelompok Item</label>
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
@@ -150,11 +150,17 @@
 
 												<div class="form-group">
 
-													<label class="col-xs-4 col-lg-4 control-label text-left">Merk</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">MERK</label>
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="" v-model='form_data.i_nama' style="text-transform: uppercase" disabled="" />
+														<div class="input-group col-xs-8 col-lg-8" id="select_kelompok">
+
+															<Merk :options="data_I_kelompok" @change="i_kelompok_change" v-model="form_data.i_merk">
+														      
+														    </Merk>
+
+														</div>
 
 													</div>
 
@@ -162,20 +168,35 @@
 
 												<div class="form-group">
 
-													<label class="col-xs-4 col-lg-4 control-label text-left">Qty Request</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Barang</label>
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="" v-model='form_data.i_nama' style="text-transform: uppercase" disabled="" />
+														<div class="input-group col-xs-8 col-lg-8" id="select_kelompok">
+
+															<Item :options="data_I_kelompok" @change="i_kelompok_change" v-model="form_data.i_item">
+														      
+														    </Item>
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<!-- <div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Merk</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<input type="text" class="form-control" name="i_nama" id="in_merk" placeholder="" v-model='form_data.i_nama' style="text-transform: uppercase" disabled="" />
 
 													</div>
 
 												</div>
 
 												
-
-												
-
 												
 												<div class="form-group">
 
@@ -183,11 +204,28 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="" v-model='form_data.i_nama' style="text-transform: uppercase" disabled="" />
+														<input type="text" class="form-control" name="i_nama" id="in_nabar" placeholder="" v-model='form_data.i_nama' style="text-transform: uppercase" disabled="" />
+
+													</div>
+
+												</div> -->
+
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Qty Request</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<input type="text" class="form-control"  id="i_qty"  />
 
 													</div>
 
 												</div>
+
+												
+
+												
+
 
 												
 												
@@ -290,9 +328,9 @@
 													<i class="fa fa-times"></i>
 													&nbsp;Batal
 												</button>
-												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" onclick="simpanRequest()">
 													<i class="fa fa-floppy-o"></i>
-													&nbsp;Simpan
+													&nbsp;Simpan2
 												</button>
 
 											</div>
@@ -337,30 +375,23 @@
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script type="text/x-template" id="select2-template-kelompok">
-	  <select style="width:100%" name="i_kelompok" required>
-	  	<option value="">-- PILIH ITEM</option>
-	    <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option>
-	  </select>
-	</script>
-
-	<script type="text/x-template" id="select2-template-group">
-	  <select style="width:100%" name="i_group">
-	  	<option value="">-- PILIH GROUP</option>
-	    <option v-for="option in options" :value="option.i_group">@{{ option.i_group }}</option>
-	  </select>
-	</script>
-
-	<script type="text/x-template" id="select2-template-subgroup">
-	  <select style="width:100%" name="i_sub_group">
-	  	<option value="">-- PILIH SUB GROUP</option>
-	    <option v-for="option in options" :value="option.i_sub_group">@{{ option.i_sub_group }}</option>
+	  <select style="width:100%" name="i_kelompok" required id="item_kelompok" onchange="getMerk()">
+	  	<option value="">-- PILIH KELOMPOK</option>
+	    <!-- <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option> -->
 	  </select>
 	</script>
 
 	<script type="text/x-template" id="select2-template-merk">
-	  <select style="width:100%" name="i_merk">
+	  <select style="width:100%" name="i_item" required id="merk_id" onchange="getItem()">
 	  	<option value="">-- PILIH MERK</option>
-	    <option v-for="option in options" :value="option.i_merk">@{{ option.i_merk }}</option>
+	    <!-- <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option> -->
+	  </select>
+	</script>
+
+	<script type="text/x-template" id="select2-template-item">
+	  <select style="width:100%" name="i_item" required id="item_id" >
+	  	<option value="">-- PILIH ITEM</option>
+	    <!-- <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option> -->
 	  </select>
 	</script>
 
@@ -422,7 +453,121 @@
 				rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
 				return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
 			}
+
+			getKelompok_item();
+			showOutlet();
 		})
+
+	function simpanRequest(){
+		
+		$.ajax({
+			url : '{{url('/pembelian/request-pembelian/simpanRequset')}}',
+			type: "GET",
+			data: { 
+				"item_id" : $('#item_id').val(),
+				"qty" : $('#i_qty').val(),
+			},
+			dataType: "JSON",
+			success: function(data)
+			{
+				if(data.HASIL =='gagal'){
+					alert('gagal');
+				}else{
+					alert('sukses');
+				}
+			},
+			
+		}); 
+	}
+
+		function getKelompok_item(){
+                $.ajax({
+                          url : '{{url('/pembelian/request-pembelian/getKelompok_item')}}',
+                          type: "GET",
+                          data: { 
+                           
+                          },
+                          dataType: "JSON",
+                          success: function(data)
+                          {
+                            $('#item_kelompok').empty(); 
+                            row = "<option selected='' value='0'>Pilih Kelompok</option>";
+                            $(row).appendTo("#item_kelompok");
+                            $.each(data, function(k, v) {
+                              row = "<option value='"+v.i_kelompok+"'>"+v.i_kelompok+"</option>";
+							  $(row).appendTo("#item_kelompok");
+							  $('#item_id').empty(); 
+                            row = "<option selected='' value='0'>Pilih Item</option>";
+                            });
+                          },
+                          
+                      });  
+			}
+
+			function getMerk(){
+				$('#merk_id').empty(); 
+				showOutlet();
+                $.ajax({
+                          url : '{{url('/pembelian/request-pembelian/getMerk')}}',
+                          type: "GET",
+                          data: { 
+                            "kelompok" : $('#item_kelompok').val() 
+                          },
+                          dataType: "JSON",
+                          success: function(data)
+                          {
+                            $('#merk_id').empty(); 
+                            row = "<option selected='' value='0'>Pilih Merk</option>";
+                            $(row).appendTo("#merk_id");
+                            $.each(data, function(k, v) {
+                              row = "<option value='"+v.i_id+"'>"+v.i_merk+"</option>";
+                              $(row).appendTo("#merk_id");
+                            });
+                          },
+                          
+                      });  
+			}
+			
+			function getItem(){
+				$('#item_id').empty(); 
+				showOutlet();
+                $.ajax({
+                          url : '{{url('/pembelian/request-pembelian/getBarang')}}',
+                          type: "GET",
+                          data: { 
+                            "merk" : $('#merk_id').val() 
+                          },
+                          dataType: "JSON",
+                          success: function(data)
+                          {
+                            $('#item_id').empty(); 
+                            row = "<option selected='' value='0'>Pilih Item</option>";
+                            $(row).appendTo("#item_id");
+                            $.each(data, function(k, v) {
+                              row = "<option value='"+v.i_id+"'>"+v.i_nama+"</option>";
+                              $(row).appendTo("#item_id");
+                            });
+                          },
+                          
+                      });  
+			}
+			
+			function showOutlet(){
+                $.ajax({
+                          url : '{{url('/pembelian/request-pembelian/getOutlet')}}',
+                          type: "GET",
+                          data: { 
+                          },
+                          dataType: "JSON",
+                          success: function(data)
+                          {
+							 
+							$('#i_nama').val(data.C_NAME); 
+                          },
+                          
+                      });  
+            }
+
 		
 	</script>
 
@@ -512,6 +657,54 @@
 		Vue.component('kelompok', {
 		  props: ['options'],
 		  template: '#select2-template-kelompok',
+		  mounted: function () {
+		    var vm = this
+		    $(this.$el).select2().on('change', function () {
+		        vm.$emit('change', this.value)
+		    })
+		  },
+		  watch: {
+		    value: function (value) {
+		      // update value
+		      $(this.$el).val(value);
+		    },
+		    options: function (options) {
+		      // update options
+		      // $(this.$el).empty().select2()
+		    }
+		  },
+		  destroyed: function () {
+		    $(this.$el).off().select2('destroy')
+		  }
+		})
+
+		Vue.component('Item', {
+		  props: ['options'],
+		  template: '#select2-template-item',
+		  mounted: function () {
+		    var vm = this
+		    $(this.$el).select2().on('change', function () {
+		        vm.$emit('change', this.value)
+		    })
+		  },
+		  watch: {
+		    value: function (value) {
+		      // update value
+		      $(this.$el).val(value);
+		    },
+		    options: function (options) {
+		      // update options
+		      // $(this.$el).empty().select2()
+		    }
+		  },
+		  destroyed: function () {
+		    $(this.$el).off().select2('destroy')
+		  }
+		})
+
+		Vue.component('Merk', {
+		  props: ['options'],
+		  template: '#select2-template-merk',
 		  mounted: function () {
 		    var vm = this
 		    $(this.$el).select2().on('change', function () {

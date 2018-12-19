@@ -88,6 +88,7 @@
         <!-- row -->
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                
                     <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false"
                          data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
@@ -95,13 +96,13 @@
                                 <li class="active">
                                     <a data-toggle="tab" href="#hr1"> <i style="color: #739E73;"
                                                                          class="fa fa-lg fa-rotate-right fa-spin"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Menunggu </span> </a>
+                                            class="hidden-mobile hidden-tablet"> Table Request Order </span> </a>
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
                                                                          class="fa fa-lg fa-check"></i> <span
                                             class="hidden-mobile hidden-tablet"> Diterima </span></a>
-                                </li>
+                                </li> -->
                                 
                             </ul>
                         </header>
@@ -112,21 +113,23 @@
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
                                     <div class="tab-pane fade in active" id="table-waiting">
-                                        <table id="dt_active" class="table table-striped table-bordered table-hover"
+                                        <table id="requestOrder_table" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>
+                                            
                                                 <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
                                                 <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <th data-hide="phone,tablet" width="15%">Status</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade" id="hr2">
+                                    <!-- <div class="tab-pane fade" id="hr2">
                                         <table id="dt_all" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
@@ -140,7 +143,7 @@
                                             <tbody>
                                             </tbody>
                                         </table>
-                                    </div>
+                                    </div> -->
                                     
                                 </div>
                                 <!-- end widget body text-->
@@ -171,10 +174,104 @@
 
 @section('extra_script')
 
+    
     <script type="text/javascript">
-        $(document).ready(function () {
 
-        })
+        var  table_requestOrder;
+       
+
+            $(document).ready(function () {
+                load_table_request_order();
+                
+            });
+
+            function load_table_request_order(){
+                table_requestOrder= $('#requestOrder_table').DataTable({
+                    "ajax": {
+                                "url": '{{url('/pembelian/request-pembelian/tampilData')}}',
+                                "type": 'GET',  
+                                "data": function ( data ) {
+                                    //  data.token = token;
+                                },
+                            },
+                    } );
+               
+            };
+
+            function reload_table_requestOrder(){
+                table_requestOrder.ajax.reload(null, false);
+                
+            };
+
+            function getKelompok_item(){
+                $.ajax({
+                          url : '{{url('/pembelian/request-pembelian/getKelompok_item')}}',
+                          type: "GET",
+                          data: { 
+                           
+                          },
+                          dataType: "JSON",
+                          success: function(data)
+                          {
+                            $('#item_kelompok').empty(); 
+                            row = "<option selected='' value='0'>Pilih Kelompok</option>";
+                            $(row).appendTo("#item_kelompok");
+                            $.each(data, function(k, v) {
+                              row = "<option value='"+v.ID_KAB+"'>"+v.NAMA_KABUPATEN+"</option>";
+                              $(row).appendTo("#item_kelompok");
+                            });
+                          },
+                          
+                      });  
+            }
+
+            function getItem(){
+                $.ajax({
+                          url : '{{url('/pembelian/request-pembelian/getItem')}}',
+                          type: "GET",
+                          data: { 
+                            "kelompok" : $('#item_kelompok').val() 
+                          },
+                          dataType: "JSON",
+                          success: function(data)
+                          {
+                            $('#item_id').empty(); 
+                            row = "<option selected='' value='0'>Pilih Item</option>";
+                            $(row).appendTo("#item_id");
+                            $.each(data, function(k, v) {
+                              row = "<option value='"+v.ID_KAB+"'>"+v.NAMA_KABUPATEN+"</option>";
+                              $(row).appendTo("#item_id");
+                            });
+                          },
+                          
+                      });  
+            }
+
+            function showItem(){
+                $.ajax({
+                          url : '{{url('/pembelian/request-pembelian/showItem')}}',
+                          type: "GET",
+                          data: { 
+                            "item_id" : $('#item_id').val() 
+                          },
+                          dataType: "JSON",
+                          success: function(data)
+                          {
+
+                            $('#item_id').val(data.MERK); 
+                           
+                          },
+                          
+                      });  
+            }
+
+            // $(function() {
+            //     $("li").on("click",function() {
+            //         reload_table_requestOrder();
+                   
+            //     });
+            // });
+
     </script>
 
 @endsection
