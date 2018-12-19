@@ -425,6 +425,18 @@ Route::group(['middleware' => 'auth'], function () {
 	// End ditribusi barang
 	// End Inventory
 
+	///// PENJUALAN
+
+	//== Set Harga
+
+	Route::get('/penjualan/set-harga', 'penjualan\setHargaController@index');
+	Route::match(['get', 'post'], '/penjualan/set-harga/add', 'penjualan\setHargaController@tambah');
+	Route::match(['get', 'post'], '/penjualan/set-harga/edit/{id}', 'penjualan\setHargaController@edit');
+
+	//== End Set Harga
+
+	///// End PENJUALAN
+
 	// Setting Application
 
 	// Akses Pengguna

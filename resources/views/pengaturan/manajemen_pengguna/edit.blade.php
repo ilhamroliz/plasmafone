@@ -150,7 +150,6 @@
                                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sortable-grid ui-sortable">
 
                                                 
-
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Tanggal Lahir</label>
                                                     <div class="col-xs-8 col-lg-8">

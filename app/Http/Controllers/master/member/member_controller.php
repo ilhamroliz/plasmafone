@@ -43,15 +43,15 @@ class member_controller extends Controller
 
                 if ($all->m_status == "AKTIF") {
                     if (Plasma::checkAkses(47, 'update') == true) {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_id) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                     } else {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     }
                 } else {
                     if (Plasma::checkAkses(47, 'update') == true) {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($all->m_id) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-check"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="hapus(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                     } else {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     }
                 }
             })
@@ -67,9 +67,9 @@ class member_controller extends Controller
         return DataTables::of($active)
             ->addColumn('aksi', function ($active) {
                 if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($active->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_id) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_nik) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -85,10 +85,10 @@ class member_controller extends Controller
 
             ->addColumn('aksi', function ($nonactive) {
 
-                if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($nonactive->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($nonactive->m_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($nonactive->m_id) . '\', \'' . $nonactive->m_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                if (Plasma::checkAkses(47, 'update') == true) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($nonactive->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($nonactive->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($nonactive->m_nik) . '\', \'' . $nonactive->m_name . '\')"><i class="glyphicon glyphicon-check"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="hapus(\'' . Crypt::encrypt($nonactive->m_nik) . '\', \'' . $nonactive->m_name . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($nonactive->m_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($nonactive->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -97,7 +97,22 @@ class member_controller extends Controller
 
     public function detail($id)
     {
+        if (Plasma::checkAkses(47, 'read') == false) {
 
+            return json_encode([
+                'status' => 'ditolak'
+            ]);
+
+        } else {
+
+            $id = Crypt::decrypt($id);
+            $member = member::where('m_nik', $id)->first();
+            // dd($member);
+            return response()->json([
+                'status' => 'ok',
+                'data' => $member
+            ]);
+        }
     }
 
     // public function tambah(Request $request)
@@ -221,6 +236,7 @@ class member_controller extends Controller
                     ]);
 
                 } else {
+                    // dd($request);
 
                     $data = $request->all();
                     DB::beginTransaction();
@@ -296,15 +312,24 @@ class member_controller extends Controller
             DB::beginTransaction();
 
             try {
-
                 $id = Crypt::decrypt($id);
+                // dd($id);
                 $check = member::where('m_nik', $id)->count();
 
                 if ($check > 0) {
 
                     $member = member::where('m_nik', $id)->get();
+                    $date = member::where('m_nik', $id)->select('m_birth')->first();
+                    $tgl = [];
+                    $tgl = explode('-', $date->m_birth);
+                    $day = $tgl[2];
+                    $month = $tgl[1];
+                    $year = $tgl[0];
+
+                    // dd($year);
                     DB::commit();
-                    return view('master.member.edit')->with(compact('member'));
+
+                    return view('master.member.edit')->with(compact('member', 'day', 'month', 'year'));
 
                 } else {
 
@@ -326,20 +351,21 @@ class member_controller extends Controller
         if (Plasma::checkAkses(47, 'update') == true) {
             DB::beginTransaction();
             try {
-                $cek = member::where('m_id', Crypt::decrypt($id))->count();
+                $cek = member::where('m_nik', Crypt::decrypt($id))->count();
 
                 if ($cek != 0) {
 
-                    member::where('m_id', Crypt::decrypt($id))->update(['m_status' => 'AKTIF']);
+                    member::where('m_nik', Crypt::decrypt($id))->update(['m_status' => 'AKTIF']);
 
                     DB::commit();
 
-                    $data = member::where('m_id', Crypt::decrypt($id))->select('m_name', 'm_telp')->get();
+                    $data = member::where('m_nik', Crypt::decrypt($id))->select('m_name', 'm_telp')->first();
                     $log = 'Mengubah Status Member ' . $data->m_name . ' (' . $data->m_telp . ') = AKTIF';
                     Plasma::logActivity($log);
 
                     return json_encode([
-                        'status' => 'berhasil'
+                        'status' => 'aktifberhasil',
+                        'name' => $data->m_name
                     ]);
                 } else {
                     return json_encode([
@@ -365,20 +391,21 @@ class member_controller extends Controller
         if (Plasma::checkAkses(47, 'update') == true) {
             DB::beginTransaction();
             try {
-                $cek = member::where('m_id', Crypt::decrypt($id))->count();
+                $cek = member::where('m_nik', Crypt::decrypt($id))->count();
 
                 if ($cek != 0) {
 
-                    member::where('m_id', Crypt::decrypt($id))->update(['m_status' => 'NONAKTIF']);
+                    member::where('m_nik', Crypt::decrypt($id))->update(['m_status' => 'NONAKTIF']);
 
                     DB::commit();
 
-                    $data = member::where('m_id', Crypt::decrypt($id))->select('m_name', 'm_telp')->get();
-                    $log = 'Mengubah Status Member ' . $data->m_name . ' (' . $data->m_telp . ') = AKTIF';
+                    $data = member::where('m_nik', Crypt::decrypt($id))->select('m_name', 'm_telp')->first();
+                    $log = 'Mengubah Status Member ' . $data->m_name . ' (' . $data->m_telp . ') = NONAKTIF';
                     Plasma::logActivity($log);
 
                     return json_encode([
-                        'status' => 'berhasil'
+                        'status' => 'nonaktifberhasil',
+                        'name' => $data->m_name
                     ]);
                 } else {
                     return json_encode([
@@ -401,30 +428,53 @@ class member_controller extends Controller
 
     public function delete($id)
     {
-        if (Plasma::checkAkses(47, 'delete')) {
+        if (Plasma::checkAkses(47, 'delete') == false) {
+
+            return json_encode([
+                'status' => 'ditolak'
+            ]);
+
+        } else {
+
             DB::beginTransaction();
+
             try {
+                $id = Crypt::decrypt($id);
+                $check = member::where('m_nik', $id)->count();
 
-                member::where('m_id', Crypt::decrypt($id))->delete();
+                if ($check == 0) {
 
-                DB::commit();
+                    return json_encode([
+                        'status' => 'tidak ada'
+                    ]);
 
-                $data = member::where('m_id', Crypt::decrypt($id))->select('m_name', 'm_telp')->get();
-                $log = 'Hapus Member ' . $data->m_name . ' (' . $data->m_telp . ')';
-                Plasma::logActivity($log);
+                } else {
 
-                return json_encode([
-                    'status' => 'berhasil'
-                ]);
+                    member::where(['m_nik' => $id])->delete();
+
+                    DB::commit();
+
+                    $data = member::where('m_nik', $id)->select('m_name', 'm_telp')->first();
+                    // $log = 'Menghapus data member ' . $data->m_name . ' (' . $data->m_telp . ')';
+                    // Plasma::logActivity($log);
+
+                    return json_encode([
+                        'status' => 'hapusberhasil',
+                        'name' => $data->m_name
+                    ]);
+
+                }
+
             } catch (\Exception $e) {
+
                 DB::rollback();
+                
+                // something went wrong
                 return json_encode([
                     'status' => 'gagal',
                     'msg' => $e
                 ]);
             }
-        } else {
-
         }
     }
 }

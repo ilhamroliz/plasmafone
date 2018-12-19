@@ -85,7 +85,7 @@
 							
 							<div class="widget-body">
 
-								<form id="data-form" class="form-horizontal" method="post">
+								<form id="form-edit" class="form-horizontal" method="post">
 									{{ csrf_field() }}
 
 									<fieldset>
@@ -103,7 +103,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Nama Member</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-user"></i></span>
+															<span class="input-group-addon"><i class="fa fa-user" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Member" style="text-transform: uppercase" value="{{ $member->m_name }}" />
 														</div>
 													</div>
@@ -113,8 +113,8 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">No. ID</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-credit-card"></i></span>
-															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan Nama Member" style="text-transform: uppercase" value="{{ $member->m_id }}" readonly/>
+															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
+															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan No. ID Member" value="{{ $member->m_nik }}" readonly/>
 														</div>
 													</div>
 												</div>
@@ -123,7 +123,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">No. Telephone</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+															<span class="input-group-addon"><i class="fa fa-phone" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="telp" name="telp" v-model="form_data.telp" placeholder="Masukkan Nomor Telepon" value="{{ $member->m_telp }}" />
 														</div>
 													</div>
@@ -133,7 +133,7 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Email</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
-															<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+															<span class="input-group-addon"><i class="fa fa-envelope" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="email" name="email" v-model="form_data.email" placeholder="Masukkan Alamat Email" value="{{ $member->m_email }}" />
 														</div>
 													</div>
@@ -142,6 +142,15 @@
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+												<div class="form-group">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Tanggal Lahir</label>
+                                                    <div class="col-xs-8 col-lg-8">
+                                                        <select id="tanggal" class="form-control col-sm-2" style="width: 28%;" name="tanggal" v-model="form_data.tanggal"></select>
+                                                        <select id="bulan" class="form-control col-sm-4" style="width: 35%; margin-left: 10px" name="bulan" v-model="form_data.bulan"></select>
+                                                        <select id="tahun" class="form-control col-sm-3" style="width: 30%; margin-left: 10px" name="tahun" v-model="form_data.tahun"></select>
+                                                    </div>
+                                                </div>
 
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Member</label>
@@ -167,7 +176,7 @@
 													&nbsp;Batal
 												</button>
 
-												<button class="btn btn-primary" type="submit" id="submit">
+												<button class="btn btn-primary" type="button" id="submit">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -197,10 +206,34 @@
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
 	<!-- <script src="{{ asset('template_asset/js/plugin/choosen/init.js') }}"></script> -->
+	<script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
+
 
 	<script type="text/javascript">
 
 		var baseUrl = '{{ url('/') }}';
+
+		$.dobPicker({
+			// Selectopr IDs
+			daySelector: '#tanggal',
+			monthSelector: '#bulan',
+			yearSelector: '#tahun',
+
+			// Default option values
+			dayDefault: 'Tanggal',
+			monthDefault: 'Bulan',
+			yearDefault: 'Tahun',
+
+			// Minimum age
+			minimumAge: 10,
+
+			// Maximum age
+			maximumAge: 80
+		});
+		
+		$('#tanggal').val('{{ $day }}');
+		$('#bulan').val('{{ $month }}');
+		$('#tahun').val('{{ $year }}');
 
 		function overlay()
 		{
@@ -215,38 +248,31 @@
 
 		// validator
 
-		$('#data-form').bootstrapValidator({
+		$('#form-edit').bootstrapValidator({
 			feedbackIcons : {
 				valid : 'glyphicon glyphicon-ok',
 				invalid : 'glyphicon glyphicon-remove',
 				validating : 'glyphicon glyphicon-refresh'
 			},
 			fields : {
-				code : {
-					validators : {
-						notEmpty : {
-							message : 'Isi kode outlet'
-						}
-					}
-				},
 				name : {
 					validators : {
 						notEmpty : {
-							message : 'Isi nama outlet'
+							message : 'Isi nama Member'
 						}
 					}
 				},
 				telp : {
 					validators : {
 						notEmpty : {
-							message : 'Isi telephone outlet'
+							message : 'Isi telepon Member'
 						}
 					}
 				},
 				address : {
 					validators : {
 						notEmpty : {
-							message : 'Isi alamat outlet'
+							message : 'Isi alamat Member'
 						}
 					}
 				}
@@ -265,9 +291,9 @@
 
 			overlay();
 
-			axios.post(baseUrl+'/master/outlet/edit/'+ $('#code').val(), $('#data-form').serialize()).then((response) => {
+			axios.post(baseUrl+'/master/member/simpan-edit/'+ $('#nik').val(), $('#form-edit').serialize()).then((response) => {
 
-				if (response.data.status == 'Access denied') {
+				if (response.data.status == 'ditolak') {
 
 					out();
 					$.smallBox({
@@ -284,7 +310,7 @@
 
 					$.smallBox({
 						title : "Berhasil",
-						content : 'Data outlet <i>"'+response.data.code+'"</i> berhasil diubah...!',
+						content : 'Data Member <i>"'+response.data.name+'"</i> berhasil diubah...!',
 						color : "#739E73",
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"
@@ -297,18 +323,6 @@
 					$.smallBox({
 						title : "Gagal",
 						content : "Upsss. Data yang ingin Anda ubah sudah tidak ada...!",
-						color : "#A90329",
-						timeout: 4000,
-						icon : "fa fa-times bounce animated"
-					});
-
-				}else if(response.data.status == 'nama ada'){
-
-					out();
-
-					$.smallBox({
-						title : "Gagal",
-						content : 'Upsss. Data outlet <i>"'+response.data.name+'"</i> sudah ada...!',
 						color : "#A90329",
 						timeout: 4000,
 						icon : "fa fa-times bounce animated"
