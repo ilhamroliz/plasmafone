@@ -153,6 +153,21 @@
 													</div>
 												</div>
 
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Tipe Member</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+														<div class="input-group">
+															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
+																<option value="" selected disabled>== Jenis Member ==</option>
+																<option value="1">Grosir 1</option>
+																<option value="2">Grosir 2</option>
+																<option value="3">Grosir 3</option>
+																<option value="4">Retail</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -291,6 +306,13 @@
 									message : 'Isi alamat Member'
 								}
 							}
+						},
+						tipe : {
+							validators : {
+								notEmpty : {
+									message : 'Isi alamat Member'
+								}
+							}
 						}
 					}
 				});
@@ -308,6 +330,7 @@
 						telp 	: '',
 						address : '',
 						email 	: '',
+						tipe	: '',
 						tanggal : 'Tanggal',
 						bulan	: 'Bulan',
 						tahun	: 'Tahun'
@@ -402,6 +425,7 @@
 						this.form_data.telp			= '';
 						this.form_data.address 		= '';
 						this.form_data.email 		= '';
+						this.form_data.tipe 		= '';
 						this.form_data.tanggal 		= 'Tanggal';
 						this.form_data.bulan 		= 'Bulan';
 						this.form_data.tahun 		= 'Tahun';
@@ -410,7 +434,7 @@
 					}
 				}
 			});
-		})
+		});
 	</script>
 
 @endsection

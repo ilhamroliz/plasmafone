@@ -115,11 +115,6 @@ class member_controller extends Controller
         }
     }
 
-    // public function tambah(Request $request)
-    // {
-
-    // }
-
     public function simpan_tambah(Request $request)
     {
         if (Plasma::checkAkses(47, 'insert') == false) {
@@ -182,6 +177,7 @@ class member_controller extends Controller
                                 'm_nik' => $data['nik'],
                                 'm_telp' => $data['telp'],
                                 'm_email' => $email,
+                                'm_jenis' => $data['tipe'],
                                 'm_address' => $data['address'],
                                 'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
                                 'm_status' => 'AKTIF',
@@ -455,12 +451,11 @@ class member_controller extends Controller
                     DB::commit();
 
                     $data = member::where('m_nik', $id)->select('m_name', 'm_telp')->first();
-                    // $log = 'Menghapus data member ' . $data->m_name . ' (' . $data->m_telp . ')';
-                    // Plasma::logActivity($log);
+                    $log = 'Menghapus data member ' . $data->m_name . ' (' . $data->m_telp . ')';
+                    Plasma::logActivity($log);
 
                     return json_encode([
-                        'status' => 'hapusberhasil',
-                        'name' => $data->m_name
+                        'status' => 'hapusberhasil'
                     ]);
 
                 }

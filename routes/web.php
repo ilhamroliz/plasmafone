@@ -432,7 +432,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/penjualan/set-harga', 'penjualan\setHargaController@index');
 	Route::get('/penjualan/set-harga/getdataharga', [
 		'uses' => 'penjualan\setHargaController@get_data_harga',
-	])->name('member.getdataharga');
+	])->name('penjualan.getdataharga');
 	Route::match(['get', 'post'], '/penjualan/set-harga/add', 'penjualan\setHargaController@tambah');
 	Route::match(['get', 'post'], '/penjualan/set-harga/edit/{id}', 'penjualan\setHargaController@edit');
 

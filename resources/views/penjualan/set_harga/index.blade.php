@@ -102,10 +102,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                    <th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Grosir 1</th>
+													<th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Grosir 2</th>
+													<th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Grosir 3</th>
+													<th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Retail</th>                                                    
+													<th class="text-center" width="10%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -124,7 +126,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			<!-- end row -->
 
 			<!-- Modal -->
-            <div class="modal fade" id="modalPass" tabindex="-1" role="dialog">
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -132,17 +134,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         </div>
                         <div class="modal-body no-padding">
 
-                            <form id="pass-form" class="smart-form">
+                            <form id="form-harga" class="smart-form">
                                 <input type="hidden" name="id" id="id">
 
                                 <fieldset>
                                     <section>
                                         <div class="row">
-                                            <label class="label col col-4">Password Lama</label>
-                                            <div class="col col-8 has-feedback">
+                                            <label class="label col col-3">Nama Barang</label>
+                                            <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="password" name="passLama" id="passLama">
-                                                    <i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
+                                                    <input type="text" name="nama" id="nama">
                                                 </label>
                                             </div>
                                         </div>
@@ -150,11 +151,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                                     <section>
                                         <div class="row">
-                                            <label class="label col col-4">Password Baru</label>
+                                            <label class="label col col-3">Tipe Penjualan</label>
                                             <div class="col col-8 has-feedback">
                                                 <label class="input">
-                                                    <input type="password" name="passBaru" id="passBaru">
-                                                    <i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
+                                                    <select class="form-control" name="tipe" id="tipe">
+                                                        <option value="1">Grosir 1</option>
+                                                        <option value="2">Grosir 2</option>
+                                                        <option value="3">Grosir 3</option>
+                                                        <option value="4">Retail</option>
+                                                    </select>
                                                 </label>
                                             </div>
                                         </div>
@@ -162,11 +167,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                                     <section>
                                         <div class="row">
-                                            <label class="label col col-4">Konfirmasi Password Baru</label>
-                                            <div class="col col-8 has-feedback">
+                                            <label class="label col col-3">Harga Barang</label>
+                                            <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="password" name="passconf" id="passconf">
-                                                    <i class="glyphicon glyphicon-eye-open form-control-feedback"></i>
+                                                    <input type="text" name="harga" id="harga">
                                                 </label>
                                             </div>
                                         </div>
@@ -175,7 +179,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 </fieldset>
                                 
                                 <footer>
-                                    <button type="button" class="btn btn-primary" onclick="simpan_pass()"><i class="fa fa-floppy-o"></i>
+                                    <button type="button" class="btn btn-primary" id="submit"><i class="fa fa-floppy-o"></i>
                                         Simpan
                                     </button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -209,7 +213,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
-		var aktif, semua, inaktif;
+		var aktif;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -232,11 +236,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				aktif = $('#dt_active').dataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ route('member.getdataharga') }}",
+					"ajax": "{{ route('penjualan.getdataharga') }}",
 					"columns":[
-						{"data": "m_name"},
-						{"data": "m_telp"},
-						{"data": "m_address"},
+						{"data": "i_nama"},
+						{"data": "i_price_1"},
+                        {"data": "i_price_2"},
+                        {"data": "i_price_3"},
+                        {"data": "i_price_4"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -257,115 +263,24 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					}
 				});
 
-			}, 500);
+                $('#overlay').fadeOut(200);
+
+			}, 1000);
 
 		/* END BASIC */
 
 		function refresh_tab(){
 		    aktif.api().ajax.reload();
-		    semua.api().ajax.reload();
-		    inaktif.api().ajax.reload();
 		}
 
-		function hapus(val){
+		function edit(id){
 
-			$.SmartMessageBox({
-				title : "Pesan!",
-				content : 'Apakah Anda yakin akan manghapus data member ini ?',
-				buttons : '[Batal][Ya]'
-			}, function(ButtonPressed) {
-				if (ButtonPressed === "Ya") {
-
-					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
-
-					axios.get(baseUrl+'/master/member/delete/'+val).then((response) => {
-
-						if(response.data.status == 'hapusberhasil'){
-							refresh_tab();
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Berhasil",
-								content : 'Data outlet <i>"'+response.data.name+'"</i> berhasil dihapus...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-							});
-
-						}else if(response.data.status == 'tidak ada'){
-
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else if(response.data.status == 'd_mem ada'){
-
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda hapus masih dipakai oleh member...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else{
-							$('#overlay').fadeOut(200);
-							console.log(response);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}
-
-					}).catch((err) => {
-						out();
-						$.smallBox({
-							title : "Gagal",
-							content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-							color : "#A90329",
-							timeout: 4000,
-							icon : "fa fa-times bounce animated"
-						});
-						
-					}).then(function(){
-						$('#overlay').fadeOut(200);
-					})
-
-				}
-	
-			});
-
-		}
-
-		function edit(val){
-
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Memproses...');
-
-			window.location = baseUrl+'/master/member/simpan-edit/'+val;
-
-		}
-
-		function detail(id){
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
 
 			var status;
 
-			axios.get(baseUrl+'/master/member/detail/'+id).then(response => {
+			axios.get(baseUrl+'/penjualan/set-harga/edit/'+id).then(response => {
 
 				if (response.data.status == 'ditolak') {
 
@@ -380,190 +295,94 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 				} else {
 
-					$('#title_detail').html('<strong>Detail Member "'+response.data.data.m_name+'"</strong>');
-					$('#dt_nik').text(response.data.data.m_nik);
-					$('#dt_name').text(response.data.data.m_name);
-					$('#dt_phone').text(response.data.data.m_telp);
-					$('#dt_address').text(response.data.data.m_address);
-
-					if(response.data.data.m_status == "AKTIF"){
-
-						status = "AKTIF";
-
-					}else{
-
-						status = "NON AKTIF";
-
-					}
-
-					$('#dt_isactive').text(status);
-					$('#dt_created').text(response.data.data.m_insert);
+			        $("#harga").maskMoney({thousands:'.', precision: 0});
+					$('#id').val(response.data.data.i_id);
+					$('#nama').val(response.data.data.i_nama);
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 
 				}
-
 			});
+
 		}
 
-		function statusactive(id){
-			$.SmartMessageBox({
-				title : "Pesan!",
-				content : 'Apakah Anda yakin akan mengaktifkan data member ini ? ',
-				buttons : '[Batal][Ya]'
-			}, function(ButtonPressed) {
-				if (ButtonPressed === "Ya") {
+		$('#submit').click(function(evt){
 
-					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Memproses...');
+			evt.preventDefault();
 
-					axios.get(baseUrl+'/master/member/active/'+id).then((response) => {
+			var btn = $('#submit');
+			btn.attr('disabled', 'disabled');
+			btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
 
-						if (response.data.status == 'ditolak') {
+			$('#overlay').fadeIn(200);
+		    $('#load-status-text').text('Sedang Menyiapkan...');
 
-							$('#overlay').fadeOut(200);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-								color : "#A90329",
-								timeout: 5000,
-								icon : "fa fa-times bounce animated"
-							});
+			axios.post(baseUrl+'/penjualan/set-harga/edit/'+ $('#id').val(), $('#form-harga').serialize()).then((response) => {
 
-						}else if(response.data.status == 'aktifberhasil'){
-							refresh_tab();
-							$('#overlay').fadeOut(200);
+				if (response.data.status == 'ditolak') {
 
-							$.smallBox({
-								title : "Berhasil",
-								content : 'Data member <i>"'+response.data.name+'"</i> berhasil diaktifkan...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-							});
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
 
-						}else if(response.data.status == 'tidak ada'){
+				}else if(response.data.status == 'setberhasil'){
 
-							$('#overlay').fadeOut(200);
+                    $('#myModal').modal('hide');
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Berhasil",
+						content : 'Set harga berhasil dilakukan...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+					});
 
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda aktifkan sudah tidak ada...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
+				}else if(response.data.status == 'tidak ada'){
 
-						}else{
-							$('#overlay').fadeOut(200);
-							// console.log(response);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-						}
-					}).catch((err) => {
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "Gagal",
-							content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
-							color : "#A90329",
-							timeout: 4000,
-							icon : "fa fa-times bounce animated"
-						});
-						
-					}).then(function(){
-						$('#overlay').fadeOut(200);
-					})
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Data yang ingin Anda ubah sudah tidak ada...!",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				}else{
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Gagal mengedit data...! Coba lagi dengan mulai ulang halaman",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
 
 				}
-	
+
+			}).catch((err) => {
+
+				$('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Upsss. Gagal mengedit data...! Coba lagi dengan mulai ulang halaman",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				
+			}).then(function(){
+
+				btn.removeAttr('disabled');
+				btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');
+				$('#overlay').fadeOut(200);
 			});
-		}
-
-		function statusnonactive(id){
-			$.SmartMessageBox({
-				title : "Pesan!",
-				content : 'Apakah Anda yakin akan menonaktifkan data member ini ? ',
-				buttons : '[Batal][Ya]'
-			}, function(ButtonPressed) {
-				if (ButtonPressed === "Ya") {
-
-					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Memproses...');
-
-					axios.get(baseUrl+'/master/member/nonactive/'+id).then((response) => {
-
-						if (response.data.status == 'ditolak') {
-
-							$('#overlay').fadeOut(200);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-								color : "#A90329",
-								timeout: 5000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else if(response.data.status == 'nonaktifberhasil'){
-							refresh_tab();
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Berhasil",
-								content : 'Data member <i>"'+response.data.name+'"</i> berhasil dinonaktifkan...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-							});
-
-						}else if(response.data.status == 'tidak ada'){
-
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda nonaktifkan sudah tidak ada...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else{
-							$('#overlay').fadeOut(200);
-							console.log(response);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}
-
-					}).catch((err) => {
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "Gagal",
-							content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
-							color : "#A90329",
-							timeout: 4000,
-							icon : "fa fa-times bounce animated"
-						});
-						
-					}).then(function(){
-						$('#overlay').fadeOut(200);
-					})
-
-				}
-	
-			});
-		}
-
+		});
 	</script>
-
 @endsection

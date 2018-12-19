@@ -427,7 +427,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data outlet <i>"'+response.data.name+'"</i> berhasil dihapus...!',
+								content : 'Data member berhasil dihapus...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
@@ -440,18 +440,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else if(response.data.status == 'd_mem ada'){
-
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda hapus masih dipakai oleh member...!",
 								color : "#A90329",
 								timeout: 4000,
 								icon : "fa fa-times bounce animated"

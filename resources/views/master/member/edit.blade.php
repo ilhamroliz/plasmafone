@@ -355,9 +355,9 @@
 				btn.removeAttr('disabled');
 				btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');
 				out();
-			})
+			});
 
-		})
+		});
 
 	</script>
 
