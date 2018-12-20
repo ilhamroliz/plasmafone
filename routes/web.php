@@ -282,7 +282,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Pembelian
 
 	// Request Order
-	
+
 	Route::get('/pembelian/request-pembelian/t', 'PembelianController@menunggu');
 	Route::get('/pembelian/request-pembelian/a', 'PembelianController@all');
 	// 1
@@ -299,7 +299,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/pembelian/request-order/add', 'PembelianController@form_add_request');
 
 	Route::post('/pembelian/request-order/edit-multiple', 'PembelianController@edit_multiple');
-	
+
 	Route::get('/pembelian/request-order/edit', 'PembelianController@edit_order');
 
 	Route::match(['get', 'post'], '/pembelian/request-order/get/{id}', 'PembelianController@get_order');
@@ -450,10 +450,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/penjualan/set-harga', 'penjualan\setHargaController@index');
 	Route::get('/penjualan/set-harga/getdataharga', [
-		'uses' => 'penjualan\setHargaController@get_data_harga',
-	])->name('penjualan.getdataharga');
-	Route::match(['get', 'post'], '/penjualan/set-harga/add', 'penjualan\setHargaController@tambah');
-	Route::match(['get', 'post'], '/penjualan/set-harga/edit/{id}', 'penjualan\setHargaController@edit');
+		'uses' => 'penjualan\setHargaController@get_data_group',
+	])->name('penjualan.getdatagroup');
+	Route::get('/penjualan/set-harga/get-data-gp', 'penjualan\setHargaController@get_data_gp');
+	Route::get('/penjualan/set-harga/get-data-harga/{id}', 'penjualan\setHargaController@get_data_harga');
+	Route::match(['get', 'post'], '/penjualan/set-harga/addGroup', 'penjualan\setHargaController@tambah_group');
+	Route::match(['get', 'post'], '/penjualan/set-harga/addHarga', 'penjualan\setHargaController@tambah_harga');
+	Route::match(['get', 'post'], '/penjualan/set-harga/editGroup/{id}', 'penjualan\setHargaController@edit');
+	Route::match(['get', 'post'], '/penjualan/set-harga/editHarga/{id}', 'penjualan\setHargaController@edit');
+
 
 	//== End Set Harga
 
