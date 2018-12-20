@@ -96,54 +96,59 @@
                                 <li class="active">
                                     <a data-toggle="tab" href="#hr1"> <i style="color: #739E73;"
                                                                          class="fa fa-lg fa-rotate-right fa-spin"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Table Request Order </span> </a>
+                                            class="hidden-mobile hidden-tablet"> Menunggu </span> </a>
                                 </li>
-                                <!-- <li>
+                                <li>
                                     <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
                                                                          class="fa fa-lg fa-check"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Diterima </span></a>
-                                </li> -->
+                                            class="hidden-mobile hidden-tablet"> DiProses </span></a>
+                                </li>
                                 
                             </ul>
                         </header>
                         <!-- widget div-->
                         <div>
+                        
                             <!-- widget content -->
                             <div class="widget-body no-padding">
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
-                                    <div class="tab-pane fade in active" id="table-waiting">
-                                        <table id="requestOrder_table" class="table table-striped table-bordered table-hover"
+                                    <div class="tab-pane fade in active" id="hr1">
+                                        <table id="waitingReq_table" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>
-                                            
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <th data-hide="phone,tablet" >No</th>
+                                                <th >Nama Outlet</th>
+                                                <th data-hide="phone,tablet" width="35%">Nama Barang</th>
+                                                <th data-hide="phone,tablet" >Qty</th>
                                                 <th data-hide="phone,tablet" width="15%">Status</th>
+                                                <th data-hide="phone,tablet" >Aksi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <!-- <div class="tab-pane fade" id="hr2">
+
+                                    <div class="tab-pane fade" id="hr2">
                                         <table id="dt_all" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <th data-hide="phone,tablet" >No</th>
+                                                <th >Nama Outlet</th>
+                                                <th data-hide="phone,tablet" width="35%">Nama Barang</th>
+                                                <th data-hide="phone,tablet" >Qty</th>
+                                                <th data-hide="phone,tablet" width="15%">Status</th>
+                                                <th data-hide="phone,tablet" >Aksi</th>
+
                                             </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
-                                    </div> -->
+                                    </div>
                                     
                                 </div>
                                 <!-- end widget body text-->
@@ -174,8 +179,423 @@
 
 @section('extra_script')
 
+    <!-- PAGE RELATED PLUGIN(S) -->
+	<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
+	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+
+	<script type="text/javascript">
+		var menunggu, diproses, semua,inaktif;
+
+		$('#overlay').fadeIn(200);
+		$('#load-status-text').text('Sedang Menyiapkan...');
+		
+		var baseUrl = '{{ url('/') }}';
+
+		/* BASIC ;*/
+			var responsiveHelper_dt_basic = undefined;
+			var responsiveHelper_datatable_fixed_column = undefined;
+			var responsiveHelper_datatable_col_reorder = undefined;
+			var responsiveHelper_datatable_tabletools = undefined;
+			
+			var breakpointDefinition = {
+				tablet : 1024,
+				phone : 480
+			};
+
+     $(document).ready(function(){
+
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Menyiapkan...');
+
+            // $('#tabs').tabs();
+
+            let selected = [];
+
+            /* BASIC ;*/
+            var responsiveHelper_dt_basic = undefined;
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
+
+            var breakpointDefinition = {
+                tablet : 1024,
+                phone : 480
+            };
+
+            setTimeout(function () {
+
+            semua = $('#dt_all').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/request-pembelian/a') }}",
+                "columns":[
+                    {"data": "id_purchaseReq"},
+                    {"data": "c_name"},
+                    {"data": "i_nama"},
+                    {"data": "qtyReq"},
+                    {"data": "status"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+             $('#overlay').fadeOut(200);
+            }, 1000);
+
+
+            setTimeout(function () {
+
+            menunggu = $('#waitingReq_table').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/request-pembelian/t') }}",
+                "columns":[
+                    {"data": "id_purchaseReq"},
+                    {"data": "c_name"},
+                    {"data": "i_nama"},
+                    {"data": "qtyReq"},
+                    {"data": "status"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#waitingReq_table'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+            $('#overlay').fadeOut(200);
+            }, 500);
+
+
+            
+
+        })
+                
+		/* END BASIC */
+
+		function refresh_tab(){
+		    menunggu.api().ajax.reload();
+		    diproses.api().ajax.reload();
+		    semua.api().ajax.reload();
+		}
+
+		function hapus(val){
+
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan manghapus data member ini ?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menghapus...');
+
+					axios.get(baseUrl+'/master/member/delete/'+val).then((response) => {
+
+						if(response.data.status == 'hapusberhasil'){
+							refresh_tab();
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data member berhasil dihapus...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+
+						}else if(response.data.status == 'tidak ada'){
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else{
+							$('#overlay').fadeOut(200);
+							console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}
+
+					}).catch((err) => {
+						out();
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
+
+				}
+	
+			});
+
+		}
+
+		function edit(val){
+
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+
+			window.location = baseUrl+'/master/member/simpan-edit/'+val;
+
+		}
+
+		function detail(id){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Mengambil data...');
+
+			var status;
+
+			axios.get(baseUrl+'/master/member/detail/'+id).then(response => {
+
+				if (response.data.status == 'ditolak') {
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				} else {
+
+					$('#title_detail').html('<strong>Detail Member "'+response.data.data.m_name+'"</strong>');
+					$('#dt_nik').text(response.data.data.m_nik);
+					$('#dt_name').text(response.data.data.m_name);
+					$('#dt_phone').text(response.data.data.m_telp);
+					$('#dt_address').text(response.data.data.m_address);
+
+					if(response.data.data.m_status == "AKTIF"){
+
+						status = "AKTIF";
+
+					}else{
+
+						status = "NON AKTIF";
+
+					}
+
+					$('#dt_isactive').text(status);
+					$('#dt_created').text(response.data.data.m_insert);
+					$('#overlay').fadeOut(200);
+					$('#myModal').modal('show');
+
+				}
+
+			});
+		}
+
+		function statusactive(id){
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan mengaktifkan data member ini ? ',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Memproses...');
+
+					axios.get(baseUrl+'/master/member/active/'+id).then((response) => {
+
+						if (response.data.status == 'ditolak') {
+
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else if(response.data.status == 'aktifberhasil'){
+							refresh_tab();
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data member <i>"'+response.data.name+'"</i> berhasil diaktifkan...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+
+						}else if(response.data.status == 'tidak ada'){
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Data yang ingin Anda aktifkan sudah tidak ada...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else{
+							$('#overlay').fadeOut(200);
+							// console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+						}
+					}).catch((err) => {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
+
+				}
+	
+			});
+		}
+
+		function statusnonactive(id){
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan menonaktifkan data member ini ? ',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Memproses...');
+
+					axios.get(baseUrl+'/master/member/nonactive/'+id).then((response) => {
+
+						if (response.data.status == 'ditolak') {
+
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else if(response.data.status == 'nonaktifberhasil'){
+							refresh_tab();
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data member <i>"'+response.data.name+'"</i> berhasil dinonaktifkan...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+
+						}else if(response.data.status == 'tidak ada'){
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Data yang ingin Anda nonaktifkan sudah tidak ada...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else{
+							$('#overlay').fadeOut(200);
+							console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}
+
+					}).catch((err) => {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
+
+				}
+	
+			});
+		}
+
+	</script>
+
     
-    <script type="text/javascript">
+    <!-- <script type="text/javascript">
 
         var  table_requestOrder;
        
@@ -191,7 +611,6 @@
                                 "url": '{{url('/pembelian/request-pembelian/tampilData')}}',
                                 "type": 'GET',  
                                 "data": function ( data ) {
-                                    //  data.token = token;
                                 },
                             },
                     } );
@@ -264,14 +683,6 @@
                           
                       });  
             }
-
-            // $(function() {
-            //     $("li").on("click",function() {
-            //         reload_table_requestOrder();
-                   
-            //     });
-            // });
-
-    </script>
+    </script> -->
 
 @endsection

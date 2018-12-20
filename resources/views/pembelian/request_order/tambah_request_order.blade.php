@@ -474,7 +474,11 @@
 			success: function(data)
 			{
 				if(data.status != "SUKSES"){
-					location.reload();
+					// getKelompok_item();
+					// getMerk();
+					// getItem();
+					// $('#i_qty')val('');
+					// location.reload();
 					$.smallBox({
 						title : "SUKSES",
 						content : "Request Berhasil Di tambah kan ",
@@ -506,8 +510,8 @@
                             $(row).appendTo("#item_kelompok");
                             $.each(data, function(k, v) {
                               row = "<option value='"+v.i_kelompok+"'>"+v.i_kelompok+"</option>";
-							  $(row).appendTo("#item_kelompok");
-							  $('#item_id').empty(); 
+															$(row).appendTo("#item_kelompok");
+															$('#item_id').empty(); 
                             row = "<option selected='' value='0'>Pilih Item</option>";
                             });
                           },

@@ -84,7 +84,7 @@
                         <!-- widget content -->
                         <div class="widget-body">
                             <form id="checkout-form" class="form-inline" role="form">
-                                <fieldset class="row">
+                                <!-- <fieldset class="row">
                                     <div class="form-group col-md-8">
                                         <label class="sr-only" for="namabarang">Nama Barang</label>
                                         <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
@@ -97,15 +97,18 @@
                                     <div class="form-group col-md-2">
                                         <button class="btn btn-primary" onclick="tambah()">Tambah</button>
                                     </div>
-                                </fieldset>
+                                </fieldset> -->
                                 <fieldset class="row">
                                     <dir class="col-md-12">
                                         <table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="75%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="10%">Qty</th>
-                                                    <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                    <th data-hide="phone,tablet">No Req</th>
+                                                    <th data-hide="phone,tablet">Nama Outlet</th>
+                                                    <th data-hide="phone,tablet">Nama Barang</th>
+                                                    <th data-hide="phone,tablet">Permintaan</th>
+                                                    <th data-hide="phone,tablet">Aksi</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -134,7 +137,38 @@
     <script type="text/javascript">
         var table = null;
         $(document).ready(function () {
-            table = $('#table-rencana').dataTable({
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Menyiapkan...');
+
+            // $('#tabs').tabs();
+
+            let selected = [];
+
+            /* BASIC ;*/
+            var responsiveHelper_dt_basic = undefined;
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
+
+            var breakpointDefinition = {
+                tablet : 1024,
+                phone : 480
+            };
+
+            setTimeout(function () {
+
+            semua = $('#table-rencana').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/rencana-pembelian/dtSemua') }}",
+                "columns":[
+                    {"data": "id_purchaseReq"},
+                    {"data": "c_name"},
+                    {"data": "i_nama"},
+                    {"data": "qtyReq"},
+                    {"data": "status"},
+                    {"data": "aksi"}
+                ],
                 "autoWidth" : true,
                 "language" : dataTableLanguage,
                 "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
@@ -142,7 +176,7 @@
                 "preDrawCallback" : function() {
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-rencana'), breakpointDefinition);
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
                     }
                 },
                 "rowCallback" : function(nRow) {
@@ -152,6 +186,8 @@
                     responsiveHelper_dt_basic.respond();
                 }
             });
+             $('#overlay').fadeOut(200);
+            }, 1000);
 
             $( "#namabarang" ).autocomplete({
                 source: baseUrl+'/pembelian/rencana-pembelian/get-item',

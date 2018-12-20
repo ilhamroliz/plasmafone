@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-// use App\Http\Controllers\Auth;
 use App\Model\pembelian\order as order;
+use App\Http\Controllers\PlasmafoneController as Plasma;
+use DataTables;
 use Carbon\Carbon;
 use Auth;
 use DB;
@@ -711,13 +712,10 @@ class PembelianController extends Controller
     	return view('pembelian/refund/refund');
     } 
 
+    // -------------request order-------------------
+
     public function request_order()
     {
-        /*$r_orders_dt = DB::table('d_request_order_dt')
-                        ->select('d_request_order_dt.*', 'd_request_order.ro_cabang', 'd_cabang.*')
-                        ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
-                        ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
-                        ->get();*/
         return view('pembelian/request_order/view_request_order');
     }
 
@@ -725,19 +723,73 @@ class PembelianController extends Controller
         return view('pembelian/request_order/tambah_request_order');
     }
 
+    public function menunggu(){
+        $waiting  = DB::table('purchase_req')
+                ->select('purchase_req.id_purchaseReq','m_company.c_name','d_mem.m_name','d_item.i_nama','purchase_req.qtyReq','purchase_req.status')
+                ->join('d_item','purchase_req.item_id','=','d_item.i_id')
+                ->join('d_mem','purchase_req.idComp','=','d_mem.m_id')
+                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                ->where('purchase_req.status','WAITING')
+                ->get();
+        $waiting = collect($waiting);
+
+        return DataTables::of($waiting)
+            ->addColumn('status', function ($waiting) {
+
+                return "<span class='label label-danger'>WAITING...</span>";
+
+            })
+
+            ->addColumn('aksi', function ($waiting) {
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->id_purchaseReq . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->id_purchaseReq . '\', \'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                // if (Plasma::checkAkses(49, 'update') == false) {
+                //     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                // } else {
+                //     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->id_purchaseReq . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->id_purchaseReq . '\', \'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                // }
+            })
+            ->rawColumns(['status','aksi'])
+            ->make(true);
+    }
+
+    public function all(){
+        $all  = DB::table('purchase_req')
+                ->select('purchase_req.id_purchaseReq','m_company.c_name','d_mem.m_name','d_item.i_nama','purchase_req.qtyReq','purchase_req.status')
+                ->join('d_item','purchase_req.item_id','=','d_item.i_id')
+                ->join('d_mem','purchase_req.idComp','=','d_mem.m_id')
+                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                ->where('purchase_req.status','PROSES')
+                ->get();
+        $all = collect($all);
+
+        return DataTables::of($all)
+            ->addColumn('aksi', function ($all) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$all->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$all->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $all->id_purchaseReq . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $all->id_purchaseReq . '\', \'' .$all->id_purchaseReq. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
 
     public function tampilData(Request $request)
     {
 
         $list  = DB::table('purchase_req')
-                ->select('purchase_req.id_purchaseReq','purchase_req.idComp','purchase_req.item_id','purchase_req.qtyReq','purchase_req.status')
+                ->select('purchase_req.id_purchaseReq','m_company.c_name','d_mem.m_name','purchase_req.item_id','purchase_req.qtyReq','purchase_req.status')
+                ->join('d_mem','purchase_req.idComp','=','d_mem.m_id')
+                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                ->where('purchase_req.status','WAITING')
                 ->get();
                 
                 $data = array();
                 foreach ($list as $hasil) {
                    $row = array();
                     $row[] = $hasil->id_purchaseReq;
-                    $row[] = $hasil->idComp;
+                    $row[] = $hasil->c_name;
                     $row[] = $hasil->item_id;
                     $row[] = $hasil->qtyReq;
                     if ($hasil->status == 'WAITING') {
@@ -829,10 +881,12 @@ class PembelianController extends Controller
         $qty = $request->input('i_qty');
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'WAITING';
+       
 
        
 
          $insert =DB::table('purchase_req')->insert([
+                
 	    		'idComp'                     => $comp,
                 'item_id'                    => $item,
                 'qtyReq'                     => $qty,
@@ -848,9 +902,6 @@ class PembelianController extends Controller
         }
 
         echo json_encode($status);
-
-	    	// return redirect('/pembelian/request-order/add')->with('flash_message_success','Data berhasil ditambahkan!');
-            // return view('/pembelian/request-order/add');
         
     }
 
@@ -1140,16 +1191,28 @@ class PembelianController extends Controller
 
     }
 
+    // ----Bagian rencana Pembelian -----
+
     public function rencana_pembelian()
     {
-        /*$r_orders = DB::table('d_request_order_dt')
-                        ->select('d_request_order_dt.*', 'd_request_order.ro_cabang', 'd_supplier.s_name','d_cabang.*')
-                        ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
-                        ->join('d_supplier', 'd_request_order_dt.rdt_supplier', '=', 'd_supplier.s_id', 'left')
-                        ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
-                        ->orderBy('d_request_order.created_at', 'desc')
-                        ->get();*/
+        
     	return view('pembelian/rencana_pembelian/index');
+    }
+
+    public function rencanaMenunggu(){
+
+    }
+
+    public function rencanaDisetujui(){
+        
+    }
+
+    public function rencanaDitolak(){
+        
+    }
+
+    public function rencanaSemua(){
+        
     }
 
     public function addRencana()
