@@ -421,13 +421,24 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 					axios.get(baseUrl+'/master/member/delete/'+val).then((response) => {
 
-						if(response.data.status == 'hapusberhasil'){
+						if (response.data.status == 'ditolak') {
+
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Anda tidak diizinkan untuk menghapus data ini",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else if(response.data.status == 'hapusberhasil'){
 							refresh_tab();
 							$('#overlay').fadeOut(200);
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data member berhasil dihapus...!',
+								content : 'Data member <i>"'+response.data.name+'"</i>berhasil dihapus...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
@@ -500,7 +511,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#overlay').fadeOut(200);
 					$.smallBox({
 						title : "Gagal",
-						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						content : "Upsss. Anda tidak diizinkan untuk mengubah data ini",
 						color : "#A90329",
 						timeout: 5000,
 						icon : "fa fa-times bounce animated"
@@ -552,7 +563,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							$('#overlay').fadeOut(200);
 							$.smallBox({
 								title : "Gagal",
-								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+								content : "Upsss. Anda tidak diizinkan untuk mengubah data ini",
 								color : "#A90329",
 								timeout: 5000,
 								icon : "fa fa-times bounce animated"

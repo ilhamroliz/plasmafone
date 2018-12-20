@@ -139,6 +139,21 @@
 													</div>
 												</div>
 
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Tipe Member</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+														<div class="input-group">
+															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
+																<option value="" @if($member->m_jenis == "") selected @endif disabled>== Jenis Member ==</option>
+																<option value="1" @if($member->m_jenis == "1") selected @endif>Grosir 1</option>
+																<option value="2" @if($member->m_jenis == "2") selected @endif>Grosir 2</option>
+																<option value="3" @if($member->m_jenis == "3") selected @endif>Grosir 3</option>
+																<option value="4" @if($member->m_jenis == "4") selected @endif>Retail</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -307,7 +322,6 @@
 				}else if(response.data.status == 'berhasil'){
 
 					out();
-
 					$.smallBox({
 						title : "Berhasil",
 						content : 'Data Member <i>"'+response.data.name+'"</i> berhasil diubah...!',
@@ -319,7 +333,6 @@
 				}else if(response.data.status == 'tidak ada'){
 
 					out();
-
 					$.smallBox({
 						title : "Gagal",
 						content : "Upsss. Data yang ingin Anda ubah sudah tidak ada...!",
