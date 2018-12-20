@@ -99,6 +99,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						<div>	
 							<!-- widget content -->
 							<div class="widget-body">
+								<div class="tab-content">
+
 								@if(Plasma::checkAkses(15, 'insert') == true)
 								<div class="form-group">
 									<form id="form_gp">
@@ -112,10 +114,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								</div>
 								@endif
 
-								<table id="group_member">
+								<table id="group_member" class="table table-striped table-bordered table-hover" width="100%">
+									<thead>
+										<tr>
+											<th class="text-center" >Grup Member</th>
+										</tr>
+									</thead>
 									<tbody></tbody>
 								</table>
 
+								</div>
 							</div>
 							<!-- end widget content -->									
 						</div>
@@ -148,7 +156,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 												</tr>
 											</thead>
 
-											<tbody>
+											<tbody id="show-harga">
 											</tbody>
 
 										</table>
@@ -255,6 +263,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('#load-status-text').text('Sedang Mengambil Data...');
 		
 		var baseUrl = '{{ url('/') }}';
+		var table = $('#dt_harga').DataTable();
+		$('#show-harga').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 
 		/* BASIC ;*/
 		var responsiveHelper_dt_basic = undefined;
@@ -272,18 +282,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			"serverSide": true,
 			"ajax": "{{ route('penjualan.getdatagroup') }}",
 			"columns":[
+				// {"data": "DT_RowIndex"},
 				{"data": "group_name"}
 			],
 			"autoWidth" : true,
 			"searching" : false,
 			"paging"	: false,
-			"language" 	: dataTableLanguage,
-			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-			"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
 			"preDrawCallback" : function() {
 				// Initialize the responsive datatables helper once.
 				if (!responsiveHelper_dt_basic) {
-					responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+					responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#group_member'), breakpointDefinition);
 				}
 			},
 			"rowCallback" : function(nRow) {
@@ -297,15 +305,18 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('#overlay').fadeOut(200);
 
 		function show(id){
+	
+			$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
+			table.fnDestroy();
 
-			$('#dt_harga').dataTable({
+			$('#dt_harga').DataTable({
 				"processing": true,
 				"serverSide": true,
-				"ajax": "{{ route('penjualan.getdataharga') }}",
+				"ajax": "{{ url('/penjualan/set-harga/get-data-harga') }}/"+id,
 				"columns":[
-					{"data": "gp_item"},
+					{"data": "i_nama"},
 					{"data": "gp_price"},
 					{"data": "aksi"}
 				],
@@ -316,7 +327,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"preDrawCallback" : function() {
 					// Initialize the responsive datatables helper once.
 					if (!responsiveHelper_dt_basic) {
-						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_harga'), breakpointDefinition);
 					}
 				},
 				"rowCallback" : function(nRow) {
@@ -326,6 +337,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					responsiveHelper_dt_basic.respond();
 				}
 			});
+			// table.draw(false);
 
 			$('#overlay').fadeOut(200);
 		}

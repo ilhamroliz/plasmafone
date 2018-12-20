@@ -25,19 +25,41 @@ class setHargaController extends Controller
         }
     }
 
-    public function get_data_harga()
+    public function get_data_harga($id)
     {
-        $active = Item::where('i_isactive', 'Y')->orderBy('created_at', 'desc')->get();
-        $active = collect($active);
+        $gp = DB::table('m_group_price')
+            ->join('d_item', 'i_id', '=', 'gp_item')
+            ->where('gp_group', $id)
+            ->select('m_group_price.*', 'i_nama')
+            ->orderBy('i_nama', 'asc')->get();
 
-        return DataTables::of($active)
+        $gp = collect($gp);
 
-            ->addColumn('aksi', function ($active) {
+        return DataTables::of($gp)
+            ->addColumn('aksi', function ($gp) {
                 if (Plasma::checkAkses(15, 'update') == true) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Set Harga" onclick="edit(\'' . $active->i_id . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+                    return '<div class="text-center">
+                                <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Set Harga" onclick="edit(\'' . $gp->gp_item . '\')"><i class="glyphicon glyphicon-edit"></i></button>
+                            </div>';
                 }
             })
             ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    public function get_data_group()
+    {
+        $group = DB::table('m_group')->get();
+        $group = collect($group);
+
+        return DataTables::of($group)
+            // ->addIndexColumn()
+            ->addColumn('group_name', function ($group) {
+                return '<div class="text-center">
+                            <a onclick="show(\'' . $group->g_id . '\')">\'' . $group->g_name . '\'</a>
+                        </div>';
+            })
+            ->rawColumns(['group_name'])
             ->make(true);
     }
 
