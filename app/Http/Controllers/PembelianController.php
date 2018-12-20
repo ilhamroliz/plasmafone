@@ -723,54 +723,106 @@ class PembelianController extends Controller
         return view('pembelian/request_order/tambah_request_order');
     }
 
-    public function menunggu(){
-        $waiting  = DB::table('purchase_req')
-                ->select('purchase_req.id_purchaseReq','m_company.c_name','d_mem.m_name','d_item.i_nama','purchase_req.qtyReq','purchase_req.status')
-                ->join('d_item','purchase_req.item_id','=','d_item.i_id')
-                ->join('d_mem','purchase_req.idComp','=','d_mem.m_id')
+    public function clearData(){
+        $comp = Auth::user()->m_id;
+        $del = DB::table('d_purchase_req_dumy')->where('pr_mem_id',$comp)->delete();
+        if(!$del){
+            return view('pembelian/request_order/');
+        }else{
+            $data = "OK";
+            echo json_encode($data);
+        }
+        
+    }
+
+    public function addData(){
+        $comp = Auth::user()->m_id;
+        $del = DB::table('d_purchase_req_dumy')->where('pr_mem_id',$comp)->delete();
+        if(!$del){
+            return view('pembelian/request_order/');
+        }else{
+            $data = "OK";
+            echo json_encode($data);
+        }
+        
+    }
+
+    public function ddRequest(){
+        $waiting  = DB::table('d_purchase_req_dumy')
+                ->select('d_purchase_req_dumy.pr_id','m_company.c_name','d_mem.m_name','d_item.i_nama','d_purchase_req_dumy.pr_qty')
+                ->join('d_item','d_purchase_req_dumy.pr_item','=','d_item.i_id')
+                ->join('d_mem','d_purchase_req_dumy.pr_mem_id','=','d_mem.m_id')
                 ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-                ->where('purchase_req.status','WAITING')
                 ->get();
         $waiting = collect($waiting);
 
         return DataTables::of($waiting)
-            ->addColumn('status', function ($waiting) {
 
-                return "<span class='label label-danger'>WAITING...</span>";
+            ->addColumn('aksi', function ($waiting) {
+                // return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                if (Plasma::checkAkses(49, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['pr_stsReq','aksi'])
+            ->make(true);
+    }
+
+    public function menunggu(){
+        $waiting  = DB::table('d_purchase_req')
+                ->select('d_purchase_req.pr_id','m_company.c_name','d_mem.m_name','d_item.i_nama','d_purchase_req.pr_qtyReq','d_purchase_req.pr_stsReq')
+                ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
+                ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
+                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                ->where('d_purchase_req.pr_stsReq','WAITING')
+                ->get();
+        $waiting = collect($waiting);
+
+        return DataTables::of($waiting)
+            ->addColumn('pr_stsReq', function ($waiting) {
+
+                return "<span class='label label-danger'>MENUNGGU...</span>";
 
             })
 
             ->addColumn('aksi', function ($waiting) {
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->id_purchaseReq . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->id_purchaseReq . '\', \'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                // if (Plasma::checkAkses(49, 'update') == false) {
-                //     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                // } else {
-                //     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->id_purchaseReq . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->id_purchaseReq . '\', \'' .$waiting->id_purchaseReq. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                // }
+                // return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                if (Plasma::checkAkses(49, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
             })
-            ->rawColumns(['status','aksi'])
+            ->rawColumns(['pr_stsReq','aksi'])
             ->make(true);
     }
 
     public function all(){
-        $all  = DB::table('purchase_req')
-                ->select('purchase_req.id_purchaseReq','m_company.c_name','d_mem.m_name','d_item.i_nama','purchase_req.qtyReq','purchase_req.status')
-                ->join('d_item','purchase_req.item_id','=','d_item.i_id')
-                ->join('d_mem','purchase_req.idComp','=','d_mem.m_id')
-                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-                ->where('purchase_req.status','PROSES')
-                ->get();
+        $all  = DB::table('d_purchase_req')
+        ->select('d_purchase_req.pr_id','m_company.c_name','d_mem.m_name','d_item.i_nama','d_purchase_req.pr_qtyReq','d_purchase_req.pr_stsReq')
+        ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
+        ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        // ->where('d_purchase_req.pr_stsReq','PROSES')
+        ->get();
         $all = collect($all);
 
         return DataTables::of($all)
+            ->addColumn('input', function ($all) {
+                
+                    return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTy"  style="text-transform: uppercase" /></div>';
+                
+            })
             ->addColumn('aksi', function ($all) {
                 if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$all->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$all->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$all->id_purchaseReq. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $all->id_purchaseReq . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $all->id_purchaseReq . '\', \'' .$all->id_purchaseReq. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$all->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $all->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $all->pr_id . '\', \'' .$all->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['input','aksi'])
             ->make(true);
     }
 
@@ -778,29 +830,29 @@ class PembelianController extends Controller
     public function tampilData(Request $request)
     {
 
-        $list  = DB::table('purchase_req')
-                ->select('purchase_req.id_purchaseReq','m_company.c_name','d_mem.m_name','purchase_req.item_id','purchase_req.qtyReq','purchase_req.status')
-                ->join('d_mem','purchase_req.idComp','=','d_mem.m_id')
-                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-                ->where('purchase_req.status','WAITING')
-                ->get();
+        // $list  = DB::table('purchase_req')
+        //         ->select('purchase_req.id_purchaseReq','m_company.c_name','d_mem.m_name','purchase_req.item_id','purchase_req.qtyReq','purchase_req.status')
+        //         ->join('d_mem','purchase_req.idComp','=','d_mem.m_id')
+        //         ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        //         ->where('purchase_req.status','WAITING')
+        //         ->get();
                 
-                $data = array();
-                foreach ($list as $hasil) {
-                   $row = array();
-                    $row[] = $hasil->id_purchaseReq;
-                    $row[] = $hasil->c_name;
-                    $row[] = $hasil->item_id;
-                    $row[] = $hasil->qtyReq;
-                    if ($hasil->status == 'WAITING') {
-                        $row[] = "<span class='label label-danger'>WAITING...</span>";
-                    }
-                    else if ($hasil->status == 'CONFIRMED') {
-                        $row[] = "<span class='label label-warning'>SUBMITTED...</span>";
-                    }
-                   $data[] = $row;
-               }
-                echo json_encode(array("data"=>$data));
+        //         $data = array();
+        //         foreach ($list as $hasil) {
+        //            $row = array();
+        //             $row[] = $hasil->id_purchaseReq;
+        //             $row[] = $hasil->c_name;
+        //             $row[] = $hasil->item_id;
+        //             $row[] = $hasil->qtyReq;
+        //             if ($hasil->status == 'WAITING') {
+        //                 $row[] = "<span class='label label-danger'>WAITING...</span>";
+        //             }
+        //             else if ($hasil->status == 'CONFIRMED') {
+        //                 $row[] = "<span class='label label-warning'>SUBMITTED...</span>";
+        //             }
+        //            $data[] = $row;
+        //        }
+        //         echo json_encode(array("data"=>$data));
     }
 
     public function form_add_request()
@@ -851,16 +903,29 @@ class PembelianController extends Controller
         echo json_encode($data);
     }
 
-    public function getBarang(Request $req){
-        $kelompok = $req->input('merk');
+
+
+    public function getBarang(){
+        // $kelompok = $req->input('merk');
 
         $data  = DB::table('d_item')
         ->select('d_item.i_id','d_item.i_nama')
-        ->where('d_item.i_id',$kelompok)
+        // ->where('d_item.i_id',$kelompok)
         ->get();
 
         echo json_encode($data);
     }
+
+    // public function getBarang(Request $req){
+    //     $kelompok = $req->input('merk');
+
+    //     $data  = DB::table('d_item')
+    //     ->select('d_item.i_id','d_item.i_nama')
+    //     ->where('d_item.i_id',$kelompok)
+    //     ->get();
+
+    //     echo json_encode($data);
+    // }
 
     public function showItem(Request $request){
         $i_id = $request->input('item_id');
@@ -1211,8 +1276,40 @@ class PembelianController extends Controller
         
     }
 
-    public function rencanaSemua(){
-        
+    public function dtSemua(){
+        $list  = DB::table('d_purchase_req')
+        ->select('d_purchase_req.pr_id','m_company.c_name','d_mem.m_name','d_item.i_nama','d_purchase_req.pr_qtyReq','d_purchase_req.pr_stsReq')
+        ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
+        ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        ->where('d_purchase_req.pr_stsReq','WAITING')
+        ->get();
+
+            $data = array();
+            foreach ($list as $hasil) {
+               $row = array();
+                $row[] = $hasil->pr_id;
+                $row[] = $hasil->c_name;
+                $row[] = $hasil->i_nama;
+                $row[] = $hasil->pr_qtyReq;
+                if ($hasil->pr_stsReq == 'WAITING') {
+                    $row[] = "<span class='label label-danger'>BELUM DI PROSES</span>";
+                }
+                else if ($hasil->pr_stsReq == 'PROSES') {
+                    $row[] = "<span class='label label-warning'>SEDANG DI PROSES.</span>";
+                }
+
+                if (Plasma::checkAkses(47, 'update') == true) {
+                    $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$hasil->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    // $row[] = "<span class='label label-warning'>SEDANG DI PROSES.</span>";
+                } else {
+                    // $row[] =  "<span class='label label-warning'>SEDANG DI PROSES.</span>";
+                    $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$hasil->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $hasil->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' .$hasil->pr_id. '\', \'' .$hasil->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+
+               $data[] = $row;
+           }
+            echo json_encode(array("data"=>$data));
     }
 
     public function addRencana()

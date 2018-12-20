@@ -141,6 +141,8 @@
                                                 <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" >Qty</th>
                                                 <th data-hide="phone,tablet" width="15%">Status</th>
+                                                <th data-hide="phone,tablet" >Jml</th>
+
                                                 <th data-hide="phone,tablet" >Aksi</th>
 
                                             </tr>
@@ -232,11 +234,12 @@
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/request-pembelian/a') }}",
                 "columns":[
-                    {"data": "id_purchaseReq"},
+                    {"data": "pr_id"},
                     {"data": "c_name"},
                     {"data": "i_nama"},
-                    {"data": "qtyReq"},
-                    {"data": "status"},
+                    {"data": "pr_qtyReq"},
+                    {"data": "pr_stsReq"},
+                    {"data": "input"},
                     {"data": "aksi"}
                 ],
                 "autoWidth" : true,
@@ -267,11 +270,11 @@
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/request-pembelian/t') }}",
                 "columns":[
-                    {"data": "id_purchaseReq"},
+                    {"data": "pr_id"},
                     {"data": "c_name"},
                     {"data": "i_nama"},
-                    {"data": "qtyReq"},
-                    {"data": "status"},
+                    {"data": "pr_qtyReq"},
+                    {"data": "pr_stsReq"},
                     {"data": "aksi"}
                 ],
                 "autoWidth" : true,

@@ -287,6 +287,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/request-pembelian/a', 'PembelianController@all');
 	// 1
 	Route::get('/pembelian/request-pembelian', 'PembelianController@request_order');
+	Route::get('/pembelian/request-pembelian/ddRequest', 'PembelianController@ddRequest');
+	Route::get('/pembelian/request-pembelian/clearData', 'PembelianController@clearData');
 	Route::get('/pembelian/request-pembelian/tambah', 'PembelianController@request_order_tambah');
 	Route::get('/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
 	Route::get('/pembelian/request-pembelian/getKelompok_item', 'PembelianController@getKelompok_item');

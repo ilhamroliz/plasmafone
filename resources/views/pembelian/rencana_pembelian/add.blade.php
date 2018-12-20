@@ -107,7 +107,8 @@
                                                     <th data-hide="phone,tablet">Nama Outlet</th>
                                                     <th data-hide="phone,tablet">Nama Barang</th>
                                                     <th data-hide="phone,tablet">Permintaan</th>
-                                                    <th data-hide="phone,tablet">Aksi</th>
+                                                    <th data-hide="phone,tablet">Status</th>
+                                                    <!-- <th data-hide="phone,tablet">Aksi</th> -->
                                                     
                                                 </tr>
                                             </thead>
@@ -136,67 +137,30 @@
 
     <script type="text/javascript">
         var table = null;
-        $(document).ready(function () {
-            $('#overlay').fadeIn(200);
-            $('#load-status-text').text('Sedang Menyiapkan...');
+        var  table_requestOrder;
+       
 
-            // $('#tabs').tabs();
+            $(document).ready(function () {
+                load_table_request_order();
+                
+            });
 
-            let selected = [];
-
-            /* BASIC ;*/
-            var responsiveHelper_dt_basic = undefined;
-            var responsiveHelper_datatable_fixed_column = undefined;
-            var responsiveHelper_datatable_col_reorder = undefined;
-            var responsiveHelper_datatable_tabletools = undefined;
-
-            var breakpointDefinition = {
-                tablet : 1024,
-                phone : 480
+            function load_table_request_order(){
+                table_requestOrder= $('#table-rencana').DataTable({
+                    "ajax": {
+                                "url": '{{url('/pembelian/rencana-pembelian/dtSemua')}}',
+                                "type": 'GET',  
+                                "data": function ( data ) {
+                                },
+                            },
+                    } );
+               
             };
 
-            setTimeout(function () {
-
-            semua = $('#table-rencana').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('/pembelian/rencana-pembelian/dtSemua') }}",
-                "columns":[
-                    {"data": "id_purchaseReq"},
-                    {"data": "c_name"},
-                    {"data": "i_nama"},
-                    {"data": "qtyReq"},
-                    {"data": "status"},
-                    {"data": "aksi"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-                    }
-                },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-             $('#overlay').fadeOut(200);
-            }, 1000);
-
-            $( "#namabarang" ).autocomplete({
-                source: baseUrl+'/pembelian/rencana-pembelian/get-item',
-                minLength: 2,
-                select: function(event, data) {
-                    tanam(data.item);
-                }
-            });
-        })
+            function reload_table_requestOrder(){
+                table_requestOrder.ajax.reload(null, false);
+                
+            };
 
         function tambah(){
 
