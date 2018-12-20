@@ -5,7 +5,6 @@ namespace App\Http\Controllers\penjualan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlasmafoneController as Plasma;
-use App\Model\master\d_item as Item;
 use Illuminate\Support\Facades\Crypt;
 
 use DataTables;
@@ -21,7 +20,8 @@ class setHargaController extends Controller
         if (Plasma::checkAkses(15, 'read') == false) {
             return view('errors/407');
         } else {
-            return view('penjualan.set_harga.index');
+            $group = DB::table('m_group')->select('g_id', 'g_name')->get();
+            return view('penjualan.set_harga.index')->with(compact('group'));
         }
     }
 

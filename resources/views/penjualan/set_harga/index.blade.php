@@ -41,7 +41,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 				<h1 class="page-title txt-color-blueDark">
 
-					<i class="fa-fw fa fa-asterisk"></i>
+					<i class="fa-fw fa fa-lg fa-handshake-o"></i>
 
 					Penjualan <span><i class="fa fa-angle-double-right"></i> Setting Harga </span>
 
@@ -78,18 +78,58 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			<!-- row -->
 			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+				<!-- LIST GROUP MEMBER -->
+				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+					<!-- Widget ID (each widget will need unique ID)-->
+					<div class="jarviswidget" id="wid-id-0" 
+							data-widget-colorbutton="false"	
+							data-widget-editbutton="false"
+							data-widget-togglebutton="false"
+							data-widget-deletebutton="false"
+							data-widget-fullscreenbutton="false"
+							data-widget-custombutton="false"
+							data-widget-sortable="false"> 
+						
+						<header>
+							<h2><strong>Group Member</strong></h2>											
+						</header>
+
+						<!-- widget div-->
+						<div>	
+							<!-- widget content -->
+							<div class="widget-body">
+								@if(Plasma::checkAkses(15, 'insert') == true)
+								<div class="form-group">
+									<form id="form_gp">
+										<div class="col-md-9 no-padding">
+											<input type="text" class="form-control">
+										</div>
+										<div class="col-md-3">
+											<button class="btn btn-success"><i class="fa fa-plus"></i></button>
+										</div>
+									</form>
+								</div>
+								@endif
+
+								<table id="group_member">
+									<tbody></tbody>
+								</table>
+
+							</div>
+							<!-- end widget content -->									
+						</div>
+						<!-- end widget div -->								
+					</div>
+					<!-- end widget -->
+				</div>
+				<!-- End LIST GROUP MEMBER -->
+
+				<!-- Tabel Item for @ GROUP MEMBER -->
+				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9">
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
-							
-							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
-
-								<li class="active">
-									<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
-								</li>
-
-							</ul>
 
 						</header>
 
@@ -98,16 +138,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								<div class="tab-content padding-10">
                                     
 									<div class="tab-pane fade in active" id="hr1">
-										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+										<table id="dt_harga" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>		
 												<tr>
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
-                                                    <th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Grosir 1</th>
-													<th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Grosir 2</th>
-													<th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Grosir 3</th>
-													<th width="15%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Retail</th>                                                    
-													<th class="text-center" width="10%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="60%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                    <th width="25%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga</th>                                                 
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -122,7 +159,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					</div>
 				</div>
 			</div>
-
+			<!-- End Tabel Item for @ GROUP MEMBER -->			
 			<!-- end row -->
 
 			<!-- Modal -->
@@ -213,59 +250,85 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
-		var aktif;
 
 		$('#overlay').fadeIn(200);
-		$('#load-status-text').text('Sedang Menyiapkan...');
+		$('#load-status-text').text('Sedang Mengambil Data...');
 		
 		var baseUrl = '{{ url('/') }}';
 
 		/* BASIC ;*/
-			var responsiveHelper_dt_basic = undefined;
-			var responsiveHelper_datatable_fixed_column = undefined;
-			var responsiveHelper_datatable_col_reorder = undefined;
-			var responsiveHelper_datatable_tabletools = undefined;
-			
-			var breakpointDefinition = {
-				tablet : 1024,
-				phone : 480
-			};
+		var responsiveHelper_dt_basic = undefined;
+		var responsiveHelper_datatable_fixed_column = undefined;
+		var responsiveHelper_datatable_col_reorder = undefined;
+		var responsiveHelper_datatable_tabletools = undefined;
+		
+		var breakpointDefinition = {
+			tablet : 1024,
+			phone : 480
+		};
 
-			setTimeout(function () {
+		$('#group_member').dataTable({
+			"processing": true,
+			"serverSide": true,
+			"ajax": "{{ route('penjualan.getdatagroup') }}",
+			"columns":[
+				{"data": "group_name"}
+			],
+			"autoWidth" : true,
+			"searching" : false,
+			"paging"	: false,
+			"language" 	: dataTableLanguage,
+			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+			"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+			"preDrawCallback" : function() {
+				// Initialize the responsive datatables helper once.
+				if (!responsiveHelper_dt_basic) {
+					responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+				}
+			},
+			"rowCallback" : function(nRow) {
+				responsiveHelper_dt_basic.createExpandIcon(nRow);
+			},
+			"drawCallback" : function(oSettings) {
+				responsiveHelper_dt_basic.respond();
+			}
+		});
 
-				aktif = $('#dt_active').dataTable({
-					"processing": true,
-					"serverSide": true,
-					"ajax": "{{ route('penjualan.getdataharga') }}",
-					"columns":[
-						{"data": "i_nama"},
-						{"data": "i_price_1"},
-                        {"data": "i_price_2"},
-                        {"data": "i_price_3"},
-                        {"data": "i_price_4"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
+		$('#overlay').fadeOut(200);
+
+		function show(id){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Mengambil Data...');
+
+			$('#dt_harga').dataTable({
+				"processing": true,
+				"serverSide": true,
+				"ajax": "{{ route('penjualan.getdataharga') }}",
+				"columns":[
+					{"data": "gp_item"},
+					{"data": "gp_price"},
+					{"data": "aksi"}
+				],
+				"autoWidth" : true,
+				"language" : dataTableLanguage,
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+				"preDrawCallback" : function() {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_dt_basic) {
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
 					}
-				});
+				},
+				"rowCallback" : function(nRow) {
+					responsiveHelper_dt_basic.createExpandIcon(nRow);
+				},
+				"drawCallback" : function(oSettings) {
+					responsiveHelper_dt_basic.respond();
+				}
+			});
 
-                $('#overlay').fadeOut(200);
-
-			}, 1000);
+			$('#overlay').fadeOut(200);
+		}
 
 		/* END BASIC */
 
@@ -306,83 +369,5 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		}
 
-		$('#submit').click(function(evt){
-
-			evt.preventDefault();
-
-			var btn = $('#submit');
-			btn.attr('disabled', 'disabled');
-			btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
-
-			$('#overlay').fadeIn(200);
-		    $('#load-status-text').text('Sedang Menyiapkan...');
-
-			axios.post(baseUrl+'/penjualan/set-harga/edit/'+ $('#id').val(), $('#form-harga').serialize()).then((response) => {
-
-				if (response.data.status == 'ditolak') {
-
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-						color : "#A90329",
-						timeout: 5000,
-						icon : "fa fa-times bounce animated"
-					});
-
-				}else if(response.data.status == 'setberhasil'){
-
-                    $('#myModal').modal('hide');
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Berhasil",
-						content : 'Set harga berhasil dilakukan...!',
-						color : "#739E73",
-						timeout: 4000,
-						icon : "fa fa-check bounce animated"
-					});
-
-				}else if(response.data.status == 'tidak ada'){
-
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Upsss. Data yang ingin Anda ubah sudah tidak ada...!",
-						color : "#A90329",
-						timeout: 4000,
-						icon : "fa fa-times bounce animated"
-					});
-
-				}else{
-
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Upsss. Gagal mengedit data...! Coba lagi dengan mulai ulang halaman",
-						color : "#A90329",
-						timeout: 4000,
-						icon : "fa fa-times bounce animated"
-					});
-
-				}
-
-			}).catch((err) => {
-
-				$('#overlay').fadeOut(200);
-				$.smallBox({
-					title : "Gagal",
-					content : "Upsss. Gagal mengedit data...! Coba lagi dengan mulai ulang halaman",
-					color : "#A90329",
-					timeout: 4000,
-					icon : "fa fa-times bounce animated"
-				});
-				
-			}).then(function(){
-
-				btn.removeAttr('disabled');
-				btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');
-				$('#overlay').fadeOut(200);
-			});
-		});
 	</script>
 @endsection
