@@ -438,7 +438,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data member <i>"'+response.data.name+'"</i>berhasil dihapus...!',
+								content : 'Data member <i>"'+response.data.name+'"</i> berhasil dihapus...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"

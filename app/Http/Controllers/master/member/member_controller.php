@@ -446,12 +446,19 @@ class member_controller extends Controller
 
                 } else {
 
+                    $mNama = member::select('m_name', 'm_telp')->where('m_nik', $id)->first();
+                    $nama = $mNama->m_name;
+                    $log = 'Menghapus Data Member ' . $mNama->m_name . ' (' . $mNama->m_name . ')';
+
                     member::where('m_nik', $id)->delete();
 
                     DB::commit();
 
+                    Plasma::logActivity($log);
+
                     return json_encode([
-                        'status' => 'hapusberhasil'
+                        'status' => 'hapusberhasil',
+                        'name' => $nama
                     ]);
                 }
             } catch (\Exception $e) {

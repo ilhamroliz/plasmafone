@@ -103,20 +103,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 								@if(Plasma::checkAkses(15, 'insert') == true)
 								<div class="form-group">
-									<form id="form_gp">
-										<div class="col-md-9 no-padding">
-											<input type="text" class="form-control">
-										</div>
-										<div class="col-md-3">
-											<button class="btn btn-success"><i class="fa fa-plus"></i></button>
-										</div>
-									</form>
+									<button style="width: 100%" class="btn btn-success text-center" onclick="tambah_group()">
+										<i class="fa fa-plus"></i>&nbsp;&nbsp;Tambah
+									</button>
 								</div>
 								@endif
 
-								<table id="group_member" class="table table-striped table-bordered table-hover" width="100%">
+								<table id="group_member" class="table table-striped table-bordered table-hover" width="100%" style="cursor: pointer">
 									<thead>
 										<tr>
+											<th class="text-center" >No</th>
 											<th class="text-center" >Grup Member</th>
 										</tr>
 									</thead>
@@ -144,6 +140,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						<div>
 							<div class="widget-body no-padding">
 								<div class="tab-content padding-10">
+
+									<div id="title_table" class="col-6">
+
+									</div>
                                     
 									<div class="tab-pane fade in active" id="hr1">
 										<table id="dt_harga" class="table table-striped table-bordered table-hover" width="100%">
@@ -170,16 +170,133 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			<!-- End Tabel Item for @ GROUP MEMBER -->			
 			<!-- end row -->
 
-			<!-- Modal -->
-            <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+
+			<!-- Modal Untuk Tambah Group -->
+            <div class="modal fade" id="tgModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4>Form Setting Harga</h4>
+                            <h4><strong>Form Tambah Group</strong></h4>
                         </div>
                         <div class="modal-body no-padding">
 
-                            <form id="form-harga" class="smart-form">
+                            <form id="ft-group" class="smart-form">
+                                <input type="hidden" name="id" id="id">
+
+                                <fieldset>
+
+                                    <section>
+                                        <div class="row">
+                                            <label class="label col col-3">Nama Group</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="namaGroup" id="namaGroup">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                </fieldset>
+                                
+                                <footer>
+                                    <button type="button" class="btn btn-primary" onclick="tgSubmit()"><i class="fa fa-floppy-o"></i>
+                                        Simpan
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        Kembali
+                                    </button>
+
+                                </footer>
+                            </form>						
+                                    
+
+                        </div>
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- Akhir Modal untuk Tambah Group /.modal -->
+
+
+			<!-- Modal untuk Tambah Harga -->
+            <div class="modal fade" id="thModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h4><strong>Form Tambah Harga</strong></h4>
+                        </div>
+                        <div class="modal-body no-padding">
+
+                            <form id="ft-harga" class="smart-form">
+                                <input type="hidden" name="id" id="id">
+
+                                <fieldset>
+                                    <section>
+                                        <div class="row">
+                                            <label class="label col col-3">Nama Barang</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="nama" id="nama">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section>
+                                        <div class="row">
+                                            <label class="label col col-3">Tipe Penjualan</label>
+                                            <div class="col col-8 has-feedback">
+                                                <label class="input">
+                                                    <select class="form-control" name="tipe" id="tipe">
+                                                        <option value="1">Grosir 1</option>
+                                                        <option value="2">Grosir 2</option>
+                                                        <option value="3">Grosir 3</option>
+                                                        <option value="4">Retail</option>
+                                                    </select>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section>
+                                        <div class="row">
+                                            <label class="label col col-3">Harga Barang</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="harga" id="harga">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                </fieldset>
+                                
+                                <footer>
+                                    <button type="button" class="btn btn-primary" id="submit"><i class="fa fa-floppy-o"></i>
+                                        Simpan
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        Kembali
+                                    </button>
+                                </footer>
+                            </form>						                                 
+						</div>
+						
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+			
+
+			<!-- Modal untuk Edit Harga -->
+            <div class="modal fade" id="ehModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4><strong>Form Edit Harga</strong></h4>
+                        </div>
+                        <div class="modal-body no-padding">
+
+                            <form id="fe-harga" class="smart-form">
                                 <input type="hidden" name="id" id="id">
 
                                 <fieldset>
@@ -263,7 +380,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('#load-status-text').text('Sedang Mengambil Data...');
 		
 		var baseUrl = '{{ url('/') }}';
-		var table = $('#dt_harga').DataTable();
+		$('#dt_harga').DataTable();
 		$('#show-harga').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 
 		/* BASIC ;*/
@@ -282,7 +399,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			"serverSide": true,
 			"ajax": "{{ route('penjualan.getdatagroup') }}",
 			"columns":[
-				// {"data": "DT_RowIndex"},
+				{"data": "DT_RowIndex", "name": "DT_RowIndex"},
 				{"data": "group_name"}
 			],
 			"autoWidth" : true,
@@ -306,18 +423,17 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		function show(id){
 	
-			$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
-			table.fnDestroy();
-
+			$('#dt_harga').DataTable().destroy();
+			
 			$('#dt_harga').DataTable({
 				"processing": true,
 				"serverSide": true,
-				"ajax": "{{ url('/penjualan/set-harga/get-data-harga') }}/"+id,
+				"ajax": "{{ url('/penjualan/set-harga/get-data-harga')}}/"+id,
 				"columns":[
 					{"data": "i_nama"},
-					{"data": "gp_price"},
+					{"data": "harga"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -339,13 +455,91 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			});
 			// table.draw(false);
 
+			$('#title_table').html('<>')
+
 			$('#overlay').fadeOut(200);
 		}
 
-		/* END BASIC */
+		function tambah_group(){
+			$('#tgModal').modal('show');
+		}
+
+		function tambah_harga(){
+			$('#thModal').modal('show');
+		}
+
+		function edit_group(id){
+			$('#egModal').modal('show');			
+		}
+
+		function edit_harga(id){
+			$('#ehModal').modal('show');
+		}
 
 		function refresh_tab(){
 		    aktif.api().ajax.reload();
+		}
+
+		function tgSubmit(){
+
+			// --- AXIOS USE ----//
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Penyimpanan Data Group Sedang di Proses ...');
+			// let btn = $('#tgSubmit');
+			// btn.attr('disabled', 'disabled');
+			// btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
+
+			axios.post(baseUrl+'/penjualan/set-harga/addGroup', $('#ft-group').serialize())
+			    .then((response) => {
+
+			        if(response.data.status == 'sukses'){
+						$('#tgModal').modal('hide');
+						$('#group_member').DataTable().destroy();
+						$('#group_member').DataTable({
+							"processing": true,
+							"serverSide": true,
+							"ajax": "{{ route('penjualan.getdatagroup') }}",
+							"columns":[
+								{"data": "DT_RowIndex", "name": "DT_RowIndex"},
+								{"data": "group_name"}
+							],
+							"autoWidth" : true,
+							"searching" : false,
+							"paging"	: false,
+							"preDrawCallback" : function() {
+								// Initialize the responsive datatables helper once.
+								if (!responsiveHelper_dt_basic) {
+									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#group_member'), breakpointDefinition);
+								}
+							},
+							"rowCallback" : function(nRow) {
+								responsiveHelper_dt_basic.createExpandIcon(nRow);
+							},
+							"drawCallback" : function(oSettings) {
+								responsiveHelper_dt_basic.respond();
+							}
+						});
+
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "SUKSES",
+			                content : "Data Group berhasil ditambahkan",
+			                color : "#739E73",
+			                iconSmall : "fa fa-check animated",
+			                timeout : 3000
+			            });
+			            
+			        }else if(response.data.status == 'gagal'){
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "GAGAL",
+			                content : "Data Group gagal ditambahkan",
+			                color : "#C46A69",
+			                iconSmall : "fa fa-times animated",
+			                timeout : 3000
+			            });
+			        }
+			});
 		}
 
 		function edit(id){
@@ -374,7 +568,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#id').val(response.data.data.i_id);
 					$('#nama').val(response.data.data.i_nama);
 					$('#overlay').fadeOut(200);
-					$('#myModal').modal('show');
+					$('#ehModal').modal('show');
 
 				}
 			});

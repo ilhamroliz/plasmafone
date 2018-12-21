@@ -454,6 +454,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/penjualan/set-harga/getdataharga', [
 		'uses' => 'penjualan\setHargaController@get_data_group',
 	])->name('penjualan.getdatagroup');
+	Route::get('/penjualan/set-harga/get-data-gp-non/{id}', 'penjualan\setHargaController@get_data_group_nonDT');
 	Route::get('/penjualan/set-harga/get-data-gp', 'penjualan\setHargaController@get_data_gp');
 	Route::get('/penjualan/set-harga/get-data-harga/{id}', 'penjualan\setHargaController@get_data_harga');
 	Route::match(['get', 'post'], '/penjualan/set-harga/addGroup', 'penjualan\setHargaController@tambah_group');
