@@ -36,14 +36,22 @@ class setHargaController extends Controller
         $gp = collect($gp);
 
         return DataTables::of($gp)
+            ->addColumn('harga', function ($gp) {
+                $pisah = [];
+                $pisah = explode('.', $gp->gp_price);
+                $harga = $pisah[0];
+                return '<div>
+                            <span style="float: left" >Rp. </span>
+                            <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . '</span>';
+            })
             ->addColumn('aksi', function ($gp) {
                 if (Plasma::checkAkses(15, 'update') == true) {
                     return '<div class="text-center">
-                                <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Set Harga" onclick="edit(\'' . $gp->gp_item . '\')"><i class="glyphicon glyphicon-edit"></i></button>
+                                <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Set Harga" onclick="edit_harga(this)"><i class="glyphicon glyphicon-edit"></i></button>
                             </div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'harga'])
             ->make(true);
     }
 
@@ -53,14 +61,75 @@ class setHargaController extends Controller
         $group = collect($group);
 
         return DataTables::of($group)
-            // ->addIndexColumn()
+            ->addIndexColumn()
             ->addColumn('group_name', function ($group) {
                 return '<div class="text-center">
-                            <a onclick="show(\'' . $group->g_id . '\')">\'' . $group->g_name . '\'</a>
+                            <a onclick="show(\'' . $group->g_id . '\')">' . $group->g_name . '</a>
                         </div>';
             })
             ->rawColumns(['group_name'])
             ->make(true);
+    }
+
+    public function tambah_group(Request $request)
+    {
+        if (Plasma::checkAkses(15, 'insert') == false) {
+            return view('errors/407');
+        } else {
+            if ($request->isMethod('post')) {
+                DB::beginTransaction();
+                try {
+                    DB::table('m_group')->insert([
+                        'g_name' => $request->namaGroup
+                    ]);
+
+                    DB::commit();
+                    Plasma::logActivity('Menambahkan Group ' . $request->namaGroup);
+                    return json_encode([
+                        'status' => 'sukses'
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return json_encode([
+                        'status' => 'gagal',
+                        'msg' => $e
+                    ]);
+                }
+            }
+        }
+    }
+
+    public function tambah_harga()
+    {
+        if (Plasma::checkAkses(15, 'insert') == false) {
+            return view('errors/407');
+        } else {
+            if ($request->isMethod('post')) {
+
+                DB::beginTransaction();
+                try {
+                    DB::table('m_group_ptice')->insert([
+                        'gp_group' => $request->id,
+                        'gp_item' => $request->item,
+                        'gp_price' => $request->price
+                    ]);
+
+                    $item = DB::table('d_item')->select('i_nama')->where('i_id', $request->item)->first();
+                    $group = DB::table('m_group')->select('g_name')->where('g_id', $request->id)->first();
+                    $log = 'Menambahkan Harga Barang ' . $item->i_name . ' pada group harga ' . $group->g_name;
+
+                    DB::commit();
+                    Plasma::logActivity($log);
+                    return json_encode([
+                        'status' => 'sukses',
+                        'group' => $request->nama
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return json_encode([]);
+                }
+            }
+        }
     }
 
     public function edit(Request $request, $id = null)
