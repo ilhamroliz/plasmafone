@@ -296,6 +296,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/request-pembelian/getMerk', 'PembelianController@getMerk');
 	Route::get('/pembelian/request-pembelian/getOutlet', 'PembelianController@getOutlet');
 	Route::get('/pembelian/request-pembelian/simpanRequest', 'PembelianController@simpanRequest');
+	Route::get('/pembelian/request-pembelian/addData', 'PembelianController@addData');
+	Route::get('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
+	Route::get('/pembelian/request-pembelian/editDumy', 'PembelianController@editDumyReq');
+	Route::get('/pembelian/request-pembelian/addDumyReq','PembelianController@addDumyReq');
+	Route::get('/pembelian/request-pembelian/getInput','PembelianController@getBarang_input');
+	Route::get('/pembelian/request-pembelian/hapusDumy','PembelianController@hapusDumy');
+
+
 	// Route::match(['get', 'post'], '/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
 
 	Route::match(['get', 'post'], '/pembelian/request-order/add', 'PembelianController@form_add_request');

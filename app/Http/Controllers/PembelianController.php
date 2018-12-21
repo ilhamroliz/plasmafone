@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\pembelian\order as order;
 use App\Http\Controllers\PlasmafoneController as Plasma;
+
 use DataTables;
 use Carbon\Carbon;
 use Auth;
@@ -721,54 +722,147 @@ class PembelianController extends Controller
 
     public function request_order_tambah(){
         return view('pembelian/request_order/tambah_request_order');
-    }
+        // $comp = Auth::user()->m_id;
+        // $del = DB::table('d_purchase_req_dumy')->where('pr_mem_id',$comp)->delete();
 
-    public function clearData(){
-        $comp = Auth::user()->m_id;
-        $del = DB::table('d_purchase_req_dumy')->where('pr_mem_id',$comp)->delete();
-        if(!$del){
-            return view('pembelian/request_order/');
-        }else{
-            $data = "OK";
-            echo json_encode($data);
-        }
+        // if($del){
+        //     return view('pembelian/request_order/tambah_request_order');
+        // }else{
+        //     return view('pembelian/request_order/tambah_request_order');
+        // }
         
     }
 
-    public function addData(){
+    
+
+    public function addData(Request $request){
+
         $comp = Auth::user()->m_id;
-        $del = DB::table('d_purchase_req_dumy')->where('pr_mem_id',$comp)->delete();
-        if(!$del){
-            return view('pembelian/request_order/');
+        $item = $request->input('item');
+        $qty = $request->input('qty');
+
+        $insert =DB::table('d_purchase_req_dumy')->insert([
+                'pr_item'                    => $item,
+                'pr_qty'                     => $qty,
+                'pr_mem_id'                => $$comp
+                
+            ]);
+            
+        if($insert){
+            $status ="SUKSES";
         }else{
-            $data = "OK";
-            echo json_encode($data);
+            $status ="GAGAL";
         }
+
+        echo json_encode($status);
         
     }
 
-    public function ddRequest(){
-        $waiting  = DB::table('d_purchase_req_dumy')
-                ->select('d_purchase_req_dumy.pr_id','m_company.c_name','d_mem.m_name','d_item.i_nama','d_purchase_req_dumy.pr_qty')
-                ->join('d_item','d_purchase_req_dumy.pr_item','=','d_item.i_id')
-                ->join('d_mem','d_purchase_req_dumy.pr_mem_id','=','d_mem.m_id')
-                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+    public function ddRequest_dumy(Request $request){
+        $comp = Auth::user()->m_id;
+        $list  = DB::table('d_purchase_req_dumy')
+                ->select('d_purchase_req_dumy.pr_id','d_purchase_req_dumy.pr_item','d_purchase_req_dumy.pr_qty')
+                ->where('d_purchase_req_dumy.pr_mem_id',$comp)
                 ->get();
-        $waiting = collect($waiting);
-
-        return DataTables::of($waiting)
-
-            ->addColumn('aksi', function ($waiting) {
-                // return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                if (Plasma::checkAkses(49, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
-            ->rawColumns(['pr_stsReq','aksi'])
-            ->make(true);
+       
+                $data = array();
+                foreach ($list as $hasil) {
+                    $row = array();
+                    $row[] = $hasil->pr_item;
+                    // $row[] = $hasil->pr_qty;
+                    $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama'.$hasil->pr_id.'" value="'.$hasil->pr_qty.'"  style="text-transform: uppercase" /></div>';
+                    $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle"   title="Edit Data" onclick="editDumy(' .$hasil->pr_id. ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle"   title="Hapus Data" onclick="hapusData(' .$hasil->pr_id. ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                   $data[] = $row;
+               }
+                echo json_encode(array("data"=>$data));
     }
+
+    public function addDumyReq(Request $request){
+        $comp = Auth::user()->m_id;
+        $item = $request->input('item');
+        $qty = $request->input('qty');
+
+        $insert = DB::table('d_purchase_req_dumy')
+        ->insert([
+            'pr_item'=>$item,
+            'pr_qty'=>$qty,
+            'pr_mem_id'=>$comp
+        ]);
+
+        if($insert){
+            $status ="SUKSES";
+        }else{
+            $status = "GAGAL";
+        }
+
+        echo json_encode(array("data"=>$status));
+    }
+
+    public function getDumyReq(){
+        $comp = Auth::user()->mem_id;
+        $item = $request->input('item_id');
+        $qty = $request->input('qty');
+        $id = $request->input('id');
+
+        $query = DB::table('d_purchase_req_dumy')
+        ->select('d_purchase_req_dumy.pr_id','d_item.i_nama','d_purchase_req_dumy.pr_qty')
+        ->join('d_item','d_purchase_req_dumy.pr_item','=','d_item.i_id')
+        ->where('d_purchase_req_dumy.pr_mem_id',$comp)
+        ->get();
+
+        $data = array(
+            'pr_id'=>$query->pr_id,
+            'i_nama'=>$query->i_nama,
+            'pr_qty'=>$query->pr_qty,
+
+        );
+
+        echo json_encode($data);
+    }
+
+
+
+    public function editDumyReq(Request $request){
+        $comp = Auth::user()->m_id;
+        $id = $request->input('id');
+        $qty = $request->input('qty');
+
+        $update = DB::table('d_purchase_req_dumy')
+        ->where('d_purchase_req_dumy.pr_mem_id',$comp)
+        ->where('d_purchase_req_dumy.pr_id',$id)
+        ->update([
+            'pr_qty'=>$qty,
+        ]);
+
+        if($update){
+            $data = "ok";
+        }else{
+            $data = "gagal";
+        }
+                
+        echo json_encode(array("dataSet"=>$data));
+
+    }
+
+    public function hapusDumy(Request $request){
+        $comp = Auth::user()->m_id;
+        $id = $request->input('id');
+        
+        $delete = DB::table('d_purchase_req_dumy')
+        ->where('d_purchase_req_dumy.pr_mem_id',$comp)
+        ->where('d_purchase_req_dumy.pr_id',$id)
+        ->delete();
+
+        if($delete){
+            $data = "ok";
+        }else{
+            $data = "gagal";
+        }
+                
+        echo json_encode(array("dataSet"=>$data));
+
+    }
+
 
     public function menunggu(){
         $waiting  = DB::table('d_purchase_req')
@@ -942,29 +1036,52 @@ class PembelianController extends Controller
     {
         
         $comp = Auth::user()->m_id;
-        $item = $request->input('i_item');
-        $qty = $request->input('i_qty');
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'WAITING';
-       
 
-       
+        $dumy = DB::table('d_purchase_req_dumy')
+                    ->select('d_purcahse_req_dumy.*')
+                    ->where('d_purchase_req_dumy.pr_mem_id')
+                    ->get();
+        
+        $data = array(
+            'pr_compReq'    =>$comp,
+            'pr_itemReq'    =>$dumy->pr_item,
+            'pr_qtyReq'     =>$dumy->pr_qty,
+            'pr_dateReq'    =>$dateReq,
+            'pr_stsReq'     =>$status,
+        );
 
-         $insert =DB::table('purchase_req')->insert([
-                
-	    		'idComp'                     => $comp,
-                'item_id'                    => $item,
-                'qtyReq'                     => $qty,
-                'dateRequest'                => $dateReq,
-                'status'                     => $status,
-                
-            ]);
-            
+        $insert =DB::table('purchase_req')->insert($data);
+
         if($insert){
             $status ="SUKSES";
         }else{
             $status ="GAGAL";
         }
+        // $item = $request->input('i_item');
+        // $qty = $request->input('i_qty');
+        // $dateReq = Carbon::now('Asia/Jakarta');
+        // $status = 'WAITING';
+       
+
+       
+
+        //  $insert =DB::table('purchase_req')->insert([
+                
+	    // 		'idComp'                     => $comp,
+        //         'item_id'                    => $item,
+        //         'qtyReq'                     => $qty,
+        //         'dateRequest'                => $dateReq,
+        //         'status'                     => $status,
+                
+        //     ]);
+            
+        // if($insert){
+        //     $status ="SUKSES";
+        // }else{
+        //     $status ="GAGAL";
+        // }
 
         echo json_encode($status);
         
@@ -1274,6 +1391,27 @@ class PembelianController extends Controller
 
     public function rencanaDitolak(){
         
+    }
+
+    public function getBarang_input(Request $request){
+        $input = $request->input('data');
+        $list  = DB::table('d_item')
+        ->select('d_item.*')
+        ->where('d_item.i_id','LIKE',"%{$input}%")
+        ->orWhere('d_item.i_nama','LIKE',"%{$input}%")
+        ->orWhere('d_item.i_code','LIKE',"%{$input}%")
+        ->get();
+
+
+        if ($list == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($list as $query) {
+                $results[] = ['id' => $query->i_id, 'label' => $query->i_nama];
+            }
+        }
+
+        echo json_encode($results);
     }
 
     public function dtSemua(){
