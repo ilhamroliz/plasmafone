@@ -141,8 +141,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							<div class="widget-body no-padding">
 								<div class="tab-content padding-10">
 
-									<div id="title_table" class="col-6">
+									<div id="title_table" style="width: 100%; padding-bottom: 20px; padding-top: 10px">
+										
+									</div>
 
+									<div id="thFormDiv" class="form-group">
+										
 									</div>
                                     
 									<div class="tab-pane fade in active" id="hr1">
@@ -150,8 +154,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="60%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
-                                                    <th width="25%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga</th>                                                 
+													<th width="8%">No</th>
+													<th width="57%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                    <th width="20%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga</th>                                                 
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
@@ -216,54 +221,25 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 </div><!-- /.modal-dialog -->
             </div><!-- Akhir Modal untuk Tambah Group /.modal -->
 
-
-			<!-- Modal untuk Tambah Harga -->
-            <div class="modal fade" id="thModal" tabindex="-1" role="dialog">
+			<!-- Modal untuk Edit Group -->
+            <div class="modal fade" id="egModal" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
-
                         <div class="modal-header">
-                            <h4><strong>Form Tambah Harga</strong></h4>
+                            <h4><strong>Form Edit Group</strong></h4>
                         </div>
                         <div class="modal-body no-padding">
 
-                            <form id="ft-harga" class="smart-form">
-                                <input type="hidden" name="id" id="id">
+                            <form id="egForm" class="smart-form">
+                                <input type="hidden" name="egId" id="egId">
 
                                 <fieldset>
                                     <section>
                                         <div class="row">
-                                            <label class="label col col-3">Nama Barang</label>
+                                            <label class="label col col-3">Nama Group</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="nama" id="nama">
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section>
-                                        <div class="row">
-                                            <label class="label col col-3">Tipe Penjualan</label>
-                                            <div class="col col-8 has-feedback">
-                                                <label class="input">
-                                                    <select class="form-control" name="tipe" id="tipe">
-                                                        <option value="1">Grosir 1</option>
-                                                        <option value="2">Grosir 2</option>
-                                                        <option value="3">Grosir 3</option>
-                                                        <option value="4">Retail</option>
-                                                    </select>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </section>
-
-                                    <section>
-                                        <div class="row">
-                                            <label class="label col col-3">Harga Barang</label>
-                                            <div class="col col-9 has-feedback">
-                                                <label class="input">
-                                                    <input type="text" name="harga" id="harga">
+                                                    <input type="text" name="egNama" id="egNama">
                                                 </label>
                                             </div>
                                         </div>
@@ -272,19 +248,22 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 </fieldset>
                                 
                                 <footer>
-                                    <button type="button" class="btn btn-primary" id="submit"><i class="fa fa-floppy-o"></i>
+                                    <button type="button" class="btn btn-primary" onclick="egSubmit()"><i class="fa fa-floppy-o"></i>
                                         Simpan
                                     </button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">
                                         Kembali
                                     </button>
+
                                 </footer>
-                            </form>						                                 
-						</div>
-						
+                            </form>						
+                                    
+
+                        </div>
+
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
-			</div><!-- /.modal -->
+            </div><!-- /.modal -->
 			
 
 			<!-- Modal untuk Edit Harga -->
@@ -297,15 +276,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         <div class="modal-body no-padding">
 
                             <form id="fe-harga" class="smart-form">
-                                <input type="hidden" name="id" id="id">
-
+								<input type="hidden" name="ehGroupId" id="ehGroupId">
+                                <input type="hidden" name="ehItemId" id="ehItemId">
+								
                                 <fieldset>
                                     <section>
                                         <div class="row">
                                             <label class="label col col-3">Nama Barang</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="nama" id="nama">
+                                                    <input type="text" name="ehItemNama" id="ehItemNama" readonly>
                                                 </label>
                                             </div>
                                         </div>
@@ -313,15 +293,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                                     <section>
                                         <div class="row">
-                                            <label class="label col col-3">Tipe Penjualan</label>
-                                            <div class="col col-8 has-feedback">
+                                            <label class="label col col-3">Group Member</label>
+                                            <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <select class="form-control" name="tipe" id="tipe">
-                                                        <option value="1">Grosir 1</option>
-                                                        <option value="2">Grosir 2</option>
-                                                        <option value="3">Grosir 3</option>
-                                                        <option value="4">Retail</option>
-                                                    </select>
+                                                    <input type="text" name="ehGroupNama" id="ehGroupNama" readonly>                                                    
                                                 </label>
                                             </div>
                                         </div>
@@ -332,7 +307,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <label class="label col col-3">Harga Barang</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="harga" id="harga">
+                                                    <input type="text" name="ehHarga" id="ehHarga">
                                                 </label>
                                             </div>
                                         </div>
@@ -341,7 +316,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 </fieldset>
                                 
                                 <footer>
-                                    <button type="button" class="btn btn-primary" id="submit"><i class="fa fa-floppy-o"></i>
+                                    <button type="button" class="btn btn-primary" onclick="ehSubmit()"><i class="fa fa-floppy-o"></i>
                                         Simpan
                                     </button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">
@@ -378,8 +353,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Mengambil Data...');
-		
+
 		var baseUrl = '{{ url('/') }}';
+
+		function getData(data){
+			$('#thItemId').val(data.id);
+		}
+		
 		$('#dt_harga').DataTable();
 		$('#show-harga').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 
@@ -405,6 +385,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			"autoWidth" : true,
 			"searching" : false,
 			"paging"	: false,
+			"info"	: false,
 			"preDrawCallback" : function() {
 				// Initialize the responsive datatables helper once.
 				if (!responsiveHelper_dt_basic) {
@@ -432,6 +413,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"serverSide": true,
 				"ajax": "{{ url('/penjualan/set-harga/get-data-harga')}}/"+id,
 				"columns":[
+					{"data": "DT_RowIndex"},
 					{"data": "i_nama"},
 					{"data": "harga"},
 					{"data": "aksi"}
@@ -453,9 +435,23 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					responsiveHelper_dt_basic.respond();
 				}
 			});
-			// table.draw(false);
+			
+			axios.get(baseUrl+'/penjualan/set-harga/get-data-gp-non/'+id).then(response => {
 
-			$('#title_table').html('<>')
+				$('#title_table').html('<h4 style="float: left"><strong>'+response.data.name+'</strong></h4>&nbsp;<a onclick="edit_group('+response.data.id+')"><i class="fa fa-pencil"></i></a>&nbsp;<a onclick="hapus_group('+response.data.id+')"><i class="fa fa-close"></i></a>');
+				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang"><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" name="thHarga" placeholder="Harga Barang"><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
+				$('#egNama').val(response.data.name);
+				$('#thGroupId').val(response.data.id);
+
+				$( "#thItemNama" ).autocomplete({
+					source: baseUrl+'/penjualan/set-harga/cariItem',
+					minLength: 2,
+					select: function(event, data) {
+						getData(data.item);
+					}
+				});
+				$("#thHarga").maskMoney({thousands:'.', precision: 0});
+			})
 
 			$('#overlay').fadeOut(200);
 		}
@@ -464,16 +460,188 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#tgModal').modal('show');
 		}
 
-		function tambah_harga(){
-			$('#thModal').modal('show');
-		}
-
-		function edit_group(id){
-			$('#egModal').modal('show');			
+		function edit_group(id, name){
+			$('#egModal').modal('show');
+			$('#egId').val(id);
 		}
 
 		function edit_harga(id){
 			$('#ehModal').modal('show');
+			$('#ehId').val(id);
+		}
+
+		function hapus_group(val){
+
+			$.SmartMessageBox({
+				title : "PERHATIAN !",
+				content : 'Apakah Anda yakin akan manghapus data group ini ?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menghapus Data...');
+
+					axios.get(baseUrl+'/penjualan/set-harga/hapusGroup/'+val).then((response) => {
+
+						if(response.data.status == 'hgBerhasil'){
+
+							$('#group_member').DataTable().destroy();
+							$('#group_member').DataTable({
+								"processing": true,
+								"serverSide": true,
+								"ajax": "{{ route('penjualan.getdatagroup') }}",
+								"columns":[
+									{"data": "DT_RowIndex"},
+									{"data": "group_name"}
+								],
+								"autoWidth" : true,
+								"searching" : false,
+								"paging"	: false,
+								"info"	: false,
+								"preDrawCallback" : function() {
+									// Initialize the responsive datatables helper once.
+									if (!responsiveHelper_dt_basic) {
+										responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#group_member'), breakpointDefinition);
+									}
+								},
+								"rowCallback" : function(nRow) {
+									responsiveHelper_dt_basic.createExpandIcon(nRow);
+								},
+								"drawCallback" : function(oSettings) {
+									responsiveHelper_dt_basic.respond();
+								}
+							});
+
+							$('#dt_harga').DataTable().destroy();
+							$('#dt_harga').DataTable();
+							$('#show-harga').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+							$('#title_table').html('<h4 style="float: left"></h4>');
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data group <i>"'+response.data.name+'"</i> berhasil dihapus...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+
+						}else if(response.data.status == 'hgDigunakan'){
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Gagal",
+								content : "Maaf, Group tidak dapat dihapus, Group ini sedang digunakan...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else{
+							$('#overlay').fadeOut(200);
+							console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}
+
+					}).catch((err) => {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
+
+				}
+	
+			});
+
+		}
+
+		function hapus_harga(group, item){
+
+			$.SmartMessageBox({
+				title : "PERHATIAN !",
+				content : 'Apakah Anda yakin akan manghapus data harga barang ini ?"</i>',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menghapus...');
+
+					axios.get(baseUrl+'/penjualan/set-harga/hapusHarga?group='+group+'&?item='+item).then((response) => {
+
+						if(response.data.status == 'berhasil'){
+							refresh_tab();
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data harg barang <i>"'+response.data.item+'" ('+response.data.group+')</i> berhasil dihapus...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+
+						}else if(response.data.status == 'tidak ada'){
+
+							$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}else{
+							$('#overlay').fadeOut(200);
+							console.log(response);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+
+						}
+
+					}).catch((err) => {
+						out();
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
+							color : "#A90329",
+							timeout: 4000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					}).then(function(){
+						$('#overlay').fadeOut(200);
+					})
+
+				}
+	
+			});
+
 		}
 
 		function refresh_tab(){
@@ -506,6 +674,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							"autoWidth" : true,
 							"searching" : false,
 							"paging"	: false,
+							"info"	: false,
 							"preDrawCallback" : function() {
 								// Initialize the responsive datatables helper once.
 								if (!responsiveHelper_dt_basic) {
@@ -542,16 +711,123 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			});
 		}
 
-		function edit(id){
-
+		function thSubmit(){
+			// --- AXIOS USE ----//
 			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Mengambil data...');
+			$('#load-status-text').text('Penyimpanan Data Harga Sedang di Proses ...');
 
-			var status;
+			axios.post(baseUrl+'/penjualan/set-harga/addHarga', $('#thForm').serialize())
+			    .then((response) => {
 
-			axios.get(baseUrl+'/penjualan/set-harga/edit/'+id).then(response => {
+			        if(response.data.status == 'thBerhasil'){
 
-				if (response.data.status == 'ditolak') {
+						$('#dt_harga').DataTable().destroy();
+						$('#dt_harga').DataTable({
+							"processing": true,
+							"serverSide": true,
+							"ajax": "{{ url('/penjualan/set-harga/get-data-harga')}}/"+response.data.id,
+							"columns":[
+								{"data": "DT_RowIndex"},
+								{"data": "i_nama"},
+								{"data": "harga"},
+								{"data": "aksi"}
+							],
+							"autoWidth" : true,
+							"searching" : false,
+							"paging"	: false,
+							"info"	: false,
+							"preDrawCallback" : function() {
+								// Initialize the responsive datatables helper once.
+								if (!responsiveHelper_dt_basic) {
+									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#group_member'), breakpointDefinition);
+								}
+							},
+							"rowCallback" : function(nRow) {
+								responsiveHelper_dt_basic.createExpandIcon(nRow);
+							},
+							"drawCallback" : function(oSettings) {
+								responsiveHelper_dt_basic.respond();
+							}
+						});
+
+						$('#thItemId').val('');
+						$('#thItemNama').val('');
+						$('#thHarga').val('');
+
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "SUKSES",
+			                content : "Data Harga berhasil ditambahkan",
+			                color : "#739E73",
+			                iconSmall : "fa fa-check animated",
+			                timeout : 3000
+			            });
+			            
+			        }else if(response.data.status == 'thGagal'){
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "GAGAL",
+			                content : "Data Group gagal ditambahkan",
+			                color : "#C46A69",
+			                iconSmall : "fa fa-times animated",
+			                timeout : 3000
+			            });
+			        }
+			});
+		}
+
+		function egSubmit(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Mengubah Data ...');
+
+			axios.post(baseUrl+'/penjualan/set-harga/editGroup', $('#egForm').serialize()).then(response => {
+
+				if (response.data.status == 'berhasil') {
+
+					$('#egModal').modal('hide');
+					$('#group_member').DataTable().destroy();
+					$('#group_member').DataTable({
+						"processing": true,
+						"serverSide": true,
+						"ajax": "{{ route('penjualan.getdatagroup') }}",
+						"columns":[
+							{"data": "DT_RowIndex"},
+							{"data": "group_name"}
+						],
+						"autoWidth" : true,
+						"searching" : false,
+						"paging"	: false,
+						"info"	: false,
+						"preDrawCallback" : function() {
+							// Initialize the responsive datatables helper once.
+							if (!responsiveHelper_dt_basic) {
+								responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#group_member'), breakpointDefinition);
+							}
+						},
+						"rowCallback" : function(nRow) {
+							responsiveHelper_dt_basic.createExpandIcon(nRow);
+						},
+						"drawCallback" : function(oSettings) {
+							responsiveHelper_dt_basic.respond();
+						}
+					});
+
+					axios.get(baseUrl+'/penjualan/set-harga/get-data-gp-non/'+$('#egId').val()).then(response => {
+
+						$('#title_table').html('<h4 style="float: left"><strong>'+response.data.name+'</strong></h4>&nbsp;<a onclick="edit_group('+response.data.id+')"><i class="fa fa-pencil"></i></a>&nbsp;<a onclick="hapus_group('+response.data.id+')"><i class="fa fa-close"></i></a>');
+
+					})
+
+					$('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "SUKSES",
+			                content : "Data Group berhasil ditambahkan",
+			                color : "#739E73",
+			                iconSmall : "fa fa-check animated",
+			                timeout : 3000
+			            });
+
+				}else if(response.data.status == 'ditolak'){
 
 					$('#overlay').fadeOut(200);
 					$.smallBox({
@@ -562,17 +838,17 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						icon : "fa fa-times bounce animated"
 					});
 
-				} else {
-
-			        $("#harga").maskMoney({thousands:'.', precision: 0});
-					$('#id').val(response.data.data.i_id);
-					$('#nama').val(response.data.data.i_nama);
+				}else if(response.data.status == 'gagal'){
 					$('#overlay').fadeOut(200);
-					$('#ehModal').modal('show');
-
+					$.smallBox({
+						title : "GAGAL",
+						content : "Data Group gagal ditambahkan",
+						color : "#C46A69",
+						iconSmall : "fa fa-times animated",
+						timeout : 3000
+					});
 				}
 			});
-
 		}
 
 	</script>

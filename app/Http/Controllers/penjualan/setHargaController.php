@@ -12,6 +12,7 @@ use DB;
 use Session;
 use Auth;
 use Carbon\Carbon;
+use Response;
 
 class setHargaController extends Controller
 {
@@ -36,6 +37,7 @@ class setHargaController extends Controller
         $gp = collect($gp);
 
         return DataTables::of($gp)
+            ->addIndexColumn()
             ->addColumn('harga', function ($gp) {
                 $pisah = [];
                 $pisah = explode('.', $gp->gp_price);
@@ -48,6 +50,7 @@ class setHargaController extends Controller
                 if (Plasma::checkAkses(15, 'update') == true) {
                     return '<div class="text-center">
                                 <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Set Harga" onclick="edit_harga(this)"><i class="glyphicon glyphicon-edit"></i></button>
+                                <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Harga" onclick="hapus_harga(this)"><i class="glyphicon glyphicon-trash"></i></button>                                
                             </div>';
                 }
             })
@@ -63,12 +66,37 @@ class setHargaController extends Controller
         return DataTables::of($group)
             ->addIndexColumn()
             ->addColumn('group_name', function ($group) {
-                return '<div class="text-center">
-                            <a onclick="show(\'' . $group->g_id . '\')">' . $group->g_name . '</a>
-                        </div>';
+                return '<a onclick="show(\'' . $group->g_id . '\')"><div>' . $group->g_name . '</div></a>';
             })
             ->rawColumns(['group_name'])
             ->make(true);
+    }
+
+    public function get_data_group_nonDT($id)
+    {
+        $unDT = DB::table('m_group')->where('g_id', $id)->first();
+        // dd($unDT);
+        return json_encode([
+            'id' => $unDT->g_id,
+            'name' => strtoupper($unDT->g_name)
+        ]);
+    }
+
+    public function cari_itemth(Request $request)
+    {
+
+        $cari = $request->term;
+        $nama = DB::select("select i_id, i_nama from d_item where i_nama like '%" . $cari . "%'");
+
+        if ($nama == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->i_id, 'label' => $query->i_nama];
+            }
+        }
+
+        return Response::json($results);
     }
 
     public function tambah_group(Request $request)
@@ -99,8 +127,9 @@ class setHargaController extends Controller
         }
     }
 
-    public function tambah_harga()
+    public function tambah_harga(Request $request)
     {
+        // dd($request);
         if (Plasma::checkAkses(15, 'insert') == false) {
             return view('errors/407');
         } else {
@@ -108,28 +137,161 @@ class setHargaController extends Controller
 
                 DB::beginTransaction();
                 try {
-                    DB::table('m_group_ptice')->insert([
-                        'gp_group' => $request->id,
-                        'gp_item' => $request->item,
-                        'gp_price' => $request->price
+
+                    $harga = implode(explode('.', $request->thHarga));
+                    DB::table('m_group_price')->insert([
+                        'gp_group' => $request->thGroupId,
+                        'gp_item' => $request->thItemId,
+                        'gp_price' => $harga
                     ]);
 
-                    $item = DB::table('d_item')->select('i_nama')->where('i_id', $request->item)->first();
-                    $group = DB::table('m_group')->select('g_name')->where('g_id', $request->id)->first();
-                    $log = 'Menambahkan Harga Barang ' . $item->i_name . ' pada group harga ' . $group->g_name;
+                    $item = DB::table('d_item')->select('i_nama')->where('i_id', $request->thItemId)->first();
+                    $group = DB::table('m_group')->select('g_name')->where('g_id', $request->thGroupId)->first();
+                    $log = 'Menambahkan Harga Barang ' . $item->i_nama . ' pada group harga ' . $group->g_name;
 
                     DB::commit();
                     Plasma::logActivity($log);
                     return json_encode([
-                        'status' => 'sukses',
-                        'group' => $request->nama
+                        'status' => 'thBerhasil',
+                        'id' => $request->thGroupId,
+                        'name' => $request->thItemName
                     ]);
                 } catch (\Exception $e) {
                     DB::rollback();
-                    return json_encode([]);
+                    return json_encode([
+                        'status' => 'thGagal',
+                        'msg' => $e
+                    ]);
                 }
             }
         }
+    }
+
+    public function edit_group(Request $request)
+    {
+        if (Plasma::checkAkses(15, 'update') == false) {
+            return view('errors/407');
+        } else {
+            if ($request->isMethod('post')) {
+                // dd($request);
+                $id = $request->egId;
+                DB::beginTransaction();
+                try {
+
+                    $getNama = DB::table('m_group')->select('g_name')->where('g_id', $id)->first();
+                    $oldName = $getNama->g_name;
+
+                    DB::table('m_group')->where('g_id', $id)->update([
+                        'g_name' => $request->egNama
+                    ]);
+
+                    DB::commit();
+
+                    $log = 'Mengubah Nama Group dari ' . $oldName . ' menjadi ' . $request->egNama;
+
+                    Plasma::logActivity($log);
+
+                    return json_encode([
+                        'status' => 'berhasil'
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+
+                    return json_encode([
+                        'status' => 'gagal',
+                        'msg' => $e
+                    ]);
+                }
+
+            }
+
+        }
+    }
+
+    public function edit_harga(Request $request)
+    {
+        if (Plasma::checkAkses(15, 'update') == false) {
+            return view('errors/407');
+        } else {
+            if ($request->isMethod('post')) {
+                // dd($request);
+                $id = $request->egId;
+                DB::beginTransaction();
+                try {
+
+                    $getNama = DB::table('m_group')->select('g_name')->where('g_id', $id)->first();
+                    $oldName = $getNama->g_name;
+
+                    DB::table('m_group')->where('g_id', $id)->update([
+                        'g_name' => $request->egNama
+                    ]);
+
+                    DB::commit();
+
+                    $log = 'Mengubah Nama Group dari ' . $oldName . ' menjadi ' . $request->egNama;
+
+                    Plasma::logActivity($log);
+
+                    return json_encode([
+                        'status' => 'berhasil'
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+
+                    return json_encode([
+                        'status' => 'gagal',
+                        'msg' => $e
+                    ]);
+                }
+
+            }
+
+        }
+    }
+
+    public function hapus_group($id)
+    {
+        if (Plasma::checkAkses(15, 'delete') == false) {
+            return view('errors/407');
+        } else {
+
+            $cek = DB::table('m_member')->where('m_jenis', $id)->count();
+
+            if ($cek != 0) {
+                return json_encode([
+                    'status' => 'hgDigunakan'
+                ]);
+            } else {
+
+                DB::beginTransaction();
+                try {
+                    $get = DB::table('m_group')->select('g_name')->where('g_id', $id)->first();
+                    $egNama = $get->g_name;
+                    $log = 'Menghapus Group ' . $get->g_name;
+
+                    DB::table('m_group')->where('g_id', $id)->delete();
+                    DB::commit();
+
+                    Plasma::logActivity($log);
+                    return json_encode([
+                        'status' => 'hgBerhasil',
+                        'name' => $egNama
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+
+                    return json_encode([
+                        'status' => 'hgGagal',
+                        'msg' => $e
+                    ]);
+                }
+            }
+        }
+    }
+
+    public function hapus_harga(Request $request, $id)
+    {
+
     }
 
     public function edit(Request $request, $id = null)

@@ -299,9 +299,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/request-pembelian/addData', 'PembelianController@addData');
 	Route::get('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
 	Route::get('/pembelian/request-pembelian/editDumy', 'PembelianController@editDumyReq');
-	Route::get('/pembelian/request-pembelian/addDumyReq','PembelianController@addDumyReq');
-	Route::get('/pembelian/request-pembelian/getInput','PembelianController@getBarang_input');
-	Route::get('/pembelian/request-pembelian/hapusDumy','PembelianController@hapusDumy');
+	Route::get('/pembelian/request-pembelian/addDumyReq', 'PembelianController@addDumyReq');
+	Route::get('/pembelian/request-pembelian/getInput', 'PembelianController@getBarang_input');
+	Route::get('/pembelian/request-pembelian/hapusDumy', 'PembelianController@hapusDumy');
 
 
 	// Route::match(['get', 'post'], '/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
@@ -462,13 +462,18 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/penjualan/set-harga/getdataharga', [
 		'uses' => 'penjualan\setHargaController@get_data_group',
 	])->name('penjualan.getdatagroup');
+
+	Route::get('/penjualan/set-harga/cariItem', 'penjualan\setHargaController@cari_itemth');
+
 	Route::get('/penjualan/set-harga/get-data-gp-non/{id}', 'penjualan\setHargaController@get_data_group_nonDT');
 	Route::get('/penjualan/set-harga/get-data-gp', 'penjualan\setHargaController@get_data_gp');
 	Route::get('/penjualan/set-harga/get-data-harga/{id}', 'penjualan\setHargaController@get_data_harga');
 	Route::match(['get', 'post'], '/penjualan/set-harga/addGroup', 'penjualan\setHargaController@tambah_group');
 	Route::match(['get', 'post'], '/penjualan/set-harga/addHarga', 'penjualan\setHargaController@tambah_harga');
-	Route::match(['get', 'post'], '/penjualan/set-harga/editGroup/{id}', 'penjualan\setHargaController@edit');
-	Route::match(['get', 'post'], '/penjualan/set-harga/editHarga/{id}', 'penjualan\setHargaController@edit');
+	Route::match(['get', 'post'], '/penjualan/set-harga/editGroup', 'penjualan\setHargaController@edit_group');
+	Route::match(['get', 'post'], '/penjualan/set-harga/editHarga/{id}', 'penjualan\setHargaController@edit_harga');
+	Route::match(['get', 'post'], '/penjualan/set-harga/hapusGroup/{id}', 'penjualan\setHargaController@hapus_group');
+	Route::match(['get', 'post'], '/penjualan/set-harga/hapusHarga/{id}', 'penjualan\setHargaController@hapus_harga');
 
 
 	//== End Set Harga
