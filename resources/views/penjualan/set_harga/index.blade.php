@@ -442,6 +442,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang"><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" name="thHarga" placeholder="Harga Barang"><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
 				$('#egNama').val(response.data.name);
 				$('#thGroupId').val(response.data.id);
+				$('#ehGroupNama').val(response.data.name);
+				$('#ehGroupId').val(response.data.id);
 
 				$( "#thItemNama" ).autocomplete({
 					source: baseUrl+'/penjualan/set-harga/cariItem',
@@ -460,14 +462,18 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#tgModal').modal('show');
 		}
 
-		function edit_group(id, name){
-			$('#egModal').modal('show');
+		function edit_group(id){
 			$('#egId').val(id);
+			$('#egModal').modal('show');
 		}
 
-		function edit_harga(id){
+		function edit_harga(id, item, group, harga){
+			$('#ehItemId').val(id);
+			$('#ehItemNama').val(id);
+			$('#ehGroupNama').val(group);
+			$('#ehHarga').val(harga);
+			$('#ehHarga').maskMoney({thousands:'.', precision: 0});
 			$('#ehModal').modal('show');
-			$('#ehId').val(id);
 		}
 
 		function hapus_group(val){
@@ -566,14 +572,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
-
-				}
-	
+				}	
 			});
-
 		}
 
-		function hapus_harga(group, item){
+		function hapus_harga(id){
 
 			$.SmartMessageBox({
 				title : "PERHATIAN !",
@@ -583,14 +586,39 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				if (ButtonPressed === "Ya") {
 
 					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
+					$('#load-status-text').text('Sedang Menghapus Data Harga...');
 
-					axios.get(baseUrl+'/penjualan/set-harga/hapusHarga?group='+group+'&?item='+item).then((response) => {
+					axios.get(baseUrl+'/penjualan/set-harga/hapusHarga?group='+$('#thGroupId').val()+'&item='+id).then((response) => {
 
-						if(response.data.status == 'berhasil'){
-							refresh_tab();
+						if(response.data.status == 'hhBerhasil'){
+
+							$('#dt_harga').DataTable().destroy();
+							$('#dt_harga').DataTable({
+								"processing": true,
+								"serverSide": true,
+								"ajax": "{{ url('/penjualan/set-harga/get-data-harga')}}/"+$('#thGroupId').val(),
+								"columns":[									
+									{"data": "DT_RowIndex"},
+									{"data": "i_nama"},
+									{"data": "harga"},
+									{"data": "aksi"}
+								],
+								"autoWidth" : true,
+								"preDrawCallback" : function() {
+									// Initialize the responsive datatables helper once.
+									if (!responsiveHelper_dt_basic) {
+										responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#group_member'), breakpointDefinition);
+									}
+								},
+								"rowCallback" : function(nRow) {
+									responsiveHelper_dt_basic.createExpandIcon(nRow);
+								},
+								"drawCallback" : function(oSettings) {
+									responsiveHelper_dt_basic.respond();
+								}
+							});
+
 							$('#overlay').fadeOut(200);
-
 							$.smallBox({
 								title : "Berhasil",
 								content : 'Data harg barang <i>"'+response.data.item+'" ('+response.data.group+')</i> berhasil dihapus...!',
@@ -602,7 +630,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						}else if(response.data.status == 'tidak ada'){
 
 							$('#overlay').fadeOut(200);
-
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
@@ -612,6 +639,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							});
 
 						}else{
+
 							$('#overlay').fadeOut(200);
 							console.log(response);
 							$.smallBox({
@@ -621,11 +649,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								timeout: 4000,
 								icon : "fa fa-times bounce animated"
 							});
-
 						}
 
 					}).catch((err) => {
-						out();
+						$('#overlay').fadeOut(200);
 						$.smallBox({
 							title : "Gagal",
 							content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
@@ -637,11 +664,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
-
 				}
-	
 			});
-
 		}
 
 		function refresh_tab(){
@@ -653,9 +677,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			// --- AXIOS USE ----//
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Penyimpanan Data Group Sedang di Proses ...');
-			// let btn = $('#tgSubmit');
-			// btn.attr('disabled', 'disabled');
-			// btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Proses...');
 
 			axios.post(baseUrl+'/penjualan/set-harga/addGroup', $('#ft-group').serialize())
 			    .then((response) => {
@@ -674,7 +695,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							"autoWidth" : true,
 							"searching" : false,
 							"paging"	: false,
-							"info"	: false,
+							"info"		: false,
 							"preDrawCallback" : function() {
 								// Initialize the responsive datatables helper once.
 								if (!responsiveHelper_dt_basic) {
@@ -698,7 +719,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			                timeout : 3000
 			            });
 			            
-			        }else if(response.data.status == 'gagal'){
+			        }else if(response.data.status == 'tgAda'){
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "GAGAL",
+			                content : "Data Group <i>"+response.data.name+"</i> sudah ada !",
+			                color : "#C46A69",
+			                iconSmall : "fa fa-times animated",
+			                timeout : 3000
+			            });
+			        }else if(response.data.status == 'tgGagal'){
 			            $('#overlay').fadeOut(200);
 			            $.smallBox({
 			                title : "GAGAL",
@@ -727,15 +757,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							"serverSide": true,
 							"ajax": "{{ url('/penjualan/set-harga/get-data-harga')}}/"+response.data.id,
 							"columns":[
+								
 								{"data": "DT_RowIndex"},
 								{"data": "i_nama"},
 								{"data": "harga"},
 								{"data": "aksi"}
 							],
 							"autoWidth" : true,
-							"searching" : false,
-							"paging"	: false,
-							"info"	: false,
 							"preDrawCallback" : function() {
 								// Initialize the responsive datatables helper once.
 								if (!responsiveHelper_dt_basic) {
@@ -763,6 +791,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			                timeout : 3000
 			            });
 			            
+			        }else if(response.data.status == 'thAda'){
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "GAGAL",
+			                content : "Data Harga Item <i>"+response.data.name+"</i> pada group ini sudah ada !",
+			                color : "#C46A69",
+			                iconSmall : "fa fa-times animated",
+			                timeout : 3000
+			            });
+
 			        }else if(response.data.status == 'thGagal'){
 			            $('#overlay').fadeOut(200);
 			            $.smallBox({
@@ -821,7 +859,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#overlay').fadeOut(200);
 			            $.smallBox({
 			                title : "SUKSES",
-			                content : "Data Group berhasil ditambahkan",
+			                content : "Data Group berhasil diubah !",
 			                color : "#739E73",
 			                iconSmall : "fa fa-check animated",
 			                timeout : 3000
@@ -832,7 +870,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#overlay').fadeOut(200);
 					$.smallBox({
 						title : "Gagal",
-						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						content : "Upsss. Anda tidak diizinkan untuk mengubah data ini",
 						color : "#A90329",
 						timeout: 5000,
 						icon : "fa fa-times bounce animated"
@@ -842,7 +880,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#overlay').fadeOut(200);
 					$.smallBox({
 						title : "GAGAL",
-						content : "Data Group gagal ditambahkan",
+						content : "Data Group gagal diubah !",
 						color : "#C46A69",
 						iconSmall : "fa fa-times animated",
 						timeout : 3000
