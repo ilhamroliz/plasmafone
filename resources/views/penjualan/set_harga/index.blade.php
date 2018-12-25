@@ -453,7 +453,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					}
 				});
 				$("#thHarga").maskMoney({thousands:',', precision: 0});
-			})
+			});
 
 			$('#overlay').fadeOut(200);
 		}
@@ -475,7 +475,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#ehGroupId').val($groupId);
 				$('#ehGroupNama').val(response.data.fields.g_name);
 				$('#ehItemNama').val(response.data.fields.i_nama);
-				$('#ehHarga').val(response.data.price).maskMoney({thousands:'.', precision: 0});
+				$('#ehHarga').val(response.data.price).maskMoney({thousands:',', precision: 0});
 				$('#ehModal').modal('show');
 			});
 		}
