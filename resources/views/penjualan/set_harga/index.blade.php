@@ -195,7 +195,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <label class="label col col-3">Nama Group</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="namaGroup" id="namaGroup">
+                                                    <input type="text" name="namaGroup" id="namaGroup" style="text-transform: uppercase" required>
                                                 </label>
                                             </div>
                                         </div>
@@ -239,7 +239,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <label class="label col col-3">Nama Group</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="egNama" id="egNama">
+                                                    <input type="text" name="egNama" id="egNama" style="text-transform: uppercase" required>
                                                 </label>
                                             </div>
                                         </div>
@@ -275,7 +275,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         </div>
                         <div class="modal-body no-padding">
 
-                            <form id="fe-harga" class="smart-form">
+                            <form id="ehForm" class="smart-form">
 								<input type="hidden" name="ehGroupId" id="ehGroupId">
                                 <input type="hidden" name="ehItemId" id="ehItemId">
 								
@@ -379,7 +379,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			"serverSide": true,
 			"ajax": "{{ route('penjualan.getdatagroup') }}",
 			"columns":[
-				{"data": "DT_RowIndex", "name": "DT_RowIndex"},
+				{"data": "DT_RowIndex"},
 				{"data": "group_name"}
 			],
 			"autoWidth" : true,
@@ -439,7 +439,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			axios.get(baseUrl+'/penjualan/set-harga/get-data-gp-non/'+id).then(response => {
 
 				$('#title_table').html('<h4 style="float: left"><strong>'+response.data.name+'</strong></h4>&nbsp;<a onclick="edit_group('+response.data.id+')"><i class="fa fa-pencil"></i></a>&nbsp;<a onclick="hapus_group('+response.data.id+')"><i class="fa fa-close"></i></a>');
-				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang"><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" name="thHarga" placeholder="Harga Barang"><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
+				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang" required><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" name="thHarga" placeholder="Harga Barang" required><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
 				$('#egNama').val(response.data.name);
 				$('#thGroupId').val(response.data.id);
 				$('#ehGroupNama').val(response.data.name);
@@ -452,7 +452,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						getData(data.item);
 					}
 				});
-				$("#thHarga").maskMoney({thousands:'.', precision: 0});
+				$("#thHarga").maskMoney({thousands:',', precision: 0});
 			})
 
 			$('#overlay').fadeOut(200);
@@ -467,13 +467,17 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#egModal').modal('show');
 		}
 
-		function edit_harga(id, item, group, harga){
+		function edit_harga(id){
 			$('#ehItemId').val(id);
-			$('#ehItemNama').val(id);
-			$('#ehGroupNama').val(group);
-			$('#ehHarga').val(harga);
-			$('#ehHarga').maskMoney({thousands:'.', precision: 0});
-			$('#ehModal').modal('show');
+			
+			axios.get(baseUrl+'/penjualan/set-harga/editHarga?id='+id+'&g='+$('#thGroupId').val()).then((response) => {
+				$groupId = $('#thGroupId').val();
+				$('#ehGroupId').val($groupId);
+				$('#ehGroupNama').val(response.data.fields.g_name);
+				$('#ehItemNama').val(response.data.fields.i_nama);
+				$('#ehHarga').val(response.data.price).maskMoney({thousands:'.', precision: 0});
+				$('#ehModal').modal('show');
+			});
 		}
 
 		function hapus_group(val){
@@ -886,6 +890,66 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						timeout : 3000
 					});
 				}
+			});
+		}
+
+		function ehSubmit(){
+			// --- AXIOS USE ----//
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Penyimpanan Data Harga Sedang di Proses ...');
+
+			axios.post(baseUrl+'/penjualan/set-harga/editHarga', $('#ehForm').serialize())
+			    .then((response) => {
+
+			        if(response.data.status == 'ehBerhasil'){
+						$('#ehModal').modal('hide');
+
+						$('#dt_harga').DataTable().destroy();
+						$('#dt_harga').DataTable({
+							"processing": true,
+							"serverSide": true,
+							"ajax": "{{ url('/penjualan/set-harga/get-data-harga')}}/"+response.data.id,
+							"columns":[
+								
+								{"data": "DT_RowIndex"},
+								{"data": "i_nama"},
+								{"data": "harga"},
+								{"data": "aksi"}
+							],
+							"autoWidth" : true,
+							"preDrawCallback" : function() {
+								// Initialize the responsive datatables helper once.
+								if (!responsiveHelper_dt_basic) {
+									responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#group_member'), breakpointDefinition);
+								}
+							},
+							"rowCallback" : function(nRow) {
+								responsiveHelper_dt_basic.createExpandIcon(nRow);
+							},
+							"drawCallback" : function(oSettings) {
+								responsiveHelper_dt_basic.respond();
+							}
+						});
+
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "SUKSES",
+			                content : "Data Harga <i>"+response.data.item+"</i>berhasil diubah ..",
+			                color : "#739E73",
+			                iconSmall : "fa fa-check animated",
+			                timeout : 3000
+			            });
+			            
+			        }else if(response.data.status == 'ehGagal'){
+			            $('#overlay').fadeOut(200);
+			            $.smallBox({
+			                title : "GAGAL",
+			                content : "Data Group gagal diubah",
+			                color : "#C46A69",
+			                iconSmall : "fa fa-times animated",
+			                timeout : 3000
+			            });
+			        }
 			});
 		}
 
