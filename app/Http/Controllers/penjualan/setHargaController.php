@@ -118,7 +118,7 @@ class setHargaController extends Controller
                     DB::beginTransaction();
                     try {
                         DB::table('m_group')->insert([
-                            'g_name' => $request->namaGroup
+                            'g_name' => strtoupper($request->namaGroup)
                         ]);
 
                         DB::commit();
@@ -205,7 +205,7 @@ class setHargaController extends Controller
                     $oldName = $getNama->g_name;
 
                     DB::table('m_group')->where('g_id', $id)->update([
-                        'g_name' => $request->egNama
+                        'g_name' => strtoupper($request->egNama)
                     ]);
 
                     DB::commit();

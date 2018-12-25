@@ -144,11 +144,14 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
-																<option value="" @if($member->m_jenis == "") selected @endif disabled>== Jenis Member ==</option>
-																<option value="1" @if($member->m_jenis == "1") selected @endif>Grosir 1</option>
-																<option value="2" @if($member->m_jenis == "2") selected @endif>Grosir 2</option>
-																<option value="3" @if($member->m_jenis == "3") selected @endif>Grosir 3</option>
-																<option value="4" @if($member->m_jenis == "4") selected @endif>Retail</option>
+																<option value="" @if($member->m_jenis == "") selected @endif disabled>== Jenis Member ==</option>																																	
+																@foreach($getJM as $data)
+																	@if($data->g_id == $member->m_jenis)
+																	<option value="{{ $data->g_id }}" selected >{{ $data->g_name }}</option>
+																	@else
+																	<option value="{{ $data->g_id }}">{{ $data->g_name }}</option>
+																	@endif
+																@endforeach
 															</select>
 														</div>
 													</div>

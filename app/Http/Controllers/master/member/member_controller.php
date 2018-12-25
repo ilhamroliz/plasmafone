@@ -206,7 +206,8 @@ class member_controller extends Controller
                     }
                 }
             }
-            return view('master.member.add');
+            $getJM = DB::table('m_group')->select('g_id', 'g_name')->get();
+            return view('master.member.add')->with(compact('getJM'));
         }
     }
 
@@ -280,6 +281,7 @@ class member_controller extends Controller
                                 'm_email' => $email,
                                 'm_address' => $data['address'],
                                 'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
+                                'm_jenis' => $request->tipe,
                                 'm_update' => Carbon::now('Asia/Jakarta')
                             ]);
 
@@ -322,10 +324,12 @@ class member_controller extends Controller
                     $month = $tgl[1];
                     $year = $tgl[0];
 
+                    $getJM = DB::table('m_group')->select('g_id', 'g_name')->get();
+
                     // dd($year);
                     DB::commit();
 
-                    return view('master.member.edit')->with(compact('member', 'day', 'month', 'year'));
+                    return view('master.member.edit')->with(compact('member', 'day', 'month', 'year', 'getJM'));
 
                 } else {
 

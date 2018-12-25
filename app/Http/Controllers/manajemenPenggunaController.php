@@ -24,75 +24,81 @@ use Carbon\Carbon;
 class manajemenPenggunaController extends Controller
 {
 
-    public function tambah_pengguna(){
+    public function tambah_pengguna()
+    {
         $getLevel = DB::table('m_level')
-                ->select('l_id', 'l_name')
-                ->get();
+            ->select('l_id', 'l_name')
+            ->get();
         $getOutlet = DB::table('m_company')
-                ->select('c_id', 'c_name')
-                ->get();
-        if(Plasmafone::checkAkses(42, 'insert') == true){
+            ->select('c_id', 'c_name')
+            ->get();
+        if (Plasmafone::checkAkses(42, 'insert') == true) {
             return view('pengaturan.manajemen_pengguna.tambah', compact('getLevel', 'getOutlet'));
-        }else{
+        } else {
             return view('errors.access_denied');
         }
     }
 
-    public function edit_pengguna($id){
+    public function edit_pengguna($id)
+    {
         $idm = Crypt::decrypt($id);
         $user = DB::table('d_mem')
-                        ->join('m_level', 'l_id', '=', 'm_level')
-                        ->join('m_company', 'c_id', '=', 'm_comp')
-                        ->select('d_mem.*', 'l_name', 'c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
-                        ->where('m_id', $idm)->get();
+            ->join('m_level', 'l_id', '=', 'm_level')
+            ->join('m_company', 'c_id', '=', 'm_comp')
+            ->select('d_mem.*', 'l_name', 'c_name', DB::raw('DATE_FORMAT(m_lastlogin, "%d/%m/%Y %h:%i") as m_lastlogin'), DB::raw('DATE_FORMAT(m_lastlogout, "%d/%m/%Y %h:%i") as m_lastlogout'))
+            ->where('m_id', $idm)->get();
         $getLevel = DB::table('m_level')
-                ->select('l_id', 'l_name')
-                ->get();
+            ->select('l_id', 'l_name')
+            ->get();
         $getOutlet = DB::table('m_company')
-                ->select('c_id', 'c_name')
-                ->get();
+            ->select('c_id', 'c_name')
+            ->get();
         $tgllahir = DB::table('d_mem')
-                ->select('m_birth')
-                ->where('m_id', $idm)->first();
+            ->select('m_birth')
+            ->where('m_id', $idm)->first();
         $date = [];
         $date = explode('-', $tgllahir->m_birth);
-        $day = $date[2]; $month = $date[1]; $year = $date[0];
-        
+        $day = $date[2];
+        $month = $date[1];
+        $year = $date[0];
+
         $id = Crypt::encrypt($idm);
         // dd($user);
-        if(Plasmafone::checkAkses(42, 'update') == true){
-            return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getLevel', 'getOutlet','id', 'year', 'month', 'day'));
-        }else{
+        if (Plasmafone::checkAkses(42, 'update') == true) {
+            return view('pengaturan.manajemen_pengguna.edit')->with(compact('user', 'getLevel', 'getOutlet', 'id', 'year', 'month', 'day'));
+        } else {
             return view('errors.access_denied');
         }
     }
 
-    public function ganti_pass($id){
+    public function ganti_pass($id)
+    {
         $idm = $id;
-        if(Plasmafone::checkAkses(42, 'update') == true){
+        if (Plasmafone::checkAkses(42, 'update') == true) {
             return view('pengaturan.manajemen_pengguna.pass')->with(compact('idm'));
-        }else{
+        } else {
             return view('errors.access_denied');
         }
     }
 
-    public function hapus_pengguna($id){
-        if(Plasmafone::checkAkses(42, 'delete') == true){
+    public function hapus_pengguna($id)
+    {
+        if (Plasmafone::checkAkses(42, 'delete') == true) {
             DB::beginTransaction();
             try {
                 $idm = Crypt::decrypt($id);
                 $cek = DB::table('d_mem')
-                        ->select('m_state')
-                        ->where('m_id', $idm)
-                        ->first();
+                    ->select('m_state')
+                    ->where('m_id', $idm)
+                    ->first();
                 // dd($idm);
                 $data = '';
-                if($cek->m_state == "ACTIVE"){
+                if ($cek->m_state == "ACTIVE") {
                     DB::table('d_mem')
                         ->where('m_id', $idm)
                         ->update(['m_state' => 'NONACTIVE']);
                     $data = 'NONACTIVE';
-                }else{
+                } else {
                     DB::table('d_mem')
                         ->where('m_id', $idm)
                         ->update(['m_state' => 'ACTIVE']);
@@ -100,22 +106,22 @@ class manajemenPenggunaController extends Controller
                 }
 
                 $getNama = DB::table('d_mem')
-                        ->select('m_name')
-                        ->where('m_id', $idm)
-                        ->first();
+                    ->select('m_name')
+                    ->where('m_id', $idm)
+                    ->first();
 
-                $log = 'Mengganti Status User '. $getNama->m_name .' = '.$data;
+                $log = 'Mengganti Status User ' . $getNama->m_name . ' = ' . $data;
 
                 DB::commit();
                 Plasmafone::logActivity($log);
-                return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Set Aktivasi User '.$idm.' berhasil tersimpan !!');
+                return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Set Aktivasi User ' . $idm . ' berhasil tersimpan !!');
             } catch (\Throwable $e) {
 
                 DB::rollback();
-                return redirect('/pengaturan/akses-pengguna')->with('flash_message_error', ''.$e.'');
-            } 
-        }else{
-            return view('errors.access_denied');       
+                return redirect('/pengaturan/akses-pengguna')->with('flash_message_error', '' . $e . '');
+            }
+        } else {
+            return view('errors.access_denied');
         }
     }
 
@@ -127,7 +133,7 @@ class manajemenPenggunaController extends Controller
 
         foreach ($cek as $x) {
             $temp = ((int)$x->id + 1);
-            $kode = sprintf("%07s",$temp);
+            $kode = sprintf("%07s", $temp);
         }
 
         $tempKode = 'MEM' . $kode;
@@ -140,7 +146,7 @@ class manajemenPenggunaController extends Controller
         $cek = DB::table('d_mem')
             ->where('m_username', '=', $user)
             ->get();
-        if (count($cek) > 0){
+        if (count($cek) > 0) {
             return response()->json([
                 'status' => 'gagal'
             ]);
@@ -171,7 +177,8 @@ class manajemenPenggunaController extends Controller
     }
 
 
-    public function simpan_pengguna(Request $request){
+    public function simpan_pengguna(Request $request)
+    {
         // dd($request);
         DB::beginTransaction();
         try {
@@ -183,11 +190,11 @@ class manajemenPenggunaController extends Controller
             $pass = $request->pass;
             $passconf = $request->passconf;
             $alamat = $request->alamat;
-            $tgllahir = $request->tahun.'-'.$request->bulan.'-'.$request->tanggal;
-            
+            $tgllahir = $request->tahun . '-' . $request->bulan . '-' . $request->tanggal;
+
             $cek = $this->cekUsername($request);
             $cek = $cek->getData('status')['status'];
-            if($cek == 'gagal'){
+            if ($cek == 'gagal') {
                 // return response()->json([
                 //     'status' => 'gagalUser'
                 // ]);
@@ -204,20 +211,20 @@ class manajemenPenggunaController extends Controller
             // $pass = Hash::make("secret_".$pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
-            
+
             if ($request->hasFile('imageUpload')) {
 
                 $image_tmp = Input::file('imageUpload');
                 $image_size = $image_tmp->getSize(); //getClientSize()
-                $maxsize    = '2097152';
+                $maxsize = '2097152';
 
                 if ($image_size < $maxsize) {
 
-                   if ($image_tmp->isValid()) {
+                    if ($image_tmp->isValid()) {
 
                         $extension = $image_tmp->getClientOriginalExtension();
-                        $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
-                        $image_path = 'img/user/'.$filename;
+                        $filename = date('YmdHms') . rand(111, 99999) . '.' . $extension;
+                        $image_path = 'img/user/' . $filename;
 
                         //Resize images
                         ini_set('memory_limit', '256M');
@@ -233,8 +240,8 @@ class manajemenPenggunaController extends Controller
                     //     'status' => 'gagalImg'
                     // ]);
                     return redirect()->back()->with('flash_message_error', 'Ukuran file terlalu besar !!');
-                }                
-            }else{
+                }
+            } else {
                 $imgPath = '';
             }
 
@@ -263,7 +270,7 @@ class manajemenPenggunaController extends Controller
                 ->get();
 
             $addAkses = [];
-            for ($i = 0; $i < count($akses); $i++){
+            for ($i = 0; $i < count($akses); $i++) {
                 $temp = [
                     'ma_mem' => $id,
                     'ma_access' => $akses[$i]->a_id
@@ -273,9 +280,9 @@ class manajemenPenggunaController extends Controller
             DB::table('d_mem_access')->insert($addAkses);
 
             /////////////////////////////////////////////
-            
+
             DB::commit();
-            Plasmafone::logActivity('Menambahkan User '.$nama);
+            Plasmafone::logActivity('Menambahkan User ' . $nama);
             // Session::flash('sukses', 'Data berhasil disimpan');
             // return redirect('manajemen-pengguna/pengguna');
             return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Data pengguna berhasil tersimpan !!');
@@ -286,7 +293,7 @@ class manajemenPenggunaController extends Controller
             DB::rollback();
             // Session::flash('gagal', 'Data gagal disimpan, cobalah sesaat lagi');
             // return redirect('manajemen-pengguna/pengguna');
-            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', ''.$e.'');
+            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', '' . $e . '');
             // return response()->json([
             //     'status' => 'gagal'
             // ]);
@@ -294,7 +301,8 @@ class manajemenPenggunaController extends Controller
 
     }
 
-    public function simpan_edit(Request $request){
+    public function simpan_edit(Request $request)
+    {
         DB::beginTransaction();
         try {
             $id = Crypt::decrypt($request->id);
@@ -305,7 +313,7 @@ class manajemenPenggunaController extends Controller
             // $pass = $request->pass;
             // $passconf = $request->passconf;
             $alamat = $request->alamat;
-            $tgllahir = $request->tahun.'-'.$request->bulan.'-'.$request->tanggal;
+            $tgllahir = $request->tahun . '-' . $request->bulan . '-' . $request->tanggal;
             
             // if ($pass != $passconf) {
             //     // return response()->json([
@@ -317,12 +325,12 @@ class manajemenPenggunaController extends Controller
             // $pass = Hash::make("secret_".$pass);
             $imgPath = null;
             $tgl = Carbon::now('Asia/Jakarta');
-            
+
             if ($request->hasFile('imageUpload')) {
 
                 $image_tmp = Input::file('imageUpload');
                 $image_size = $image_tmp->getSize(); //getClientSize()
-                $maxsize    = '2097152';
+                $maxsize = '2097152';
 
                 if ($image_size < $maxsize) {
 
@@ -332,7 +340,7 @@ class manajemenPenggunaController extends Controller
 
                         if ($namefile != "") {
 
-                            $path = 'img/user/'.$namefile;
+                            $path = 'img/user/' . $namefile;
 
                             if (File::exists($path)) {
                                 # code...
@@ -342,8 +350,8 @@ class manajemenPenggunaController extends Controller
                         }
 
                         $extension = $image_tmp->getClientOriginalExtension();
-                        $filename = date('YmdHms').rand(111, 99999).'.'.$extension;
-                        $image_path = 'img/user/'.$filename;
+                        $filename = date('YmdHms') . rand(111, 99999) . '.' . $extension;
+                        $image_path = 'img/user/' . $filename;
 
                         //Resize images
                         ini_set('memory_limit', '256M');
@@ -359,8 +367,8 @@ class manajemenPenggunaController extends Controller
                     //     'status' => 'gagalImg'
                     // ]);
                     return redirect()->back()->with('flash_message_error', 'Ukuran file terlalu besar !!');
-                }                
-            }else{
+                }
+            } else {
                 $namefile = $request->imageUpload;
             }
 
@@ -374,11 +382,11 @@ class manajemenPenggunaController extends Controller
                     'm_level' => $jabatan,
                     'm_birth' => $tgllahir,
                     'm_address' => $alamat,
-                    
+
                 ]);
-            
+
             DB::commit();
-            Plasmafone::logActivity('Edit Data User '.$nama);
+            Plasmafone::logActivity('Edit Data User ' . $nama);
             // Session::flash('sukses', 'Data berhasil disimpan');
             // return redirect('manajemen-pengguna/pengguna');
             return redirect('/pengaturan/akses-pengguna')->with('flash_message_success', 'Data pengguna berhasil diperbarui !!');
@@ -389,14 +397,15 @@ class manajemenPenggunaController extends Controller
             DB::rollback();
             // Session::flash('gagal', 'Data gagal disimpan, cobalah sesaat lagi');
             // return redirect('manajemen-pengguna/pengguna');
-            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', ''.$e.'');
+            return redirect('/pengaturan/kelola-pengguna/tambah')->with('flash_message_error', '' . $e . '');
             // return response()->json([
             //     'status' => 'gagal'
             // ]);
         }
     }
 
-    public function simpan_pass(Request $request){
+    public function simpan_pass(Request $request)
+    {
         // dd($request);
         DB::beginTransaction();
         try {
@@ -411,24 +420,24 @@ class manajemenPenggunaController extends Controller
                 ->first();
             // dd($cekPassL);
             $getNama = DB::table('d_mem')->select('m_name')->where('m_id', $idm)->first();
-            
-            if(sha1(md5('لا إله إلاّ الله') . $passL) == $cekPassL->m_password){
-                if($passB == $passC){
+
+            if (sha1(md5('لا إله إلاّ الله') . $passL) == $cekPassL->m_password) {
+                if ($passB == $passC) {
 
                     $codePass = sha1(md5('لا إله إلاّ الله') . $passB);
                     DB::table('d_mem')->where('m_id', $idm)->update(['m_password' => $codePass]);
                     DB::commit();
-                    $log = 'Mengganti Password User '.$getNama->m_name;
+                    $log = 'Mengganti Password User ' . $getNama->m_name;
                     Plasmafone::logActivity($log);
                     return response()->json([
                         'status' => 'sukses'
                     ]);
-                }else{
+                } else {
                     return response()->json([
                         'status' => 'gagalPassB'
                     ]);
                 }
-            }else{
+            } else {
                 return response()->json([
                     'status' => 'gagalPassL'
                 ]);

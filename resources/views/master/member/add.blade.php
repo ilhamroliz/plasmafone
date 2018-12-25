@@ -159,10 +159,9 @@
 														<div class="input-group">
 															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
 																<option value="" selected disabled>== Jenis Member ==</option>
-																<option value="1">Grosir 1</option>
-																<option value="2">Grosir 2</option>
-																<option value="3">Grosir 3</option>
-																<option value="4">Retail</option>
+																@foreach($getJM as $data)
+																	<option value="{{ $data->g_id }}">{{ $data->g_name }}</option>
+																@endforeach
 															</select>
 														</div>
 													</div>
