@@ -232,18 +232,30 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 														</tr>
 
 														<tr class="info">
+															<td><strong>Email</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_email"></td>
+														</tr>
+
+														<tr class="danger">
+															<td><strong>Jenis Member</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_jenis"></td>
+														</tr>
+
+														<tr class="warning">
 															<td><strong>Alamat</strong></td>
 															<td><strong>:</strong></td>
 															<td id="dt_address"></td>
 														</tr>
 
-														<tr class="danger">
+														<tr class="success">
 															<td><strong>Status</strong></td>
 															<td><strong>:</strong></td>
 															<td id="dt_isactive"></td>
 														</tr>
 
-														<tr class="warning">
+														<tr class="danger">
 															<td><strong>Dibuat</strong></td>
 															<td><strong>:</strong></td>
 															<td id="dt_created"></td>
@@ -524,6 +536,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#dt_name').text(response.data.data.m_name);
 					$('#dt_phone').text(response.data.data.m_telp);
 					$('#dt_address').text(response.data.data.m_address);
+					$('#dt_email').text(response.data.data.m_email);
+					$('#dt_jenis').text(response.data.jm);					
 
 					if(response.data.data.m_status == "AKTIF"){
 

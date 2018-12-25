@@ -92,7 +92,7 @@
 
 						<header>
 
-							<h2><strong>Master Master</strong></h2>				
+							<h2><strong>Master Member</strong></h2>				
 							
 						</header>
 
@@ -118,7 +118,7 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-user" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Outlet" style="text-transform: uppercase" />
+															<input type="text" class="form-control" id="name" name="name" v-model="form_data.name" placeholder="Masukkan Nama Member" style="text-transform: uppercase" />
 														</div>
 													</div>
 												</div>

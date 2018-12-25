@@ -107,10 +107,13 @@ class member_controller extends Controller
 
             $id = Crypt::decrypt($id);
             $member = member::where('m_nik', $id)->first();
+
+            $dataGroup = DB::table('m_group')->select('g_name')->where('g_id', $member->m_jenis)->first();
             // dd($member);
             return response()->json([
                 'status' => 'ok',
-                'data' => $member
+                'data' => $member,
+                'jm' => $dataGroup->g_name
             ]);
         }
     }
@@ -210,11 +213,6 @@ class member_controller extends Controller
             return view('master.member.add')->with(compact('getJM'));
         }
     }
-
-    // public function edit(Request $request)
-    // {
-
-    // }
 
     public function simpan_edit(Request $request, $id = null)
     {
