@@ -13,9 +13,9 @@
                 prefix: "",
                 suffix: "",
                 affixesStay: true,
-                thousands: ",",
-                decimal: ".",
-                precision: 2,
+                thousands: ".",
+                decimal: ",",
+                precision: 0,
                 allowZero: false,
                 allowNegative: false,
                 doubleClickSelection: true,
@@ -49,23 +49,49 @@
             });
         },
 
+        // unmasked: function () {
+        //     return this.map(function () {
+        //         var value = ($(this).val() || "0"),
+        //             isNegative = value.indexOf("-") !== -1,
+        //             decimalPart;
+        //         // get the last position of the array that is a number(coercion makes "" to be evaluated as false)
+        //         $(value.split(/\D/).reverse()).each(function (index, element) {
+        //             if (element) {
+        //                 decimalPart = element;
+        //                 return false;
+        //             }
+        //         });
+        //         value = value.replace(/\D/g, "");
+        //         value = value.replace(new RegExp(decimalPart + "$"), "." + decimalPart);
+        //         if (isNegative) {
+        //             value = "-" + value;
+        //         }
+        //         return parseFloat(value);
+        //     });
+        // },
+
         unmasked: function () {
             return this.map(function () {
                 var value = ($(this).val() || "0"),
                     isNegative = value.indexOf("-") !== -1,
                     decimalPart;
                 // get the last position of the array that is a number(coercion makes "" to be evaluated as false)
-                $(value.split(/\D/).reverse()).each(function (index, element) {
-                    if (element) {
-                        decimalPart = element;
-                        return false;
-                    }
-                });
+
+                var split = value.split(/\D/).reverse();
+                if (split.length > 1) {
+                    $(split).each(function (index, element) {
+                        if (element) {
+                            decimalPart = element;
+                            return false;
+                        }
+                    });
+                }
                 value = value.replace(/\D/g, "");
                 value = value.replace(new RegExp(decimalPart + "$"), "." + decimalPart);
                 if (isNegative) {
                     value = "-" + value;
                 }
+                console.log(value);
                 return parseFloat(value);
             });
         },

@@ -341,20 +341,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 @endsection
 
 @section('extra_script')
-	
-	<!-- PAGE RELATED PLUGIN(S) -->
-	<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Mengambil Data...');
-
-		var baseUrl = '{{ url('/') }}';
 
 		function getData(data){
 			$('#thItemId').val(data.id);
@@ -439,7 +430,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			axios.get(baseUrl+'/penjualan/set-harga/get-data-gp-non/'+id).then(response => {
 
 				$('#title_table').html('<h4 style="float: left"><strong>'+response.data.name+'</strong></h4>&nbsp;<a onclick="edit_group('+response.data.id+')"><i class="fa fa-pencil"></i></a>&nbsp;<a onclick="hapus_group('+response.data.id+')"><i class="fa fa-close"></i></a>');
-				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang" required><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" name="thHarga" placeholder="Harga Barang" required><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
+				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang" required><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" data-thousands="." data-decimal="," name="thHarga" placeholder="Harga Barang" required><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
 				$('#egNama').val(response.data.name);
 				$('#thGroupId').val(response.data.id);
 				$('#ehGroupNama').val(response.data.name);
@@ -452,7 +443,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						getData(data.item);
 					}
 				});
-				$("#thHarga").maskMoney({precision: 0});
+				$("#thHarga").maskMoney({
+					precision: 0
+				});
 			});
 
 			$('#overlay').fadeOut(200);
