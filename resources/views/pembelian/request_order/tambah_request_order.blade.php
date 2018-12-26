@@ -3,6 +3,11 @@
 @section('title', 'Request Order')
 
 @section('extra_style')
+<script src="{{ asset('template_asset/jquery/b.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('template_asset/jquery/b.min.js') }}" />
+<script src="{{ asset('template_asset/jquery/j.js') }}"></script>
+<script src="{{ asset('template_asset/sweetalert2/sweetalert2.min.css') }}"></script>
+
     <style type="text/css">
         
     </style>
@@ -88,8 +93,13 @@
 								<div class="form-group col-md-8">
                                         <label class="sr-only" for="namabarang">Nama Barang</label>
                                         <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
-                                        <input type="hidden" class="kodeItem">
+										
+										<div id="list_barang">
+											
+											</div>
+										
                                     </div>
+									{{csrf_field()}}
                                     <!-- <div class="form-group col-md-8">
 										<div class="input-group col-xs-10 col-lg-10" id="select_kelompok">
 												<kelompok :options="data_I_kelompok" @change="i_kelompok_change" v-model="form_data.i_kelompok">
@@ -98,7 +108,7 @@
                                     </div> -->
                                     <div class="form-group col-md-2">
                                         <label class="sr-only" for="kuantitas">QTY</label>
-                                        <input type="text" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%">
+                                        <input type="text" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <button class="btn btn-primary" onclick="tambah()">Tambah</button>
@@ -125,7 +135,7 @@
 								<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
-                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">Kirim Permintaan</button>
+                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">AJUKAN REQUEST ORDER</button>
 											</div>
 										</div>
                                     </div>
@@ -146,17 +156,20 @@
 @endsection
 
 @section('extra_script')
-
+<script src="{{ asset('template_asset/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('template_asset/sweetalert2/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/app.config.js') }}"></script>
+<script src="{{ asset('template_asset/jquery/jquery.autocomplete.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/bootstrap/bootstrap.min.js') }}"></script>
 
-	<script type="text/x-template" id="select2-template-kelompok">
-	  <select style="width:100%" name="i_kelompok" required id="item_kelompok" >
-	  	<option value="">CARI ITEM </option>
-	    <!-- <option v-for="option in options" :value="option.i_kelompok">@{{ option.i_kelompok }}</option> -->
-	  </select>
-	</script>
 
     <script type="text/javascript">
 		var requestDumy;
@@ -164,46 +177,37 @@
         $(document).ready(function () {
 			load_data();
 
-		$( "#namabarang" ).autocomplete({
-			source: '{{url('/pembelian/request-pembelian/getInput')}}',
-			minLength: 1,
-			select: function(event, data) {
-				tanam(data.list);
-				
-			}
-		});
-
-		function tanam(list){
-					console.log(list);
+			$('#namabarang').keyup(function(){
+				var query = $(this).val();
+				if(query != ''){
+					var _token = $('input[name="_token"]').val();
+					$.ajax({
+						url :'{{url('/pembelian/request-pembelian/getInput')}}',
+						method : "POST",
+						data :{
+							query : query,
+							_token : _token
+						},
+						success: function(data)
+						{
+							$('#list_barang').fadeIn();
+							$('#list_barang').html(data);
+						}
+					})
 				}
+			});
+
+			
+
+			$(document).on('click','li',function(){
+				$('#namabarang').val($(this).text());
+				$('#list_barang').fadeOut();
+			})
+
+			
 
 		})
 
-            
-
-            
-
-            
-// $('#tabs').tabs();
-		
-// clearData();
-						
-				
-
-		// function clearData(){
-		// 	$.ajax({
-		// 			url : '{{url('/pembelian/request-pembelian/clearData')}}',
-		// 			type: "GET",
-		// 			data: { 
-		// 			},
-		// 			dataType: "JSON",
-		// 			success: function(data)
-		// 			{
-		// 				load_data();
-		// 			},
-					
-		// 	}); 
-		// }
 
 		function hapusData(id){
 			$.ajax({
@@ -215,7 +219,8 @@
 				dataType: "JSON",
 				success: function(data)
 				{
-					$('#table-rencana').DataTable().fnDestroy();
+					// $('#table-rencana').DataTable().fnDestroy();
+					$('#table-rencana').DataTable().ajax.reload();
 				},
 				
 			}); 
@@ -233,14 +238,9 @@
                     } );
 					
 				}
-
-		// function reload_table_requestOrder(){
-		// 	requestDumy.ajax.reload(null, false);
-		
-		// 	};
 				
 		function getItem(){
-			$('#item_kelompok').empty(); 
+			$('#item_kelompok').empty();  
 		
 			$.ajax({
 						url : '{{url('/pembelian/request-pembelian/getBarang')}}',
@@ -263,6 +263,7 @@
 		}
 
         function tambah(){
+			
 			$.ajax({
 						url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
 						type: "GET",
@@ -274,13 +275,15 @@
 						dataType: "JSON",
 						success: function(data)
 						{
-							$('#table-rencana').DataTable().fnDestroy();
+							
+							
 						},
 						
 				}); 
+				alert();
 		}
-
-		
+// $('#table-rencana').DataTable().ajax.reload();
+		 
 		function editDumy(id){
 			var input = $('#i_nama'+id).val();
 			$.ajax({
@@ -294,7 +297,16 @@
 						dataType: "JSON",
 						success: function(data)
 						{
-							$('#table-rencana').DataTable().fnDestroy();
+							
+							Swal({
+									position: 'top-end',
+									type: 'danger',
+									title: 'Request Order Telah Di edit',
+									showConfirmButton: false,
+									timer: 7500,
+								});
+							
+							$('#table-rencana').DataTable().ajax.reload();
 							
 						},
 						
@@ -302,20 +314,43 @@
 		}
 
 		function simpanRequest(){
+			
 			$.ajax({
 				url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
-				type: "GET",
+				type: "get",
 				data: { 
 				},
 				dataType: "JSON",
 				success: function(data)
 				{
+					
+					if(data.status == 'gagal')
+					{
+						Swal({
+								position: 'top-end',
+								type: 'danger',
+								title: 'Request Order Gagal Di Ajukan',
+								showConfirmButton: false,
+								timer: 1500
+							});
+						// $('#table-rencana').DataTable().ajax.reload();
+					}else{
+						
+						$('#table-rencana').dataTable().ajax.reload();
+						Swal({
+								position: 'top-end',
+								type: 'danger',
+								title: 'Request Order Telah Di Ajukan',
+								showConfirmButton: false,
+								timer: 3500
+							});
+					}
 					// $('#table-rencana').DataTable().fnDestroy();
 					
 				},
 					
 			}); 
-			alert();
+			
 		}
 
         
