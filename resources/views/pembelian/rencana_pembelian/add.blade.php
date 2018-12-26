@@ -304,18 +304,18 @@
 														<td><strong>:</strong></td>
 														<td ><label id="dt_price"></label></td>
 													</tr>
-													<tr class="info">
+													<tr class="info" id="in_sup">
 														<td><strong>Suplier</strong></td>
 														<td><strong>:</strong></td>
 														<td >
 															<div class="form-group">
 																<select class="form-control" name="" id="dt_suplier" >
-																	<option selected="" value="00"></option>
+																	<!-- <option selected="" value="00"></option> -->
 																</select>
 															</div>
 								  						</td>
 													</tr>
-													<tr class="info">
+													<tr class="info" id="in_qty">
 														<td><strong>QTY APPROVE</strong></td>
 														<td><strong>:</strong></td>
 														<td >
@@ -332,7 +332,7 @@
 													</tr>
 													<tr hidden="">
 														<td><input type="text" id="pr_dateRequest"></td>
-														<td><input type="text"  ></td>
+														<td><input type="text" id="dt_comp" ></td>
 														<td ><input type="text"  ></label></td>
 													</tr>
 
@@ -472,6 +472,9 @@
 					$('#pr_itemPlan').val(data.data.i_id);
 					$('#pr_qtyReq').val(data.data.pr_dateReq);
 					$('#pr_dateRequest').val(data.data.pr_dateReq);
+                    $('#dt_comp').val(data.data.pr_compReq);
+                    
+
 					
 
 					$('#myModalLabel').text('FORM RENCANA PEMBELIAN');
@@ -484,6 +487,70 @@
             }); 
 
 			suplier();
+            
+        }
+
+        function getTolak(id){
+            
+            $.ajax({
+                url : '{{url('/pembelian/rencana-pembelian/getRequest_id')}}',
+                type: "GET",
+                data: { 
+					id : id,
+                },
+                dataType: "JSON",
+                success: function(data)
+                {
+					
+				// pr_idReq = data.data.pr_id;
+				// pr_itemPlan = data.data.i_id;
+				// pr_qtyReq = data.data.pr_qtyReq;
+				// pr_dateRequest = data.data.pr_dateReq;
+
+					if (data.data.i_img == "") {
+
+							$('img#dt_image').attr("src", "{{asset('img/image-not-found.png')}}");
+
+						}else{
+
+							$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
+
+						}
+					
+
+					$('#dt_kelompok').text(data.data.i_kelompok);
+					$('#dt_group').text(data.data.i_group);
+					$('#dt_subgroup').text(data.data.i_sub_group);
+					$('#dt_merk').text(data.data.i_merk);
+					$('#dt_specificcode').text(data.data.i_specificcode);
+					$('#dt_isactive').text(data.data.i_isactive);
+					$('#dt_code').text(data.data.i_code);
+					$('#dt_minstock').text(data.data.i_minstock);
+					$('#dt_price').text(data.data.i_price);
+					$('#dt_berat').text(data.data.i_berat);
+					$('#dt_nama').text(data.data.i_nama);
+
+					$('#pr_idReq').val(data.data.pr_id);
+					$('#pr_itemPlan').val(data.data.i_id);
+					$('#pr_qtyReq').val(data.data.pr_dateReq);
+					$('#pr_dateRequest').val(data.data.pr_dateReq);
+                    $('#dt_comp').val(data.data.pr_compReq);
+                    
+
+					
+
+					$('#myModalLabel').text('FORM RENCANA PEMBELIAN');
+					$('#myModal').modal('show');
+                    $('#btnTambah').hide();
+                    $('#btnTolak').show();
+                    $('#in_sup').hide();
+                    $('#in_qty').hide();
+                    $('#btnBatal').show();
+                },
+                
+            }); 
+
+			
             
         }
 
@@ -518,10 +585,13 @@
                 url : '{{url('/pembelian/rencana-pembelian/tambahRencana')}}',
                 type: "GET",
                 data: { 
-					pr_idReq :	$('#pr_idReq').val(),
-					pr_itemPlan :	$('#pr_itemPlan').val(),
-					pr_qtyReq :	$('#pr_qtyReq').val(),
-					pr_dateRequest : $('#pr_dateRequest').val(),
+					pr_idReq         :	$('#pr_idReq').val(),
+					pr_itemPlan      :	$('#pr_itemPlan').val(),
+					pr_qtyReq        :	$('#pr_qtyReq').val(),
+					pr_dateRequest   : $('#pr_dateRequest').val(),
+                    qty              : $('#dt_qtyApp').val(),
+                    supplier         : $('#dt_supplier').val(),
+                    comp             : $('#dt_comp').val(),
                 },
                 dataType: "JSON",
                 success: function(data)
@@ -551,17 +621,37 @@
             });  
         }
 
-        function tolak(){
+        function tolak(id){
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/tolakRequest')}}',
                 type: "GET",
                 data: { 
-                
+                    
+                    pr_idReq         :	$('#pr_idReq').val(),
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
-                    
+                    if(data.status == 'GAGAL'){
+						$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Upsss. data Gagal di Update",
+								color : "#A90329",
+								timeout: 5000,
+								icon : "fa fa-times bounce animated"
+							});
+					}else{
+						$('#overlay').fadeOut(200);
+
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data telah Di tolak...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+					}
                 },
                 
             });  

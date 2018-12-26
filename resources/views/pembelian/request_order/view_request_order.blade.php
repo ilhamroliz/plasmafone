@@ -264,8 +264,8 @@
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/request-pembelian/t') }}",
                 "fnCreatedRow": function (row, data, index) {
-			$('td', row).eq(0).html(index + 1);
-			},
+                    $('td', row).eq(0).html(index + 1);
+                    },
                 "columns":[
                     {"data": "pr_id"},
                     {"data": "c_name"},

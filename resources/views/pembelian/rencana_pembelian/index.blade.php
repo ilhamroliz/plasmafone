@@ -125,10 +125,11 @@
                                                width="100%">
                                             <thead>
                                             <tr>
+                                                
                                                 <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -143,7 +144,7 @@
                                                 <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -158,7 +159,7 @@
                                                 <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -173,7 +174,7 @@
                                                 <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -229,14 +230,14 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaSemua') }}",
-                "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
-                    },
-                "columns":[     
-                    {"data": "pr_supplier"},
-                    {"data": "pr_itemPlan"},
-                    {"data": "pr_qtyApp"},
-                    {"data": "aksi"}
+                // "fnCreatedRow": function (row, data, index) {
+                //     $('td', row).eq(0).html(index + 1);
+                //     },
+                "columns":[    
+                    
+                    {"data": "c_name"},
+                    {"data": "i_nama"},
+                    {"data": "pr_qtyApp"}
                 ],
                 "autoWidth" : true,
                 "language" : dataTableLanguage,
@@ -264,14 +265,15 @@
                     "processing": true,
                     "serverSide": true,
                     "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaMenunggu') }}",
-                    "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
-                    },
-                    "columns":[     
-                        {"data": "pr_supplier"},
-                        {"data": "pr_itemPlan"},
+                    // "fnCreatedRow": function (row, data, index) {
+                    // $('th', row).eq(0).html(index + 1);
+                    // },
+                    "columns":[  
+                        
+                        {"data": "c_name"},
+                        {"data": "i_nama"},
                         {"data": "pr_qtyApp"},
-                        {"data": "aksi"}
+                        // {"data": "aksi"}
                     ],
                     "autoWidth" : true,
                     "language" : dataTableLanguage,
@@ -300,14 +302,15 @@
                         "processing": true,
                         "serverSide": true,
                         "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaDitolak') }}",
-                        "fnCreatedRow": function (row, data, index) {
-                        $('td', row).eq(0).html(index + 1);
-                        },
+                        // "fnCreatedRow": function (row, data, index) {
+                        // $('td', row).eq(0).html(index + 1);
+                        // },
                         "columns":[     
-                            {"data": "pr_supplier"},
-                            {"data": "pr_itemPlan"},
+                            
+                            {"data": "c_name"},
+                            {"data": "i_nama"},
                             {"data": "pr_qtyApp"},
-                            {"data": "aksi"}
+                            // {"data": "aksi"}
                         ],
                         "autoWidth" : true,
                         "language" : dataTableLanguage,
@@ -335,14 +338,15 @@
                         "processing": true,
                         "serverSide": true,
                         "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaDisetujui') }}",
-                        "fnCreatedRow": function (row, data, index) {
-                        $('td', row).eq(0).html(index + 1);
-                        },
+                        // "fnCreatedRow": function (row, data, index) {
+                        // $('td', row).eq(0).html(index + 1);
+                        // },
                         "columns":[     
-                            {"data": "pr_supplier"},
-                            {"data": "pr_itemPlan"},
+                            
+                            {"data": "c_name"},
+                            {"data": "i_nama"},
                             {"data": "pr_qtyApp"},
-                            {"data": "aksi"}
+                            // {"data": "aksi"}
                         ],
                         "autoWidth" : true,
                         "language" : dataTableLanguage,

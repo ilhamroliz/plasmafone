@@ -27,22 +27,25 @@ class PembelianController extends Controller
     public function rencanaMenunggu(){
        
         $menunggu  = DB::table('d_purchase_plan')
-        ->select(
-            'd_purchase_plan.pr_idPlan',
-            'd_purchase_plan.pr_idReq',
-            'd_purchase_plan.pr_itemPlan',
-            'd_purchase_plan.pr_supplier',
-            'd_purchase_plan.pr_qtyReq',
-            'd_purchase_plan.pr_qtyApp',
-            'd_purchase_plan.pr_stsPlan',
-            'd_purchase_plan.pr_dateRequest',
-            'd_purchase_plan.pr_dateApp',
-        )
-        // ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
-        // ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
-        // ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-        ->where('d_purchase_plan.pr_stsPlan','WAITING')
-        ->get();
+                    ->select(
+                        'd_purchase_plan.pr_idPlan',
+                        'd_purchase_plan.pr_idReq',
+                        'd_purchase_plan.pr_itemPlan',
+                        'd_purchase_plan.pr_supplier',
+                        'd_purchase_plan.pr_qtyReq',
+                        'd_purchase_plan.pr_qtyApp',
+                        'd_purchase_plan.pr_stsPlan',
+                        'd_purchase_plan.pr_dateRequest',
+                        'd_purchase_plan.pr_dateApp',
+                        'd_purchase_plan.pr_comp',
+                        'd_item.i_nama',
+                        'm_company.c_name'
+                    )
+                    ->join('d_item','d_purchase_plan.pr_itemPlan','=','d_item.i_id')
+                    ->join('d_mem','d_purchase_plan.pr_comp','=','d_mem.m_id')
+                    ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                    ->where('d_purchase_plan.pr_stsPlan','WAITING')
+                    ->get();
         $menunggu = collect($menunggu);
 
         return DataTables::of($menunggu)
@@ -70,10 +73,13 @@ class PembelianController extends Controller
             'd_purchase_plan.pr_stsPlan',
             'd_purchase_plan.pr_dateRequest',
             'd_purchase_plan.pr_dateApp',
+            'd_purchase_plan.pr_comp',
+            'd_item.i_nama',
+            'm_company.c_name'
         )
-        // ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
-        // ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
-        // ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        ->join('d_item','d_purchase_plan.pr_itemPlan','=','d_item.i_id')
+        ->join('d_mem','d_purchase_plan.pr_comp','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
         ->where('d_purchase_plan.pr_stsPlan','DISETUJUI')
         ->get();
         $setujui = collect($setujui);
@@ -107,10 +113,13 @@ class PembelianController extends Controller
             'd_purchase_plan.pr_stsPlan',
             'd_purchase_plan.pr_dateRequest',
             'd_purchase_plan.pr_dateApp',
+            'd_purchase_plan.pr_comp',
+            'd_item.i_nama',
+            'm_company.c_name'
         )
-        // ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
-        // ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
-        // ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        ->join('d_item','d_purchase_plan.pr_itemPlan','=','d_item.i_id')
+        ->join('d_mem','d_purchase_plan.pr_comp','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
         ->where('d_purchase_plan.pr_stsPlan','DITOLAK')
         ->get();
         $ditolak = collect($ditolak);
@@ -145,28 +154,32 @@ class PembelianController extends Controller
             'd_purchase_plan.pr_stsPlan',
             'd_purchase_plan.pr_dateRequest',
             'd_purchase_plan.pr_dateApp',
+            'd_purchase_plan.pr_comp',
+            'd_item.i_nama',
+            'm_company.c_name'
         )
-        // ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
-        // ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
-        // ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        ->join('d_item','d_purchase_plan.pr_itemPlan','=','d_item.i_id')
+        ->join('d_mem','d_purchase_plan.pr_comp','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
         ->get();
         $semua = collect($semua);
 
         return DataTables::of($semua)
-            ->addColumn('input', function ($semua) {
+        ->addColumn('input', function ($semua) {
                 
-                    return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTy"  style="text-transform: uppercase" /></div>';
-                
-            })
-            ->addColumn('aksi', function ($semua) {
-                if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$semua->pr_idPlan. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$semua->pr_idPlan. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $semua->pr_idPlan. '\', \'' .$semua->pr_idPlan. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
-            ->rawColumns(['input','aksi'])
-            ->make(true); 
+            return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTy"  style="text-transform: uppercase" /></div>';
+        
+    })
+    ->addColumn('aksi', function ($semua) {
+        if (Plasma::checkAkses(47, 'update') == false) {
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$semua->pr_idPlan. '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+        } else {
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$semua->pr_idPlan. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $semua->pr_idPlan. '\', \'' .$semua->pr_idPlan. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+        }
+    })
+    ->rawColumns(['input','aksi'])
+    ->make(true);
+            
     }
 
     public function view_tambahRencana()
@@ -198,7 +211,7 @@ class PembelianController extends Controller
                 if (Plasma::checkAkses(47, 'update') == false) {
                     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana('.$tambahRencana->pr_id.')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit('. $tambahRencana->pr_id .')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive('. $tambahRencana->pr_id.','.$tambahRencana->pr_id.')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit('. $tambahRencana->pr_id .')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak('. $tambahRencana->pr_id .')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['input','aksi'])
@@ -215,12 +228,14 @@ class PembelianController extends Controller
 
     public function tambahRencana(Request $request)
     {
+        $comp = $request->input('comp');
         $pr_idReq = $request->input('pr_idReq');
         $pr_itemPlan = $request->input('pr_idReq');
         $pr_qtyReq = $request->input('pr_idReq');
         $pr_dateRequest = $request->input('pr_idReq');
-        $pr_supplier = $request->input('pr_supplier');
-        $pr_qtyApp = $request->input('pr_qtyApp');
+        $pr_supplier = $request->input('supplier');
+        $pr_qtyApp = $request->input('qty');
+        
         $pr_dateApp = Carbon::now('Asia/Jakarta');
         $pr_stsPlan = "WAITING";
 
@@ -232,20 +247,48 @@ class PembelianController extends Controller
             'pr_supplier'=>$pr_supplier, 
             'pr_qtyApp'=>$pr_qtyApp,
             'pr_stsPlan'=>$pr_stsPlan,
-            'pr_dateApp'=>$pr_dateApp
-
-
+            'pr_dateApp'=>$pr_dateApp,
+            'pr_comp'=>$comp
         );
 
         $insert = DB::table('d_purchase_plan')->insert($list);
         if(!$insert){
+            
             $data = "GAGAL";
             echo json_encode(array("status"=>$data));
         }else{
-            $data = "SUKSES";
-            echo json_encode(array("status"=>$data));
+            $reqOrder = DB::table('d_purchase_req')
+                ->where('d_purchase_req.pr_id',$pr_idReq)
+                ->update([
+                    'pr_stsReq'=>'DIPROSES'
+                ]);
+                if(!$reqOrder){
+                    $data = "GAGAL";
+                    echo json_encode(array("status"=>$data));
+                }else{
+                    $data = "SUKSES";
+                    echo json_encode(array("status"=>$data));
+                }
+            
         }
         
+    }
+
+    public function tolakRequest(Request $request)
+    {
+        $pr_idReq = $request->input('pr_idReq');
+        $reqOrder = DB::table('d_purchase_req')
+        ->where('d_purchase_req.pr_id',$pr_idReq)
+        ->update([
+            'pr_stsReq'=>'DITOLAK'
+        ]);
+        if($reqOrder){
+            $data = "SUKSES";
+            echo json_encode(array("status"=>$data));
+        }else{
+            $data = "GAGAL";
+            echo json_encode(array("status"=>$data));
+        } 
     }
 
     public function getRequest_id(Request $request)
@@ -1300,7 +1343,7 @@ class PembelianController extends Controller
         ->join('d_item','d_purchase_req.pr_itemReq','=','d_item.i_id')
         ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
         ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-        ->where('d_purchase_req.pr_stsReq','PROSES')
+        ->where('d_purchase_req.pr_stsReq','DIPROSES')
         ->get();
         $all = collect($all);
 
