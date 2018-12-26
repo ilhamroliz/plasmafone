@@ -287,11 +287,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 @section('extra_script')
 	
 	<!-- PAGE RELATED PLUGIN(S) -->
-	<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
 		var aktif, semua, inaktif;
@@ -299,8 +294,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
 		
-		var baseUrl = '{{ url('/') }}';
-
 		/* BASIC ;*/
 			var responsiveHelper_dt_basic = undefined;
 			var responsiveHelper_datatable_fixed_column = undefined;
