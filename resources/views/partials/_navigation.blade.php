@@ -173,7 +173,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					@if($sidebar['Penjualan Reguler'] == 'Y')
 					<li>
-						<a href="flot.html">Penjualan Reguler</a>
+						<a href="{{ url('penjualan-reguler') }}">Penjualan Reguler</a>
 					</li>
 					@endif
 

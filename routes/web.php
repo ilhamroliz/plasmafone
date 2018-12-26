@@ -521,6 +521,8 @@ Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@ge
 	// End Setting Application
 
 	// main route end
-	// Route::get('/coba-print', 'PembelianController@coba_print');
+	//=== Penjualan Reguler
+    Route::get('penjualan-reguler', 'PengaturanController@log_kegiatan');
+    //
 
 });
