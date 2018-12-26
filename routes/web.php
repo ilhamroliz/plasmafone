@@ -478,6 +478,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//== End Set Harga
 
+	//== Pemesanan Barang
+
+	Route::get('/penjualan/pemesanan-barang', 'penjualan\pemesananBarangController@index');
+
+	//== End Pemesanan Barang
+
 	///// End PENJUALAN
 
 	// Setting Application
