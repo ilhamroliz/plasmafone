@@ -159,7 +159,7 @@ class setHargaController extends Controller
                     DB::beginTransaction();
                     try {
 
-                        $harga = implode(explode(',', $request->thHarga));
+                        $harga = implode(explode('.', $request->thHarga));
                         DB::table('m_group_price')->insert([
                             'gp_group' => $request->thGroupId,
                             'gp_item' => $request->thItemId,
@@ -251,7 +251,7 @@ class setHargaController extends Controller
                         ->where('gp_group', $GroupId)
                         ->where('gp_item', $ItemId)
                         ->update([
-                            'gp_price' => implode(explode(',', $request->ehHarga))
+                            'gp_price' => implode(explode('.', $request->ehHarga))
                         ]);
 
                     DB::commit();

@@ -290,18 +290,18 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/request-pembelian/ddRequest', 'PembelianController@ddRequest');
 	Route::get('/pembelian/request-pembelian/clearData', 'PembelianController@clearData');
 	Route::get('/pembelian/request-pembelian/tambah', 'PembelianController@request_order_tambah');
-	Route::get('/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
 	Route::get('/pembelian/request-pembelian/getKelompok_item', 'PembelianController@getKelompok_item');
 	Route::get('/pembelian/request-pembelian/getBarang', 'PembelianController@getBarang');
 	Route::get('/pembelian/request-pembelian/getMerk', 'PembelianController@getMerk');
 	Route::get('/pembelian/request-pembelian/getOutlet', 'PembelianController@getOutlet');
-	Route::get('/pembelian/request-pembelian/simpanRequest', 'PembelianController@simpanRequest');
+	Route::get('/pembelian/request-pembelian/simpanRequest', 'PembelianController@verifikasi_simpanRequest');
 	Route::get('/pembelian/request-pembelian/addData', 'PembelianController@addData');
 	Route::get('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
 	Route::get('/pembelian/request-pembelian/editDumy', 'PembelianController@editDumyReq');
-	Route::get('/pembelian/request-pembelian/addDumyReq', 'PembelianController@addDumyReq');
-	Route::get('/pembelian/request-pembelian/getInput', 'PembelianController@getBarang_input');
-	Route::get('/pembelian/request-pembelian/hapusDumy', 'PembelianController@hapusDumy');
+	Route::get('/pembelian/request-pembelian/addDumyReq','PembelianController@addDumyReq');
+	Route::POST('/pembelian/request-pembelian/getInput','PembelianController@getBarang_input');
+	Route::get('/pembelian/request-pembelian/hapusDumy','PembelianController@hapusDumy');
+
 
 
 	// Route::match(['get', 'post'], '/pembelian/request-pembelian/tampilData', 'PembelianController@tampilData');
@@ -334,21 +334,27 @@ Route::group(['middleware' => 'auth'], function () {
 // 	Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
 // >>>>>>> ff228b106c4823a9d890f856329d75eab291d36e
 
-	Route::get('/pembelian/rencana-pembelian', 'PembelianController@rencana_pembelian');
-	Route::get('/pembelian/rencana-pembelian/tambah', 'PembelianController@addRencana');
-	Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
-	Route::get('/pembelian/rencana-pembelian/rencana-pembelian/edit', 'PembelianController@rencana_pembelian_edit');
-	Route::post('/pembelian/rencana-pembelian/rencana-pembelian/update', 'PembelianController@update_rencana_pembelian');
-	Route::post('/pembelian/rencana-pembelian/rencana-pembelian/edit-multiple', 'PembelianController@multiple_edit_rencana_pembelian');
+Route::get('/pembelian/rencana-pembelian', 'PembelianController@rencana_pembelian');
+Route::get('/pembelian/rencana-pembelian/tambah', 'PembelianController@addRencana');
+Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
+Route::get('/pembelian/rencana-pembelian/rencana-pembelian/edit', 'PembelianController@rencana_pembelian_edit');
+Route::post('/pembelian/rencana-pembelian/rencana-pembelian/update', 'PembelianController@update_rencana_pembelian');
+Route::post('/pembelian/rencana-pembelian/rencana-pembelian/edit-multiple', 'PembelianController@multiple_edit_rencana_pembelian');
 // tampil data
-	Route::get('/pembelian/rencana-pembelian/dtSemua', 'PembelianController@dtSemua');
-	Route::get('/pembelian/rencana-pembelian/dtMenunggu', 'PembelianController@dtMenunggu');
-	Route::get('/pembelian/rencana-pembelian/dtDisetujui', 'PembelianController@dtDisetujui');
-	Route::get('/pembelian/rencana-pembelian/dtDitolak', 'PembelianController@dtDitolak');
+Route::get('/pembelian/rencana-pembelian/rencanaMenunggu', 'PembelianController@rencanaMenunggu');
+Route::get('/pembelian/rencana-pembelian/rencanaDitolak', 'PembelianController@rencanaDitolak');
+Route::get('/pembelian/rencana-pembelian/rencanaDisetujui', 'PembelianController@rencanaDisetujui');
+Route::get('/pembelian/rencana-pembelian/rencanaSemua', 'PembelianController@rencanaSemua');
+Route::get('/pembelian/rencana-pembelian/view_tambahRencana', 'PembelianController@view_tambahRencana');
+Route::get('/pembelian/rencana-pembelian/itemSuplier', 'PembelianController@itemSuplier');
 // action data rencana pembelian
-	Route::get('/pembelian/rencana-pembelian/updateRequest', 'PembelianController@updateRequest');
-	Route::get('/pembelian/rencana-pembelian/updateRencana', 'PembelianController@updateRencana');
-	Route::get('/pembelian/rencana-pembelian/deleteRencana', 'PembelianController@deleteRencana');
+Route::get('/pembelian/rencana-pembelian/updateRequest', 'PembelianController@updateRequest');
+Route::get('/pembelian/rencana-pembelian/updateRencana', 'PembelianController@updateRencana');
+Route::get('/pembelian/rencana-pembelian/deleteRencana', 'PembelianController@deleteRencana');
+
+Route::get('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
+Route::get('/pembelian/rencana-pembelian/tolakRequest', 'PembelianController@tolakRequest');
+Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 
 
 
@@ -477,6 +483,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 	//== End Set Harga
+
+	//== Pemesanan Barang
+
+	Route::get('/penjualan/pemesanan-barang', 'penjualan\pemesananBarangController@index');
+
+	//== End Pemesanan Barang
 
 	///// End PENJUALAN
 

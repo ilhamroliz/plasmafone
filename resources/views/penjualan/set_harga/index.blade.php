@@ -368,13 +368,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('#group_member').dataTable({
 			"processing": true,
 			"serverSide": true,
+			"searching": true,
 			"ajax": "{{ route('penjualan.getdatagroup') }}",
 			"columns":[
 				{"data": "DT_RowIndex"},
 				{"data": "group_name"}
 			],
 			"autoWidth" : true,
-			"searching" : false,
 			"paging"	: false,
 			"info"	: false,
 			"preDrawCallback" : function() {
@@ -433,9 +433,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang" required><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" data-thousands="." data-decimal="," name="thHarga" placeholder="Harga Barang" required><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
 				$('#egNama').val(response.data.name);
 				$('#thGroupId').val(response.data.id);
-				$('#ehGroupNama').val(response.data.name);
-				$('#ehGroupId').val(response.data.id);
-
 				$( "#thItemNama" ).autocomplete({
 					source: baseUrl+'/penjualan/set-harga/cariItem',
 					minLength: 2,
@@ -446,8 +443,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$("#thHarga").maskMoney({
 					precision: 0
 				});
-			});
 
+				$('#egNama').val(response.data.name);				
+				$('#ehGroupNama').val(response.data.name);
+				$('#ehGroupId').val(response.data.id);
+
+			});
 			$('#overlay').fadeOut(200);
 		}
 
@@ -464,11 +465,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#ehItemId').val(id);
 			
 			axios.get(baseUrl+'/penjualan/set-harga/editHarga?id='+id+'&g='+$('#thGroupId').val()).then((response) => {
+				
 				$groupId = $('#thGroupId').val();
 				$('#ehGroupId').val($groupId);
 				$('#ehGroupNama').val(response.data.fields.g_name);
 				$('#ehItemNama').val(response.data.fields.i_nama);
 				$('#ehHarga').val(response.data.price).maskMoney({precision: 0});
+
 				$('#ehModal').modal('show');
 			});
 		}
