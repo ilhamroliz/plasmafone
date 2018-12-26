@@ -141,9 +141,9 @@
                                                 <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" >Qty</th>
                                                 <th data-hide="phone,tablet" width="15%">Status</th>
-                                                <th data-hide="phone,tablet" >Jml</th>
+                                                <!-- <th data-hide="phone,tablet" >Jml</th>
 
-                                                <th data-hide="phone,tablet" >Aksi</th>
+                                                <th data-hide="phone,tablet" >Aksi</th> -->
 
                                             </tr>
                                             </thead>
@@ -187,6 +187,7 @@
 	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+    
 
 	<script type="text/javascript">
 		var menunggu, diproses, semua,inaktif;
@@ -196,16 +197,6 @@
 		
 		var baseUrl = '{{ url('/') }}';
 
-		/* BASIC ;*/
-			var responsiveHelper_dt_basic = undefined;
-			var responsiveHelper_datatable_fixed_column = undefined;
-			var responsiveHelper_datatable_col_reorder = undefined;
-			var responsiveHelper_datatable_tabletools = undefined;
-			
-			var breakpointDefinition = {
-				tablet : 1024,
-				phone : 480
-			};
 
      $(document).ready(function(){
 
@@ -233,14 +224,17 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/request-pembelian/a') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
                 "columns":[
                     {"data": "pr_id"},
                     {"data": "c_name"},
                     {"data": "i_nama"},
                     {"data": "pr_qtyReq"},
                     {"data": "pr_stsReq"},
-                    {"data": "input"},
-                    {"data": "aksi"}
+                    // {"data": "input"},
+                    // {"data": "aksi"}
                 ],
                 "autoWidth" : true,
                 "language" : dataTableLanguage,
@@ -269,6 +263,9 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/request-pembelian/t') }}",
+                "fnCreatedRow": function (row, data, index) {
+			$('td', row).eq(0).html(index + 1);
+			},
                 "columns":[
                     {"data": "pr_id"},
                     {"data": "c_name"},
