@@ -321,7 +321,7 @@ class PembelianController extends Controller
                 'm_company.c_id',
                 'm_company.c_name',
                 'm_company.c_address',
-                'm_company.c_tlp',
+                'm_company.c_tlp'
             )
 
             ->join('d_mem', 'd_purchase_req.pr_compReq', '=', 'd_mem.m_id')
@@ -466,7 +466,7 @@ class PembelianController extends Controller
                 'd_purchase_confirm.pr_stsConf',
                 'd_purchase_confirm.pr_dateApp',
                 'd_item.i_nama',
-                'd_supplier.s_company',
+                'd_supplier.s_company'
             )
             ->join('d_mem', 'd_purchase_confirm.pr_comp', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
@@ -506,7 +506,7 @@ class PembelianController extends Controller
                 'd_purchase_confirm.pr_stsConf',
                 'd_purchase_confirm.pr_dateApp',
                 'd_item.i_nama',
-                'd_supplier.s_company',
+                'd_supplier.s_company'
             )
             ->join('d_mem', 'd_purchase_confirm.pr_comp', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
@@ -546,7 +546,7 @@ class PembelianController extends Controller
                 'd_purchase_confirm.pr_stsConf',
                 'd_purchase_confirm.pr_dateApp',
                 'd_item.i_nama',
-                'd_supplier.s_company',
+                'd_supplier.s_company'
             )
             ->join('d_mem', 'd_purchase_confirm.pr_comp', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
@@ -649,7 +649,7 @@ class PembelianController extends Controller
                 'm_company.c_tlp',
                 'd_supplier.s_id',
                 'd_supplier.s_company',
-                'd_supplier.s_phone',
+                'd_supplier.s_phone'
 
             )
 

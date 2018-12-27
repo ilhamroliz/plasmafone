@@ -61,7 +61,7 @@ class setHargaController extends Controller
 
     public function get_data_group()
     {
-        $group = DB::table('m_group')->get();
+        $group = DB::table('m_group')->orderBy('g_name', 'asc')->get();
         $group = collect($group);
 
         return DataTables::of($group)
