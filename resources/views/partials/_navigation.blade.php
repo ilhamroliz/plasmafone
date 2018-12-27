@@ -172,7 +172,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Penjualan Reguler'] == 'Y')
-					<li>
+					<li class="{{ (Request::is('penjualan-reguler') || Request::is('penjualan-reguler/*')) ? 'active' : '' }}">
 						<a href="{{ url('penjualan-reguler') }}">Penjualan Reguler</a>
 					</li>
 					@endif
