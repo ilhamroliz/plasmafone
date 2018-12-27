@@ -421,6 +421,7 @@
 
 
         function getPlan_id(id){
+
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/getPlan_id')}}',
                 type: "GET",
@@ -430,7 +431,9 @@
                 dataType: "JSON",
                 success: function(data) 
                 {
-					idPlan = data.data.pr_idPlan;
+					pr_idPlan = data.data.pr_idPlan;
+					i_item = data.data.i_id;
+					pr_comp = data.data.pr_comp;
 					supplier = data.data.s_id;
 
 					if (data.data.i_img == "") {
@@ -486,7 +489,7 @@
         }
 
         function getTolak(id){
-            
+           
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/getPlan_id')}}',
                 type: "GET",
@@ -496,6 +499,9 @@
                 dataType: "JSON",
                 success: function(data) 
                 {
+					pr_idPlan = data.data.pr_idPlan;
+					i_item = data.data.i_id;
+					pr_comp = data.data.pr_comp;
 					supplier = data.data.s_id;
 
 					if (data.data.i_img == "") {
@@ -546,7 +552,6 @@
                 
             }); 
 
-			
             
         }
 
@@ -575,29 +580,22 @@
         
         function setuju(){
             $.ajax({
-                url : '{{url('/pembelian/rencana-pembelian/tambahRencana')}}',
+                url : '{{url('/pembelian/konfirmasi-pembelian/confirmSetuju')}}',
                 type: "GET",
                 data: { 
-					pr_idConf
-					pr_idPlan		: $('').val(),
-					pr_supplier
-					pr_item
-					pr_price
-					pr_qtyApp
-					pr_stsConf
-					pr_dateApp
-					pr_comp
-					pr_idReq         :	$('#pr_idReq').val(),
-					pr_itemPlan      :	$('#pr_itemPlan').val(),
-					pr_qtyReq        :	$('#pr_qt').val(),
-					pr_dateRequest   : $('#pr_dateRequest').val(),
-                    qty              : $('#dt_qtyApp').val(),
-                    supplier         : $('#dt_supplier').val(),
-                    comp             : $('#dt_comp').val(),
+					pr_idPlan 		: pr_idPlan,
+					pr_item 		: i_item,
+					pr_comp 		: pr_comp,
+					pr_supplier		: $('#dt_supplier').val(),
+					pr_price		: $('#dt_harga').val(),
+					pr_qtyApp		: $('#dt_qty').val(),
+					pr_stsConf		: "CONFIRM",
+					
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
+					// alert();
                     if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
 							$.smallBox({
@@ -623,22 +621,29 @@
             });  
         }
 
-        function tolak(id){
+        function tolak(){
             $.ajax({
-                url : '{{url('/pembelian/rencana-pembelian/tolakRequest')}}',
+                url : '{{url('/pembelian/konfirmasi-pembelian/confirmTolak')}}',
                 type: "GET",
                 data: { 
-                    
-                    pr_idReq         :	$('#pr_idReq').val(),
+					pr_idPlan 		: pr_idPlan,
+					pr_item 		: i_item,
+					pr_comp 		: pr_comp,
+					pr_supplier		: $('#dt_supplier').val(),
+					pr_price		: $('#dt_harga').val(),
+					pr_qtyApp		: $('#dt_qty').val(),
+					pr_stsConf		: "CONFIRM",
+					
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
+					// alert();
                     if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
 							$.smallBox({
 								title : "Gagal",
-								content : "Upsss. data Gagal di Update",
+								content : "Upsss. data Gagal di tambahkan",
 								color : "#A90329",
 								timeout: 5000,
 								icon : "fa fa-times bounce animated"
@@ -648,7 +653,7 @@
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data telah Di tolak...!',
+								content : 'Data telah ditambahkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"

@@ -472,7 +472,7 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
-            ->where('d_purchase_confirm.pr_stsConf', 'APPROVED')
+            ->where('d_purchase_confirm.pr_stsConf', 'CONFIRM')
             ->get();
         $confirmOrder = collect($confirmOrder);
 
@@ -741,6 +741,80 @@ class PembelianController extends Controller
 
         echo json_encode($data);
     }
+
+    public function confirmSetuju(Request $request)
+    {
+        $pr_idPlan		= $request->input('pr_idPlan');
+        $pr_supplier	= $request->input('pr_supplier');	
+        $pr_item		= $request->input('pr_item');
+        $pr_price		= $request->input('pr_price');
+        $pr_qtyApp		= $request->input('pr_qtyApp');
+        $pr_stsConf		= $request->input('pr_stsConf');
+        $pr_comp		= $request->input('pr_comp');
+        $pr_dateApp     =  Carbon::now('Asia/Jakarta');
+
+        $list = array([
+            'pr_idPlan'     =>$pr_idPlan,
+            'pr_supplier'   =>$pr_supplier,
+            'pr_item'       =>$pr_item,
+            'pr_price'      =>$pr_price,
+            'pr_qtyApp'     =>$pr_qtyApp,
+            'pr_stsConf'    =>$pr_stsConf,
+            'pr_dateApp'    =>$pr_dateApp,
+            'pr_comp'       =>$pr_comp
+            ]);
+
+            $insert = DB::table('d_purchase_confirm')->insert($list);
+            if (!$insert) {
+    
+                $data = "GAGAL";
+                echo json_encode(array("status" => $data));
+            } else {
+                
+                $confOrder = DB::table('d_purchase_plan')
+                    ->where('d_purchase_plan.pr_idPlan', $pr_idPlan)
+                    ->update([
+                        'pr_stsPlan' => 'DISETUJUI',
+                        'pr_qtyApp' => $pr_qtyApp
+                    ]);
+                if (!$confOrder) {
+                    $data = "GAGAL";
+                    echo json_encode(array("status" => $data));
+                } else {
+                    $data = "SUKSES";
+                    echo json_encode(array("status" => $data));
+                }
+    
+            }
+    }
+
+    public function confirmTolak(Request $request)
+    {
+        $pr_idPlan		= $request->input('pr_idPlan');
+        $pr_supplier	= $request->input('pr_supplier');	
+        $pr_item		= $request->input('pr_item');
+        $pr_price		= $request->input('pr_price');
+        $pr_qtyApp		= $request->input('pr_qtyApp');
+        $pr_stsConf		= $request->input('pr_stsConf');
+        $pr_comp		= $request->input('pr_comp');
+        $pr_dateApp     =  Carbon::now('Asia/Jakarta');
+
+        $confOrder = DB::table('d_purchase_plan')
+                    ->where('d_purchase_plan.pr_idPlan', $pr_idPlan)
+                    ->update([
+                        'pr_stsPlan' => 'DITOLAK',
+                        'pr_qtyApp' => $pr_qtyApp
+                    ]);
+                if (!$confOrder) {
+                    $data = "GAGAL";
+                    echo json_encode(array("status" => $data));
+                } else {
+                    $data = "SUKSES";
+                    echo json_encode(array("status" => $data));
+                }
+    }
+
+
     
 
     // end konfirm order
