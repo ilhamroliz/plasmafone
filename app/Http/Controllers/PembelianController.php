@@ -608,7 +608,7 @@ class PembelianController extends Controller
                 if (Plasma::checkAkses(47, 'update') == false) {
                     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="test(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['input', 'aksi'])
@@ -668,7 +668,7 @@ class PembelianController extends Controller
             $pr_supplier = $value->pr_supplier;
             $pr_qtyApp = $value->pr_qtyApp;
             $pr_dateApp = $value->pr_dateApp;
-            $pr_dateReq = $value->pr_dateReq;
+            $pr_dateRequest = $value->pr_dateRequest;
             $pr_stsPlan = $value->pr_stsPlan;
             $pr_comp = $value->pr_comp;
             $i_id = $value->i_id;
@@ -692,11 +692,12 @@ class PembelianController extends Controller
             $s_phone = $value->s_phone;
         }
 
-        $item = array(
+        $data = array(
             'pr_idPlan' => $pr_idPlan,
             "pr_comp" => $pr_comp,
             "pr_supplier" => $pr_supplier,
-            "pr_itemReq" => $pr_itemReq,
+            "pr_itemPlan" => $pr_itemPlan,
+            "pr_qtyApp" => $pr_qtyApp,
             "i_id" => $i_id,
             "i_kelompok" => $i_kelompok,
             "i_group" => $i_group,
@@ -715,10 +716,10 @@ class PembelianController extends Controller
             "c_tlp" => $c_tlp,
             "s_id" => $s_id,
             "s_company" => $s_company,
-            "s_phone" => $s_phone,
+            "s_phone" => $s_phone
         );
 
-        echo json_encode($item);
+        echo json_encode(array("data"=>$data));
     
     }
 
@@ -727,6 +728,17 @@ class PembelianController extends Controller
         $data = DB::table('d_supplier')
                 ->select('d_supplier.*')
                 ->get();
+        echo json_encode($data);
+    }
+
+    public function getTelp(Request $request)
+    {
+        $id = $request->input('s_id');
+        $data = DB::table('d_supplier')
+            ->select('d_supplier.s_phone')
+            ->where('d_supplier.s_id',$id)
+            ->get();
+
         echo json_encode($data);
     }
     

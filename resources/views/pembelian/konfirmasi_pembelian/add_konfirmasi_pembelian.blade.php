@@ -237,25 +237,25 @@
                                                     <section>
                                                         <label class="label">Nama Item</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" id="dt_item" placeholder="">
+                                                            <input type="text" id="dt_item" placeholder="" disabled="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <section>
                                                         <label class="label">Kelompok</label>
                                                         <label class="input"> <i class="icon-append fa fa-envelope-o"></i>
-                                                            <input type="text" id="dt_kelompok" placeholder="">
+                                                            <input type="text" id="dt_kelompok" placeholder="" disabled="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <section>
                                                         <label class="label">Merk</label>
                                                         <label class="input"> <i class="icon-append fa fa-lock"></i>
-                                                            <input type="text" id="dt_merk" placeholder="">
+                                                            <input type="text" id="dt_merk" placeholder="" disabled="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <section>
                                                         <label class="label">Spesifik Kode</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" id="dt_code" placeholder="">
+                                                            <input type="text" id="dt_code" placeholder="" disabled="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <div class="row">
@@ -292,16 +292,16 @@
                                                     <section class="col col-6">
                                                             <label class="label">Supplier</label>
                                                             <label class="select">
-                                                                <select id="dt_supplier" onchange="">
-                                                                    <option value="0" selected="" disabled="">Pilih Supplier</option>
+                                                                <select id="dt_supplier" onchange="getTelp()">
+                                                                    <option value="0" disabled="">Pilih Supplier</option>
                                                                 </select> <i></i> </label>
                                                         </section>
-                                                        <section class="col col-6">
+                                                        <!-- <section class="col col-6">
                                                             <label class="label">No Telepon</label>
                                                             <label class="input">
-                                                                <input type="text" name="telepon" placeholder="" id="dt_telepon">
+                                                                <input type="text" name="telepon" placeholder="" id="dt_telepon" disabled="">
                                                             </label>
-                                                        </section>
+                                                        </section> -->
                                                     </div>
                                                     
                                                 </fieldset>
@@ -403,6 +403,22 @@
             $('#detailModal').modal('hide');
         }
 
+		function getTelp(){
+			$.ajax({
+				url : '{{url('/pembelian/konfirmasi-pembelian/getTelp')}}',
+				type: "GET",
+				data: { 
+					"s_id" : $('dt_supplier').val(),
+				},
+				dataType: "JSON",
+				success: function(data)
+					{	
+						$('#dt_telepon').val("");
+						$('#dt_telepon').val(data.data.s_phone);
+					},
+			});
+		}
+
 
         function getPlan_id(id){
             $.ajax({
@@ -412,8 +428,9 @@
 					id : id,
                 },
                 dataType: "JSON",
-                success: function(data)
+                success: function(data) 
                 {
+					idPlan = data.data.pr_idPlan;
 					supplier = data.data.s_id;
 
 					if (data.data.i_img == "") {
@@ -431,6 +448,7 @@
 					$('#dt_code').val(data.data.i_specificcode);
 					$('#dt_harga').val(data.data.i_price);
 					$('#dt_qty').val(data.data.pr_qtyApp);
+					$('#dt_telepon').val(data.data.s_phone);
 
 					$.ajax({
 						url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
@@ -470,59 +488,60 @@
         function getTolak(id){
             
             $.ajax({
-                url : '{{url('/pembelian/rencana-pembelian/getRequest_id')}}',
+                url : '{{url('/pembelian/konfirmasi-pembelian/getPlan_id')}}',
                 type: "GET",
                 data: { 
 					id : id,
                 },
                 dataType: "JSON",
-                success: function(data)
+                success: function(data) 
                 {
-					
-				// pr_idReq = data.data.pr_id;
-				// pr_itemPlan = data.data.i_id;
-				// pr_qtyReq = data.data.pr_qtyReq;
-				// pr_dateRequest = data.data.pr_dateReq;
+					supplier = data.data.s_id;
 
 					if (data.data.i_img == "") {
 
-							$('img#dt_image').attr("src", "{{asset('img/image-not-found.png')}}");
+						$('img#dt_image').attr("src", "{{asset('img/image-not-found.png')}}");
 
-						}else{
+					}else{
 
-							$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
+						$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
 
-						}
+					}
+					$('#dt_item').val(data.data.i_nama);
+					$('#dt_merk').val(data.data.i_merk);
+					$('#dt_kelompok').val(data.data.i_kelompok);
+					$('#dt_code').val(data.data.i_specificcode);
+					$('#dt_harga').val(data.data.i_price);
+					$('#dt_qty').val(data.data.pr_qtyApp);
+					$('#dt_telepon').val(data.data.s_phone);
+
+					$.ajax({
+						url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
+						type: "GET",
+						data: { 
+						},
+						dataType: "JSON",
+						success: function(data)
+                          {
+                            $('#dt_supplier').empty(); 
+                            row = "<option value='0'>Pilih Supplier</option>";
+                            $(row).appendTo("#dt_supplier");
+                            $.each(data, function(k, v) {
+                              if (v.s_id == supplier) {
+                                row = "<option selected='' value='"+v.s_id+"'>"+v.s_company+"</option>";
+                              }else{
+                                row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
+                              }
+                              $(row).appendTo("#dt_supplier");
+                            });
+                          },
+					});
 					
-
-					$('#dt_kelompok').text(data.data.i_kelompok);
-					$('#dt_group').text(data.data.i_group);
-					$('#dt_subgroup').text(data.data.i_sub_group);
-					$('#dt_merk').text(data.data.i_merk);
-					$('#dt_specificcode').text(data.data.i_specificcode);
-					$('#dt_isactive').text(data.data.i_isactive);
-					$('#dt_code').text(data.data.i_code);
-					$('#dt_minstock').text(data.data.i_minstock);
-					$('#dt_price').text(data.data.i_price);
-					$('#dt_berat').text(data.data.i_berat);
-					$('#dt_nama').text(data.data.i_nama);
-
-					$('#pr_idReq').val(data.data.pr_id);
-					$('#pr_itemPlan').val(data.data.i_id);
-					$('#pr_qt').val(data.data.pr_qtyReq);
-					$('#pr_dateRequest').val(data.data.pr_dateReq);
-                    $('#dt_comp').val(data.data.pr_compReq);
-                    
-
-					
-
-					$('#myModalLabel').text('FORM RENCANA PEMBELIAN');
-					$('#myModal').modal('show');
-                    $('#btnTambah').hide();
-                    $('#btnTolak').show();
-                    $('#in_sup').hide();
-                    $('#in_qty').hide();
-                    $('#btnBatal').show();
+					$('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
+					$('#detailModal').modal('show');
+                    $('#btn_disetujui').hide();
+                    $('#btn_ditutup').show();
+                    $('#btn_ditolak').show();
                 },
                 
             }); 
@@ -554,11 +573,20 @@
 		}
 
         
-        function tambah(){
+        function setuju(){
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/tambahRencana')}}',
                 type: "GET",
                 data: { 
+					pr_idConf
+					pr_idPlan		: $('').val(),
+					pr_supplier
+					pr_item
+					pr_price
+					pr_qtyApp
+					pr_stsConf
+					pr_dateApp
+					pr_comp
 					pr_idReq         :	$('#pr_idReq').val(),
 					pr_itemPlan      :	$('#pr_itemPlan').val(),
 					pr_qtyReq        :	$('#pr_qt').val(),
