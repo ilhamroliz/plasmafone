@@ -279,10 +279,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			setTimeout(function () {
 
-				proses = $('#dt_proses').dataTable({
+				proses = $('#dt_proses').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ route('member.getdataproses') }}",
+					"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
 					"columns":[
 						{"data": "m_name"},
 						{"data": "i_nota"},
@@ -296,7 +296,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					"preDrawCallback" : function() {
 						// Initialize the responsive datatables helper once.
 						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_proses'), breakpointDefinition);
 						}
 					},
 					"rowCallback" : function(nRow) {
@@ -311,10 +311,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			setTimeout(function () {
 
-				done = $('#dt_selesai').dataTable({
+				done = $('#dt_selesai').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ route('member.getdatadone') }}",
+					"ajax": "{{ url('/penjualan/pemesanan-barang/getdatadone') }}",
 					"columns":[
 						{"data": "m_name"},
 						{"data": "i_nota"},
@@ -328,7 +328,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					"preDrawCallback" : function() {
 						// Initialize the responsive datatables helper once.
 						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_done'), breakpointDefinition);
 						}
 					},
 					"rowCallback" : function(nRow) {
@@ -343,10 +343,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			setTimeout(function () {
 
-				cancel = $('#dt_batal').dataTable({
+				cancel = $('#dt_batal').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ route('member.getdatacancel') }}",
+					"ajax": "{{ url('/penjualan/pemesanan-barang/getdatacancel') }}",
 					"columns":[
 						{"data": "m_name"},
 						{"data": "i_nota"},
@@ -360,7 +360,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					"preDrawCallback" : function() {
 						// Initialize the responsive datatables helper once.
 						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_cancel'), breakpointDefinition);
 						}
 					},
 					"rowCallback" : function(nRow) {

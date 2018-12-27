@@ -298,9 +298,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/request-pembelian/addData', 'PembelianController@addData');
 	Route::get('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
 	Route::get('/pembelian/request-pembelian/editDumy', 'PembelianController@editDumyReq');
-	Route::get('/pembelian/request-pembelian/addDumyReq','PembelianController@addDumyReq');
-	Route::POST('/pembelian/request-pembelian/getInput','PembelianController@getBarang_input');
-	Route::get('/pembelian/request-pembelian/hapusDumy','PembelianController@hapusDumy');
+	Route::get('/pembelian/request-pembelian/addDumyReq', 'PembelianController@addDumyReq');
+	Route::POST('/pembelian/request-pembelian/getInput', 'PembelianController@getBarang_input');
+	Route::get('/pembelian/request-pembelian/hapusDumy', 'PembelianController@hapusDumy');
 
 
 
@@ -334,27 +334,27 @@ Route::group(['middleware' => 'auth'], function () {
 // 	Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
 // >>>>>>> ff228b106c4823a9d890f856329d75eab291d36e
 
-Route::get('/pembelian/rencana-pembelian', 'PembelianController@rencana_pembelian');
-Route::get('/pembelian/rencana-pembelian/tambah', 'PembelianController@addRencana');
-Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
-Route::get('/pembelian/rencana-pembelian/rencana-pembelian/edit', 'PembelianController@rencana_pembelian_edit');
-Route::post('/pembelian/rencana-pembelian/rencana-pembelian/update', 'PembelianController@update_rencana_pembelian');
-Route::post('/pembelian/rencana-pembelian/rencana-pembelian/edit-multiple', 'PembelianController@multiple_edit_rencana_pembelian');
+	Route::get('/pembelian/rencana-pembelian', 'PembelianController@rencana_pembelian');
+	Route::get('/pembelian/rencana-pembelian/tambah', 'PembelianController@addRencana');
+	Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
+	Route::get('/pembelian/rencana-pembelian/rencana-pembelian/edit', 'PembelianController@rencana_pembelian_edit');
+	Route::post('/pembelian/rencana-pembelian/rencana-pembelian/update', 'PembelianController@update_rencana_pembelian');
+	Route::post('/pembelian/rencana-pembelian/rencana-pembelian/edit-multiple', 'PembelianController@multiple_edit_rencana_pembelian');
 // tampil data
-Route::get('/pembelian/rencana-pembelian/rencanaMenunggu', 'PembelianController@rencanaMenunggu');
-Route::get('/pembelian/rencana-pembelian/rencanaDitolak', 'PembelianController@rencanaDitolak');
-Route::get('/pembelian/rencana-pembelian/rencanaDisetujui', 'PembelianController@rencanaDisetujui');
-Route::get('/pembelian/rencana-pembelian/rencanaSemua', 'PembelianController@rencanaSemua');
-Route::get('/pembelian/rencana-pembelian/view_tambahRencana', 'PembelianController@view_tambahRencana');
-Route::get('/pembelian/rencana-pembelian/itemSuplier', 'PembelianController@itemSuplier');
+	Route::get('/pembelian/rencana-pembelian/rencanaMenunggu', 'PembelianController@rencanaMenunggu');
+	Route::get('/pembelian/rencana-pembelian/rencanaDitolak', 'PembelianController@rencanaDitolak');
+	Route::get('/pembelian/rencana-pembelian/rencanaDisetujui', 'PembelianController@rencanaDisetujui');
+	Route::get('/pembelian/rencana-pembelian/rencanaSemua', 'PembelianController@rencanaSemua');
+	Route::get('/pembelian/rencana-pembelian/view_tambahRencana', 'PembelianController@view_tambahRencana');
+	Route::get('/pembelian/rencana-pembelian/itemSuplier', 'PembelianController@itemSuplier');
 // action data rencana pembelian
-Route::get('/pembelian/rencana-pembelian/updateRequest', 'PembelianController@updateRequest');
-Route::get('/pembelian/rencana-pembelian/updateRencana', 'PembelianController@updateRencana');
-Route::get('/pembelian/rencana-pembelian/deleteRencana', 'PembelianController@deleteRencana');
+	Route::get('/pembelian/rencana-pembelian/updateRequest', 'PembelianController@updateRequest');
+	Route::get('/pembelian/rencana-pembelian/updateRencana', 'PembelianController@updateRencana');
+	Route::get('/pembelian/rencana-pembelian/deleteRencana', 'PembelianController@deleteRencana');
 
-Route::get('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
-Route::get('/pembelian/rencana-pembelian/tolakRequest', 'PembelianController@tolakRequest');
-Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
+	Route::get('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
+	Route::get('/pembelian/rencana-pembelian/tolakRequest', 'PembelianController@tolakRequest');
+	Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 
 
 
@@ -487,7 +487,23 @@ Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@ge
 	//== Pemesanan Barang
 
 	Route::get('/penjualan/pemesanan-barang', 'penjualan\pemesananBarangController@index');
+	Route::get('/penjualan/pemesanan-barang/getdataproses', [
+		'uses' => 'penjualan\pemesananBarangController@get_data_proses',
+	])->name('penjualan.getdataproses');
+	Route::get('/penjualan/pemesanan-barang/getdatadone', [
+		'uses' => 'penjualan\pemesananBarangController@get_data_done',
+	])->name('penjualan.getdatadone');
+	Route::get('/penjualan/pemesanan-barang/getdatacancel', [
+		'uses' => 'penjualan\pemesananBarangController@get_data_cancel',
+	])->name('penjualan.getdatacancel');
 
+	Route::get('/penjualan/pemesanan-barang/get-member', 'penjualan\pemesananBarangController@cari_member');
+	Route::get('/penjualan/pemesanan-barang/get-item', 'penjualan\pemesananBarangController@cari_item');
+	Route::get('/penjualan/pemesanan-barang/get-group', 'penjualan\pemesananBarangController@get_group');
+
+	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
+	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-pemesanan', 'penjualan\pemesananBarangController@tambah_pemesanan');
+	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/hapus/{id}', 'penjualan\pemesananBarangController@hapus');
 	//== End Pemesanan Barang
 
 	///// End PENJUALAN
@@ -522,7 +538,7 @@ Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@ge
 
 	// main route end
 	//=== Penjualan Reguler
-    Route::get('penjualan-reguler', 'PengaturanController@log_kegiatan');
+	Route::get('penjualan-reguler', 'PengaturanController@log_kegiatan');
     //
 
 });
