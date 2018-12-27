@@ -159,6 +159,7 @@
 														<div class="input-group">
 															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
 																<option value="" selected disabled>== Jenis Member ==</option>
+																<option value="" selected >DEFAULT</option>
 																@foreach($getJM as $data)
 																	<option value="{{ $data->g_id }}">{{ $data->g_name }}</option>
 																@endforeach
@@ -238,8 +239,6 @@
 
 		$(document).ready(function(){
 
-			var baseUrl = '{{ url('/') }}';
-
 			$.dobPicker({
 				// Selectopr IDs
 				daySelector: '#tanggal',
@@ -247,9 +246,9 @@
 				yearSelector: '#tahun',
 
 				// Default option values
-				dayDefault: 'Tanggal',
-				monthDefault: 'Bulan',
-				yearDefault: 'Tahun',
+				dayDefault: '= Tanggal =',
+				monthDefault: '= Bulan =',
+				yearDefault: '= Tahun =',
 
 				// Minimum age
 				minimumAge: 10,
@@ -305,13 +304,6 @@
 									message : 'Isi alamat Member'
 								}
 							}
-						},
-						tipe : {
-							validators : {
-								notEmpty : {
-									message : 'Isi alamat Member'
-								}
-							}
 						}
 					}
 				});
@@ -330,9 +322,9 @@
 						address : '',
 						email 	: '',
 						tipe	: '',
-						tanggal : 'Tanggal',
-						bulan	: 'Bulan',
-						tahun	: 'Tahun'
+						tanggal : '',
+						bulan	: '',
+						tahun	: ''
 					}
 
 				},
@@ -425,9 +417,9 @@
 						this.form_data.address 		= '';
 						this.form_data.email 		= '';
 						this.form_data.tipe 		= '';
-						this.form_data.tanggal 		= 'Tanggal';
-						this.form_data.bulan 		= 'Bulan';
-						this.form_data.tahun 		= 'Tahun';
+						this.form_data.tanggal 		= '';
+						this.form_data.bulan 		= '';
+						this.form_data.tahun 		= '';
 						
 						$('#form-tambah').data('bootstrapValidator').resetForm();
 					}
