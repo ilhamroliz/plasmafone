@@ -377,6 +377,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/konfirmasi-pembelian/getPlan_id', 'PembelianController@getPlan_id');
 	Route::get('/pembelian/konfirmasi-pembelian/getSupplier', 'PembelianController@getSupplier');
 	Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
+	Route::get('/pembelian/konfirmasi-pembelian/confirmSetuju', 'PembelianController@confirmSetuju');
+	Route::get('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
 
 	Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
