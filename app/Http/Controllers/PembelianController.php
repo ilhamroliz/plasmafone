@@ -297,40 +297,6 @@ class PembelianController extends Controller
     {
         $id = $request->input('id');
         $query = DB::table('d_purchase_req')
-<<<<<<< HEAD
-                ->SELECT(
-                    'd_purchase_req.pr_id',
-                    'd_purchase_req.pr_codeReq',
-                    'd_purchase_req.pr_compReq',
-                    'd_purchase_req.pr_itemReq',
-                    'd_purchase_req.pr_qtyReq',
-                    'd_purchase_req.pr_dateReq',
-                    'd_purchase_req.pr_stsReq',
-                    'd_item.i_id',
-                    'd_item.i_kelompok',
-                    'd_item.i_group',
-                    'd_item.i_sub_group',
-                    'd_item.i_merk',
-                    'd_item.i_nama',
-                    'd_item.i_specificcode',
-                    'd_item.i_code',
-                    'd_item.i_isactive',
-                    'd_item.i_price',
-                    'd_item.i_minstock',
-                    'd_item.i_berat',
-                    'd_item.i_img',
-                    'm_company.c_id',
-                    'm_company.c_name',
-                    'm_company.c_address',
-                    'm_company.c_tlp',
-                )
-
-                ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
-                ->join('d_item','d_purchase_req.pr_itemReq','=', 'd_item.i_id')
-                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-                ->where('d_purchase_req.pr_id',$id)
-                ->get();
-=======
             ->SELECT(
                 'd_purchase_req.pr_id',
                 'd_purchase_req.pr_codeReq',
@@ -363,7 +329,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_id', $id)
             ->get();
->>>>>>> 8db58a9794f1c14622c0050c18d4c40444a5df5a
 
 
         foreach ($query as $value) {
@@ -490,27 +455,6 @@ class PembelianController extends Controller
 
     public function view_confirmApp()
     {
-<<<<<<< HEAD
-        $confirmOrder  = DB::table('d_purchase_confirm')
-        ->select(
-            'd_purchase_confirm.pr_idConf',
-            'd_purchase_confirm.pr_idPlan',
-            'd_purchase_confirm.pr_supplier',
-            'd_purchase_confirm.pr_item',
-            'd_purchase_confirm.pr_price',
-            'd_purchase_confirm.pr_qtyApp',
-            'd_purchase_confirm.pr_stsConf',
-            'd_purchase_confirm.pr_dateApp',
-            'd_item.i_nama',
-            'd_supplier.s_company',
-        )
-        ->join('d_mem','d_purchase_confirm.pr_comp','=','d_mem.m_id')
-        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-        ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
-        ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
-        ->where('d_purchase_confirm.pr_stsConf','APPROVED')
-        ->get();
-=======
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
                 'd_purchase_confirm.pr_idConf',
@@ -530,7 +474,6 @@ class PembelianController extends Controller
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_confirm.pr_stsConf', 'APPROVED')
             ->get();
->>>>>>> 8db58a9794f1c14622c0050c18d4c40444a5df5a
         $confirmOrder = collect($confirmOrder);
 
         return DataTables::of($confirmOrder)
@@ -552,27 +495,6 @@ class PembelianController extends Controller
 
     public function view_confirmPurchase()
     {
-<<<<<<< HEAD
-        $confirmOrder  = DB::table('d_purchase_confirm')
-        ->select(
-            'd_purchase_confirm.pr_idConf',
-            'd_purchase_confirm.pr_idPlan',
-            'd_purchase_confirm.pr_supplier',
-            'd_purchase_confirm.pr_item',
-            'd_purchase_confirm.pr_price',
-            'd_purchase_confirm.pr_qtyApp',
-            'd_purchase_confirm.pr_stsConf',
-            'd_purchase_confirm.pr_dateApp',
-            'd_item.i_nama',
-            'd_supplier.s_company',
-        )
-        ->join('d_mem','d_purchase_confirm.pr_comp','=','d_mem.m_id')
-        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-        ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
-        ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
-        ->where('d_purchase_confirm.pr_stsConf','PURCHASE')
-        ->get();
-=======
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
                 'd_purchase_confirm.pr_idConf',
@@ -592,7 +514,6 @@ class PembelianController extends Controller
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_confirm.pr_stsConf', 'PURCHASE')
             ->get();
->>>>>>> 8db58a9794f1c14622c0050c18d4c40444a5df5a
         $confirmOrder = collect($confirmOrder);
 
         return DataTables::of($confirmOrder)
@@ -614,26 +535,6 @@ class PembelianController extends Controller
 
     public function view_confirmAll()
     {
-<<<<<<< HEAD
-        $confirmOrder  = DB::table('d_purchase_confirm')
-        ->select(
-            'd_purchase_confirm.pr_idConf',
-            'd_purchase_confirm.pr_idPlan',
-            'd_purchase_confirm.pr_supplier',
-            'd_purchase_confirm.pr_item',
-            'd_purchase_confirm.pr_price',
-            'd_purchase_confirm.pr_qtyApp',
-            'd_purchase_confirm.pr_stsConf',
-            'd_purchase_confirm.pr_dateApp',
-            'd_item.i_nama',
-            'd_supplier.s_company',
-        )
-        ->join('d_mem','d_purchase_confirm.pr_comp','=','d_mem.m_id')
-        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-        ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
-        ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
-        ->get();
-=======
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
                 'd_purchase_confirm.pr_idConf',
@@ -652,7 +553,6 @@ class PembelianController extends Controller
             ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
             ->get();
->>>>>>> 8db58a9794f1c14622c0050c18d4c40444a5df5a
         $confirmOrder = collect($confirmOrder);
 
         return DataTables::of($confirmOrder)
@@ -719,48 +619,6 @@ class PembelianController extends Controller
     {
         $id = $request->input('id');
         $query = DB::table('d_purchase_plan')
-<<<<<<< HEAD
-                ->SELECT(
-                    'd_purchase_plan.pr_idPlan',
-                    'd_purchase_plan.pr_idReq',
-                    'd_purchase_plan.pr_itemPlan',
-                    'd_purchase_plan.pr_supplier',
-                    'd_purchase_plan.pr_qtyReq',
-                    'd_purchase_plan.pr_qtyApp',
-                    'd_purchase_plan.pr_stsPlan',
-                    'd_purchase_plan.pr_dateRequest',
-                    'd_purchase_plan.pr_dateApp',
-                    'd_purchase_plan.pr_comp',
-                    'd_item.i_id',
-                    'd_item.i_kelompok',
-                    'd_item.i_group',
-                    'd_item.i_sub_group',
-                    'd_item.i_merk',
-                    'd_item.i_nama',
-                    'd_item.i_specificcode',
-                    'd_item.i_code',
-                    'd_item.i_isactive',
-                    'd_item.i_price',
-                    'd_item.i_minstock',
-                    'd_item.i_berat',
-                    'd_item.i_img',
-                    'm_company.c_id',
-                    'm_company.c_name',
-                    'm_company.c_address',
-                    'm_company.c_tlp',
-                    'd_supplier.s_id',
-                    'd_supplier.s_company',
-                    'd_supplier.s_phone',
-
-                )
-
-                ->join('d_mem','d_purchase_plan.pr_comp','=','d_mem.m_id')
-                ->join('d_item','d_purchase_plan.pr_itemPlan','=', 'd_item.i_id')
-                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
-                ->join('d_supplier','d_purchase_plan.pr_supplier','=','d_supplier.s_id')
-                ->where('d_purchase_plan.pr_idPlan',$id)
-                ->get();
-=======
             ->SELECT(
                 'd_purchase_plan.pr_idPlan',
                 'd_purchase_plan.pr_idReq',
@@ -801,7 +659,6 @@ class PembelianController extends Controller
             ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_plan.pr_idPlan', $id)
             ->get();
->>>>>>> 8db58a9794f1c14622c0050c18d4c40444a5df5a
 
 
         foreach ($query as $value) {
@@ -861,7 +718,10 @@ class PembelianController extends Controller
             "s_phone" => $s_phone,
         );
 
-<<<<<<< HEAD
+        echo json_encode($item);
+    
+    }
+
     public function getSupplier()
     { 
         $data = DB::table('d_supplier')
@@ -869,11 +729,6 @@ class PembelianController extends Controller
                 ->get();
         echo json_encode($data);
     }
-=======
-        echo json_encode(array("data" => $item));
-    } 
->>>>>>> 8db58a9794f1c14622c0050c18d4c40444a5df5a
-
     
 
     // end konfirm order

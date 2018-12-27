@@ -292,7 +292,7 @@
                                                     <section class="col col-6">
                                                             <label class="label">Supplier</label>
                                                             <label class="select">
-                                                                <select id="dt_supplier">
+                                                                <select id="dt_supplier" onchange="">
                                                                     <option value="0" selected="" disabled="">Pilih Supplier</option>
                                                                 </select> <i></i> </label>
                                                         </section>
