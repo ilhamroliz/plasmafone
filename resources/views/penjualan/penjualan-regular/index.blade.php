@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Outlet')
+@section('title', 'Penjualan Reguler')
 
 @section('extra_style')
 
@@ -55,7 +55,8 @@
                                             <div class="col-md-4">
                                                 <div class="input-icon-left">
                                                     <i class="fa fa-user"></i>
-                                                    <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text">
+                                                    <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
+                                                    <input type="hidden" value="" class="idMember" id="idMember">
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
@@ -66,7 +67,7 @@
                                             <div class="col-md-8">
                                                 <div class="input-icon-left">
                                                     <i class="fa fa-barcode"></i>
-                                                    <input class="form-control" placeholder="Masukkan Nama Barang" type="text">
+                                                    <input class="form-control" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -138,7 +139,7 @@
                                 <div class="col-md-12">
                                     <div class="input-icon-left">
                                         <i class="fa fa-user"></i>
-                                        <input class="form-control" id="nama-member" placeholder="Masukkan Nama Pembeli" type="text">
+                                        <input class="form-control" id="nama-member"  style="text-transform: uppercase" placeholder="Masukkan Nama Pembeli" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +147,7 @@
                                 <div class="col-md-12">
                                     <div class="input-icon-left">
                                         <i class="fa fa-phone"></i>
-                                        <input class="form-control" id="nomor-member" placeholder="Masukkan Nomor Pembeli" type="text">
+                                        <input class="form-control" id="nomor-member" placeholder="MASUKKAN NOMOR PEMBELI" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +172,7 @@
     $(document).ready(function(){
         $('.togel').click();
         $( "#cari-member" ).autocomplete({
-            source: baseUrl+'/pengaturan/log-kegiatan/cariLog',
+            source: baseUrl+'/penjualan-reguler/cari-member',
             minLength: 2,
             select: function(event, data) {
                 getData(data.item);
@@ -187,8 +188,69 @@
     });
 
     function simpanmember() {
+        overlay();
         var nama = $('#nama-member').val();
         var nomor = $('#nomor-member').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: baseUrl + '/penjualan-reguler/simpan-member',
+            type: 'get',
+            data: {nama: nama, nomor: nomor},
+            dataType: 'json',
+            success: function (response) {
+                out();
+                $('#DaftarMember').modal('hide');
+                if (response.status == 'nomor'){
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Nomor sudah pernah didaftarkan",
+                        color : "#C46A69",
+                        timeout: 2000,
+                        icon : "fa fa-warning shake animated"
+                    });
+                } else if (response.status == 'sukses'){
+                    $.smallBox({
+                        title : "Sukses",
+                        content : "Data berhasil disimpan",
+                        color : "#739E73",
+                        timeout: 2000,
+                        icon : "fa fa-check"
+                    });
+                } else if (response.status == 'gagal'){
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Silhakan coba sesaat lagi",
+                        color : "#C46A69",
+                        timeout: 2000,
+                        icon : "fa fa-warning shake animated"
+                    });
+                }
+            },
+            error: function (xhr, status) {
+                out();
+                $('#DaftarMember').modal('hide');
+                if (status == 'timeout') {
+                    $('.error-load').css('visibility', 'visible');
+                    $('.error-load small').text('Ups. Terjadi Kesalahan, Coba Lagi Nanti');
+                }
+                else if (xhr.status == 0) {
+                    $('.error-load').css('visibility', 'visible');
+                    $('.error-load small').text('Ups. Koneksi Internet Bemasalah, Coba Lagi Nanti');
+                }
+                else if (xhr.status == 500) {
+                    $('.error-load').css('visibility', 'visible');
+                    $('.error-load small').text('Ups. Server Bemasalah, Coba Lagi Nanti');
+                }
+            }
+        });
+    }
+
+    function getData(data) {
+        $('#idMember').val(data.id);
     }
 </script>
 @endsection
