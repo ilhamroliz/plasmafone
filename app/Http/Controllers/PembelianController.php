@@ -230,23 +230,22 @@ class PembelianController extends Controller
     {
         $comp = $request->input('comp');
         $pr_idReq = $request->input('pr_idReq');
-        $pr_itemPlan = $request->input('pr_idReq');
-        $pr_qtyReq = $request->input('pr_idReq');
-        $pr_dateRequest = $request->input('pr_idReq');
+        $pr_itemPlan = $request->input('pr_itemPlan');
+        $pr_qtyReq = $request->input('pr_qtyReq');
+        $pr_dateRequest = $request->input('pr_dateRequest');
         $pr_supplier = $request->input('supplier');
         $pr_qtyApp = $request->input('qty');
-        
         $pr_dateApp = Carbon::now('Asia/Jakarta');
         $pr_stsPlan = "WAITING";
 
         $list = array(
             'pr_idReq'=>$pr_idReq,
             'pr_itemPlan'=>$pr_itemPlan,
-            'pr_qtyReq'=>$pr_qtyReq,
-            'pr_dateRequest'=>$pr_dateRequest,
             'pr_supplier'=>$pr_supplier, 
+            'pr_qtyReq'=>$pr_qtyReq,
             'pr_qtyApp'=>$pr_qtyApp,
             'pr_stsPlan'=>$pr_stsPlan,
+            'pr_dateRequest'=>$pr_dateRequest,
             'pr_dateApp'=>$pr_dateApp,
             'pr_comp'=>$comp
         );
@@ -335,7 +334,7 @@ class PembelianController extends Controller
                     $pr_codeReq = $value->pr_codeReq;
                     $pr_compReq = $value->pr_compReq;
                     $pr_itemReq = $value->pr_itemReq;
-                    $pr_qtyReq  = $value->pr_qtyReq;
+                    $pr_qty     = $value->pr_qtyReq;
                     $pr_dateReq = $value->pr_dateReq;
                     $pr_stsReq  = $value->pr_stsReq;
                     $i_id       = $value->i_id;
@@ -361,7 +360,7 @@ class PembelianController extends Controller
                     "pr_codeReq"=>$pr_codeReq,
                     "pr_compReq"=>$pr_compReq,
                     "pr_itemReq"=>$pr_itemReq,
-                    "pr_qtyReq"=>$pr_qtyReq,
+                    "pr_qtyReq"=>$pr_qty,
                     "pr_dateReq"=>$pr_dateReq,
                     "pr_stsReq"=>$pr_stsReq,
                     "i_id"=>$i_id,
@@ -439,19 +438,292 @@ class PembelianController extends Controller
         // echo json_encode($results);
     }
 
+    // start konfirm order-----------------------------------------------------------------------------------------------------------
+
     public function konfirmasi_pembelian()
     { 
-        // $data = "Null";
-        // $data_supplier = DB::table('d_supplier')
-        //                 ->join('d_request_order_dt', 'd_supplier.s_id', '=', 'd_request_order_dt.rdt_supplier')
-        //                 ->where('d_request_order_dt.rdt_status', '=', 'Rencana Pembelian')
-        //                 ->groupBy('d_supplier.s_name')
-        //                 ->get();
-        // print_r($data_supplier);
-    	// return view('pembelian/konfirmasi_pembelian/index', compact('data', 'data_supplier'));
-
+        
         return view('pembelian/konfirmasi_pembelian/view_konfirmasi_pembelian');
     }
+
+    public function view_addKonfirmasi()
+    { 
+        
+        return view('pembelian/konfirmasi_pembelian/add_konfirmasi_pembelian');
+    }
+
+    public function view_confirmApp()
+    {
+        $confirmOrder  = DB::table('d_purchase_confirm')
+        ->select(
+            'd_purchase_confirm.pr_idConf',
+            'd_purchase_confirm.pr_idPlan',
+            'd_purchase_confirm.pr_supplier',
+            'd_purchase_confirm.pr_item',
+            'd_purchase_confirm.pr_price',
+            'd_purchase_confirm.pr_qtyApp',
+            'd_purchase_confirm.pr_stsConf',
+            'd_purchase_confirm.pr_dateApp',
+            'd_item.i_nama',
+            'd_supplier.s_company',
+        )
+        ->join('d_mem','d_purchase_confirm.pr_comp','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
+        ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
+        ->where('d_purchase_confirm.pr_stsConf','APPROVED')
+        ->get();
+        $confirmOrder = collect($confirmOrder);
+
+        return DataTables::of($confirmOrder)
+            ->addColumn('input', function ($confirmOrder) {
+                
+                    return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+                
+            })
+            ->addColumn('aksi', function ($confirmOrder) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana('.$confirmOrder->pr_idConf.')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit('. $confirmOrder->pr_idConf .')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak('. $confirmOrder->pr_idConf .')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['input','aksi'])
+            ->make(true); 
+    }
+
+    public function view_confirmPurchase()
+    {
+        $confirmOrder  = DB::table('d_purchase_confirm')
+        ->select(
+            'd_purchase_confirm.pr_idConf',
+            'd_purchase_confirm.pr_idPlan',
+            'd_purchase_confirm.pr_supplier',
+            'd_purchase_confirm.pr_item',
+            'd_purchase_confirm.pr_price',
+            'd_purchase_confirm.pr_qtyApp',
+            'd_purchase_confirm.pr_stsConf',
+            'd_purchase_confirm.pr_dateApp',
+            'd_item.i_nama',
+            'd_supplier.s_company',
+        )
+        ->join('d_mem','d_purchase_confirm.pr_comp','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
+        ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
+        ->where('d_purchase_confirm.pr_stsConf','PURCHASE')
+        ->get();
+        $confirmOrder = collect($confirmOrder);
+
+        return DataTables::of($confirmOrder)
+            ->addColumn('input', function ($confirmOrder) {
+                
+                    return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+                
+            })
+            ->addColumn('aksi', function ($confirmOrder) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana('.$confirmOrder->pr_idConf.')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit('. $confirmOrder->pr_idConf .')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak('. $confirmOrder->pr_idConf .')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['input','aksi'])
+            ->make(true); 
+    }
+
+    public function view_confirmAll()
+    {
+        $confirmOrder  = DB::table('d_purchase_confirm')
+        ->select(
+            'd_purchase_confirm.pr_idConf',
+            'd_purchase_confirm.pr_idPlan',
+            'd_purchase_confirm.pr_supplier',
+            'd_purchase_confirm.pr_item',
+            'd_purchase_confirm.pr_price',
+            'd_purchase_confirm.pr_qtyApp',
+            'd_purchase_confirm.pr_stsConf',
+            'd_purchase_confirm.pr_dateApp',
+            'd_item.i_nama',
+            'd_supplier.s_company',
+        )
+        ->join('d_mem','d_purchase_confirm.pr_comp','=','d_mem.m_id')
+        ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+        ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
+        ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
+        ->get();
+        $confirmOrder = collect($confirmOrder);
+
+        return DataTables::of($confirmOrder)
+            ->addColumn('input', function ($confirmOrder) {
+                
+                    return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+                
+            })
+            ->addColumn('aksi', function ($confirmOrder) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana('.$confirmOrder->pr_idConf.')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit('. $confirmOrder->pr_idConf .')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak('. $confirmOrder->pr_idConf .')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['input','aksi'])
+            ->make(true); 
+    }
+
+    public function view_confirmAdd()
+    {
+        $menunggu  = DB::table('d_purchase_plan')
+                    ->select(
+                        'd_purchase_plan.pr_idPlan',
+                        'd_purchase_plan.pr_idReq',
+                        'd_purchase_plan.pr_itemPlan',
+                        'd_purchase_plan.pr_supplier',
+                        'd_purchase_plan.pr_qtyReq',
+                        'd_purchase_plan.pr_qtyApp',
+                        'd_purchase_plan.pr_stsPlan',
+                        'd_purchase_plan.pr_dateRequest',
+                        'd_purchase_plan.pr_dateApp',
+                        'd_purchase_plan.pr_comp',
+                        'd_item.i_nama',
+                        'm_company.c_name',
+                        'd_supplier.s_company'
+                    )
+                    ->join('d_item','d_purchase_plan.pr_itemPlan','=','d_item.i_id')
+                    ->join('d_mem','d_purchase_plan.pr_comp','=','d_mem.m_id')
+                    ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                    ->join('d_supplier','d_purchase_plan.pr_supplier','=','d_supplier.s_id')
+                    ->where('d_purchase_plan.pr_stsPlan','WAITING')
+                    ->get();
+        $menunggu = collect($menunggu);
+
+        return DataTables::of($menunggu)
+        ->addColumn('input', function ($menunggu) {
+            
+                return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+            
+        })
+        ->addColumn('aksi', function ($menunggu) {
+            if (Plasma::checkAkses(47, 'update') == false) {
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana('.$menunggu->pr_idPlan.')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            } else {
+                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="test('. $menunggu->pr_idPlan.')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit('. $menunggu->pr_idPlan.')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak('. $menunggu->pr_idPlan .')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            }
+        })
+        ->rawColumns(['input','aksi'])
+        ->make(true); 
+    }
+
+    public function getPlan_id(Request $request)
+    {
+        $id = $request->input('id');
+        $query = DB::table('d_purchase_plan')
+                ->SELECT(
+                    'd_purchase_plan.pr_idPlan',
+                    'd_purchase_plan.pr_idReq',
+                    'd_purchase_plan.pr_itemPlan',
+                    'd_purchase_plan.pr_supplier',
+                    'd_purchase_plan.pr_qtyReq',
+                    'd_purchase_plan.pr_qtyApp',
+                    'd_purchase_plan.pr_stsPlan',
+                    'd_purchase_plan.pr_dateRequest',
+                    'd_purchase_plan.pr_dateApp',
+                    'd_purchase_plan.pr_comp',
+                    'd_item.i_id',
+                    'd_item.i_kelompok',
+                    'd_item.i_group',
+                    'd_item.i_sub_group',
+                    'd_item.i_merk',
+                    'd_item.i_nama',
+                    'd_item.i_specificcode',
+                    'd_item.i_code',
+                    'd_item.i_isactive',
+                    'd_item.i_price',
+                    'd_item.i_minstock',
+                    'd_item.i_berat',
+                    'd_item.i_img',
+                    'm_company.c_id',
+                    'm_company.c_name',
+                    'm_company.c_address',
+                    'm_company.c_tlp',
+                    'd_supplier.s_id',
+                    'd_supplier.s_company',
+                    'd_supplier.s_phone',
+
+                )
+
+                ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
+                ->join('d_item','d_purchase_req.pr_itemReq','=', 'd_item.i_id')
+                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                ->join('d_supplier','d_purchase_plan.pr_supplier','=','d_supplier.s_id')
+                ->where('d_purchase_req.pr_id',$id)
+                ->get();
+
+
+                foreach($query as $value)
+                {   
+                    $pr_idPlan = $value->pr_idPlan;
+                    $pr_idReq    = $value->pr_idReq;
+                    $pr_itemPlan = $value->pr_itemPlan;
+                    $pr_supplier = $value->pr_supplier;
+                    $pr_qtyApp = $value->pr_qtyApp;
+                    $pr_dateApp     = $value->pr_dateApp;
+                    $pr_dateReq = $value->pr_dateReq;
+                    $pr_stsPlan  = $value->pr_stsPlan;
+                    $pr_comp       = $value->pr_comp;
+                    $i_id = $value->i_id;
+                    $i_kelompok    = $value->i_kelompok;
+                    $i_sub_group= $value->i_sub_group;
+                    $i_group     = $value->i_group;
+                    $i_merk     = $value->i_merk;
+                    $i_nama     = $value->i_nama;
+                    $i_specificcode = $value->i_specificcode;
+                    $i_code     = $value->i_code;
+                    $i_isactive = $value->i_isactive;
+                    $i_price    = $value->i_price;
+                    $i_minstock = $value->i_minstock;
+                    $i_berat    = $value->i_berat;
+                    $i_img      = $value->i_img;
+                    $c_name     = $value->c_name;
+                    $c_address  = $value->c_address;
+                    $c_tlp      = $value->c_tlp;
+                    $s_id     = $value->s_id;
+                    $s_company     = $value->s_company;
+                    $s_phone     = $value->s_phone;
+                }
+
+                $item = array(
+                    'pr_idPlan' =>$pr_idPlan,
+                    "pr_comp"=>$pr_comp,
+                    "pr_supplier"=>$pr_supplier,
+                    "pr_itemReq"=>$pr_itemReq,
+                    "i_id"=>$i_id,
+                    "i_kelompok"=>$i_kelompok,
+                    "i_group"=>$i_group,
+                    "i_sub_group"=>$i_sub_group,
+                    "i_merk"=>$i_merk,
+                    "i_nama"=>$i_nama,
+                    "i_specificcode"=>$i_specificcode,
+                    "i_code"=>$i_code,
+                    "i_isactive"=>$i_isactive,
+                    "i_price"=>$i_price,
+                    "i_minstock"=>$i_minstock,
+                    "i_berat"=>$i_berat,
+                    "i_img"=>$i_img,
+                    "c_name"=>$c_name,
+                    "c_address"=>$c_address,
+                    "c_tlp"=>$c_tlp,
+                    "s_id"=>$s_id,
+                    "s_company"=>$s_company,
+                    "s_phone"=>$s_phone,
+                );
+
+        echo json_encode(array("data"=>$item));
+    } 
+
+    
+
+    // end konfirm order
 
     public function get_data_order($id)
     {

@@ -362,9 +362,18 @@ Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@ge
 
 	// End Rencana Pembelian
 
-	// Konfirmasi Pembelian
+	// Konfirmasi Pembelian page
 
 	Route::get('/pembelian/konfirmasi-pembelian', 'PembelianController@konfirmasi_pembelian');
+	Route::get('/pembelian/konfirmasi-pembelian/view_addKonfirmasi', 'PembelianController@view_addKonfirmasi');
+
+	//tampil data
+	Route::get('/pembelian/konfirmasi-pembelian/view_confirmApp', 'PembelianController@view_confirmApp');
+	Route::get('/pembelian/konfirmasi-pembelian/view_confirmPurchase', 'PembelianController@view_confirmPurchase');
+	Route::get('/pembelian/konfirmasi-pembelian/view_confirmAll', 'PembelianController@view_confirmAll');
+	Route::get('/pembelian/konfirmasi-pembelian/view_confirmAdd', 'PembelianController@view_confirmAdd');
+
+	//action confirm order
 
 	Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
