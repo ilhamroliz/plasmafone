@@ -454,11 +454,6 @@
                           },
 					});
 					
-				
-                    
-
-					
-
 					$('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
 					$('#detailModal').modal('show');
                     $('#btn_disetujui').show();
