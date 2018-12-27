@@ -531,7 +531,7 @@ Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@ge
 
 	// main route end
 	//=== Penjualan Reguler
-    Route::get('penjualan-reguler', 'PengaturanController@log_kegiatan');
+    Route::get('penjualan-reguler', 'PenjualanController@index');
     //
 
 });
