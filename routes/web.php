@@ -513,6 +513,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/penjualan/pemesanan-barang/get-item', 'penjualan\pemesananBarangController@cari_item');
 	Route::get('/penjualan/pemesanan-barang/get-group', 'penjualan\pemesananBarangController@get_group');
 
+	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/ft-pemesanan', 'penjualan\pemesananBarangController@ft_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-pemesanan', 'penjualan\pemesananBarangController@tambah_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/hapus/{id}', 'penjualan\pemesananBarangController@hapus');
@@ -551,8 +552,8 @@ Route::group(['middleware' => 'auth'], function () {
 	// main route end
 	//=== Penjualan Reguler
 	Route::get('penjualan-reguler', 'PenjualanController@index');
-    Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
-    Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
+	Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
+	Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
     //
 
 });

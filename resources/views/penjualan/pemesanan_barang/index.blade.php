@@ -49,10 +49,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					<input type="text" class="form-control" id="findMember" name="findMember" placeholder="Masukkan Nama Member">
 				</div>
 				<div class="page-title col-md-3">
-                    <a onclick="tambah_member()" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Tambah Member</a>
+                    <button onclick="modal_tambah()" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Tambah Member</button>
                 </div>
                 <div class="page-title col-md-3">
-                    <a href="{{ url('/penjualan/pemesanan-barang/tambah-pemesanan') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Pemesanan</a>
+                    <button onclick="tambah_pemesanan()" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Pemesanan</button>
                 </div>
             </div>
             @endif
@@ -114,10 +114,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="55%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
-													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="35%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+													<th width="30%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+													<th width="20%"data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
+													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -132,10 +132,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
-													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="35%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+													<th width="30%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+													<th width="20%" data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
+													<th width="15%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -150,10 +150,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
-													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="35%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+													<th width="30%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+													<th width="20%" data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
+													<th width="15%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -168,7 +168,63 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					</div>
 				</div>
 			</div>
-            <!-- end row -->
+			<!-- end row -->
+			
+			<!-- Modal Untuk Tambah Member -->
+            <div class="modal fade" id="tmModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4><strong>Form Tambah Member</strong></h4>
+                        </div>
+                        <div class="modal-body no-padding">
+
+                            <form id="ft-group" class="smart-form">
+                                <input type="hidden" name="id" id="id">
+
+                                <fieldset>
+
+                                    <section>
+                                        <div class="row">
+                                            <label class="label col col-3">Nama Member</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="namaMember" id="namaMember" style="text-transform: uppercase" placeholder="Masukkan Nama Member" required>
+                                                </label>
+                                            </div>
+										</div>
+									</section>
+									
+									<section>
+										<div class="row">
+                                            <label class="label col col-3">Nomor Telepon</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="noTelp" id="noTelp" placeholder="Masukkan Nomor Telepon/HP Member" required>
+                                                </label>
+                                            </div>
+                                        </div>
+									</section>
+
+                                </fieldset>
+                                
+                                <footer>
+                                    <button type="button" class="btn btn-primary" onclick="tmSubmit()"><i class="fa fa-floppy-o"></i>
+                                        Simpan
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        Kembali
+                                    </button>
+
+                                </footer>
+                            </form>						
+                                    
+
+                        </div>
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- Akhir Modal untuk Tambah Group /.modal -->
             
             <!-- Modal untuk Detil Pemesanan -->
 			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -272,134 +328,131 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		@if(Plasma::checkAkses(18, 'insert') == true){
 			$(document).ready(function(){
 				$( "#findMember" ).autocomplete({
-					source: baseUrl+'/penjualan/pemesanan-barang/cari-member',
+					source: baseUrl+'/penjualan/pemesanan-barang/get-member',
 					minLength: 2,
 					select: function(event, data) {
 						getData(data.item);
 					}
 				});
-
-				table = $('#dt_basic').DataTable({
-					language: dataTableLanguage
-				});
 			}); 
 		}
 
 		function getData(data){
-			$('#searchhidden').val(data.id);
+			$('#tpMemberId').val(data.id);
 		}
 		@endif
+
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
 		
 		/* BASIC ;*/
-			var responsiveHelper_dt_basic = undefined;
-			var responsiveHelper_datatable_fixed_column = undefined;
-			var responsiveHelper_datatable_col_reorder = undefined;
-			var responsiveHelper_datatable_tabletools = undefined;
-			
-			var breakpointDefinition = {
-				tablet : 1024,
-				phone : 480
-			};
+		var responsiveHelper_dt_basic = undefined;
+		var responsiveHelper_datatable_fixed_column = undefined;
+		var responsiveHelper_datatable_col_reorder = undefined;
+		var responsiveHelper_datatable_tabletools = undefined;
+		
+		var breakpointDefinition = {
+			tablet : 1024,
+			phone : 480
+		};
 
-			setTimeout(function () {
+		setTimeout(function () {
 
-				proses = $('#dt_proses').DataTable({
-					"processing": true,
-					"serverSide": true,
-					"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
-					"columns":[
-						{"data": "m_name"},
-						{"data": "i_nota"},
-						{"data": "i_total_tagihan"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_proses'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
+			proses = $('#dt_proses').DataTable({
+				"processing": true,
+				"serverSide": true,
+				"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
+				"columns":[
+					{"data": "m_name"},
+					{"data": "i_nota"},
+					{"data": "i_total_tagihan"},
+					{"data": "aksi"}
+				],
+				"autoWidth" : true,
+				"language" : dataTableLanguage,
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+				"preDrawCallback" : function() {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_dt_basic) {
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_proses'), breakpointDefinition);
 					}
-				});
+				},
+				"rowCallback" : function(nRow) {
+					responsiveHelper_dt_basic.createExpandIcon(nRow);
+				},
+				"drawCallback" : function(oSettings) {
+					responsiveHelper_dt_basic.respond();
+				}
+			});
 
-			}, 500);
+		}, 500);
 
-			setTimeout(function () {
+		setTimeout(function () {
 
-				done = $('#dt_selesai').DataTable({
-					"processing": true,
-					"serverSide": true,
-					"ajax": "{{ url('/penjualan/pemesanan-barang/getdatadone') }}",
-					"columns":[
-						{"data": "m_name"},
-						{"data": "i_nota"},
-						{"data": "i_total_tagihan"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_done'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
+			done = $('#dt_selesai').DataTable({
+				"processing": true,
+				"serverSide": true,
+				"ajax": "{{ url('/penjualan/pemesanan-barang/getdatadone') }}",
+				"columns":[
+					{"data": "m_name"},
+					{"data": "i_nota"},
+					{"data": "i_total_tagihan"},
+					{"data": "aksi"}
+				],
+				"autoWidth" : true,
+				"language" : dataTableLanguage,
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+				"preDrawCallback" : function() {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_dt_basic) {
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_done'), breakpointDefinition);
 					}
-				});
+				},
+				"rowCallback" : function(nRow) {
+					responsiveHelper_dt_basic.createExpandIcon(nRow);
+				},
+				"drawCallback" : function(oSettings) {
+					responsiveHelper_dt_basic.respond();
+				}
+			});
 
-			}, 1000);
+		}, 1000);
 
-			setTimeout(function () {
+		setTimeout(function () {
 
-				cancel = $('#dt_batal').DataTable({
-					"processing": true,
-					"serverSide": true,
-					"ajax": "{{ url('/penjualan/pemesanan-barang/getdatacancel') }}",
-					"columns":[
-						{"data": "m_name"},
-						{"data": "i_nota"},
-						{"data": "i_total_tagihan"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_cancel'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
+			cancel = $('#dt_batal').DataTable({
+				"processing": true,
+				"serverSide": true,
+				"ajax": "{{ url('/penjualan/pemesanan-barang/getdatacancel') }}",
+				"columns":[
+					{"data": "m_name"},
+					{"data": "i_nota"},
+					{"data": "i_total_tagihan"},
+					{"data": "aksi"}
+				],
+				"autoWidth" : true,
+				"language" : dataTableLanguage,
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+				"preDrawCallback" : function() {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_dt_basic) {
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_cancel'), breakpointDefinition);
 					}
-				});
+				},
+				"rowCallback" : function(nRow) {
+					responsiveHelper_dt_basic.createExpandIcon(nRow);
+				},
+				"drawCallback" : function(oSettings) {
+					responsiveHelper_dt_basic.respond();
+				}
+			});
 
-				$('#overlay').fadeOut(200);
+			$('#overlay').fadeOut(200);
 
-			}, 1500);
+		}, 1500);
 
 		/* END BASIC */
 
@@ -407,6 +460,28 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		    proses.api().ajax.reload();
 		    done.api().ajax.reload();
 		    batal.api().ajax.reload();
+		}
+
+		function modal_tambah(){
+			$('#tmModal').modal('show');
+		}
+
+		function tambah_member(){
+			
+		}
+
+		function tambah_pemesanan(){
+			if($('#findMember').val() == ''){
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, tidak dapat menambahkan pemesanan jika member belum terdaftar!",
+					color : "#A90329",
+					timeout: 5000,
+					icon : "fa fa-times bounce animated"
+				});
+			}else{
+				location.href = "{{ url('/penjualan/pemesanan-barang/tambah-pemesanan') }}";
+			}
 		}
 
 		function hapus(val){

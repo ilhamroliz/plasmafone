@@ -364,12 +364,20 @@
 									});
 
 									this.reset_form();
-								}
-								else if(response.data.status == 'ada') {
+								}else if(response.data.status == 'nikada') {
 									out();
 									$.smallBox({
 										title : "Gagal",
-										content : 'Data member <i>"'+response.data.name+'"</i> sudah ada!',
+										content : 'Data member dengan NIK <i>"'+response.data.name+'"</i> sudah ada!',
+										color : "#A90329",
+										timeout: 5000,
+										icon : "fa fa-times bounce animated"
+									});
+								}else if(response.data.status == 'telpada') {
+									out();
+									$.smallBox({
+										title : "Gagal",
+										content : 'Data member dengan No. Telp <i>"'+response.data.name+'"</i> sudah ada!',
 										color : "#A90329",
 										timeout: 5000,
 										icon : "fa fa-times bounce animated"
