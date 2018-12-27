@@ -43,7 +43,7 @@
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
 
-			<li>Home</li><li>Pembelian</li><li>Rencana Pembelian</li>
+			<li>Home</li><li>Pembelian</li><li>Konfirmasi Pembelian</li>
 
 		</ol>
 		<!-- end breadcrumb -->
@@ -65,7 +65,7 @@
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Rencana Pembelian
+						 Konfirmasi Pembelian
 					</span>
                 </h1>
             </div>
@@ -73,7 +73,7 @@
 
                 <div class="page-title">
 
-                    <a href="{{ url('pembelian/rencana-pembelian') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+                    <a href="{{ url('pembelian/konfirmasi-pembelian') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 
                 </div>
 
@@ -114,7 +114,7 @@
                     <header role="heading">
                         <div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
                         </div>
-                        <h2><strong>Tambah Rencana Pembelian</strong></h2>
+                        <h2><strong>Tambah Konfirmasi Pembelian</strong></h2>
 
                     <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
@@ -136,7 +136,7 @@
 
 												<tr>
                                                     <th data-hide="phone,tablet">No</th>
-                                                    <th data-hide="phone,tablet">Nama Outlet</th>
+                                                    <th data-hide="phone,tablet">Nama Supplier</th>
                                                     <th data-hide="phone,tablet">Nama Barang</th>
                                                     <th data-hide="phone,tablet">Qty</th>
                                                     <th data-hide="phone,tablet">Aksi</th>
@@ -191,183 +191,156 @@
 		<!-- end widget grid -->
 
 		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-			<div class="modal-dialog">
-
-				<div class="modal-content">
-
-					<div class="modal-header">
-
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-
-						<h4 class="modal-title" id="myModalLabel">Detail Barang</h4>
-
-					</div>
-
-					<div class="modal-body">
-
-						<div style="margin-bottom: 15px;" class="preview thumbnail">
-
-							<img id="dt_image" src="">
-
-						</div>
-		
-						<div class="row">
-
-							<!-- Widget ID (each widget will need unique ID)-->
-							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-
-								<header>
-
-									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
-
-									<h2 id="title_detail"></h2>
-
-								</header>
-
-								<!-- widget div-->
-								<div>
-
-									<!-- widget content -->
-									<div class="widget-body no-padding">
-										
-										<div class="table-responsive">
-											
-											<table class="table">
-												<tbody>
-
-													<tr class="success">
-														<td><strong>Kelompok</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_kelompok"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Group</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_group"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>Sub Group</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_subgroup"></td>
-													</tr>
-
-													<tr class="info">
-														<td><strong>Merk</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_merk"></td>
-													</tr>
-
-													<tr class="success">
-														<td><strong>Nama</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_nama"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Spesifik Kode</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_specificcode"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>Kode</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_code"></td>
-													</tr>
-
-													<tr class="info">
-														<td><strong>Status</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_isactive"></td>
-													</tr>
-
-													<tr class="success">
-														<td><strong>Min Stock</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_minstock"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Berat (Gram)</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_berat"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>Harga</strong></td>
-														<td><strong>:</strong></td>
-														<td ><label id="dt_price"></label></td>
-													</tr>
-													<tr class="info" id="in_sup">
-														<td><strong>Suplier</strong></td>
-														<td><strong>:</strong></td>
-														<td >
-															<div class="form-group">
-																<select class="form-control" name="" id="dt_supplier" >
-																	<!-- <option selected="" value="00"></option> -->
-																</select>
-															</div>
-								  						</td>
-													</tr>
-													<tr class="info" id="in_qty">
-														<td><strong>QTY APPROVE</strong></td>
-														<td><strong>:</strong></td>
-														<td >
-															<div class="form-group">
-																
-																<input type="text" class="form-control" id="dt_qtyApp"  placeholder="QTY" style="width: 100%" >
-															</div>
-								  						</td>
-													</tr>
-													<tr hidden="">
-														<td><input type="text" id="pr_idReq"></td>
-														<td><input type="text"  id="pr_itemPlan"></td>
-														<td ><input type="text"  id="pr_qt"></label></td>
-													</tr>
-													<tr hidden="">
-														<td><input type="text" id="pr_dateRequest"></td>
-														<td><input type="text" id="dt_comp" ></td>
-														<td ><input type="text"  ></label></td>
-													</tr>
-
-
-												</tbody>
-
-											</table>
-											
-										</div>
-                                        
-									</div>
-									<!-- end widget content -->
-
-								</div>
-								<!-- end widget div -->
-                                
+        <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+									&times;
+								</button>
+								<!-- <h4 class="modal-title" id="myModalLabel">Article Post</h4> -->
 							</div>
-							<!-- end widget -->
-                            <div class="form-group col-md-12 text-right">
+							<div class="modal-body">
+                                <div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
+				
+                                    <header>
+                                    
+                                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                                        <h2 id="myModalLabel"> </h2>				
+                                        
+                                    </header>
+
+                                    <!-- widget div-->
+                                    <div>
+                                        
+                                        <!-- widget edit box -->
+                                        <div class="jarviswidget-editbox">
+                                            <!-- This area used as dropdown edit box -->
                                             
-                                            <button class="btn btn-primary" onclick="batal()" id="btnBatal">Batal</button>
-                                            <button class="btn btn-primary" onclick="tambah()" id="btnTambah">Tambah</button>
-                                            <button class="btn btn-primary" onclick="tolak()" id="btnTolak">Tolak</button>
                                         </div>
-						</div>
-                        
-		
-					</div>
+                                        <!-- end widget edit box -->
+                                        
+                                        <!-- widget content -->
+                                        <div class="widget-body no-padding">
+                                            
+                                            <form id="smart-form-register" class="smart-form">
+                                                <header>
+                                                    Detail Item
+                                                </header>
 
-				</div><!-- /.modal-content -->
+                                                <fieldset>
+                                                    <section>
+                                                        <div style="margin-bottom: 15px;" class="preview thumbnail">
+                                                            <img id="dt_image" src="">
+                                                        </div>
+                                                    </section>
+                                                    <section>
+                                                        <label class="label">Nama Item</label>
+                                                        <label class="input"> <i class="icon-append fa fa-user"></i>
+                                                            <input type="text" name="username" placeholder="Username">
+                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
+                                                    </section>
+                                                    <section>
+                                                        <label class="label">Kelompok</label>
+                                                        <label class="input"> <i class="icon-append fa fa-envelope-o"></i>
+                                                            <input type="text" name="username" placeholder="Username">
+                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
+                                                    </section>
+                                                    <section>
+                                                        <label class="label">Merk</label>
+                                                        <label class="input"> <i class="icon-append fa fa-lock"></i>
+                                                            <input type="text" name="username" placeholder="Username">
+                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
+                                                    </section>
+                                                    <section>
+                                                        <label class="label">Spesifik Kode</label>
+                                                        <label class="input"> <i class="icon-append fa fa-user"></i>
+                                                            <input type="text" name="username" placeholder="Username">
+                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
+                                                    </section>
+                                                    <div class="row">
+                                                        <section class="col col-6">
+                                                        <label class="label">Harga Satuan</label>
+                                                            <label class="input">
+                                                                <input type="text" name="firstname" placeholder="Harga Satuan">
+                                                            </label>
+                                                        </section>
+                                                        <section class="col col-6">
+                                                            <label class="label">Qty</label>
+                                                            <label class="input">
+                                                                <input type="text" name="lastname" placeholder="Qty">
+                                                            </label>
+                                                        </section>
+                                                    </div>
+                                                    <section>
+                                                        <label class="label">Sub Total</label>
+                                                        <label class="input"> <i class="icon-append fa fa-user"></i>
+                                                            <input type="text" name="username" placeholder="Sub Total">
+                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
+                                                    </section>
+                                                    
+                                                    
+                                                </fieldset>
 
-			</div><!-- /.modal-dialog -->
+                                                <header>
+                                                    Detail Supplier
+                                                </header>
 
-		</div>
-		<!-- /.modal -->
+                                                <fieldset>
+                                                    <div class="row">
+                                                    <section class="col col-6">
+                                                            <label class="label">Supplier</label>
+                                                            <label class="select">
+                                                                <select name="gender">
+                                                                    <option value="0" selected="" disabled="">Gender</option>
+                                                                    <option value="1">Male</option>
+                                                                    <option value="2">Female</option>
+                                                                    <option value="3">Prefer not to answer</option>
+                                                                </select> <i></i> </label>
+                                                        </section>
+                                                        <section class="col col-6">
+                                                            <label class="label">No Telepon</label>
+                                                            <label class="input">
+                                                                <input type="text" name="lastname" placeholder="Telepon">
+                                                            </label>
+                                                        </section>
+                                                    </div>
+                                                    
+                                                </fieldset>
+                                                <footer>
+                                                    <button type="submit" class="btn btn-danger">
+                                                        Rencana DiTolak
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary">
+                                                        Rencana DISetujui
+                                                    </button>
+                                                    <button type="submit" class="btn btn-warning">
+                                                        Tutup
+                                                    </button>
+                                                </footer>
+                                            </form>						
+                                            
+                                        </div>
+                                        <!-- end widget content -->
+                                        
+                                    </div>
+                                    <!-- end widget div -->
+                                    
+                                </div>
+                                <!-- end widget -->
+				
+							</div>
+							<!-- <div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">
+									Cancel
+								</button>
+								<button type="button" class="btn btn-primary">
+									Post Article
+								</button>
+							</div> -->
+						</div><!-- /.modal-content -->
+					</div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
 
 	</div>
 	<!-- END MAIN CONTENT -->
@@ -377,7 +350,7 @@
 
 
 	<script type="text/javascript">
-		var tambahRencana;
+		var tambahKonfirmasi;
         $(document).ready(function () {
 
             var responsiveHelper_dt_basic = undefined;
@@ -392,18 +365,18 @@
 
             setTimeout(function () {
 
-            tambahRencana = $('#dt_tambah').dataTable({
+                tambahKonfirmasi = $('#dt_tambah').dataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
+                "ajax": "{{ url('/pembelian/konfirmasi-pembelian/view_confirmAdd') }}",
                 "fnCreatedRow": function (row, data, index) {
                     $('td', row).eq(0).html(index + 1);
                     },
                 "columns":[
-                    {"data": "pr_id"},
-                    {"data": "c_name"},
+                    {"data": "pr_idPlan"},
+                    {"data": "s_company"},
                     {"data": "i_nama"},
-                    {"data": "pr_qtyReq"},
+                    {"data": "pr_qtyApp"},
                     {"data": "aksi"}
                 ],
                 "autoWidth" : true,
@@ -428,6 +401,11 @@
             
         });
 
+        function test(id){
+            $('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
+					$('#detailModal').modal('show');
+        }
+
         function edit(id){
             
             $.ajax({
@@ -440,45 +418,13 @@
                 success: function(data)
                 {
 					
-				// pr_idReq = data.data.pr_id;
-				// pr_itemPlan = data.data.i_id;
-				// pr_qtyReq = data.data.pr_qtyReq;
-				// pr_dateRequest = data.data.pr_dateReq;
-
-					if (data.data.i_img == "") {
-
-							$('img#dt_image').attr("src", "{{asset('img/image-not-found.png')}}");
-
-						}else{
-
-							$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
-
-						}
-					
-
-					$('#dt_kelompok').text(data.data.i_kelompok);
-					$('#dt_group').text(data.data.i_group);
-					$('#dt_subgroup').text(data.data.i_sub_group);
-					$('#dt_merk').text(data.data.i_merk);
-					$('#dt_specificcode').text(data.data.i_specificcode);
-					$('#dt_isactive').text(data.data.i_isactive);
-					$('#dt_code').text(data.data.i_code);
-					$('#dt_minstock').text(data.data.i_minstock);
-					$('#dt_price').text(data.data.i_price);
-					$('#dt_berat').text(data.data.i_berat);
-					$('#dt_nama').text(data.data.i_nama);
-
-					$('#pr_idReq').val(data.data.pr_id);
-					$('#pr_itemPlan').val(data.data.i_id);
-					$('#pr_qt').val(data.data.pr_qtyReq);
-					$('#pr_dateRequest').val(data.data.pr_dateReq);
-                    $('#dt_comp').val(data.data.pr_compReq);
+				
                     
 
 					
 
-					$('#myModalLabel').text('FORM RENCANA PEMBELIAN');
-					$('#myModal').modal('show');
+					$('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
+					$('#detailModal').modal('show');
                     $('#btnTambah').show();
                     $('#btnTolak').hide();
                     $('#btnBatal').show();
