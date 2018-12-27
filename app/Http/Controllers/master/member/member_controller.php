@@ -140,61 +140,74 @@ class member_controller extends Controller
 
                     try {
 
-                        $check = member::where('m_nik', '=', $data['nik'])->count();
+                        $checknik = member::where('m_nik', '=', $data['nik'])->where('m_status', 'AKTIF')->count();
 
-                        if ($check > 0) {
+                        if ($checknik > 0) {
 
                             return json_encode([
-                                'status' => 'ada',
-                                'name' => strtoupper($data['name'])
+                                'status' => 'nikada',
+                                'name' => $data['nik']
                             ]);
 
                         } else {
 
-                            if ($data['email'] == "") {
-                                $email = "";
+                            $checktelp = member::where('m_telp', '=', $data['telp'])->where('m_status', 'AKTIF')->count();
+
+                            if ($checktelp > 0) {
+
+                                return json_encode([
+                                    'status' => 'telpada',
+                                    'name' => $data['telp']
+                                ]);
+
                             } else {
-                                $email = $data['email'];
+
+                                if ($data['email'] == "") {
+                                    $email = "";
+                                } else {
+                                    $email = $data['email'];
+                                }
+
+                                if ($data['tanggal'] == "Tanggal") {
+                                    $tanggal = "00";
+                                } else {
+                                    $tanggal = $data['tanggal'];
+                                }
+
+                                if ($data['bulan'] == "Bulan") {
+                                    $bulan = "00";
+                                } else {
+                                    $bulan = $data['bulan'];
+                                }
+
+                                if ($data['tahun'] == "Tahun") {
+                                    $tahun = "0000";
+                                } else {
+                                    $tahun = $data['tahun'];
+                                }
+
+                                member::insert([
+                                    'm_name' => strtoupper($data['name']),
+                                    'm_nik' => $data['nik'],
+                                    'm_telp' => $data['telp'],
+                                    'm_email' => $email,
+                                    'm_jenis' => $data['tipe'],
+                                    'm_address' => $data['address'],
+                                    'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
+                                    'm_status' => 'AKTIF',
+                                    'm_insert' => Carbon::now('Asia/Jakarta'),
+                                    'm_update' => Carbon::now('Asia/Jakarta')
+                                ]);
+
+                                DB::commit();
+                                Plasma::logActivity('Menambahkan Member ' . strtoupper($data['name'] . ' (' . $data['telp'] . ')'));
+
+                                return json_encode([
+                                    'status' => 'berhasil',
+                                    'name' => strtoupper($data['name'])
+                                ]);
+
                             }
-
-                            if ($data['tanggal'] == "Tanggal") {
-                                $tanggal = "00";
-                            } else {
-                                $tanggal = $data['tanggal'];
-                            }
-
-                            if ($data['bulan'] == "Bulan") {
-                                $bulan = "00";
-                            } else {
-                                $bulan = $data['bulan'];
-                            }
-
-                            if ($data['tahun'] == "Tahun") {
-                                $tahun = "0000";
-                            } else {
-                                $tahun = $data['tahun'];
-                            }
-
-                            member::insert([
-                                'm_name' => strtoupper($data['name']),
-                                'm_nik' => $data['nik'],
-                                'm_telp' => $data['telp'],
-                                'm_email' => $email,
-                                'm_jenis' => $data['tipe'],
-                                'm_address' => $data['address'],
-                                'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
-                                'm_status' => 'AKTIF',
-                                'm_insert' => Carbon::now('Asia/Jakarta'),
-                                'm_update' => Carbon::now('Asia/Jakarta')
-                            ]);
-
-                            DB::commit();
-                            Plasma::logActivity('Menambahkan Member ' . strtoupper($data['name'] . ' (' . $data['telp'] . ')'));
-
-                            return json_encode([
-                                'status' => 'berhasil',
-                                'name' => strtoupper($data['name'])
-                            ]);
                         }
                     } catch (\Exception $e) {
 

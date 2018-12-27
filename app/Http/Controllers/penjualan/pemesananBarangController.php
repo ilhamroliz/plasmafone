@@ -169,7 +169,6 @@ class pemesananBarangController extends Controller
 
             }
 
-            ////==== IF Method used is GET
             return view('penjualan.pemesanan_barang.tambah');
         }
     }
