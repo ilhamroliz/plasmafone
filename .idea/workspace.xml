@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-    </list>
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,11 +85,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="336">
-              <caret line="551" column="45" selection-start-line="551" selection-start-column="16" selection-end-line="551" selection-end-column="45" />
+              <caret line="553" column="45" selection-start-line="553" selection-start-column="16" selection-end-line="553" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -110,7 +106,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="48">
@@ -517,12 +513,12 @@
       <workItem from="1545094876501" duration="303000" />
       <workItem from="1545792892353" duration="1699000" />
       <workItem from="1545814784043" duration="6919000" />
-      <workItem from="1545874862360" duration="7410000" />
+      <workItem from="1545874862360" duration="8040000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67152000" />
+    <option name="totallyTimeSpent" value="67782000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="14" width="1368" height="719" extended-state="6" />
@@ -882,13 +878,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="551" column="45" selection-start-line="551" selection-start-column="16" selection-end-line="551" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-450">
@@ -923,6 +912,13 @@
             <element signature="e#6670#6677#0#HTML" expanded="true" />
             <element signature="e#7295#7328#0#HTML" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="553" column="45" selection-start-line="553" selection-start-column="16" selection-end-line="553" selection-end-column="45" />
         </state>
       </provider>
     </entry>
