@@ -653,11 +653,11 @@ class PembelianController extends Controller
 
             )
 
-            ->join('d_mem', 'd_purchase_req.pr_compReq', '=', 'd_mem.m_id')
-            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
+            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
-            ->where('d_purchase_req.pr_id', $id)
+            ->where('d_purchase_plan.pr_idPlan', $id)
             ->get();
 
 
