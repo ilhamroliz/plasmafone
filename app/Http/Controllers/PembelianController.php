@@ -607,7 +607,7 @@ class PembelianController extends Controller
             if (Plasma::checkAkses(47, 'update') == false) {
                 return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana('.$menunggu->pr_idPlan.')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
             } else {
-                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="test('. $menunggu->pr_idPlan.')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit('. $menunggu->pr_idPlan.')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak('. $menunggu->pr_idPlan .')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id('. $menunggu->pr_idPlan.')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak('. $menunggu->pr_idPlan .')"><i class="glyphicon glyphicon-remove"></i></button></div>';
             }
         })
         ->rawColumns(['input','aksi'])
@@ -652,74 +652,83 @@ class PembelianController extends Controller
 
                 )
 
-                ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
-                ->join('d_item','d_purchase_req.pr_itemReq','=', 'd_item.i_id')
+                ->join('d_mem','d_purchase_plan.pr_comp','=','d_mem.m_id')
+                ->join('d_item','d_purchase_plan.pr_itemPlan','=', 'd_item.i_id')
                 ->join('m_company','d_mem.m_comp','=','m_company.c_id')
                 ->join('d_supplier','d_purchase_plan.pr_supplier','=','d_supplier.s_id')
-                ->where('d_purchase_req.pr_id',$id)
+                ->where('d_purchase_plan.pr_idPlan',$id)
                 ->get();
 
 
                 foreach($query as $value)
                 {   
-                    $pr_idPlan = $value->pr_idPlan;
+                    $pr_idPlan   = $value->pr_idPlan;
                     $pr_idReq    = $value->pr_idReq;
                     $pr_itemPlan = $value->pr_itemPlan;
                     $pr_supplier = $value->pr_supplier;
-                    $pr_qtyApp = $value->pr_qtyApp;
-                    $pr_dateApp     = $value->pr_dateApp;
-                    $pr_dateReq = $value->pr_dateReq;
+                    $pr_qtyApp   = $value->pr_qtyApp;
+                    $pr_dateApp  = $value->pr_dateApp;
+                    $pr_dateReq  = $value->pr_dateRequest;
                     $pr_stsPlan  = $value->pr_stsPlan;
-                    $pr_comp       = $value->pr_comp;
-                    $i_id = $value->i_id;
-                    $i_kelompok    = $value->i_kelompok;
-                    $i_sub_group= $value->i_sub_group;
+                    $pr_comp     = $value->pr_comp;
+                    $i_id        = $value->i_id;
+                    $i_kelompok  = $value->i_kelompok;
+                    $i_sub_group = $value->i_sub_group;
                     $i_group     = $value->i_group;
-                    $i_merk     = $value->i_merk;
-                    $i_nama     = $value->i_nama;
+                    $i_merk      = $value->i_merk;
+                    $i_nama      = $value->i_nama;
                     $i_specificcode = $value->i_specificcode;
-                    $i_code     = $value->i_code;
-                    $i_isactive = $value->i_isactive;
-                    $i_price    = $value->i_price;
-                    $i_minstock = $value->i_minstock;
-                    $i_berat    = $value->i_berat;
-                    $i_img      = $value->i_img;
-                    $c_name     = $value->c_name;
-                    $c_address  = $value->c_address;
-                    $c_tlp      = $value->c_tlp;
-                    $s_id     = $value->s_id;
-                    $s_company     = $value->s_company;
+                    $i_code      = $value->i_code;
+                    $i_isactive  = $value->i_isactive;
+                    $i_price     = $value->i_price;
+                    $i_minstock  = $value->i_minstock;
+                    $i_berat     = $value->i_berat;
+                    $i_img       = $value->i_img;
+                    $c_name      = $value->c_name;
+                    $c_address   = $value->c_address;
+                    $c_tlp       = $value->c_tlp;
+                    $s_id        = $value->s_id;
+                    $s_company   = $value->s_company;
                     $s_phone     = $value->s_phone;
                 }
 
                 $item = array(
-                    'pr_idPlan' =>$pr_idPlan,
-                    "pr_comp"=>$pr_comp,
-                    "pr_supplier"=>$pr_supplier,
-                    "pr_itemReq"=>$pr_itemReq,
-                    "i_id"=>$i_id,
-                    "i_kelompok"=>$i_kelompok,
-                    "i_group"=>$i_group,
-                    "i_sub_group"=>$i_sub_group,
-                    "i_merk"=>$i_merk,
-                    "i_nama"=>$i_nama,
+                    'pr_idPlan'     =>$pr_idPlan,
+                    "pr_comp"       =>$pr_comp,
+                    "pr_supplier"   =>$pr_supplier,
+                    "pr_itemPlan"   =>$pr_itemPlan,
+                    "pr_qtyApp"     =>$pr_qtyApp,
+                    "i_id"          =>$i_id,
+                    "i_kelompok"    =>$i_kelompok,
+                    "i_group"       =>$i_group,
+                    "i_sub_group"   =>$i_sub_group,
+                    "i_merk"        =>$i_merk,
+                    "i_nama"        =>$i_nama,
                     "i_specificcode"=>$i_specificcode,
-                    "i_code"=>$i_code,
-                    "i_isactive"=>$i_isactive,
-                    "i_price"=>$i_price,
-                    "i_minstock"=>$i_minstock,
-                    "i_berat"=>$i_berat,
-                    "i_img"=>$i_img,
-                    "c_name"=>$c_name,
-                    "c_address"=>$c_address,
-                    "c_tlp"=>$c_tlp,
-                    "s_id"=>$s_id,
-                    "s_company"=>$s_company,
-                    "s_phone"=>$s_phone,
+                    "i_code"        =>$i_code,
+                    "i_isactive"    =>$i_isactive,
+                    "i_price"       =>$i_price,
+                    "i_minstock"    =>$i_minstock,
+                    "i_berat"       =>$i_berat,
+                    "i_img"         =>$i_img,
+                    "c_name"        =>$c_name,
+                    "c_address"     =>$c_address,
+                    "c_tlp"         =>$c_tlp,
+                    "s_id"          =>$s_id,
+                    "s_company"     =>$s_company,
+                    "s_phone"       =>$s_phone,
                 );
 
         echo json_encode(array("data"=>$item));
     } 
+
+    public function getSupplier()
+    {
+        $data = DB::table('d_supplier')
+                ->select('d_supplier.*')
+                ->get();
+        echo json_encode($data);
+    }
 
     
 
