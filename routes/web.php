@@ -515,6 +515,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/addDummy', 'penjualan\pemesananBarangController@add_dummy');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/delDummy', 'penjualan\pemesananBarangController@del_dummy');
+	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/loadData', 'penjualan\pemesananBarangController@load_data');
 
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/ft-pemesanan', 'penjualan\pemesananBarangController@ft_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
