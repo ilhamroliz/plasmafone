@@ -82,17 +82,21 @@
                         <div class="widget-body">
                             <form id="tpForm" class="form-inline" role="form">
 								{{csrf_field()}}
-
-                                <fieldset>
-
-									<div class="row">
-										<div class="form-group col-md-12" style="padding-left: 30px;">
-											<label>
-												<h5><strong> Nama Member : </strong></h5><h5 id="lbNama"></h5>
-											</label>
+								<div class="row">
+									<div class="col-sm-12 col-md-12 col-lg-12 no-padding padding-bottom-10">										
+										<div class="form-group col-md-12">
+											<label class="col-md-2"><strong>Nama Member :</strong></label>
+											<div class="col-md-4">
+												<input type="text" class="form-control" id="member" name="member" style="width: 100%" placeholder="Masukkan Nama Member">												
+											</div>
+											<div class="col-md-1">
+												<a onclick="modal_tambah()" class="btn btn-success" data-title="Tambah Member" style="width:100%"><i class="fa fa-plus"></i></a>												
+											</div>
 										</div>
 									</div>
+								</div>
 
+                                <fieldset>
 									<div class="row">
 										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
 											<div class="form-group col-md-12">
@@ -142,7 +146,64 @@
                     <!-- end widget div -->
                 </div>
             <!-- end widget -->
-            </div>
+			</div>
+			
+			<!-- Modal Untuk Tambah Member -->
+            <div class="modal fade" id="tmModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4><strong>Form Tambah Member</strong></h4>
+                        </div>
+                        <div class="modal-body no-padding">
+
+                            <form id="ft-group" class="smart-form">
+                                <input type="hidden" name="id" id="id">
+
+                                <fieldset>
+
+                                    <section>
+                                        <div class="row">
+                                            <label class="label col col-3">Nama Member</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="namaMember" id="namaMember" style="text-transform: uppercase" placeholder="Masukkan Nama Member" required>
+                                                </label>
+                                            </div>
+										</div>
+									</section>
+									
+									<section>
+										<div class="row">
+                                            <label class="label col col-3">Nomor Telepon</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="noTelp" id="noTelp" placeholder="Masukkan Nomor Telepon/HP Member" required>
+                                                </label>
+                                            </div>
+                                        </div>
+									</section>
+
+                                </fieldset>
+                                
+                                <footer>
+                                    <button type="button" class="btn btn-primary" onclick="tmSubmit()"><i class="fa fa-floppy-o"></i>
+                                        Simpan
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        Kembali
+                                    </button>
+
+                                </footer>
+                            </form>						
+                                    
+
+                        </div>
+
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- Akhir Modal untuk Tambah Group /.modal -->
+
         </div>
 
     </div>
@@ -165,35 +226,27 @@
 			source: baseUrl+'/penjualan/pemesanan-barang/get-item',
 			minLength: 2,
 			select: function(event, data) {
-				getData(data.item);
+				getItem(data.item);
 			}
 		});
 
-		function getData(data){
-			$('#itemId').val(data.id);
+		$( "#member" ).autocomplete({
+			source: baseUrl+'/penjualan/pemesanan-barang/get-member',
+			minLength: 2,
+			select: function(event, data) {
+				getMember(data.item);
+			}
+		});
+
+		function getItem(data){
+			$('#tpItemId').val(data.id);
+		}
+
+		function getMember(data){
+			$('#tpMemberId').val(data.id);
 		}
 
 		load_data();
-
-		$('#namabarang').keyup(function(){
-			var query = $(this).val();
-			if(query != ''){
-				var _token = $('input[name="_token"]').val();
-				$.ajax({
-					url :'{{url('/pembelian/request-pembelian/getInput')}}',
-					method : "POST",
-					data :{
-						query : query,
-						_token : _token
-					},
-					success: function(data)
-					{
-						$('#list_barang').fadeIn();
-						$('#list_barang').html(data);
-					}
-				})
-			}
-		});
 
 		$(document).on('click','li',function(){
 			$('#namabarang').val($(this).text());
@@ -202,6 +255,9 @@
 
 	})
 
+	function modal_tambah(){
+		$('#tmModal').modal('show');
+	}
 
 	function hapusData(id){
 		$.ajax({
@@ -224,13 +280,13 @@
 	function load_data(){
 		requestDumy = $('#table-rencana').DataTable({
 			"ajax": {
-					"url": '{{url('/pembelian/request-pembelian/ddRequest_dummy')}}',
-					"type": 'GET',  
-					"data": function ( data ) {
-					},
+				"url": '{{url('/pembelian/request-pembelian/ddRequest_dummy')}}',
+				"type": 'GET',  
+				"data": function ( data ) {
 				},
-			} );	
-		}
+			},
+		} );	
+	}
 			
 	function getItem(){
 		$('#item_kelompok').empty();  
@@ -272,35 +328,33 @@
 		}); 
 		alert();
 	}
-// $('#table-rencana').DataTable().ajax.reload();
 		
 	function editDumy(id){
 		var input = $('#i_nama'+id).val();
 		$.ajax({
-					url : '{{url('/pembelian/request-pembelian/editDumy')}}',
-					type: "GET",
-					data: { 
-						'id' : id,
-						'qty' : input,
+			url : '{{url('/pembelian/request-pembelian/editDumy')}}',
+			type: "GET",
+			data: { 
+				'id' : id,
+				'qty' : input,
 
-					},
-					dataType: "JSON",
-					success: function(data)
-					{
-						
-						Swal({
-								position: 'top-end',
-								type: 'danger',
-								title: 'Request Order Telah Di edit',
-								showConfirmButton: false,
-								timer: 7500,
-							});
-						
-						$('#table-rencana').DataTable().ajax.reload();
-						
-					},
-					
-			}); 
+			},
+			dataType: "JSON",
+			success: function(data)
+			{
+				
+				Swal({
+						position: 'top-end',
+						type: 'danger',
+						title: 'Request Order Telah Di edit',
+						showConfirmButton: false,
+						timer: 7500,
+					});
+				
+				$('#table-rencana').DataTable().ajax.reload();
+				
+			},				
+		}); 
 	}
 
 	function simpanRequest(){

@@ -513,6 +513,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/penjualan/pemesanan-barang/get-item', 'penjualan\pemesananBarangController@cari_item');
 	Route::get('/penjualan/pemesanan-barang/get-group', 'penjualan\pemesananBarangController@get_group');
 
+	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/addDummy', 'penjualan\pemesananBarangController@add_dummy');
+	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/delDummy', 'penjualan\pemesananBarangController@del_dummy');
+
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/ft-pemesanan', 'penjualan\pemesananBarangController@ft_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-pemesanan', 'penjualan\pemesananBarangController@tambah_pemesanan');

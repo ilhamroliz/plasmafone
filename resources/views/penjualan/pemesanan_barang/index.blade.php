@@ -45,15 +45,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
             @if(Plasma::checkAkses(18, 'insert') == true)
             <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text-align-right">
-				<div class="page-title col-md-6">
-					<input type="text" class="form-control" id="findMember" name="findMember" placeholder="Masukkan Nama Member">
+				<div class="page-title">
+					<a href="{{ url('/penjualan/pemesanan-barang/tambah-pemesanan') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Pemesanan</a>
 				</div>
-				<div class="page-title col-md-3">
-                    <button onclick="modal_tambah()" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Tambah Member</button>
-                </div>
-                <div class="page-title col-md-3">
-                    <button onclick="tambah_pemesanan()" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Pemesanan</button>
-                </div>
             </div>
             @endif
         
@@ -170,61 +164,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			</div>
 			<!-- end row -->
 			
-			<!-- Modal Untuk Tambah Member -->
-            <div class="modal fade" id="tmModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4><strong>Form Tambah Member</strong></h4>
-                        </div>
-                        <div class="modal-body no-padding">
-
-                            <form id="ft-group" class="smart-form">
-                                <input type="hidden" name="id" id="id">
-
-                                <fieldset>
-
-                                    <section>
-                                        <div class="row">
-                                            <label class="label col col-3">Nama Member</label>
-                                            <div class="col col-9 has-feedback">
-                                                <label class="input">
-                                                    <input type="text" name="namaMember" id="namaMember" style="text-transform: uppercase" placeholder="Masukkan Nama Member" required>
-                                                </label>
-                                            </div>
-										</div>
-									</section>
-									
-									<section>
-										<div class="row">
-                                            <label class="label col col-3">Nomor Telepon</label>
-                                            <div class="col col-9 has-feedback">
-                                                <label class="input">
-                                                    <input type="text" name="noTelp" id="noTelp" placeholder="Masukkan Nomor Telepon/HP Member" required>
-                                                </label>
-                                            </div>
-                                        </div>
-									</section>
-
-                                </fieldset>
-                                
-                                <footer>
-                                    <button type="button" class="btn btn-primary" onclick="tmSubmit()"><i class="fa fa-floppy-o"></i>
-                                        Simpan
-                                    </button>
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                        Kembali
-                                    </button>
-
-                                </footer>
-                            </form>						
-                                    
-
-                        </div>
-
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- Akhir Modal untuk Tambah Group /.modal -->
+			
             
             <!-- Modal untuk Detil Pemesanan -->
 			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -324,23 +264,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 <script type="text/javascript">
 		var done, proses, cancel;
-
-		@if(Plasma::checkAkses(18, 'insert') == true){
-			$(document).ready(function(){
-				$( "#findMember" ).autocomplete({
-					source: baseUrl+'/penjualan/pemesanan-barang/get-member',
-					minLength: 2,
-					select: function(event, data) {
-						getData(data.item);
-					}
-				});
-			}); 
-		}
-
-		function getData(data){
-			$('#tpMemberId').val(data.id);
-		}
-		@endif
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -462,9 +385,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		    batal.api().ajax.reload();
 		}
 
-		function modal_tambah(){
-			$('#tmModal').modal('show');
-		}
+		
 
 		function tambah_member(){
 			
@@ -480,7 +401,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					icon : "fa fa-times bounce animated"
 				});
 			}else{
-				location.href = "{{ url('/penjualan/pemesanan-barang/tambah-pemesanan') }}";
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Penyimpanan Data Group Sedang di Proses ...');
+
+				axios.post(baseUrl+'/penjualan/pemesanan-barang/ft-pemesanan', $('#ftForm').serialize());
 			}
 		}
 

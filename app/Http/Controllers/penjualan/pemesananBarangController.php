@@ -160,17 +160,6 @@ class pemesananBarangController extends Controller
         return view('penjualan.pemesanan_barang.tambah');
     }
 
-    public function ft_pemesanan(Request $request)
-    {
-        if (Plasma::checkAkses(18, 'insert') == false) {
-            return view('errors/407');
-        } else {
-            if ($request->isMethod('post')) {
-
-            }
-        }
-    }
-
     public function tambah_pemesanan(Request $request)
     {
         if (Plasma::checkAkses(18, 'insert') == false) {
@@ -179,6 +168,8 @@ class pemesananBarangController extends Controller
             if ($request->isMethod('post')) {
 
             }
+
+            return view('penjualan.pemesanan_barang.tambah');
         }
     }
 
