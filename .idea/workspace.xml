@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/penjualan/PenjualanController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_header.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,11 +31,12 @@
           <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.60" value="1" />
           <entry key="project.open.time.66" value="1" />
           <entry key="project.open.time.69" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="21" />
+          <entry key="project.opened" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -46,17 +44,17 @@
           <entry key="css" value="3" />
           <entry key="env" value="1" />
           <entry key="js" value="6" />
-          <entry key="php" value="79" />
+          <entry key="php" value="85" />
           <entry key="ts" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key=".env file" value="1" />
-          <entry key="Blade" value="19" />
+          <entry key="Blade" value="24" />
           <entry key="CSS" value="3" />
           <entry key="JavaScript" value="6" />
-          <entry key="PHP" value="60" />
+          <entry key="PHP" value="61" />
           <entry key="TypeScript" value="1" />
         </counts>
       </usages-collector>
@@ -65,15 +63,15 @@
           <entry key="dummy" value="5" />
           <entry key="env" value="17" />
           <entry key="js" value="74" />
-          <entry key="php" value="3123" />
+          <entry key="php" value="3524" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="17" />
-          <entry key="Blade" value="717" />
+          <entry key="Blade" value="1075" />
           <entry key="JavaScript" value="74" />
-          <entry key="PHP" value="2406" />
+          <entry key="PHP" value="2449" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
@@ -94,8 +92,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="524" column="56" selection-start-line="524" selection-start-column="56" selection-end-line="524" selection-end-column="56" />
+            <state relative-caret-position="158">
+              <caret line="518" column="104" selection-start-line="518" selection-start-column="92" selection-end-line="518" selection-end-column="104" />
             </state>
           </provider>
         </entry>
@@ -103,29 +101,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
-              <caret line="78" column="92" selection-start-line="78" selection-start-column="92" selection-end-line="78" selection-end-column="92" />
+            <state relative-caret-position="360">
+              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="190" column="45" lean-forward="true" selection-start-line="190" selection-start-column="45" selection-end-line="190" selection-end-column="45" />
+              <folding>
+                <element signature="e#6670#6677#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/set_harga/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="287" column="109" selection-start-line="287" selection-start-column="105" selection-end-line="287" selection-end-column="109" />
-              <folding>
-                <element signature="e#3607#5054#0#HTML" />
-              </folding>
+            <state relative-caret-position="1638">
+              <caret line="683" column="57" lean-forward="true" selection-start-line="683" selection-start-column="57" selection-end-line="683" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -158,6 +156,10 @@
       <find>toggleMenu</find>
       <find>collapse</find>
       <find>ready</find>
+      <find>cari_userLog</find>
+      <find>auto</find>
+      <find>modal</find>
+      <find>ajax</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -174,7 +176,6 @@
         <option value="$PROJECT_DIR$/vendor/nesbot/carbon/src/Carbon/Carbon.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/master/outlet/outlet_controller.php" />
         <option value="$PROJECT_DIR$/config/database.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" />
         <option value="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" />
         <option value="$PROJECT_DIR$/config/app.php" />
         <option value="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/index.blade.php" />
@@ -185,10 +186,11 @@
         <option value="$PROJECT_DIR$/template_asset/js/plugin/mask-money/jquery.maskMoney.js" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/PenjualanController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/main.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_header.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" />
       </list>
     </option>
@@ -326,6 +328,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -382,6 +385,36 @@
               <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="pembelian" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="pembelian" type="462c0819:PsiDirectoryNode" />
+              <item name="rencana_pembelian" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="pengaturan" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="pengaturan" type="462c0819:PsiDirectoryNode" />
+              <item name="log_activity" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="penjualan" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -409,7 +442,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -471,17 +503,18 @@
       <workItem from="1545094876501" duration="303000" />
       <workItem from="1545792892353" duration="1699000" />
       <workItem from="1545814784043" duration="6919000" />
+      <workItem from="1545874862360" duration="2857000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="59742000" />
+    <option name="totallyTimeSpent" value="62599000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1366" height="734" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2723824" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27693474" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -510,19 +543,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/User.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Middleware/Authenticate.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
@@ -718,24 +738,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="232" column="28" selection-start-line="232" selection-start-column="28" selection-end-line="232" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config/app.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="395">
           <caret line="226" column="68" selection-start-line="226" selection-start-column="68" selection-end-line="226" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="60" column="40" lean-forward="true" selection-start-line="52" selection-start-column="8" selection-end-line="60" selection-end-column="40" />
         </state>
       </provider>
     </entry>
@@ -788,29 +794,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="48">
           <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="41" />
-          <folding>
-            <element signature="e#50#78#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/PenjualanController.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="524" column="56" selection-start-line="524" selection-start-column="56" selection-end-line="524" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/PenjualanController.php" />
     <entry file="file://$PROJECT_DIR$/resources/views/partials/_navigation.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-144" />
@@ -835,20 +822,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/set_harga/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="47" column="32" selection-start-line="47" selection-start-column="20" selection-end-line="47" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pengaturan/log_activity/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="190" column="11" lean-forward="true" selection-start-line="184" selection-start-column="8" selection-end-line="190" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="158">
+          <caret line="518" column="104" selection-start-line="518" selection-start-column="92" selection-end-line="518" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/edit_rencana_pembelian.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="287" column="109" selection-start-line="287" selection-start-column="105" selection-end-line="287" selection-end-column="109" />
-          <folding>
-            <element signature="e#3607#5054#0#HTML" />
-          </folding>
+          <caret line="24" column="32" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/add.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1026">
+          <caret line="193" column="25" selection-start-line="193" selection-start-column="20" selection-end-line="193" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="97" column="60" selection-start-line="97" selection-start-column="60" selection-end-line="97" selection-end-column="60" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="78" column="92" selection-start-line="78" selection-start-column="92" selection-end-line="78" selection-end-column="92" />
+        <state relative-caret-position="288">
+          <caret line="190" column="45" lean-forward="true" selection-start-line="190" selection-start-column="45" selection-end-line="190" selection-end-column="45" />
+          <folding>
+            <element signature="e#6670#6677#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/set_harga/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1638">
+          <caret line="683" column="57" lean-forward="true" selection-start-line="683" selection-start-column="57" selection-end-line="683" selection-end-column="57" />
         </state>
       </provider>
     </entry>

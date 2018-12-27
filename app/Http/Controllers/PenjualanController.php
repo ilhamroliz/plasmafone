@@ -10,4 +10,9 @@ class PenjualanController extends Controller
     {
         return view('penjualan.penjualan-regular.index');
     }
+
+    public function getMember()
+    {
+
+    }
 }

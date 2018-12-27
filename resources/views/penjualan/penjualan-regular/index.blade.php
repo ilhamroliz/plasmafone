@@ -55,11 +55,11 @@
                                             <div class="col-md-4">
                                                 <div class="input-icon-left">
                                                     <i class="fa fa-user"></i>
-                                                    <input class="form-control" placeholder="Masukkan Nama Pembeli" type="text">
+                                                    <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text">
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
-                                                <button type="button" class="btn btn-primary" title="Tambah Pembeli"><i class="fa fa-user-plus"></i></button>
+                                                <button type="button" data-toggle="modal" data-target="#DaftarMember" class="btn btn-primary" title="Tambah Pembeli"><i class="fa fa-user-plus"></i></button>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -119,15 +119,76 @@
             </div>
         </section>
         <!-- end widget grid -->
-
     </div>
     <!-- END MAIN CONTENT -->
+    <!-- Modal -->
+    <div class="modal fade" id="DaftarMember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Tambah Member</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="input-icon-left">
+                                        <i class="fa fa-user"></i>
+                                        <input class="form-control" id="nama-member" placeholder="Masukkan Nama Pembeli" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="input-icon-left">
+                                        <i class="fa fa-phone"></i>
+                                        <input class="form-control" id="nomor-member" placeholder="Masukkan Nomor Pembeli" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Batal
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="simpanmember()">
+                        Simpan
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 
 @section('extra_script')
 <script>
     $(document).ready(function(){
         $('.togel').click();
+        $( "#cari-member" ).autocomplete({
+            source: baseUrl+'/pengaturan/log-kegiatan/cariLog',
+            minLength: 2,
+            select: function(event, data) {
+                getData(data.item);
+            }
+        });
     })
+
+    $("#nomor-member").on("keypress keyup blur",function (event) {
+        $(this).val($(this).val().replace(/[^\d].+/, ""));
+        if ((event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+
+    function simpanmember() {
+        var nama = $('#nama-member').val();
+        var nomor = $('#nomor-member').val();
+    }
 </script>
 @endsection

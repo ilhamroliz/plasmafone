@@ -132,4 +132,15 @@
 	            "processing":"<img src='{{ asset('template_asset/images/loader.gif') }}' width='30px'>"
 	        }
 
+	        function overlay()
+			{
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Memproses...');
+			}
+
+			function out()
+			{
+				$('#overlay').fadeOut(200);
+			}
+
 		</script>
