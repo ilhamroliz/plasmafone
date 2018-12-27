@@ -3,7 +3,7 @@
 @section('title', 'Pemesanan Barang')
 
 @section('extra_style')
-<script src="{{ asset('template_asset/sweetalert2/sweetalert2.min.css') }}"></script>
+
 @endsection
 
 @section('ribbon')
@@ -37,7 +37,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
-                    <i class="fa-fw fa fa-credit-card"></i>
+                    <i class="fa-fw fa fa-handshake-o"></i>
                     Penjualan
                     <span>
 						<i class="fa fa-angle-double-right"></i>
@@ -80,36 +80,42 @@
 
                         <!-- widget content -->
                         <div class="widget-body">
-                            <form id="checkout-form" class="form-inline" role="form">
-                                <fieldset class="row">
-                                    <div class="form-group col-md-8">
-                                        <label class="sr-only" for="itemNama">Nama Barang</label>
-                                        <input type="text" class="form-control" id="itemNama" name="itemNama" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
-                                    </div>
-									{{csrf_field()}}
-                                    <!-- <div class="form-group col-md-8">
-										<div class="input-group col-xs-10 col-lg-10" id="select_kelompok">
-												<kelompok :options="data_I_kelompok" @change="i_kelompok_change" v-model="form_data.i_kelompok">
-													</kelompok>
-												</div>
-                                    </div> -->
-                                    <div class="form-group col-md-2">
-                                        <label class="sr-only" for="jumlah">Jumlah Barang</label>
-                                        <input type="text" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan Jumlah Barang" style="width: 100%" autocomplete="off">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <button class="btn btn-primary" onclick="tambah()">Tambah</button>
-                                    </div>
-                                </fieldset>
+                            <form id="tpForm" class="form-inline" role="form">
+								{{csrf_field()}}
 
-                                <fieldset class="row">
+                                <fieldset>
+
+									<div class="row">
+										<div class="form-group col-md-12" style="padding-left: 30px;">
+											<label>
+												<h5><strong> Nama Member : </strong></h5><h5 id="lbNama"></h5>
+											</label>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
+											<div class="form-group col-md-12">
+												<div class="col-md-7">
+													<input type="text" class="form-control" id="itemNama" name="itemNama" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
+												</div>
+												<div class="col-md-3">
+													<input type="text" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan Jumlah Barang" style="width: 100%" autocomplete="off">
+												</div>
+												<div class="col-md-2">
+													<button class="btn btn-primary" style="width: 100%" onclick="tambah()"><i class="fa fa-plus"></i>Tambah</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									
                                     <dir class="col-md-12">
 
-                                        <table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
+                                        <table id="tpTable" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="75%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="10%">Jumlah Barang</th>
+                                                    <th data-hide="phone,tablet" width="65%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" width="20%">Jumlah Barang</th>
                                                     <th data-hide="phone,tablet" width="15%">Aksi</th>
                                                 </tr>
                                             </thead>
@@ -124,7 +130,7 @@
 								<div class="form-actions">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">AJUKAN REQUEST ORDER</button>
+                                            <button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">Masukkan Pemesanan Barang</button>
                                         </div>
                                     </div>
                                 </div>
@@ -145,209 +151,200 @@
 @endsection
 
 @section('extra_script')
-<script src="{{ asset('template_asset/jquery/b.min.js') }}"></script>
-<script src="{{ asset('template_asset/jquery/b.min.js') }}"></script>
-<script src="{{ asset('template_asset/jquery/j.js') }}"></script>
-
-<script src="{{ asset('template_asset/sweetalert2/sweetalert2.min.js') }}"></script>
-<script src="{{ asset('template_asset/sweetalert2/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/app.config.js') }}"></script>
-<script src="{{ asset('template_asset/jquery/jquery.autocomplete.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/bootstrap/bootstrap.min.js') }}"></script>
 
+<script type="text/javascript">
+	var requestDumy;
 
-    <script type="text/javascript">
-		var requestDumy;
+	$(document).ready(function () {
 
-        $(document).ready(function () {
-			load_data();
+		$( "#itemNama" ).autocomplete({
+			source: baseUrl+'/penjualan/pemesanan-barang/get-item',
+			minLength: 2,
+			select: function(event, data) {
+				getData(data.item);
+			}
+		});
 
-			$('#namabarang').keyup(function(){
-				var query = $(this).val();
-				if(query != ''){
-					var _token = $('input[name="_token"]').val();
-					$.ajax({
-						url :'{{url('/pembelian/request-pembelian/getInput')}}',
-						method : "POST",
-						data :{
-							query : query,
-							_token : _token
-						},
-						success: function(data)
-						{
-							$('#list_barang').fadeIn();
-							$('#list_barang').html(data);
-						}
-					})
-				}
-			});
+		function getData(data){
+			$('#itemId').val(data.id);
+		}
 
-			
+		load_data();
 
-			$(document).on('click','li',function(){
-				$('#namabarang').val($(this).text());
-				$('#list_barang').fadeOut();
-			})
+		$('#namabarang').keyup(function(){
+			var query = $(this).val();
+			if(query != ''){
+				var _token = $('input[name="_token"]').val();
+				$.ajax({
+					url :'{{url('/pembelian/request-pembelian/getInput')}}',
+					method : "POST",
+					data :{
+						query : query,
+						_token : _token
+					},
+					success: function(data)
+					{
+						$('#list_barang').fadeIn();
+						$('#list_barang').html(data);
+					}
+				})
+			}
+		});
 
-			
-
+		$(document).on('click','li',function(){
+			$('#namabarang').val($(this).text());
+			$('#list_barang').fadeOut();
 		})
 
+	})
 
-		function hapusData(id){
-			$.ajax({
-				url : '{{url('/pembelian/request-pembelian/hapusDumy')}}',
-				type: "GET",
-				data: { 
-					id : id,
+
+	function hapusData(id){
+		$.ajax({
+			url : '{{url('/pembelian/request-pembelian/hapusDumy')}}',
+			type: "GET",
+			data: { 
+				id : id,
+			},
+			dataType: "JSON",
+			success: function(data)
+			{
+				// $('#table-rencana').DataTable().fnDestroy();
+				$('#table-rencana').DataTable().ajax.reload();
+			},
+			
+		}); 
+		alert(); 
+	}
+
+	function load_data(){
+		requestDumy = $('#table-rencana').DataTable({
+			"ajax": {
+					"url": '{{url('/pembelian/request-pembelian/ddRequest_dummy')}}',
+					"type": 'GET',  
+					"data": function ( data ) {
+					},
 				},
-				dataType: "JSON",
-				success: function(data)
-				{
-					// $('#table-rencana').DataTable().fnDestroy();
-					$('#table-rencana').DataTable().ajax.reload();
-				},
-				
-			}); 
-			alert(); 
+			} );	
 		}
+			
+	function getItem(){
+		$('#item_kelompok').empty();  
+	
+		$.ajax({
+			url : '{{url('/pembelian/request-pembelian/getBarang')}}',
+			type: "GET",
+			data: { 
+			},
+			dataType: "JSON",
+			success: function(data)
+			{
+			$('#item_kelompok').empty(); 
+			row = "<option selected='' value='0'>Pilih Item</option>";
+			$(row).appendTo("#item_kelompok");
+			$.each(data, function(k, v) {
+				row = "<option value='"+v.i_id+"'>"+v.i_nama+"</option>";
+				$(row).appendTo("#item_kelompok");
+			});
+			},
+			
+		});  
+	}
 
-		function load_data(){
-			requestDumy = $('#table-rencana').DataTable({
-                    "ajax": {
-                                "url": '{{url('/pembelian/request-pembelian/ddRequest_dummy')}}',
-                                "type": 'GET',  
-                                "data": function ( data ) {
-                                },
-                            },
-                    } );
-					
-				}
-				
-		function getItem(){
-			$('#item_kelompok').empty();  
+	function tambah(){
 		
-			$.ajax({
-						url : '{{url('/pembelian/request-pembelian/getBarang')}}',
-						type: "GET",
-						data: { 
-						},
-						dataType: "JSON",
-						success: function(data)
-						{
-						$('#item_kelompok').empty(); 
-						row = "<option selected='' value='0'>Pilih Item</option>";
-						$(row).appendTo("#item_kelompok");
-						$.each(data, function(k, v) {
-							row = "<option value='"+v.i_id+"'>"+v.i_nama+"</option>";
-							$(row).appendTo("#item_kelompok");
-						});
-						},
-						
-					});  
-		}
-
-        function tambah(){
-			
-			$.ajax({
-						url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
-						type: "GET",
-						data: { 
-							'qty' : $('#qty').val(),
-							'item' : $('#namabarang').val(),
-
-						},
-						dataType: "JSON",
-						success: function(data)
-						{
-							
-							
-						},
-						
-				}); 
-				alert();
-		}
+		$.ajax({
+			url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
+			type: "GET",
+			data: { 
+				'qty' : $('#jumlah').val(),
+				'item' : $('#itemId').val(),
+			},
+			dataType: "JSON",
+			success: function(data)
+			{
+					
+			},
+		}); 
+		alert();
+	}
 // $('#table-rencana').DataTable().ajax.reload();
-		 
-		function editDumy(id){
-			var input = $('#i_nama'+id).val();
-			$.ajax({
-						url : '{{url('/pembelian/request-pembelian/editDumy')}}',
-						type: "GET",
-						data: { 
-							'id' : id,
-							'qty' : input,
+		
+	function editDumy(id){
+		var input = $('#i_nama'+id).val();
+		$.ajax({
+					url : '{{url('/pembelian/request-pembelian/editDumy')}}',
+					type: "GET",
+					data: { 
+						'id' : id,
+						'qty' : input,
 
-						},
-						dataType: "JSON",
-						success: function(data)
-						{
-							
-							Swal({
-									position: 'top-end',
-									type: 'danger',
-									title: 'Request Order Telah Di edit',
-									showConfirmButton: false,
-									timer: 7500,
-								});
-							
-							$('#table-rencana').DataTable().ajax.reload();
-							
-						},
-						
-				}); 
-		}
-
-		function simpanRequest(){
-			
-			$.ajax({
-				url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
-				type: "get",
-				data: { 
-				},
-				dataType: "JSON",
-				success: function(data)
-				{
-					
-					if(data.status == 'gagal')
+					},
+					dataType: "JSON",
+					success: function(data)
 					{
-						Swal({
-								position: 'top-end',
-								type: 'danger',
-								title: 'Request Order Gagal Di Ajukan',
-								showConfirmButton: false,
-								timer: 1500
-							});
-						// $('#table-rencana').DataTable().ajax.reload();
-					}else{
 						
-						$('#table-rencana').dataTable().ajax.reload();
 						Swal({
 								position: 'top-end',
 								type: 'danger',
-								title: 'Request Order Telah Di Ajukan',
+								title: 'Request Order Telah Di edit',
 								showConfirmButton: false,
-								timer: 3500
+								timer: 7500,
 							});
-					}
-					// $('#table-rencana').DataTable().fnDestroy();
-					
-				},
+						
+						$('#table-rencana').DataTable().ajax.reload();
+						
+					},
 					
 			}); 
-			
-		}
+	}
 
-        
-    </script>
+	function simpanRequest(){
+		
+		$.ajax({
+			url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
+			type: "get",
+			data: { 
+			},
+			dataType: "JSON",
+			success: function(data)
+			{
+				
+				if(data.status == 'gagal')
+				{
+					Swal({
+							position: 'top-end',
+							type: 'danger',
+							title: 'Request Order Gagal Di Ajukan',
+							showConfirmButton: false,
+							timer: 1500
+						});
+					// $('#table-rencana').DataTable().ajax.reload();
+				}else{
+					
+					$('#table-rencana').dataTable().ajax.reload();
+					Swal({
+							position: 'top-end',
+							type: 'danger',
+							title: 'Request Order Telah Di Ajukan',
+							showConfirmButton: false,
+							timer: 3500
+						});
+				}
+				// $('#table-rencana').DataTable().fnDestroy();
+				
+			},
+				
+		}); 
+		
+	}
+
+	
+</script>
 
 <script type="text/javascript">
 

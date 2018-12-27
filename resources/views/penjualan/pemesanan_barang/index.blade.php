@@ -36,7 +36,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
         <div class="row">
 
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-handshake-o"></i>
                     Penjualan <span><i class="fa fa-angle-double-right"></i> Pemesanan Barang </span>
@@ -44,8 +44,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             </div>
 
             @if(Plasma::checkAkses(18, 'insert') == true)
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
-                <div class="page-title">
+            <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 text-align-right">
+				<div class="page-title col-md-6">
+					<input type="text" class="form-control" id="findMember" name="findMember" placeholder="Masukkan Nama Member">
+				</div>
+				<div class="page-title col-md-3">
+                    <a onclick="tambah_member()" class="btn btn-primary"><i class="fa fa-plus"></i>&nbsp;Tambah Member</a>
+                </div>
+                <div class="page-title col-md-3">
                     <a href="{{ url('/penjualan/pemesanan-barang/tambah-pemesanan') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Pemesanan</a>
                 </div>
             </div>
@@ -108,7 +114,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+													<th width="55%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
 													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
 													<th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
@@ -263,6 +269,26 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 <script type="text/javascript">
 		var done, proses, cancel;
 
+		@if(Plasma::checkAkses(18, 'insert') == true){
+			$(document).ready(function(){
+				$( "#findMember" ).autocomplete({
+					source: baseUrl+'/penjualan/pemesanan-barang/cari-member',
+					minLength: 2,
+					select: function(event, data) {
+						getData(data.item);
+					}
+				});
+
+				table = $('#dt_basic').DataTable({
+					language: dataTableLanguage
+				});
+			}); 
+		}
+
+		function getData(data){
+			$('#searchhidden').val(data.id);
+		}
+		@endif
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
 		

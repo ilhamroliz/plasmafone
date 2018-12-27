@@ -135,7 +135,7 @@ class pemesananBarangController extends Controller
         if ($item == null) {
             $hasilitem[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
-            foreach ($nama as $query) {
+            foreach ($item as $query) {
                 $hasilitem[] = ['id' => $query->i_id, 'label' => $query->i_nama];
             }
         }
@@ -160,13 +160,53 @@ class pemesananBarangController extends Controller
         return view('penjualan.pemesanan_barang.tambah');
     }
 
-    public function tambah_pemesanan()
+    public function tambah_pemesanan(Request $request)
     {
+        if (Plasma::checkAkses(18, 'insert') == false) {
+            return view('errors/407');
+        } else {
+            if ($request->isMethod('post')) {
 
+            }
+
+            ////==== IF Method used is GET
+            return view('penjualan.pemesanan_barang.tambah');
+        }
     }
 
     public function hapus()
     {
 
+    }
+
+    public function temp_tambah_data(Request $request)
+    {
+        $comp = Auth::user()->m_id;
+        $item = $request->input('itemId');
+        $qty = $request->input('jumlah');
+        $status = 'DUMY';
+
+        $count = DB::table('d_indent')->count();
+        $idIndent = $count + 1;
+
+        $countDetil = DB::table('d_indent_dt')->where('id_indent', $idIndent)->count();
+        $idDetilId = $countDetail + 1;
+
+        $insert = DB::table('d_indent_dt')
+            ->insert([
+                'id_indent' => $idIndent,
+                'id_detailid' => $idIndentId,
+                'id_item' => $item,
+                'id_qty' => $qty,
+                'id_note' => $request->note
+            ]);
+
+        if ($insert) {
+            $status = "SUKSES";
+        } else {
+            $status = "GAGAL";
+        }
+
+        echo json_encode(array("data" => $status));
     }
 }

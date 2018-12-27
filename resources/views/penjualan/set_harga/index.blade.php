@@ -430,19 +430,22 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			axios.get(baseUrl+'/penjualan/set-harga/get-data-gp-non/'+id).then(response => {
 
 				$('#title_table').html('<h4 style="float: left"><strong>'+response.data.name+'</strong></h4>&nbsp;<a onclick="edit_group('+response.data.id+')"><i class="fa fa-pencil"></i></a>&nbsp;<a onclick="hapus_group('+response.data.id+')"><i class="fa fa-close"></i></a>');
-				$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang" required><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" data-thousands="." data-decimal="," name="thHarga" placeholder="Harga Barang" required><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')
+				@if(Plasma::checkAkses(15, 'insert') == true){
+					$('#thFormDiv').html('<form id="thForm"><input type="hidden" id="thGroupId" name="thGroupId"><input type="hidden" id="thItemId" name="thItemId"><input style="width: 50%; margin-right: 10px; float: left" class="form-control" type="text" id="thItemNama" name="thItemNama" placeholder="Nama Barang" required><input style="width: 30%; margin-right: 10px; float: left" class="form-control" type="text" id="thHarga" data-thousands="." data-decimal="," name="thHarga" placeholder="Harga Barang" required><button type="button" style="width: 17%" class="btn btn-success" onclick="thSubmit()"><i class="fa fa-plus">&nbsp;Tambah</i></button></form>')					
+					$('#thGroupId').val(response.data.id);
+					$( "#thItemNama" ).autocomplete({
+						source: baseUrl+'/penjualan/set-harga/cariItem',
+						minLength: 2,
+						select: function(event, data) {
+							getData(data.item);
+						}
+					});
+					$("#thHarga").maskMoney({
+						precision: 0
+					});
+				}
+				@endif
 				$('#egNama').val(response.data.name);
-				$('#thGroupId').val(response.data.id);
-				$( "#thItemNama" ).autocomplete({
-					source: baseUrl+'/penjualan/set-harga/cariItem',
-					minLength: 2,
-					select: function(event, data) {
-						getData(data.item);
-					}
-				});
-				$("#thHarga").maskMoney({
-					precision: 0
-				});
 
 				$('#egNama').val(response.data.name);				
 				$('#ehGroupNama').val(response.data.name);
