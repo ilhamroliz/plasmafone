@@ -223,7 +223,7 @@
                                         <!-- widget content -->
                                         <div class="widget-body no-padding">
                                             
-                                            <form id="smart-form-register" class="smart-form">
+                                            <form id="smart-form-register" class="smart-form" name="autoSumForm">
                                                 <header>
                                                     Detail Item
                                                 </header>
@@ -237,45 +237,46 @@
                                                     <section>
                                                         <label class="label">Nama Item</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" name="username" placeholder="Username">
+                                                            <input type="text" id="dt_item" placeholder="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <section>
                                                         <label class="label">Kelompok</label>
                                                         <label class="input"> <i class="icon-append fa fa-envelope-o"></i>
-                                                            <input type="text" name="username" placeholder="Username">
+                                                            <input type="text" id="dt_kelompok" placeholder="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <section>
                                                         <label class="label">Merk</label>
                                                         <label class="input"> <i class="icon-append fa fa-lock"></i>
-                                                            <input type="text" name="username" placeholder="Username">
+                                                            <input type="text" id="dt_merk" placeholder="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <section>
                                                         <label class="label">Spesifik Kode</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" name="username" placeholder="Username">
+                                                            <input type="text" id="dt_code" placeholder="">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     <div class="row">
                                                         <section class="col col-6">
                                                         <label class="label">Harga Satuan</label>
                                                             <label class="input">
-                                                                <input type="text" name="firstname" placeholder="Harga Satuan">
+                                                                <input type="text" name="firstBox" placeholder="Harga Satuan" value="" onkeyup="calc(1)" id="dt_harga">
                                                             </label>
                                                         </section>
                                                         <section class="col col-6">
                                                             <label class="label">Qty</label>
                                                             <label class="input">
-                                                                <input type="text" name="lastname" placeholder="Qty">
+                                                                <input type="text" name="secondBox" placeholder="Qty" value="" onkeyup="calc(2)" id="dt_qty">
                                                             </label>
                                                         </section>
                                                     </div>
+													
                                                     <section>
                                                         <label class="label">Sub Total</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" name="username" placeholder="Sub Total">
+                                                            <input type="text" name="thirdBox" placeholder="Sub Total" value="" onkeyup="calc(3)" disabled="disabled" id="dt_subTotal">
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     
@@ -291,30 +292,27 @@
                                                     <section class="col col-6">
                                                             <label class="label">Supplier</label>
                                                             <label class="select">
-                                                                <select name="gender">
-                                                                    <option value="0" selected="" disabled="">Gender</option>
-                                                                    <option value="1">Male</option>
-                                                                    <option value="2">Female</option>
-                                                                    <option value="3">Prefer not to answer</option>
+                                                                <select id="dt_supplier">
+                                                                    <option value="0" selected="" disabled="">Pilih Supplier</option>
                                                                 </select> <i></i> </label>
                                                         </section>
                                                         <section class="col col-6">
                                                             <label class="label">No Telepon</label>
                                                             <label class="input">
-                                                                <input type="text" name="lastname" placeholder="Telepon">
+                                                                <input type="text" name="telepon" placeholder="" id="dt_telepon">
                                                             </label>
                                                         </section>
                                                     </div>
                                                     
                                                 </fieldset>
                                                 <footer>
-                                                    <button type="submit" class="btn btn-danger">
-                                                        Rencana DiTolak
+                                                    <button  class="btn btn-danger" id="btn_ditolak" onclick="tolak()">
+                                                        Rencana Di Tolak
                                                     </button>
-                                                    <button type="submit" class="btn btn-primary">
-                                                        Rencana DISetujui
+                                                    <button  class="btn btn-primary" id="btn_disetujui" onclick="setuju()">
+                                                        Rencana Di Setujui
                                                     </button>
-                                                    <button type="submit" class="btn btn-warning">
+                                                    <button  class="btn btn-warning" id="btn_tutup" onclick="tutup()">
                                                         Tutup
                                                     </button>
                                                 </footer>
@@ -401,15 +399,14 @@
             
         });
 
-        function test(id){
-            $('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
-					$('#detailModal').modal('show');
+        function tutup(){
+            $('#detailModal').modal('hide');
         }
 
-        function edit(id){
-            
+
+        function getPlan_id(id){
             $.ajax({
-                url : '{{url('/pembelian/rencana-pembelian/getRequest_id')}}',
+                url : '{{url('/pembelian/konfirmasi-pembelian/getPlan_id')}}',
                 type: "GET",
                 data: { 
 					id : id,
@@ -417,6 +414,45 @@
                 dataType: "JSON",
                 success: function(data)
                 {
+					supplier = data.data.s_id;
+
+					if (data.data.i_img == "") {
+
+						$('img#dt_image').attr("src", "{{asset('img/image-not-found.png')}}");
+
+					}else{
+
+						$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
+
+					}
+					$('#dt_item').val(data.data.i_nama);
+					$('#dt_merk').val(data.data.i_merk);
+					$('#dt_kelompok').val(data.data.i_kelompok);
+					$('#dt_code').val(data.data.i_specificcode);
+					$('#dt_harga').val(data.data.i_price);
+					$('#dt_qty').val(data.data.pr_qtyApp);
+
+					$.ajax({
+						url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
+						type: "GET",
+						data: { 
+						},
+						dataType: "JSON",
+						success: function(data)
+                          {
+                            $('#dt_supplier').empty(); 
+                            row = "<option value='0'>Pilih Supplier</option>";
+                            $(row).appendTo("#dt_supplier");
+                            $.each(data, function(k, v) {
+                              if (v.s_id == supplier) {
+                                row = "<option selected='' value='"+v.s_id+"'>"+v.s_company+"</option>";
+                              }else{
+                                row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
+                              }
+                              $(row).appendTo("#dt_supplier");
+                            });
+                          },
+					});
 					
 				
                     
@@ -425,14 +461,14 @@
 
 					$('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
 					$('#detailModal').modal('show');
-                    $('#btnTambah').show();
-                    $('#btnTolak').hide();
-                    $('#btnBatal').show();
+                    $('#btn_disetujui').show();
+                    $('#btn_ditutup').show();
+                    $('#btn_ditolak').hide();
                 },
                 
             }); 
 
-			suplier();
+			
             
         }
 
@@ -522,10 +558,7 @@
             });  
 		}
 
-        function batal(){
-            $('#myModal').modal('hide');
-        }
-
+        
         function tambah(){
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/tambahRencana')}}',
@@ -680,6 +713,37 @@
 
 		}
 	});
+
+	function calc(box){
+		one = document.autoSumForm.firstBox.value;
+		two = document.autoSumForm.secondBox.value; 
+		// third = document.autoSumForm.thirdBox.value; 
+
+		if(box == 1){
+			if(one == "" || two == ""){
+				document.autoSumForm.thirdBox.value = "0";
+			}else if(one == "" || two != ""){
+				document.autoSumForm.thirdBox.value = parseInt(one) * parseInt(two);
+			}else if(one != "" || two == ""){
+
+				document.autoSumForm.thirdBox.value = parseInt(one) * parseInt(two);
+			}
+			
+		}else if(box == 2){
+			if(one == "" || two == ""){
+				document.autoSumForm.thirdBox.value = "0";
+			}else if(one == "" || two != ""){
+				document.autoSumForm.thirdBox.value = parseInt(one) * parseInt(two);
+			}else if(one != "" || two == ""){
+
+				document.autoSumForm.thirdBox.value = parseInt(one) * parseInt(two);
+			}
+			
+		}
+
+	}
+
+	
 
 	</script>
 
