@@ -550,6 +550,8 @@ Route::group(['middleware' => 'auth'], function () {
 	// main route end
 	//=== Penjualan Reguler
 	Route::get('penjualan-reguler', 'PenjualanController@index');
+    Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
+    Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
     //
 
 });
