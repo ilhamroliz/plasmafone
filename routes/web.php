@@ -376,9 +376,6 @@ Route::group(['middleware' => 'auth'], function () {
 	//action confirm order
 	Route::get('/pembelian/konfirmasi-pembelian/getPlan_id', 'PembelianController@getPlan_id');
 	Route::get('/pembelian/konfirmasi-pembelian/getSupplier', 'PembelianController@getSupplier');
-	Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
-	Route::get('/pembelian/konfirmasi-pembelian/confirmSetuju', 'PembelianController@confirmSetuju');
-	Route::get('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
 
 	Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
@@ -558,8 +555,10 @@ Route::group(['middleware' => 'auth'], function () {
 	// main route end
 	//=== Penjualan Reguler
 	Route::get('penjualan-reguler', 'PenjualanController@index');
-	Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
-	Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
+    Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
+    Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
+    Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
+    Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
     //
 
 });

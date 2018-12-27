@@ -49,7 +49,7 @@
                         <div role="content">
                             <!-- widget content -->
                             <div class="widget-body">
-                                <form class="form-horizontal">
+                                <form class="form-horizontal" id="form-penjualan">
                                     <fieldset>
                                         <div class="form-group">
                                             <div class="col-md-4">
@@ -62,38 +62,44 @@
                                             <div class="col-md-1">
                                                 <button type="button" data-toggle="modal" data-target="#DaftarMember" class="btn btn-primary" title="Tambah Pembeli"><i class="fa fa-user-plus"></i></button>
                                             </div>
+                                            <div class="col-md-7">
+                                                <div class="pull-right">
+                                                    <h1 class="font-400 total-tampil">Rp. 0</h1>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-8">
                                                 <div class="input-icon-left">
                                                     <i class="fa fa-barcode"></i>
-                                                    <input class="form-control" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+                                                    <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="input-icon-left">
                                                     <i class="fa fa-sort-numeric-asc"></i>
-                                                    <input class="form-control" placeholder="Qty" type="text">
+                                                    <input class="form-control" placeholder="Qty" id="qty" type="text">
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
-                                                <button type="button" class="btn btn-primary"><i class="fa fa-plus"></i></button>
+                                                <button type="button" id="tambahketable" class="btn btn-primary" onclick="tambah()"><i class="fa fa-plus"></i></button>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="col-md-12">
-                                                <table class="table table-responsive table-striped table-bordered">
+                                                <table class="table table-responsive table-striped table-bordered" id="table-penjualan">
                                                     <thead>
                                                     <tr>
-                                                        <th>Nama Barang</th>
-                                                        <th>Qty</th>
-                                                        <th>Harga @</th>
-                                                        <th>Diskon %</th>
-                                                        <th>Diskon Rp</th>
-                                                        <th>Total</th>
-                                                        <th>Aksi</th>
+                                                        <th style="width: 32%;">Nama Barang</th>
+                                                        <th style="width: 8%;">Qty</th>
+                                                        <th style="width: 15%;">Harga @</th>
+                                                        <th style="width: 8%;">Diskon %</th>
+                                                        <th style="width: 12%;">Diskon Rp</th>
+                                                        <th style="width: 15%;">Total</th>
+                                                        <th style="width: 10%;">Aksi</th>
                                                     </tr>
                                                     </thead>
+                                                    <tbody></tbody>
                                                 </table>
                                             </div>
                                         </div>
@@ -101,19 +107,16 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary" type="submit">
+                                                <button class="btn btn-primary" type="button" onclick="simpanPenjualan()">
                                                     <i class="fa fa-save"></i>
                                                     Simpan
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-
                                 </form>
-
                             </div>
                             <!-- end widget content -->
-
                         </div>
                     </div>
                 </div>
@@ -168,9 +171,19 @@
 @endsection
 
 @section('extra_script')
-<script>
+    <script>
+    var namaGlobal = null;
+    var qtyGlobal = null;
+    var idGlobal = [];
+    var hargaGlobal = null;
+    var stockGlobal = null;
+    var kodespesifikGlobal = null;
+    var kodeGlobal = null;
+    var spesifikGlobal = null;
+    var searchGlobal = null;
     $(document).ready(function(){
         $('.togel').click();
+
         $( "#cari-member" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-member',
             minLength: 2,
@@ -178,12 +191,49 @@
                 getData(data.item);
             }
         });
+
+        $( "#cari-stock" ).autocomplete({
+            source: baseUrl+'/penjualan-reguler/cari-stock',
+            minLength: 2,
+            select: function(event, data) {
+                setStock(data.item);
+            }
+        });
     })
+
+    function setStock(info){
+        var data = info.data;
+        namaGlobal = data.i_nama;
+        stockGlobal = data.s_qty;
+        hargaGlobal = parseInt(data.i_price);
+        idGlobal = data.s_id;
+        kodespesifikGlobal = data.sd_specificcode;
+        spesifikGlobal = data.i_specificcode;
+        kodeGlobal = data.sm_specificcode;
+    }
+
+    function setSearch(){
+        searchGlobal = $('#cari-stock').val();
+    }
 
     $("#nomor-member").on("keypress keyup blur",function (event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));
         if ((event.which < 48 || event.which > 57)) {
             event.preventDefault();
+        }
+    });
+
+    $("#qty").on("keypress keyup blur",function (event) {
+        $(this).val($(this).val().replace(/[^\d].+/, ""));
+        if ((event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+
+    $("#qty").on("keyup",function (event) {
+        $(this).val($(this).val().replace(/[^\d].+/, ""));
+        if ((event.which == 13)) {
+            $('#tambahketable').click();
         }
     });
 
@@ -251,6 +301,176 @@
 
     function getData(data) {
         $('#idMember').val(data.id);
+    }
+
+    function tambah() {
+        qtyGlobal = $('#qty').val();
+        if (qtyGlobal > stockGlobal){
+            qtyGlobal = stockGlobal;
+        }
+        var row = '';
+        if (spesifikGlobal == 'N'){
+            var inputs = document.getElementsByClassName( 'idStock' ),
+                idStock  = [].map.call(inputs, function( input ) {
+                    return parseInt(input.value);
+                });
+            if (idStock.includes(idGlobal)){
+                var qtyawal = $('.qty-'+idGlobal).val();
+                qtyakhir = parseInt(qtyawal) + parseInt(qtyGlobal);
+                if (qtyakhir > stockGlobal){
+                    qtyakhir = stockGlobal;
+                }
+                $('.qty-'+idGlobal).val(qtyakhir);
+                var harga = qtyakhir * hargaGlobal;
+                harga = convertToRupiah(harga);
+                $('.harga-'+idGlobal).html(harga);
+            } else {
+                row = '<tr id="'+idGlobal+'">' +
+                    '<td style="width: 32%;">'+namaGlobal+
+                    '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
+                    '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
+                    '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
+                    '<input type="hidden" class="harga" name="harga[]" value="'+hargaGlobal+'" />'+
+                    '</td>' +
+                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \''+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
+                    '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
+                    '<td style="width: 8%;"><input style="width: 100%;" type="text" class="discp" name="discp[]" /></td>' +
+                    '<td style="width: 12%;"><input style="width: 100%;" type="text" class="discv" name="discv[]" /></td>' +
+                    '<td style="width: 15%;" class="harga-'+idGlobal+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
+                    '<td style="width: 10%;" class="text-center"><button onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
+                    '</tr>';
+                $("#table-penjualan tbody").append(row);
+            }
+        } else {
+            row = '<tr id="'+kodeGlobal+'" ">' +
+                '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
+                '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
+                '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
+                '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
+                '<input type="hidden" class="harga" name="harga[]" value="'+hargaGlobal+'" />'+
+                '</td>' +
+                '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" name="qtyTable[]" value="1" />1</td>' +
+                '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
+                '<td style="width: 8%;"><input style="width: 100%;" type="text" class="discp" name="discp[]" /></td>' +
+                '<td style="width: 12%;"><input style="width: 100%;" type="text" class="discv" name="discv[]" /></td>' +
+                '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
+                '<td style="width: 10%;" class="text-center"><button class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
+                '</tr>';
+            $("#table-penjualan tbody").append(row);
+        }
+        $('#cari-stock').val('');
+        $('#qty').val('');
+        $('#cari-stock').focus();
+
+        var inputs = document.getElementsByClassName( 'kode' ),
+            kode  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+
+        $( "#cari-stock" ).autocomplete({
+            source: function( request, response ) {
+                $.ajax({
+                    url: '{{ url('penjualan-reguler/cari-stock') }}',
+                    data: {
+                        kode: kode,
+                        term: searchGlobal
+                    },
+                    success: function( data ) {
+                        response( data );
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, data) {
+                setStock(data.item);
+            }
+        });
+        updateTotalTampil();
+    }
+
+    function ubahQty(stock, id) {
+        stock = parseInt(stock);
+        var input = parseInt($('.qty-'+id).val());
+        if (isNaN(input)){
+            input = 0;
+        }
+        if (input > stock){
+            input = stock;
+            $('.qty-'+id).val(input);
+        }
+        console.log(input);
+        var harga = input * hargaGlobal;
+        harga = convertToRupiah(harga);
+        $('.harga-'+idGlobal).html(harga);
+        updateTotalTampil();
+    }
+
+    function hapus(id) {
+        $('#'+id).remove();
+        updateTotalTampil();
+    }
+    
+    function updateTotalTampil() {
+        var inputs = document.getElementsByClassName( 'harga' ),
+            arharga  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+        var inputs = document.getElementsByClassName( 'qtyTable' ),
+            arqty  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+
+        var total = 0;
+        for (var i = 0; i < arharga.length; i++){
+            total = total + (arharga[i] * arqty[i]);
+        }
+
+        total = convertToRupiah(total);
+        $('.total-tampil').html(total);
+    }
+
+    function simpanPenjualan() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: baseUrl + '/pointofsales/simpan',
+            type: 'get',
+            data: $('#form-penjualan').serialize(),
+            success: function(response){
+
+            }, error:function(x, e) {
+                if (x.status == 0) {
+                    alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                } else if (x.status == 404) {
+                    alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                } else if (x.status == 500) {
+                    alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                } else if (e == 'parsererror') {
+                    alert('Error.\nParsing JSON Request failed.');
+                } else if (e == 'timeout'){
+                    alert('Request Time out. Harap coba lagi nanti');
+                } else {
+                    alert('Unknow Error.\n' + x.responseText);
+                }
+            }
+        })
+    }
+
+    function convertToRupiah(angka) {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+        var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
+        return hasil;
+
+    }
+
+    function convertToAngka(rupiah)
+    {
+        return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
     }
 </script>
 @endsection
