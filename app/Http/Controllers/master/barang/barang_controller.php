@@ -252,6 +252,10 @@ class barang_controller extends Controller
                                 $filename = date('YmdHms') . rand(111, 99999) . '.' . $extension;
                                 $image_path = 'img/items/' . $filename;
 
+                                if (!is_dir($image_path )) {
+                                    mkdir("img/items", 0777, true);
+                                }
+
                                 //Resize images
                                 ini_set('memory_limit', '256M');
                                 Image::make($image_tmp)->resize(250, 190)->save($image_path);
@@ -285,7 +289,7 @@ class barang_controller extends Controller
                 DB::rollback();
 
                 // something went wrong
-                return redirect('master/barang/add')->with('flash_message_error', 'Data barang gagal disimpan...! Mohon coba lagi');
+                return redirect('master/barang/add')->with('flash_message_error', 'Data barang gagal disimpan...! "Terjadi kesalahan server" Mohon coba lagi ');
 
             }
 

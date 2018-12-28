@@ -780,13 +780,13 @@
 				switch_sub_group: function(){
 					if(this.sub_group == 'select'){
 						this.sub_group = 'input';
-						$('#select_sub_group').hide();
+						$("#select_sub_group").hide();
 						$("#input_sub_group").show();
 					}else{
-						this.subgroup = 'select';
+						this.sub_group = 'select';
 						this.form_data.i_sub_group = '';
 						$('#data-form').data('bootstrapValidator').resetForm();
-						$('#input_sub_group').hide();
+						$("#input_sub_group").hide();
 						$("#select_sub_group").show();
 					}
 				},

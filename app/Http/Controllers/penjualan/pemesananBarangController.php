@@ -143,6 +143,68 @@ class pemesananBarangController extends Controller
         return Response::json($hasilitem);
     }
 
+    public function load_data()
+    {
+        $dateReq = Carbon::now('Asia/Jakarta');
+        $status = 'DUMY';
+        $comp = Auth::user()->m_id;
+        $list = DB::table('d_purchase_req')
+            ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
+            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->where('d_purchase_req.pr_compReq', $comp)
+            ->where('d_purchase_req.pr_stsReq', 'DUMY')
+            ->get();
+
+        $data = array();
+        foreach ($list as $hasil) {
+            $row = array();
+            $row[] = $hasil->i_nama;
+                    // $row[] = $hasil->pr_qty;
+            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="' . $hasil->pr_qtyReq . '"  style="text-transform: uppercase" /></div>';
+            $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle"   title="Edit Data" onclick="editDumy(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle"   title="Hapus Data" onclick="hapusData(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            $data[] = $row;
+        }
+        echo json_encode(array("data" => $data));
+    }
+
+    public function temp_tambah_data(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $item = $request->input('itemId');
+            $qty = $request->input('jumlah');
+            $status = 'DUMY';
+
+            $count = DB::table('d_indent')->count();
+            $idIndent = $count + 1;
+
+            $countDetil = DB::table('d_indent_dt')->where('id_indent', $idIndent)->count();
+            $idDetilId = $countDetil + 1;
+
+            $insert = DB::table('d_indent_dt')
+                ->insert([
+                    'id_indent' => $idIndent,
+                    'id_detailid' => $idDetilId,
+                    'id_item' => $item,
+                    'id_qty' => $qty,
+                    'id_note' => $request->note
+                ]);
+
+            DB::commit();
+
+            $status = 'berhasil';
+
+            echo json_encode(array("data" => $status));
+        } catch (\Exception $e) {
+            DB::rollback();
+
+            $status = 'gagal';
+
+            echo json_encode(array("data" => $status));
+        }
+
+    }
+
     public function tambah_member(Request $request)
     {
         if (Plasma::checkAkses(18, 'insert') == false) {
@@ -178,34 +240,4 @@ class pemesananBarangController extends Controller
 
     }
 
-    public function temp_tambah_data(Request $request)
-    {
-        $comp = Auth::user()->m_id;
-        $item = $request->input('itemId');
-        $qty = $request->input('jumlah');
-        $status = 'DUMY';
-
-        $count = DB::table('d_indent')->count();
-        $idIndent = $count + 1;
-
-        $countDetil = DB::table('d_indent_dt')->where('id_indent', $idIndent)->count();
-        $idDetilId = $countDetail + 1;
-
-        $insert = DB::table('d_indent_dt')
-            ->insert([
-                'id_indent' => $idIndent,
-                'id_detailid' => $idIndentId,
-                'id_item' => $item,
-                'id_qty' => $qty,
-                'id_note' => $request->note
-            ]);
-
-        if ($insert) {
-            $status = "SUKSES";
-        } else {
-            $status = "GAGAL";
-        }
-
-        echo json_encode(array("data" => $status));
-    }
 }
