@@ -1018,22 +1018,30 @@ class PembelianController extends Controller
         
     }
 
+    public function view_tambahPo()
+    {
+        return view('pembelian/purchase_order/tambah_purchase_order');
+    }
+
     public function add_purchaseOrder(Request $request)
         {
             
-            $number = DB::table('d_purchase')
+            $masterPo = DB::table('d_purchase')
                     ->select('d_purchase.p_id')
                     ->get();
+            $detailPo =DB::table('d_purchase_dt')
+                    ->select('d_purchase_dt.*')
+                    ->get();
 
-            $count = count($number);
+            $baris = count($masterPo);
                 if($count==0) {
                     $cif ="00001";
                 }
                 else
                 {
-                    foreach ($number as $row) {
+                    foreach ($masterPo as $row) {
                         //$a = substr($row->ID,5); 
-                        $counter=intval($count); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
+                        $counter=intval($baris); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
                         $new=intval($counter)+1;         //digit terahit ditambah 1
                     }
                     if (strlen($new)==1){ //jika counter yg didapat panjangnya 1 ex: 1
@@ -1059,7 +1067,44 @@ class PembelianController extends Controller
             $thn = date('Y');
                 
             $code = "PO-".$cif."/".$tgl."/".$bln."/".$thn;
-            echo ($code);
+            
+            $detailPurchase = DB::table('d_purchase_confirm')
+                            ->select('d_purchase_confirm.*')
+                            ->where('d_purchase_confrim.pr_supplier',$pr_supplier)
+                            ->where('d_purchase_confrim.pr_comp',$pr_comp)
+                            ->where('d_purchase_confrim.pr_stsConf','CONFIRM')
+                            ->get();
+
+            $count = count($detailPurchase);
+
+            $insertPo = [];
+            for ($i=0; $i < count($query); $i++) {
+                $temp = [
+                    // 'pr_idConf' =>$query[$i]->pr_idConf,
+                    'ide'=>$query[$i]->pr_idPlan,
+                    'pd_purchase' =>$query[$i]->pr_idPlan,
+                    'pd_detailid'=>$query[$i]->pr_idPlan,
+                    'pd_item'=>$query[$i]->pr_idPlan,
+                    'pd_qty'=>$query[$i]->pr_idPlan,
+                    'pd_value'=>$query[$i]->pr_idPlan,
+                    'pd_disc_value'=>$query[$i]->pr_idPlan,
+                    'pd_disc_persen'=>$query[$i]->pr_idPlan,
+                    'pd_total_net'=>$query[$i]->pr_idPlan,
+                    'pd_receivedtime'=>$query[$i]->pr_idPlan,
+                    'pr_idPlan' =>$query[$i]->pr_idPlan,
+                    'pr_supplier'=>$query[$i]->pr_supplier,
+                    'pr_item' =>$query[$i]->pr_item,
+                    'pr_price' =>$query[$i]->pr_price,
+                    'pr_qtyApp' =>$query[$i]->pr_qtyApp,
+                    'pr_stsConf' =>$n++,
+                    'pr_dateApp' =>$query[$i]->pr_dateApp,
+                    'pr_comp' =>$query[$i]->pr_comp
+                ];  
+                array_push($insertPo, $temp);
+            }
+
+
+            
 
                 
 

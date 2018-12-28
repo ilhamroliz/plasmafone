@@ -92,9 +92,7 @@
 									<div class="col-xs-8 col-lg-8 inputGroupContainer">
 										<select class="form-control" name="request_dt_no" id="request_dt_no">
 											<option value="">---Pilih Request Order Cabang---</option>
-											@foreach($data_request as $data)
-											<option value="{{ $data->rdt_no }}">Cabang-{{ $data->c_nama }} | {{ $data->rdt_kode_barang }}</option>
-											@endforeach
+											
 										</select>
 									</div>
 								</div>

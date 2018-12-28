@@ -388,6 +388,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Purchase Order 
 
 	Route::get('/pembelian/purchase-order', 'PembelianController@purchase_order');
+	Route::get('/pembelian/purchase-order/view_tambahPo', 'PembelianController@view_tambahPo');
 	Route::get('/pembelian/purchase-order/view_purchaseAll', 'PembelianController@view_purchaseAll');
 	Route::get('/pembelian/purchase-order/purchasing', 'PembelianController@purchasing');
 	Route::get('/pembelian/purchase-order/purchaseComplete', 'PembelianController@purchaseComplete');
