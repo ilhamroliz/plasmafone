@@ -232,6 +232,8 @@
 
 @section('extra_script')
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
+
 
 <script type="text/javascript">
 
@@ -264,9 +266,10 @@
 	});
 
 	function dt_addBarang(id, nama, harga){
+		hargarp = accounting.formatMoney(harga, "", 2, ".", ",");
 		table.row.add([
 			nama+'<input type="hidden" name="idItem[]" class="idItem" value="'+id+'"><input type="hidden" class="hargaItem" name="hargaItem[]" value="'+harga+'">',
-			'<div><span style="float: left;">Rp. </span><span style="float: right;">'+harga+'</span></div>',
+			'<div><span style="float: left;">Rp. </span><span style="float: right;">'+hargarp+'</span></div>',
 			'<input type="text" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="update_showHarga()">',
 	        '<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
 		]).draw(false);
@@ -297,7 +300,7 @@
         table
             .row( $(this).parents('tr') )
             .remove()
-            .draw(false);
+            .draw();
         var inputs = document.getElementsByClassName( 'idItem' ),
         names  = [].map.call(inputs, function( input ) {
             return input.value;
@@ -334,9 +337,11 @@
 
         for (var i = 0; i < hargaItem.length; i++) {
             total = total + (hargaItem[i] * qtyItem[i]);
-        }
+		}
+		
+		totalrp = accounting.formatMoney(total, "", 2, ".", ",");
 
-        $('.tpShowTagihan').html(total);
+        $('.tpShowTagihan').html(totalrp);
 	}
 
 	function modal_tambah(){
@@ -383,6 +388,11 @@
 					timeout: 4000,
 					icon : "fa fa-check bounce animated"
 				});
+
+				$('#tmModal').modal('hide');
+				$('#namaMember').val('');
+				$('#noTelp').val('');
+				$('#noNIK').val('');
 
             }else if(response.status=='tmGagal'){
 
@@ -509,179 +519,6 @@
           }
         });
     }
-
-</script>
-
-<script type="text/javascript">
-
-var baseUrl = '{{ url('/') }}';
-
-function validation_regis()
-{
-	$('#data-form').bootstrapValidator({
-		feedbackIcons : {
-			valid : 'glyphicon glyphicon-ok',
-			invalid : 'glyphicon glyphicon-remove',
-			validating : 'glyphicon glyphicon-refresh'
-		},
-		fields : {
-
-			i_kelompok : {
-				validators : {
-					notEmpty : {
-						message : 'Kelompok Barang Tidak Boleh Kosong',
-					}
-				}
-			},
-
-			
-			i_berat : {
-				validators : {
-					notEmpty : {
-						message : 'Berat Barang Tidak Boleh Kosong',
-					},
-
-					numeric: {
-						message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Barang Anda'
-					}
-				}
-			},
-
-		}
-	});
-
-}
-
-Vue.component('kelompok', {
-	props: ['options'],
-	template: '#select2-template-kelompok',
-	mounted: function () {
-		var vm = this
-		$(this.$el).select2().on('change', function () {
-				vm.$emit('change', this.value)
-		})
-	},
-	watch: {
-		value: function (value) {
-			// update value
-			$(this.$el).val(value);
-		},
-		options: function (options) {
-			// update options
-			// $(this.$el).empty().select2()
-		}
-	},
-	destroyed: function () {
-		$(this.$el).off().select2('destroy')
-	}
-})
-
-
-
-Vue.component('group', {
-	props: ['options'],
-	template: '#select2-template-group',
-	mounted: function () {
-		var vm = this
-		$(this.$el).select2().on('change', function () {
-				vm.$emit('change', this.value)
-		})
-	},
-	watch: {
-		value: function (value) {
-			// update value
-			$(this.$el).val(value);
-		},
-		options: function (options) {
-			// update options
-			// $(this.$el).empty().select2()
-		}
-	},
-	destroyed: function () {
-		$(this.$el).off().select2('destroy')
-	}
-})
-
-
-
-
-var app = new Vue({
-	el 		: '#content',
-	data 	: {
-		kelompok : 'select',
-		group : 'select',
-		sub_group : 'select',
-		merk : 'select',
-		btn_save_disabled 	: false,
-
-		data_I_kelompok: [],
-		data_I_group: [],
-		data_I_sub_group: [],
-		data_I_merk: [],
-
-		form_data : {
-			i_kelompok: '',
-			i_group: '',
-			i_sub_group: '',
-			i_merk: '',
-			i_nama: '',
-			i_code: '',
-			i_img: '',
-			i_minstock: '',
-			i_berat: '',
-			i_specificcode: 'Y',
-			i_isactive: 'Y'
-			
-		}
-
-	},
-	
-
-	
-	methods: {
-
-		switch_kelompok: function(){
-			if(this.kelompok == 'select'){
-				this.kelompok = 'input';
-				$('#select_kelompok').hide();
-				$("#input_kelompok").show();
-			}else{
-				this.kelompok = 'select';
-				this.form_data.i_kelompok = '';
-				$('#data-form').data('bootstrapValidator').resetForm();
-				$('#input_kelompok').hide();
-				$("#select_kelompok").show();
-			}
-		},
-
-		switch_group: function(){
-			if(this.group == 'select'){
-				this.group = 'input';
-				$('#select_group').hide();
-				$("#input_group").show();
-			}else{
-				this.group = 'select';
-				this.form_data.i_group = '';
-				$('#data-form').data('bootstrapValidator').resetForm();
-				$('#input_group').hide();
-				$("#select_group").show();
-			}
-		},
-
-	
-
-		i_kelompok_change: function(v){
-			this.form_data.i_kelompok = v;
-		},
-
-		i_group_change: function(v){
-			this.form_data.i_group = v;
-		},
-
-		
-
-	}
-});
 
 </script>
 

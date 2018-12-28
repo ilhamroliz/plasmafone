@@ -38,6 +38,14 @@ class pemesananBarangController extends Controller
         $proses = collect($proses);
 
         return DataTables::of($proses)
+            ->addColumn('tagihan', function ($proses) {
+                $tagihan = [];
+                $tagihan = explode('.', $proses->i_total_tagihan);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
             ->addColumn('aksi', function ($proses) {
                 if (Plasma::checkAkses(18, 'delete') == false) {
                     return '<div class="text-center">
@@ -48,7 +56,7 @@ class pemesananBarangController extends Controller
                             <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($proses->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'tagihan'])
             ->make(true);
     }
 
@@ -61,6 +69,14 @@ class pemesananBarangController extends Controller
         $done = collect($done);
 
         return DataTables::of($done)
+            ->addColumn('tagihan', function ($done) {
+                $tagihan = [];
+                $tagihan = explode('.', $done->i_total_tagihan);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
             ->addColumn('aksi', function ($done) {
                 if (Plasma::checkAkses(18, 'delete') == false) {
                     return '<div class="text-center">
@@ -71,7 +87,7 @@ class pemesananBarangController extends Controller
                             <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($done->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'tagihan'])
             ->make(true);
     }
 
@@ -84,6 +100,14 @@ class pemesananBarangController extends Controller
         $cancel = collect($cancel);
 
         return DataTables::of($cancel)
+            ->addColumn('tagihan', function ($cancel) {
+                $tagihan = [];
+                $tagihan = explode('.', $cancel->i_total_tagihan);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
             ->addColumn('aksi', function ($cancel) {
                 if (Plasma::checkAkses(18, 'delete') == false) {
                     return '<div class="text-center">
@@ -94,7 +118,7 @@ class pemesananBarangController extends Controller
                             <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($cancel->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'tagihan'])
             ->make(true);
     }
 
@@ -241,7 +265,7 @@ class pemesananBarangController extends Controller
                         $total = $total + ($qtyItem[$i] * $hargaItem[$i]);
                     }
 
-                    $hitung = DB::table('d_indent')->count();
+                    $hitung = DB::table('d_indent')->select('i_id')->max('i_id');
 
                     //== untuk d_indent
                     $i_id = $hitung + 1;
@@ -285,17 +309,41 @@ class pemesananBarangController extends Controller
                         'msg' => $e
                     ]);
                 }
-
-
             }
 
             return view('penjualan.pemesanan_barang.tambah');
         }
     }
 
-    public function hapus()
+    public function hapus($id)
     {
+        if (Plasma::checkAkses(18, 'delete') == false) {
+            return view('errors.407');
+        } else {
+            DB::beginTransaction();
+            try {
 
+                $id = Crypt::decrypt($id);
+                // dd($id);
+                $nota = DB::table('d_indent')->select('i_nota')->where('i_id', $id)->first();
+
+                DB::table('d_indent')->where('i_id', $id)->delete();
+
+                DB::table('d_indent_dt')->where('id_indent', $id)->delete();
+
+                DB::commit();
+                return json_encode([
+                    'status' => 'hpBerhasil',
+                    'name' => $nota->i_nota
+                ]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return json_encode([
+                    'status' => 'hpGagal',
+                    'msg' => $e
+                ]);
+            }
+        }
     }
 
 }

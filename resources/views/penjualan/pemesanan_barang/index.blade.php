@@ -163,8 +163,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				</div>
 			</div>
 			<!-- end row -->
-			
-			
             
             <!-- Modal untuk Detil Pemesanan -->
 			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -288,7 +286,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"columns":[
 					{"data": "m_name"},
 					{"data": "i_nota"},
-					{"data": "i_total_tagihan"},
+					{"data": "tagihan"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -320,7 +318,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"columns":[
 					{"data": "m_name"},
 					{"data": "i_nota"},
-					{"data": "i_total_tagihan"},
+					{"data": "tagihan"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -352,7 +350,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"columns":[
 					{"data": "m_name"},
 					{"data": "i_nota"},
-					{"data": "i_total_tagihan"},
+					{"data": "tagihan"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -383,12 +381,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		    proses.api().ajax.reload();
 		    done.api().ajax.reload();
 		    batal.api().ajax.reload();
-		}
-
-		
-
-		function tambah_member(){
-			
 		}
 
 		function tambah_pemesanan(){
@@ -422,21 +414,38 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 					axios.get(baseUrl+'/penjualan/pemesanan-barang/hapus/'+val).then((response) => {
 
-						if (response.data.status == 'hpDitolak') {
+						if (response.data.status == 'hpBerhasil') {
 
-							$('#overlay').fadeOut(200);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Anda tidak diizinkan untuk menghapus data ini",
-								color : "#A90329",
-								timeout: 5000,
-								icon : "fa fa-times bounce animated"
+							$('#dt_proses').DataTable().destroy();
+							$('#dt_proses').DataTable({
+								"processing": true,
+								"serverSide": true,
+								"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
+								"columns":[
+									{"data": "m_name"},
+									{"data": "i_nota"},
+									{"data": "tagihan"},
+									{"data": "aksi"}
+								],
+								"autoWidth" : true,
+								"language" : dataTableLanguage,
+								"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+								"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+								"preDrawCallback" : function() {
+									// Initialize the responsive datatables helper once.
+									if (!responsiveHelper_dt_basic) {
+										responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_proses'), breakpointDefinition);
+									}
+								},
+								"rowCallback" : function(nRow) {
+									responsiveHelper_dt_basic.createExpandIcon(nRow);
+								},
+								"drawCallback" : function(oSettings) {
+									responsiveHelper_dt_basic.respond();
+								}
 							});
 
-						}else if(response.data.status == 'hpBerhasil'){
-							refresh_tab();
 							$('#overlay').fadeOut(200);
-
 							$.smallBox({
 								title : "Berhasil",
 								content : 'Data pemesanan <i>"'+response.data.name+'"</i> berhasil dihapus...!',
