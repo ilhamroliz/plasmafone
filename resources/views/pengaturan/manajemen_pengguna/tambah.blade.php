@@ -150,12 +150,12 @@
                                             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sortable-grid ui-sortable">
 
                                                 <div class="form-group">
-                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Jabatan</label>
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Level Pengguna</label>
                                                     <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                         <select name="jabatan" class="form-control jabatan" id="jabatan" required>
-                                                            <option value="" selected disabled>-- PILIH JABATAN</option>
-                                                            @foreach($getJabatan as $data)
-                                                            <option value="{{ $data->id }}">{{ $data->nama }}</option>
+                                                            <option value="" selected disabled>-- PILIH LEVEL</option>
+                                                            @foreach($getLevel as $data)
+                                                            <option value="{{ $data->l_id }}">{{ $data->l_name }}</option>
                                                             @endforeach
                                                         </select>                                                       
                                                     </div>
