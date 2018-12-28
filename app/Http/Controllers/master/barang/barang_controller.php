@@ -252,8 +252,8 @@ class barang_controller extends Controller
                                 $filename = date('YmdHms') . rand(111, 99999) . '.' . $extension;
                                 $image_path = 'img/items/' . $filename;
 
-                                if (!file_exists($image_path)) {
-                                    mkdir($image_path, 0777);
+                                if (!is_dir($image_path )) {
+                                    mkdir("img/items", 0777, true);
                                 }
 
                                 //Resize images
