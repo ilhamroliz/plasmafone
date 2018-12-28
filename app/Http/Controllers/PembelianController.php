@@ -814,10 +814,290 @@ class PembelianController extends Controller
                 }
     }
 
-
-    
-
     // end konfirm order
+
+    // start purchase order
+    public function multiple_insert()
+    {
+       $query = DB::table('d_purchase_confirm')
+                ->select('d_purchase_confirm.*')
+                ->get();
+
+        $query2 = DB::table('d_purchase_confirm_copy')
+        ->select('d_purchase_confirm_copy.*')
+        ->get();
+
+        $n = count($query2);
+       
+
+                $addAkses = [];
+                for ($i=0; $i < count($query); $i++) {
+                    $temp = [
+                        // 'pr_idConf' =>$query[$i]->pr_idConf,
+                        'pr_idPlan' =>$query[$i]->pr_idPlan,
+                        'pr_supplier'=>$query[$i]->pr_supplier,
+                        'pr_item' =>$query[$i]->pr_item,
+                        'pr_price' =>$query[$i]->pr_price,
+                        'pr_qtyApp' =>$query[$i]->pr_qtyApp,
+                        'pr_stsConf' =>$n++,
+                        'pr_dateApp' =>$query[$i]->pr_dateApp,
+                        'pr_comp' =>$query[$i]->pr_comp
+                    ];  
+                    array_push($addAkses, $temp);
+                }
+        $insert = DB::table('d_purchase_confirm_copy')->insert($addAkses);
+
+        if(!$insert){
+            echo "GAGAL";
+        }else{
+            echo json_encode($n);
+        }
+
+    }
+
+    public function purchase_order()
+    {
+        // $data = DB::table('d_purchase_order_dt')
+        //         ->select('d_purchase_order_dt.*', 'd_purchase_order.*', 'd_supplier.*')
+        //         ->join('d_purchase_order', 'd_purchase_order_dt.podt_purchase', 'd_purchase_order.po_no')
+        //         ->join('d_supplier', 'd_purchase_order_dt.podt_kode_suplier', '=', 'd_supplier.s_id')
+        //         ->orderBy('d_purchase_order.po_status', 'desc')
+        //         ->get();
+    	// return view('pembelian/purchase_order/index', compact('data'));
+        return view('pembelian/purchase_order/view_purchase_order');
+    }
+
+
+    public function view_purchaseAll()
+    {
+        $purchaseAll = DB::table('d_purchase')
+                ->select('d_purchase.*', 'd_purchase.*', 'd_supplier.*')
+                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->get();
+
+
+        $purchaseAll = collect($purchaseAll);
+
+        return DataTables::of($purchaseAll)
+            ->addColumn('input', function ($purchaseAll) {
+
+                return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+
+            })
+            ->addColumn('aksi', function ($purchaseAll) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $purchaseAll->p_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $purchaseAll->p_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $purchaseAll->p_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['input', 'aksi'])
+            ->make(true);
+        
+        
+    }
+
+    public function purchasing()
+    {
+        $purchasing = DB::table('d_purchase_dt')
+                ->select('d_purchase_dt.*', 'd_purchase.*', 'd_supplier.*')
+                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->get();
+
+
+        $purchasing = collect($purchasing);
+
+        return DataTables::of($purchasing)
+            ->addColumn('input', function ($purchasing) {
+
+                return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+
+            })
+            ->addColumn('aksi', function ($purchasing) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $purchasing->p_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $purchasing->p_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $purchasing->p_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['input', 'aksi'])
+            ->make(true);
+    }
+
+    public function purchaseComplete()
+    {
+        $purchaseComplete = DB::table('d_purchase_dt')
+                ->select('d_purchase.*', 'd_supplier.*')
+                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->get();
+
+
+        $purchaseComplete = collect($purchaseComplete);
+
+        return DataTables::of($purchaseComplete)
+            ->addColumn('input', function ($purchaseComplete) {
+
+                return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+
+            })
+            ->addColumn('aksi', function ($purchaseComplete) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $purchaseComplete->p_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $purchaseComplete->p_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $purchaseComplete->p_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['input', 'aksi'])
+            ->make(true);
+    }
+
+    public function getDetail_purchase(Request $request)
+    {
+        $id = $request->input('id');
+        $detailPurchase = DB::table('d_purchase_dt')
+                ->select('d_purchase_dt.*', 'd_purchase.*', 'd_supplier.*')
+                ->join('d_purchase', 'd_purchase_dt.pd_purchase', '=', 'd_purchase.p_id')
+                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->get();
+
+
+        $detailPurchase = collect($detailPurchase);
+
+        return DataTables::of($detailPurchase)
+            ->addColumn('input', function ($detailPurchase) {
+
+                return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+
+            })
+            ->addColumn('aksi', function ($detailPurchase) {
+                if (Plasma::checkAkses(47, 'update') == false) {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $detailPurchase->p_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $detailPurchase->p_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $purchaseComplete->p_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                }
+            })
+            ->rawColumns(['input', 'aksi'])
+            ->make(true);
+    }
+    
+    public function get_idDetail(Request $request)
+    {
+        $idDetail = $request->input('idDetail');
+        $query    = DB::table('d_purchase_dt')
+                    ->select('d_purchase_dt.*')
+                    ->where('d_purchase_dt.ide',$idDetail)
+                    ->get();
+        echo json_encode(array("data"=>$query));
+    }
+
+    public function update_detailPurchase(Request $request)
+    {
+        $ide = $request->input('ide');
+        $pd_qty = $request->input('pd_qty');
+        $pd_value = $request->input('pd_value');
+        $pd_disc_value = $request->input('pd_disc_value');
+        $pd_disc_persen = $request->input('pd_disc_persen');
+        $pd_total_net = $request->input('pd_total_net');
+
+        $update = DB::table('p_purchase_dt')
+                    ->update([
+                        'pd_qty' => $request->methode_return,
+                        'pd_value' => date('Y-m-d'),
+                        'pd_disc_value' => $total_harga_return,
+                        'pd_disc_persen' => $result_price,
+                        'pd_total_net' => $request->confirm_return
+                    ]);
+        if(!$update){
+            $data = array("data"=>"GAGAL");
+            echo json_encode($data);
+        }else{
+            $data = array("data"=>"SUKSES");
+            echo json_encode($data);
+        }
+
+        
+    }
+
+    public function add_purchaseOrder(Request $request)
+        {
+            
+            $number = DB::table('d_purchase')
+                    ->select('d_purchase.p_id')
+                    ->get();
+
+            $count = count($number);
+                if($count==0) {
+                    $cif ="00001";
+                }
+                else
+                {
+                    foreach ($number as $row) {
+                        //$a = substr($row->ID,5); 
+                        $counter=intval($count); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
+                        $new=intval($counter)+1;         //digit terahit ditambah 1
+                    }
+                    if (strlen($new)==1){ //jika counter yg didapat panjangnya 1 ex: 1
+                    $vcounter="0000". '' .$new;
+                    }
+                    if (strlen($new)==2){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="000". '' .$new;
+                    }
+                    if (strlen($new)==3){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="00". '' .$new;
+                    }
+                    if (strlen($new)==4){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="0". '' .$new;
+                    }
+                    if (strlen($new)==5){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter=$new;
+                    }
+                    $cif = $vcounter;
+                }
+
+            $tgl = date('d');
+            $bln = date('m');
+            $thn = date('Y');
+                
+            $code = "PO-".$cif."/".$tgl."/".$bln."/".$thn;
+            echo ($code);
+
+                
+
+            // $query = DB::table('d_purchase_confirm')
+            // ->select('d_purchase_confirm.*')
+            // ->get();
+
+            // $query2 = DB::table('d_purchase_confirm_copy')
+            // ->select('d_purchase_confirm_copy.*')
+            // ->get();
+
+            // $n = count($query2);
+        
+            // $addAkses = [];
+            // for ($i=0; $i < count($query); $i++) {
+            //     $temp = [
+            //         // 'pr_idConf' =>$query[$i]->pr_idConf,
+            //         'pr_idPlan' =>$query[$i]->pr_idPlan,
+            //         'pr_supplier'=>$query[$i]->pr_supplier,
+            //         'pr_item' =>$query[$i]->pr_item,
+            //         'pr_price' =>$query[$i]->pr_price,
+            //         'pr_qtyApp' =>$query[$i]->pr_qtyApp,
+            //         'pr_stsConf' =>$n++,
+            //         'pr_dateApp' =>$query[$i]->pr_dateApp,
+            //         'pr_comp' =>$query[$i]->pr_comp
+            //     ];  
+            //     array_push($addAkses, $temp);
+            // }
+
+            // $insert = DB::table('d_purchase_confirm_copy')->insert($addAkses);
+
+            // if(!$insert){
+            //     echo "GAGAL";
+            // }else{
+            //     echo json_encode($n);
+            // }
+        }
+    // end purchase order
 
     public function get_data_order($id)
     {
@@ -1117,18 +1397,7 @@ class PembelianController extends Controller
         echo json_encode($data);
     }
 
-    public function purchase_order()
-    {
-        // $data = DB::table('d_purchase_order_dt')
-        //         ->select('d_purchase_order_dt.*', 'd_purchase_order.*', 'd_supplier.*')
-        //         ->join('d_purchase_order', 'd_purchase_order_dt.podt_purchase', 'd_purchase_order.po_no')
-        //         ->join('d_supplier', 'd_purchase_order_dt.podt_kode_suplier', '=', 'd_supplier.s_id')
-        //         ->orderBy('d_purchase_order.po_status', 'desc')
-        //         ->get();
-    	// return view('pembelian/purchase_order/index', compact('data'));
-        return view('pembelian/purchase_order/view_purchase_order');
-    }
-
+    
     public function purchase_order_add()
     {
         $data_request = DB::table('d_request_order_dt')

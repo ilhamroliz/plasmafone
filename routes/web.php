@@ -388,9 +388,16 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// End Konfirmasi Pembelian
 
-	// Purchase Order
+	// Purchase Order 
 
 	Route::get('/pembelian/purchase-order', 'PembelianController@purchase_order');
+	Route::get('/pembelian/purchase-order/view_purchaseAll', 'PembelianController@view_purchaseAll');
+	Route::get('/pembelian/purchase-order/purchasing', 'PembelianController@purchasing');
+	Route::get('/pembelian/purchase-order/purchaseComplete', 'PembelianController@purchaseComplete');
+	Route::get('/pembelian/purchase-order/getDetail_purchase', 'PembelianController@getDetail_purchase');
+	Route::get('/pembelian/purchase-order/get_idDetail', 'PembelianController@get_idDetail');
+	Route::get('/pembelian/purchase-order/PurchaseTambah', 'PembelianController@purchaseTambah');
+	Route::get('/pembelian/purchase-order/add_purchaseOrder', 'PembelianController@add_purchaseOrder');
 
 	Route::get('/pembelian/purchase-order/add', 'PembelianController@purchase_order_add');
 
