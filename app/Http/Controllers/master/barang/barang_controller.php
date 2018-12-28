@@ -285,7 +285,7 @@ class barang_controller extends Controller
                 DB::rollback();
 
                 // something went wrong
-                return redirect('master/barang/add')->with('flash_message_error', 'Data barang gagal disimpan...! Mohon coba lagi');
+                return redirect('master/barang/add')->with('flash_message_error', 'Data barang gagal disimpan...! "Terjadi kesalahan server" Mohon coba lagi ');
 
             }
 
