@@ -31,7 +31,10 @@ class pemesananBarangController extends Controller
 
     public function get_data_proses()
     {
-        $proses = pemesanan::where('i_status', 'PROSES')->orderBy('i_id', 'desc')->get();
+        $proses = pemesanan::where('i_status', 'PROSES')
+            ->join('m_member', 'm_id', '=', 'i_member')
+            ->select('d_indent.*', 'm_name')
+            ->orderBy('i_id', 'desc')->get();
         $proses = collect($proses);
 
         return DataTables::of($proses)
@@ -51,7 +54,10 @@ class pemesananBarangController extends Controller
 
     public function get_data_done()
     {
-        $done = pemesanan::where('i_status', 'DONE')->orderBy('i_id', 'desc')->get();
+        $done = pemesanan::where('i_status', 'DONE')
+            ->join('m_member', 'm_id', '=', 'i_member')
+            ->select('d_indent.*', 'm_name')
+            ->orderBy('i_id', 'desc')->get();
         $done = collect($done);
 
         return DataTables::of($done)
@@ -71,7 +77,10 @@ class pemesananBarangController extends Controller
 
     public function get_data_cancel()
     {
-        $cancel = pemesanan::where('i_status', 'CANCEL')->orderBy('i_id', 'desc')->get();
+        $cancel = pemesanan::where('i_status', 'CANCEL')
+            ->join('m_member', 'm_id', '=', 'i_member')
+            ->select('d_indent.*', 'm_name')
+            ->orderBy('i_id', 'desc')->get();
         $cancel = collect($cancel);
 
         return DataTables::of($cancel)
@@ -120,7 +129,10 @@ class pemesananBarangController extends Controller
             $hasilmember[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($member as $query) {
-                $hasilmember[] = ['id' => $query->m_id, 'label' => $query->m_name];
+                $hasilmember[] = [
+                    'id' => $query->m_id,
+                    'label' => $query->m_name
+                ];
             }
         }
 
@@ -130,79 +142,33 @@ class pemesananBarangController extends Controller
     public function cari_item(Request $request)
     {
         $cari = $request->term;
-        $item = DB::select("select i_id, i_nama from d_item where i_nama like '%" . $cari . "%'");
+        $idItem = [];
+        if (isset($request->idItem)) {
+            $idItem = $request->idItem;
+        } else {
+            $idItem[0] = 'a';
+        }
+
+        $hasilitem = array();
+        $item = DB::table('d_item')
+            ->select('i_id', 'i_nama', 'i_price')
+            ->whereRaw('i_nama like "%' . $cari . '%"')
+            ->whereNotIn('i_id', $idItem)
+            ->get();
 
         if ($item == null) {
             $hasilitem[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($item as $query) {
-                $hasilitem[] = ['id' => $query->i_id, 'label' => $query->i_nama];
+                $hasilitem[] = [
+                    'id' => $query->i_id,
+                    'label' => $query->i_nama,
+                    'harga' => $query->i_price
+                ];
             }
         }
 
         return Response::json($hasilitem);
-    }
-
-    public function load_data()
-    {
-        $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'DUMY';
-        $comp = Auth::user()->m_id;
-        $list = DB::table('d_purchase_req')
-            ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
-            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            ->where('d_purchase_req.pr_compReq', $comp)
-            ->where('d_purchase_req.pr_stsReq', 'DUMY')
-            ->get();
-
-        $data = array();
-        foreach ($list as $hasil) {
-            $row = array();
-            $row[] = $hasil->i_nama;
-                    // $row[] = $hasil->pr_qty;
-            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="' . $hasil->pr_qtyReq . '"  style="text-transform: uppercase" /></div>';
-            $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle"   title="Edit Data" onclick="editDumy(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle"   title="Hapus Data" onclick="hapusData(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-            $data[] = $row;
-        }
-        echo json_encode(array("data" => $data));
-    }
-
-    public function temp_tambah_data(Request $request)
-    {
-        DB::beginTransaction();
-        try {
-            $item = $request->input('itemId');
-            $qty = $request->input('jumlah');
-            $status = 'DUMY';
-
-            $count = DB::table('d_indent')->count();
-            $idIndent = $count + 1;
-
-            $countDetil = DB::table('d_indent_dt')->where('id_indent', $idIndent)->count();
-            $idDetilId = $countDetil + 1;
-
-            $insert = DB::table('d_indent_dt')
-                ->insert([
-                    'id_indent' => $idIndent,
-                    'id_detailid' => $idDetilId,
-                    'id_item' => $item,
-                    'id_qty' => $qty,
-                    'id_note' => $request->note
-                ]);
-
-            DB::commit();
-
-            $status = 'berhasil';
-
-            echo json_encode(array("data" => $status));
-        } catch (\Exception $e) {
-            DB::rollback();
-
-            $status = 'gagal';
-
-            echo json_encode(array("data" => $status));
-        }
-
     }
 
     public function tambah_member(Request $request)
@@ -222,12 +188,89 @@ class pemesananBarangController extends Controller
         return view('penjualan.pemesanan_barang.tambah');
     }
 
+    public function getDataId()
+    {
+        $cek = DB::table('d_indent')
+            ->select(DB::raw('max(right(i_id, 3)) as id'))
+            ->get();
+
+        foreach ($cek as $x) {
+            $temp = ((int)$x->id + 1);
+            $kode = sprintf("%03s", $temp);
+        }
+
+        $date = [];
+        $date = explode(' ', Carbon::now('Asia/Jakarta'));
+        $tgl = explode('-', $date[0]);
+
+        $tempKode = 'IND-' . $kode . '/' . $tgl[2] . '/' . $tgl[1] . '/' . $tgl[0];
+        return $tempKode;
+    }
+
     public function tambah_pemesanan(Request $request)
     {
         if (Plasma::checkAkses(18, 'insert') == false) {
             return view('errors/407');
         } else {
+
             if ($request->isMethod('post')) {
+
+                DB::beginTransaction();
+                try {
+
+                    $idItem = $request->idItem;
+                    $qtyItem = $request->qtyItem;
+                    $hargaItem = $request->hargaItem;
+                    $total = 0;
+                    for ($i = 0; $i < count($idItem); $i++) {
+                        $total = $total + ($qtyItem[$i] * $hargaItem[$i]);
+                    }
+
+                    $hitung = DB::table('d_indent')->count();
+
+                    //== untuk d_indent
+                    $i_id = $hitung + 1;
+                    $i_comp = Auth::user()->m_comp;
+                    $i_member = $request->tpMemberId;
+                    $i_nota = $this->getDataId();
+                    $i_total_tagihan = $total;
+                    $i_total_pembayaran = 0;
+                    $i_status = "PROSES";
+
+                    DB::table('d_indent')->insert([
+                        'i_id' => $i_id,
+                        'i_comp' => $i_comp,
+                        'i_member' => $i_member,
+                        'i_nota' => $i_nota,
+                        'i_total_tagihan' => $i_total_tagihan,
+                        'i_total_pembayaran' => $i_total_pembayaran,
+                        'i_status' => $i_status
+                    ]);
+
+                    //== untuk d_indent_dt
+                    for ($i = 0; $i < count($idItem); $i++) {
+
+                        DB::table('d_indent_dt')->insert([
+                            'id_indent' => $i_id,
+                            'id_detailid' => $i + 1,
+                            'id_item' => $idItem[$i],
+                            'id_qty' => $qtyItem[$i],
+                        ]);
+                    }
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 'tpSukses'
+                    ]);
+
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return response()->json([
+                        'status' => 'tpGagal',
+                        'msg' => $e
+                    ]);
+                }
+
 
             }
 

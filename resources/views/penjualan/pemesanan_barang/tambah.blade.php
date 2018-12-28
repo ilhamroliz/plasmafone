@@ -80,19 +80,24 @@
 
                         <!-- widget content -->
                         <div class="widget-body">
-                            <form id="tdForm" class="form-inline" role="form">
+                            <form id="tpForm" class="form-inline" role="form">
 								{{csrf_field()}}
 								<div class="row">
 									<div class="col-sm-12 col-md-12 col-lg-12 no-padding padding-bottom-10">										
 										<div class="form-group col-md-12">
-											<label class="col-md-2"><strong>Nama Member :</strong></label>
-											<div class="col-md-4">
-												<input type="hidden" id="tpMemberId" name="tpMemberId">
-												<input type="text" class="form-control" id="member" name="member" style="width: 100%" placeholder="Masukkan Nama Member">												
+											<div class="col-md-9">
+
 											</div>
-											<div class="col-md-1">
-												<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-plus"></i></a>												
-											</div>
+											<div class="col-md-3">
+												<h4>
+													<span style="float: left; width: 15%">
+														Rp.
+													</span>
+													<span style="float: right; width: 85%" class="text-align-right tpShowTagihan">
+
+													</span>
+												</h4>		
+											</div>										
 										</div>
 									</div>
 								</div>
@@ -101,28 +106,31 @@
 									<div class="row">
 										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
 											<div class="form-group col-md-12">
-												<div class="col-md-7">
+												<div class="col-md-5">
+													<input type="hidden" id="tpMemberId" name="tpMemberId">
+													<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
+												</div>
+												<div class="col-md-1">
+													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-plus"></i></a>												
+												</div>
+
+												<div class="col-md-6">
 													<input type="hidden" id="tpItemId" name="tpItemId">
-													<input type="text" class="form-control" id="itemNama" name="itemNama" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
-												</div>
-												<div class="col-md-3">
-													<input type="text" class="form-control" id="jumlah" name="jumlah" placeholder="Masukkan Jumlah Barang" style="width: 100%" autocomplete="off">
-												</div>
-												<div class="col-md-2">
-													<button class="btn btn-primary" style="width: 100%" onclick="tambah_dummy()"><i class="fa fa-plus"></i>Tambah</button>
+													<input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
 												</div>
 											</div>
 										</div>
 									</div>
 									
-                                    <dir class="col-md-12">
+                                    <div class="col-md-12">
 
-                                        <table id="tpTable" class="table table-striped table-bordered table-hover" width="100%">
+                                        <table id="tpTable" class="table table-striped table-bordered table-hover tpTable" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="65%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="20%">Jumlah Barang</th>
-                                                    <th data-hide="phone,tablet" width="15%">Aksi</th>
+													<th data-hide="phone,tablet" width="50%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" width="25%">Harga Barang</th>													
+                                                    <th data-hide="phone,tablet" width="15%">Jumlah Barang</th>
+                                                    <th data-hide="phone,tablet" width="10%">Aksi</th>
                                                 </tr>
                                             </thead>
 
@@ -130,13 +138,13 @@
                                             </tbody>
                                         </table>
 									
-                                    </dir>
+                                    </div>
                                 </fieldset>
 
 								<div class="form-actions">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">Masukkan Pemesanan Barang</button>
+                                            <a class="btn btn-block btn-primary text-center" onclick="simpan_pemesanan()">Masukkan Pemesanan Barang</a>
                                         </div>
                                     </div>
                                 </div>
@@ -159,9 +167,7 @@
                         </div>
                         <div class="modal-body no-padding">
 
-                            <form id="ft-group" class="smart-form">
-                                <input type="hidden" name="id" id="id">
-
+                            <form id="tmForm" class="smart-form">
                                 <fieldset>
 
                                     <section>
@@ -215,175 +221,212 @@
 
 @section('extra_script')
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
-<script src="{{ asset('template_asset/js/bootstrap/bootstrap.min.js') }}"></script>
 
 <script type="text/javascript">
-	var requestDumy;
 
+	var table;
 	$(document).ready(function () {
 
-		$( "#itemNama" ).autocomplete({
-			source: baseUrl+'/penjualan/pemesanan-barang/get-item',
-			minLength: 2,
-			select: function(event, data) {
-				getItem(data.item);
-			}
+		table = $('#tpTable').DataTable({
+			paging : false,
+			searching : false
 		});
 
-		$( "#member" ).autocomplete({
+		$( "#tpMemberNama" ).autocomplete({
 			source: baseUrl+'/penjualan/pemesanan-barang/get-member',
 			minLength: 2,
 			select: function(event, data) {
-				getMember(data.item);
+				$('#tpMemberId').val(data.item.id);
+				$('#tpMemberNama').val(data.item.label);
 			}
 		});
 
-		function getItem(data){
-			$('#tpItemId').val(data.id);
-		}
+		$( "#tpItemNama" ).autocomplete({
+			source: baseUrl+'/penjualan/pemesanan-barang/get-item',
+			minLength: 2,
+			select: function(event, data) {
+				$('#tpItemId').val(data.item.id);
+				$('#tpItemNama').val(data.item.label);
+				dt_addBarang(data.item.id, data.item.label, data.item.harga);
+			}
+		});
+	});
 
-		function getMember(data){
-			$('#tpMemberId').val(data.id);
-		}
+	function dt_addBarang(id, nama, harga){
+		table.row.add([
+			nama+'<input type="hidden" name="idItem[]" class="idItem" value="'+id+'"><input type="hidden" class="hargaItem" name="hargaItem[]" value="'+harga+'">',
+			'<div><span style="float: left;">Rp. </span><span style="float: right;">'+harga+'</span></div>',
+			'<input type="text" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="update_showHarga()">',
+	        '<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
+		]).draw(false);
 
-		load_data();
+		var inputs = document.getElementsByClassName( 'idItem' ),
+        names  = [].map.call(inputs, function( input ) {
+            return input.value;
+        });
 
-	})
+        $( "#tpItemNama" ).autocomplete({
+            source: function(request, response) {
+                $.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#tpItemNama").val() }, 
+                          response);
+            },
+            minLength: 3,
+            select: function(event, data) {
+                $('#tpItemId').val(data.item.id);
+                $('#tpItemNama').val(data.item.label);
+                dt_addBarang(data.item.id, data.item.label, data.item.harga);
+            }
+        });
+
+		$('#tpItemNama').val('');
+        update_showHarga();
+	}
+
+	$('.tpTable tbody').on( 'click', 'button.btnhapus', function () {
+        table
+            .row( $(this).parents('tr') )
+            .remove()
+            .draw(false);
+        var inputs = document.getElementsByClassName( 'idItem' ),
+        names  = [].map.call(inputs, function( input ) {
+            return input.value;
+        });
+
+        $( "#tpItemNama" ).autocomplete({
+            source: function(request, response) {
+                $.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#tpItemNama").val() }, 
+                          response);
+            },
+            minLength: 3,
+            select: function(event, data) {
+                $('#tpItemId').val(data.item.id);
+                $('#tpItemNama').val(data.item.label);
+                dt_addBarang(data.item.id, data.item.label, data.item.harga);
+            }
+        });
+		$('#tpItemNama').val('');
+        update_showHarga();
+    });
+
+	function update_showHarga(){
+		var inputs = document.getElementsByClassName( 'hargaItem' ),
+        hargaItem  = [].map.call(inputs, function( input ) {
+            return input.value;
+        });
+
+        var inputs = document.getElementsByClassName( 'qtyItem' ),
+        qtyItem  = [].map.call(inputs, function( input ) {
+            return input.value;
+        });
+
+        var total = 0;
+
+        for (var i = 0; i < hargaItem.length; i++) {
+            total = total + (hargaItem[i] * qtyItem[i]);
+        }
+
+        $('.tpShowTagihan').html(total);
+	}
 
 	function modal_tambah(){
 		$('#tmModal').modal('show');
 	}
 
-	function tambah_dummy(){
-		// axios.post(baseUrl+'/penjualan/pemesanan-barang/addDummy', $('#tdForm').serialize())
-		// 	.then((response) => {
-				
-		// 	});
-		
-		$.ajax({
-			url : '{{url('/penjualan/pemesanan-barang/addDummy')}}',
-			type: "post",
-			data: { 
-				'qty' : $('#jumlah').val(),
-				'item' : $('#tpItemId').val(),
-			},
-			dataType: "JSON",
-			success: function(data)
-			{
-				if(data.status == 'berhasil'){
-					$('#tpTable').DataTable.destroy();
-					load_data();
-				}
-			},
-		}); 
-	}
+	function simpan_pemesanan(){
 
-	function load_data(){
-		$('#tpTable').DataTable({
-			"ajax": {
-				"url": '{{url('/penjualan/pemesanan-barang/loadData')}}',
-				"type": 'get',  
-				"data": function ( data ) {
-				},
-			},
-		} );	
-	}
+        $('#overlay').fadeIn(200);
+		$('#load-status-text').text('Sedang Menyimpan Data...');
 
-	function hapusData(id){
-		$.ajax({
-			url : '{{url('/pejualan/pemesanan-barang/delDummy')}}',
-			type: "get",
-			data: { 
-				id : id,
-			},
-			dataType: "JSON",
-			success: function(data)
-			{
-				$('#table-rencana').DataTable().ajax.reload();
-			},
-			
-		}); 
-	}
+		var namaMember = $('#tpMemberNama').val();
+		var qty;
+        var harga;
 
-	function simpanRequest(){
-		
-		$.ajax({
-			url : '{{url('/pepenjualan/pemesanan-barang/tambah-pemesanan')}}',
-			type: "post",
-			data: { 
-			},
-			dataType: "JSON",
-			success: function(data)
-			{
-				
-				if(data.status == 'gagal')
-				{
-					
-				}else{
-					
-					
-				}				
-			},				
-		}); 		
-	}
+        var inputs = document.getElementsByClassName( 'hargaItem' ),
+        harga  = [].map.call(inputs, function( input ) {
+            return input.value;
+        });
 
+        var inputs = document.getElementsByClassName( 'qtyItem' ),
+        qty  = [].map.call(inputs, function( input ) {
+            return input.value;
+        });
 
-
-
-
-	function getItem(){
-		$('#item_kelompok').empty();  
-	
-		$.ajax({
-			url : '{{url('/pembelian/request-pembelian/getBarang')}}',
-			type: "GET",
-			data: { 
-			},
-			dataType: "JSON",
-			success: function(data)
-			{
-			$('#item_kelompok').empty(); 
-			row = "<option selected='' value='0'>Pilih Item</option>";
-			$(row).appendTo("#item_kelompok");
-			$.each(data, function(k, v) {
-				row = "<option value='"+v.i_id+"'>"+v.i_nama+"</option>";
-				$(row).appendTo("#item_kelompok");
+        if (harga.length <= 0) {
+			$('#overlay').fadeOut(200);
+            $.smallBox({
+				title : "Gagal",
+				content : "Data tidak dapat disimpan tanpa Masukan BARANG",
+				color : "#A90329",
+				timeout: 4000,
+				icon : "fa fa-times bounce animated"
 			});
-			},
-			
-		});  
-	}
-		
-	function editDumy(id){
-		var input = $('#i_nama'+id).val();
-		$.ajax({
-			url : '{{url('/pembelian/request-pembelian/editDumy')}}',
-			type: "GET",
-			data: { 
-				'id' : id,
-				'qty' : input,
+            return false;
+        }
 
-			},
-			dataType: "JSON",
-			success: function(data)
-			{
-				
-				Swal({
-						position: 'top-end',
-						type: 'danger',
-						title: 'Request Order Telah Di edit',
-						showConfirmButton: false,
-						timer: 7500,
-					});
-				
-				$('#table-rencana').DataTable().ajax.reload();
-				
-			},				
-		}); 
-	}
-	
+        if (namaMember == '') {
+            $('#overlay').fadeOut(200);
+            $.smallBox({
+				title : "Gagal",
+				content : "Data tidak dapat disimpan tanpa Masukan MEMBER",
+				color : "#A90329",
+				timeout: 4000,
+				icon : "fa fa-times bounce animated"
+			});
+            return false;
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+        });
+        $.ajax({
+        url: baseUrl + '/penjualan/pemesanan-barang/tambah-pemesanan',
+        type: 'post',
+        data: $('#tpForm').serialize(),
+        success: function(response){
+            if(response.status=='tpSukses'){
+
+              	$('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Berhasil",
+					content : 'Data Pemesanan Barang Berhasil Disimpan...!',
+					color : "#739E73",
+					timeout: 4000,
+					icon : "fa fa-check bounce animated"
+				});
+				location.reload();
+
+            }else if(response.status=='tpGagal'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Pemesanan Barang Gagal Disimpan ",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+
+            }
+        }, error:function(x, e) {
+            if (x.status == 0) {
+                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+            } else if (x.status == 404) {
+                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+            } else if (x.status == 500) {
+                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+            } else if (e == 'parsererror') {
+                alert('Error.\nParsing JSON Request failed.');
+            } else if (e == 'timeout'){
+                alert('Request Time out. Harap coba lagi nanti');
+            } else {
+                alert('Unknow Error.\n' + x.responseText);
+            }
+          }
+        });
+    }
+
 </script>
 
 <script type="text/javascript">
