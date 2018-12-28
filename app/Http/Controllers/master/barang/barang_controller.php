@@ -252,6 +252,10 @@ class barang_controller extends Controller
                                 $filename = date('YmdHms') . rand(111, 99999) . '.' . $extension;
                                 $image_path = 'img/items/' . $filename;
 
+                                if (!file_exists($image_path)) {
+                                    mkdir($image_path, 0777);
+                                }
+
                                 //Resize images
                                 ini_set('memory_limit', '256M');
                                 Image::make($image_tmp)->resize(250, 190)->save($image_path);
