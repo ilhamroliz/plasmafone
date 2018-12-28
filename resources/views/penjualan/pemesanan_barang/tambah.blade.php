@@ -111,7 +111,7 @@
 													<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
 												</div>
 												<div class="col-md-1">
-													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-plus"></i></a>												
+													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-user-plus"></i></a>												
 												</div>
 
 												<div class="col-md-6">
@@ -175,10 +175,21 @@
                                             <label class="label col col-3">Nama Member</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="namaMember" id="namaMember" style="text-transform: uppercase" placeholder="Masukkan Nama Member" required>
+                                                    <input type="text" name="namaMember" id="namaMember" style="text-transform: uppercase" placeholder="Masukkan Nama Member">
                                                 </label>
                                             </div>
 										</div>
+									</section>
+
+									<section>
+										<div class="row">
+                                            <label class="label col col-3">Nomor ID</label>
+                                            <div class="col col-9 has-feedback">
+                                                <label class="input">
+                                                    <input type="text" name="noNIK" id="noNIK" placeholder="Masukkan Nomor Identitas Member (no KTP/SIM/dll)">
+                                                </label>
+                                            </div>
+                                        </div>
 									</section>
 									
 									<section>
@@ -186,7 +197,7 @@
                                             <label class="label col col-3">Nomor Telepon</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="noTelp" id="noTelp" placeholder="Masukkan Nomor Telepon/HP Member" required>
+                                                    <input type="text" name="noTelp" id="noTelp" placeholder="Masukkan Nomor Telepon/HP Member">
                                                 </label>
                                             </div>
                                         </div>
@@ -195,9 +206,9 @@
                                 </fieldset>
                                 
                                 <footer>
-                                    <button type="button" class="btn btn-primary" onclick="tmSubmit()"><i class="fa fa-floppy-o"></i>
+                                    <a class="btn btn-primary" onclick="simpan_member()"><i class="fa fa-floppy-o"></i>
                                         Simpan
-                                    </button>
+									</a>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">
                                         Kembali
                                     </button>
@@ -330,6 +341,78 @@
 
 	function modal_tambah(){
 		$('#tmModal').modal('show');
+	}
+
+	function simpan_member(){
+		$('#overlay').fadeIn(200);
+		$('#load-status-text').text('Sedang Menyimpan Data...');
+
+		var namaMember = $('#namaMember').val();
+		var noTelp = $('#noTelp').val();
+		var noNIK = $('#noNIK').val();
+
+		if (namaMember == '' || noTelp == '' || noNIK == '') {
+            $('#overlay').fadeOut(200);
+            $.smallBox({
+				title : "Perhatian !",
+				content : "Mohon Lengkapi Data Member Terlebih Dahulu !",
+				color : "#A90329",
+				timeout: 4000,
+				icon : "fa fa-times bounce animated"
+			});
+            return false;
+		}
+		
+		$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+        });
+        $.ajax({
+        url: baseUrl + '/penjualan/pemesanan-barang/tambah-member',
+        type: 'post',
+        data: $('#tmForm').serialize(),
+        success: function(response){
+            if(response.status=='tmSukses'){
+
+              	$('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Berhasil",
+					content : 'Data Member Berhasil Disimpan...!',
+					color : "#739E73",
+					timeout: 4000,
+					icon : "fa fa-check bounce animated"
+				});
+
+            }else if(response.status=='tmGagal'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Pemesanan Barang Gagal Disimpan ",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+
+            }
+        }, error:function(x, e) {
+            if (x.status == 0) {
+                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+            } else if (x.status == 404) {
+                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+            } else if (x.status == 500) {
+                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+            } else if (e == 'parsererror') {
+                alert('Error.\nParsing JSON Request failed.');
+            } else if (e == 'timeout'){
+                alert('Request Time out. Harap coba lagi nanti');
+            } else {
+                alert('Unknow Error.\n' + x.responseText);
+            }
+          }
+        });
+
 	}
 
 	function simpan_pemesanan(){

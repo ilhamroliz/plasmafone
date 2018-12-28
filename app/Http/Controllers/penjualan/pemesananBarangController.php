@@ -177,11 +177,26 @@ class pemesananBarangController extends Controller
             return view('errors/407');
         } else {
             if ($request->isMethod('post')) {
-                DB::beginTransavtion();
+                DB::beginTransaction();
                 try {
+                    DB::table('m_member')->insert([
+                        'm_name' => strtoupper($request->namaMember),
+                        'm_telp' => $request->noTelp,
+                        'm_nik' => $request->noNIK
+                    ]);
+
+                    DB::commit();
+                    return response()->json([
+                        'status' => 'tmSukses'
+                    ]);
 
                 } catch (\Exception $e) {
 
+                    DB::rollback();
+                    return response()->json([
+                        'status' => 'tmGagal',
+                        'msg' => $e
+                    ]);
                 }
             }
         }
