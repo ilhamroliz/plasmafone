@@ -166,7 +166,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             
             <!-- Modal untuk Detil Pemesanan -->
 			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
+				<div class="modal-dialog" style="width: 60%">
 					<div class="modal-content">
 						<div class="modal-header">
 
@@ -194,48 +194,56 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 										<!-- widget content -->
 										<div class="widget-body no-padding">											
-											<div class="table-responsive">												
-												<table class="table">
-													<tbody>
+											<div class="table-responsive">
 
-														<tr class="success">
-															<td><strong>No. Nota</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_nota"></td>
-														</tr>
+												{{-- <div class="row no-padding"> --}}
+													<div class="col-md-12 padding-top-10 ">
+														<div class="form-group">
+															<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
+															<label class="col-md-1">:</label>
+															<label class="col-md-8" id="dmNoNota"></label>
+														</div>
 
-														<tr class="danger">
-															<td><strong>Nama Member</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_name"></td>
-														</tr>
+														<div class="form-group">
+															<label class="col-md-3" style="float:left"><strong>Nama Member</strong></label>
+															<label class="col-md-1">:</label>
+															<div class="col-md-8">
+																<label id="dmNamaMember"></label>
+															</div>
+														</div>
 
-														<tr class="warning">
-															<td><strong>Cabang</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_cabang"></td>
-														</tr>
+														<div class="form-group">
+															<label class="col-md-3" style="float:left"><strong>Total Tagihan</strong></label>
+															<label class="col-md-1">:</label>
+															<label class="col-md-8" id="dmTagihan"></label>
+														</div>
 
-														<tr class="info">
-															<td><strong>Total Tagihan</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_tagihan"></td>
-														</tr>
+														<div class="form-group">
+															<label class="col-md-3" style="float:left"><strong>Total Pembayaran</strong></label>
+															<label class="col-md-1">:</label>
+															<label class="col-md-8" id="dmPembayaran"></label>
+														</div>
+														
+													</div>
 
-														<tr class="danger">
-															<td><strong>Total Pembayaran</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_pembayaran"></td>
-														</tr>
+													<table id="dt_detail" class="table table-striped table-bordered table-hover">
+														<thead>		
+															<tr>
+																<th width="10%">&nbsp;No.</th>
+																<th width="50%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+																<th width="20%"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Unit</th>
+																<th width="20%"><i class="fa fa-fw fa-dollar txt-color-blue"></i>&nbsp;Harga Satuan</th>
+															</tr>
+														</thead>
 
-														<tr class="warning">
-															<td><strong>Status</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_status"></td>
-														</tr>
+														<tbody>
+														</tbody>
 
-													</tbody>
-												</table>												
+													</table>
+
+
+												{{-- </div> --}}
+																	
 											</div>
 										</div>
 										<!-- end widget content -->
@@ -259,12 +267,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 @endsection
 
 @section('extra_script')
+<script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
 
 <script type="text/javascript">
 		var done, proses, cancel;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
+
+		$('#dt_detail').DataTable();
 		
 		/* BASIC ;*/
 		var responsiveHelper_dt_basic = undefined;
@@ -501,21 +512,56 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
 
-			var status;
+			var tagihan;
+			var pembayaran;
 
 			axios.get(baseUrl+'/penjualan/pemesanan-barang/detail/'+id).then(response => {
 
                 $('#title_detail').html('<strong>Detail Pemesanan Barang</strong>');
-                $('#dt_nota').text(response.data.data.i_nota);
-                $('#dt_name').text(response.data.data.m_name);
-                $('#dt_cabang').text(response.data.data.c_name);
-                $('#dt_tagihan').text(response.data.data.i_total_tagihan);
-                $('#dt_pembayaran').text(response.data.data.i_total_pembayaran);
-                $('#dt_status').text(response.data.data.i_status);					
-                $('#overlay').fadeOut(200);
-                $('#detilModal').modal('show');
+
+                $('#dmNoNota').text(response.data.data.i_nota);
+                $('#dmNamaMember').text(response.data.data.m_name);
+				tagihan = accounting.formatMoney(response.data.data.i_total_tagihan, "", 2, ".", ",");
+                $('#dmTagihan').html('Rp. '+ tagihan);
+				pembayaran = accounting.formatMoney(response.data.data.i_total_pembayaran, "", 2, ".", ",");
+                $('#dmPembayaran').html('Rp. '+ pembayaran);
 
 			});
+
+			$('#dt_detail').DataTable().destroy();
+			$('#dt_detail').DataTable({
+				"processing": true,
+				"serverSide": true,
+				"ajax": "{{ url('/penjualan/pemesanan-barang/detail-dt') }}/"+id,
+				"columns":[
+					{"data": "DT_RowIndex"},
+					{"data": "i_nama"},
+					{"data": "harga"},
+					{"data": "qty"}
+				],
+				"searching" : false,
+				"paging" : false,
+				"info" : false,
+				"autoWidth" : true,
+				"language" : dataTableLanguage,
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+				"preDrawCallback" : function() {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_dt_basic) {
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_detail'), breakpointDefinition);
+					}
+				},
+				"rowCallback" : function(nRow) {
+					responsiveHelper_dt_basic.createExpandIcon(nRow);
+				},
+				"drawCallback" : function(oSettings) {
+					responsiveHelper_dt_basic.respond();
+				}
+			});
+
+			$('#overlay').fadeOut(200);
+            $('#detilModal').modal('show');
 		}
 
 	</script>

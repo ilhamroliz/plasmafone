@@ -122,26 +122,44 @@ class pemesananBarangController extends Controller
             ->make(true);
     }
 
-    public function get_detail($id)
+    public function detail_dt($id)
     {
-        if (Plasma::checkAkses(47, 'read') == false) {
+        $id = Crypt::decrypt($id);
+        $proses = DB::table('d_indent_dt')->where('id_indent', $id)
+            ->join('d_item', 'd_item.i_id', '=', 'id_item')
+            ->select('i_price', 'i_nama', 'id_qty')
+            ->orderBy('i_id', 'desc')->get();
+        $proses = collect($proses);
 
-            return view('errors/407');
+        return DataTables::of($proses)
+            ->addIndexColumn()
+            ->addColumn('harga', function ($proses) {
+                $tagihan = [];
+                $tagihan = explode('.', $proses->i_price);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
+            ->addColumn('qty', function ($proses) {
+                return '<span style="float: right">' . $proses->id_qty . ' Unit</span>';
+            })
+            ->rawColumns(['harga', 'qty'])
+            ->make(true);
+    }
 
-        } else {
+    public function detail($id)
+    {
+        $id = Crypt::decrypt($id);
+        $data = pemesanan::where('i_id', $id)
+            ->join('m_member', 'm_id', '=', 'i_member')
+            ->select('i_nota', 'm_name', 'i_total_tagihan', 'i_total_pembayaran')
+            ->first();
 
-            $id = Crypt::decrypt($id);
-            $pemesanan = pemesanan::where('i_id', $id)->first();
-
-            $dataMember = DB::table('m_member')->select('m_name')->where('m_id', $pemesanan->i_member)->first();
-            $dataCompany = DB::table('m_company')->select('c_name')->where('c_id', $pemesanan->i_comp)->first();
-            // dd($member);
-            return response()->json([
-                'data' => $pemesanan,
-                'dm' => $dataMember->m_name,
-                'dc' => $dataCompany->c_name
-            ]);
-        }
+        // dd($data);
+        return json_encode([
+            'data' => $data
+        ]);
     }
 
     public function cari_member(Request $request)
