@@ -43,9 +43,10 @@ class barang_controller extends Controller
 
     public function getdataactive()
     {
-        $items_active = Item::where('i_isactive', 'Y')->orderBy('created_at', 'desc')->get();
+        $items_active = Item::where('i_isactive', 'Y');
+            //->orderBy('created_at', 'desc')->get();
 
-        $items_active = collect($items_active);
+        //$items_active = collect($items_active);
 
         return DataTables::of($items_active)
 
