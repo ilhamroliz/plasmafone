@@ -33,9 +33,7 @@ class pemesananBarangController extends Controller
     {
         $proses = pemesanan::where('i_status', 'PROSES')
             ->join('m_member', 'm_id', '=', 'i_member')
-            ->select('d_indent.*', 'm_name')
-            ->orderBy('i_id', 'desc')->get();
-        $proses = collect($proses);
+            ->select('d_indent.*', 'm_name')->orderBy('i_nota', 'desc');
 
         return DataTables::of($proses)
             ->addColumn('tagihan', function ($proses) {
@@ -64,9 +62,7 @@ class pemesananBarangController extends Controller
     {
         $done = pemesanan::where('i_status', 'DONE')
             ->join('m_member', 'm_id', '=', 'i_member')
-            ->select('d_indent.*', 'm_name')
-            ->orderBy('i_id', 'desc')->get();
-        $done = collect($done);
+            ->select('d_indent.*', 'm_name')->orderBy('i_nota', 'desc');
 
         return DataTables::of($done)
             ->addColumn('tagihan', function ($done) {
@@ -95,9 +91,7 @@ class pemesananBarangController extends Controller
     {
         $cancel = pemesanan::where('i_status', 'CANCEL')
             ->join('m_member', 'm_id', '=', 'i_member')
-            ->select('d_indent.*', 'm_name')
-            ->orderBy('i_id', 'desc')->get();
-        $cancel = collect($cancel);
+            ->select('d_indent.*', 'm_name')->orderBy('i_nota', 'desc');
 
         return DataTables::of($cancel)
             ->addColumn('tagihan', function ($cancel) {
@@ -127,9 +121,7 @@ class pemesananBarangController extends Controller
         $id = Crypt::decrypt($id);
         $proses = DB::table('d_indent_dt')->where('id_indent', $id)
             ->join('d_item', 'd_item.i_id', '=', 'id_item')
-            ->select('i_price', 'i_nama', 'id_qty')
-            ->orderBy('i_id', 'desc')->get();
-        $proses = collect($proses);
+            ->select('i_price', 'i_nama', 'id_qty')->get();
 
         return DataTables::of($proses)
             ->addIndexColumn()
@@ -219,26 +211,51 @@ class pemesananBarangController extends Controller
             return view('errors/407');
         } else {
             if ($request->isMethod('post')) {
-                DB::beginTransaction();
-                try {
-                    DB::table('m_member')->insert([
-                        'm_name' => strtoupper($request->namaMember),
-                        'm_telp' => $request->noTelp,
-                        'm_nik' => $request->noNIK
-                    ]);
 
-                    DB::commit();
+                $nama = strtoupper($request->namaMember);
+                $telp = $request->noTelp;
+                $nik = $request->noNIK;
+
+                $ceknik = DB::table('m_member')->where('m_nik', $nik)->count();
+                if ($ceknik > 0) {
                     return response()->json([
-                        'status' => 'tmSukses'
+                        'status' => 'nikAda',
+                        'member' => $nik
                     ]);
+                } else {
+                    $cektelp = DB::table('m_member')->where('m_telp', $telp)->count();
+                    if ($cektelp > 0) {
+                        return response()->json([
+                            'status' => 'telpAda',
+                            'member' => $telp
+                        ]);
+                    } else {
+                        DB::beginTransaction();
+                        try {
+                            DB::table('m_member')->insert([
+                                'm_name' => $nama,
+                                'm_telp' => $telp,
+                                'm_nik' => $nik,
+                                'm_status' => 'AKTIF'
+                            ]);
 
-                } catch (\Exception $e) {
+                            DB::commit();
 
-                    DB::rollback();
-                    return response()->json([
-                        'status' => 'tmGagal',
-                        'msg' => $e
-                    ]);
+                            Plasma::logActivity('Menambahkan Member ' . strtoupper($request->namaMember) . ' (' . $request->noTelp . ')');
+
+                            return response()->json([
+                                'status' => 'tmSukses'
+                            ]);
+
+                        } catch (\Exception $e) {
+
+                            DB::rollback();
+                            return response()->json([
+                                'status' => 'tmGagal',
+                                'msg' => $e
+                            ]);
+                        }
+                    }
                 }
             }
         }
@@ -272,26 +289,43 @@ class pemesananBarangController extends Controller
 
             if ($request->isMethod('post')) {
 
+                $i_member = $request->tpMemberId;
+                $ceksales = DB::table('d_sales')->where('s_member', $i_member)->count();
+                $cekindent = DB::table('d_indent')->where('i_member', $i_member)->count();
+                $i_pembayaran = $request->tpPembayaran;
+
+                $idItem = $request->idItem;
+                $qtyItem = $request->qtyItem;
+                $hargaItem = $request->hargaItem;
+                $total = 0;
+                for ($i = 0; $i < count($idItem); $i++) {
+                    $total = $total + ($qtyItem[$i] * $hargaItem[$i]);
+                }
+
+                $i_total_pembayaran = 0;
+
+                if ($i_pembayaran != 'lunas') {
+                    if ($ceksales == 0 || $cekindent == 0) {
+                        return response()->json([
+                            'status' => 'dpNull'
+                        ]);
+                    } else {
+                        $i_total_pembayaran == 0;
+                    }
+                } else {
+                    $i_total_pembayaran = $total;
+                }
+
                 DB::beginTransaction();
                 try {
-
-                    $idItem = $request->idItem;
-                    $qtyItem = $request->qtyItem;
-                    $hargaItem = $request->hargaItem;
-                    $total = 0;
-                    for ($i = 0; $i < count($idItem); $i++) {
-                        $total = $total + ($qtyItem[$i] * $hargaItem[$i]);
-                    }
 
                     $hitung = DB::table('d_indent')->select('i_id')->max('i_id');
 
                     //== untuk d_indent
                     $i_id = $hitung + 1;
                     $i_comp = Auth::user()->m_comp;
-                    $i_member = $request->tpMemberId;
                     $i_nota = $this->getDataId();
                     $i_total_tagihan = $total;
-                    $i_total_pembayaran = 0;
                     $i_status = "PROSES";
 
                     DB::table('d_indent')->insert([
@@ -300,7 +334,7 @@ class pemesananBarangController extends Controller
                         'i_member' => $i_member,
                         'i_nota' => $i_nota,
                         'i_total_tagihan' => $i_total_tagihan,
-                        'i_total_pembayaran' => $i_total_pembayaran,
+                        'i_total_pembayaran' => $i_total_tagihan,
                         'i_status' => $i_status
                     ]);
 
@@ -316,6 +350,9 @@ class pemesananBarangController extends Controller
                     }
 
                     DB::commit();
+
+                    Plasma::logActivity('Menambahkan Pemesanan Barang dengan No. Nota : ' . $i_nota);
+
                     return response()->json([
                         'status' => 'tpSukses'
                     ]);

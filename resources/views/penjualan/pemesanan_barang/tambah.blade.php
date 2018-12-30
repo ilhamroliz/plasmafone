@@ -81,43 +81,66 @@
                         <!-- widget content -->
                         <div class="widget-body">
                             <form id="tpForm" class="form-inline" role="form">
-								{{csrf_field()}}
-								<div class="row">
-									<div class="col-sm-12 col-md-12 col-lg-12 no-padding padding-bottom-10">										
-										<div class="form-group col-md-12">
-											<div class="col-md-9">
+                                {{csrf_field()}}
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 no-padding padding-bottom-10">										
+                                            <div class="form-group col-md-12">
+                                                <div class="col-md-5 inputGroupContainer">
+                                                    <div class="input-group" style="width: 100%">
+                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-user"></i></span>
+                                                        <input type="hidden" id="tpMemberId" name="tpMemberId">
+													    <input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
+                                                    </div>													
+												</div>
+												<div class="col-md-1">
+													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-user-plus"></i></a>												
+												</div>
+                                                <div class="col-md-2">
+                                                    <h4><strong>Total Tagihan</strong></h4>
+                                                </div>
+                                                <div class="col-md-1"><strong>:</strong></div>
+                                                <div class="col-md-3">
+                                                    <h4><strong>
+                                                        <span style="float: left; width: 15%">
+                                                            Rp.
+                                                        </span>
+                                                        <span style="float: right; width: 85%" class="text-align-right tpShowTagihan">
 
-											</div>
-											<div class="col-md-3">
-												<h4>
-													<span style="float: left; width: 15%">
-														Rp.
-													</span>
-													<span style="float: right; width: 85%" class="text-align-right tpShowTagihan">
-
-													</span>
-												</h4>		
-											</div>										
-										</div>
-									</div>
-								</div>
+                                                        </span>
+                                                    </strong></h4>		
+                                                </div>										
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
 
                                 <fieldset>
 									<div class="row">
 										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
 											<div class="form-group col-md-12">
-												<div class="col-md-5">
-													<input type="hidden" id="tpMemberId" name="tpMemberId">
-													<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
-												</div>
-												<div class="col-md-1">
-													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-user-plus"></i></a>												
-												</div>
+												<div class="col-md-6 inputGroupContainer">
+                                                    <div class="input-group" style="width: 100%">
+                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-barcode"></i></span>                                                        
+                                                        <input type="hidden" id="tpItemId" name="tpItemId">
+													    <input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang">
+                                                    </div>                                                    
+                                                </div>
 
-												<div class="col-md-6">
-													<input type="hidden" id="tpItemId" name="tpItemId">
-													<input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
-												</div>
+
+                                                <div class="col-md-2">
+                                                    <h4><strong>Pembayaran</strong></h4>
+                                                </div>
+                                                <div class="col-md-1"><strong>:</strong></div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group"  style="width: 100%">
+                                                        <select class="form-control" name="tpPembayaran" id="tpPembayaran">
+                                                            <option value="" selected disabled>==== PILIH PEMBAYARAN ====</option>
+                                                            <option value="lunas">LUNAS</option>
+                                                            <option value="tidak">TIDAK LUNAS</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 											</div>
 										</div>
 									</div>
@@ -239,6 +262,8 @@
 
 	var table;
 	$(document).ready(function () {
+
+        $('.tpShowTagihan').html('0,00');
 
 		table = $('#tpTable').DataTable({
 			paging : false,
@@ -394,6 +419,28 @@
 				$('#noTelp').val('');
 				$('#noNIK').val('');
 
+            }else if(response.status=='nikAda'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Member dengan NIK : "+response.member+", Sudah Ada !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+
+            }else if(response.status=='telpAda'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Member dengan No. Telp : "+response.member+", Sudah Ada !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+
             }else if(response.status=='tmGagal'){
 
                 $('#overlay').fadeOut(200);
@@ -489,6 +536,17 @@
 					icon : "fa fa-check bounce animated"
 				});
 				location.reload();
+
+            }else if(response.status=='dpNull'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Member belum pernah melakukan transaksi. Pembayaran harus LUNAS !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
 
             }else if(response.status=='tpGagal'){
 
