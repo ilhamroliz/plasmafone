@@ -139,7 +139,6 @@ class member_controller extends Controller
 
                 } else {
 
-                    // dd($request);
                     $data = $request->all();
                     DB::beginTransaction();
 
@@ -166,6 +165,7 @@ class member_controller extends Controller
                                 ]);
 
                             } else {
+                              dd($request);
 
                                 if ($data['email'] == "") {
                                     $email = "";
@@ -194,6 +194,7 @@ class member_controller extends Controller
                                 member::insert([
                                     'm_name' => strtoupper($data['name']),
                                     'm_nik' => $data['nik'],
+                                    'm_idmember' => $data['idmember'],
                                     'm_telp' => $data['telp'],
                                     'm_email' => $email,
                                     'm_jenis' => $data['tipe'],
@@ -234,7 +235,6 @@ class member_controller extends Controller
 
     public function simpan_edit(Request $request, $id = null)
     {
-
         if (Plasma::checkAkses(47, 'update') == false) {
 
             return view('errors/407');
@@ -320,7 +320,7 @@ class member_controller extends Controller
 
                     }
                 }
-            }   
+            }
 
             // ======================Method Get================================
             DB::beginTransaction();
@@ -484,7 +484,7 @@ class member_controller extends Controller
             } catch (\Exception $e) {
 
                 DB::rollback();
-                
+
                 // something went wrong
                 return json_encode([
                     'status' => 'gagal',
