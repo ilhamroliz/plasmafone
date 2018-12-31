@@ -404,7 +404,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/purchase-order/getSupplier_po', 'PembelianController@getSupplier_po');
 	Route::get('/pembelian/purchase-order/getOutlet_po', 'PembelianController@getOutlet_po');
 	Route::get('/pembelian/purchase-order/list_draftPo', 'PembelianController@list_draftPo');
-	Route::get('/pembelian/purchase-order/z', 'PembelianController@z');
+	Route::get('/pembelian/purchase-order/simpanPo', 'PembelianController@simpanPo');
 	// end aksi purchase
 
 	Route::get('/pembelian/purchase-order/add', 'PembelianController@purchase_order_add');

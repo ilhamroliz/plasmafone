@@ -152,7 +152,6 @@
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/app.config.js') }}"></script>
-<script src="{{ asset('template_asset/jquery/jquery.autocomplete.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/bootstrap/bootstrap.min.js') }}"></script>
 
 
@@ -161,6 +160,7 @@
 $('#load-status-text').text('Sedang Mengambil Data...');	
 
 $(document).ready(function () {
+
 	reload_data();
 	getSupplier();
 	getOutlet_po();
@@ -305,6 +305,7 @@ function simpanPo(){
 		url : '{{url('/pembelian/purchase-order/simpanPo')}}',
 		type: "get",
 		data: { 
+			"id" : $('#dt_supplier').val(),
 		},
 		dataType: "JSON",
 		success: function(data)
@@ -321,7 +322,7 @@ function simpanPo(){
 					});
 				// $('#table-rencana').DataTable().ajax.reload();
 			}else{
-				
+				alert();
 				$('#table_addPo').dataTable().ajax.reload();
 				Swal({
 						position: 'top-end',
