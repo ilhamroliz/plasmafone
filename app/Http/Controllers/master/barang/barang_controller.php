@@ -43,9 +43,7 @@ class barang_controller extends Controller
 
     public function getdataactive()
     {
-        $items_active = Item::where('i_isactive', 'Y')->orderBy('created_at', 'desc')->get();
-
-        $items_active = collect($items_active);
+        $items_active = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price')->where('i_isactive', 'Y');
 
         return DataTables::of($items_active)
 
@@ -76,9 +74,7 @@ class barang_controller extends Controller
 
     public function getdataall()
     {
-        $items_all = Item::orderBy('created_at', 'desc')->get();
-
-        $items_all = collect($items_all);
+        $items_all = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price');
 
         return DataTables::of($items_all)
 
@@ -137,9 +133,7 @@ class barang_controller extends Controller
 
     public function getdatanonactive()
     {
-        $items_nonactive = Item::where('i_isactive', 'N')->orderBy('created_at', 'desc')->get();
-
-        $items_nonactive = collect($items_nonactive);
+        $items_nonactive = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price')->where('i_isactive', 'N');
 
         return DataTables::of($items_nonactive)
             ->addColumn('harga', function ($items_nonactive) {
