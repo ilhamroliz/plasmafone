@@ -1065,6 +1065,7 @@ class PembelianController extends Controller
 
     public function add_purchaseOrder(Request $request)
         {
+            $id = $request->input('id');
             
             $masterPo = DB::table('d_purchase')
                     ->select('d_purchase.p_id')
@@ -1073,15 +1074,15 @@ class PembelianController extends Controller
                     ->select('d_purchase_dt.*')
                     ->get();
 
-            $baris = count($masterPo);
-                if($count==0) {
+            $barisPo = count($masterPo);
+                if($barisPo==0) {
                     $cif ="00001";
                 }
                 else
                 {
                     foreach ($masterPo as $row) {
                         //$a = substr($row->ID,5); 
-                        $counter=intval($baris); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
+                        $counter=intval($barisPo); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
                         $new=intval($counter)+1;         //digit terahit ditambah 1
                     }
                     if (strlen($new)==1){ //jika counter yg didapat panjangnya 1 ex: 1
@@ -1102,6 +1103,35 @@ class PembelianController extends Controller
                     $cif = $vcounter;
                 }
 
+                $barisDetail = count($detailPo);
+                if($barisDetail==0) {
+                    $cif1 ="00001";
+                }
+                else
+                {
+                    foreach ($detailPo as $row1) {
+                        //$a = substr($row->ID,5); 
+                        $counter1=intval($barisDetail); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
+                        $new1=intval($counter1)+1;         //digit terahit ditambah 1
+                    }
+                    if (strlen($new1)==1){ //jika counter yg didapat panjangnya 1 ex: 1
+                    $vcounter1="0000". '' .$new1;
+                    }
+                    if (strlen($new1)==2){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter1="000". '' .$new1;
+                    }
+                    if (strlen($new1)==3){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter1="00". '' .$new1;
+                    }
+                    if (strlen($new1)==4){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter1="0". '' .$new1;
+                    }
+                    if (strlen($new1)==5){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter1=$new1;
+                    }
+                    $cif1 = $vcounter1;
+                }
+
             $tgl = date('d');
             $bln = date('m');
             $thn = date('Y');
@@ -1111,17 +1141,19 @@ class PembelianController extends Controller
             $detailPurchase = DB::table('d_purchase_confirm')
                             ->select('d_purchase_confirm.*')
                             ->where('d_purchase_confrim.pr_supplier',$pr_supplier)
-                            ->where('d_purchase_confrim.pr_comp',$pr_comp)
                             ->where('d_purchase_confrim.pr_stsConf','CONFIRM')
                             ->get();
 
-            $count = count($detailPurchase);
+            $ide = count($detailPo);  
+            $pd_purchase =count($masterPo);
+
+            
 
             $insertPo = [];
-            for ($i=0; $i < count($query); $i++) {
+            for ($i=0; $i < count($detailPurchase); $i++) {
                 $temp = [
                     // 'pr_idConf' =>$query[$i]->pr_idConf,
-                    'ide'=>$query[$i]->pr_idPlan,
+                    'ide'=>$ide++,
                     'pd_purchase' =>$query[$i]->pr_idPlan,
                     'pd_detailid'=>$query[$i]->pr_idPlan,
                     'pd_item'=>$query[$i]->pr_idPlan,
@@ -1143,6 +1175,7 @@ class PembelianController extends Controller
                 array_push($insertPo, $temp);
             }
 
+            $insert = DB::table('d_purchase_dt')->insert($insertPo);
 
             
 
@@ -1212,11 +1245,148 @@ class PembelianController extends Controller
     public function simpanPo(Request $request)
     {
         $id = $request->input('id');
+            $queryBaris = DB::table('d_purchase')
+            ->select('d_purchase.*')
+            ->get();
 
-        $query = DB::table('d_purchase_confirm')
-                    ->select('d_purchase_confirm.pr_supplier')
-                    ->where('d_purchase_confirm.pr_supplier',$id)
-                    ->get();
+            $query3 = DB::table('d_purchase_dt')
+            ->select('d_purchase_dt.*')
+            ->get();
+
+        $noD = count($query3);
+        if($noD==''){
+            $noDetail = '1';
+        }else{
+            $noDetail = $noD+1;
+        }
+
+
+        $total =  DB::table('d_purchase_confirm')
+        ->select(DB::raw('sum(d_purchase_confirm.pr_price) as Total'))
+        // ->where('d_purchase_confirm.pr_supplier',$id)
+        ->get();
+
+        foreach ($total as $key) {
+            $harga = $key->Total;
+        }
+
+            $barisPo = count($queryBaris);
+                if($barisPo==0) {
+                    $cif ="00001";
+                }
+                else
+                {
+                    foreach ($queryBaris as $row) {
+                        //$a = substr($row->ID,5); 
+                        $counter=intval($barisPo); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
+                        $new=intval($counter)+1;         //digit terahit ditambah 1
+                    }
+                    if (strlen($new)==1){ //jika counter yg didapat panjangnya 1 ex: 1
+                    $vcounter="0000". '' .$new;
+                    }
+                    if (strlen($new)==2){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="000". '' .$new;
+                    }
+                    if (strlen($new)==3){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="00". '' .$new;
+                    }
+                    if (strlen($new)==4){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="0". '' .$new;
+                    }
+                    if (strlen($new)==5){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter=$new;
+                    }
+                    $cif = $vcounter;
+                }
+
+                $date = Carbon::Now('Asia/jakarta');
+
+                $tgl = date('d');
+                $bln = date('m');
+                $thn = date('Y');
+
+                $m=count($queryBaris);
+                if($m == ""){
+                    $n = '1';
+                }else{
+                    $n = $m+1;
+                }
+                    
+                $code = "PO-".$cif."/".$tgl."/".$bln."/".$thn;
+
+                $list = array([
+                    'p_id' =>$n,
+                    'p_nota'=>$code,
+                    'p_date'=>$date,
+                    'p_supplier'=>$id,
+                    'p_total_gross'=>'0',
+                    'p_disc_value'=>'0',
+                    'p_disc_persen'=>'0',
+                    'p_total_net'=>$harga,
+                    'po_status'=>'PURCHASING',
+                    'p_purchaseNumber'=>$code,
+                    'p_tgl'=>$tgl,
+                    'p_bln'=>$bln,
+                    'p_thn'=>$thn,
+                    ]);
+
+        $insertOne = DB::table('d_purchase')->insert($list);
+
+        if(!$insertOne){
+           echo "GAGAL";
+        }else{
+            
+            $query = DB::table('d_purchase_confirm')
+            ->select('d_purchase_confirm.*')
+            ->get();
+
+                $queryx = DB::table('d_purchase_dt')
+                ->select('d_purchase_dt.ide')
+                ->get();
+
+                $dt = count($queryx);
+                if($dt==''){
+                    $num = '1';
+                }else{
+                    $num = $dt+1;
+                }
+
+                $dtx = count($queryx);
+                if($dt==''){
+                    $numx = '1';
+                }else{
+                    $numx = $dtx+1;
+                }
+            
+
+                        $addAkses = [];
+                        for ($i=0; $i < count($query); $i++) {
+                            $temp = [
+                                // 'pr_idConf' =>$query[$i]->pr_idConf,
+                                'ide' =>$numx++,
+                                'pd_purchase'=>$query[$i]->pr_supplier,
+                                'pd_detailid' =>$num++,
+                                'pd_item' =>$query[$i]->pr_item,
+                                'pd_qty' =>$query[$i]->pr_qtyApp,
+                                'pd_value' =>$query[$i]->pr_price,
+                                'pd_disc_value' =>$query[$i]->pr_dateApp,
+                                'pd_disc_persen' =>$query[$i]->pr_comp,
+                                'pd_total_net' =>$query[$i]->pr_comp,
+                                'pd_receivedtime'=>Carbon::Now('Asia/Jakarta')
+                            ];  
+                            array_push($addAkses, $temp);
+                        }
+                $insert = DB::table('d_purchase_dt')->insert($addAkses);
+
+                if(!$insert){
+                    echo "GAGAL";
+                }else{
+                    PlasmafoneController::logActivity('aksi yang dilalukan');
+                    echo "SUKSES";
+                }
+        }
+
+       
     }
     // end purchase order
 
