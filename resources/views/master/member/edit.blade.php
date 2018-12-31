@@ -12,10 +12,10 @@
 	<!-- RIBBON -->
 	<div id="ribbon">
 
-		<span class="ribbon-button-alignment"> 
+		<span class="ribbon-button-alignment">
 			<span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.." data-html="true" onclick="location.reload()">
 				<i class="fa fa-refresh"></i>
-			</span> 
+			</span>
 		</span>
 
 		<!-- breadcrumb -->
@@ -59,7 +59,7 @@
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -78,11 +78,11 @@
 					<div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
-							<h2><strong>Master Member</strong></h2>				
+							<h2><strong>Master Member</strong></h2>
 						</header>
 
 						<div>
-							
+
 							<div class="widget-body">
 
 								<form id="form-edit" class="form-horizontal" method="post">
@@ -110,11 +110,21 @@
 												</div>
 
 												<div class="form-group">
-													<label class="col-xs-4 col-lg-4 control-label text-left">No. ID</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">No. Identitas</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan No. ID Member" value="{{ $member->m_nik }}" readonly/>
+															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan No. Identitas" value="{{ $member->m_nik }}" readonly/>
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">ID. Member</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
+															<input type="text" class="form-control" id="m_idmember" name="m_idmember" v-model="form_data.idmember" placeholder="Masukkan Nomor ID Member" />
 														</div>
 													</div>
 												</div>
@@ -144,7 +154,7 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
-																<option value="" @if($member->m_jenis == "") selected @endif disabled>== Jenis Member ==</option>																																	
+																<option value="" @if($member->m_jenis == "") selected @endif disabled>== Jenis Member ==</option>
 																@foreach($getJM as $data)
 																	@if($data->g_id == $member->m_jenis)
 																	<option value="{{ $data->g_id }}" selected >{{ $data->g_name }}</option>
@@ -178,7 +188,7 @@
 												</div>
 
 											</article>
-											
+
 										</div>
 
 										@endforeach
@@ -219,7 +229,7 @@
 @endsection
 
 @section('extra_script')
-	
+
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
@@ -248,7 +258,7 @@
 			// Maximum age
 			maximumAge: 80
 		});
-		
+
 		$('#tanggal').val('{{ $day }}');
 		$('#bulan').val('{{ $month }}');
 		$('#tahun').val('{{ $year }}');
@@ -366,7 +376,7 @@
 					timeout: 4000,
 					icon : "fa fa-times bounce animated"
 				});
-				
+
 			}).then(function(){
 				btn.removeAttr('disabled');
 				btn.html('<i class="fa fa-floppy-o"></i> &nbsp;Simpan');

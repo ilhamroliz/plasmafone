@@ -1,12 +1,8 @@
 @extends('main')
 
-@section('title', 'Request Order')
+@section('title', 'Purchase Order')
 
 @section('extra_style')
-<script src="{{ asset('template_asset/jquery/b.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('template_asset/jquery/b.min.js') }}" />
-<script src="{{ asset('template_asset/jquery/j.js') }}"></script>
-<script src="{{ asset('template_asset/sweetalert2/sweetalert2.min.css') }}"></script>
 
     <style type="text/css">
         
@@ -29,7 +25,7 @@
         <ol class="breadcrumb">
             <li>Home</li>
             <li>Pembelian</li>
-            <li>Request Order</li>
+            <li>Purchase Order</li>
         </ol> 
 
     </div>
@@ -48,7 +44,7 @@
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Request Order
+						 Purchase Order
 					</span>
                 </h1>
             </div>
@@ -72,7 +68,7 @@
                     <header role="heading">
                         <div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
                         </div>
-                        <h2><strong>Tambah Request Order</strong></h2>
+                        <h2><strong>Tambah Purchase Order</strong></h2>
 
                     <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
@@ -91,30 +87,23 @@
                             <form id="checkout-form" class="form-inline" role="form">
                                 <fieldset class="row">
 								
-									<div class="form-group col-md-8">
-                                        <label class="sr-only" for="namabarang">Nama Barang</label>
-										<input type="hidden" id="tpMemberId" name="tpMemberId">
-										<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Item">
-                                        <!-- <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%"> -->
-										
-										<div id="list_barang">
-											
-											</div>
-										
-                                    </div>
 									{{csrf_field()}}
                                    
-                                    <div class="form-group col-md-2">
-                                        <label class="sr-only" for="kuantitas">QTY</label>
-                                        <input type="text" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%" autocomplete="off">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <button class="btn btn-primary" onclick="tambah()">Tambah</button>
-                                    </div>
+                                    <div class="form-group col-md-6">
+                                            <select class="form-control col-md-12" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
+                                                <option selected="" value="00">----pilih semua Supplier----</option>
+                                            </select>
+                                        </div>
+                                        <!-- <div class="form-group col-md-6">
+                                            <select class="form-control col-md-12" name="" id="dt_outlet" style="padding-right:50%" onchange="reload_table()">
+                                                <option selected="" value="00">----pilih semua Outlet----</option>
+                                            </select>
+                                        </div>
+                                    -->
                                 </fieldset>
                                 <fieldset class="row">
                                     <dir class="col-md-12">
-                                        <table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
+                                        <table id="table_addPo" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th data-hide="phone,tablet" width="75%">Nama Barang</th>
@@ -133,7 +122,7 @@
 								<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
-                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">AJUKAN REQUEST ORDER</button>
+                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanPo()">Buat Purchase Order</button>
 											</div>
 										</div>
                                     </div>
@@ -167,47 +156,39 @@
 <script src="{{ asset('template_asset/js/bootstrap/bootstrap.min.js') }}"></script>
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
+// $('#overlay').fadeIn(200);
+$('#load-status-text').text('Sedang Mengambil Data...');	
 
-        $(document).ready(function () {
+$(document).ready(function () {
+	reload_data();
+	getSupplier();
+	getOutlet_po();
+		var breakpointDefinition = {
+			tablet : 1024,
+			phone : 480
+		};
 
-			$( "#tpMemberNama" ).autocomplete({
-			source: baseUrl+'/pembelian/request-pembelian/cariItem',
-				minLength: 2,
-				select: function(event, data) {
-					$('#tpMemberId').val(data.item.id);
-					$('#tpMemberNama').val(data.item.label);
-				}
-			});
-		reload_data();
+		
+		$('#dt_').on('change', function(e){
+			oTable.draw();
+			e.preventDefault();
 		})
 
+	
 
-		function hapusData(id){
-			$.ajax({
-				url : '{{url('/pembelian/request-pembelian/hapusDumy')}}',
-				type: "GET",
-				data: { 
-					id : id,
-				},
-				dataType: "JSON",
-				success: function(data)
-				{
-					// $('#table-rencana').DataTable().fnDestroy();
-					$('#table-rencana').DataTable().ajax.reload();
-				},
-				
-			}); 
-			alert(); 
-		}
+})
 
-	function reload_data(){
-        table_registrasi= $('#table-rencana').DataTable({
+function reload_data(){
+      // table_registrasi.ajax.reload(null, false);
+        table_registrasi= $('#table_addPo').DataTable({
 			"language" : dataTableLanguage,
             "ajax": {
-                    "url": '{{url('/pembelian/request-pembelian/ddRequest_dummy')}}',
+                    "url": '{{url('/pembelian/purchase-order/list_draftPo')}}',
                     "type": "GET",  
                     "data": function ( data ) {
+                        data.supplier = $('#dt_supplier').val();
+                        data.outlet = $('#dt_outlet').val();
                     },
                 },
         } );
@@ -217,117 +198,144 @@
         table_registrasi.ajax.reload(null, false);
 
     }
-
-		function getItem(){
-			$('#item_kelompok').empty();  
+			
+function getSupplier()
+{
+	
+	$.ajax({
+		url : '{{url('/pembelian/purchase-order/getSupplier_po')}}',
+		type: "GET",
+		data: { 
+		},
+		dataType: "JSON",
+		success: function(data)
+		{
+		$('#dt_supplier').empty(); 
+		row = "<option selected='' value='00'>Pilih Supplier</option>";
+		$(row).appendTo("#dt_supplier");
+		$.each(data, function(k, v) {
+			row = "<option value='"+v.pr_supplier+"'>"+v.s_company+"</option>";
+			$(row).appendTo("#dt_supplier");
+		});
+		},
 		
-			$.ajax({
-						url : '{{url('/pembelian/request-pembelian/getBarang')}}',
-						type: "GET",
-						data: { 
-						},
-						dataType: "JSON",
-						success: function(data)
-						{
-						$('#item_kelompok').empty(); 
-						row = "<option selected='' value='0'>Pilih Item</option>";
-						$(row).appendTo("#item_kelompok");
-						$.each(data, function(k, v) {
-							row = "<option value='"+v.i_id+"'>"+v.i_nama+"</option>";
-							$(row).appendTo("#item_kelompok");
-						});
-						},
-						
-					});  
-		}
+	});  
+}
 
-        function tambah(){
-			$.ajax({
-				url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
+function getOutlet_po()
+{
+	$.ajax({
+		url : '{{url('/pembelian/purchase-order/getOutlet_po')}}',
+		type: "GET",
+		data: { 
+			'id' : $('#dt_supplier').val()
+
+		},
+		dataType: "JSON",
+		success: function(data)
+		{
+			$('#dt_outlet').empty(); 
+			row = "<option selected='' value='00'>Pilih Outlet</option>";
+			$(row).appendTo("#dt_outlet");
+			$.each(data, function(k, v) {
+				row = "<option value='"+v.pr_comp+"'>"+v.c_name+"</option>";
+				$(row).appendTo("#dt_outlet");
+			});
+			
+		},
+	}); 
+}
+
+// $('#table-rencana').DataTable().ajax.reload();
+
+function formatRupiah(angka, prefix, dec)
+{
+	var number_string = angka.toString(),
+	split	= number_string.split(','),
+	sisa 	= split[0].length % 3,
+	rupiah 	= split[0].substr(0, sisa),
+	ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
+
+	if (ribuan) {
+
+		separator = sisa ? '.' : '';
+		rupiah += separator + ribuan.join('.') + "," + dec;
+
+	}
+
+	rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+	
+	return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
+}
+		 
+function editDumy(id){
+	var input = $('#i_nama'+id).val();
+	$.ajax({
+				url : '{{url('/pembelian/request-pembelian/editDumy')}}',
 				type: "GET",
 				data: { 
-					'qty' : $('#qty').val(),
-					'item' : $('#tpMemberId').val(),
+					'id' : id,
+					'qty' : input,
+
 				},
 				dataType: "JSON",
 				success: function(data)
 				{
-					reload_table();
+					
+					Swal({
+							position: 'top-end',
+							type: 'danger',
+							title: 'Request Order Telah Di edit',
+							showConfirmButton: false,
+							timer: 7500,
+						});
+					
+					$('#table-rencana').DataTable().ajax.reload();
+					
 				},
 				
 		}); 
-		}
+}
 
-// $('#table-rencana').DataTable().ajax.reload();
-		 
-		function editDumy(id){
-			var input = $('#i_nama'+id).val();
-			$.ajax({
-						url : '{{url('/pembelian/request-pembelian/editDumy')}}',
-						type: "GET",
-						data: { 
-							'id' : id,
-							'qty' : input,
-
-						},
-						dataType: "JSON",
-						success: function(data)
-						{
-							
-							Swal({
-									position: 'top-end',
-									type: 'danger',
-									title: 'Request Order Telah Di edit',
-									showConfirmButton: false,
-									timer: 7500,
-								});
-							
-							$('#table-rencana').DataTable().ajax.reload();
-							
-						},
-						
-				}); 
-		}
-
-		function simpanRequest(){
+function simpanPo(){
+	
+	$.ajax({
+		url : '{{url('/pembelian/purchase-order/simpanPo')}}',
+		type: "get",
+		data: { 
+		},
+		dataType: "JSON",
+		success: function(data)
+		{
 			
-			$.ajax({
-				url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
-				type: "get",
-				data: { 
-				},
-				dataType: "JSON",
-				success: function(data)
-				{
-					
-					if(data.status == 'gagal')
-					{
-						Swal({
-								position: 'top-end',
-								type: 'danger',
-								title: 'Request Order Gagal Di Ajukan',
-								showConfirmButton: false,
-								timer: 1500
-							});
-						// $('#table-rencana').DataTable().ajax.reload();
-					}else{
-						
-						$('#table-rencana').dataTable().ajax.reload();
-						Swal({
-								position: 'top-end',
-								type: 'danger',
-								title: 'Request Order Telah Di Ajukan',
-								showConfirmButton: false,
-								timer: 3500
-							});
-					}
-					// $('#table-rencana').DataTable().fnDestroy();
-					
-				},
-					
-			}); 
+			if(data.status == 'gagal')
+			{
+				Swal({
+						position: 'top-end',
+						type: 'danger',
+						title: 'Request Order Gagal Di Ajukan',
+						showConfirmButton: false,
+						timer: 1500
+					});
+				// $('#table-rencana').DataTable().ajax.reload();
+			}else{
+				
+				$('#table-rencana').dataTable().ajax.reload();
+				Swal({
+						position: 'top-end',
+						type: 'danger',
+						title: 'Request Order Telah Di Ajukan',
+						showConfirmButton: false,
+						timer: 3500
+					});
+			}
+			// $('#table-rencana').DataTable().fnDestroy();
 			
-		}
+		},
+			
+	}); 
+	
+}
 
         
     </script>

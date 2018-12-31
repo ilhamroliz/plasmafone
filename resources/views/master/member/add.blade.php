@@ -12,11 +12,11 @@
 	<!-- RIBBON -->
 	<div id="ribbon">
 
-		<span class="ribbon-button-alignment"> 
+		<span class="ribbon-button-alignment">
 
 			<span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.." data-html="true" onclick="location.reload()">
 				<i class="fa fa-refresh"></i>
-			</span> 
+			</span>
 
 		</span>
 
@@ -70,7 +70,7 @@
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -92,12 +92,12 @@
 
 						<header>
 
-							<h2><strong>Master Member</strong></h2>				
-							
+							<h2><strong>Master Member</strong></h2>
+
 						</header>
 
 						<div>
-							
+
 							<div class="widget-body">
 
 								<form id="form-tambah" class="form-horizontal" method="post">
@@ -124,11 +124,21 @@
 												</div>
 
 												<div class="form-group">
-													<label class="col-xs-4 col-lg-4 control-label text-left">No. ID</label>
+													<label class="col-xs-4 col-lg-4 control-label text-left">No. Identitas</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan Nomor ID Member" />
+															<input type="text" class="form-control" id="nik" name="nik" v-model="form_data.nik" placeholder="Masukkan Nomor Identitas" />
+														</div>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">ID. Member</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+														<div class="input-group">
+															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
+															<input type="text" class="form-control" id="idmember" name="idmember" v-model="form_data.idmember" placeholder="Masukkan Nomor ID Member" />
 														</div>
 													</div>
 												</div>
@@ -189,7 +199,7 @@
 												</div>
 
 											</article>
-											
+
 										</div>
 
 									</fieldset>
@@ -228,7 +238,7 @@
 @endsection
 
 @section('extra_script')
-	
+
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/choosen/chosen.jquery.js') }}"></script>
@@ -280,7 +290,14 @@
 						nik : {
 							validators : {
 								notEmpty : {
-									message : 'Isi No. ID Member'
+									message : 'Isi No. Identitas'
+								}
+							}
+						},
+						idmember : {
+							validators : {
+								notEmpty : {
+									message : 'Isi ID Member'
 								}
 							}
 						},
@@ -317,6 +334,7 @@
 
 					form_data : {
 						nik 	: '',
+						idmember : '',
 						name 	: '',
 						telp 	: '',
 						address : '',
@@ -339,7 +357,7 @@
 						if($('#form-tambah').data('bootstrapValidator').validate().isValid()){
 							this.btn_save_disabled = true;
 							overlay();
-							axios.post(baseUrl+'/master/member/simpan-tambah', 
+							axios.post(baseUrl+'/master/member/simpan-tambah',
 								$('#form-tambah').serialize()
 							).then((response) => {
 								if (response.data.status == 'ditolak') {
@@ -420,6 +438,7 @@
 					},
 					reset_form:function(){
 						this.form_data.nik 			= '';
+						this.form_data.idmember = '';
 						this.form_data.name 		= '';
 						this.form_data.telp			= '';
 						this.form_data.address 		= '';
@@ -428,7 +447,7 @@
 						this.form_data.tanggal 		= '';
 						this.form_data.bulan 		= '';
 						this.form_data.tahun 		= '';
-						
+
 						$('#form-tambah').data('bootstrapValidator').resetForm();
 					}
 				}

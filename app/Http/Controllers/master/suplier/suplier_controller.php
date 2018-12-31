@@ -37,9 +37,7 @@ class suplier_controller extends Controller
 
     public function getdataactive()
     {
-        $supplier_active = suplier::where('s_isactive', 'Y')->orderBy('s_insert', 'desc')->get();
-
-        $supplier_active = collect($supplier_active);
+        $supplier_active = suplier::select('s_id', 's_company', 's_name', 's_phone', 's_limit', 's_isactive')->where('s_isactive', 'Y');
 
         return DataTables::of($supplier_active)
 
@@ -70,9 +68,7 @@ class suplier_controller extends Controller
 
     public function getdataall()
     {
-        $supplier_all = suplier::orderBy('s_insert', 'desc')->get();
-
-        $supplier_all = collect($supplier_all);
+        $supplier_all = suplier::select('s_id', 's_company', 's_name', 's_phone', 's_limit', 's_isactive');
 
         return DataTables::of($supplier_all)
 
@@ -133,9 +129,7 @@ class suplier_controller extends Controller
 
     public function getdatanonactive()
     {
-        $supplier_nonactive = suplier::where('s_isactive', 'N')->orderBy('s_insert', 'desc')->get();
-
-        $supplier_nonactive = collect($supplier_nonactive);
+        $supplier_nonactive = suplier::select('s_id', 's_company', 's_name', 's_phone', 's_limit', 's_isactive')->where('s_isactive', 'N');
 
         return DataTables::of($supplier_nonactive)
 
@@ -433,7 +427,7 @@ class suplier_controller extends Controller
                     suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'Y']);
 
                     DB::commit();
-                    $data = supplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
+                    $data = suplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
                     $log = 'Set Data Supplier ' . $data->s_name . ' = ACTIVE';
                     Access::logActivity($log);
 
@@ -488,7 +482,7 @@ class suplier_controller extends Controller
                     suplier::where(['s_id' => Crypt::decrypt($id)])->update(['s_isactive' => 'N']);
 
                     DB::commit();
-                    $data = supplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
+                    $data = suplier::select('s_name')->where('s_id', Crypt::decrypt($id))->first();
                     $log = 'Set Data Supplier ' . $data->s_name . ' = NONACTIVE';
                     Access::logActivity($log);
 

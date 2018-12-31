@@ -17,6 +17,24 @@ use Response;
 class PembelianController extends Controller
 {
     // ----Bagian rencana Pembelian -----
+    public function cariItem(Request $request)
+    {
+        $cari = $request->term;
+        $nama = DB::table('d_item')
+            ->where(function ($q) use ($cari){
+                $q->orWhere('i_id', 'like', '%'.$cari.'%');
+                $q->orWhere('i_nama', 'like', '%'.$cari.'%');
+            })->get();
+
+        if ($nama == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->i_id, 'label' => $query->i_nama . ' ('.$query->i_code.')'];
+            }
+        }
+        return Response::json($results);
+    }
 
     public function rencana_pembelian()
     {
@@ -395,7 +413,7 @@ class PembelianController extends Controller
                 ->where('d_item.i_nama', 'LIKE', "%{$query}%")
                 ->get();
 
-            $output = '<ul class="dropdown-menu" style="display:block; position:relative" >';
+            $output = '<ul class="dropdown-menu table-responsive" style="display:block; position:relative" >';
             foreach ($data as $row) {
                 $output .= '<li><a href="#" >' . $row->i_nama . '</a></li>';
             }
@@ -817,6 +835,28 @@ class PembelianController extends Controller
     // end konfirm order
 
     // start purchase order
+    public function getSupplier_po()
+    {
+        $data = DB::table('d_purchase_confirm')
+                ->select('d_purchase_confirm.pr_supplier','d_supplier.s_company')
+                ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
+                ->where('d_purchase_confirm.pr_stsConf','CONFIRM')
+                ->groupBy('d_purchase_confirm.pr_supplier')
+                ->get();
+        echo json_encode($data);
+    }
+
+    public function getOutlet_po(Request $request)
+    {
+        $id = $request->input('id');
+        $data = DB::table('d_purchase_confirm')
+                ->select('d_purchase_confirm.pr_comp','m_company.c_name')
+                ->join('d_mem','d_purchase_confirm.pr_comp','=','d_mem.m_id')
+                ->join('m_company','d_mem.m_comp','=','m_company.c_id')
+                ->groupBy('d_purchase_confirm.pr_comp')
+                ->get();
+        echo json_encode($data);
+    }
     public function multiple_insert()
     {
        $query = DB::table('d_purchase_confirm')
@@ -1020,7 +1060,7 @@ class PembelianController extends Controller
 
     public function view_tambahPo()
     {
-        return view('pembelian/purchase_order/tambah_purchase_order');
+        return view('pembelian/purchase_order/add_po');
     }
 
     public function add_purchaseOrder(Request $request)
@@ -1142,6 +1182,37 @@ class PembelianController extends Controller
             //     echo json_encode($n);
             // }
         }
+
+    public function list_draftPo(Request $request)
+    {
+        $supplier = $request->input('supplier');
+        $outlet = $request->input('outlet');
+
+        $list = DB::table('d_purchase_confirm')
+                ->select('d_purchase_confirm.*','d_supplier.*','d_item.*')
+                ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
+                ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
+                ->where('d_purchase_confirm.pr_stsConf','CONFIRM')
+                ->where('d_purchase_confirm.pr_supplier',$supplier)
+                ->get();
+
+                $data = array();
+                foreach ($list as $hasil) {
+                   
+                   $row = array();
+        
+                    $row[] = $hasil->s_company;
+                    $row[] = $hasil->s_name;
+                    $row[] = $hasil->pr_price;
+                    $data[] = $row;
+                }
+                echo json_encode(array("data"=>$data));
+    }
+
+    public function simpanPo()
+    {
+        $id = $request->input('id');
+    }
     // end purchase order
 
     public function get_data_order($id)
@@ -1880,11 +1951,11 @@ class PembelianController extends Controller
 
 
 
-        $query = DB::table('d_item')
-            ->select('d_item.i_id')
-            ->where('d_item.i_nama', $item)->first();
+        // $query = DB::table('d_item')
+        //     ->select('d_item.i_id')
+        //     ->where('d_item.i_nama', $item)->first();
 
-        $itm = implode(" ", explode("+", $query->i_id));
+        // $itm = implode(" ", explode("+", $query->i_id));
 
 
         $insert = DB::table('d_purchase_req')
@@ -1892,7 +1963,7 @@ class PembelianController extends Controller
 
                 'pr_codeReq' => '',
                 'pr_compReq' => $comp,
-                'pr_itemReq' => $itm,
+                'pr_itemReq' => $item,
                 'pr_qtyReq' => $qty,
                 'pr_dateReq' => $dateReq,
                 'pr_stsReq' => $status,
