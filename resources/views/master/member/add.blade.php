@@ -168,8 +168,8 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<select class="form-control" name="tipe" id="tipe" v-model="form_data.tipe">
-																<option value="" selected disabled>== Jenis Member ==</option>
-																<option value="" selected >DEFAULT</option>
+																<option value="" disabled>== Jenis Member ==</option>
+																<option value="0">DEFAULT</option>
 																@foreach($getJM as $data)
 																	<option value="{{ $data->g_id }}">{{ $data->g_name }}</option>
 																@endforeach
@@ -358,7 +358,7 @@
 							this.btn_save_disabled = true;
 							overlay();
 							axios.post(baseUrl+'/master/member/simpan-tambah',
-								$('#form-tambah').serialize()
+								$('#form-tambah').serialize()+'&tipe='+$('#tipe').val()
 							).then((response) => {
 								if (response.data.status == 'ditolak') {
 
