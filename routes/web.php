@@ -301,6 +301,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/request-pembelian/addDumyReq', 'PembelianController@addDumyReq');
 	Route::POST('/pembelian/request-pembelian/getInput', 'PembelianController@getBarang_input');
 	Route::get('/pembelian/request-pembelian/hapusDumy', 'PembelianController@hapusDumy');
+	Route::get('/pembelian/request-pembelian/cariItem', 'PembelianController@cariItem');
 
 
 
@@ -396,6 +397,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/purchase-order/get_idDetail', 'PembelianController@get_idDetail');
 	Route::get('/pembelian/purchase-order/PurchaseTambah', 'PembelianController@purchaseTambah');
 	Route::get('/pembelian/purchase-order/add_purchaseOrder', 'PembelianController@add_purchaseOrder');
+
+	// aksi purchase
+	Route::get('/pembelian/purchase-order/getSupplier_po', 'PembelianController@getSupplier_po');
+	Route::get('/pembelian/purchase-order/getOutlet_po', 'PembelianController@getOutlet_po');
+	Route::get('/pembelian/purchase-order/list_draftPo', 'PembelianController@list_draftPo');
+	Route::get('/pembelian/purchase-order/z', 'PembelianController@z');
+	// end aksi purchase
 
 	Route::get('/pembelian/purchase-order/add', 'PembelianController@purchase_order_add');
 
