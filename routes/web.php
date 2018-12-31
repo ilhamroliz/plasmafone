@@ -535,7 +535,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-pemesanan', 'penjualan\pemesananBarangController@tambah_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/hapus/{id}', 'penjualan\pemesananBarangController@hapus');
-	Route::get('/penjualan/pemesanan-barang/print/{id}', 'penjualan\pemesananBarangController@print');
+	Route::get('/penjualan/pemesanan-barang/print', 'penjualan\pemesananBarangController@print');
 	//== End Pemesanan Barang
 
 	///// End PENJUALAN

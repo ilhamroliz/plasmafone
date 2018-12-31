@@ -166,8 +166,20 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				<a href="#"><i class="fa fa-lg fa-fw fa-handshake-o"></i> <span class="menu-item-parent">Penjualan</span></a>
 				<ul>
 					@if($sidebar['Setting Harga'] == 'Y')
-					<li class="{{ (Request::is('penjualan/set-harga/*') || Request::is('penjualan/set-harga')) ? 'active' : '' }}">
-						<a href="{{ url('/penjualan/set-harga') }}">Setting Harga</a>
+					<li>
+						<a href="#">Setting Harga</a>
+						<ul>
+							@if($sidebar['Penerimaan Barang Supplier'] == 'Y')
+							<li class="{{ (Request::is('penjualan/set-harga/outlet/*') || Request::is('penjualan/set-harga/outlet')) ? 'active' : '' }}">
+								<a href="{{ url('/penjualan/set-harga/outlet') }}">Outlet</a>
+							</li>
+							@endif
+							@if($sidebar['Penerimaan Barang Pusat'] == 'Y')
+							<li class="{{ (Request::is('penjualan/set-harga/*') || Request::is('penjualan/set-harga')) ? 'active' : '' }}">
+								<a href="{{ url('/penjualan/set-harga') }}">Group</a>
+							</li>
+							@endif
+						</ul>
 					</li>
 					@endif
 
