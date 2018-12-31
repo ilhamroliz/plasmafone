@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Outlet')
+@section('title', 'Master Member')
 
 
 @section('extra_style')
@@ -124,7 +124,7 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
-															<input type="text" class="form-control" id="m_idmember" name="m_idmember" v-model="form_data.idmember" placeholder="Masukkan Nomor ID Member" />
+															<input type="text" class="form-control" id="m_idmember" name="m_idmember" v-model="form_data.idmember" placeholder="Masukkan Nomor ID Member" value="{{$member->m_idmember}}" readonly />
 														</div>
 													</div>
 												</div>
@@ -184,6 +184,54 @@
 													<label class="col-xs-4 col-lg-4 control-label text-left">Alamat Member</label>
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Member" id="address" name="address" v-model="form_data.address">{{ $member->m_address }}</textarea>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-md-4 control-label text-left">Provinsi</label>
+													<div class="col-md-8 inputGroupContainer">
+															<select width="100%" class="form-control" name="provinsi" id="provinsi" v-model="form_data.provinsi" onchange="getkota()">
+																<option value="" disabled>== Pilih Provinsi ==</option>
+																@foreach ($provinsi as $key => $value)
+																	<option value="{{$value->wp_id}}" @if($member->m_provinsi == $value->wp_id) selected @endif>{{$value->wp_name}}</option>
+																@endforeach
+															</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kota</label>
+													<div class="col-xs-5 col-lg-8 inputGroupContainer">
+															<select width="100%" class="form-control" name="kota" id="kota" v-model="form_data.kota" readonly onchange="getkecamatan()">
+																<option value="" disabled>== Pilih Kota ==</option>
+																@foreach ($kota as $key => $value)
+																	<option value="{{$value->wc_id}}" @if($member->m_kota == $value->wc_id) selected @endif>{{$value->wc_name}}</option>
+																@endforeach
+															</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kecamatan</label>
+													<div class="col-xs-5 col-lg-8 inputGroupContainer">
+															<select class="form-control" name="kecamatan" id="kecamatan" v-model="form_data.kecamatan" readonly onchange="getdesa()">
+																<option value="" disabled>== Pilih Kecamatan ==</option>
+																@foreach ($kecamatan as $key => $value)
+																	<option value="{{$value->wk_id}}" @if($member->m_kecamatan == $value->wk_id) selected @endif>{{$value->wk_name}}</option>
+																@endforeach
+															</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Desa</label>
+													<div class="col-xs-5 col-lg-8 inputGroupContainer">
+															<select class="form-control" name="desa" id="desa" v-model="form_data.desa" readonly>
+																<option value="" disabled>== Pilih Desa ==</option>
+																@foreach ($desa as $key => $value)
+																	<option value="{{$value->wd_id}}" @if($member->m_desa == $value->wd_id) selected @endif>{{$value->wd_name}}</option>
+																@endforeach
+															</select>
 													</div>
 												</div>
 
@@ -259,9 +307,27 @@
 			maximumAge: 80
 		});
 
-		$('#tanggal').val('{{ $day }}');
-		$('#bulan').val('{{ $month }}');
-		$('#tahun').val('{{ $year }}');
+		if ({{$day}} == "") {
+			var day = null;
+		} else {
+			var day = '{{$day}}';
+		}
+
+		if ({{$month}} == "") {
+			var month = null;
+		} else {
+			var month = '{{$month}}';
+		}
+
+		if ({{$year}} == "") {
+			var year = null;
+		} else {
+			var year = '{{$year}}';
+		}
+
+		$('#tanggal').val(day);
+		$('#bulan').val(month);
+		$('#tahun').val(year);
 
 		function overlay()
 		{
@@ -384,6 +450,60 @@
 			});
 
 		});
+
+		function getkota(){
+			var html = '<option value="" disabled>== Pilih Kota ==</option>';
+			var provinsi = $('#provinsi').val();
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {provinsi},
+				url: baseUrl + '/master/member/getkota',
+				success : function(response){
+						for (var i = 0; i < response.length; i++) {
+							html += '<option value="'+response[i].wc_id+'">'+response[i].wc_name+'</option>';
+						}
+					$('#kota').html(html);
+					$('#kota').attr('readonly', false);
+				}
+			});
+		}
+
+		function getkecamatan(){
+			var html = '<option value="" disabled>== Pilih Kecamatan ==</option>';
+			var kota = $('#kota').val();
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {kota},
+				url: baseUrl + '/master/member/getkecamatan',
+				success : function(response){
+					for (var i = 0; i < response.length; i++) {
+						html += '<option value="'+response[i].wk_id+'">'+response[i].wk_name+'</option>';
+					}
+					$('#kecamatan').html(html);
+					$('#kecamatan').attr('readonly', false);
+				}
+			});
+		}
+
+		function getdesa(){
+			var html = '<option value="" disabled>== Pilih Desa ==</option>';
+			var kecamatan = $('#kecamatan').val();
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {kecamatan},
+				url: baseUrl + '/master/member/getdesa',
+				success : function(response){
+					for (var i = 0; i < response.length; i++) {
+						html += '<option value="'+response[i].wd_id+'">'+response[i].wd_name+'</option>';
+					}
+					$('#desa').html(html);
+					$('#desa').attr('readonly', false);
+				}
+			});
+		}
 
 	</script>
 
