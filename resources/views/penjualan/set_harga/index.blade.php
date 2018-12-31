@@ -43,7 +43,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 					<i class="fa-fw fa fa-lg fa-handshake-o"></i>
 
-					Penjualan <span><i class="fa fa-angle-double-right"></i> Setting Harga </span>
+					Penjualan <span><i class="fa fa-angle-double-right"></i> Setting Harga Group</span>
 
 				</h1>
 

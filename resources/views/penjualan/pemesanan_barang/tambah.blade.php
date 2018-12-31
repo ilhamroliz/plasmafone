@@ -29,7 +29,6 @@
     <!-- END RIBBON -->
 @endsection
 
-
 @section('main_content')
     <!-- MAIN CONTENT -->
     <div id="content">
