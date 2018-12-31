@@ -620,10 +620,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			})
 		}
 
-		function statusactive(id){
+		function statusactive(id, name){
 			$.SmartMessageBox({
 				title : "Pesan!",
-				content : 'Apakah Anda yakin akan mengaktifkan data outlet <i>"'+id+'"</i>',
+				content : 'Apakah Anda yakin akan mengaktifkan data outlet <i>"'+name+'"</i>?',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
 				if (ButtonPressed === "Ya") {
@@ -650,7 +650,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data outlet <i>"'+id+'"</i> berhasil diaktifkan...!',
+								content : 'Data outlet berhasil diaktifkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
@@ -700,10 +700,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			});
 		}
 
-		function statusnonactive(id){
+		function statusnonactive(id, name){
 			$.SmartMessageBox({
 				title : "Pesan!",
-				content : 'Apakah Anda yakin akan menonaktifkan data outlet <i>"'+id+'"</i>',
+				content : 'Apakah Anda yakin akan menonaktifkan data outlet <i>"'+name+'"</i>?',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
 				if (ButtonPressed === "Ya") {
@@ -730,7 +730,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data outlet <i>"'+id+'"</i> berhasil dinonaktifkan...!',
+								content : 'Data outlet berhasil dinonaktifkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"

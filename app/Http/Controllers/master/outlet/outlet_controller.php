@@ -44,9 +44,7 @@ class outlet_controller extends Controller
 
     public function getdataactive()
     {
-        $outlet_active = Outlet::where('c_isactive', 'Y')->orderBy('created_at', 'desc')->get();
-
-        $outlet_active = collect($outlet_active);
+        $outlet_active = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'Y');
 
         return DataTables::of($outlet_active)
 
@@ -58,7 +56,7 @@ class outlet_controller extends Controller
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_active->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_active->c_id . '\', \'' . $outlet_active->c_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
                 }
 
@@ -71,9 +69,7 @@ class outlet_controller extends Controller
 
     public function getdataall()
     {
-        $outlet_all = Outlet::orderBy('created_at', 'desc')->get();
-
-        $outlet_all = collect($outlet_all);
+        $outlet_all = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive');
 
         return DataTables::of($outlet_all)
 
@@ -101,7 +97,7 @@ class outlet_controller extends Controller
 
                     } else {
 
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $outlet_all->c_id . '\', \'' . $outlet_all->c_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
                     }
 
@@ -113,7 +109,7 @@ class outlet_controller extends Controller
 
                     } else {
 
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_all->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_all->c_id . '\', \'' . $outlet_all->c_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
 
                     }
 
@@ -128,9 +124,7 @@ class outlet_controller extends Controller
 
     public function getdatanonactive()
     {
-        $outlet_nonactive = Outlet::where('c_isactive', 'N')->orderBy('created_at', 'desc')->get();
-
-        $outlet_nonactive = collect($outlet_nonactive);
+        $outlet_nonactive = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'N');
 
         return DataTables::of($outlet_nonactive)
 
@@ -142,7 +136,7 @@ class outlet_controller extends Controller
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $outlet_nonactive->c_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . $outlet_nonactive->c_id . '\', \'' . $outlet_nonactive->c_name . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
 
                 }
 
@@ -278,14 +272,14 @@ class outlet_controller extends Controller
 
                             return json_encode([
                                 'status' => 'tidak ada',
-                                'code' => $data['code']
+                                'name' => strtoupper($data['name'])
                             ]);
 
                         } else if ($check_name > 0) {
 
                             return json_encode([
                                 'status' => 'nama ada',
-                                'name' => $data['name']
+                                'name' => strtoupper($data['name'])
                             ]);
 
                         } else {
@@ -314,7 +308,7 @@ class outlet_controller extends Controller
                         // all good
                             return json_encode([
                                 'status' => 'berhasil',
-                                'code' => $data['code']
+                                'name' => strtoupper($data['name'])
                             ]);
 
                         }
