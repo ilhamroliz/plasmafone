@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,7 +18,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="24" />
+          <entry key="project.closed" value="25" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.181" value="1" />
           <entry key="project.open.time.2" value="4" />
@@ -47,17 +46,17 @@
           <entry key="css" value="4" />
           <entry key="env" value="1" />
           <entry key="js" value="12" />
-          <entry key="php" value="111" />
+          <entry key="php" value="113" />
           <entry key="ts" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key=".env file" value="1" />
-          <entry key="Blade" value="38" />
+          <entry key="Blade" value="39" />
           <entry key="CSS" value="4" />
           <entry key="JavaScript" value="12" />
-          <entry key="PHP" value="73" />
+          <entry key="PHP" value="74" />
           <entry key="TypeScript" value="1" />
         </counts>
       </usages-collector>
@@ -66,16 +65,16 @@
           <entry key="dummy" value="5" />
           <entry key="env" value="17" />
           <entry key="js" value="74" />
-          <entry key="php" value="8963" />
+          <entry key="php" value="8977" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="17" />
-          <entry key="Blade" value="4235" />
+          <entry key="Blade" value="4242" />
           <entry key="HTML" value="2" />
           <entry key="JavaScript" value="74" />
-          <entry key="PHP" value="4726" />
+          <entry key="PHP" value="4733" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
@@ -93,6 +92,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/routes/web.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="193">
+              <caret line="547" column="49" lean-forward="true" selection-start-line="547" selection-start-column="49" selection-end-line="547" selection-end-column="49" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/partials/_script.blade.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -124,7 +132,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>thousand</find>
       <find>mask</find>
       <find>thousands</find>
       <find>click</find>
@@ -154,6 +161,7 @@
       <find>datap</find>
       <find>date</find>
       <find>datep</find>
+      <find>penjualan/pemesanan-barang/p</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -185,10 +193,11 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_script.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_head.blade.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php" />
       </list>
     </option>
   </component>
@@ -460,6 +469,14 @@
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="penjualan" type="462c0819:PsiDirectoryNode" />
+              <item name="pemesanan_barang" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="penjualan" type="462c0819:PsiDirectoryNode" />
               <item name="penjualan-regular" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -482,7 +499,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="datepicker&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datapicker/bootstrap-datepicker.js&#10;scr&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;jquer&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datatables/jquery.dataTables.min.js&#10;jquery&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/libs/jquery-2.1.1.min.js&#10;pembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PembelianController.php&#10;rencanapembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/pembelian/rencana_pembelian&#10;login&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="web&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/routes/web.php&#10;datepicker&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datapicker/bootstrap-datepicker.js&#10;scr&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;jquer&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datatables/jquery.dataTables.min.js&#10;jquery&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/libs/jquery-2.1.1.min.js&#10;pembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PembelianController.php&#10;rencanapembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/pembelian/rencana_pembelian&#10;login&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../perwita" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -544,12 +561,12 @@
       <workItem from="1545987790826" duration="775000" />
       <workItem from="1546054687291" duration="763000" />
       <workItem from="1546228653236" duration="1239000" />
-      <workItem from="1546242390355" duration="734000" />
+      <workItem from="1546242390355" duration="2216000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="97102000" />
+    <option name="totallyTimeSpent" value="98584000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
@@ -584,13 +601,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/template_asset/css/font-awesome.min.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="3" column="743" selection-start-line="3" selection-start-column="743" selection-end-line="3" selection-end-column="743" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/pembelian/request_order/view_request_order.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1645">
@@ -862,13 +872,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13656">
-          <caret line="580" column="21" selection-start-line="580" selection-start-column="21" selection-end-line="580" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/master/item/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9048">
@@ -909,6 +912,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/partials/_script.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="71" column="19" selection-start-line="71" selection-start-column="19" selection-end-line="71" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/pengaturan/log_activity/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="265">
@@ -916,10 +926,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/partials/_script.blade.php">
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="71" column="19" selection-start-line="71" selection-start-column="19" selection-end-line="71" selection-end-column="19" />
+        <state relative-caret-position="193">
+          <caret line="547" column="49" lean-forward="true" selection-start-line="547" selection-start-column="49" selection-end-line="547" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="539" lean-forward="true" selection-start-line="539" selection-end-line="539" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

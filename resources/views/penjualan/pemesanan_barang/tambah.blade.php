@@ -535,7 +535,7 @@
 					timeout: 4000,
 					icon : "fa fa-check bounce animated"
 				});
-                // window.open( {{ url('/penjualan/pemesanan-barang/print?id=') }} + response.nota);
+                // window.open( {{ url('/penjualan/pemesanan-barang/print') }} + '?id=' + response.nota);
 				location.reload();
 
             }else if(response.status=='dpNull'){
