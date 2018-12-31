@@ -18,6 +18,8 @@
 
 <!-- Checkbox style -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
+<!-- Datepicker -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/js/plugin/datapicker/datepicker3.css') }}">
 {{-- <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap4.css') }}"> --}}
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
 
