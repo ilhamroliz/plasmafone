@@ -108,12 +108,17 @@ class member_controller extends Controller
             $id = Crypt::decrypt($id);
             $member = member::where('m_nik', $id)->first();
 
-            $dataGroup = DB::table('m_group')->select('g_name')->where('g_id', $member->m_jenis)->first();
-            // dd($member);
+            $groupMember = '';
+            if ($member->m_jenis != null) {
+                $dataGroup = DB::table('m_group')->select('g_name')->where('g_id', $member->m_jenis)->first();
+                $groupMember = $dataGroup->g_name;
+            } else {
+                $groupMember = 'DEFAULT';
+            }
             return response()->json([
                 'status' => 'ok',
                 'data' => $member,
-                'jm' => $dataGroup->g_name
+                'jm' => $groupMember
             ]);
         }
     }

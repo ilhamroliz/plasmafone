@@ -33,11 +33,17 @@ class pemesananBarangController extends Controller
     {
         $proses = pemesanan::where('i_status', 'PROSES')
             ->join('m_member', 'm_id', '=', 'i_member')
-            ->select('d_indent.*', 'm_name')
-            ->orderBy('i_id', 'desc')->get();
-        $proses = collect($proses);
+            ->select('d_indent.*', 'm_name')->orderBy('i_nota', 'desc');
 
         return DataTables::of($proses)
+            ->addColumn('tagihan', function ($proses) {
+                $tagihan = [];
+                $tagihan = explode('.', $proses->i_total_tagihan);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
             ->addColumn('aksi', function ($proses) {
                 if (Plasma::checkAkses(18, 'delete') == false) {
                     return '<div class="text-center">
@@ -48,7 +54,7 @@ class pemesananBarangController extends Controller
                             <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($proses->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'tagihan'])
             ->make(true);
     }
 
@@ -56,11 +62,17 @@ class pemesananBarangController extends Controller
     {
         $done = pemesanan::where('i_status', 'DONE')
             ->join('m_member', 'm_id', '=', 'i_member')
-            ->select('d_indent.*', 'm_name')
-            ->orderBy('i_id', 'desc')->get();
-        $done = collect($done);
+            ->select('d_indent.*', 'm_name')->orderBy('i_nota', 'desc');
 
         return DataTables::of($done)
+            ->addColumn('tagihan', function ($done) {
+                $tagihan = [];
+                $tagihan = explode('.', $done->i_total_tagihan);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
             ->addColumn('aksi', function ($done) {
                 if (Plasma::checkAkses(18, 'delete') == false) {
                     return '<div class="text-center">
@@ -71,7 +83,7 @@ class pemesananBarangController extends Controller
                             <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($done->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'tagihan'])
             ->make(true);
     }
 
@@ -79,11 +91,17 @@ class pemesananBarangController extends Controller
     {
         $cancel = pemesanan::where('i_status', 'CANCEL')
             ->join('m_member', 'm_id', '=', 'i_member')
-            ->select('d_indent.*', 'm_name')
-            ->orderBy('i_id', 'desc')->get();
-        $cancel = collect($cancel);
+            ->select('d_indent.*', 'm_name')->orderBy('i_nota', 'desc');
 
         return DataTables::of($cancel)
+            ->addColumn('tagihan', function ($cancel) {
+                $tagihan = [];
+                $tagihan = explode('.', $cancel->i_total_tagihan);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
             ->addColumn('aksi', function ($cancel) {
                 if (Plasma::checkAkses(18, 'delete') == false) {
                     return '<div class="text-center">
@@ -94,30 +112,46 @@ class pemesananBarangController extends Controller
                             <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($cancel->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'tagihan'])
             ->make(true);
     }
 
-    public function get_detail($id)
+    public function detail_dt($id)
     {
-        if (Plasma::checkAkses(47, 'read') == false) {
+        $id = Crypt::decrypt($id);
+        $proses = DB::table('d_indent_dt')->where('id_indent', $id)
+            ->join('d_item', 'd_item.i_id', '=', 'id_item')
+            ->select('i_price', 'i_nama', 'id_qty')->get();
 
-            return view('errors/407');
+        return DataTables::of($proses)
+            ->addIndexColumn()
+            ->addColumn('harga', function ($proses) {
+                $tagihan = [];
+                $tagihan = explode('.', $proses->i_price);
+                $harga = $tagihan[0];
+                return '<div>
+                        <span style="float: left" >Rp. </span>
+                        <span style="float: right" >' . strrev(implode('.', str_split(strrev(strval($harga)), 3))) . ',00</span>';
+            })
+            ->addColumn('qty', function ($proses) {
+                return '<span style="float: right">' . $proses->id_qty . ' Unit</span>';
+            })
+            ->rawColumns(['harga', 'qty'])
+            ->make(true);
+    }
 
-        } else {
+    public function detail($id)
+    {
+        $id = Crypt::decrypt($id);
+        $data = pemesanan::where('i_id', $id)
+            ->join('m_member', 'm_id', '=', 'i_member')
+            ->select('i_nota', 'm_name', 'i_total_tagihan', 'i_total_pembayaran')
+            ->first();
 
-            $id = Crypt::decrypt($id);
-            $pemesanan = pemesanan::where('i_id', $id)->first();
-
-            $dataMember = DB::table('m_member')->select('m_name')->where('m_id', $pemesanan->i_member)->first();
-            $dataCompany = DB::table('m_company')->select('c_name')->where('c_id', $pemesanan->i_comp)->first();
-            // dd($member);
-            return response()->json([
-                'data' => $pemesanan,
-                'dm' => $dataMember->m_name,
-                'dc' => $dataCompany->c_name
-            ]);
-        }
+        // dd($data);
+        return json_encode([
+            'data' => $data
+        ]);
     }
 
     public function cari_member(Request $request)
@@ -177,26 +211,51 @@ class pemesananBarangController extends Controller
             return view('errors/407');
         } else {
             if ($request->isMethod('post')) {
-                DB::beginTransaction();
-                try {
-                    DB::table('m_member')->insert([
-                        'm_name' => strtoupper($request->namaMember),
-                        'm_telp' => $request->noTelp,
-                        'm_nik' => $request->noNIK
-                    ]);
 
-                    DB::commit();
+                $nama = strtoupper($request->namaMember);
+                $telp = $request->noTelp;
+                $nik = $request->noNIK;
+
+                $ceknik = DB::table('m_member')->where('m_nik', $nik)->count();
+                if ($ceknik > 0) {
                     return response()->json([
-                        'status' => 'tmSukses'
+                        'status' => 'nikAda',
+                        'member' => $nik
                     ]);
+                } else {
+                    $cektelp = DB::table('m_member')->where('m_telp', $telp)->count();
+                    if ($cektelp > 0) {
+                        return response()->json([
+                            'status' => 'telpAda',
+                            'member' => $telp
+                        ]);
+                    } else {
+                        DB::beginTransaction();
+                        try {
+                            DB::table('m_member')->insert([
+                                'm_name' => $nama,
+                                'm_telp' => $telp,
+                                'm_nik' => $nik,
+                                'm_status' => 'AKTIF'
+                            ]);
 
-                } catch (\Exception $e) {
+                            DB::commit();
 
-                    DB::rollback();
-                    return response()->json([
-                        'status' => 'tmGagal',
-                        'msg' => $e
-                    ]);
+                            Plasma::logActivity('Menambahkan Member ' . strtoupper($request->namaMember) . ' (' . $request->noTelp . ')');
+
+                            return response()->json([
+                                'status' => 'tmSukses'
+                            ]);
+
+                        } catch (\Exception $e) {
+
+                            DB::rollback();
+                            return response()->json([
+                                'status' => 'tmGagal',
+                                'msg' => $e
+                            ]);
+                        }
+                    }
                 }
             }
         }
@@ -230,26 +289,43 @@ class pemesananBarangController extends Controller
 
             if ($request->isMethod('post')) {
 
+                $i_member = $request->tpMemberId;
+                $ceksales = DB::table('d_sales')->where('s_member', $i_member)->count();
+                $cekindent = DB::table('d_indent')->where('i_member', $i_member)->count();
+                $i_pembayaran = $request->tpPembayaran;
+
+                $idItem = $request->idItem;
+                $qtyItem = $request->qtyItem;
+                $hargaItem = $request->hargaItem;
+                $total = 0;
+                for ($i = 0; $i < count($idItem); $i++) {
+                    $total = $total + ($qtyItem[$i] * $hargaItem[$i]);
+                }
+
+                $i_total_pembayaran = 0;
+
+                if ($i_pembayaran != 'lunas') {
+                    if ($ceksales == 0 || $cekindent == 0) {
+                        return response()->json([
+                            'status' => 'dpNull'
+                        ]);
+                    } else {
+                        $i_total_pembayaran == 0;
+                    }
+                } else {
+                    $i_total_pembayaran = $total;
+                }
+
                 DB::beginTransaction();
                 try {
 
-                    $idItem = $request->idItem;
-                    $qtyItem = $request->qtyItem;
-                    $hargaItem = $request->hargaItem;
-                    $total = 0;
-                    for ($i = 0; $i < count($idItem); $i++) {
-                        $total = $total + ($qtyItem[$i] * $hargaItem[$i]);
-                    }
-
-                    $hitung = DB::table('d_indent')->count();
+                    $hitung = DB::table('d_indent')->select('i_id')->max('i_id');
 
                     //== untuk d_indent
                     $i_id = $hitung + 1;
                     $i_comp = Auth::user()->m_comp;
-                    $i_member = $request->tpMemberId;
                     $i_nota = $this->getDataId();
                     $i_total_tagihan = $total;
-                    $i_total_pembayaran = 0;
                     $i_status = "PROSES";
 
                     DB::table('d_indent')->insert([
@@ -258,7 +334,7 @@ class pemesananBarangController extends Controller
                         'i_member' => $i_member,
                         'i_nota' => $i_nota,
                         'i_total_tagihan' => $i_total_tagihan,
-                        'i_total_pembayaran' => $i_total_pembayaran,
+                        'i_total_pembayaran' => $i_total_tagihan,
                         'i_status' => $i_status
                     ]);
 
@@ -274,6 +350,9 @@ class pemesananBarangController extends Controller
                     }
 
                     DB::commit();
+
+                    Plasma::logActivity('Menambahkan Pemesanan Barang dengan No. Nota : ' . $i_nota);
+
                     return response()->json([
                         'status' => 'tpSukses'
                     ]);
@@ -285,17 +364,41 @@ class pemesananBarangController extends Controller
                         'msg' => $e
                     ]);
                 }
-
-
             }
 
             return view('penjualan.pemesanan_barang.tambah');
         }
     }
 
-    public function hapus()
+    public function hapus($id)
     {
+        if (Plasma::checkAkses(18, 'delete') == false) {
+            return view('errors.407');
+        } else {
+            DB::beginTransaction();
+            try {
 
+                $id = Crypt::decrypt($id);
+                // dd($id);
+                $nota = DB::table('d_indent')->select('i_nota')->where('i_id', $id)->first();
+
+                DB::table('d_indent')->where('i_id', $id)->delete();
+
+                DB::table('d_indent_dt')->where('id_indent', $id)->delete();
+
+                DB::commit();
+                return json_encode([
+                    'status' => 'hpBerhasil',
+                    'name' => $nota->i_nota
+                ]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return json_encode([
+                    'status' => 'hpGagal',
+                    'msg' => $e
+                ]);
+            }
+        }
     }
 
 }

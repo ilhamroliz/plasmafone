@@ -35,8 +35,6 @@ class setHargaController extends Controller
             ->select('m_group_price.*', 'i_nama', 'g_name')
             ->orderBy('i_nama', 'asc')->get();
 
-        $gp = collect($gp);
-
         return DataTables::of($gp)
             ->addIndexColumn()
             ->addColumn('harga', function ($gp) {
