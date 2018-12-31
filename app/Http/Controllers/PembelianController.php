@@ -1209,9 +1209,14 @@ class PembelianController extends Controller
                 echo json_encode(array("data"=>$data));
     }
 
-    public function simpanPo()
+    public function simpanPo(Request $request)
     {
         $id = $request->input('id');
+
+        $query = DB::table('d_purchase_confirm')
+                    ->select('d_purchase_confirm.pr_supplier')
+                    ->where('d_purchase_confirm.pr_supplier',$id)
+                    ->get();
     }
     // end purchase order
 

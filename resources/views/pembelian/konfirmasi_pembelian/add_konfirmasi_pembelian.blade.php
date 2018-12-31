@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Barang')
+@section('title', 'Tambah Konfirmasi')
 
 <?php 
 	use App\Http\Controllers\PlasmafoneController as Access;
@@ -350,8 +350,19 @@
 	<script type="text/javascript">
 		var tambahKonfirmasi;
         $(document).ready(function () {
+           load_table();
+            
+        });
 
-            var responsiveHelper_dt_basic = undefined;
+        function tutup(){
+            $('#detailModal').modal('hide');
+        }
+
+		function load_table()
+		{
+
+			var tambahKonfirmasi;
+			var responsiveHelper_dt_basic = undefined;
             var responsiveHelper_datatable_fixed_column = undefined;
             var responsiveHelper_datatable_col_reorder = undefined;
             var responsiveHelper_datatable_tabletools = undefined;
@@ -396,12 +407,7 @@
             });
              $('#overlay').fadeOut(200);
             }, 1000);
-            
-        });
-
-        function tutup(){
-            $('#detailModal').modal('hide');
-        }
+		}
 
 		function getTelp(){
 			$.ajax({
@@ -577,8 +583,7 @@
             });  
 		}
 
-        
-        function setuju(){
+		function setuju(){
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/confirmSetuju')}}',
                 type: "GET",
@@ -590,14 +595,13 @@
 					pr_price		: $('#dt_harga').val(),
 					pr_qtyApp		: $('#dt_qty').val(),
 					pr_stsConf		: "CONFIRM",
-					
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
-					// alert();
                     if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
+						
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. data Gagal di tambahkan",
@@ -606,20 +610,53 @@
 								icon : "fa fa-times bounce animated"
 							});
 					}else{
-						$('#overlay').fadeOut(200);
-
-							$.smallBox({
+						
+							var rule = 	$('#detailModal').modal('hide');
+							$('#detailModal').modal('hide');
+							
+						// var rel = $('#dt_tambah').DataTable().ajax.reload();
+						// 	$('#dt_tambah').DataTable().ajax.reload();
+							if(!rule)
+							{
+								$.smallBox({
+								title : "Berhasil",
+								content : 'Data gagal direload...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+								});
+							}else{
+								var rule2 = $.smallBox({
 								title : "Berhasil",
 								content : 'Data telah ditambahkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
-							});
+								});
+
+								$.smallBox({
+								title : "Berhasil",
+								content : 'Data telah ditambahkan...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+								});
+
+								if(rule)
+								{
+									$('#dt_tambah').DataTable().ajax.reload();
+								}
+								
+							}
+						
+						
 					}
                 },
                 
             });  
         }
+        
+        
 
         function tolak(){
             $.ajax({
@@ -650,7 +687,6 @@
 							});
 					}else{
 						$('#overlay').fadeOut(200);
-
 							$.smallBox({
 								title : "Berhasil",
 								content : 'Data telah ditambahkan...!',
@@ -664,83 +700,7 @@
             });  
 		}
 		
-		var app = new Vue({
-		el 		: '#content',
-		data 	: {
-			kelompok : 'select',
-			group : 'select',
-			sub_group : 'select',
-			merk : 'select',
-			btn_save_disabled 	: false,
-
-			data_I_kelompok: [],
-			data_I_group: [],
-			data_I_sub_group: [],
-			data_I_merk: [],
-
-			form_data : {
-				i_kelompok: '',
-				i_group: '',
-				i_sub_group: '',
-				i_merk: '',
-				i_nama: '',
-				i_code: '',
-				i_img: '',
-				i_minstock: '',
-				i_berat: '',
-				i_specificcode: 'Y',
-				i_isactive: 'Y'
-				
-			}
-
-		},
-		
-
-		
-		methods: {
-
-			switch_kelompok: function(){
-				if(this.kelompok == 'select'){
-					this.kelompok = 'input';
-					$('#select_kelompok').hide();
-					$("#input_kelompok").show();
-				}else{
-					this.kelompok = 'select';
-					this.form_data.i_kelompok = '';
-					$('#data-form').data('bootstrapValidator').resetForm();
-					$('#input_kelompok').hide();
-					$("#select_kelompok").show();
-				}
-			},
-
-			switch_group: function(){
-				if(this.group == 'select'){
-					this.group = 'input';
-					$('#select_group').hide();
-					$("#input_group").show();
-				}else{
-					this.group = 'select';
-					this.form_data.i_group = '';
-					$('#data-form').data('bootstrapValidator').resetForm();
-					$('#input_group').hide();
-					$("#select_group").show();
-				}
-			},
-
-		
-
-			i_kelompok_change: function(v){
-				this.form_data.i_kelompok = v;
-			},
-
-			i_group_change: function(v){
-				this.form_data.i_group = v;
-			},
-
-			
-
-		}
-	});
+	
 
 	function calc(box){
 		one = document.autoSumForm.firstBox.value;
