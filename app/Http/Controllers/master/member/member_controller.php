@@ -165,7 +165,6 @@ class member_controller extends Controller
                                 ]);
 
                             } else {
-                              dd($request);
 
                                 if ($data['email'] == "") {
                                     $email = "";
@@ -173,22 +172,28 @@ class member_controller extends Controller
                                     $email = $data['email'];
                                 }
 
-                                if ($data['tanggal'] == "Tanggal") {
+                                if ($data['tanggal'] == null) {
                                     $tanggal = "00";
                                 } else {
                                     $tanggal = $data['tanggal'];
                                 }
 
-                                if ($data['bulan'] == "Bulan") {
+                                if ($data['bulan'] == null) {
                                     $bulan = "00";
                                 } else {
                                     $bulan = $data['bulan'];
                                 }
 
-                                if ($data['tahun'] == "Tahun") {
+                                if ($data['tahun'] == null) {
                                     $tahun = "0000";
                                 } else {
                                     $tahun = $data['tahun'];
+                                }
+
+                                if ($data['tipe'] == "") {
+                                    $tipe = "DEFAULT";
+                                } else {
+                                    $tipe = $data['tipe'];
                                 }
 
                                 member::insert([
@@ -197,7 +202,7 @@ class member_controller extends Controller
                                     'm_idmember' => $data['idmember'],
                                     'm_telp' => $data['telp'],
                                     'm_email' => $email,
-                                    'm_jenis' => $data['tipe'],
+                                    'm_jenis' => $tipe,
                                     'm_address' => $data['address'],
                                     'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
                                     'm_status' => 'AKTIF',
