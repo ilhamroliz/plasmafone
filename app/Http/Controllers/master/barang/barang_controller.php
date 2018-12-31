@@ -136,9 +136,13 @@ class barang_controller extends Controller
         $items_nonactive = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price')->where('i_isactive', 'N');
 
         return DataTables::of($items_nonactive)
+
             ->addColumn('harga', function ($items_nonactive) {
+
                 return '<div class="text-right">Rp' . number_format($items_nonactive->i_price, 2, ',', '.') . '</div>';
+
             })
+
             ->addColumn('aksi', function ($items_nonactive) {
 
                 if (Access::checkAkses(45, 'update') == false) {
@@ -152,6 +156,7 @@ class barang_controller extends Controller
                 }
 
             })
+
             ->rawColumns(['aksi', 'harga'])
 
             ->make(true);
@@ -161,9 +166,13 @@ class barang_controller extends Controller
     {
 
         if (Access::checkAkses(45, 'insert') == false) {
+
             return view('errors/407');
+
         } else {
+
             return view('master.item.add');
+
         }
 
     }
@@ -171,13 +180,21 @@ class barang_controller extends Controller
     public function get_form_resources()
     {
         if (Access::checkAkses(45, 'read') == false) {
+
             return json_encode([
+
                 'status' => 'Access denied'
+
             ]);
+
         } else {
+
             $kelompok = DB::table('d_item')->distinct('i_kelompok')->select('i_kelompok')->orderBy('i_kelompok', 'asc')->get();
+
             $group = DB::table('d_item')->distinct('i_group')->select('i_group')->orderBy('i_group', 'asc')->get();
+
             $subgroup = DB::table('d_item')->distinct('i_sub_group')->select('i_sub_group')->orderBy('i_sub_group', 'asc')->get();
+
             $merk = DB::table('d_item')->distinct('i_merk')->select('i_merk')->orderBy('i_merk', 'asc')->get();
 
             return response()->json([
@@ -221,11 +238,17 @@ class barang_controller extends Controller
                     $barang->i_merk = strtoupper($data['i_merk']);
                     $barang->i_nama = strtoupper($data['i_nama']);
                     $barang->i_specificcode = strtoupper($data['i_specificcode']);
+
                     if ($data['i_code'] == "") {
+
                         $code = "";
+
                     } else {
+
                         $code = strtoupper($data['i_code']);
+
                     }
+
                     $barang->i_code = $code;
                     $barang->i_isactive = strtoupper($data['i_isactive']);
                     $barang->i_minstock = strtoupper($data['i_minstock']);
@@ -370,9 +393,13 @@ class barang_controller extends Controller
                         }
 
                         if ($data['i_code'] == "") {
+
                             $code = "";
+
                         } else {
+
                             $code = strtoupper($data['i_code']);
+                            
                         }
 
                         Item::where(['i_id' => Crypt::decrypt($id)])->update([
