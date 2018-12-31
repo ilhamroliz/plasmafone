@@ -379,52 +379,52 @@
 	<script type="text/javascript">
 		var tambahRencana;
         $(document).ready(function () {
+			load_table();
+            // var responsiveHelper_dt_basic = undefined;
+            // var responsiveHelper_datatable_fixed_column = undefined;
+            // var responsiveHelper_datatable_col_reorder = undefined;
+            // var responsiveHelper_datatable_tabletools = undefined;
 
-            var responsiveHelper_dt_basic = undefined;
-            var responsiveHelper_datatable_fixed_column = undefined;
-            var responsiveHelper_datatable_col_reorder = undefined;
-            var responsiveHelper_datatable_tabletools = undefined;
+            // var breakpointDefinition = {
+            //     tablet : 1024,
+            //     phone : 480
+            // };
 
-            var breakpointDefinition = {
-                tablet : 1024,
-                phone : 480
-            };
+            // setTimeout(function () {
 
-            setTimeout(function () {
-
-            tambahRencana = $('#dt_tambah').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
-                "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
-                    },
-                "columns":[
-                    {"data": "pr_id"},
-                    {"data": "c_name"},
-                    {"data": "i_nama"},
-                    {"data": "pr_qtyReq"},
-                    {"data": "aksi"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
-                    }
-                },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-             $('#overlay').fadeOut(200);
-            }, 1000);
+            // tambahRencana = $('#dt_tambah').dataTable({
+            //     "processing": true,
+            //     "serverSide": true,
+            //     "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
+            //     "fnCreatedRow": function (row, data, index) {
+            //         $('td', row).eq(0).html(index + 1);
+            //         },
+            //     "columns":[
+            //         {"data": "pr_id"},
+            //         {"data": "c_name"},
+            //         {"data": "i_nama"},
+            //         {"data": "pr_qtyReq"},
+            //         {"data": "aksi"}
+            //     ],
+            //     "autoWidth" : true,
+            //     "language" : dataTableLanguage,
+            //     "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+            //     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            //     "preDrawCallback" : function() {
+            //         // Initialize the responsive datatables helper once.
+            //         if (!responsiveHelper_dt_basic) {
+            //             responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
+            //         }
+            //     },
+            //     "rowCallback" : function(nRow) {
+            //         responsiveHelper_dt_basic.createExpandIcon(nRow);
+            //     },
+            //     "drawCallback" : function(oSettings) {
+            //         responsiveHelper_dt_basic.respond();
+            //     }
+            // });
+            //  $('#overlay').fadeOut(200);
+            // }, 1000);
             
         });
 
@@ -580,6 +580,62 @@
             $('#myModal').modal('hide');
         }
 
+		function load_table()
+		{
+			var tambahRencana;
+			var responsiveHelper_dt_basic = undefined;
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
+
+            var breakpointDefinition = {
+                tablet : 1024,
+                phone : 480
+            };
+
+            setTimeout(function () {
+
+            tambahRencana = $('#dt_tambah').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
+                "columns":[
+                    {"data": "pr_id"},
+                    {"data": "c_name"},
+                    {"data": "i_nama"},
+                    {"data": "pr_qtyReq"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+             $('#overlay').fadeOut(200);
+            }, 1000);
+		}
+
+		function reload_table(){
+			tambahRencana.ajax.reload(null, false);
+	// $('#dt_tambah').dataTable().ajax.reload();
+    }
+
+
         function tambah(){
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/tambahRencana')}}',
@@ -598,6 +654,7 @@
                 {
                     if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
+						
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. data Gagal di tambahkan",
@@ -606,15 +663,29 @@
 								icon : "fa fa-times bounce animated"
 							});
 					}else{
-						$('#overlay').fadeOut(200);
-
-							$.smallBox({
+						var rel = $('#dt_tambah').DataTable().ajax.reload();
+							$('#dt_tambah').DataTable().ajax.reload();
+							if(!rel)
+							{
+								$.smallBox({
+								title : "Berhasil",
+								content : 'Data gagal direload...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+								});
+							}else{
+								$.smallBox({
 								title : "Berhasil",
 								content : 'Data telah ditambahkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
-							});
+								});
+								$('#myModal').modal('hide');
+							}
+						
+						
 					}
                 },
                 
@@ -642,15 +713,27 @@
 								icon : "fa fa-times bounce animated"
 							});
 					}else{
-						$('#overlay').fadeOut(200);
-
-							$.smallBox({
+						var rel = $('#dt_tambah').DataTable().ajax.reload();
+							$('#dt_tambah').DataTable().ajax.reload();
+							if(!rel)
+							{
+								$.smallBox({
 								title : "Berhasil",
-								content : 'Data telah Di tolak...!',
+								content : 'Data gagal direload...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
-							});
+								});
+							}else{
+								$.smallBox({
+								title : "Berhasil",
+								content : 'Data telah ditambahkan...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+								});
+								$('#myModal').modal('hide');
+							}
 					}
                 },
                 

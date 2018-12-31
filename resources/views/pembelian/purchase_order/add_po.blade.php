@@ -289,6 +289,8 @@ function editDumy(id){
 							showConfirmButton: false,
 							timer: 7500,
 						});
+
+						
 					
 					$('#table-rencana').DataTable().ajax.reload();
 					
@@ -320,7 +322,7 @@ function simpanPo(){
 				// $('#table-rencana').DataTable().ajax.reload();
 			}else{
 				
-				$('#table-rencana').dataTable().ajax.reload();
+				$('#table_addPo').dataTable().ajax.reload();
 				Swal({
 						position: 'top-end',
 						type: 'danger',
@@ -328,6 +330,7 @@ function simpanPo(){
 						showConfirmButton: false,
 						timer: 3500
 					});
+					reload_table();
 			}
 			// $('#table-rencana').DataTable().fnDestroy();
 			
