@@ -510,6 +510,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/set-harga/hapusGroup/{id}', 'penjualan\setHargaController@hapus_group');
 	Route::match(['get', 'post'], '/penjualan/set-harga/hapusHarga', 'penjualan\setHargaController@hapus_harga');
 
+	/////// OUTLET
+
+	Route::get('/penjualan/set-harga/outlet', 'penjualan\setHargaController@index_outlet');
+	Route::match(['get', 'post'], '/penjualan/set-harga/outlet/add', 'penjualan\setHargaController@add_price_outlet');
+	Route::match(['get', 'post'], '/penjualan/set-harga/outlet/edit', 'penjualan\setHargaController@edit_price_outlet');
+	Route::get('/penjualan/set-harga/outlet/hapus', 'penjualan\setHargaController@hapus_price_outlet');
+
+	///////// END OUTLET
 
 	//== End Set Harga
 
@@ -537,6 +545,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-pemesanan', 'penjualan\pemesananBarangController@tambah_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/hapus/{id}', 'penjualan\pemesananBarangController@hapus');
+	Route::get('/penjualan/pemesanan-barang/print', 'penjualan\pemesananBarangController@print');
 	//== End Pemesanan Barang
 
 	///// End PENJUALAN
