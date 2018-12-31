@@ -139,7 +139,6 @@ class member_controller extends Controller
 
                 } else {
 
-                    // dd($request);
                     $data = $request->all();
                     DB::beginTransaction();
 
@@ -173,30 +172,37 @@ class member_controller extends Controller
                                     $email = $data['email'];
                                 }
 
-                                if ($data['tanggal'] == "Tanggal") {
+                                if ($data['tanggal'] == null) {
                                     $tanggal = "00";
                                 } else {
                                     $tanggal = $data['tanggal'];
                                 }
 
-                                if ($data['bulan'] == "Bulan") {
+                                if ($data['bulan'] == null) {
                                     $bulan = "00";
                                 } else {
                                     $bulan = $data['bulan'];
                                 }
 
-                                if ($data['tahun'] == "Tahun") {
+                                if ($data['tahun'] == null) {
                                     $tahun = "0000";
                                 } else {
                                     $tahun = $data['tahun'];
                                 }
 
+                                if ($data['tipe'] == "") {
+                                    $tipe = "DEFAULT";
+                                } else {
+                                    $tipe = $data['tipe'];
+                                }
+
                                 member::insert([
                                     'm_name' => strtoupper($data['name']),
                                     'm_nik' => $data['nik'],
+                                    'm_idmember' => $data['idmember'],
                                     'm_telp' => $data['telp'],
                                     'm_email' => $email,
-                                    'm_jenis' => $data['tipe'],
+                                    'm_jenis' => $tipe,
                                     'm_address' => $data['address'],
                                     'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
                                     'm_status' => 'AKTIF',
@@ -234,7 +240,6 @@ class member_controller extends Controller
 
     public function simpan_edit(Request $request, $id = null)
     {
-
         if (Plasma::checkAkses(47, 'update') == false) {
 
             return view('errors/407');
@@ -320,7 +325,7 @@ class member_controller extends Controller
 
                     }
                 }
-            }   
+            }
 
             // ======================Method Get================================
             DB::beginTransaction();
@@ -484,7 +489,7 @@ class member_controller extends Controller
             } catch (\Exception $e) {
 
                 DB::rollback();
-                
+
                 // something went wrong
                 return json_encode([
                     'status' => 'gagal',
