@@ -401,4 +401,20 @@ class pemesananBarangController extends Controller
         }
     }
 
+    public function print($id)
+    {
+        $data = DB::table('d_indent')
+            ->join('m_company', 'c_id', '=', 'i_comp')
+            ->join('m_member', 'm_id', '=', 'i_member')
+            ->select('d_indent.*', 'c_name', 'c_address', 'c_tlp', 'm_name', 'm_telp')
+            ->where('i_id', $id)->get();
+        $dtData = DB::table('d_indent_dt')
+            ->join('d_item', 'i_id', '=', 'id_item')
+            ->select('i_nama', 'id_qty')
+            ->where('id_indent', $id)->get();
+
+        // dd($dtData);
+
+        return view('penjualan.pemesanan_barang.print')->with(compact(['data', 'dtData']));
+    }
 }

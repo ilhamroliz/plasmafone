@@ -536,6 +536,7 @@
 					icon : "fa fa-check bounce animated"
 				});
 				location.reload();
+                location.open("");
 
             }else if(response.status=='dpNull'){
 
