@@ -528,9 +528,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/penjualan/pemesanan-barang/get-item', 'penjualan\pemesananBarangController@cari_item');
 	Route::get('/penjualan/pemesanan-barang/get-group', 'penjualan\pemesananBarangController@get_group');
 
-	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/addDummy', 'penjualan\pemesananBarangController@add_dummy');
-	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/delDummy', 'penjualan\pemesananBarangController@del_dummy');
-	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/loadData', 'penjualan\pemesananBarangController@load_data');
+	Route::get('/penjualan/pemesanan-barang/detail/{id}', 'penjualan\pemesananBarangController@detail');
+	Route::get('/penjualan/pemesanan-barang/detail-dt/{id}', 'penjualan\pemesananBarangController@detail_dt');
 
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/ft-pemesanan', 'penjualan\pemesananBarangController@ft_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
@@ -571,10 +570,10 @@ Route::group(['middleware' => 'auth'], function () {
 	// main route end
 	//=== Penjualan Reguler
 	Route::get('penjualan-reguler', 'PenjualanController@index');
-    Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
-    Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
-    Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
-    Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
+	Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
+	Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
+	Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
+	Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
     //
 
 });

@@ -355,7 +355,7 @@
 
 					$.smallBox({
 						title : "Berhasil",
-						content : 'Data outlet <i>"'+response.data.code+'"</i> berhasil diubah...!',
+						content : 'Data outlet <i>"'+response.data.name+'"</i> berhasil diubah...!',
 						color : "#739E73",
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"

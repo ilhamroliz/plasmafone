@@ -81,43 +81,66 @@
                         <!-- widget content -->
                         <div class="widget-body">
                             <form id="tpForm" class="form-inline" role="form">
-								{{csrf_field()}}
-								<div class="row">
-									<div class="col-sm-12 col-md-12 col-lg-12 no-padding padding-bottom-10">										
-										<div class="form-group col-md-12">
-											<div class="col-md-9">
+                                {{csrf_field()}}
+                                <fieldset>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-12 no-padding padding-bottom-10">										
+                                            <div class="form-group col-md-12">
+                                                <div class="col-md-5 inputGroupContainer">
+                                                    <div class="input-group" style="width: 100%">
+                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-user"></i></span>
+                                                        <input type="hidden" id="tpMemberId" name="tpMemberId">
+													    <input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
+                                                    </div>													
+												</div>
+												<div class="col-md-1">
+													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-user-plus"></i></a>												
+												</div>
+                                                <div class="col-md-2">
+                                                    <h4><strong>Total Tagihan</strong></h4>
+                                                </div>
+                                                <div class="col-md-1"><strong>:</strong></div>
+                                                <div class="col-md-3">
+                                                    <h4><strong>
+                                                        <span style="float: left; width: 15%">
+                                                            Rp.
+                                                        </span>
+                                                        <span style="float: right; width: 85%" class="text-align-right tpShowTagihan">
 
-											</div>
-											<div class="col-md-3">
-												<h4>
-													<span style="float: left; width: 15%">
-														Rp.
-													</span>
-													<span style="float: right; width: 85%" class="text-align-right tpShowTagihan">
-
-													</span>
-												</h4>		
-											</div>										
-										</div>
-									</div>
-								</div>
+                                                        </span>
+                                                    </strong></h4>		
+                                                </div>										
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
 
                                 <fieldset>
 									<div class="row">
 										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
 											<div class="form-group col-md-12">
-												<div class="col-md-5">
-													<input type="hidden" id="tpMemberId" name="tpMemberId">
-													<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
-												</div>
-												<div class="col-md-1">
-													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-user-plus"></i></a>												
-												</div>
+												<div class="col-md-6 inputGroupContainer">
+                                                    <div class="input-group" style="width: 100%">
+                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-barcode"></i></span>                                                        
+                                                        <input type="hidden" id="tpItemId" name="tpItemId">
+													    <input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang">
+                                                    </div>                                                    
+                                                </div>
 
-												<div class="col-md-6">
-													<input type="hidden" id="tpItemId" name="tpItemId">
-													<input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang" style="width: 100%">
-												</div>
+
+                                                <div class="col-md-2">
+                                                    <h4><strong>Pembayaran</strong></h4>
+                                                </div>
+                                                <div class="col-md-1"><strong>:</strong></div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group"  style="width: 100%">
+                                                        <select class="form-control" name="tpPembayaran" id="tpPembayaran">
+                                                            <option value="" selected disabled>==== PILIH PEMBAYARAN ====</option>
+                                                            <option value="lunas">LUNAS</option>
+                                                            <option value="tidak">TIDAK LUNAS</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 											</div>
 										</div>
 									</div>
@@ -232,11 +255,15 @@
 
 @section('extra_script')
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
+
 
 <script type="text/javascript">
 
 	var table;
 	$(document).ready(function () {
+
+        $('.tpShowTagihan').html('0,00');
 
 		table = $('#tpTable').DataTable({
 			paging : false,
@@ -264,9 +291,10 @@
 	});
 
 	function dt_addBarang(id, nama, harga){
+		hargarp = accounting.formatMoney(harga, "", 2, ".", ",");
 		table.row.add([
 			nama+'<input type="hidden" name="idItem[]" class="idItem" value="'+id+'"><input type="hidden" class="hargaItem" name="hargaItem[]" value="'+harga+'">',
-			'<div><span style="float: left;">Rp. </span><span style="float: right;">'+harga+'</span></div>',
+			'<div><span style="float: left;">Rp. </span><span style="float: right;">'+hargarp+'</span></div>',
 			'<input type="text" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="1" onkeypress="return event.charCode >= 48 && event.charCode <= 57" onkeyup="update_showHarga()">',
 	        '<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
 		]).draw(false);
@@ -297,7 +325,7 @@
         table
             .row( $(this).parents('tr') )
             .remove()
-            .draw(false);
+            .draw();
         var inputs = document.getElementsByClassName( 'idItem' ),
         names  = [].map.call(inputs, function( input ) {
             return input.value;
@@ -334,9 +362,11 @@
 
         for (var i = 0; i < hargaItem.length; i++) {
             total = total + (hargaItem[i] * qtyItem[i]);
-        }
+		}
+		
+		totalrp = accounting.formatMoney(total, "", 2, ".", ",");
 
-        $('.tpShowTagihan').html(total);
+        $('.tpShowTagihan').html(totalrp);
 	}
 
 	function modal_tambah(){
@@ -382,6 +412,33 @@
 					color : "#739E73",
 					timeout: 4000,
 					icon : "fa fa-check bounce animated"
+				});
+
+				$('#tmModal').modal('hide');
+				$('#namaMember').val('');
+				$('#noTelp').val('');
+				$('#noNIK').val('');
+
+            }else if(response.status=='nikAda'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Member dengan NIK : "+response.member+", Sudah Ada !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+
+            }else if(response.status=='telpAda'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Member dengan No. Telp : "+response.member+", Sudah Ada !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
 				});
 
             }else if(response.status=='tmGagal'){
@@ -480,6 +537,17 @@
 				});
 				location.reload();
 
+            }else if(response.status=='dpNull'){
+
+                $('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Member belum pernah melakukan transaksi. Pembayaran harus LUNAS !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+
             }else if(response.status=='tpGagal'){
 
                 $('#overlay').fadeOut(200);
@@ -509,179 +577,6 @@
           }
         });
     }
-
-</script>
-
-<script type="text/javascript">
-
-var baseUrl = '{{ url('/') }}';
-
-function validation_regis()
-{
-	$('#data-form').bootstrapValidator({
-		feedbackIcons : {
-			valid : 'glyphicon glyphicon-ok',
-			invalid : 'glyphicon glyphicon-remove',
-			validating : 'glyphicon glyphicon-refresh'
-		},
-		fields : {
-
-			i_kelompok : {
-				validators : {
-					notEmpty : {
-						message : 'Kelompok Barang Tidak Boleh Kosong',
-					}
-				}
-			},
-
-			
-			i_berat : {
-				validators : {
-					notEmpty : {
-						message : 'Berat Barang Tidak Boleh Kosong',
-					},
-
-					numeric: {
-						message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Barang Anda'
-					}
-				}
-			},
-
-		}
-	});
-
-}
-
-Vue.component('kelompok', {
-	props: ['options'],
-	template: '#select2-template-kelompok',
-	mounted: function () {
-		var vm = this
-		$(this.$el).select2().on('change', function () {
-				vm.$emit('change', this.value)
-		})
-	},
-	watch: {
-		value: function (value) {
-			// update value
-			$(this.$el).val(value);
-		},
-		options: function (options) {
-			// update options
-			// $(this.$el).empty().select2()
-		}
-	},
-	destroyed: function () {
-		$(this.$el).off().select2('destroy')
-	}
-})
-
-
-
-Vue.component('group', {
-	props: ['options'],
-	template: '#select2-template-group',
-	mounted: function () {
-		var vm = this
-		$(this.$el).select2().on('change', function () {
-				vm.$emit('change', this.value)
-		})
-	},
-	watch: {
-		value: function (value) {
-			// update value
-			$(this.$el).val(value);
-		},
-		options: function (options) {
-			// update options
-			// $(this.$el).empty().select2()
-		}
-	},
-	destroyed: function () {
-		$(this.$el).off().select2('destroy')
-	}
-})
-
-
-
-
-var app = new Vue({
-	el 		: '#content',
-	data 	: {
-		kelompok : 'select',
-		group : 'select',
-		sub_group : 'select',
-		merk : 'select',
-		btn_save_disabled 	: false,
-
-		data_I_kelompok: [],
-		data_I_group: [],
-		data_I_sub_group: [],
-		data_I_merk: [],
-
-		form_data : {
-			i_kelompok: '',
-			i_group: '',
-			i_sub_group: '',
-			i_merk: '',
-			i_nama: '',
-			i_code: '',
-			i_img: '',
-			i_minstock: '',
-			i_berat: '',
-			i_specificcode: 'Y',
-			i_isactive: 'Y'
-			
-		}
-
-	},
-	
-
-	
-	methods: {
-
-		switch_kelompok: function(){
-			if(this.kelompok == 'select'){
-				this.kelompok = 'input';
-				$('#select_kelompok').hide();
-				$("#input_kelompok").show();
-			}else{
-				this.kelompok = 'select';
-				this.form_data.i_kelompok = '';
-				$('#data-form').data('bootstrapValidator').resetForm();
-				$('#input_kelompok').hide();
-				$("#select_kelompok").show();
-			}
-		},
-
-		switch_group: function(){
-			if(this.group == 'select'){
-				this.group = 'input';
-				$('#select_group').hide();
-				$("#input_group").show();
-			}else{
-				this.group = 'select';
-				this.form_data.i_group = '';
-				$('#data-form').data('bootstrapValidator').resetForm();
-				$('#input_group').hide();
-				$("#select_group").show();
-			}
-		},
-
-	
-
-		i_kelompok_change: function(v){
-			this.form_data.i_kelompok = v;
-		},
-
-		i_group_change: function(v){
-			this.form_data.i_group = v;
-		},
-
-		
-
-	}
-});
 
 </script>
 

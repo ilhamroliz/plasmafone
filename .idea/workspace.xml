@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +18,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="22" />
+          <entry key="project.closed" value="23" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.181" value="1" />
           <entry key="project.open.time.2" value="3" />
@@ -30,10 +33,11 @@
           <entry key="project.open.time.52" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.60" value="1" />
+          <entry key="project.open.time.63" value="1" />
           <entry key="project.open.time.66" value="1" />
           <entry key="project.open.time.69" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="23" />
+          <entry key="project.opened" value="24" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -41,7 +45,7 @@
           <entry key="css" value="3" />
           <entry key="env" value="1" />
           <entry key="js" value="10" />
-          <entry key="php" value="106" />
+          <entry key="php" value="107" />
           <entry key="ts" value="1" />
         </counts>
       </usages-collector>
@@ -51,7 +55,7 @@
           <entry key="Blade" value="35" />
           <entry key="CSS" value="3" />
           <entry key="JavaScript" value="10" />
-          <entry key="PHP" value="71" />
+          <entry key="PHP" value="72" />
           <entry key="TypeScript" value="1" />
         </counts>
       </usages-collector>
@@ -60,7 +64,7 @@
           <entry key="dummy" value="5" />
           <entry key="env" value="17" />
           <entry key="js" value="74" />
-          <entry key="php" value="8928" />
+          <entry key="php" value="8935" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
@@ -69,7 +73,7 @@
           <entry key="Blade" value="4207" />
           <entry key="HTML" value="2" />
           <entry key="JavaScript" value="74" />
-          <entry key="PHP" value="4719" />
+          <entry key="PHP" value="4726" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
@@ -90,17 +94,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="554" column="21" selection-start-line="554" selection-start-column="21" selection-end-line="554" selection-end-column="21" />
+            <state relative-caret-position="13488">
+              <caret line="562" column="21" selection-start-line="562" selection-start-column="21" selection-end-line="562" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/master/item/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="121">
+              <caret line="377" column="77" selection-start-line="377" selection-start-column="68" selection-end-line="377" selection-end-column="77" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/master/item/index.blade.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="377" column="77" selection-start-line="377" selection-start-column="68" selection-end-line="377" selection-end-column="77" />
+            <state relative-caret-position="215">
+              <caret line="48" column="10" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
+              <folding>
+                <element signature="e#256#262#1" expanded="true" />
+                <element signature="e#481#487#1" expanded="true" />
+                <element signature="e#253#259#1" expanded="true" />
+                <element signature="e#480#486#1" expanded="true" />
+                <element signature="e#253#259#1" expanded="true" />
+                <element signature="e#480#486#1" expanded="true" />
+                <element signature="e#491#497#1" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -172,6 +194,7 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php" />
       </list>
     </option>
   </component>
@@ -297,7 +320,7 @@
       <path value="$PROJECT_DIR$/vendor/laravelcollective/html" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -308,7 +331,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -333,6 +355,23 @@
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="Http" type="462c0819:PsiDirectoryNode" />
               <item name="Controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="Http" type="462c0819:PsiDirectoryNode" />
+              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
+              <item name="master" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="Http" type="462c0819:PsiDirectoryNode" />
+              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
+              <item name="master" type="462c0819:PsiDirectoryNode" />
+              <item name="barang" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
@@ -445,6 +484,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -507,18 +547,19 @@
       <workItem from="1545792892353" duration="1699000" />
       <workItem from="1545814784043" duration="6919000" />
       <workItem from="1545874862360" duration="33849000" />
-      <workItem from="1545987790826" duration="618000" />
+      <workItem from="1545987790826" duration="775000" />
+      <workItem from="1546054687291" duration="236000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="94209000" />
+    <option name="totallyTimeSpent" value="94602000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1366" height="732" extended-state="7" />
+    <frame x="0" y="0" width="1366" height="732" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2810606" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28560606" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -634,13 +675,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-357">
           <caret line="7" column="25" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="143" column="47" selection-start-line="143" selection-start-column="47" selection-end-line="143" selection-end-column="47" />
         </state>
       </provider>
     </entry>
@@ -860,28 +894,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="249">
           <caret line="459" lean-forward="true" selection-start-line="459" selection-end-line="459" />
-          <folding>
-            <element signature="n#style#0;n#td#0;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#3;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#3;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#4;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#4;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#5;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#6;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#1;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#3;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#3;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#4;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#td#4;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#5;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#6;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -889,16 +901,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="129" column="49" selection-start-line="129" selection-start-column="49" selection-end-line="129" selection-end-column="49" />
-          <folding>
-            <element signature="e#40#47#0#PHP" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="554" column="21" selection-start-line="554" selection-start-column="21" selection-end-line="554" selection-end-column="21" />
+        <state relative-caret-position="13488">
+          <caret line="562" column="21" selection-start-line="562" selection-start-column="21" selection-end-line="562" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -906,6 +915,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="121">
           <caret line="377" column="77" selection-start-line="377" selection-start-column="68" selection-end-line="377" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="215">
+          <caret line="48" column="10" selection-start-line="48" selection-start-column="10" selection-end-line="48" selection-end-column="10" />
+          <folding>
+            <element signature="e#256#262#1" expanded="true" />
+            <element signature="e#481#487#1" expanded="true" />
+            <element signature="e#253#259#1" expanded="true" />
+            <element signature="e#480#486#1" expanded="true" />
+            <element signature="e#253#259#1" expanded="true" />
+            <element signature="e#480#486#1" expanded="true" />
+            <element signature="e#491#497#1" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
