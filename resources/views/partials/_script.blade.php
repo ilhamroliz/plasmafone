@@ -71,6 +71,9 @@
 		<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
 
+        <!-- Datepicker -->
+        <script src="{{ asset('template_asset/js/plugin/datapicker/bootstrap-datepicker.js') }}"></script>
+
 		<!-- SmartChat UI : plugin -->
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.ui.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.manager.min.js') }}"></script>

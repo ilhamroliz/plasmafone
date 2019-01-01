@@ -1,12 +1,12 @@
 @extends('main')
 
-@section('title', 'Master Outlet')
+@section('title', 'Master Member')
 
 @section('extra_style')
 
 @endsection
 
-<?php 
+<?php
 use App\Http\Controllers\PlasmafoneController as Plasma;
 ?>
 
@@ -14,10 +14,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 	<!-- RIBBON -->
 	<div id="ribbon">
 
-		<span class="ribbon-button-alignment"> 
+		<span class="ribbon-button-alignment">
 			<span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.." data-html="true" onclick="location.reload()">
 				<i class="fa fa-refresh"></i>
-			</span> 
+			</span>
 		</span>
 
 		<!-- breadcrumb -->
@@ -74,7 +74,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -94,7 +94,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
-							
+
 							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
 
 								<li class="active">
@@ -119,7 +119,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div class="tab-pane fade in active" id="hr1">
 										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
-											<thead>		
+											<thead>
 												<tr>
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
@@ -137,7 +137,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div class="tab-pane fade" id="hr2">
 										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
 
-											<thead>		
+											<thead>
 												<tr>
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
@@ -156,7 +156,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div class="tab-pane fade" id="hr3">
 										<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
 
-											<thead>		
+											<thead>
 												<tr>
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
 													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
@@ -193,7 +193,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 						</div>
 
-						<div class="modal-body">			
+						<div class="modal-body">
 							<div class="row">
 
 								<!-- Widget ID (each widget will need unique ID)-->
@@ -208,8 +208,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div>
 
 										<!-- widget content -->
-										<div class="widget-body no-padding">											
-											<div class="table-responsive">												
+										<div class="widget-body no-padding">
+											<div class="table-responsive">
 												<table class="table">
 													<tbody>
 
@@ -262,7 +262,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 														</tr>
 
 													</tbody>
-												</table>												
+												</table>
 											</div>
 										</div>
 										<!-- end widget content -->
@@ -270,7 +270,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<!-- end widget div -->
 								</div>
 								<!-- end widget -->
-							</div>			
+							</div>
 						</div>
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
@@ -285,7 +285,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 @endsection
 
 @section('extra_script')
-	
+
 	<!-- PAGE RELATED PLUGIN(S) -->
 
 	<script type="text/javascript">
@@ -293,13 +293,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
-		
+
 		/* BASIC ;*/
 			var responsiveHelper_dt_basic = undefined;
 			var responsiveHelper_datatable_fixed_column = undefined;
 			var responsiveHelper_datatable_col_reorder = undefined;
 			var responsiveHelper_datatable_tabletools = undefined;
-			
+
 			var breakpointDefinition = {
 				tablet : 1024,
 				phone : 480
@@ -483,13 +483,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							timeout: 4000,
 							icon : "fa fa-times bounce animated"
 						});
-						
+
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
 
 				}
-	
+
 			});
 
 		}
@@ -530,7 +530,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#dt_phone').text(response.data.data.m_telp);
 					$('#dt_address').text(response.data.data.m_address);
 					$('#dt_email').text(response.data.data.m_email);
-					$('#dt_jenis').text(response.data.jm);					
+					$('#dt_jenis').text(response.data.jm);
 
 					if(response.data.data.m_status == "AKTIF"){
 
@@ -620,13 +620,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							timeout: 4000,
 							icon : "fa fa-times bounce animated"
 						});
-						
+
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
 
 				}
-	
+
 			});
 		}
 
@@ -700,13 +700,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							timeout: 4000,
 							icon : "fa fa-times bounce animated"
 						});
-						
+
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
 
 				}
-	
+
 			});
 		}
 

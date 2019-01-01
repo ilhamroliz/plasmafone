@@ -43,7 +43,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 					<i class="fa-fw fa fa-lg fa-handshake-o"></i>
 
-					Penjualan <span><i class="fa fa-angle-double-right"></i> Setting Harga </span>
+					Penjualan <span><i class="fa fa-angle-double-right"></i> Setting Harga Group</span>
 
 				</h1>
 
@@ -750,6 +750,30 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			// --- AXIOS USE ----//
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Penyimpanan Data Harga Sedang di Proses ...');
+
+			if($('#thItemNama').val() == ''){
+				$('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Perhatian !",
+					content : "Mohon Lengkapi Data Item Terlebih Dahulu !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				return false;
+			}
+
+			if($('#thHarga').val() == ''){
+				$('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Perhatian !",
+					content : "Mohon Lengkapi Harga Item Terlebih Dahulu !",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				return false;
+			}
 
 			axios.post(baseUrl+'/penjualan/set-harga/addHarga', $('#thForm').serialize())
 			    .then((response) => {

@@ -265,14 +265,11 @@ class pemesananBarangController extends Controller
     public function getDataId()
     {
         $cek = DB::table('d_indent')
-            ->select(DB::raw('max(right(i_id, 3)) as id'))
-            ->get();
+            ->select('i_id')
+            ->max('i_id');
 
-        foreach ($cek as $x) {
-            $temp = ((int)$x->id + 1);
-            $kode = sprintf("%03s", $temp);
-        }
-
+        $temp = ($cek + 1);
+        $kode = sprintf("%03s", $temp);
         $date = [];
         $date = explode(' ', Carbon::now('Asia/Jakarta'));
         $tgl = explode('-', $date[0]);
@@ -354,7 +351,8 @@ class pemesananBarangController extends Controller
                     Plasma::logActivity('Menambahkan Pemesanan Barang dengan No. Nota : ' . $i_nota);
 
                     return response()->json([
-                        'status' => 'tpSukses'
+                        'status' => 'tpSukses',
+                        'nota' => $i_nota
                     ]);
 
                 } catch (\Exception $e) {
@@ -401,4 +399,23 @@ class pemesananBarangController extends Controller
         }
     }
 
+    public function print(Request $request)
+    {
+        $id = $request->id;
+        $data = DB::table('d_indent')
+            ->join('m_company', 'c_id', '=', 'i_comp')
+            ->join('m_member', 'm_id', '=', 'i_member')
+            ->select('i_nota', 'c_name', 'c_address', 'c_tlp', 'm_name', 'm_telp', 'm_idmember')
+            ->where('i_nota', $id)->get();
+
+        $getId = DB::table('d_indent')->select('i_id')->where('i_nota', $id)->first();
+
+        $dtData = DB::table('d_indent_dt')
+            ->join('d_item', 'i_id', '=', 'id_item')
+            ->select('i_nama', 'id_qty')
+            ->where('id_indent', $getId->i_id)->get();
+
+        // dd($data);
+        return view('penjualan.pemesanan_barang.print')->with(compact('data', 'dtData'));
+    }
 }

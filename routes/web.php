@@ -1,5 +1,5 @@
 <?php
- 
+
 // use Symfony\Component\Routing\Annotation\Route;
 
 /*
@@ -284,6 +284,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/master/member/active/{id}', 'master\member\member_controller@active');
 	Route::get('/master/member/nonactive/{id}', 'master\member\member_controller@nonactive');
 	Route::get('/master/member/delete/{id}', 'master\member\member_controller@delete');
+	Route::get('/master/member/getkota', 'master\member\member_controller@getkota');
+	Route::get('/master/member/getkecamatan', 'master\member\member_controller@getkecamatan');
+	Route::get('/master/member/getdesa', 'master\member\member_controller@getdesa');
 
 	// End Master Member
 
@@ -396,7 +399,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// End Konfirmasi Pembelian
 
-	// Purchase Order 
+	// Purchase Order
 
 	Route::get('/pembelian/purchase-order', 'PembelianController@purchase_order');
 	Route::get('/pembelian/purchase-order/view_tambahPo', 'PembelianController@view_tambahPo');
@@ -412,7 +415,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/purchase-order/getSupplier_po', 'PembelianController@getSupplier_po');
 	Route::get('/pembelian/purchase-order/getOutlet_po', 'PembelianController@getOutlet_po');
 	Route::get('/pembelian/purchase-order/list_draftPo', 'PembelianController@list_draftPo');
-	Route::get('/pembelian/purchase-order/z', 'PembelianController@z');
+	Route::get('/pembelian/purchase-order/simpanPo', 'PembelianController@simpanPo');
 	// end aksi purchase
 
 	Route::get('/pembelian/purchase-order/add', 'PembelianController@purchase_order_add');
@@ -518,6 +521,16 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/set-harga/hapusGroup/{id}', 'penjualan\setHargaController@hapus_group');
 	Route::match(['get', 'post'], '/penjualan/set-harga/hapusHarga', 'penjualan\setHargaController@hapus_harga');
 
+	/////// OUTLET
+
+	Route::get('/penjualan/set-harga/outlet', 'penjualan\setHargaController@index_outlet');
+	Route::match(['get', 'post'], '/penjualan/set-harga/outlet/add', 'penjualan\setHargaController@add_price_outlet');
+	Route::match(['get', 'post'], '/penjualan/set-harga/outlet/edit', 'penjualan\setHargaController@edit_price_outlet');
+	Route::get('/penjualan/set-harga/outlet/hapus', 'penjualan\setHargaController@hapus_price_outlet');
+	Route::get('/penjualan/set-harga/outlet/auto-CodeNItem', 'penjualan\setHargaController@cari_code_n_item');
+	Route::get('/penjualan/set-harga/outlet/cektable', 'penjualan\setHargaController@cek_table');
+
+	///////// END OUTLET
 
 	//== End Set Harga
 
@@ -545,6 +558,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-pemesanan', 'penjualan\pemesananBarangController@tambah_pemesanan');
 	Route::match(['get', 'post'], '/penjualan/pemesanan-barang/hapus/{id}', 'penjualan\pemesananBarangController@hapus');
+	Route::get('/penjualan/pemesanan-barang/print', 'penjualan\pemesananBarangController@print');
 	//== End Pemesanan Barang
 
 	///// End PENJUALAN
