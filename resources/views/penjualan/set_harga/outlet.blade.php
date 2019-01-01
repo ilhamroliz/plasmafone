@@ -91,8 +91,6 @@
 									</div>
 								</div>
 
-								{!! csrf_field() !!}
-								
 							</div>
 							<!-- end widget content -->
 							
@@ -136,35 +134,50 @@
 										<!-- widget content -->
 										<div class="widget-body no-padding">											
 											<div class="table-responsive">
+                                                <form id="shoForm" role="form">
+													{{csrf_field()}}
+														<input type="hidden" name="shoShowId" id="shoShowId">
 
-                                                <div class="col-md-12 padding-top-10 margin-bottom-10">
-                                                    <div class="form-group">
-                                                        <label class="col-md-2" style="float:left"><strong>Nama Item</strong></label>
-                                                        <label class="col-md-1">:</label>
-                                                        <label class="col-md-9" id="shoItemNama">ACER</label>
+                                                     	<div class="col-md-12 padding-top-10 margin-bottom-10">
+                                                            <div class="form-group">
+                                                                <label class="col-md-2" style="float:left"><strong>Nama Item</strong></label>
+                                                                <label class="col-md-1">:</label>
+                                                                <label class="col-md-9" id="shoShowNama"></label>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <label class="col-md-2" style="float:left"><strong>HPP</strong></label>
+                                                                <label class="col-md-1">:</label>
+                                                                <label class="col-md-9" id="shoHPP"></label>
+                                                            </div>	
+                                                        </div>
+
+                                                        <table id="shoTable" class="table table-striped table-bordered table-hover margin-bottom-10" style="width:100%">
+                                                            <thead>		
+                                                                <tr style="width:100%">
+                                                                    <th style="width:60%"><i class="fa fa-building txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+                                                                    <th style="width:40%"><i class="fa fa-dollar txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Harga Satuan</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody>
+                                                            </tbody>
+
+                                                        </table>
+                                                                            
                                                     </div>
                                                     
-                                                    <div class="form-group">
-                                                        <label class="col-md-2" style="float:left"><strong>HPP</strong></label>
-                                                        <label class="col-md-1">:</label>
-                                                        <label class="col-md-9" id="shoHPP">Rp. xxxx</label>
-                                                    </div>	
-                                                </div>
+                                                    <div class="col-md-12 margin-bottom-10">
+                                                        <div style="width:100%" class="text-align-right">
+                                                            <a class="btn btn-primary" id="shoSubmit" onclick="shoSimpan()">
+                                                                <i class="fa fa-floppy-o"></i> 
+                                                                &nbsp;Simpan
+                                                            </a>
+                                                        </div>                                              
+                                                    </div>
 
-                                                <table id="dt_detail" class="table table-striped table-bordered table-hover margin-bottom-10">
-                                                    <thead>		
-                                                        <tr>
-                                                            <th width="60%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
-                                                            <th width="40%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Satuan</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                    </tbody>
-
-                                                </table>
-																	
-											</div>
+                                                </form>
+										    </div>                                                  
 										</div>
 										<!-- end widget content -->
 									</div>
@@ -185,56 +198,86 @@
 @section('extra_script')
 
 <!-- PAGE RELATED PLUGIN(S) -->
+<script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
 
 <script type="text/javascript">
-	var table;
 	$(document).ready(function(){
 		$( "#shoItemNama" ).autocomplete({
 			source: baseUrl+'/penjualan/set-harga/outlet/auto-CodeNItem',
 			minLength: 2,
 			select: function(event, data) {
 				$('#shoItemId').val(data.item.id);
+				$('#shoShowId').val(data.item.id);
                 $('#shoItemNama').val(data.item.label);
+                $('#shoShowNama').html(data.item.label);
+                if(data.item.hpp == '0'){
+                    $('#shoHPP').html('Rp. 0,00');
+                }else{
+                    angka = accounting.formatMoney(data.item.hpp, "", 2, ".", ",");
+                    $('#shoHPP').html('Rp. '+angka);
+                }                
 			}
 		});
+
+        $('#shoTable').DataTable();
 	}); 
 
     function shoModal(){
-        $('#shoModal').modal('show');
+        var id = $('#shoItemId').val();
+        $('#shoTable').DataTable().destroy();
+        $('#shoTable').DataTable({
+			"processing": true,
+			"serverSide": true,
+			"searching" : false,
+			"paging" : false,
+			"info" : false,
+			"ajax": "{{ url('/penjualan/set-harga/outlet/add?id=') }}"+id,
+			"columns":[
+				{"data": "compName"},
+				{"data": "compPrice"},
+			],
+			"autoWidth" : true,
+			"language" : dataTableLanguage,
+			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+			"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+			"preDrawCallback" : function() {
+				// Initialize the responsive datatables helper once.
+				if (!responsiveHelper_dt_basic) {
+					responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#shoTable'), breakpointDefinition);
+				}
+			},
+			"rowCallback" : function(nRow) {
+				responsiveHelper_dt_basic.createExpandIcon(nRow);
+			},
+			"drawCallback" : function(oSettings) {
+				responsiveHelper_dt_basic.respond();
+			}
+		});
+
+		$('#shoCompPrice').maskMoney();        
+		$('#shoModal').modal('show');
     }
 
-	function search(){
-		
-		$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
-		var tgl_awal = $('#tgl_awal').val();
-		var tgl_akhir = $('#tgl_akhir').val();
-		var nama = $('#searchhidden').val();
-		
-		$('#overlay').fadeIn(200);
-		$('#load-status-text').text('Sedang Mencari Data');
-		$.ajaxSetup({
-			headers: {
-				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-			}
-		});
-		$.ajax({
-			url: '{{ url('/pengaturan/log-kegiatan/findLog') }}',
-			type: 'get',
-			data: {tgl_awal:tgl_awal, tgl_akhir:tgl_akhir, nama:nama},
-			success: function(response){
-				$('#searchhidden').val('');
-				table.clear();
-				for (var i = 0; i < response.length; i++) {
-					table.row.add([
-						response[i].m_name,
-						response[i].c_name,
-						response[i].la_activity,
-						response[i].la_date
-					]).draw( false );
+	function shoSimpan(){
+
+        $('#overlay').fadeIn(200);
+		$('#load-status-text').text('Sedang Menyimpan Data...');
+        
+        axios.post(baseUrl+'/penjualan/set-harga/outlet/add', $('#shoForm').serialize())
+			.then((response) => {
+				if(response.data.status == 'sukses'){
+					$('#overlay').fadeOut(200);
+					$('#shoModal').modal('hide');
+					$.smallBox({
+						title : "SUKSES",
+						content : "Data Setting Harga Outlet berhasil ditambahkan",
+						color : "#739E73",
+						iconSmall : "fa fa-check animated",
+						timeout : 3000
+					});
 				}
-			}
-		});
-		$('#overlay').fadeOut(200);
+				
+			})
 	}
 </script>
 @endsection

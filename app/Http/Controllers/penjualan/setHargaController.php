@@ -69,7 +69,6 @@ class setHargaController extends Controller
     public function get_data_group()
     {
         $group = DB::table('m_group')->orderBy('g_name', 'asc')->get();
-        $group = collect($group);
 
         return DataTables::of($group)
             ->addIndexColumn()
@@ -115,7 +114,6 @@ class setHargaController extends Controller
             ->leftjoin('d_purchase_dt', 'pd_item', '=', 'i_id')
             ->select('i_id', 'i_nama', 'i_code', 'pd_value')
             ->whereRaw('i_nama like "%' . $term . '%"')
-            ->orWhereRaw('i_code like "%' . $term . '%"')
             ->orWhereRaw('concat(coalesce(i_code, ""), " ", coalesce(i_nama, "")) like "%' . $term . '%"')
             ->take(50)->get();
 
@@ -125,10 +123,30 @@ class setHargaController extends Controller
             $results[] = ['id' => null, 'label' => ' Tidak ditemukan data terkait '];
         } else {
             foreach ($select as $query) {
-                if ($query->i_code == null || $query->i_code == '') {
-                    $results[] = ['id' => $query->i_id, 'label' => $query->i_nama];
+                if ($query->i_code == null || $query->i_code == '' && $query->pd_value == null) {
+                    $results[] = [
+                        'id' => Crypt::encrypt($query->i_id),
+                        'label' => $query->i_nama,
+                        'hpp' => '0'
+                    ];
+                } else if ($query->i_code == null || $query->i_code == '' && $query->pd_value != null) {
+                    $results[] = [
+                        'id' => Crypt::encrypt($query->i_id),
+                        'label' => $query->i_nama,
+                        'hpp' => $query->pd_value
+                    ];
+                } else if ($query->pd_value == null) {
+                    $results[] = [
+                        'id' => Crypt::encrypt($query->i_id),
+                        'label' => $query->i_code . ' - ' . $query->i_nama,
+                        'hpp' => '0'
+                    ];
                 } else {
-                    $results[] = ['id' => $query->i_id, 'label' => $query->i_code . ' - ' . $query->i_nama];
+                    $results[] = [
+                        'id' => Crypt::encrypt($query->i_id),
+                        'label' => $query->i_code . ' - ' . $query->i_nama,
+                        'hpp' => $query->pd_value
+                    ];
                 }
             }
         }
@@ -226,9 +244,68 @@ class setHargaController extends Controller
         }
     }
 
+    public function add_price_outlet(Request $request)
+    {
+        if (Plasma::checkAkses(15, 'insert') == false) {
+            return view('errors.407');
+        } else {
+            if ($request->isMethod('post')) {
+
+                DB::beginTransaction();
+                try {
+                    $shoItemId = Crypt::decrypt($request->shoShowId);
+                    $shoCompId = $request->shoCompId;
+                    $shoCompPrice = $request->shoCompPrice;
+
+                    $aray = array();
+
+                    for ($i = 0; $i < count($shoCompId); $i++) {
+                        $field = array(
+                            'op_outlet' => $shoCompId[$i],
+                            'op_item' => $shoItemId,
+                            'op_price' => $shoCompPrice[$i]
+                        );
+                        array_push($aray, $field);
+                    }
+
+                    DB::table('d_outlet_price')->insert($aray);
+
+                    DB::commit();
+                    return json_encode([
+                        'status' => 'sukses'
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return json_encode([
+                        'status' => 'gagal',
+                        'msg' => $e
+                    ]);
+                }
+            }
+
+            $id = Crypt::decrypt($request->id);
+
+            $comp = DB::table('d_outlet_price')->rightjoin('m_company', 'c_id', '=', 'op_outlet')->where('op_item', $id)->select('c_id', 'c_name', 'op_price');
+
+            return DataTables::of($comp)
+                ->addColumn('compName', function ($comp) {
+                    return '<input type="hidden" id="shoCompId" name="shoCompId[]" value="' . $comp->c_id . '">' . $comp->c_name;
+                })
+                ->addColumn('compPrice', function ($comp) {
+                    if ($comp->op_price == null) {
+                        return '<input type="text" class="form-control" id="shoCompPrice" name="shoCompPrice[] value="0">';
+                    } else {
+                        return '<input type="text" class="form-control" id="shoCompPrice" name="shoCompPrice[] value="' . $comp->op_price . '">';
+                    }
+                })
+                ->rawColumns(['compName', 'compPrice'])
+                ->make(true);
+        }
+    }
+
     public function edit_group(Request $request)
     {
-        if (Plasma::checkAkses(15, ' update ') == false) {
+        if (Plasma::checkAkses(15, 'update') == false) {
             return view(' errors / 407 ');
         } else {
             if ($request->isMethod(' post ')) {

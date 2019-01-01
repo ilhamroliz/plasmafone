@@ -276,9 +276,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/master/member/active/{id}', 'master\member\member_controller@active');
 	Route::get('/master/member/nonactive/{id}', 'master\member\member_controller@nonactive');
 	Route::get('/master/member/delete/{id}', 'master\member\member_controller@delete');
-  Route::get('/master/member/getkota', 'master\member\member_controller@getkota');
-  Route::get('/master/member/getkecamatan', 'master\member\member_controller@getkecamatan');
-  Route::get('/master/member/getdesa', 'master\member\member_controller@getdesa');
+	Route::get('/master/member/getkota', 'master\member\member_controller@getkota');
+	Route::get('/master/member/getkecamatan', 'master\member\member_controller@getkecamatan');
+	Route::get('/master/member/getdesa', 'master\member\member_controller@getdesa');
 
 	// End Master Member
 
@@ -520,6 +520,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/set-harga/outlet/edit', 'penjualan\setHargaController@edit_price_outlet');
 	Route::get('/penjualan/set-harga/outlet/hapus', 'penjualan\setHargaController@hapus_price_outlet');
 	Route::get('/penjualan/set-harga/outlet/auto-CodeNItem', 'penjualan\setHargaController@cari_code_n_item');
+	Route::get('/penjualan/set-harga/outlet/cektable', 'penjualan\setHargaController@cek_table');
 
 	///////// END OUTLET
 
