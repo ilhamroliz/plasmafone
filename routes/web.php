@@ -154,6 +154,14 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/master/barang/nonactive/{id}', 'master\barang\barang_controller@nonactive');
 
+	Route::post('/master/barang/setharga', 'master\barang\barang_controller@hargaperoutlet')->name('barang.setharga');
+
+	Route::post('/master/barang/addoutletprice', 'master\barang\barang_controller@addoutletprice')->name('barang.addoutletprice');
+
+	Route::get('/master/barang/getharga/{outlet}/{item}', 'master\barang\barang_controller@gethargaperoutlet');
+
+	Route::get('/master/barang/getoutlet/{item}', 'master\barang\barang_controller@getoutlet');
+
 	// ============================End Master Barang==========================
 
 	// =============================Master Gudang=============================

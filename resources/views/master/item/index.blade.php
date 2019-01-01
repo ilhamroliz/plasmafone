@@ -459,6 +459,103 @@
 		</div>
 		<!-- /.modal -->
 
+		<!-- Modal setting harga outlet -->
+		<div class="modal fade" id="modalsetharga" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+
+					<div class="modal-header">
+
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+
+						<h4 class="modal-title" id="myModalLabel">Pengaturan Harga Barang Peroutlet</h4>
+
+					</div>
+
+					<form method="post" action="">
+
+					<div class="modal-body">
+		
+						<div class="row">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+								<header>
+
+									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+									<h2 id="name_barang"></h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget content -->
+									<div class="widget-body no-padding">
+										
+										<div class="table-responsive">
+											
+											<table class="table" id="tbl_setharga">
+
+												<thead>
+
+													<tr>
+
+														<th> 
+															&nbsp;Outlet
+														</th>
+
+														<th> 
+															&nbsp;Harga
+														</th>
+
+													</tr>
+
+												</thead>
+
+												<tbody>
+
+													<input type="hidden" name="item_id" class="item_id">
+												
+													
+													
+												</tbody>
+
+											</table>
+											
+										</div>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+						</div>
+		
+					</div>
+
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary"><i class="fa fa-floppy-o"></i>&nbsp;Simpan</button>
+					</div>
+
+					</form>
+
+				</div><!-- /.modal-content -->
+
+			</div><!-- /.modal-dialog -->
+
+		</div>
+		<!-- /.modal setting harga -->
+
 	</div>
 	<!-- END MAIN CONTENT -->
 @endsection
@@ -470,6 +567,7 @@
 		var baseUrl = '{{ url('/') }}';
 
 		$(document).ready(function(){
+			$(".harga-outlet").maskMoney({thousands:'.', precision: 0});
 
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Menyiapkan...');
@@ -590,6 +688,56 @@
 				$('#overlay').fadeOut(200);
 
 			}, 1500);
+
+			$('.harga-outlet').on('change paste keyup', function(e){
+				$('.save').attr('data-harga', $(this).val());
+			})
+
+			$(".save").click(function(){
+				$('#overlay').fadeIn(200);
+				var op_item = $(this).data('item'), op_outlet = $(this).data('outlet'), op_harga = $(this).data('harga'), _token = "{{ csrf_token() }}", outletname = $(this).data('namaoutlet'), itemname = $(this).data('namaitem');
+				var url = "{{ route('barang.setharga') }}";
+
+				$.post( url, { _token: _token, item: op_item, outlet: op_outlet, harga: op_harga, namaoutlet: outletname, namaitem: itemname }, function(response){
+					
+					if (response.status == 'Access denied') {
+
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+							color : "#A90329",
+							timeout: 5000,
+							icon : "fa fa-times bounce animated"
+						});
+
+					}else if (response.status == 'Failed') {
+
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : 'Gagal mengatur harga peroutlet! "Terjadi kesalahan server" Mohon coba lagi...',
+							color : "#A90329",
+							timeout: 5000,
+							icon : "fa fa-times bounce animated"
+						});
+
+					}else{
+						
+						$("#overlay").fadeOut(200);
+						$.smallBox({
+							title : "Berhasil",
+							content : response.message,
+							color : "#739E73",
+							timeout: 5000,
+							icon : "fa fa-check bounce animated"
+						});
+
+					}
+				}, "json")
+			})
+
+			
 
 		})
 
@@ -768,6 +916,74 @@
 
 		}
 
+		function setting(id, name){
+
+			window.location.href = baseUrl+'/master/barang/getoutlet/'+id;
+			
+			// $('#overlay').fadeIn(200);
+			// var url = "{{ route('barang.addoutletprice') }}", _token = "{{ csrf_token() }}", setharga = "";
+			// if ( $.fn.DataTable.isDataTable('#tbl_setharga') ) {
+			// 	$('#tbl_setharga').DataTable().destroy();
+			// }
+
+			// $('#tbl_setharga tbody').empty();
+
+			// $.post(url, {_token: _token, itemid: id}, function(response){
+			// 	console.log(response)
+			// 	if (response.status == "Failed") {
+			// 		$('#overlay').fadeOut(200);
+			// 			$.smallBox({
+			// 				title : "Gagal",
+			// 				content : 'Gagal menyiapkan data! "Terjadi kesalahan server" Mohon coba lagi...',
+			// 				color : "#A90329",
+			// 				timeout: 5000,
+			// 				icon : "fa fa-times bounce animated"
+			// 			});
+			// 	}
+
+			// }, "json");
+
+			// $.get("{{ url('/master/barang/getoutlet/') }}"+"/"+id, function(response){
+			// 	console.log(response);
+			// })
+			
+			// $('#tbl_setharga').dataTable({
+			// 		"processing": true,
+			// 		"serverSide": true,
+			// 		"paging": false,
+			// 		"scrollY": "250px",
+  			// 		"scrollCollapse": true,
+			// 		"ajax": "{{ url('master/barang/getoutlet/') }}"+"/"+id,
+			// 		"columns":[
+			// 			{"data": "c_name"},
+			// 			{"data": "harga"}
+			// 		],
+			// 		"autoWidth" : true,
+			// 		"language" : dataTableLanguage,
+			// 		"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+			// 		"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+			// 		"preDrawCallback" : function() {
+			// 			// Initialize the responsive datatables helper once.
+			// 			if (!responsiveHelper_dt_basic) {
+			// 				responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#tbl_setharga'), breakpointDefinition);
+			// 			}
+			// 		},
+			// 		"rowCallback" : function(nRow) {
+			// 			responsiveHelper_dt_basic.createExpandIcon(nRow);
+			// 		},
+			// 		"drawCallback" : function(oSettings) {
+			// 			responsiveHelper_dt_basic.respond();
+			// 		}
+			// 	});
+
+			// $('.item_id').val(id);
+			// $('.save').attr('data-item', id);
+			// $('.save').attr('data-namaitem', name);
+			// $('#name_barang').html('<strong><i>"'+name+'"</i></strong>');
+			// $('#modalsetharga').modal('show');
+			// $('#overlay').fadeOut(200);
+		}
+
 		function detail(id){
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
@@ -848,25 +1064,53 @@
 			})
 		}
 
-		function formatRupiah(angka, prefix, dec)
+		function formatRupiah(angka, prefix = undefined)
 		{
-			var number_string = angka.toString(),
-			split	= number_string.split(','),
-			sisa 	= split[0].length % 3,
-			rupiah 	= split[0].substr(0, sisa),
-			ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
-
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+				split	= number_string.split(','),
+				sisa 	= split[0].length % 3,
+				rupiah 	= split[0].substr(0, sisa),
+				ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+				
 			if (ribuan) {
-
 				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.') + "," + dec;
-
+				rupiah += separator + ribuan.join('.');
 			}
-
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
 			
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
 		}
+
+		function isNumberKey(evt)
+		{
+		    var charCode = (evt.which) ? evt.which : evt.keyCode;
+		    if (charCode > 31 && (charCode < 48 || charCode > 57))
+		        return false;
+		    return true;
+		}
+
+		function validate(evt) {
+			var theEvent = evt || window.event;
+
+			// Handle paste
+			if (theEvent.type === 'paste') {
+				key = event.clipboardData.getData('text/plain');
+			} else {
+			// Handle key press
+				var key = theEvent.keyCode || theEvent.which;
+				key = String.fromCharCode(key);
+			}
+			var regex = /[0-9]|\./;
+			if( !regex.test(key) ) {
+				theEvent.returnValue = false;
+				if(theEvent.preventDefault) theEvent.preventDefault();
+			}
+		}
+
+		$('.harga-outlet').keyup(function(e){
+			alert("ok");
+			// $(this).val(formatRupiah(this.value, ''));
+		})
 	</script>
 
 @endsection
