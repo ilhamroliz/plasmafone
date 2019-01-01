@@ -1,5 +1,5 @@
 <?php
- 
+
 // use Symfony\Component\Routing\Annotation\Route;
 
 /*
@@ -276,6 +276,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/master/member/active/{id}', 'master\member\member_controller@active');
 	Route::get('/master/member/nonactive/{id}', 'master\member\member_controller@nonactive');
 	Route::get('/master/member/delete/{id}', 'master\member\member_controller@delete');
+  Route::get('/master/member/getkota', 'master\member\member_controller@getkota');
+  Route::get('/master/member/getkecamatan', 'master\member\member_controller@getkecamatan');
+  Route::get('/master/member/getdesa', 'master\member\member_controller@getdesa');
 
 	// End Master Member
 
@@ -388,7 +391,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// End Konfirmasi Pembelian
 
-	// Purchase Order 
+	// Purchase Order
 
 	Route::get('/pembelian/purchase-order', 'PembelianController@purchase_order');
 	Route::get('/pembelian/purchase-order/view_tambahPo', 'PembelianController@view_tambahPo');

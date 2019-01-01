@@ -26,8 +26,11 @@ class member_controller extends Controller
 
     public function get_data_all()
     {
-        $all = member::orderBy('m_insert', 'desc')->get();
-        $all = collect($all);
+        $all = member::orderBy('m_insert', 'desc');
+
+        $checkindent = 0;
+        $checksales = 0;
+
 
         return DataTables::of($all)
             ->addColumn('active', function ($all) {
@@ -41,9 +44,22 @@ class member_controller extends Controller
             })
             ->addColumn('aksi', function ($all) {
 
+              $checkindent = DB::table('d_indent')
+                                ->where('i_member', $all->m_id)
+                                ->count();
+
+              $checksales = DB::table('d_sales')
+                                ->where('s_member', $all->m_id)
+                                ->count();
+
+                $nonactive = '';
+                if ($checkindent != 0 || $checksales != 0) {
+                  $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
+                }
+
                 if ($all->m_status == "AKTIF") {
                     if (Plasma::checkAkses(47, 'update') == true) {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;'.$nonactive.'</div>';
                     } else {
                         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     }
@@ -61,15 +77,26 @@ class member_controller extends Controller
 
     public function get_data_active()
     {
-        $active = member::where('m_status', 'AKTIF')->orderBy('m_insert')->get();
-        $active = collect($active);
+        $active = member::where('m_status', 'AKTIF')->orderBy('m_insert');
 
         return DataTables::of($active)
             ->addColumn('aksi', function ($active) {
+              $checkindent = DB::table('d_indent')
+                                ->where('i_member', $active->m_id)
+                                ->count();
+
+              $checksales = DB::table('d_sales')
+                                ->where('s_member', $active->m_id)
+                                ->count();
+
+                $nonactive = '';
+                if ($checkindent != 0 || $checksales != 0) {
+                  $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_nik) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
+                }
                 if (Plasma::checkAkses(47, 'update') == false) {
                     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_nik) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;'.$nonactive.'</div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -78,8 +105,7 @@ class member_controller extends Controller
 
     public function get_data_nonactive()
     {
-        $nonactive = member::where('m_status', 'NONAKTIF')->orderBy('m_insert', 'desc')->get();
-        $nonactive = collect($nonactive);
+        $nonactive = member::where('m_status', 'NONAKTIF')->orderBy('m_insert', 'desc');
 
         return DataTables::of($nonactive)
 
@@ -125,6 +151,10 @@ class member_controller extends Controller
 
     public function simpan_tambah(Request $request)
     {
+
+        $provinsi = DB::table('m_wil_provinsi')
+                      ->get();
+
         if (Plasma::checkAkses(47, 'insert') == false) {
             return view('errors/407');
         } else {
@@ -166,6 +196,30 @@ class member_controller extends Controller
 
                             } else {
 
+                                $kode = "";
+
+                                $querykode = DB::select(DB::raw("SELECT MAX(RIGHT(m_idmember,7)) as counter FROM m_member"));
+
+                                if (count($querykode) > 0) {
+                                    foreach($querykode as $k)
+                                      {
+                                        $tmp = ((int)$k->counter)+1;
+                                        $kode = sprintf("%06s", $tmp);
+                                      }
+                                } else {
+                                  $kode = "000001";
+                                }
+
+
+                                $finalkode = 'MPF' . $kode;
+
+
+                                if ($data['checklist'] != "") {
+                                  $member = $finalkode;
+                                } else {
+                                  $member = $data['idmember'];
+                                }
+
                                 if ($data['email'] == "") {
                                     $email = "";
                                 } else {
@@ -199,12 +253,16 @@ class member_controller extends Controller
                                 member::insert([
                                     'm_name' => strtoupper($data['name']),
                                     'm_nik' => $data['nik'],
-                                    'm_idmember' => $data['idmember'],
+                                    'm_idmember' => $member,
                                     'm_telp' => $data['telp'],
                                     'm_email' => $email,
                                     'm_jenis' => $tipe,
                                     'm_address' => $data['address'],
                                     'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
+                                    'm_provinsi' => $data['provinsi'],
+                                    'm_kota' => $data['kota'],
+                                    'm_kecamatan' => $data['kecamatan'],
+                                    'm_desa' => $data['desa'],
                                     'm_status' => 'AKTIF',
                                     'm_insert' => Carbon::now('Asia/Jakarta'),
                                     'm_update' => Carbon::now('Asia/Jakarta')
@@ -234,12 +292,13 @@ class member_controller extends Controller
                 }
             }
             $getJM = DB::table('m_group')->select('g_id', 'g_name')->get();
-            return view('master.member.add')->with(compact('getJM'));
+            return view('master.member.add')->with(compact('provinsi', 'getJM'));
         }
     }
 
     public function simpan_edit(Request $request, $id = null)
     {
+
         if (Plasma::checkAkses(47, 'update') == false) {
 
             return view('errors/407');
@@ -278,22 +337,28 @@ class member_controller extends Controller
                                 $email = $data['email'];
                             }
 
-                            if ($data['tanggal'] == "Tanggal") {
+                            if ($data['tanggal'] == null) {
                                 $tanggal = "00";
                             } else {
                                 $tanggal = $data['tanggal'];
                             }
 
-                            if ($data['bulan'] == "Bulan") {
+                            if ($data['bulan'] == null) {
                                 $bulan = "00";
                             } else {
                                 $bulan = $data['bulan'];
                             }
 
-                            if ($data['tahun'] == "Tahun") {
+                            if ($data['tahun'] == null) {
                                 $tahun = "0000";
                             } else {
                                 $tahun = $data['tahun'];
+                            }
+
+                            if ($data['tipe'] == "") {
+                                $tipe = "DEFAULT";
+                            } else {
+                                $tipe = $data['tipe'];
                             }
 
                             member::where('m_nik', $data['nik'])->update([
@@ -301,6 +366,10 @@ class member_controller extends Controller
                                 'm_telp' => $data['telp'],
                                 'm_email' => $email,
                                 'm_address' => $data['address'],
+                                'm_provinsi' => $data['provinsi'],
+                                'm_kota' => $data['kota'],
+                                'm_kecamatan' => $data['kecamatan'],
+                                'm_desa' => $data['desa'],
                                 'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
                                 'm_jenis' => $request->tipe,
                                 'm_update' => Carbon::now('Asia/Jakarta')
@@ -338,6 +407,21 @@ class member_controller extends Controller
                 if ($check > 0) {
 
                     $member = member::where('m_nik', $id)->get();
+                    $provinsi = DB::table('m_wil_provinsi')                                  
+                                  ->get();
+
+                      $desa = DB::table('m_wil_desa')
+                                    ->where('wd_id', $member[0]->m_desa)
+                                    ->get();
+
+                        $kecamatan = DB::table('m_wil_kecamatan')
+                                      ->where('wk_id', $member[0]->m_kecamatan)
+                                      ->get();
+
+                          $kota = DB::table('m_wil_kota')
+                                        ->where('wc_id', $member[0]->m_kota)
+                                        ->get();
+
                     $date = member::where('m_nik', $id)->select('m_birth')->first();
                     $tgl = [];
                     $tgl = explode('-', $date->m_birth);
@@ -350,7 +434,7 @@ class member_controller extends Controller
                     // dd($year);
                     DB::commit();
 
-                    return view('master.member.edit')->with(compact('member', 'day', 'month', 'year', 'getJM'));
+                    return view('master.member.edit')->with(compact('provinsi', 'desa', 'kota', 'kecamatan', 'member', 'day', 'month', 'year', 'getJM'));
 
                 } else {
 
@@ -497,5 +581,29 @@ class member_controller extends Controller
                 ]);
             }
         }
+    }
+
+    public function getkota(Request $request){
+      $kota = DB::table('m_wil_kota')
+                ->where('wc_provinsi', $request->provinsi)
+                ->get();
+
+      return response()->json($kota);
+    }
+
+    public function getkecamatan(Request $request){
+      $kecamatan = DB::table('m_wil_kecamatan')
+                ->where('wk_kota', $request->kota)
+                ->get();
+
+      return response()->json($kecamatan);
+    }
+
+    public function getdesa(Request $request){
+      $desa = DB::table('m_wil_desa')
+                ->where('wd_kecamatan', $request->kecamatan)
+                ->get();
+
+      return response()->json($desa);
     }
 }
