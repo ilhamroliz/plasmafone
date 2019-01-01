@@ -692,8 +692,9 @@ class barang_controller extends Controller
 
         // $get_outlet = OutletPrice::where('op_item', Crypt::decrypt($item));
         $get_outlet = DB::table('d_outlet_price')
-                        ->select('m_company.c_name', 'd_outlet_price.op_outlet', 'd_outlet_price.op_item', 'd_outlet_price.op_price')
+                        ->select('m_company.c_name', 'd_item.i_nama', 'd_outlet_price.op_outlet', 'd_outlet_price.op_item', 'd_outlet_price.op_price')
                         ->join('m_company', 'm_company.c_id', '=', 'd_outlet_price.op_outlet')
+                        ->join('d_item', 'd_item.i_id', '=', 'd_outlet_price.op_item')
                         ->where('d_outlet_price.op_item', Crypt::decrypt($item))->get();
 
         // return DataTables::of($get_outlet)

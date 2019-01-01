@@ -109,7 +109,7 @@
 									<fieldset>
 
 										<legend>
-											Form Tambah Data Harga Barang
+											Form Tambah Data Harga Barang <i>"{{ $get_outlet[0]->i_nama }}"</i>
 										</legend>
 
 										<div class="row ">
@@ -153,7 +153,7 @@
 													<i class="fa fa-times"></i>
 													&nbsp;Batal
 												</button>
-												<button class="btn btn-primary" type="submit" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="submit">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
