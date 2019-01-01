@@ -220,6 +220,7 @@
 		});
 
         $('#shoTable').DataTable();
+
 	}); 
 
     function shoModal(){
@@ -254,7 +255,8 @@
 			}
 		});
 
-		$('#shoCompPrice').maskMoney();        
+		// $('.shoCompPrice').val('Coba-Coba');
+		$('.shoCompPrice').maskMoney({ precision: 0 });
 		$('#shoModal').modal('show');
     }
 
