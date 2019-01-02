@@ -77,6 +77,10 @@
 
 				<div class="page-title">
 
+					<button class="btn btn-primary" id="btn_collapse" style="display: none"><i class="fa fa-search"></i>&nbsp;Tutup Pencarian</button>
+
+					<button class="btn btn-primary" id="btn_cari"><i class="fa fa-search"></i>&nbsp;Cari</button>
+
 					<a href="{{ url('/master/barang/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
 
 				</div>
@@ -114,6 +118,154 @@
 			<!-- row -->
 			<div class="row">
 
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="search_item" style="display: none">
+					
+					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+						<header>
+							
+							<h2><strong>Pencarian Barang</strong></h2>
+							
+						</header>
+
+						<!-- widget div-->
+						<div>
+							
+							<!-- widget content -->
+							<div class="widget-body">
+
+								<!-- widget body text-->
+								
+								<form id="form_search" class="form-horizontal" method="post">
+									{{ csrf_field() }}
+
+									<fieldset>
+
+										<div class="row ">
+
+											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+												<div class="form-group">
+
+													<label class="col-xs-3 col-lg-3 control-label text-left">Kelompok</label>
+
+													<div class="col-xs-9 col-lg-9 inputGroupContainer">
+
+														<div class="input-group" style="width: 100%">
+
+															<input type="text" class="form-control" id="txtkelompok" name="txtkelompok" style="text-transform: uppercase" placeholder="Masukkan Kelompok">
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-3 col-lg-3 control-label text-left">Group</label>
+
+													<div class="col-xs-9 col-lg-9 inputGroupContainer">
+
+														<div class="input-group" style="width: 100%">
+
+															<input type="text" class="form-control" id="txtgroup" name="txtgroup" style="text-transform: uppercase" placeholder="Masukkan Group">
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-3 col-lg-3 control-label text-left">Sub Group</label>
+
+													<div class="col-xs-9 col-lg-9 inputGroupContainer">
+
+														<div class="input-group" style="width: 100%">
+
+															<input type="text" class="form-control" id="txtsubgroup" name="txtsubgroup" style="text-transform: uppercase" placeholder="Masukkan Sub Group">
+
+														</div>
+
+													</div>
+
+												</div>
+
+											</article>
+
+											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+												<div class="form-group">
+
+													<label class="col-xs-3 col-lg-3 control-label text-left">Merk</label>
+
+													<div class="col-xs-9 col-lg-9 inputGroupContainer">
+
+														<div class="input-group" style="width: 100%">
+
+															<input type="text" class="form-control" id="txtmerk" name="txtmerk" style="text-transform: uppercase" placeholder="Masukkan Merk">
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<label class="col-xs-3 col-lg-3 control-label text-left">Nama</label>
+
+													<div class="col-xs-9 col-lg-9 inputGroupContainer">
+
+														<div class="input-group" style="width: 100%">
+
+															<input type="text" class="form-control" id="txtnama" name="txtnama" style="text-transform: uppercase" placeholder="Masukkan Nama Barang">
+
+														</div>
+
+													</div>
+
+												</div>
+
+												<div class="form-group">
+
+													<div class="col-xs-9 col-lg-9 inputGroupContainer pull-right">
+
+														<button class="btn btn-primary" id="btn_searchingitem" style="width: 100%"><i class="fa fa-search"></i>&nbsp;Cari</button>
+
+													</div>
+
+												</div>
+
+											</article>
+
+										</div>
+
+									</fieldset>
+
+								</form>
+								
+								<!-- end widget body text-->
+								
+								<!-- widget footer -->
+								<div class="widget-footer text-right">
+									
+									
+								</div>
+								<!-- end widget footer -->
+								
+							</div>
+							<!-- end widget content -->
+							
+						</div>
+						<!-- end widget div -->
+							
+					</div>
+
+				</div>
+
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
@@ -122,21 +274,27 @@
 							
 							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
 
-								<li class="active">
+								<li class="active" id="tab_aktif">
 
 									<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
 
 								</li>
 
-								<li>
+								<li id="tab_semua">
 
 									<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
 
 								</li>
 
-								<li>
+								<li id="tab_nonaktif">
 
 									<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
+
+								</li>
+
+								<li id="tab_pencarian" style="display: none">
+
+									<a data-toggle="tab" href="#hr4"> <i style="color: #3276b1;" class="fa fa-lg fa-search"></i> <span class="hidden-mobile hidden-tablet"> Pencarian </span></a>
 
 								</li>
 
@@ -265,6 +423,48 @@
 													</th>
 
 												</tr>
+
+											</thead>
+
+											<tbody>
+												
+											</tbody>
+
+										</table>
+																					
+									</div>
+
+									<div class="tab-pane fade" id="hr4">
+										
+										<table id="dt_pencarian" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>
+
+											<tr>
+
+												<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-star txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+													&nbsp;Merk
+												</th>
+
+												<th width="30%"><i class="fa fa-fw fa-font txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+													&nbsp;Nama
+												</th>
+
+												<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+													&nbsp;Kode
+												</th>
+
+												<th data-hide="phone,tablet" width="15%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i> 
+													&nbsp;Harga
+												</th>
+
+												<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
+
+												<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue hidden-md hidden-sm hidden-xs"></i>
+													&nbsp;Aksi
+												</th>
+
+											</tr>
 
 											</thead>
 
@@ -737,7 +937,142 @@
 				}, "json")
 			})
 
-			
+			$('#btn_cari').click(function(){
+				$('#search_item').show("slow");
+				$('#btn_cari').hide();
+				$('#btn_collapse').show();
+			})
+
+			$('#btn_collapse').click(function(){
+				$("#txtkelompok").val('');
+				$("#txtgroup").val('');
+				$("#txtsubgroup").val('');
+				$("#txtmerk").val('');
+				$("#txtnama").val('');
+
+				$('#search_item').hide(1000);
+				$('#btn_cari').show();
+				$('#btn_collapse').hide();
+
+				$('#tab_aktif').addClass("active");
+				$('#tab_semua').removeClass("active");
+				$('#tab_nonaktif').removeClass("active");
+				$('#tab_pencarian').removeClass("active");
+
+				$('#hr1').addClass("in active");
+				$('#hr2').removeClass("in active");
+				$('#hr3').removeClass("in active");
+				$('#hr4').removeClass("in active");
+
+				$('#tab_pencarian').hide(1000);
+			})
+
+			$("#txtkelompok").autocomplete({
+			source: baseUrl+'/master/barang/carikelompok',
+				minLength: 1,
+				select: function(event, data) {
+					$('#txtkelompok').val(data.item.label);
+				}
+			});
+
+			$("#txtgroup").autocomplete({
+			source: baseUrl+'/master/barang/carigroup',
+				minLength: 1,
+				select: function(event, data) {
+					$('#txtgroup').val(data.item.label);
+				}
+			});
+
+			$("#txtsubgroup").autocomplete({
+			source: baseUrl+'/master/barang/carisubgroup',
+				minLength: 1,
+				select: function(event, data) {
+					$('#txtsubgroup').val(data.item.label);
+				}
+			});
+
+			$("#txtmerk").autocomplete({
+			source: baseUrl+'/master/barang/carimerk',
+				minLength: 1,
+				select: function(event, data) {
+					$('#txtmerk').val(data.item.label);
+				}
+			});
+
+			$("#txtnama").autocomplete({
+			source: baseUrl+'/master/barang/carinama',
+				minLength: 1,
+				select: function(event, data) {
+					$('#txtnama').val(data.item.label);
+				}
+			});
+
+			function overlay()
+			{
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Mencari...');
+			}
+
+			function out()
+			{
+				$('#overlay').fadeOut(200);
+			}
+
+			$("#btn_searchingitem").click(function(e){
+
+				e.preventDefault();
+
+				overlay();
+
+				if ( $.fn.DataTable.isDataTable('#dt_pencarian') ) {
+					$('#dt_pencarian').DataTable().destroy();
+				}
+
+				$('#dt_pencarian').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"ajax": "{{ url('/master/barang/searchitem?') }}"+"kelompok="+$("#txtkelompok").val()+"&group="+$("#txtgroup").val()+"&subgroup="+$("#txtsubgroup").val()+"&merk="+$("#txtmerk").val()+"&nama="+$("#txtnama").val(),
+					"columns":[
+						{"data": "i_merk"},
+						{"data": "i_nama"},
+						{"data": "i_code"},
+						{"data": "harga"},
+						{"data": "active"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+					"language" : dataTableLanguage,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					}
+				});
+
+				$('#tab_aktif').removeClass("active");
+				$('#tab_semua').removeClass("active");
+				$('#tab_nonaktif').removeClass("active");
+				$('#tab_pencarian').addClass("active");
+
+				$('#hr1').removeClass("in active");
+				$('#hr2').removeClass("in active");
+				$('#hr3').removeClass("in active");
+				$('#hr4').addClass("in active");
+
+				$('#tab_pencarian').show("slow");
+
+				out();
+
+			})
 
 		})
 

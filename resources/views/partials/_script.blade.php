@@ -84,7 +84,7 @@
 		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
-
+		<!-- <script src="{{ asset('template_asset/jquery/jquery.autocomplete.min.js') }}"></script> -->
 		<script>
 		var responsiveHelper_dt_basic = undefined;
 		var responsiveHelper_datatable_fixed_column = undefined;

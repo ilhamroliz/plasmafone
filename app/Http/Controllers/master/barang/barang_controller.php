@@ -18,6 +18,7 @@ use Image;
 use File;
 use ImageOptimizer;
 use DataTables;
+use Response;
 
 class barang_controller extends Controller
 {
@@ -837,6 +838,324 @@ class barang_controller extends Controller
 
         }
         
+    }
+
+    public function cariKelompok(Request $request)
+    {
+        $cari = $request->term;
+        $kelompok = DB::table('d_item')
+            ->select('i_kelompok')
+            ->where('i_kelompok', 'like', '%'.$cari.'%')->distinct()->get();
+
+        if (count($kelompok) == 0) {
+            $results[] = ['label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($kelompok as $query) {
+                $results[] = ['label' => $query->i_kelompok];
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function cariGroup(Request $request)
+    {
+        $cari = $request->term;
+        $group = DB::table('d_item')
+            ->select('i_group')
+            ->where('i_group', 'like', '%'.$cari.'%')->distinct()->get();
+
+        if (count($group) == 0) {
+            $results[] = ['label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($group as $query) {
+                $results[] = ['label' => $query->i_group];
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function cariSubGroup(Request $request)
+    {
+        $cari = $request->term;
+        $subgroup = DB::table('d_item')
+            ->select('i_sub_group')
+            ->where('i_sub_group', 'like', '%'.$cari.'%')->distinct()->get();
+
+        if (count($subgroup) == 0) {
+            $results[] = ['label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($subgroup as $query) {
+                $results[] = ['label' => $query->i_sub_group];
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function cariMerk(Request $request)
+    {
+        $cari = $request->term;
+        $merk = DB::table('d_item')
+            ->select('i_merk')
+            ->where('i_merk', 'like', '%'.$cari.'%')->distinct()->get();
+
+        if (count($merk) == 0) {
+            $results[] = ['label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($merk as $query) {
+                $results[] = ['label' => $query->i_merk];
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function cariNama(Request $request)
+    {
+        $cari = $request->term;
+        $nama = DB::table('d_item')
+            ->select('i_nama')
+            ->where('i_nama', 'like', '%'.$cari.'%')->distinct()->get();
+
+        if (count($nama) == 0) {
+            $results[] = ['label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['label' => $query->i_nama];
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function searchItem(Request $request)
+    {
+
+        $data = $request->all();
+
+        if ($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] == "") {
+            
+            $search = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price', 'i_isactive');
+
+        } else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok']);
+
+        } else if($data['kelompok'] == "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] == "") {
+
+            $search = Item::where('i_group', $data['group']);
+
+        } else if($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] == "") {
+
+            $search = Item::where('i_sub_group', $data['subgroup']);
+
+        } else if($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group']);
+
+        } else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_sub_group', $data['subgroup']);
+
+        } else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] == "" && $data['group'] != "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] == "") {
+
+            $search = Item::where('i_group', $data['group'])
+                            ->where('i_sub_group', $data['subgroup']);
+
+        } else if($data['kelompok'] == "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_group', $data['group'])
+                            ->where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] == "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_group', $data['group'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_sub_group', $data['subgroup'])
+                            ->where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_sub_group', $data['subgroup'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] != "") {
+
+            $search = Item::where('i_merk', $data['merk'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group'])
+                            ->where('i_sub_group', $data['subgroup']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group'])
+                            ->where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_nama', $data['nama']);
+
+        }  else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_merk', $data['merk'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] == "" && $data['group'] != "" && $data['subgroup'] != "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_group', $data['group'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] == "" && $data['group'] != "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_group', $data['group'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] == "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] != "") {
+
+            $search = Item::where('i_group', $data['group'])
+                            ->where('i_merk', $data['merk'])
+                            ->where('i_nama', $data['nama']);
+
+        }  else if($data['kelompok'] == "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] != "" && $data['nama'] != "") {
+
+            $search = Item::where('i_sub_group', $data['subgroup'])
+                            ->where('i_merk', $data['merk'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] != "" && $data['merk'] != "" && $data['nama'] == "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_merk', $data['merk']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] != "" && $data['merk'] == "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] == "" && $data['merk'] != "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group'])
+                            ->where('i_merk', $data['merk'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] != "" && $data['group'] == "" && $data['subgroup'] != "" && $data['merk'] != "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_merk', $data['merk'])
+                            ->where('i_nama', $data['nama']);
+
+        } else if($data['kelompok'] != "" && $data['group'] != "" && $data['subgroup'] != "" && $data['merk'] != "" && $data['nama'] != "") {
+
+            $search = Item::where('i_kelompok', $data['kelompok'])
+                            ->where('i_group', $data['group'])
+                            ->where('i_sub_group', $data['subgroup'])
+                            ->where('i_merk', $data['merk'])
+                            ->where('i_nama', $data['nama']);
+
+        }
+
+        return DataTables::of($search)
+
+        ->addColumn('harga', function ($search) {
+            return '<div class="text-right">Rp' . number_format($search->i_price, 2, ',', '.') . '</div>';
+        })
+
+        ->addColumn('active', function ($search) {
+
+            if ($search->i_isactive == "Y") {
+
+                return '<span class="label label-success">AKTIF</span>';
+
+            } else {
+
+                return '<span class="label label-danger">NON AKTIF</span>';
+
+            }
+
+        })
+
+        ->addColumn('aksi', function ($search) {
+
+            if ($search->i_isactive == "Y") {
+
+                if (Access::checkAkses(45, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($search->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($search->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($search->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-info btn-circle" data-toggle="tooltip" data-placement="top" title="Pengaturan harga outlet" onclick="setting(\'' . Crypt::encrypt($search->i_id) . '\', \'' . $search->i_nama . '\')"><i class="glyphicon glyphicon-wrench"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($search->i_id) . '\', \'' . $search->i_nama . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                }
+
+            } else {
+
+                if (Access::checkAkses(45, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($search->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($search->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($search->i_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-info btn-circle" data-toggle="tooltip" data-placement="top" title="Pengaturan harga outlet" onclick="setting(\'' . Crypt::encrypt($search->i_id) . '\', \'' . $search->i_nama . '\')"><i class="glyphicon glyphicon-wrench"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Aktifkan" onclick="statusactive(\'' . Crypt::encrypt($search->i_id) . '\', \'' . $search->i_nama . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+
+                }
+
+            }
+
+        })
+
+        ->rawColumns(['aksi', 'harga', 'active'])
+
+        ->make(true);
+
     }
 
     function formatPrice($data)

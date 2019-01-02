@@ -109,8 +109,19 @@
 									<fieldset>
 
 										<legend>
-											Form Tambah Data Harga Barang <i>"{{ $get_outlet[0]->i_nama }}"</i>
+											Form Tambah Data Harga Barang
 										</legend>
+
+										<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+											<div class="form-group">
+
+												<label class="control-label text-left">Nama Barang</label>
+												&nbsp; &colon; &nbsp;
+												<strong><i>{{ $get_outlet[0]->i_nama }}</i></strong>
+
+											</div>
+										</article>
 
 										<div class="row ">
 

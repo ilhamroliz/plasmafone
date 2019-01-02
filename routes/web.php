@@ -162,6 +162,18 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/master/barang/getoutlet/{item}', 'master\barang\barang_controller@getoutlet');
 
+	Route::get('/master/barang/carikelompok', 'master\barang\barang_controller@cariKelompok');
+
+	Route::get('/master/barang/carigroup', 'master\barang\barang_controller@cariGroup');
+
+	Route::get('/master/barang/carisubgroup', 'master\barang\barang_controller@cariSubGroup');
+
+	Route::get('/master/barang/carimerk', 'master\barang\barang_controller@cariMerk');
+
+	Route::get('/master/barang/carinama', 'master\barang\barang_controller@cariNama');
+
+	Route::get('/master/barang/searchitem', 'master\barang\barang_controller@searchItem');
+
 	// ============================End Master Barang==========================
 
 	// =============================Master Gudang=============================
