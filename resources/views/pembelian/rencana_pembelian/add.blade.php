@@ -152,7 +152,13 @@
 										</table>
 										
 									</div>
-
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-12">
+                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRencana()">Tambah Semua Rencana</button>
+											</div>
+										</div>
+                                    </div>
 
 								</div>
 								
@@ -160,7 +166,7 @@
 								
 								<!-- widget footer -->
 								<div class="widget-footer text-right">
-									
+								
 									
 								</div>
 								<!-- end widget footer -->
@@ -379,6 +385,13 @@
 	<script type="text/javascript">
 		var tambahRencana;
         $(document).ready(function () {
+
+			$.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
 			load_table();
             // var responsiveHelper_dt_basic = undefined;
             // var responsiveHelper_datatable_fixed_column = undefined;
@@ -427,6 +440,44 @@
             // }, 1000);
             
         });
+
+		function simpanRencana()
+		{
+			$.ajax({
+				url : '{{url('/pembelian/rencana-pembelian/')}}',
+                type: "GET",
+                data: { 
+					id : id,
+                },
+                dataType: "JSON",
+				success: function(data)
+                {
+					hasil = data.status;
+
+					if(hasil =="gagal"){
+						$.smallBox({
+						title : "Berhasil",
+						content : 'Data gagal direload...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+						});
+						$('#dt_tambah').DataTable().ajax.reload();
+						$('#myModal').modal('hide');
+					}else{
+						$.smallBox({
+						title : "Berhasil",
+						content : 'Data telah ditambahkan...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+						});
+						$('#dt_tambah').DataTable().ajax.reload();
+						$('#myModal').modal('hide');
+					}
+				}
+			});
+		}
 
         function edit(id){
             
