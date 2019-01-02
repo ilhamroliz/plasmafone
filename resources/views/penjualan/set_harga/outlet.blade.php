@@ -225,38 +225,53 @@
 
     function shoModal(){
         var id = $('#shoItemId').val();
-        $('#shoTable').DataTable().destroy();
-        $('#shoTable').DataTable({
-			"processing": true,
-			"serverSide": true,
-			"searching" : false,
-			"paging" : false,
-			"info" : false,
-			"ajax": "{{ url('/penjualan/set-harga/outlet/add?id=') }}"+id,
-			"columns":[
-				{"data": "compName"},
-				{"data": "compPrice"},
-			],
-			"autoWidth" : true,
-			"language" : dataTableLanguage,
-			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-			"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-			"preDrawCallback" : function() {
-				// Initialize the responsive datatables helper once.
-				if (!responsiveHelper_dt_basic) {
-					responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#shoTable'), breakpointDefinition);
-				}
-			},
-			"rowCallback" : function(nRow) {
-				responsiveHelper_dt_basic.createExpandIcon(nRow);
-			},
-			"drawCallback" : function(oSettings) {
-				responsiveHelper_dt_basic.respond();
+		$('#shoTable').DataTable().destroy();
+		var table = $('#shoTable').DataTable();
+
+		axios.get(baseUrl+'/penjualan/set-harga/outlet/add?id='+id).then((response) => {
+
+			table.clear().draw();
+			for($i=0; $i < response.data.data.length; $i++){
+				var price = response.data.data[$i].op_price;
+				var pisah = price.split(".");
+				var harga = pisah[0];
+				table.row.add([
+					response.data.data[$i].c_name+'<input type="hidden" name="shoCompId[]" value="'+response.data.data[$i].c_id+'">',
+					'<input type="text" class="form-control shoCompPrice" name="shoCompPrice[]" value="'+harga+'">'
+				]).draw(false);
+				$('.shoCompPrice').maskMoney({ thousands: '.', decimal: ','});
 			}
 		});
 
-		// $('.shoCompPrice').val('Coba-Coba');
-		$('.shoCompPrice').maskMoney({ precision: 0 });
+        // $('#shoTable').DataTable({
+		// 	"processing": true,
+		// 	"serverSide": true,
+		// 	"searching" : false,
+		// 	"paging" : false,
+		// 	"info" : false,
+		// 	"ajax": "{{ url('/penjualan/set-harga/outlet/add?id=') }}"+id,
+		// 	"columns":[
+		// 		{"data": "compName"},
+		// 		{"data": "compPrice"},
+		// 	],
+		// 	"autoWidth" : true,
+		// 	"language" : dataTableLanguage,
+		// 	"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+		// 	"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+		// 	"preDrawCallback" : function() {
+		// 		// Initialize the responsive datatables helper once.
+		// 		if (!responsiveHelper_dt_basic) {
+		// 			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#shoTable'), breakpointDefinition);
+		// 		}
+		// 	},
+		// 	"rowCallback" : function(nRow) {
+		// 		responsiveHelper_dt_basic.createExpandIcon(nRow);
+		// 	},
+		// 	"drawCallback" : function(oSettings) {
+		// 		responsiveHelper_dt_basic.respond();
+		// 	}
+		// });
+		
 		$('#shoModal').modal('show');
     }
 

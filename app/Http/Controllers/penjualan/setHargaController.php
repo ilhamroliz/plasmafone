@@ -117,8 +117,6 @@ class setHargaController extends Controller
             ->orWhereRaw('concat(coalesce(i_code, ""), " ", coalesce(i_nama, "")) like "%' . $term . '%"')
             ->take(50)->get();
 
-        // dd($select);
-
         if ($select == null) {
             $results[] = ['id' => null, 'label' => ' Tidak ditemukan data terkait '];
         } else {
@@ -156,35 +154,35 @@ class setHargaController extends Controller
 
     public function tambah_group(Request $request)
     {
-        if (Plasma::checkAkses(15, ' insert ') == false) {
-            return view(' errors / 407 ');
+        if (Plasma::checkAkses(15, 'insert') == false) {
+            return view('errors/407');
         } else {
-            if ($request->isMethod(' post ')) {
+            if ($request->isMethod('post')) {
 
-                $cekAda = DB::table(' m_group ')->where(' g_name ', $request->namaGroup)->count();
+                $cekAda = DB::table('m_group')->where('g_name', $request->namaGroup)->count();
 
                 if ($cekAda != 0) {
                     return json_encode([
-                        ' status ' => ' tgAda ',
-                        ' name ' => $request->namaGroup
+                        'status' => 'tgAda',
+                        'name' => $request->namaGroup
                     ]);
                 } else {
                     DB::beginTransaction();
                     try {
-                        DB::table(' m_group ')->insert([
-                            ' g_name ' => strtoupper($request->namaGroup)
+                        DB::table('m_group')->insert([
+                            'g_name' => strtoupper($request->namaGroup)
                         ]);
 
                         DB::commit();
-                        Plasma::logActivity(' Menambahkan Group ' . $request->namaGroup);
+                        Plasma::logActivity('Menambahkan Group' . $request->namaGroup);
                         return json_encode([
-                            ' status ' => ' sukses '
+                            'status' => 'sukses'
                         ]);
                     } catch (\Exception $e) {
                         DB::rollback();
                         return json_encode([
-                            ' status ' => ' gagal ',
-                            ' msg ' => $e
+                            'status' => 'gagal',
+                            'msg' => $e
                         ]);
                     }
                 }
@@ -195,47 +193,47 @@ class setHargaController extends Controller
     public function tambah_harga(Request $request)
     {
         // dd($request);
-        if (Plasma::checkAkses(15, ' insert ') == false) {
-            return view(' errors / 407 ');
+        if (Plasma::checkAkses(15, 'insert') == false) {
+            return view('errors/407');
         } else {
-            if ($request->isMethod(' post ')) {
+            if ($request->isMethod('post')) {
 
-                $cekAda = DB::table(' m_group_price ')
-                    ->where(' gp_item ', $request->thItemId)
-                    ->where(' gp_group ', $request->thGroupId)->count();
+                $cekAda = DB::table('m_group_price')
+                    ->where('gp_item', $request->thItemId)
+                    ->where('gp_group', $request->thGroupId)->count();
 
                 if ($cekAda != 0) {
                     return json_encode([
-                        ' status ' => ' thAda ',
-                        ' name ' => $request->thItemNama
+                        'status' => 'thAda',
+                        'name' => $request->thItemNama
                     ]);
                 } else {
                     DB::beginTransaction();
                     try {
 
-                        $harga = implode(explode(' . ', $request->thHarga));
-                        DB::table(' m_group_price ')->insert([
-                            ' gp_group ' => $request->thGroupId,
-                            ' gp_item ' => $request->thItemId,
-                            ' gp_price ' => $harga
+                        $harga = implode(explode('.', $request->thHarga));
+                        DB::table('m_group_price')->insert([
+                            'gp_group' => $request->thGroupId,
+                            'gp_item' => $request->thItemId,
+                            'gp_price' => $harga
                         ]);
 
-                        $item = DB::table(' d_item ')->select(' i_nama ')->where(' i_id ', $request->thItemId)->first();
-                        $group = DB::table(' m_group ')->select(' g_name ')->where(' g_id ', $request->thGroupId)->first();
-                        $log = ' Menambahkan Harga Barang ' . $item->i_nama . ' pada group harga ' . $group->g_name;
+                        $item = DB::table('d_item')->select('i_nama')->where('i_id', $request->thItemId)->first();
+                        $group = DB::table('m_group')->select('g_name')->where('g_id', $request->thGroupId)->first();
+                        $log = 'Menambahkan Harga Barang ' . $item->i_nama . ' pada group harga ' . $group->g_name;
 
                         DB::commit();
                         Plasma::logActivity($log);
                         return json_encode([
-                            ' status ' => ' thBerhasil ',
-                            ' id ' => $request->thGroupId,
-                            ' name ' => $request->thItemNama
+                            'status' => 'thBerhasil',
+                            'id' => $request->thGroupId,
+                            'name' => $request->thItemNama
                         ]);
                     } catch (\Exception $e) {
                         DB::rollback();
                         return json_encode([
-                            ' status ' => ' thGagal ',
-                            ' msg ' => $e
+                            'status' => 'thGagal',
+                            'msg' => $e
                         ]);
                     }
                 }
@@ -253,6 +251,7 @@ class setHargaController extends Controller
 
                 DB::beginTransaction();
                 try {
+
                     $shoItemId = Crypt::decrypt($request->shoShowId);
                     $shoCompId = $request->shoCompId;
                     $shoCompPrice = $request->shoCompPrice;
@@ -260,6 +259,9 @@ class setHargaController extends Controller
                     $aray = array();
 
                     for ($i = 0; $i < count($shoCompId); $i++) {
+                        if (strpos($shoCompPrice[$i], '.')) {
+                            $shoCompPrice[$i] = implode(explode('.', $shoCompPrice[$i]));
+                        }
                         $field = array(
                             'op_outlet' => $shoCompId[$i],
                             'op_item' => $shoItemId,
@@ -307,18 +309,22 @@ class setHargaController extends Controller
             $comp = DB::table('m_company')
                 ->leftjoin('d_outlet_price', 'op_outlet', '=', 'c_id')
                 ->where('op_item', $id)
-                ->select('c_id', 'c_name', 'op_price');
+                ->select('c_id', 'c_name', 'op_price')->get();
 
-            return DataTables::of($comp)
-                ->addColumn('compName', function ($comp) {
-                    return '<input type="hidden" name="shoCompId[]" value="' . $comp->c_id . '">' . $comp->c_name;
-                })
-                ->addColumn('compPrice', function ($comp) {
-                    $price = explode('.', $comp->op_price);
-                    return '<input type="text" class="form-control shoCompPrice" name="shoCompPrice[]" value="' . $price[0] . '">';
-                })
-                ->rawColumns(['compName', 'compPrice'])
-                ->make(true);
+            return json_encode([
+                'data' => $comp,
+            ]);
+
+            // return DataTables::of($comp)
+            //     ->addColumn('compName', function ($comp) {
+            //         return '<input type="hidden" name="shoCompId[]" value="' . $comp->c_id . '">' . $comp->c_name;
+            //     })
+            //     ->addColumn('compPrice', function ($comp) {
+            //         $price = explode('.', $comp->op_price);
+            //         return '<input type="text" class="form-control shoCompPrice" name="shoCompPrice[]" value="' . $price[0] . '">';
+            //     })
+            //     ->rawColumns(['compName', 'compPrice'])
+            //     ->make(true);
         }
     }
 

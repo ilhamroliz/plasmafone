@@ -108,9 +108,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="35%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th width="20%"data-hide="phone" data-class="expand"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
+													<th width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+													<th width="20%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Cabang</th>
+													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
 													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
@@ -126,10 +127,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="35%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th width="20%" data-hide="phone" data-class="expand"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
-													<th width="15%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+													<th width="20%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Cabang</th>
+													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
+													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -144,10 +146,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="35%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th width="20%" data-hide="phone" data-class="expand"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Tagihan</th>
-													<th width="15%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+													<th width="20%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Cabang</th>
+													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
+													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -166,7 +169,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             
             <!-- Modal untuk Detil Pemesanan -->
 			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog" style="width: 60%">
+				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 
@@ -213,15 +216,27 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 														</div>
 
 														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>Total Tagihan</strong></label>
+															<label class="col-md-3" style="float:left"><strong>ID. Member</strong></label>
 															<label class="col-md-1">:</label>
-															<label class="col-md-8" id="dmTagihan"></label>
+															<label class="col-md-8" id="dmIdMember"></label>
 														</div>
 
 														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>Total Pembayaran</strong></label>
+															<label class="col-md-3" style="float:left"><strong>Telp Member</strong></label>
 															<label class="col-md-1">:</label>
-															<label class="col-md-8" id="dmPembayaran"></label>
+															<label class="col-md-8" id="dmTelpMember"></label>
+														</div>
+
+														<div class="form-group">
+															<label class="col-md-3" style="float:left"><strong>Cabang</strong></label>
+															<label class="col-md-1">:</label>
+															<label class="col-md-8" id="dmCabang"></label>
+														</div>
+
+														<div class="form-group">
+															<label class="col-md-3" style="float:left"><strong>Nama Sales</strong></label>
+															<label class="col-md-1">:</label>
+															<label class="col-md-8" id="dmNamaSales"></label>
 														</div>
 														
 													</div>
@@ -230,9 +245,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 														<thead>		
 															<tr>
 																<th width="10%">&nbsp;No.</th>
-																<th width="50%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
-																<th width="20%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Harga Satuan</th>
-																<th width="20%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
+																<th width="60%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+																<th width="30%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
 															</tr>
 														</thead>
 
@@ -295,9 +309,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"serverSide": true,
 				"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
 				"columns":[
-					{"data": "m_name"},
 					{"data": "i_nota"},
-					{"data": "tagihan"},
+					{"data": "c_name"},
+					{"data": "m_name"},
+					{"data": "sales"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -327,9 +342,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"serverSide": true,
 				"ajax": "{{ url('/penjualan/pemesanan-barang/getdatadone') }}",
 				"columns":[
-					{"data": "m_name"},
 					{"data": "i_nota"},
-					{"data": "tagihan"},
+					{"data": "c_name"},
+					{"data": "m_name"},
+					{"data": "sales"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -359,9 +375,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"serverSide": true,
 				"ajax": "{{ url('/penjualan/pemesanan-barang/getdatacancel') }}",
 				"columns":[
-					{"data": "m_name"},
 					{"data": "i_nota"},
-					{"data": "tagihan"},
+					{"data": "c_name"},
+					{"data": "m_name"},
+					{"data": "sales"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -433,9 +450,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								"serverSide": true,
 								"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
 								"columns":[
-									{"data": "m_name"},
 									{"data": "i_nota"},
-									{"data": "tagihan"},
+									{"data": "c_name"},
+									{"data": "m_name"},
+									{"data": "sales"},
 									{"data": "aksi"}
 								],
 								"autoWidth" : true,
@@ -521,10 +539,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                 $('#dmNoNota').text(response.data.data.i_nota);
                 $('#dmNamaMember').text(response.data.data.m_name);
-				tagihan = accounting.formatMoney(response.data.data.i_total_tagihan, "", 2, ".", ",");
-                $('#dmTagihan').html('Rp. '+ tagihan);
-				pembayaran = accounting.formatMoney(response.data.data.i_total_pembayaran, "", 2, ".", ",");
-                $('#dmPembayaran').html('Rp. '+ pembayaran);
+				$('#dmIdMember').text(response.data.data.m_idmember);
+				$('#dmTelpMember').text(response.data.data.m_telp);
+				$('#dmCabang').text(response.data.data.c_name);
+				$('#dmNamaSales').text(response.data.data.sales);				
 
 			});
 
@@ -536,7 +554,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"columns":[
 					{"data": "DT_RowIndex"},
 					{"data": "i_nama"},
-					{"data": "harga"},
 					{"data": "qty"}
 				],
 				"searching" : false,
