@@ -19,6 +19,7 @@ use File;
 use ImageOptimizer;
 use DataTables;
 use Response;
+use Carbon\Carbon;
 
 class barang_controller extends Controller
 {
@@ -226,11 +227,12 @@ class barang_controller extends Controller
 
             $data = $request->all();
             $harga = $this->formatPrice($data['i_harga']);
-            if($data['i_expired'] == ""){
-                $expired = null;
-            }else{
-                $expired = date('Y-m-d', strtotime($data['i_expired']));;
-            }
+
+            // if($data['i_expired'] == ""){
+            //     $expired = null;
+            // }else{
+            //     $expired = date('Y-m-d', strtotime($data['i_expired']));
+            // }
 
             DB::beginTransaction();
 
@@ -267,7 +269,7 @@ class barang_controller extends Controller
                     $barang->i_minstock = strtoupper($data['i_minstock']);
                     $barang->i_berat = strtoupper($data['i_berat']);
                     $barang->i_price = $harga;
-                    $barang->i_expired = $expired;
+                    $barang->i_expired = $data['i_expired'];
 
                     if ($request->hasFile('i_img')) {
 
@@ -345,12 +347,12 @@ class barang_controller extends Controller
                 } else {
 
                     $data = $request->all();
-
-                    if($data['i_expired'] == ""){
-                        $expired = null;
-                    }else{
-                        $expired = date('Y-m-d', strtotime($data['i_expired']));;
-                    }
+                    
+                    // if($data['i_expired'] == ""){
+                    //     $expired = NULL;
+                    // }else{
+                    //     $expired = date('Y-m-d', strtotime($data['i_expired']));;
+                    // }
 
                     DB::beginTransaction();
 
@@ -435,7 +437,7 @@ class barang_controller extends Controller
                             'i_berat' => strtoupper($data['i_berat']),
                             'i_price' => $this->formatPrice($data['i_harga']),
                             'i_img' => $image,
-                            'i_expired' => $expired
+                            'i_expired' => $data['i_expired']
                         ]);
 
                         DB::commit();
