@@ -265,14 +265,11 @@ class pemesananBarangController extends Controller
     public function getDataId()
     {
         $cek = DB::table('d_indent')
-            ->select(DB::raw('max(right(i_id, 3)) as id'))
-            ->get();
+            ->select('i_id')
+            ->max('i_id');
 
-        foreach ($cek as $x) {
-            $temp = ((int)$x->id + 1);
-            $kode = sprintf("%03s", $temp);
-        }
-
+        $temp = ($cek + 1);
+        $kode = sprintf("%03s", $temp);
         $date = [];
         $date = explode(' ', Carbon::now('Asia/Jakarta'));
         $tgl = explode('-', $date[0]);

@@ -354,6 +354,18 @@
 
 												</div>
 
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kedaluwarsa</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<input type="text" class="form-control" name="i_expired" id="i_expired" placeholder="Masukkan Tanggal Kedaluwarsa" v-model="form_data.i_expired" autocomplete="off"/>
+
+													</div>
+
+												</div>
+
 											</article>
 
 										</div>
@@ -485,6 +497,10 @@
 			// });
 
 			$("#i_harga").maskMoney({thousands:'.', precision: 0});
+
+			$( "#i_expired" ).datepicker({
+				format: 'dd/mm/yyyy'
+			});
 
 			function formatRupiah(angka, prefix)
 			{

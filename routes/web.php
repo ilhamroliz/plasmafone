@@ -1,5 +1,5 @@
 <?php
- 
+
 // use Symfony\Component\Routing\Annotation\Route;
 
 /*
@@ -154,6 +154,14 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/master/barang/nonactive/{id}', 'master\barang\barang_controller@nonactive');
 
+	Route::post('/master/barang/setharga', 'master\barang\barang_controller@hargaperoutlet')->name('barang.setharga');
+
+	Route::post('/master/barang/addoutletprice', 'master\barang\barang_controller@addoutletprice')->name('barang.addoutletprice');
+
+	Route::get('/master/barang/getharga/{outlet}/{item}', 'master\barang\barang_controller@gethargaperoutlet');
+
+	Route::get('/master/barang/getoutlet/{item}', 'master\barang\barang_controller@getoutlet');
+
 	// ============================End Master Barang==========================
 
 	// =============================Master Gudang=============================
@@ -276,6 +284,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/master/member/active/{id}', 'master\member\member_controller@active');
 	Route::get('/master/member/nonactive/{id}', 'master\member\member_controller@nonactive');
 	Route::get('/master/member/delete/{id}', 'master\member\member_controller@delete');
+	Route::get('/master/member/getkota', 'master\member\member_controller@getkota');
+	Route::get('/master/member/getkecamatan', 'master\member\member_controller@getkecamatan');
+	Route::get('/master/member/getdesa', 'master\member\member_controller@getdesa');
 
 	// End Master Member
 
@@ -388,7 +399,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// End Konfirmasi Pembelian
 
-	// Purchase Order 
+	// Purchase Order
 
 	Route::get('/pembelian/purchase-order', 'PembelianController@purchase_order');
 	Route::get('/pembelian/purchase-order/view_tambahPo', 'PembelianController@view_tambahPo');
@@ -516,6 +527,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/set-harga/outlet/add', 'penjualan\setHargaController@add_price_outlet');
 	Route::match(['get', 'post'], '/penjualan/set-harga/outlet/edit', 'penjualan\setHargaController@edit_price_outlet');
 	Route::get('/penjualan/set-harga/outlet/hapus', 'penjualan\setHargaController@hapus_price_outlet');
+	Route::get('/penjualan/set-harga/outlet/auto-CodeNItem', 'penjualan\setHargaController@cari_code_n_item');
+	Route::get('/penjualan/set-harga/outlet/cektable', 'penjualan\setHargaController@cek_table');
 
 	///////// END OUTLET
 

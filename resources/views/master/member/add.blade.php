@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Outlet')
+@section('title', 'Master Member')
 
 
 @section('extra_style')
@@ -135,11 +135,13 @@
 
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">ID. Member</label>
-													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+													<div class="col-xs-9 col-lg-8 inputGroupContainer">
 														<div class="input-group">
 															<span class="input-group-addon"><i class="fa fa-credit-card" style="width: 15px"></i></span>
 															<input type="text" class="form-control" id="idmember" name="idmember" v-model="form_data.idmember" placeholder="Masukkan Nomor ID Member" />
+															<span class="input-group-addon"> <input type="checkbox" onchange="klik()" id="checklist" name="checklist" value="Y"> </span>
 														</div>
+															<small class="help-block" data-bv-validator="notEmpty" data-bv-for="idmember" id="valididmember" data-bv-result="INVALID" style="display:none;color:#b94a48">Isi ID Member</small>
 													</div>
 												</div>
 
@@ -198,6 +200,45 @@
 													</div>
 												</div>
 
+												<div class="form-group row">
+													<label class="col-md-4 control-label text-left">Provinsi</label>
+													<div class="col-md-8 inputGroupContainer">
+															<select width="100%" class="form-control" name="provinsi" id="provinsi" v-model="form_data.provinsi" onchange="getkota()">
+																<option value="" disabled>== Pilih Provinsi ==</option>
+																@foreach ($provinsi as $key => $value)
+																	<option value="{{$value->wp_id}}">{{$value->wp_name}}</option>
+																@endforeach
+															</select>
+													</div>
+												</div>
+
+												<div class="form-group row">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kota</label>
+													<div class="col-xs-5 col-lg-8 inputGroupContainer">
+															<select width="100%" class="form-control" name="kota" id="kota" v-model="form_data.kota" onchange="getkecamatan()">
+																<option value="" disabled>== Pilih Kota ==</option>
+															</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kecamatan</label>
+													<div class="col-xs-5 col-lg-8 inputGroupContainer">
+															<select width="100%" class="form-control" name="kecamatan" id="kecamatan" v-model="form_data.kecamatan" onchange="getdesa()">
+																<option value="" disabled>== Pilih Kecamatan ==</option>
+															</select>
+													</div>
+												</div>
+
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Desa</label>
+													<div class="col-xs-9 col-lg-8 inputGroupContainer">
+															<select class="form-control" name="desa" id="desa" v-model="form_data.desa">
+																<option value="" disabled>== Pilih Desa ==</option>
+															</select>
+													</div>
+												</div>
+
 											</article>
 
 										</div>
@@ -213,7 +254,7 @@
 													&nbsp;Batal
 												</button>
 
-												<button class="btn btn-primary" type="button" @click="tambah_form" :disabled="btn_save_disabled">
+												<button class="btn btn-primary" type="button" @click="tambah_form" :disabled="btn_save_disabled" onclick="btnform()">
 													<i class="fa fa-floppy-o"></i>
 													&nbsp;Simpan
 												</button>
@@ -246,6 +287,7 @@
 	<script src="{{ asset('template_asset/js/dobpicker.js') }}"></script>
 
 	<script type="text/javascript">
+	var checklistcount = 0;
 
 		$(document).ready(function(){
 
@@ -294,13 +336,6 @@
 								}
 							}
 						},
-						idmember : {
-							validators : {
-								notEmpty : {
-									message : 'Isi ID Member'
-								}
-							}
-						},
 						name : {
 							validators : {
 								notEmpty : {
@@ -334,13 +369,16 @@
 
 					form_data : {
 						nik 	: '',
-						idmember : '',
 						name 	: '',
 						telp 	: '',
+						provinsi : '',
 						address : '',
 						email 	: '',
 						tipe	: '',
+						kota	: '',
+						kecamatan	: '',
 						tanggal : '',
+						desa : '',
 						bulan	: '',
 						tahun	: ''
 					}
@@ -358,7 +396,7 @@
 							this.btn_save_disabled = true;
 							overlay();
 							axios.post(baseUrl+'/master/member/simpan-tambah',
-								$('#form-tambah').serialize()+'&tipe='+$('#tipe').val()
+								$('#form-tambah').serialize()+'&tipe='+$('#tipe').val()+'&checklist='+$('#checklist').val()
 							).then((response) => {
 								if (response.data.status == 'ditolak') {
 
@@ -438,13 +476,16 @@
 					},
 					reset_form:function(){
 						this.form_data.nik 			= '';
-						this.form_data.idmember = '';
 						this.form_data.name 		= '';
+						this.form_data.provinsi = '';
 						this.form_data.telp			= '';
 						this.form_data.address 		= '';
 						this.form_data.email 		= '';
 						this.form_data.tipe 		= '';
+						this.form_data.kota 		= '';
 						this.form_data.tanggal 		= '';
+						this.form_data.desa 		= '';
+						this.form_data.kecamatan 		= '';
 						this.form_data.bulan 		= '';
 						this.form_data.tahun 		= '';
 
@@ -453,6 +494,79 @@
 				}
 			});
 		});
+
+
+		function klik(){
+			if (checklistcount == 0) {
+				checklistcount = 1;
+				$('#idmember').attr('readonly', true);
+				$('#idmember').attr('placeholder', 'Auto');
+			} else {
+				checklistcount = 0;
+				$('#idmember').attr('readonly', false);
+				$('#idmember').attr('placeholder', 'Masukkan Nomor ID Member');
+			}
+		}
+
+		function btnform(){
+			if ($('#idmember').val() == "" && checklistcount == 0) {
+				$('#valididmember').css('display', '');
+			} else {
+				$('#valididmember').css('display', 'none');
+			}
+		}
+
+		function getkota(){
+			var html = '<option value="" disabled>== Pilih Kota ==</option>';
+			var provinsi = $('#provinsi').val();
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {provinsi},
+				url: baseUrl + '/master/member/getkota',
+				success : function(response){
+						for (var i = 0; i < response.length; i++) {
+							html += '<option value="'+response[i].wc_id+'">'+response[i].wc_name+'</option>';
+						}
+					$('#kota').html(html);
+				}
+			});
+		}
+
+		function getkecamatan(){
+			var html = '<option value="" disabled>== Pilih Kecamatan ==</option>';
+			var kota = $('#kota').val();
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {kota},
+				url: baseUrl + '/master/member/getkecamatan',
+				success : function(response){
+					for (var i = 0; i < response.length; i++) {
+						html += '<option value="'+response[i].wk_id+'">'+response[i].wk_name+'</option>';
+					}
+					$('#kecamatan').html(html);
+				}
+			});
+		}
+
+		function getdesa(){
+			var html = '<option value="" disabled>== Pilih Desa ==</option>';
+			var kecamatan = $('#kecamatan').val();
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {kecamatan},
+				url: baseUrl + '/master/member/getdesa',
+				success : function(response){
+					for (var i = 0; i < response.length; i++) {
+						html += '<option value="'+response[i].wd_id+'">'+response[i].wd_name+'</option>';
+					}
+					$('#desa').html(html);
+				}
+			});
+		}
+
 	</script>
 
 @endsection

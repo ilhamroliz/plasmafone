@@ -354,6 +354,18 @@
 
 												</div>
 
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Kedaluwarsa</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<input type="text" class="form-control" name="i_expired" id="i_expired" placeholder="Masukkan Tanggal Kedaluwarsa" autocomplete="off" value="{{ $item->i_expired }}"/>
+
+													</div>
+
+												</div>
+
 												<div class="col-xs-12 col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 15px;">
 
 													<div style="margin-bottom: 0;" class="preview thumbnail">
@@ -538,6 +550,10 @@
 			// 	i_harga.value = formatRupiah(this.value, 'Rp');
 			// });
 			$("#i_harga").maskMoney({thousands:'.', precision: 0, decimal:','});
+
+			$( "#i_expired" ).datepicker({
+				format: 'dd/mm/yyyy'
+			});
 
 			if ($('#current_img').val() != "") {
 
