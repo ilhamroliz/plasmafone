@@ -127,6 +127,11 @@
 								<!-- widget body text-->
 								
 								<div class="tab-content padding-10">
+								<div class="form-group col-md-6">
+                                            <select class="form-control col-md-12" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
+                                                <option selected="" value="00">----pilih semua Supplier----</option>
+                                            </select>
+                                        </div>
 
 									<div class="tab-pane fade in active" id="hr1">
 										
@@ -139,6 +144,7 @@
                                                     <th data-hide="phone,tablet">Nama Outlet</th>
                                                     <th data-hide="phone,tablet">Nama Barang</th>
                                                     <th data-hide="phone,tablet">Qty</th>
+													<th data-hide="phone,tablet">Qty App</th>
                                                     <th data-hide="phone,tablet">Aksi</th>
 
 												</tr>
@@ -391,92 +397,85 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-
-			load_table();
-            // var responsiveHelper_dt_basic = undefined;
-            // var responsiveHelper_datatable_fixed_column = undefined;
-            // var responsiveHelper_datatable_col_reorder = undefined;
-            // var responsiveHelper_datatable_tabletools = undefined;
-
-            // var breakpointDefinition = {
-            //     tablet : 1024,
-            //     phone : 480
-            // };
-
-            // setTimeout(function () {
-
-            // tambahRencana = $('#dt_tambah').dataTable({
-            //     "processing": true,
-            //     "serverSide": true,
-            //     "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
-            //     "fnCreatedRow": function (row, data, index) {
-            //         $('td', row).eq(0).html(index + 1);
-            //         },
-            //     "columns":[
-            //         {"data": "pr_id"},
-            //         {"data": "c_name"},
-            //         {"data": "i_nama"},
-            //         {"data": "pr_qtyReq"},
-            //         {"data": "aksi"}
-            //     ],
-            //     "autoWidth" : true,
-            //     "language" : dataTableLanguage,
-            //     "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-            //     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            //     "preDrawCallback" : function() {
-            //         // Initialize the responsive datatables helper once.
-            //         if (!responsiveHelper_dt_basic) {
-            //             responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
-            //         }
-            //     },
-            //     "rowCallback" : function(nRow) {
-            //         responsiveHelper_dt_basic.createExpandIcon(nRow);
-            //     },
-            //     "drawCallback" : function(oSettings) {
-            //         responsiveHelper_dt_basic.respond();
-            //     }
-            // });
-            //  $('#overlay').fadeOut(200);
-            // }, 1000);
+			load_table_registrasi_new();
+			getMember();
             
         });
 
 		function simpanRencana()
 		{
 			$.ajax({
-				url : '{{url('/pembelian/rencana-pembelian/')}}',
+				url : '{{url('/pembelian/rencana-pembelian/getRequest_dumy')}}',
                 type: "GET",
                 data: { 
-					id : id,
+					comp : $('#dt_supplier').val(),
                 },
                 dataType: "JSON",
 				success: function(data)
                 {
-					hasil = data.status;
+					$.smallBox({
+							title : "Berhasil",
+							content : 'Data telah ditambahkan...!',
+							color : "#739E73",
+							timeout: 4000,
+							icon : "fa fa-check bounce animated"
+							});
+							$('#dt_tambah').DataTable().ajax.reload();
+					// hasil = data.status;
 
-					if(hasil =="gagal"){
-						$.smallBox({
-						title : "Berhasil",
-						content : 'Data gagal direload...!',
-						color : "#739E73",
-						timeout: 4000,
-						icon : "fa fa-check bounce animated"
-						});
-						$('#dt_tambah').DataTable().ajax.reload();
-						$('#myModal').modal('hide');
-					}else{
-						$.smallBox({
-						title : "Berhasil",
-						content : 'Data telah ditambahkan...!',
-						color : "#739E73",
-						timeout: 4000,
-						icon : "fa fa-check bounce animated"
-						});
-						$('#dt_tambah').DataTable().ajax.reload();
-						$('#myModal').modal('hide');
-					}
+					// if(hasil =="gagal"){
+					// 	$.smallBox({
+					// 	title : "Berhasil",
+					// 	content : 'Data gagal direload...!',
+					// 	color : "#739E73",
+					// 	timeout: 4000,
+					// 	icon : "fa fa-check bounce animated"
+					// 	});
+					// 	$('#dt_tambah').DataTable().ajax.reload();
+					// 	$('#myModal').modal('hide');
+					// }else{
+					// 	$.smallBox({
+					// 	title : "Berhasil",
+					// 	content : 'Data telah ditambahkan...!',
+					// 	color : "#739E73",
+					// 	timeout: 4000,
+					// 	icon : "fa fa-check bounce animated"
+					// 	});
+					// 	$('#dt_tambah').DataTable().ajax.reload();
+					// 	$('#myModal').modal('hide');
+					// }
 				}
 			});
+		}
+
+		
+
+		function apply(id){
+			var input = $('#i_nama'+id).val();
+			$.ajax({
+						url : '{{url('/pembelian/rencana-pembelian/editDumy')}}',
+						type: "GET",
+						data: { 
+							'id' : id,
+							'qty' : input,
+
+						},
+						dataType: "JSON",
+						success: function(data)
+						{
+							$.smallBox({
+							title : "Berhasil",
+							content : 'Data telah ditambahkan...!',
+							color : "#739E73",
+							timeout: 4000,
+							icon : "fa fa-check bounce animated"
+							});
+							$('#dt_tambah').DataTable().ajax.reload();
+							
+						},
+						
+				}); 
+		
 		}
 
         function edit(id){
@@ -631,60 +630,78 @@
             $('#myModal').modal('hide');
         }
 
-		function load_table()
-		{
-			var tambahRencana;
-			var responsiveHelper_dt_basic = undefined;
-            var responsiveHelper_datatable_fixed_column = undefined;
-            var responsiveHelper_datatable_col_reorder = undefined;
-            var responsiveHelper_datatable_tabletools = undefined;
+	function load_table_registrasi_new(){
+      // table_registrasi.ajax.reload(null, false);
+	  tambahRencana= $('#dt_tambah').DataTable({
 
-            var breakpointDefinition = {
-                tablet : 1024,
-                phone : 480
-            };
-
-            setTimeout(function () {
-
-            tambahRencana = $('#dt_tambah').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
-                "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
+          "ajax": {
+                    "url": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
+                    "type": "GET",  
+                    "data": function ( data ) {
+                        data.comp = $('#dt_supplier').val();
                     },
-                "columns":[
-                    {"data": "pr_id"},
-                    {"data": "c_name"},
-                    {"data": "i_nama"},
-                    {"data": "pr_qtyReq"},
-                    {"data": "aksi"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
-                    }
                 },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-             $('#overlay').fadeOut(200);
-            }, 1000);
-		}
+        } );
+    }
+
+		// function load_table()
+		// {
+		// 	var tambahRencana;
+		// 	var responsiveHelper_dt_basic = undefined;
+        //     var responsiveHelper_datatable_fixed_column = undefined;
+        //     var responsiveHelper_datatable_col_reorder = undefined;
+        //     var responsiveHelper_datatable_tabletools = undefined;
+
+        //     var breakpointDefinition = {
+        //         tablet : 1024,
+        //         phone : 480
+        //     };
+
+        //     setTimeout(function () {
+
+        //     tambahRencana = $('#dt_tambah').dataTable({
+        //         "processing": true,
+        //         "serverSide": true,
+		// 		// "data" : {
+		// 		// 	"comp" : $('#dt_supplier').val(),
+		// 		// },
+        //         "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
+        //         "fnCreatedRow": function (row, data, index) {
+        //             $('td', row).eq(0).html(index + 1);
+        //             },
+        //         "columns":[
+        //             {"data": "pr_id"},
+        //             {"data": "c_name"},
+        //             {"data": "i_nama"},
+        //             {"data": "pr_qtyReq"},
+		// 			{"data": "input"},
+        //             {"data": "aksi"}
+        //         ],
+        //         "autoWidth" : true,
+        //         "language" : dataTableLanguage,
+        //         "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+        //         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+        //         "preDrawCallback" : function() {
+        //             // Initialize the responsive datatables helper once.
+        //             if (!responsiveHelper_dt_basic) {
+        //                 responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
+        //             }
+        //         },
+        //         "rowCallback" : function(nRow) {
+        //             responsiveHelper_dt_basic.createExpandIcon(nRow);
+        //         },
+        //         "drawCallback" : function(oSettings) {
+        //             responsiveHelper_dt_basic.respond();
+        //         }
+        //     });
+        //      $('#overlay').fadeOut(200);
+        //     }, 1000);
+		// }
 
 		function reload_table(){
 			tambahRencana.ajax.reload(null, false);
 	// $('#dt_tambah').dataTable().ajax.reload();
-    }
+   		 }
 
 
         function tambah(){
@@ -742,6 +759,27 @@
                 
             });  
         }
+
+		function getMember(){
+			$.ajax({
+				url : '{{url('/pembelian/rencana-pembelian/getComp_plan')}}',
+				type: "GET",
+				data: { 
+				},
+				dataType: "JSON",
+				success: function(data)
+				{
+				$('#dt_supplier').empty(); 
+				row = "<option selected='' value='00'>Pilih Member</option>";
+				$(row).appendTo("#dt_supplier");
+				$.each(data, function(k, v) {
+					row = "<option value='"+v.pr_compReq+"'>"+v.m_name+"</option>";
+					$(row).appendTo("#dt_supplier");
+				});
+				},
+				
+			});  
+		}
 
         function tolak(id){
             $.ajax({

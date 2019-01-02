@@ -383,7 +383,7 @@
                     },
                 "columns":[
                     {"data": "pr_idPlan"},
-                    {"data": "s_company"},
+                    {"data": "c_name"},
                     {"data": "i_nama"},
                     {"data": "pr_qtyApp"},
                     {"data": "aksi"}

@@ -368,6 +368,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/rencana-pembelian/tolakRequest', 'PembelianController@tolakRequest');
 	Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 
+	Route::get('/pembelian/rencana-pembelian/getRequest_dumy', 'PembelianController@getRequest_dumy');
+	Route::get('/pembelian/rencana-pembelian/editDumy', 'PembelianController@editDumy');
+	Route::get('/pembelian/rencana-pembelian/getComp_plan', 'PembelianController@getComp_plan');
+
 
 
 
