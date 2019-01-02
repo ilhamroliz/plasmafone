@@ -94,6 +94,13 @@
                                                 <option selected="" value="00">----pilih semua Supplier----</option>
                                             </select>
                                         </div>
+										<div class="col-md-4">
+											<div class="input-group" id="date-range" style="">
+												<input type="text" class="form-control datepicker" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+												<span class="input-group-addon bg-custom text-white b-0">to</span>
+												<input type="text" class="form-control datepicker" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+											</div>
+										</div>
                                         <!-- <div class="form-group col-md-6">
                                             <select class="form-control col-md-12" name="" id="dt_outlet" style="padding-right:50%" onchange="reload_table()">
                                                 <option selected="" value="00">----pilih semua Outlet----</option>

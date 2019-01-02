@@ -3,10 +3,10 @@
 @section('title', 'Request Order')
 
 @section('extra_style')
-<script src="{{ asset('template_asset/jquery/b.min.js') }}"></script>
+<!-- <script src="{{ asset('template_asset/jquery/b.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('template_asset/jquery/b.min.js') }}" />
 <script src="{{ asset('template_asset/jquery/j.js') }}"></script>
-<script src="{{ asset('template_asset/sweetalert2/sweetalert2.min.css') }}"></script>
+<script src="{{ asset('template_asset/sweetalert2/sweetalert2.min.css') }}"></script> -->
 
     <style type="text/css">
         
@@ -88,7 +88,7 @@
 
                         <!-- widget content -->
                         <div class="widget-body">
-                            <form id="checkout-form" class="form-inline" role="form">
+                            <form id="checkout-form" class="form-inline" >
                                 <fieldset class="row">
 								
 									<div class="form-group col-md-8">
@@ -96,7 +96,6 @@
 										<input type="hidden" id="tpMemberId" name="tpMemberId">
 										<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Item">
                                         <!-- <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%"> -->
-										
 										<div id="list_barang">
 											
 											</div>
@@ -172,13 +171,14 @@
         $(document).ready(function () {
 
 			$( "#tpMemberNama" ).autocomplete({
-			source: baseUrl+'/pembelian/request-pembelian/cariItem',
+				source: baseUrl+'/pembelian/request-pembelian/cariItem',
 				minLength: 2,
 				select: function(event, data) {
 					$('#tpMemberId').val(data.item.id);
 					$('#tpMemberNama').val(data.item.label);
 				}
 			});
+
 		reload_data();
 		})
 
@@ -198,7 +198,7 @@
 				},
 				
 			}); 
-			alert(); 
+			 
 		}
 
 	function reload_data(){
@@ -220,7 +220,6 @@
 
 		function getItem(){
 			$('#item_kelompok').empty();  
-		
 			$.ajax({
 						url : '{{url('/pembelian/request-pembelian/getBarang')}}',
 						type: "GET",
@@ -334,174 +333,174 @@
 
 <script type="text/javascript">
 
-var baseUrl = '{{ url('/') }}';
+// var baseUrl = '{{ url('/') }}';
 
-function validation_regis()
-{
-	$('#data-form').bootstrapValidator({
-		feedbackIcons : {
-			valid : 'glyphicon glyphicon-ok',
-			invalid : 'glyphicon glyphicon-remove',
-			validating : 'glyphicon glyphicon-refresh'
-		},
-		fields : {
+// function validation_regis()
+// {
+// 	$('#data-form').bootstrapValidator({
+// 		feedbackIcons : {
+// 			valid : 'glyphicon glyphicon-ok',
+// 			invalid : 'glyphicon glyphicon-remove',
+// 			validating : 'glyphicon glyphicon-refresh'
+// 		},
+// 		fields : {
 
-			i_kelompok : {
-				validators : {
-					notEmpty : {
-						message : 'Kelompok Barang Tidak Boleh Kosong',
-					}
-				}
-			},
+// 			i_kelompok : {
+// 				validators : {
+// 					notEmpty : {
+// 						message : 'Kelompok Barang Tidak Boleh Kosong',
+// 					}
+// 				}
+// 			},
 
 			
-			i_berat : {
-				validators : {
-					notEmpty : {
-						message : 'Berat Barang Tidak Boleh Kosong',
-					},
+// 			i_berat : {
+// 				validators : {
+// 					notEmpty : {
+// 						message : 'Berat Barang Tidak Boleh Kosong',
+// 					},
 
-					numeric: {
-						message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Barang Anda'
-					}
-				}
-			},
+// 					numeric: {
+// 						message : 'Tampaknya Ada Yang Salah Dengan Inputan Berat Barang Anda'
+// 					}
+// 				}
+// 			},
 
-		}
-	});
+// 		}
+// 	});
 
-}
+// }
 
-Vue.component('kelompok', {
-	props: ['options'],
-	template: '#select2-template-kelompok',
-	mounted: function () {
-		var vm = this
-		$(this.$el).select2().on('change', function () {
-				vm.$emit('change', this.value)
-		})
-	},
-	watch: {
-		value: function (value) {
-			// update value
-			$(this.$el).val(value);
-		},
-		options: function (options) {
-			// update options
-			// $(this.$el).empty().select2()
-		}
-	},
-	destroyed: function () {
-		$(this.$el).off().select2('destroy')
-	}
-})
-
-
-
-Vue.component('group', {
-	props: ['options'],
-	template: '#select2-template-group',
-	mounted: function () {
-		var vm = this
-		$(this.$el).select2().on('change', function () {
-				vm.$emit('change', this.value)
-		})
-	},
-	watch: {
-		value: function (value) {
-			// update value
-			$(this.$el).val(value);
-		},
-		options: function (options) {
-			// update options
-			// $(this.$el).empty().select2()
-		}
-	},
-	destroyed: function () {
-		$(this.$el).off().select2('destroy')
-	}
-})
+// Vue.component('kelompok', {
+// 	props: ['options'],
+// 	template: '#select2-template-kelompok',
+// 	mounted: function () {
+// 		var vm = this
+// 		$(this.$el).select2().on('change', function () {
+// 				vm.$emit('change', this.value)
+// 		})
+// 	},
+// 	watch: {
+// 		value: function (value) {
+// 			// update value
+// 			$(this.$el).val(value);
+// 		},
+// 		options: function (options) {
+// 			// update options
+// 			// $(this.$el).empty().select2()
+// 		}
+// 	},
+// 	destroyed: function () {
+// 		$(this.$el).off().select2('destroy')
+// 	}
+// })
 
 
 
+// Vue.component('group', {
+// 	props: ['options'],
+// 	template: '#select2-template-group',
+// 	mounted: function () {
+// 		var vm = this
+// 		$(this.$el).select2().on('change', function () {
+// 				vm.$emit('change', this.value)
+// 		})
+// 	},
+// 	watch: {
+// 		value: function (value) {
+// 			// update value
+// 			$(this.$el).val(value);
+// 		},
+// 		options: function (options) {
+// 			// update options
+// 			// $(this.$el).empty().select2()
+// 		}
+// 	},
+// 	destroyed: function () {
+// 		$(this.$el).off().select2('destroy')
+// 	}
+// })
 
-var app = new Vue({
-	el 		: '#content',
-	data 	: {
-		kelompok : 'select',
-		group : 'select',
-		sub_group : 'select',
-		merk : 'select',
-		btn_save_disabled 	: false,
 
-		data_I_kelompok: [],
-		data_I_group: [],
-		data_I_sub_group: [],
-		data_I_merk: [],
 
-		form_data : {
-			i_kelompok: '',
-			i_group: '',
-			i_sub_group: '',
-			i_merk: '',
-			i_nama: '',
-			i_code: '',
-			i_img: '',
-			i_minstock: '',
-			i_berat: '',
-			i_specificcode: 'Y',
-			i_isactive: 'Y'
+
+// var app = new Vue({
+// 	el 		: '#content',
+// 	data 	: {
+// 		kelompok : 'select',
+// 		group : 'select',
+// 		sub_group : 'select',
+// 		merk : 'select',
+// 		btn_save_disabled 	: false,
+
+// 		data_I_kelompok: [],
+// 		data_I_group: [],
+// 		data_I_sub_group: [],
+// 		data_I_merk: [],
+
+// 		form_data : {
+// 			i_kelompok: '',
+// 			i_group: '',
+// 			i_sub_group: '',
+// 			i_merk: '',
+// 			i_nama: '',
+// 			i_code: '',
+// 			i_img: '',
+// 			i_minstock: '',
+// 			i_berat: '',
+// 			i_specificcode: 'Y',
+// 			i_isactive: 'Y'
 			
-		}
+// 		}
 
-	},
+// 	},
 	
 
 	
-	methods: {
+// 	methods: {
 
-		switch_kelompok: function(){
-			if(this.kelompok == 'select'){
-				this.kelompok = 'input';
-				$('#select_kelompok').hide();
-				$("#input_kelompok").show();
-			}else{
-				this.kelompok = 'select';
-				this.form_data.i_kelompok = '';
-				$('#data-form').data('bootstrapValidator').resetForm();
-				$('#input_kelompok').hide();
-				$("#select_kelompok").show();
-			}
-		},
+// 		switch_kelompok: function(){
+// 			if(this.kelompok == 'select'){
+// 				this.kelompok = 'input';
+// 				$('#select_kelompok').hide();
+// 				$("#input_kelompok").show();
+// 			}else{
+// 				this.kelompok = 'select';
+// 				this.form_data.i_kelompok = '';
+// 				$('#data-form').data('bootstrapValidator').resetForm();
+// 				$('#input_kelompok').hide();
+// 				$("#select_kelompok").show();
+// 			}
+// 		},
 
-		switch_group: function(){
-			if(this.group == 'select'){
-				this.group = 'input';
-				$('#select_group').hide();
-				$("#input_group").show();
-			}else{
-				this.group = 'select';
-				this.form_data.i_group = '';
-				$('#data-form').data('bootstrapValidator').resetForm();
-				$('#input_group').hide();
-				$("#select_group").show();
-			}
-		},
+// 		switch_group: function(){
+// 			if(this.group == 'select'){
+// 				this.group = 'input';
+// 				$('#select_group').hide();
+// 				$("#input_group").show();
+// 			}else{
+// 				this.group = 'select';
+// 				this.form_data.i_group = '';
+// 				$('#data-form').data('bootstrapValidator').resetForm();
+// 				$('#input_group').hide();
+// 				$("#select_group").show();
+// 			}
+// 		},
 
 	
 
-		i_kelompok_change: function(v){
-			this.form_data.i_kelompok = v;
-		},
+// 		i_kelompok_change: function(v){
+// 			this.form_data.i_kelompok = v;
+// 		},
 
-		i_group_change: function(v){
-			this.form_data.i_group = v;
-		},
+// 		i_group_change: function(v){
+// 			this.form_data.i_group = v;
+// 		},
 
 		
 
-	}
-});
+// 	}
+// });
 
 </script>
 
