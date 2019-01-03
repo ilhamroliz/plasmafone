@@ -303,7 +303,7 @@
 				yearDefault: '= Tahun =',
 
 				// Minimum age
-				minimumAge: 10,
+				minimumAge: 5,
 
 				// Maximum age
 				maximumAge: 80

@@ -44,22 +44,22 @@ class member_controller extends Controller
             })
             ->addColumn('aksi', function ($all) {
 
-              $checkindent = DB::table('d_indent')
-                                ->where('i_member', $all->m_id)
-                                ->count();
+                $checkindent = DB::table('d_indent')
+                    ->where('i_member', $all->m_id)
+                    ->count();
 
-              $checksales = DB::table('d_sales')
-                                ->where('s_member', $all->m_id)
-                                ->count();
+                $checksales = DB::table('d_sales')
+                    ->where('s_member', $all->m_id)
+                    ->count();
 
                 $nonactive = '';
                 if ($checkindent != 0 || $checksales != 0) {
-                  $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
+                    $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
                 }
 
                 if ($all->m_status == "AKTIF") {
                     if (Plasma::checkAkses(47, 'update') == true) {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;'.$nonactive.'</div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" onClick="edit(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;' . $nonactive . '</div>';
                     } else {
                         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle edit" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($all->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     }
@@ -81,22 +81,22 @@ class member_controller extends Controller
 
         return DataTables::of($active)
             ->addColumn('aksi', function ($active) {
-              $checkindent = DB::table('d_indent')
-                                ->where('i_member', $active->m_id)
-                                ->count();
+                $checkindent = DB::table('d_indent')
+                    ->where('i_member', $active->m_id)
+                    ->count();
 
-              $checksales = DB::table('d_sales')
-                                ->where('s_member', $active->m_id)
-                                ->count();
+                $checksales = DB::table('d_sales')
+                    ->where('s_member', $active->m_id)
+                    ->count();
 
                 $nonactive = '';
                 if ($checkindent != 0 || $checksales != 0) {
-                  $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_nik) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
+                    $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_nik) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
                 }
                 if (Plasma::checkAkses(47, 'update') == false) {
                     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;'.$nonactive.'</div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($active->m_nik) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;' . $nonactive . '</div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -108,7 +108,6 @@ class member_controller extends Controller
         $nonactive = member::where('m_status', 'NONAKTIF')->orderBy('m_insert', 'desc');
 
         return DataTables::of($nonactive)
-
             ->addColumn('aksi', function ($nonactive) {
 
                 if (Plasma::checkAkses(47, 'update') == true) {
@@ -153,7 +152,8 @@ class member_controller extends Controller
     {
 
         $provinsi = DB::table('m_wil_provinsi')
-                      ->get();
+            ->orderBy('wp_name')
+            ->get();
 
         if (Plasma::checkAkses(47, 'insert') == false) {
             return view('errors/407');
@@ -201,13 +201,12 @@ class member_controller extends Controller
                                 $querykode = DB::select(DB::raw("SELECT MAX(RIGHT(m_idmember,7)) as counter FROM m_member"));
 
                                 if (count($querykode) > 0) {
-                                    foreach($querykode as $k)
-                                      {
-                                        $tmp = ((int)$k->counter)+1;
+                                    foreach ($querykode as $k) {
+                                        $tmp = ((int)$k->counter) + 1;
                                         $kode = sprintf("%06s", $tmp);
-                                      }
+                                    }
                                 } else {
-                                  $kode = "000001";
+                                    $kode = "000001";
                                 }
 
 
@@ -215,9 +214,9 @@ class member_controller extends Controller
 
 
                                 if ($data['checklist'] != "") {
-                                  $member = $finalkode;
+                                    $member = $finalkode;
                                 } else {
-                                  $member = $data['idmember'];
+                                    $member = $data['idmember'];
                                 }
 
                                 if ($data['email'] == "") {
@@ -407,20 +406,24 @@ class member_controller extends Controller
                 if ($check > 0) {
 
                     $member = member::where('m_nik', $id)->get();
-                    $provinsi = DB::table('m_wil_provinsi')                                  
-                                  ->get();
+                    $provinsi = DB::table('m_wil_provinsi')
+                        ->orderBy('wp_name')
+                        ->get();
 
-                      $desa = DB::table('m_wil_desa')
-                                    ->where('wd_id', $member[0]->m_desa)
-                                    ->get();
+                    $desa = DB::table('m_wil_desa')
+                        ->where('wd_kecamatan', $member[0]->m_kecamatan)
+                        ->orderBy('wd_name')
+                        ->get();
 
-                        $kecamatan = DB::table('m_wil_kecamatan')
-                                      ->where('wk_id', $member[0]->m_kecamatan)
-                                      ->get();
+                    $kecamatan = DB::table('m_wil_kecamatan')
+                        ->where('wk_kota', $member[0]->m_kota)
+                        ->orderBy('wk_name')
+                        ->get();
 
-                          $kota = DB::table('m_wil_kota')
-                                        ->where('wc_id', $member[0]->m_kota)
-                                        ->get();
+                    $kota = DB::table('m_wil_kota')
+                        ->where('wc_provinsi', $member[0]->m_provinsi)
+                        ->orderBy('wc_name')
+                        ->get();
 
                     $date = member::where('m_nik', $id)->select('m_birth')->first();
                     $tgl = [];
@@ -583,27 +586,33 @@ class member_controller extends Controller
         }
     }
 
-    public function getkota(Request $request){
-      $kota = DB::table('m_wil_kota')
-                ->where('wc_provinsi', $request->provinsi)
-                ->get();
+    public function getkota(Request $request)
+    {
+        $kota = DB::table('m_wil_kota')
+            ->where('wc_provinsi', $request->provinsi)
+            ->orderBy('wc_name')
+            ->get();
 
-      return response()->json($kota);
+        return response()->json($kota);
     }
 
-    public function getkecamatan(Request $request){
-      $kecamatan = DB::table('m_wil_kecamatan')
-                ->where('wk_kota', $request->kota)
-                ->get();
+    public function getkecamatan(Request $request)
+    {
+        $kecamatan = DB::table('m_wil_kecamatan')
+            ->where('wk_kota', $request->kota)
+            ->orderBy('wk_name')
+            ->get();
 
-      return response()->json($kecamatan);
+        return response()->json($kecamatan);
     }
 
-    public function getdesa(Request $request){
-      $desa = DB::table('m_wil_desa')
-                ->where('wd_kecamatan', $request->kecamatan)
-                ->get();
+    public function getdesa(Request $request)
+    {
+        $desa = DB::table('m_wil_desa')
+            ->where('wd_kecamatan', $request->kecamatan)
+            ->orderBy('wd_name')
+            ->get();
 
-      return response()->json($desa);
+        return response()->json($desa);
     }
 }
