@@ -341,14 +341,15 @@ class setHargaController extends Controller
 
                     $getNama = DB::table('m_group')->select('g_name')->where('g_id', $id)->first();
                     $oldName = $getNama->g_name;
+                    $newName = strtoupper($request->egNama);
 
                     DB::table('m_group')->where('g_id', $id)->update([
-                        'g_name' => strtoupper($request->egNama)
+                        'g_name' => $newName
                     ]);
 
                     DB::commit();
 
-                    $log = 'Mengubah Nama Group dari ' . $oldName . ' menjadi ' . $request->egNama;
+                    $log = 'Mengubah Nama Group dari ' . $oldName . ' menjadi ' . $newName;
 
                     Plasma::logActivity($log);
 
@@ -411,7 +412,6 @@ class setHargaController extends Controller
                         'msg' => $e
                     ]);
                 }
-
             }
 
             $dataEdit = DB::table('m_group_price')

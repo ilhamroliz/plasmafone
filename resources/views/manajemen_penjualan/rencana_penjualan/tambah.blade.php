@@ -75,35 +75,40 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                         <!-- widget content -->
                         <div class="widget-body">
-                            <form id="tpForm" class="form-inline" role="form">
+                            <form id="trpForm" class="form-inline" role="form">
                                 {{csrf_field()}}
                                 <fieldset>
 									<div class="row">
 										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
 											<div class="form-group col-md-12">
-                                                <div class="col-md-3 inputGroupContainer">
+                                                <div class="col-md-7 inputGroupContainer">
                                                     <div class="input-group" style="width: 100%">
-                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-building"></i></span>
-													    <input type="text" class="form-control" id="trpCompNama" name="trpCompNama" style="width: 100%" placeholder="Masukkan Nama Cabang">												
+														<span class="input-group-addon" style="width: 40px"><i class="fa fa-building"></i></span>
+														<input type="hidden" id="trpCompId" name="trpCompId">
+													    <input type="text" class="form-control" id="trpCompNama" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase"/>												
                                                     </div>													
 												</div>
                                                 
-												<div class="col-md-5 inputGroupContainer">
+											</div>
+
+											<div class="form-group col-md-12 padding-top-10">
+												<div class="col-md-7 inputGroupContainer">
                                                     <div class="input-group" style="width: 100%">
-                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-barcode"></i></span>                                                        
-													    <input type="text" class="form-control" id="trpItemNama" name="trpItemNama" placeholder="Masukkan Nama/Kode Barang">
+														<span class="input-group-addon" style="width: 40px"><i class="fa fa-barcode"></i></span>
+														<input type="hidden" id="trpItemId">														                                                        
+													    <input type="text" class="form-control" id="trpItemNama" placeholder="Masukkan Nama/Kode Barang" style="text-transform: uppercase"/>
                                                     </div>                                                    
 												</div>
 												
-												<div class="col-md-2 inputGroupContainer">
+												<div class="col-md-3 inputGroupContainer">
                                                     <div class="input-group" style="width: 100%">
                                                         <span class="input-group-addon" style="width: 40px"><i class="fa fa-sort-numeric-desc"></i></span>                                                        
-													    <input type="text" class="form-control" id="trpQty" name="trpQty" placeholder="Qty">
+													    <input type="text" class="form-control" id="trpQty" placeholder="Qty">
                                                     </div>                                                    
 												</div>
 
 												<div class="col-md-2">
-													<button class="btn btn-success" style="width: 100%" onclick="tambah_row()"><i class="fa fa-plus"></i>Tambah</button>
+													<a class="btn btn-success" style="width: 100%" onclick="tambah_row()"><i class="fa fa-plus"></i>Tambah</a>
 												</div>
 											</div>
 										</div>
@@ -125,13 +130,25 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </tbody>
                                         </table>
 									
-                                    </div>
+									</div>
+									
+									<div class="col-md-12 no-padding">
+										<div class="col-md-2">
+											<label><b>KETERANGAN :</b></label>
+										</div>
+
+										<div class="col-md-10 inputGroupContainer">
+											<div class="input-group" style="width: 100%">
+												<textarea class="form-control" name="trpKet" id="trpKet" rows="2"></textarea>
+											</div>
+										</div>
+									</div>
                                 </fieldset>
 
 								<div class="form-actions">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <a class="btn btn-block btn-primary text-center" onclick="simpan_pemesanan()">Masukkan Pemesanan Barang</a>
+                                            <a class="btn btn-block btn-primary text-center" onclick="simpan_trp()">Simpan Rencana Penjualan</a>
                                         </div>
                                     </div>
                                 </div>
@@ -151,19 +168,21 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 @section('extra_script')
 	<script type="text/javascript">
-		$(document).ready(function(){
-			var table = $('#trpTable').DataTable({
+
+		var table = $('#trpTable').DataTable({
 				"paging": false,
 				"info": false,
 				"searching": false
 			});
 
+		$(document).ready(function(){
+			
 			$( "#trpCompNama" ).autocomplete({
 				source: baseUrl+'/man-penjualan/rencana-penjualan/auto-comp',
 				minLength: 2,
 				select: function(event, data) {
-					$('#tpCompId').val(data.item.id);
-					$('#tpCompNama').val(data.item.label);
+					$('#trpCompId').val(data.item.id);
+					$('#trpCompNama').val(data.item.label);
 				}
 			});
 
@@ -187,12 +206,43 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			table.row.add([
 				compName+'<input type="hidden" name="idComp[]" class="idComp" value="'+compId+'">',
 				itemName+'<input type="hidden" name="idItem[]" class="idItem" value="'+itemId+'">',
-				qty+'<input type="text" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="'+qty+'">',
+				'<input type="text" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="'+qty+'">',
 				'<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
 			]).draw(false);
 
 			$('#trpItemNama').val('');
-			$('#trpItemNama').val('');
+			$('#trpQty').val('');
+		}
+
+		function simpan_trp(){
+			axios.post(baseUrl+'/man-penjualan/rencana-penjualan/add', $('#trpForm').serialize()).then((response) => {
+
+				if(response.data.status == 'trpSukses'){
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Berhasil",
+						content : 'Data Rencana Penjualan Berhasil Disimpan...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+					});
+					// window.open(" {{ url('/penjualan/pemesanan-barang/print?id=') }} "+ response.nota);
+					location.reload();
+
+				}else{
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Maaf, Data Rencana Penjualan Gagal Disimpan ",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				}
+			})
 		}
 	</script>
 @endsection
