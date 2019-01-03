@@ -121,42 +121,13 @@
 							</tr>
 						</thead>
 						<tbody>
-							<?php 
+							 <?php 
 							function rupiah($angka){
 								$hasil_rupiah = "Rp" . number_format($angka,2,',','.');
 								return $hasil_rupiah;
 							}
 							?>
-							@foreach($data_return as $key => $return)
-							<tr>
-								<td class="text-center">{{ $key+1 }}</td>
-								<td class="text-center">
-									<input type="checkbox" class="check-me" name="data_check[]" data-id="{{$return->pr_id}}" value="{{ $return->pr_id }}"/>
-								</td>
-								<td>{{ $return->pr_po_id }}</td>
-								<td>{{ $return->pr_code }}</td>
-								<td>
-									@if($return->pr_methode_return == 'GB')
-									Ganti Barang Baru
-									@elseif($return->pr_methode_return == 'PT')
-									Potong Tagihan
-									@elseif($return->pr_methode_return == 'GU')
-									Ganti Uang
-									@elseif($return->pr_methode_return == 'PN')
-									Potong Nota
-									@endif
-								</td>
-								<td>{{ $return->prd_kode_barang }}</td>
-								<td><center>{{ $return->prd_qty }}</center></td>
-								<td><center>{{ rupiah($return->prd_unit_price) }}</center></td>
-								<td><center>{{ rupiah($return->prd_total_price) }}</center></td>
-								<td class="text-center">
-									<button type="button" class="btn btn-xs btn-success btn-circle view" data-toggle="tooltip" data-placement="top" title="View Data" data-id="{{ $return->pr_id }}"><i class="glyphicon glyphicon-folder-open"></i></button>
-									<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $return->pr_id }}"><i class="glyphicon glyphicon-edit"></i></button>
-									<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $return->pr_id }}"><i class="glyphicon glyphicon-trash"></i></button>
-								</td>
-							</tr>
-							@endforeach
+							
 						</tbody>
 					</table>
 				</form>

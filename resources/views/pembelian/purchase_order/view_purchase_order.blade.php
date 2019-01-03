@@ -95,12 +95,17 @@
                                 <li class="active">
                                     <a data-toggle="tab" href="#hr1"> <i style="color: #739E73;"
                                                                          class="fa fa-lg fa-rotate-right fa-spin"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Belum Order </span> </a>
+                                            class="hidden-mobile hidden-tablet"> Purchasing </span> </a>
                                 </li>
                                 <li>
                                     <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
                                                                          class="fa fa-lg fa-check"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Sudah Order </span></a>
+                                            class="hidden-mobile hidden-tablet"> Complete </span></a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#hr3"> <i style="color: #C79121;"
+                                                                         class="fa fa-lg fa-check"></i> <span
+                                            class="hidden-mobile hidden-tablet"> Semua </span></a>
                                 </li>
                                 
                             </ul>
@@ -111,17 +116,18 @@
                             <div class="widget-body no-padding">
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
-                                    <div class="tab-pane fade in active" id="table-waiting">
-                                        <table id="dt_active" class="table table-striped table-bordered table-hover"
+                                    <div class="tab-pane fade in active" id="hr1">
+                                        <table id="dt_purchase" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>
                                                 <th data-hide="phone,tablet" width="15%">No</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Harga</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <th width="30%">No Po</th>
+                                                <th data-hide="phone,tablet" width="15%">Tanggal</th>
+                                                <th data-hide="phone,tablet" width="15%">Supplier</th>
+                                                <th data-hide="phone,tablet" width="15%">total gross</th>
+                                                <th data-hide="phone,tablet" width="15%">total Value</th>
+                                                <th data-hide="phone,tablet" width="15%">total %</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -129,17 +135,38 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane fade" id="hr2">
+                                        <table id="dt_complete" class="table table-striped table-bordered table-hover"
+                                               width="100%">
+                                            <thead>
+                                            <tr>
+                                                
+                                                <th data-hide="phone,tablet" width="15%">No</th>
+                                                <th width="30%">No Po</th>
+                                                <th data-hide="phone,tablet" width="15%">Tanggal</th>
+                                                <th data-hide="phone,tablet" width="15%">Supplier</th>
+                                                <th data-hide="phone,tablet" width="15%">total gross</th>
+                                                <th data-hide="phone,tablet" width="15%">total Value</th>
+                                                <th data-hide="phone,tablet" width="15%">total %</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="hr3">
                                         <table id="dt_all" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>
                                                 
                                                 <th data-hide="phone,tablet" width="15%">No</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Harga</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <th width="30%">No Po</th>
+                                                <th data-hide="phone,tablet" width="15%">Tanggal</th>
+                                                <th data-hide="phone,tablet" width="15%">Supplier</th>
+                                                <th data-hide="phone,tablet" width="15%">total gross</th>
+                                                <th data-hide="phone,tablet" width="15%">total Value</th>
+                                                <th data-hide="phone,tablet" width="15%">total %</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -165,7 +192,7 @@
 
             <!-- row -->
             <div class="row">
-            </div>
+            </div> 
             <!-- end row -->
         </section>
         <!-- end widget grid -->
@@ -177,7 +204,142 @@
 @section('extra_script')
 
     <script type="text/javascript">
+    var semua,purchase,complete;
         $(document).ready(function () {
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Menyiapkan...');
+
+            // $('#tabs').tabs();
+
+            let selected = [];
+
+            /* BASIC ;*/
+            var responsiveHelper_dt_basic = undefined;
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
+
+            var breakpointDefinition = {
+                tablet : 1024,
+                phone : 480
+            };
+
+            setTimeout(function () {
+
+            semua = $('#dt_all').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/purchase-order/view_purchaseAll') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
+                "columns":[
+                    {"data": "p_id"},
+                    {"data": "p_purchaseNumber"},
+                    {"data": "p_date"},
+                    {"data": "p_supplier"},
+                    {"data": "p_total_gross"},
+                    {"data": "p_disc_value"},
+                    {"data": "p_disc_persen"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+             $('#overlay').fadeOut(200);
+            }, 1000);
+
+
+            setTimeout(function () {
+
+            purchase = $('#dt_purchase').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/purchase-order/purchasing') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
+                "columns":[
+                    {"data": "p_id"},
+                    {"data": "p_purchaseNumber"},
+                    {"data": "p_date"},
+                    {"data": "p_supplier"},
+                    {"data": "p_total_gross"},
+                    {"data": "p_disc_value"},
+                    {"data": "p_disc_persen"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_purchase'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+            $('#overlay').fadeOut(200);
+            }, 500);
+
+            setTimeout(function () {
+
+            complete = $('#dt_complete').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/purchase-order/purchaseComplete') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
+                "columns":[
+                    {"data": "p_id"},
+                    {"data": "p_purchaseNumber"},
+                    {"data": "p_date"},
+                    {"data": "p_supplier"},
+                    {"data": "p_total_gross"},
+                    {"data": "p_disc_value"},
+                    {"data": "p_disc_persen"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_complete'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+            $('#overlay').fadeOut(200);
+            }, 500);
+
+
 
         })
     </script>

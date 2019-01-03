@@ -109,6 +109,91 @@ class PengaturanController extends Controller
         return Response::json($data);
     }
 
+    public function hapus_log(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            if ($request->nama == "" && $request->tgl_awal != "" && $request->tgl_akhir != "") {
+                $request->tgl_awal = str_replace('/', '-', $request->tgl_awal);
+                $request->tgl_akhir = str_replace('/', '-', $request->tgl_akhir);
+
+                $start = Carbon::parse($request->tgl_awal)->startOfDay();  //2016-09-29 00:00:00.000000
+                $end = Carbon::parse($request->tgl_akhir)->endOfDay(); //2016-09-29 23:59:59.000000
+
+                $cek = DB::table('d_log_activity')
+                    ->where('la_date', '>=', $start)
+                    ->where('la_date', '<=', $end)
+                    ->get();
+
+                if (count($cek) == 0) {
+                    return response()->json([
+                        'status' => 'empty'
+                    ]);
+                } else {
+                    $data = DB::table('d_log_activity')
+                        ->where('la_date', '>=', $start)
+                        ->where('la_date', '<=', $end)
+                        ->delete();
+                }
+
+            } elseif ($request->nama != "" && $request->tgl_awal == "" && $request->tgl_akhir == "") {
+
+                $cek = DB::table('d_log_activity')
+                    ->where('la_mem', $request->nama)
+                    ->get();
+
+                if (count($cek) == 0) {
+                    return response()->json([
+                        'status' => 'empty'
+                    ]);
+                } else {
+                    $data = DB::table('d_log_activity')
+                        ->where('la_mem', $request->nama)
+                        ->delete();
+                }
+
+
+            } elseif ($request->nama != "" && $request->tgl_awal != "" && $request->tgl_akhir != "") {
+                $request->tgl_awal = str_replace('/', '-', $request->tgl_awal);
+                $request->tgl_akhir = str_replace('/', '-', $request->tgl_akhir);
+
+                $start = Carbon::parse($request->tgl_awal)->startOfDay();  //2016-09-29 00:00:00.000000
+                $end = Carbon::parse($request->tgl_akhir)->endOfDay(); //2016-09-29 23:59:59.000000
+
+                $cek = DB::table('d_log_activity')
+                    ->where('la_date', '>=', $start)
+                    ->where('la_date', '<=', $end)
+                    ->where('la_mem', $request->nama)
+                    ->get();
+
+                if (count($cek) == 0) {
+                    return response()->json([
+                        'status' => 'empty'
+                    ]);
+                } else {
+                    $data = DB::table('d_log_activity')
+                        ->where('la_date', '>=', $start)
+                        ->where('la_date', '<=', $end)
+                        ->where('la_mem', $request->nama)
+                        ->delete();
+                }
+
+            }
+
+            DB::commit();
+            Plasmafone::logActivity('Menghapus Log Kegiatan Tanggal ' . $request->tgl_awal . ' - ' . $request->tgl_akhir . '');
+            return response()->json([
+                'status' => 'hlSukses'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'hlGagal',
+                'msg' => $e
+            ]);
+        }
+    }
+
     public function dataUser()
     {
         $user = DB::table('d_mem')

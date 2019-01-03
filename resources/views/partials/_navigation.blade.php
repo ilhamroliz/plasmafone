@@ -169,13 +169,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					<li>
 						<a href="#">Setting Harga</a>
 						<ul>
-							@if($sidebar['Penerimaan Barang Supplier'] == 'Y')
-							<li class="{{ (Request::is('penjualan/set-harga/outlet/*') || Request::is('penjualan/set-harga/outlet')) ? 'active' : '' }}">
+							@if($sidebar['Setting Harga'] == 'Y')
+							<li class="{{ (Request::is('penjualan/set-harga/outlet')) ? 'active' : '' }}">
 								<a href="{{ url('/penjualan/set-harga/outlet') }}">Outlet</a>
 							</li>
 							@endif
-							@if($sidebar['Penerimaan Barang Pusat'] == 'Y')
-							<li class="{{ (Request::is('penjualan/set-harga/*') || Request::is('penjualan/set-harga')) ? 'active' : '' }}">
+							@if($sidebar['Setting Harga'] == 'Y')
+							<li class="{{ (Request::is('penjualan/set-harga')) ? 'active' : '' }}">
 								<a href="{{ url('/penjualan/set-harga') }}">Group</a>
 							</li>
 							@endif
@@ -253,8 +253,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				</a>
 				<ul>
 					@if($sidebar['Pembuatan Rencana Penjualan'] == 'Y')
-					<li>
-						<a href="flot.html">Pembuatan Rencana Penjualan</a>
+					<li class="{{ (Request::is('man-penjualan/rencana-penjualan/*') || Request::is('man-penjualan/rencana-penjualan')) ? 'active' : '' }}">
+						<a href="{{ url('/man-penjualan/rencana-penjualan') }}">Pembuatan Rencana Penjualan</a>
 					</li>
 					@endif
 

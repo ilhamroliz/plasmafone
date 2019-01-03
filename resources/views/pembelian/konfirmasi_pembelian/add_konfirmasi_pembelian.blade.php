@@ -262,7 +262,7 @@
                                                         <section class="col col-6">
                                                         <label class="label">Harga Satuan</label>
                                                             <label class="input">
-                                                                <input type="text" name="firstBox" placeholder="Harga Satuan" value="" onkeyup="calc(1)" id="dt_harga">
+                                                                <input type="text" name="firstBox" placeholder="Harga Satuan" value="" onkeyup="calc(1)"  id="dt_harga" >	
                                                             </label>
                                                         </section>
                                                         <section class="col col-6">
@@ -277,6 +277,7 @@
                                                         <label class="label">Sub Total</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
                                                             <input type="text" name="thirdBox" placeholder="Sub Total" value="" onkeyup="calc(3)" disabled="disabled" id="dt_subTotal">
+															
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
                                                     
@@ -349,10 +350,42 @@
 
 	<script type="text/javascript">
 		var tambahKonfirmasi;
+		var input = $('#dt_harga2').val();
+		var input2 = $('#dt_angka').val();
+
         $(document).ready(function () {
            load_table();
-            
+
+		//    var tanpa_rupiah = document.getElementById('dt_harga');
+		// 	tanpa_rupiah.addEventListener('keyup', function(e)
+		// 	{
+		// 		tanpa_rupiah.value = formatRupiah(this.value);
+		// 	});
+
+
+
+			
+
         });
+
+
+
+function formatRupiah(angka, prefix)
+    {
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+				split    = number_string.split(','),
+				sisa     = split[0].length % 3,
+				rupiah     = split[0].substr(0, sisa),
+				ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+				
+			if (ribuan) {
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+			
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+		}
 
         function tutup(){
             $('#detailModal').modal('hide');

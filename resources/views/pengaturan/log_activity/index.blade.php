@@ -81,19 +81,7 @@
 						data-widget-editbutton="false"
 						data-widget-custombutton="false"
 						data-widget-sortable="false">
-						<!-- widget options:
-							usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-							
-							data-widget-colorbutton="false"	
-							data-widget-editbutton="false"
-							data-widget-togglebutton="false"
-							data-widget-deletebutton="false"
-							data-widget-fullscreenbutton="false"
-							data-widget-custombutton="false"
-							data-widget-collapsed="true" 
-							data-widget-sortable="false"
-							
-						-->
+
 						<header>
 							<h2><strong>Log Kegiatan Pengguna</strong></h2>											
 						</header>
@@ -118,21 +106,23 @@
 									<div class="col-lg-12 col-md-12 col-sm-12">
 										<div class="col-md-4">
 											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control datepicker" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
 												<span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control datepicker" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 											</div>
 										</div>
-										<div class="col-md-6">
-											<input type="text" id="search" class="form-control" name="search" placeholder="Cari Berdasarkan Nama User">
-											<input type="hidden" name="searchhidden" id="searchhidden">
-										</div>
-										<div class="col-md-2">
-											<span class="input-group-append">
-												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()">
+										<div class="col-md-7">
+											<div class="form-group">
+												<input type="hidden" name="searchhidden" id="searchhidden">												
+												<input type="text" id="search" class="form-control" name="search" placeholder="Cari Berdasarkan Nama User" style="width: 80%; float: left">
+
+												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()" style="width: 10%; margin-left: 5%">
 													<i class="fa fa-search"></i>
 												</button>
-											</span>
+											</div>											
+										</div>
+
+										<div class="col-md-1 no-padding no-margin hapuslog">
 										</div>
 									</div>
 								</div>
@@ -189,6 +179,24 @@
 			language: dataTableLanguage
 		});
 
+		$( "#tgl_awal" ).datepicker({
+			language: "id",
+			format: 'dd/mm/yyyy',
+			prevText: '<i class="fa fa-chevron-left"></i>',
+			nextText: '<i class="fa fa-chevron-right"></i>',
+			autoclose: true,
+			todayHighlight: true
+		});
+
+		$( "#tgl_akhir" ).datepicker({
+			language: "id",
+			format: 'dd/mm/yyyy',
+			prevText: '<i class="fa fa-chevron-left"></i>',
+			nextText: '<i class="fa fa-chevron-right"></i>',
+			autoclose: true,
+			todayHighlight: true
+		});
+
 	}); 
 
 	function getData(data){
@@ -203,7 +211,7 @@
 		var nama = $('#searchhidden').val();
 		
 		$('#overlay').fadeIn(200);
-		$('#load-status-text').text('Sedang Mencari Data');
+		$('#load-status-text').text('Sedang Mencari Data ...');
 		$.ajaxSetup({
 			headers: {
 				'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -227,6 +235,66 @@
 			}
 		});
 		$('#overlay').fadeOut(200);
+		$('.hapuslog').html('<button class="btn btn-danger animated" style="width: 100%" onclick="hapus()"><i class="">Hapus</i></button>');
+	}
+
+	function hapus(){
+		var tgl_awal = $('#tgl_awal').val();
+		var tgl_akhir = $('#tgl_akhir').val();
+		var nama = $('#searchhidden').val();
+
+		$.SmartMessageBox({
+			title : "Pesan!",
+			content : 'Apakah Anda yakin akan manghapus data Log tanggal '+tgl_awal+' - '+tgl_akhir+' ?',
+			buttons : '[Batal][Ya]'
+		}, function(ButtonPressed) {
+			if (ButtonPressed === "Ya") {
+				$('#overlay').fadeIn(200);
+				$('#load-status-text').text('Sedang Menghapus Data ...');
+				$.ajaxSetup({
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					}
+				});
+				$.ajax({
+					url: '{{ url('/pengaturan/log-kegiatan/hapus') }}',
+					type: 'get',
+					data: {tgl_awal:tgl_awal, tgl_akhir:tgl_akhir, nama:nama},
+					success: function(response){
+						if(response.status == 'hlSukses'){
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data Log Berhasil Dihapus ...!',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+							location.reload();
+						}else if(response.status == 'empty'){
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Maaf, Data Log Tidak Ada ",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+						}else{
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Maaf, Data Log Gagal Dihapus ",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+						}
+					}
+				});
+				$('#overlay').fadeOut(200);
+			}
+		});
 	}
 </script>
 @endsection

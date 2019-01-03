@@ -12,12 +12,12 @@ class ReceptionController extends Controller
 	// Penerimaan barang dari supplier
     public function index_supplier()
     {
-    	$data = DB::table('d_inventory')
-    			->select('d_inventory.*', 'd_supplier.s_company')
-    			->where('d_inventory.i_from', '=', 'Supplier')
-    			->join('d_supplier', 'd_inventory.i_id_supplier', '=', 'd_supplier.s_id')
-    			->get();
-    	return view('inventory.receipt_goods.supplier.index')->with(compact('data'));
+    	// $data = DB::table('d_inventory')
+    	// 		->select('d_inventory.*', 'd_supplier.s_company')
+    	// 		->where('d_inventory.i_from', '=', 'Supplier')
+    	// 		->join('d_supplier', 'd_inventory.i_id_supplier', '=', 'd_supplier.s_id')
+    	// 		->get();
+    	return view('inventory.receipt_goods.supplier.index');
     }
 
     public function add_items_from_supplier(Request $request)

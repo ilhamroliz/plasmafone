@@ -65,7 +65,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
             ->get();
-        $menunggu = collect($menunggu);
 
         return DataTables::of($menunggu)
 
@@ -102,7 +101,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'DISETUJUI')
             ->get();
-        $setujui = collect($setujui);
 
         return DataTables::of($setujui)
             ->addColumn('input', function ($setujui) {
@@ -143,7 +141,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'DITOLAK')
             ->get();
-        $ditolak = collect($ditolak);
 
         return DataTables::of($ditolak)
             ->addColumn('input', function ($ditolak) {
@@ -183,7 +180,6 @@ class PembelianController extends Controller
             ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->get();
-        $semua = collect($semua);
 
         return DataTables::of($semua)
             ->addColumn('input', function ($semua) {
@@ -303,23 +299,7 @@ class PembelianController extends Controller
             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             $data[] = $row;
         }
-        // $tambahRencana = collect($tambahRencana);
 
-        // return DataTables::of($tambahRencana)
-        //     ->addColumn('input', function ($tambahRencana) {
-
-        //         return '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $tambahRencana->pr_id . '" value="'.$tambahRencana->pr_qtyApp .'"  style="text-transform: uppercase" /></div>';
-
-        //     })
-        //     ->addColumn('aksi', function ($tambahRencana) {
-        //         if (Plasma::checkAkses(47, 'update') == false) {
-        //             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $tambahRencana->pr_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-        //         } else {
-        //             return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $tambahRencana->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $tambahRencana->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $tambahRencana->pr_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-        //         }
-        //     })
-        //     ->rawColumns(['input', 'aksi'])
-        //     ->make(true);
         echo json_encode(array("data"=>$data));
     }
 
@@ -484,7 +464,7 @@ class PembelianController extends Controller
             "i_img" => $i_img,
             "c_name" => $c_name,
             "c_address" => $c_address,
-            "c_tlp" => $c_tlp,
+            "c_tlp" => $c_tlp
         );
 
         echo json_encode(array("data" => $item));
@@ -578,8 +558,6 @@ class PembelianController extends Controller
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_confirm.pr_stsConf', 'CONFIRM')
             ->get();
-        $confirmOrder = collect($confirmOrder);
-
         return DataTables::of($confirmOrder)
             ->addColumn('input', function ($confirmOrder) {
 
@@ -618,7 +596,6 @@ class PembelianController extends Controller
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_confirm.pr_stsConf', 'PURCHASE')
             ->get();
-        $confirmOrder = collect($confirmOrder);
 
         return DataTables::of($confirmOrder)
             ->addColumn('input', function ($confirmOrder) {
@@ -657,7 +634,6 @@ class PembelianController extends Controller
             ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
             ->get();
-        $confirmOrder = collect($confirmOrder);
 
         return DataTables::of($confirmOrder)
             ->addColumn('input', function ($confirmOrder) {
@@ -699,8 +675,6 @@ class PembelianController extends Controller
             // ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
             ->get();
-        $menunggu = collect($menunggu);
-
         return DataTables::of($menunggu)
             ->addColumn('input', function ($menunggu) {
 
@@ -749,7 +723,7 @@ class PembelianController extends Controller
                 'm_company.c_id',
                 'm_company.c_name',
                 'm_company.c_address',
-                'm_company.c_tlp',
+                'm_company.c_tlp'
                 // 'd_supplier.s_id',
                 // 'd_supplier.s_company',
                 // 'd_supplier.s_phone'
@@ -816,7 +790,7 @@ class PembelianController extends Controller
             "i_img" => $i_img,
             "c_name" => $c_name,
             "c_address" => $c_address,
-            "c_tlp" => $c_tlp,
+            "c_tlp" => $c_tlp
             // "s_id" => $s_id,
             // "s_company" => $s_company,
             // "s_phone" => $s_phone
@@ -993,13 +967,6 @@ class PembelianController extends Controller
 
     public function purchase_order()
     {
-        // $data = DB::table('d_purchase_order_dt')
-        //         ->select('d_purchase_order_dt.*', 'd_purchase_order.*', 'd_supplier.*')
-        //         ->join('d_purchase_order', 'd_purchase_order_dt.podt_purchase', 'd_purchase_order.po_no')
-        //         ->join('d_supplier', 'd_purchase_order_dt.podt_kode_suplier', '=', 'd_supplier.s_id')
-        //         ->orderBy('d_purchase_order.po_status', 'desc')
-        //         ->get();
-    	// return view('pembelian/purchase_order/index', compact('data'));
         return view('pembelian/purchase_order/view_purchase_order');
     }
 
@@ -1007,12 +974,8 @@ class PembelianController extends Controller
     public function view_purchaseAll()
     {
         $purchaseAll = DB::table('d_purchase')
-                ->select('d_purchase.*', 'd_purchase.*', 'd_supplier.*')
-                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->select('d_purchase.*')
                 ->get();
-
-
-        $purchaseAll = collect($purchaseAll);
 
         return DataTables::of($purchaseAll)
             ->addColumn('input', function ($purchaseAll) {
@@ -1035,13 +998,11 @@ class PembelianController extends Controller
 
     public function purchasing()
     {
-        $purchasing = DB::table('d_purchase_dt')
-                ->select('d_purchase_dt.*', 'd_purchase.*', 'd_supplier.*')
-                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+        $purchasing = DB::table('d_purchase')
+                ->select('d_purchase.*')
+                ->where('d_purchase.po_status','PURCHASING')
                 ->get();
 
-
-        $purchasing = collect($purchasing);
 
         return DataTables::of($purchasing)
             ->addColumn('input', function ($purchasing) {
@@ -1062,13 +1023,10 @@ class PembelianController extends Controller
 
     public function purchaseComplete()
     {
-        $purchaseComplete = DB::table('d_purchase_dt')
-                ->select('d_purchase.*', 'd_supplier.*')
-                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+        $purchaseComplete = DB::table('d_purchase')
+                ->select('d_purchase.*')
+                ->where('d_purchase.po_status','COMPLETE')
                 ->get();
-
-
-        $purchaseComplete = collect($purchaseComplete);
 
         return DataTables::of($purchaseComplete)
             ->addColumn('input', function ($purchaseComplete) {
@@ -1095,9 +1053,6 @@ class PembelianController extends Controller
                 ->join('d_purchase', 'd_purchase_dt.pd_purchase', '=', 'd_purchase.p_id')
                 ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
                 ->get();
-
-
-        $detailPurchase = collect($detailPurchase);
 
         return DataTables::of($detailPurchase)
             ->addColumn('input', function ($detailPurchase) {
@@ -1340,7 +1295,9 @@ class PembelianController extends Controller
 
     public function simpanPo(Request $request)
     {
+        // $id = '1';
         $id = $request->input('id');
+        $due_date = $request->input('due_date');
             $queryBaris = DB::table('d_purchase')
             ->select('d_purchase.*')
             ->get();
@@ -1359,7 +1316,6 @@ class PembelianController extends Controller
 
         $total =  DB::table('d_purchase_confirm')
         ->select(DB::raw('sum(d_purchase_confirm.pr_price) as Total'))
-        // ->where('d_purchase_confirm.pr_supplier',$id)
         ->get();
 
         foreach ($total as $key) {
@@ -1424,6 +1380,7 @@ class PembelianController extends Controller
                     'p_tgl'=>$tgl,
                     'p_bln'=>$bln,
                     'p_thn'=>$thn,
+                    'p_dueDate'=>$due_date
                     ]);
 
         $insertOne = DB::table('d_purchase')->insert($list);
@@ -1460,7 +1417,7 @@ class PembelianController extends Controller
                             $temp = [
                                 // 'pr_idConf' =>$query[$i]->pr_idConf,
                                 'ide' =>$numx++,
-                                'pd_purchase'=>$query[$i]->pr_supplier,
+                                'pd_purchase'=>$n,
                                 'pd_detailid' =>$num++,
                                 'pd_item' =>$query[$i]->pr_item,
                                 'pd_qty' =>$query[$i]->pr_qtyApp,
@@ -1477,7 +1434,28 @@ class PembelianController extends Controller
                 if(!$insert){
                     echo "GAGAL";
                 }else{
-                    PlasmafoneController::logActivity('aksi yang dilalukan');
+                    $def = DB::table('d_purchase_confirm')
+                    ->select('pr_idConf')
+                    ->where('pr_stsConf','=','CONFIRM')
+                    ->get();
+
+                    foreach ($def as $key => $value) {
+                        $dat['coloum'] = $value;
+                    }
+                       
+                    $data = array();
+                    foreach ($def as $key) {
+                       $row = array();
+                       $row[] = $key->pr_idConf;
+                       $data[] = $row;
+                    }
+                  
+                   $update = DB::table('d_purchase_confirm')
+                   ->whereIn('pr_idConf',$data)
+                   ->update([
+                       'pr_stsConf'=>'PURCHASING'
+                   ]);
+                    PlasmafoneController::logActivity('aksi yang dilalukan PURCHASING');
                     echo "SUKSES";
                 }
         }
@@ -1503,7 +1481,6 @@ class PembelianController extends Controller
             ->groupBy('d_supplier.s_name')
             ->get();
 
-        // print_r($data_order); die;
 
         return view('pembelian/konfirmasi_pembelian/index', compact('data', 'data_supplier', 'data_order'));
     }
@@ -1546,12 +1523,8 @@ class PembelianController extends Controller
 
     public function return_barang()
     {
-        $data_return = DB::table('d_purchase_return')
-            ->select('d_purchase_return.*', 'd_purchase_return_dt.*')
-            ->join('d_purchase_return_dt', 'd_purchase_return.pr_id', '=', 'd_purchase_return_dt.pr_id')
-            ->get();
-                        // print_r($data_return); die;
-        return view('pembelian/return_barang/index')->with(compact('data_return'));
+      
+        return view('pembelian/return_barang/index');
     }
 
     public function return_barang_add(Request $request)
@@ -2150,14 +2123,6 @@ class PembelianController extends Controller
     public function request_order_tambah()
     {
         return view('pembelian/request_order/tambah_request_order');
-        // $comp = Auth::user()->m_id;
-        // $del = DB::table('d_purchase_req_dumy')->where('pr_mem_id',$comp)->delete();
-
-        // if($del){
-        //     return view('pembelian/request_order/tambah_request_order');
-        // }else{
-        //     return view('pembelian/request_order/tambah_request_order');
-        // }
 
     }
 
@@ -2203,7 +2168,6 @@ class PembelianController extends Controller
         foreach ($list as $hasil) {
             $row = array();
             $row[] = $hasil->i_nama;
-                    // $row[] = $hasil->pr_qty;
             $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="' . $hasil->pr_qtyReq . '"  style="text-transform: uppercase" /></div>';
             $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle"   title="Edit Data" onclick="editDumy(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle"   title="Hapus Data" onclick="hapusData(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
             $data[] = $row;
@@ -2218,16 +2182,6 @@ class PembelianController extends Controller
         $qty = $request->input('qty');
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'DUMY';
-
-
-
-
-        // $query = DB::table('d_item')
-        //     ->select('d_item.i_id')
-        //     ->where('d_item.i_nama', $item)->first();
-
-        // $itm = implode(" ", explode("+", $query->i_id));
-
 
         $insert = DB::table('d_purchase_req')
             ->insert([
@@ -2350,7 +2304,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_stsReq', 'WAITING')
             ->get();
-        $waiting = collect($waiting);
 
         return DataTables::of($waiting)
             ->addColumn('pr_stsReq', function ($waiting) {
@@ -2360,7 +2313,6 @@ class PembelianController extends Controller
             })
 
             ->addColumn('aksi', function ($waiting) {
-                // return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' .$waiting->pr_id. '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 if (Plasma::checkAkses(49, 'update') == false) {
                     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
@@ -2380,7 +2332,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_stsReq', 'DIPROSES')
             ->get();
-        $all = collect($all);
 
         return DataTables::of($all)
             ->addColumn('pr_stsReq', function ($waiting) {
@@ -2430,9 +2381,6 @@ class PembelianController extends Controller
         );
 
         echo json_encode($data);
-
-
-
     }
 
     public function getKelompok_item()
@@ -2461,11 +2409,8 @@ class PembelianController extends Controller
 
     public function getBarang()
     {
-        // $kelompok = $req->input('merk');
-
         $data = DB::table('d_item')
             ->select('d_item.i_id', 'd_item.i_nama')
-        // ->where('d_item.i_id',$kelompok)
             ->get();
 
         echo json_encode($data);
@@ -2474,7 +2419,6 @@ class PembelianController extends Controller
     public function showItem(Request $request)
     {
         $i_id = $request->input('item_id');
-
         $data = DB::table('d_item')
             ->select('d_item.i_merk', 'd_item.i_nama')
             ->where('d_item.i_id', $i_id)
@@ -2485,11 +2429,9 @@ class PembelianController extends Controller
 
     public function simpanRequest(Request $request)
     {
-
         $comp = Auth::user()->m_id;
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'WAITING';
-
         $dumy = DB::table('d_purchase_req_dumy')
             ->select('d_purcahse_req_dumy.*')
             ->where('d_purchase_req_dumy.pr_mem_id')
@@ -2512,7 +2454,6 @@ class PembelianController extends Controller
         }
 
         echo json_encode($status);
-
     }
 
     public function verifikasi_simpanRequest()
@@ -2531,7 +2472,6 @@ class PembelianController extends Controller
                 'pr_dateReq' => $dateReq,
             ]);
 
-
         if (!$update) {
             $response = "gagal";
             echo json_encode(array("status" => $response));
@@ -2539,20 +2479,13 @@ class PembelianController extends Controller
             $response = "sukses";
             echo json_encode(array("status" => $response));
         }
-
-        // echo json_encode($res);
     }
 
     public function request_order_add(Request $request)
     {
         if ($request->isMethod('post')) {
             $data = $request->all();
-
-            // print_r($data); die;
-
             $ro_no = $this->generate_code('d_request_order', 'ro_no', 4, 'RO' . date('ymd'));
-            // $rdt_no = date('HmsYmd').'1';
-
             $sql = DB::table('d_request_order')->insert([
                 'ro_no' => $ro_no,
                 'ro_cabang' => $data['ro_cabang']
@@ -2562,12 +2495,6 @@ class PembelianController extends Controller
             foreach ($data['kode_barang'] as $key => $value) {
                 $rdt_no = $this->generate_code('d_request_order_dt', 'rdt_no', 4, 'RODT' . date('dmy'));
                 if (!empty($value)) {
-
-                    // $check_rdtno = DB::table('d_request_order_dt')->where('rdt_no', $rdt_no)->count();
-
-                    // if ($check_rdtno > 0) {
-                    //     $rdt_no = date('HmsYmd').$no;
-                    // }
 
                     $sql2 = DB::table('d_request_order_dt')->insert([
                         'rdt_request' => $ro_no,
@@ -2590,7 +2517,6 @@ class PembelianController extends Controller
 
     public function edit_order(Request $request)
     {
-        // $data = order::where('rdt_no', $request->id)->get();
         $data = DB::table('d_request_order_dt')
             ->select('d_request_order.*', 'd_request_order_dt.*', 'd_cabang.*')
             ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
@@ -2616,7 +2542,6 @@ class PembelianController extends Controller
 
     public function get_order($id)
     {
-        // $data = order::find($id);
         $data = DB::table('d_request_order_dt')
             ->select('d_request_order_dt.*', 'd_request_order.*', 'd_supplier.*', 'd_cabang.*')
             ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
@@ -2629,8 +2554,6 @@ class PembelianController extends Controller
 
     public function update_order(Request $request)
     {
-        // return json_encode($request->all());
-
         $data = DB::table('d_request_order_dt')->where('rdt_no', $request->rdt_request_no);
 
         if (!$data->first()) {
@@ -2659,11 +2582,7 @@ class PembelianController extends Controller
     public function multiple_delete_order(Request $request)
     {
 
-        // print_r($request); die;
-
         for ($i = 0; $i < count($request->rdt_request); $i++) {
-            # code...
-            // print_r($key);echo ": ";print_r($value); echo "<pre>";
             DB::table('d_request_order_dt')->where('rdt_no', $request->rdt_no[$i])->delete();
             $check_rdt_req = DB::table('d_request_order_dt')
                 ->where('rdt_request', $request->rdt_request[$i])
@@ -2690,9 +2609,6 @@ class PembelianController extends Controller
     public function request_order_status(Request $request)
     {
         $data = $request->all();
-
-        // echo json_encode($data); die;
-
         if ($data['status'] == "Pending") {
             $check_data = DB::table('d_rencana_pembelian')
                 ->where('no_rdt', $data['rdt_no'])
@@ -2801,19 +2717,6 @@ class PembelianController extends Controller
                     'rdt_status' => $data['status']
                 ]);
 
-            // $sql2 = DB::table('d_rencana_pembelian')->insert([
-            //     'rp_no'=>$no_rp,
-            //     'no_rdt'=>$data['rdt_no']
-            // ]);
-
-            // $sql3 = DB::table('d_rencana_pembelian_dt')->insert([
-            //     'rpdt_rencana'=>$no_rp,
-            //     'rpdt_no'=>$no_rpdt,
-            //     'rpdt_kode_barang'=>$data['kode_barang'],
-            //     'rpdt_qty'=>$data['kuantitas'],
-            //     'rpdt_kuantitas_approv'=>$data['kuantitas_approv']
-            // ]);
-
             if ($sql1) {
                 Session::flash('flash_message_success', 'Status untuk Request Detail "' . $data['rdt_no'] . '" berhasil diubah ke "Rencana Pembelian".');
                 $response = [
@@ -2899,7 +2802,6 @@ class PembelianController extends Controller
 
     public function multiple_edit_rencana_pembelian(Request $request)
     {
-        // print_r($request->all()); die;
         $data = DB::table('d_request_order_dt')
             ->select('d_request_order.*', 'd_request_order_dt.*', 'd_cabang.*')
             ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
@@ -2932,9 +2834,6 @@ class PembelianController extends Controller
 
     public function update_rencana_pembelian(Request $request)
     {
-        // return json_encode($request->all());
-        // print_r($request->all()); die;
-
         $data = DB::table('d_request_order_dt')->where('rdt_no', $request->rdt_request_no);
 
         if (!$data->first()) {
@@ -2964,7 +2863,7 @@ class PembelianController extends Controller
     {
         $pdf = PDF::loadView('pembelian.coba_cetak');
         return $pdf->stream();
-        // return $pdf->download('footballerdetail.pdf');
+       
     }
 
     public function new_print()

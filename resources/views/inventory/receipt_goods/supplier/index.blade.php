@@ -122,27 +122,6 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($data as $key => $barang)
-							<tr>
-								<td class="text-center">{{ $key+1 }}</td>
-								<td class="text-center">
-									<input type="checkbox" class="check-me" name="data_check[]" data-id="{{$barang->i_id}}" value="{{ $barang->i_id }}"/>
-								</td>
-								<td>{{ $barang->i_po }}</td>
-								<td>{{ $barang->i_kategori }}</td>
-								<td>@if($barang->i_imei == "") <center> ----- </center> @else {{ $barang->i_imei }} @endif</td>
-								<td>{{ $barang->i_kode_barang }}</td>
-								<td>{{ $barang->i_nama_barang }}</td>
-								<td><center>{{ $barang->i_qty }}</center></td>
-								<td>{{ $barang->i_tgl_masuk }}</td>
-								<td>{{ $barang->s_company }}</td>
-								<td class="text-center">
-									<button type="button" class="btn btn-xs btn-success btn-circle view" data-toggle="tooltip" data-placement="top" title="View Data" data-id="{{ $barang->i_id }}"><i class="glyphicon glyphicon-folder-open"></i></button>
-									<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $barang->i_id }}"><i class="glyphicon glyphicon-edit"></i></button>
-									<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $barang->i_id }}"><i class="glyphicon glyphicon-trash"></i></button>
-								</td>
-							</tr>
-							@endforeach
 						</tbody>
 					</table>
 				</form>

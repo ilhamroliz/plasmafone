@@ -84,29 +84,45 @@
 
                         <!-- widget content -->
                         <div class="widget-body">
+						<!-- ------------------------------------------------------------------------------------------------------------- -->
+						<div class="widget-body">
+				
+										<form class="form-horizontal">
+										{{csrf_field()}}
+											<fieldset>
+											<div class="form-group">
+													
+													<label class="col-md-2" for="prepend"> <h4>Pilih Supplier</h4></label>
+													<div class="col-md-6">
+										                <div class="icon-addon addon-lg">
+														<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
+															<option selected="" value="00">----pilih semua Supplier----</option>
+														</select>
+										                    <label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="email"></label>
+										                </div>
+													</div>
+													
+												</div>
+
+												<div class="form-group">
+												<label class="col-md-2" for="prepend"> <h4>Tanggal Di butuhkan</h4></label>
+													<div class="col-md-6">
+										                <div class="icon-addon addon-lg">
+														<input type="text" class="form-control datepicker" id="due_date" name="tgl_awal" placeholder="Due Date" data-dateformat="dd/mm/YYYY">
+										                    <label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
+										                </div>
+													</div>
+													
+												</div>
+												
+											</fieldset>
+										</form>
+				
+									</div>
+						<!-- ---------------------------------------------------------------------------------------------------------------------- -->
                             <form id="checkout-form" class="form-inline" role="form">
                                 <fieldset class="row">
-								
-									{{csrf_field()}}
-                                   
-                                    <div class="form-group col-md-6">
-                                            <select class="form-control col-md-12" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
-                                                <option selected="" value="00">----pilih semua Supplier----</option>
-                                            </select>
-                                        </div>
-										<div class="col-md-4">
-											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control datepicker" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
-												<!-- <span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control datepicker" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy"> -->
-											</div>
-										</div>
-                                        <!-- <div class="form-group col-md-6">
-                                            <select class="form-control col-md-12" name="" id="dt_outlet" style="padding-right:50%" onchange="reload_table()">
-                                                <option selected="" value="00">----pilih semua Outlet----</option>
-                                            </select>
-                                        </div>
-                                    -->
+									
                                 </fieldset>
                                 <fieldset class="row">
                                     <dir class="col-md-12">
@@ -190,6 +206,7 @@ function reload_data(){
       // table_registrasi.ajax.reload(null, false);
         table_registrasi= $('#table_addPo').DataTable({
 			"language" : dataTableLanguage,
+			"searching": false,
             "ajax": {
                     "url": '{{url('/pembelian/purchase-order/list_draftPo')}}',
                     "type": "GET",  
@@ -313,10 +330,12 @@ function simpanPo(){
 		type: "get",
 		data: { 
 			"id" : $('#dt_supplier').val(),
+			"due_date" : $('#due_date').val(),
 		},
 		dataType: "JSON",
 		success: function(data)
 		{
+			alert();
 			
 			if(data.status == 'gagal')
 			{
