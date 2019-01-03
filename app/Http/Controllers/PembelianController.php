@@ -1007,8 +1007,9 @@ class PembelianController extends Controller
     public function view_purchaseAll()
     {
         $purchaseAll = DB::table('d_purchase')
-                ->select('d_purchase.*', 'd_purchase.*', 'd_supplier.*')
-                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->select('d_purchase.*')
+                // ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+
                 ->get();
 
 
@@ -1035,9 +1036,10 @@ class PembelianController extends Controller
 
     public function purchasing()
     {
-        $purchasing = DB::table('d_purchase_dt')
-                ->select('d_purchase_dt.*', 'd_purchase.*', 'd_supplier.*')
-                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+        $purchasing = DB::table('d_purchase')
+                ->select('d_purchase.*')
+                // ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->where('d_purchase.po_status','PURCHASING')
                 ->get();
 
 
@@ -1062,9 +1064,10 @@ class PembelianController extends Controller
 
     public function purchaseComplete()
     {
-        $purchaseComplete = DB::table('d_purchase_dt')
-                ->select('d_purchase.*', 'd_supplier.*')
-                ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+        $purchaseComplete = DB::table('d_purchase')
+                ->select('d_purchase.*')
+                // ->join('d_supplier', 'd_purchase.p_suplier', '=', 'd_supplier.s_id')
+                ->where('d_purchase.po_status','COMPLETE')
                 ->get();
 
 
@@ -1340,7 +1343,9 @@ class PembelianController extends Controller
 
     public function simpanPo(Request $request)
     {
+        // $id = '1';
         $id = $request->input('id');
+        $due_date = $request->input('due_date');
             $queryBaris = DB::table('d_purchase')
             ->select('d_purchase.*')
             ->get();
@@ -1424,6 +1429,7 @@ class PembelianController extends Controller
                     'p_tgl'=>$tgl,
                     'p_bln'=>$bln,
                     'p_thn'=>$thn,
+                    'p_dueDate'=>$due_date
                     ]);
 
         $insertOne = DB::table('d_purchase')->insert($list);
@@ -1460,7 +1466,7 @@ class PembelianController extends Controller
                             $temp = [
                                 // 'pr_idConf' =>$query[$i]->pr_idConf,
                                 'ide' =>$numx++,
-                                'pd_purchase'=>$query[$i]->pr_supplier,
+                                'pd_purchase'=>$n,
                                 'pd_detailid' =>$num++,
                                 'pd_item' =>$query[$i]->pr_item,
                                 'pd_qty' =>$query[$i]->pr_qtyApp,
@@ -1477,7 +1483,28 @@ class PembelianController extends Controller
                 if(!$insert){
                     echo "GAGAL";
                 }else{
-                    PlasmafoneController::logActivity('aksi yang dilalukan');
+                    $def = DB::table('d_purchase_confirm')
+                    ->select('pr_idConf')
+                    ->where('pr_stsConf','=','CONFIRM')
+                    ->get();
+
+                    foreach ($def as $key => $value) {
+                        $dat['coloum'] = $value;
+                    }
+                       
+                    $data = array();
+                    foreach ($def as $key) {
+                       $row = array();
+                       $row[] = $key->pr_idConf;
+                       $data[] = $row;
+                    }
+                  
+                   $update = DB::table('d_purchase_confirm')
+                   ->whereIn('pr_idConf',$data)
+                   ->update([
+                       'pr_stsConf'=>'PURCHASING'
+                   ]);
+                    PlasmafoneController::logActivity('aksi yang dilalukan PURCHASING');
                     echo "SUKSES";
                 }
         }
@@ -1546,12 +1573,8 @@ class PembelianController extends Controller
 
     public function return_barang()
     {
-        $data_return = DB::table('d_purchase_return')
-            ->select('d_purchase_return.*', 'd_purchase_return_dt.*')
-            ->join('d_purchase_return_dt', 'd_purchase_return.pr_id', '=', 'd_purchase_return_dt.pr_id')
-            ->get();
-                        // print_r($data_return); die;
-        return view('pembelian/return_barang/index')->with(compact('data_return'));
+      
+        return view('pembelian/return_barang/index');
     }
 
     public function return_barang_add(Request $request)
