@@ -582,6 +582,9 @@ Route::group(['middleware' => 'auth'], function () {
 	///// MANAJEMEN PENJUALAN
 
 	Route::get('/man-penjualan/rencana-penjualan', 'manajemen_penjualan\pembuatanRencanaPenjualanController@index');
+	Route::get('/man-penjualan/rencana-penjualan/auto-comp', 'manajemen_penjualan\pembuatanRencanaPenjualanController@auto_comp');
+	Route::get('/man-penjualan/rencana-penjualan/auto-item', 'manajemen_penjualan\pembuatanRencanaPenjualanController@auto_item');
+
 	Route::get('/man-penjualan/rencana-penjualan/getPending', 'manajemen_penjualan\pembuatanRencanaPenjualanController@get_data_pending');
 	Route::get('/man-penjualan/rencana-penjualan/getApproved', 'manajemen_penjualan\pembuatanRencanaPenjualanController@get_data_approved');
 	Route::match(['get', 'post'], '/man-penjualan/rencana-penjualan/add', 'manajemen_penjualan\pembuatanRencanaPenjualanController@tambah');
