@@ -28,10 +28,6 @@ class member_controller extends Controller
     {
         $all = member::orderBy('m_insert', 'desc');
 
-        $checkindent = 0;
-        $checksales = 0;
-
-
         return DataTables::of($all)
             ->addColumn('active', function ($all) {
 
@@ -53,7 +49,7 @@ class member_controller extends Controller
                     ->count();
 
                 $nonactive = '';
-                if ($checkindent != 0 || $checksales != 0) {
+                if ($checkindent == 0 && $checksales == 0) {
                     $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($all->m_nik) . '\', \'' . $all->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
                 }
 
@@ -77,7 +73,7 @@ class member_controller extends Controller
 
     public function get_data_active()
     {
-        $active = member::where('m_status', 'AKTIF')->orderBy('m_insert');
+        $active = member::where('m_status', 'AKTIF')->orderBy('m_insert', 'desc');
 
         return DataTables::of($active)
             ->addColumn('aksi', function ($active) {
@@ -90,7 +86,7 @@ class member_controller extends Controller
                     ->count();
 
                 $nonactive = '';
-                if ($checkindent != 0 || $checksales != 0) {
+                if ($checkindent == 0 && $checksales == 0) {
                     $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . Crypt::encrypt($active->m_nik) . '\', \'' . $active->m_name . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
                 }
                 if (Plasma::checkAkses(47, 'update') == false) {
@@ -148,6 +144,21 @@ class member_controller extends Controller
         }
     }
 
+    public function getDataId()
+    {
+        $cek = DB::table('d_mem')
+            ->select(DB::raw('max(right(m_id, 7)) as id'))
+            ->get();
+
+        foreach ($cek as $x) {
+            $temp = ((int)$x->id + 1);
+            $kode = sprintf("%07s", $temp);
+        }
+
+        $tempKode = 'MPF' . $kode;
+        return $tempKode;
+    }
+
     public function simpan_tambah(Request $request)
     {
 
@@ -196,22 +207,7 @@ class member_controller extends Controller
 
                             } else {
 
-                                $kode = "";
-
-                                $querykode = DB::select(DB::raw("SELECT MAX(RIGHT(m_idmember,7)) as counter FROM m_member"));
-
-                                if (count($querykode) > 0) {
-                                    foreach ($querykode as $k) {
-                                        $tmp = ((int)$k->counter) + 1;
-                                        $kode = sprintf("%06s", $tmp);
-                                    }
-                                } else {
-                                    $kode = "000001";
-                                }
-
-
-                                $finalkode = 'MPF' . $kode;
-
+                                $finalkode = $this->getDataId();
 
                                 if ($data['checklist'] != "") {
                                     $member = $finalkode;

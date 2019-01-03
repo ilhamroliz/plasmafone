@@ -579,6 +579,17 @@ Route::group(['middleware' => 'auth'], function () {
 
 	///// End PENJUALAN
 
+	///// MANAJEMEN PENJUALAN
+
+	Route::get('/man-penjualan/rencana-penjualan', 'manajemen_penjualan\pembuatanRencanaPenjualanController@index');
+	Route::get('/man-penjualan/rencana-penjualan/getPending', 'manajemen_penjualan\pembuatanRencanaPenjualanController@get_data_pending');
+	Route::get('/man-penjualan/rencana-penjualan/getApproved', 'manajemen_penjualan\pembuatanRencanaPenjualanController@get_data_approved');
+	Route::match(['get', 'post'], '/man-penjualan/rencana-penjualan/add', 'manajemen_penjualan\pembuatanRencanaPenjualanController@tambah');
+	Route::match(['get', 'post'], '/man-penjualan/rencana-penjualan/edit', 'manajemen_penjualan\pembuatanRencanaPenjualanController@edit');
+	Route::get('/man-penjualan/rencana-penjualan/hapus', 'manajemen_penjualan\pembuatanRencanaPenjualanController@hapus');
+
+	///// End MANAJEMEN PENJUALAN
+
 	// Setting Application
 
 	// Akses Pengguna
@@ -604,6 +615,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/pengaturan/log-kegiatan/dataLog', 'PengaturanController@data_log');
 	Route::match(['get', 'post'], '/pengaturan/log-kegiatan/findLog', 'PengaturanController@find_log');
 	Route::match(['get', 'post'], '/pengaturan/log-kegiatan/cariLog', 'PengaturanController@cari_userLog');
+	Route::get('/pengaturan/log-kegiatan/hapus', 'PengaturanController@hapus_log');
 
 	// End Setting Application
 
