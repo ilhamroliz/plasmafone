@@ -51,23 +51,70 @@
                             <div class="widget-body">
                                 <form class="form-horizontal" id="form-penjualan">
                                     <fieldset>
-                                        <div class="form-group">
-                                            <div class="col-md-4">
-                                                <div class="input-icon-left">
-                                                    <i class="fa fa-user"></i>
-                                                    <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
-                                                    <input type="hidden" value="" class="idMember" id="idMember">
+
+                                        <div class="row">
+                                            
+                                            <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+                                                <div class="form-group">
+                                                    <div class="col-md-10">
+                                                        <div class="input-group input-group-md">
+                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                                            <div class="icon-addon addon-md">
+                                                                <!-- <input type="text" placeholder="Email" class="form-control"> -->
+                                                                <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
+                                                                <input type="hidden" value="" class="idMember" id="idMember">
+                                                                <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-1">
+                                                    <button type="button" data-toggle="modal" data-target="#DaftarMember" class="btn btn-primary" title="Tambah Pembeli"><i class="fa fa-user-plus"></i></button>
+                                                    </div>
+                                                    
                                                 </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <button type="button" data-toggle="modal" data-target="#DaftarMember" class="btn btn-primary" title="Tambah Pembeli"><i class="fa fa-user-plus"></i></button>
-                                            </div>
-                                            <div class="col-md-7">
-                                                <div class="pull-right">
-                                                    <h1 class="font-400 total-tampil">Rp. 0</h1>
+
+                                                <div class="form-group">
+
+                                                    <div class="col-md-12">
+
+                                                        <label class="control-label text-left">Jenis Member</label>
+                                                        &nbsp; &colon; &nbsp;
+                                                        <strong id="jenis_member">RETAIL</strong>
+                                                        
+                                                    </div>
+
                                                 </div>
-                                            </div>
+
+                                                <div class="form-group">
+
+                                                    <div class="col-md-12">
+
+                                                        <label class="control-label text-left">Alamat</label>
+                                                        &nbsp; &colon; &nbsp;
+                                                        <strong id="alamat">SURABAYA</strong>
+                                                        
+                                                    </div>
+
+                                                </div>
+
+                                            </article>
+
+                                            <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <div class="pull-right">
+                                                            <h1 class="font-400 total-tampil">Rp. 0</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </article>
+
                                         </div>
+
                                         <div class="form-group">
                                             <div class="col-md-8">
                                                 <div class="input-icon-left">

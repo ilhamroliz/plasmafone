@@ -121,32 +121,38 @@
 												<strong><i>{{ $get_outlet[0]->i_nama }}</i></strong>
 
 											</div>
+
 										</article>
 
 										<div class="row ">
 
 											<article class="col-xs-12 col-sm-8 col-md-8 col-lg-8 table-responsive">
 
-                                            <table class="table" id="tbl_setharga">
+												<table class="table" id="tbl_setharga">
 
-                                                <tbody>
+													<tbody>
 
-                                                    @foreach($get_outlet as $outlet)
+														<tr>
+															<td>Harga Default</td>
+															<td><input type="text" class="form-control harga-outlet" name="harga_default" value="{{ number_format($get_outlet[0]->i_price,0,',','.') }}"></td>
+														</tr>
 
-                                                    <tr>
-                                                        <td>{{ $outlet->c_name }}</td>
-                                                        <td class="input-group">
-                                                            <input type="hidden" name="item_id[]" value="{{ Crypt::encrypt($outlet->op_item) }}">
-                                                            <input type="hidden" name="outlet_id[]" value="{{ Crypt::encrypt($outlet->op_outlet) }}">
-                                                            <input type="text" class="form-control harga-outlet" name="harga[]" value="{{ number_format($outlet->op_price,0,',','.') }}">
-                                                        </td>
-                                                    </tr>
+														@foreach($get_outlet as $outlet)
 
-                                                    @endforeach
-                                                    
-                                                </tbody>
+														<tr>
+															<td>{{ $outlet->c_name }}</td>
+															<td>
+																<input type="hidden" name="item_id[]" value="{{ Crypt::encrypt($outlet->op_item) }}">
+																<input type="hidden" name="outlet_id[]" value="{{ Crypt::encrypt($outlet->op_outlet) }}">
+																<input type="text" class="form-control harga-outlet" name="harga[]" value="{{ number_format($outlet->op_price,0,',','.') }}">
+															</td>
+														</tr>
 
-                                            </table>
+														@endforeach
+														
+													</tbody>
+
+												</table>
 
 											</article>
 
