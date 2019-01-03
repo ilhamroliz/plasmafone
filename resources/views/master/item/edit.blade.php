@@ -11,6 +11,25 @@
 		$hasil_rupiah = number_format($angka,0,',','.');
 		return $hasil_rupiah;
 	}
+
+	function tanggal_indo($tanggal)
+	{
+		$bulan = array (1 =>   'Januari',
+					'Februari',
+					'Maret',
+					'April',
+					'Mei',
+					'Juni',
+					'Juli',
+					'Agustus',
+					'September',
+					'Oktober',
+					'November',
+					'Desember'
+				);
+		$split = explode('-', $tanggal);
+		return $split[2] . ' ' . $bulan[ (int)$split[1] ] . ' ' . $split[0];
+	}
 ?>
 
 @section('ribbon')
@@ -360,7 +379,10 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<input type="text" class="form-control" name="i_expired" id="i_expired" placeholder="Masukkan Tanggal Kedaluwarsa" autocomplete="off" value="{{ $item->i_expired }}"/>
+														<select class="form-control" name="i_expired">
+															<option value="N" @if($item->i_expired == "N") selected @endif>TIDAK</option>
+															<option value="Y" @if($item->i_expired == "Y") selected @endif>YA</option>
+														</select>
 
 													</div>
 
@@ -549,11 +571,29 @@
 			// {
 			// 	i_harga.value = formatRupiah(this.value, 'Rp');
 			// });
+			$.fn.datepicker.dates['id'] = {
+				days: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+				daysShort: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+				daysMin: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+				months: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+				monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+				today: "Hari Ini",
+				clear: "Clear",
+				format: "dd MM yyyy",
+				titleFormat: "MM yyyy", /* Leverages same syntax as ‘format’ */
+				weekStart: 0
+			};
+
 			$("#i_harga").maskMoney({thousands:'.', precision: 0, decimal:','});
 
-			$( "#i_expired" ).datepicker({
-				format: 'dd/mm/yyyy'
-			});
+			// $( "#i_expired" ).datepicker({
+			// 	language: "id",
+			// 	format: 'dd/mm/yyyy',
+			//     prevText: '<i class="fa fa-chevron-left"></i>',
+			//     nextText: '<i class="fa fa-chevron-right"></i>',
+			// 	autoclose: true,
+			// 	todayHighlight: true
+			// });
 
 			if ($('#current_img').val() != "") {
 

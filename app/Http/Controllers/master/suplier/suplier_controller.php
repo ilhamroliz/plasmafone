@@ -223,6 +223,13 @@ class suplier_controller extends Controller
 
                             }
 
+                            if ($data['jtempo_suplier'] == null) {
+                                $jtempo = 0;
+                            } else {
+                                $jtempo_ex = explode(" ", $data['jtempo_suplier']);
+                                $jtempo = $jtempo_ex[0];
+                            }
+
                             DB::table('d_supplier')->insert([
                                 's_company' => strtoupper($data['nama_perusahaan']),
                                 's_name' => strtoupper($data['nama_suplier']),
@@ -230,7 +237,8 @@ class suplier_controller extends Controller
                                 's_phone' => $data['telp_suplier'],
                                 's_fax' => $fax,
                                 's_note' => $note,
-                                's_limit' => $limit
+                                's_limit' => $limit,
+                                's_jatuh_tempo' => $jtempo
                             ]);
 
                             DB::commit();
@@ -329,6 +337,13 @@ class suplier_controller extends Controller
 
                             }
 
+                            if ($data['jtempo_suplier'] == null) {
+                                $jtempo = 0;
+                            } else {
+                                $jtempo_ex = explode(" ", $data['jtempo_suplier']);
+                                $jtempo = $jtempo_ex[0];
+                            }
+
                             suplier::where(['s_id' => Crypt::decrypt($id)])->update([
                                 's_company' => strtoupper($data['nama_perusahaan']),
                                 's_name' => strtoupper($data['nama_suplier']),
@@ -337,6 +352,7 @@ class suplier_controller extends Controller
                                 's_fax' => $fax,
                                 's_note' => $note,
                                 's_limit' => $limit,
+                                's_jatuh_tempo' => $jtempo,
                                 's_isactive' => strtoupper($data['isactive'])
                             ]);
 

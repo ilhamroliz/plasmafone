@@ -125,7 +125,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-building"></i></span>
 
-															<input type="text" class="form-control" name="nama_perusahaan" v-model="form_data.nama_perusahaan" placeholder="Masukkan Nama Perusahaan" value="{{ $supplier->s_company }}" style="text-transform: uppercase" />
+															<input type="text" class="form-control" name="nama_perusahaan" placeholder="Masukkan Nama Perusahaan" value="{{ $supplier->s_company }}" style="text-transform: uppercase" />
 
 														</div>
 
@@ -143,7 +143,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-user"></i></span>
 
-															<input type="text" class="form-control" name="nama_suplier" v-model="form_data.nama_suplier" placeholder="Masukkan Nama Supplier" value="{{ $supplier->s_name }}" style="text-transform: uppercase" />
+															<input type="text" class="form-control" name="nama_suplier" placeholder="Masukkan Nama Supplier" value="{{ $supplier->s_name }}" style="text-transform: uppercase" />
 
 														</div>
 
@@ -161,7 +161,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-phone"></i></span>
 
-															<input type="text" class="form-control" name="telp_suplier" v-model="form_data.telp_suplier" placeholder="Masukkan Nomor Telepon" value="{{ $supplier->s_phone }}" />
+															<input type="text" class="form-control" name="telp_suplier" placeholder="Masukkan Nomor Telepon" value="{{ $supplier->s_phone }}" />
 
 														</div>
 
@@ -179,7 +179,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-fax"></i></span>
 
-															<input type="text" class="form-control" name="fax_suplier" v-model="form_data.fax_suplier" placeholder="Masukkan Nomor Fax Supplier" value="{{ $supplier->s_fax }}" />
+															<input type="text" class="form-control" name="fax_suplier" placeholder="Masukkan Nomor Fax Supplier" value="{{ $supplier->s_fax }}" />
 
 														</div>
 
@@ -202,6 +202,24 @@
 
 												</div>
 
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Jatuh Tempo</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<div class="input-group">
+
+															<span class="input-group-addon"><i class="fa fa-power-off"></i></span>
+
+															<input type="text" class="form-control" id="jtempo_suplier" name="jtempo_suplier" placeholder="Masukkan Jatuh Tempo" value="{{ $supplier->s_jatuh_tempo . ' HARI' }}" />
+
+														</div>
+
+													</div>
+
+												</div>
+
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -216,7 +234,7 @@
 
 															<span class="input-group-addon"><i class="fa fa-money"></i></span>
 															
-															<input type="text" class="form-control" id="limit" name="limit" v-model="form_data.limit" placeholder="Masukkan Limitation" value="{{ number_format($supplier->s_limit,0,',','.') }}"/>
+															<input type="text" class="form-control" id="limit" name="limit" placeholder="Masukkan Limitation" value="{{ number_format($supplier->s_limit,0,',','.') }}"/>
 
 														</div>
 
@@ -230,7 +248,7 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Supplier" name="alamat_suplier" v-model="form_data.alamat_suplier">{{ $supplier->s_address }}</textarea>
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Masukkan Alamat Supplier" name="alamat_suplier">{{ $supplier->s_address }}</textarea>
 
 													</div>
 
@@ -242,7 +260,7 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Supplier" name="keterangan" v-model="form_data.keterangan">{{ $supplier->s_note }}</textarea>
+														<textarea class="form-control" rows="5" style="resize: none;" placeholder="Tambahkan Keterangan Tentang Supplier" name="keterangan">{{ $supplier->s_note }}</textarea>
 
 													</div>
 
@@ -318,6 +336,7 @@
 			var baseUrl = '{{ url('/') }}';
 
 			$('#limit').maskMoney({thousands:'.', precision: 0, decimal:','});
+			$('#jtempo_suplier').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: ' HARI'});
 
 			function overlay()
 			{

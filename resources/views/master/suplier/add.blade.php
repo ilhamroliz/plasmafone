@@ -185,6 +185,24 @@
 
 												</div>
 
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Jatuh Tempo</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<div class="input-group">
+
+															<span class="input-group-addon"><i class="fa fa-power-off"></i></span>
+
+															<input type="text" class="form-control" id="jtempo_suplier" name="jtempo_suplier" placeholder="Masukkan Jatuh Tempo" />
+
+														</div>
+
+													</div>
+
+												</div>
+
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -370,6 +388,7 @@
 					validation_regis();
 					// console.log(this.form_data.nama_lengkap);
 					$('#limit').maskMoney({thousands:'.', precision: 0, decimal:','});
+					$('#jtempo_suplier').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: ' HARI'});
 				},
 				methods: {
 					submit_form: function(e){
@@ -482,6 +501,7 @@
 						this.form_data.nama_perusahaan 		= '';
 						this.form_data.nama_suplier 		= '';
 						$("#limit").val("");
+						$("#jtempo_suplier").val("");
 						this.form_data.telp_suplier			= '';
 						this.form_data.fax_suplier 			= '';
 						this.form_data.alamat_suplier 		= '';

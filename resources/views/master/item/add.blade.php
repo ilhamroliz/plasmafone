@@ -360,7 +360,11 @@
 
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														<input type="text" class="form-control" name="i_expired" id="i_expired" placeholder="Masukkan Tanggal Kedaluwarsa" v-model="form_data.i_expired" autocomplete="off"/>
+														<!-- <input type="text" class="form-control" name="i_expired" id="i_expired" placeholder="Masukkan Tanggal Kedaluwarsa" v-model="form_data.i_expired" autocomplete="off"/> -->
+														<select class="form-control" v-model="form_data.i_expired" name="i_expired">
+															<option value="N">TIDAK</option>
+															<option value="Y">YA</option>
+														</select>
 
 													</div>
 
@@ -425,6 +429,7 @@
 @endsection
 
 @section('extra_script')
+	
 	
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
@@ -496,11 +501,29 @@
 			// 	i_harga.value = formatRupiah(this.value, 'Rp');
 			// });
 
+			$.fn.datepicker.dates['id'] = {
+				days: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+				daysShort: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+				daysMin: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+				months: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+				monthsShort: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"],
+				today: "Hari Ini",
+				clear: "Clear",
+				format: "dd MM yyyy",
+				titleFormat: "MM yyyy", /* Leverages same syntax as ‘format’ */
+				weekStart: 0
+			};
+
 			$("#i_harga").maskMoney({thousands:'.', precision: 0});
 
-			$( "#i_expired" ).datepicker({
-				format: 'dd/mm/yyyy'
-			});
+			// $( "#i_expired" ).datepicker({
+			// 	language: "id",
+			// 	format: 'dd MM yyyy',
+			//     prevText: '<i class="fa fa-chevron-left"></i>',
+			//     nextText: '<i class="fa fa-chevron-right"></i>',
+			// 	autoclose: true,
+			// 	todayHighlight: true
+			// });
 
 			function formatRupiah(angka, prefix)
 			{
@@ -727,7 +750,8 @@
 					i_minstock: '',
 					i_berat: '',
 					i_specificcode: 'Y',
-					i_isactive: 'Y'
+					i_isactive: 'Y',
+					i_expired: 'N'
 					
 				}
 

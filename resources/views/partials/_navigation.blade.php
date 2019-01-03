@@ -253,8 +253,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				</a>
 				<ul>
 					@if($sidebar['Pembuatan Rencana Penjualan'] == 'Y')
-					<li>
-						<a href="flot.html">Pembuatan Rencana Penjualan</a>
+					<li class="{{ (Request::is('man-penjualan/rencana-penjualan/*') || Request::is('man-penjualan/rencana-penjualan')) ? 'active' : '' }}">
+						<a href="{{ url('/man-penjualan/rencana-penjualan') }}">Pembuatan Rencana Penjualan</a>
 					</li>
 					@endif
 

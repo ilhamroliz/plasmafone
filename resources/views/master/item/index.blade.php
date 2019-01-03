@@ -266,7 +266,7 @@
 
 				</div>
 
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="table_content">
 					
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
@@ -1069,6 +1069,8 @@
 				$('#hr4').addClass("in active");
 
 				$('#tab_pencarian').show("slow");
+
+				$('html, body').animate({ scrollTop: $('#table_content').offset().top }, 'slow');
 
 				out();
 

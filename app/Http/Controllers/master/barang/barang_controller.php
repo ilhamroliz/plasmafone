@@ -19,6 +19,7 @@ use File;
 use ImageOptimizer;
 use DataTables;
 use Response;
+use Carbon\Carbon;
 
 class barang_controller extends Controller
 {
@@ -226,11 +227,12 @@ class barang_controller extends Controller
 
             $data = $request->all();
             $harga = $this->formatPrice($data['i_harga']);
-            if($data['i_expired'] == ""){
-                $expired = null;
-            }else{
-                $expired = date('Y-m-d', strtotime($data['i_expired']));;
-            }
+
+            // if($data['i_expired'] == ""){
+            //     $expired = null;
+            // }else{
+            //     $expired = date('Y-m-d', strtotime($data['i_expired']));
+            // }
 
             DB::beginTransaction();
 
@@ -267,7 +269,7 @@ class barang_controller extends Controller
                     $barang->i_minstock = strtoupper($data['i_minstock']);
                     $barang->i_berat = strtoupper($data['i_berat']);
                     $barang->i_price = $harga;
-                    $barang->i_expired = $expired;
+                    $barang->i_expired = $data['i_expired'];
 
                     if ($request->hasFile('i_img')) {
 
@@ -345,12 +347,12 @@ class barang_controller extends Controller
                 } else {
 
                     $data = $request->all();
-
-                    if($data['i_expired'] == ""){
-                        $expired = null;
-                    }else{
-                        $expired = date('Y-m-d', strtotime($data['i_expired']));;
-                    }
+                    
+                    // if($data['i_expired'] == ""){
+                    //     $expired = NULL;
+                    // }else{
+                    //     $expired = date('Y-m-d', strtotime($data['i_expired']));;
+                    // }
 
                     DB::beginTransaction();
 
@@ -435,7 +437,7 @@ class barang_controller extends Controller
                             'i_berat' => strtoupper($data['i_berat']),
                             'i_price' => $this->formatPrice($data['i_harga']),
                             'i_img' => $image,
-                            'i_expired' => $expired
+                            'i_expired' => $data['i_expired']
                         ]);
 
                         DB::commit();
@@ -693,7 +695,7 @@ class barang_controller extends Controller
 
         // $get_outlet = OutletPrice::where('op_item', Crypt::decrypt($item));
         $get_outlet = DB::table('d_outlet_price')
-                        ->select('m_company.c_name', 'd_item.i_nama', 'd_outlet_price.op_outlet', 'd_outlet_price.op_item', 'd_outlet_price.op_price')
+                        ->select('m_company.c_name', 'd_item.i_nama', 'd_outlet_price.op_outlet', 'd_outlet_price.op_item', 'd_outlet_price.op_price', 'd_item.i_price')
                         ->join('m_company', 'm_company.c_id', '=', 'd_outlet_price.op_outlet')
                         ->join('d_item', 'd_item.i_id', '=', 'd_outlet_price.op_item')
                         ->where('d_outlet_price.op_item', Crypt::decrypt($item))->get();
@@ -749,8 +751,21 @@ class barang_controller extends Controller
 
             try{
 
+                $harga = 0;
+
+                if ($data['harga_default'] != null) {
+                    DB::table('d_item')->where('i_id', Crypt::decrypt($data['item_id'][0]))->update(['i_price' => $this->formatPrice($data['harga_default'])]);
+                } else {
+                    DB::table('d_item')->where('i_id', Crypt::decrypt($data['item_id'][0]))->update(['i_price' => 0]);
+                }
+
                 for ($i=0; $i < count($data['outlet_id']); $i++) { 
-                    DB::table('d_outlet_price')->where(['op_outlet' => Crypt::decrypt($data['outlet_id'][$i]), 'op_item' => Crypt::decrypt($data['item_id'][$i])])->update(['op_price' => $this->formatPrice($data['harga'][$i])]);
+                    if ($data['harga'][$i] != null) {
+                        $harga = $this->formatPrice($data['harga'][$i]);
+                    } else {
+                        $harga = 0;
+                    }
+                    DB::table('d_outlet_price')->where(['op_outlet' => Crypt::decrypt($data['outlet_id'][$i]), 'op_item' => Crypt::decrypt($data['item_id'][$i])])->update(['op_price' => $harga]);
                 }
 
                 DB::commit();
@@ -762,7 +777,7 @@ class barang_controller extends Controller
                 DB::rollback();
 
                 // something went wrong
-                return redirect()->back()->with('flash_message_error', 'Data harga barang gagal diubah...! Mohon coba lagi');
+                return redirect()->back()->with('flash_message_error', 'Data harga barang gagal diubah...! Mohon coba lagi => '.$e);
 
             }
 
