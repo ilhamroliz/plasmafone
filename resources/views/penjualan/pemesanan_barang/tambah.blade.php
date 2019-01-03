@@ -85,18 +85,12 @@
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-12 no-padding padding-bottom-10">										
                                             <div class="form-group col-md-12">
-                                                <div class="col-md-5 inputGroupContainer">
-                                                    <div class="input-group" style="width: 100%">
-                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-user"></i></span>
-                                                        <input type="hidden" id="tpMemberId" name="tpMemberId">
-													    <input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
-                                                    </div>													
-												</div>
-												<div class="col-md-1">
-													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-user-plus"></i></a>												
-												</div>
+                                                <div class="col-md-6">
+
+                                                </div>
+  
                                                 <div class="col-md-2">
-                                                    <h4><strong>Total Tagihan</strong></h4>
+                                                    <h4><strong>Total Perkiraan</strong></h4>
                                                 </div>
                                                 <div class="col-md-1"><strong>:</strong></div>
                                                 <div class="col-md-3">
@@ -118,27 +112,23 @@
 									<div class="row">
 										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
 											<div class="form-group col-md-12">
+                                                <div class="col-md-5 inputGroupContainer">
+                                                    <div class="input-group" style="width: 100%">
+                                                        <span class="input-group-addon" style="width: 40px"><i class="fa fa-user"></i></span>
+                                                        <input type="hidden" id="tpMemberId" name="tpMemberId">
+													    <input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Member">												
+                                                    </div>													
+												</div>
+												<div class="col-md-1">
+													<a onclick="modal_tambah()" class="btn btn-success" title="Tambah Member" style="width:100%"><i class="fa fa-user-plus"></i></a>												
+                                                </div>
+                                                
 												<div class="col-md-6 inputGroupContainer">
                                                     <div class="input-group" style="width: 100%">
                                                         <span class="input-group-addon" style="width: 40px"><i class="fa fa-barcode"></i></span>                                                        
                                                         <input type="hidden" id="tpItemId" name="tpItemId">
 													    <input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang">
                                                     </div>                                                    
-                                                </div>
-
-
-                                                <div class="col-md-2">
-                                                    <h4><strong>Pembayaran</strong></h4>
-                                                </div>
-                                                <div class="col-md-1"><strong>:</strong></div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group"  style="width: 100%">
-                                                        <select class="form-control" name="tpPembayaran" id="tpPembayaran">
-                                                            <option value="" selected disabled>==== PILIH PEMBAYARAN ====</option>
-                                                            <option value="lunas">LUNAS</option>
-                                                            <option value="tidak">TIDAK LUNAS</option>
-                                                        </select>
-                                                    </div>
                                                 </div>
 											</div>
 										</div>
@@ -150,7 +140,7 @@
                                             <thead>
                                                 <tr>
 													<th data-hide="phone,tablet" width="50%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="25%">Harga Barang</th>													
+                                                    <th data-hide="phone,tablet" width="25%">Perkiraan Harga Barang</th>													
                                                     <th data-hide="phone,tablet" width="15%">Jumlah Barang</th>
                                                     <th data-hide="phone,tablet" width="10%">Aksi</th>
                                                 </tr>

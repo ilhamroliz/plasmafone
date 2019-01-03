@@ -155,7 +155,9 @@
                                                         <select name="jabatan" class="form-control jabatan" id="jabatan" required>
                                                             <option value="" selected disabled>-- PILIH LEVEL</option>
                                                             @foreach($getLevel as $data)
+                                                            @if($data->l_id != 1)
                                                             <option value="{{ $data->l_id }}">{{ $data->l_name }}</option>
+                                                            @endif
                                                             @endforeach
                                                         </select>                                                       
                                                     </div>

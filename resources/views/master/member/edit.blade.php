@@ -202,7 +202,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kota</label>
 													<div class="col-xs-5 col-lg-8 inputGroupContainer">
-															<select width="100%" class="form-control" name="kota" id="kota" v-model="form_data.kota" readonly onchange="getkecamatan()">
+															<select width="100%" class="form-control" name="kota" id="kota" v-model="form_data.kota" onchange="getkecamatan()">
 																<option value="" disabled>== Pilih Kota ==</option>
 																@foreach ($kota as $key => $value)
 																	<option value="{{$value->wc_id}}" @if($member->m_kota == $value->wc_id) selected @endif>{{$value->wc_name}}</option>
@@ -214,7 +214,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kecamatan</label>
 													<div class="col-xs-5 col-lg-8 inputGroupContainer">
-															<select class="form-control" name="kecamatan" id="kecamatan" v-model="form_data.kecamatan" readonly onchange="getdesa()">
+															<select class="form-control" name="kecamatan" id="kecamatan" v-model="form_data.kecamatan" onchange="getdesa()">
 																<option value="" disabled>== Pilih Kecamatan ==</option>
 																@foreach ($kecamatan as $key => $value)
 																	<option value="{{$value->wk_id}}" @if($member->m_kecamatan == $value->wk_id) selected @endif>{{$value->wk_name}}</option>
@@ -226,7 +226,7 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Desa</label>
 													<div class="col-xs-5 col-lg-8 inputGroupContainer">
-															<select class="form-control" name="desa" id="desa" v-model="form_data.desa" readonly>
+															<select class="form-control" name="desa" id="desa" v-model="form_data.desa">
 																<option value="" disabled>== Pilih Desa ==</option>
 																@foreach ($desa as $key => $value)
 																	<option value="{{$value->wd_id}}" @if($member->m_desa == $value->wd_id) selected @endif>{{$value->wd_name}}</option>
@@ -301,7 +301,7 @@
 			yearDefault: 'Tahun',
 
 			// Minimum age
-			minimumAge: 10,
+			minimumAge: 8,
 
 			// Maximum age
 			maximumAge: 80
