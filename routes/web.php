@@ -561,7 +561,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/penjualan/set-harga/outlet/auto-CodeNItem', 'penjualan\setHargaController@cari_code_n_item');
 	Route::get('/penjualan/set-harga/outlet/cektable', 'penjualan\setHargaController@cek_table');
 
-	///////// END OUTLET
+	/////// End OUTLET
 
 	//== End Set Harga
 
@@ -594,7 +594,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 	///// End PENJUALAN
 
+
 	///// MANAJEMEN PENJUALAN
+
+	//=== RENCANA PENJUALAN
 
 	Route::get('/man-penjualan/rencana-penjualan', 'manajemen_penjualan\pembuatanRencanaPenjualanController@index');
 	Route::get('/man-penjualan/rencana-penjualan/auto-comp', 'manajemen_penjualan\pembuatanRencanaPenjualanController@auto_comp');
@@ -603,8 +606,17 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/man-penjualan/rencana-penjualan/getPending', 'manajemen_penjualan\pembuatanRencanaPenjualanController@get_data_pending');
 	Route::get('/man-penjualan/rencana-penjualan/getApproved', 'manajemen_penjualan\pembuatanRencanaPenjualanController@get_data_approved');
 	Route::match(['get', 'post'], '/man-penjualan/rencana-penjualan/add', 'manajemen_penjualan\pembuatanRencanaPenjualanController@tambah');
-	Route::match(['get', 'post'], '/man-penjualan/rencana-penjualan/edit', 'manajemen_penjualan\pembuatanRencanaPenjualanController@edit');
+	Route::match(['get', 'post'], '/man-penjualan/rencana-penjualan/edit/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@edit');
+	Route::get('/man-penjualan/rencana-penjualan/edit-dt/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@edit_dt');
+
+	Route::get('/man-penjualan/rencana-penjualan/detail/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@detail');
+	Route::get('/man-penjualan/rencana-penjualan/detail-dt/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@detail_dt');
+	Route::get('/man-penjualan/rencana-penjualan/pencarian', 'manajemen_penjualan\pembuatanRencanaPenjualanController@cari');
+
+	Route::get('/man-penjualan/rencana-penjualan/approve', 'manajemen_penjualan\pembuatanRencanaPenjualanController@approve');
 	Route::get('/man-penjualan/rencana-penjualan/hapus', 'manajemen_penjualan\pembuatanRencanaPenjualanController@hapus');
+
+	//=== End RENCANA PENJUALAN
 
 	///// End MANAJEMEN PENJUALAN
 

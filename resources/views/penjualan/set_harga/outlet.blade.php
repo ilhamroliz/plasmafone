@@ -78,7 +78,7 @@
 								<div class="row form-group">
 									<div class="col-lg-12 col-md-12 col-sm-12">
 										<div class="col-md-9">
-											<input type="text" id="shoItemNama" class="form-control" name="shoItemNama" placeholder="Masukkan Nama Barang">
+											<input type="text" id="shoItemNama" class="form-control" name="shoItemNama" placeholder="Masukkan Nama Barang" style="text-transform: uppercase">
 											<input type="hidden" name="shoItemId" id="shoItemId">
 										</div>
 										<div class="col-md-3">
@@ -103,9 +103,9 @@
 
             </div>
 
-            <!-- Modal untuk Detil Pemesanan -->
+            <!-- Modal untuk Edit Data by Outlet -->
 			<div class="modal fade" id="shoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<div class="modal-dialog" style="width: 60%">
+				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
 
@@ -140,23 +140,23 @@
 
                                                      	<div class="col-md-12 padding-top-10 margin-bottom-10">
                                                             <div class="form-group">
-                                                                <label class="col-md-2" style="float:left"><strong>Nama Item</strong></label>
-                                                                <label class="col-md-1">:</label>
-                                                                <label class="col-md-9" id="shoShowNama"></label>
+                                                                <label style="float:left; width: 20%"><strong>Nama Item</strong></label>
+                                                                <label style="width: 5%">:</label>
+                                                                <label style="width: 60%" id="shoShowNama"></label>
                                                             </div>
                                                             
                                                             <div class="form-group">
-                                                                <label class="col-md-2" style="float:left"><strong>HPP</strong></label>
-                                                                <label class="col-md-1">:</label>
-                                                                <label class="col-md-9" id="shoHPP"></label>
+                                                                <label style="float:left; width: 20%"><strong>HPP</strong></label>
+                                                                <label style="width: 5%">:</label>
+                                                                <label style="width: 60%" id="shoHPP"></label>
                                                             </div>	
                                                         </div>
 
-                                                        <table id="shoTable" class="table table-striped table-bordered table-hover margin-bottom-10" style="width:100%">
+                                                        <table id="shoTable" class="table table-striped table-bordered table-hover margin-bottom-10">
                                                             <thead>		
-                                                                <tr style="width:100%">
-                                                                    <th style="width:60%"><i class="fa fa-building txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
-                                                                    <th style="width:40%"><i class="fa fa-dollar txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Harga Satuan</th>
+                                                                <tr>
+                                                                    <th style="width: 60%"><i class="fa fa-building txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+                                                                    <th style="width: 40%"><i class="fa fa-dollar txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Harga Satuan</th>
                                                                 </tr>
                                                             </thead>
 

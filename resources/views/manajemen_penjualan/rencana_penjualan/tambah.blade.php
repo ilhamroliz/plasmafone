@@ -116,7 +116,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									
                                     <div class="col-md-12">
 
-                                        <table id="trpTable" class="table table-striped table-bordered table-hover tpTable" width="100%">
+                                        <table id="trpTable" class="table table-striped table-bordered table-hover trpTable" width="100%">
                                             <thead>
                                                 <tr>
 													<th data-hide="phone,tablet" style="width: 25%">Nama Outlet</th>
@@ -169,13 +169,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 @section('extra_script')
 	<script type="text/javascript">
 
-		var table = $('#trpTable').DataTable({
+		var table;
+
+		$(document).ready(function(){
+
+			table = $('#trpTable').DataTable({
 				"paging": false,
 				"info": false,
 				"searching": false
 			});
-
-		$(document).ready(function(){
 			
 			$( "#trpCompNama" ).autocomplete({
 				source: baseUrl+'/man-penjualan/rencana-penjualan/auto-comp',
@@ -214,7 +216,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#trpQty').val('');
 		}
 
+		$('.trpTable tbody').on( 'click', 'button.btnhapus', function () {
+            table.row( $(this).parents('tr') ).remove().draw();
+        });
+
 		function simpan_trp(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Menyimpan Perubahan Data...');
+
 			axios.post(baseUrl+'/man-penjualan/rencana-penjualan/add', $('#trpForm').serialize()).then((response) => {
 
 				if(response.data.status == 'trpSukses'){
