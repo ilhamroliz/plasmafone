@@ -74,29 +74,30 @@
                                                     </div>
                                                     
                                                 </div>
+                                                <div id="detail_mem" style="display: none">
+                                                    <div class="form-group">
 
-                                                <div class="form-group">
+                                                        <div class="col-md-12">
 
-                                                    <div class="col-md-12">
+                                                            <label class="control-label text-left">Jenis Member</label>
+                                                            &nbsp; &colon; &nbsp;
+                                                            <strong id="jenis_member"></strong>
+                                                            
+                                                        </div>
 
-                                                        <label class="control-label text-left">Jenis Member</label>
-                                                        &nbsp; &colon; &nbsp;
-                                                        <strong id="jenis_member">RETAIL</strong>
-                                                        
                                                     </div>
 
-                                                </div>
+                                                    <div class="form-group">
 
-                                                <div class="form-group">
+                                                        <div class="col-md-12">
 
-                                                    <div class="col-md-12">
+                                                            <label class="control-label text-left">Alamat</label>
+                                                            &nbsp; &colon; &nbsp;
+                                                            <strong id="alamat"></strong>
+                                                            
+                                                        </div>
 
-                                                        <label class="control-label text-left">Alamat</label>
-                                                        &nbsp; &colon; &nbsp;
-                                                        <strong id="alamat">SURABAYA</strong>
-                                                        
                                                     </div>
-
                                                 </div>
 
                                             </article>
@@ -115,23 +116,28 @@
 
                                         </div>
 
-                                        <div class="form-group">
-                                            <div class="col-md-8">
-                                                <div class="input-icon-left">
-                                                    <i class="fa fa-barcode"></i>
-                                                    <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+                                        <div id="search_barang" style="display: none">
+                                        
+                                            <div class="form-group">
+                                                <div class="col-md-8">
+                                                    <div class="input-icon-left">
+                                                        <i class="fa fa-barcode"></i>
+                                                        <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="input-icon-left">
+                                                        <i class="fa fa-sort-numeric-asc"></i>
+                                                        <input class="form-control" placeholder="Qty" id="qty" type="text">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button type="button" id="tambahketable" class="btn btn-primary" onclick="tambah()"><i class="fa fa-plus"></i></button>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="input-icon-left">
-                                                    <i class="fa fa-sort-numeric-asc"></i>
-                                                    <input class="form-control" placeholder="Qty" id="qty" type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <button type="button" id="tambahketable" class="btn btn-primary" onclick="tambah()"><i class="fa fa-plus"></i></button>
-                                            </div>
+
                                         </div>
+
                                         <div class="form-group">
                                             <div class="col-md-12">
                                                 <table class="table table-responsive table-striped table-bordered" id="table-penjualan">
@@ -140,8 +146,10 @@
                                                         <th style="width: 32%;">Nama Barang</th>
                                                         <th style="width: 8%;">Qty</th>
                                                         <th style="width: 15%;">Harga @</th>
+                                                        @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)
                                                         <th style="width: 8%;">Diskon %</th>
                                                         <th style="width: 12%;">Diskon Rp</th>
+                                                        @endif
                                                         <th style="width: 15%;">Total</th>
                                                         <th style="width: 10%;">Aksi</th>
                                                     </tr>
@@ -233,9 +241,10 @@
 
         $( "#cari-member" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-member',
-            minLength: 2,
+            minLength: 1,
             select: function(event, data) {
                 getData(data.item);
+                getDetailMember(data.item.id);
             }
         });
 
@@ -246,13 +255,45 @@
                 setStock(data.item);
             }
         });
+
+        function getDetailMember(id)
+        {
+            $("#detail_mem").hide("slow");
+            $("#search_barang").hide("slow");
+            $("#cari-stock").val("");
+            $("#qty").val("");
+            axios.get(baseUrl+'/penjualan-reguler/getdetailmember/'+id)
+            .then(function (response) {
+                // handle success
+                // console.log(response.data.jenis);
+                $("#jenis_member").text(response.data.jenis);
+                $("#alamat").text(response.data.alamat);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                $("#detail_mem").show("slow");
+                $("#search_barang").show("slow");
+            });
+        }
     })
 
     function setStock(info){
         var data = info.data;
+        var price = 0;
         namaGlobal = data.i_nama;
         stockGlobal = data.s_qty;
-        hargaGlobal = parseInt(data.i_price);
+
+        if(data.gp_price != null) {
+            price = data.gp_price;
+        } else if (data.gp_price != null) {
+            price = data.gp_price;
+        } else {
+            price = data.i_price;
+        }
+        hargaGlobal = parseInt(price);
         idGlobal = data.s_id;
         kodespesifikGlobal = data.sd_specificcode;
         spesifikGlobal = data.i_specificcode;
@@ -283,6 +324,8 @@
             $('#tambahketable').click();
         }
     });
+
+    
 
     function simpanmember() {
         overlay();
@@ -381,12 +424,15 @@
                     '</td>' +
                     '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \''+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                    '<td style="width: 8%;"><input style="width: 100%;" type="text" class="discp" name="discp[]" /></td>' +
-                    '<td style="width: 12%;"><input style="width: 100%;" type="text" class="discv" name="discv[]" /></td>' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discp" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0 %" /></td>@endif' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discv" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
                     '<td style="width: 15%;" class="harga-'+idGlobal+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
                     '<td style="width: 10%;" class="text-center"><button onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
                 $("#table-penjualan tbody").append(row);
+                $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: ' %'});
+                $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+
             }
         } else {
             row = '<tr id="'+kodeGlobal+'" ">' +
@@ -398,12 +444,15 @@
                 '</td>' +
                 '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" name="qtyTable[]" value="1" />1</td>' +
                 '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                '<td style="width: 8%;"><input style="width: 100%;" type="text" class="discp" name="discp[]" /></td>' +
-                '<td style="width: 12%;"><input style="width: 100%;" type="text" class="discv" name="discv[]" /></td>' +
+                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discp"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0 %" /></td>@endif' +
+                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discv"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
                 '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
                 '<td style="width: 10%;" class="text-center"><button class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
                 '</tr>';
             $("#table-penjualan tbody").append(row);
+            $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: ' %'});
+            $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+
         }
         $('#cari-stock').val('');
         $('#qty').val('');
@@ -433,6 +482,36 @@
             }
         });
         updateTotalTampil();
+    }
+
+    function isiDiscp(discp, discv) {
+
+        var a = $("#"+discv).val();
+
+        if (a == "") {
+            a = 0;
+        } else {
+            a = parseInt(a);
+        }
+
+        if(a != 0) {
+            $("#"+discp).val("0 %");
+        }
+
+    }
+
+    function isiDiscv(discp, discv) {
+
+        var a = $("#"+discp).val();
+
+        if (a == "") {
+            a = "0 %";
+        }
+
+        if(a != "0 %") {
+            $("#"+discv).val("0");
+        }
+
     }
 
     function ubahQty(stock, id) {

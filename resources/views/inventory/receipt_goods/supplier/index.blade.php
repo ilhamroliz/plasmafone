@@ -52,7 +52,8 @@
 					</a>
 				</li>
 				<li>
-					<a href="{{ url('/inventory/penerimaan/supplier/add') }}">
+					<!-- <a href="{{ url('/inventory/penerimaan/supplier/add') }}"> -->
+					<a href="{{ url('/inventory/penerimaan/supplier/formAdd') }}">
 						<i class="fa fa-plus"></i> &nbsp;Tambahkan Data
 					</a>
 				</li>
@@ -62,13 +63,7 @@
 						<i class="fa fa-pencil-square"></i> &nbsp;Edit Data
 					</a>
 				</li>
-				<li>
-					<a href="#" id="multiple_delete">
-						<i class="fa fa-eraser"></i> &nbsp;Hapus Data
-					</a>
-				</li>
-
-				<li class="right"><i class="fa fa-bars"></i></li>
+					
 			</ul>
 		</div>
 	</div>
@@ -101,15 +96,12 @@
 		<!-- row -->
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
-				<form id="table-form" method="post" action="{{ url('/inventory/penerimaan/supplier/edit-multiple') }}">
+				<form id="table-form">
 					{!! csrf_field() !!}
-					<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+					<table id="dt_bbm" class="table table-striped table-bordered table-hover" width="100%">
 						<thead>			                
 							<tr>
-								<th class="text-center" data-hide="phone" width="4%">*</th>
-								<th class="text-center" width="5%" style="vertical-align: middle;">
-									---
-								</th>
+								
 								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;No. Purchase Order</th>
 								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kategori</th>
 								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;IMEI</th>
@@ -122,27 +114,6 @@
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($data as $key => $barang)
-							<tr>
-								<td class="text-center">{{ $key+1 }}</td>
-								<td class="text-center">
-									<input type="checkbox" class="check-me" name="data_check[]" data-id="{{$barang->i_id}}" value="{{ $barang->i_id }}"/>
-								</td>
-								<td>{{ $barang->i_po }}</td>
-								<td>{{ $barang->i_kategori }}</td>
-								<td>@if($barang->i_imei == "") <center> ----- </center> @else {{ $barang->i_imei }} @endif</td>
-								<td>{{ $barang->i_kode_barang }}</td>
-								<td>{{ $barang->i_nama_barang }}</td>
-								<td><center>{{ $barang->i_qty }}</center></td>
-								<td>{{ $barang->i_tgl_masuk }}</td>
-								<td>{{ $barang->s_company }}</td>
-								<td class="text-center">
-									<button type="button" class="btn btn-xs btn-success btn-circle view" data-toggle="tooltip" data-placement="top" title="View Data" data-id="{{ $barang->i_id }}"><i class="glyphicon glyphicon-folder-open"></i></button>
-									<button class="btn btn-xs btn-warning btn-circle edit" data-toggle="tooltip" data-placement="top" title="Edit Data" data-id="{{ $barang->i_id }}"><i class="glyphicon glyphicon-edit"></i></button>
-									<button class="btn btn-xs btn-danger btn-circle hapus" data-toggle="tooltip" data-placement="top" title="Hapus Data" data-id="{{ $barang->i_id }}"><i class="glyphicon glyphicon-trash"></i></button>
-								</td>
-							</tr>
-							@endforeach
 						</tbody>
 					</table>
 				</form>
@@ -167,16 +138,16 @@
 
 							<fieldset>
 
-								<!-- <section>
+								<section>
 									<div class="row">
 										<label class="label col col-2">Order Nomor</label>
 										<div class="col col-10">
 											<label class="input"> <i class="icon-append fa fa-user"></i>
-												<input type="text" disabled name="ro_no" id="ro_no" />
+												<input type="text" disabled name="ro_no" id="ro_no" placeholder="aaaaaaaaaaaaa" />
 											</label>
 										</div>
 									</div>
-								</section> -->
+								</section>
 								<h3 class="text-center" style="margin-bottom: 20px;">Penerimaan Barang Dari Supplier</h3>
 								<table class="table table-responsive table-bordered">
 									<tr>
@@ -255,179 +226,50 @@
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 <script type="text/javascript">
+var table_bbm;
 	$(document).ready(function(){
-		$('.check-me').prop( "checked", false );
-		let selected = [], return_id = [];
-
-		/* BASIC ;*/
-		var responsiveHelper_dt_basic = undefined;
-		var responsiveHelper_datatable_fixed_column = undefined;
-		var responsiveHelper_datatable_col_reorder = undefined;
-		var responsiveHelper_datatable_tabletools = undefined;
-
-		var breakpointDefinition = {
-			tablet : 1024,
-			phone : 480
-		};
-
-		$('#dt_basic').dataTable({
-			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-			"t"+
-			"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-			"autoWidth" : true,
-			"preDrawCallback" : function() {
-			// Initialize the responsive datatables helper once.
-			if (!responsiveHelper_dt_basic) {
-			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-			}
-			},
-			"rowCallback" : function(nRow) {
-			responsiveHelper_dt_basic.createExpandIcon(nRow);
-			},
-			"drawCallback" : function(oSettings) {
-			responsiveHelper_dt_basic.respond();
-			}
-		});
-
-		/* END BASIC */
-
-		$('.check-me').change(function(evt){
-			evt.preventDefault(); context = $(this);
-			if(context.is(':checked')){
-			selected.push(context.val());
-			return_id.push(context.data('id'));
-			}else{
-			selected.splice(_.findIndex(selected, function(o) { return o == context.val() }), 1);
-		}
-			//console.log(selected);
-			//console.log(return_id);
-		})
-
-		// Hapus Click
-
-		$("#multiple_delete").click(function(evt){
-			evt.preventDefault();
-
-			if(selected.length == 0){
-				alert('Tidak Ada Data Yang Anda Pilih')
-			}else{
-				let ask = confirm(selected.length+' Data Akan Dihapus Apakah Anda Yakin ?');
-				if(ask){
-					$('#overlay').fadeIn(300);
-					axios.post(baseUrl+'/inventory/penerimaan/supplier/multiple-delete', {
-						data 	: selected,
-						_token 	: '{{ csrf_token() }}'
-					})
-					.then((response) => {
-						if(response.data.status == 'berhasil'){
-						location.reload();
-						// console.log(response);
-					}
-					}).catch((error) => {
-						console.log(error);
-					})
-				}
-			}
-		})
-
-		// Edit Click
-
-		$("#multiple_edit").click(function(evt){
-			evt.preventDefault();
-
-			if(selected.length == 0){
-				alert('Tidak Ada Data Yang Anda Pilih')
-			}else{
-				$("#table-form").submit();
-			}
-		});
-
-		// edit 1 click
-
-		$(".edit").click(function(evt){
-			evt.preventDefault(); context = $(this);
-
-			window.location = baseUrl+'/inventory/penerimaan/supplier/edit?id='+context.data('id');
-		});
-
-		// hapus 1 click
-		$(".hapus").click(function(evt){
-			evt.preventDefault(); context = $(this);
-
-			let ask = confirm('Apakah Anda Yakin Akan Menghapus Data Ini?');
-			if(ask){
-				$('#overlay').fadeIn(300);
-				axios.post(baseUrl+'/inventory/penerimaan/supplier/multiple-delete', {
-					data 	: [context.data('id')],
-					_token 	: '{{ csrf_token() }}'
-				})
-				.then((response) => {
-					if(response.data.status == 'berhasil'){
-					location.reload();
-				}
-				}).catch((error) => {
-					console.log(error);
-				})
-			}
-		});
-
-		// view click
-		$(".view").click(function(evt){
-			evt.preventDefault(); context = $(this);
-			axios.get(baseUrl+'/inventory/penerimaan/supplier/get-current-receipt/'+context.data('id'))
-			.then((response) => {
-				if(response.data == null){
-					$.toast({
-						text: 'Ups . Data Yang Ingin Anda Lihat Sudah Tidak Ada..',
-						showHideTransition: 'fade',
-						icon: 'error'
-					})
-					$('#form-load-section-status').fadeOut(200);
-				}else{
-					// console.log(response.data);
-					initiate(response.data);
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			})
-			// $('#myModal').modal('show');
-		});
-
-		function initiate(data){
-			var no_imei;
-			if (data.i_imei == null) {
-				no_imei = "-----";
-			} else {
-				no_imei = data.i_imei;
-			}
-			$('#v_kategori').text(data.i_kategori);
-			$('#v_imei').text(no_imei);
-			$('#v_kode_barang').text(data.i_kode_barang);
-			$('#v_nama_barang').text(data.i_nama_barang);
-			$('#v_qty').text(data.i_qty);
-			$('#v_tgl_masuk').text(data.i_tgl_masuk);
-			$('#v_supplier').text(data.s_company);
-			$('#myModal').modal('show');
-		}
-
-		function formatRupiah(angka, prefix)
-		{
-			var number_string = angka.toString(),
-			split	= number_string.split(','),
-			sisa 	= split[0].length % 3,
-			rupiah 	= split[0].substr(0, sisa),
-			ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
-
-			if (ribuan) {
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
-
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
-		}
+			reload_data();
 	})
+
+	function reload_data(){
+		table_bbm= $('#dt_bbm').DataTable({
+			"language" : dataTableLanguage,
+			"searching": false,
+            "ajax": {
+                    "url": '{{url('/inventory/penerimaan/supplier/load_bbm')}}',
+                    "type": "POST",  
+                    "data": function ( data ) {
+                        
+						data._token = '{{ csrf_token() }}';
+                    },
+                },
+        } );
+    }
+
+	function reload_table(){
+		
+		$.ajax({
+			url : '{{url('/inventory/penerimaan/supplier/getEntitas_po')}}',
+			type: "POST",
+			data: { 
+				po: $('#po').val(),
+				_token 	: '{{ csrf_token() }}'
+			},
+			dataType: "JSON",
+			success: function(data)
+			{
+				
+				$('#supplier').val(data.s_company);
+				$('#tgl_order').val(data.p_date);
+				table_barang.ajax.reload(null, false);
+			}
+		});
+
+    }
+
+	function openModal(){
+			$('#myModal').modal('show',true);
+		}
 </script>
 
 @endsection

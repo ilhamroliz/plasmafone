@@ -361,7 +361,7 @@
 													<div class="col-xs-8 col-lg-8 inputGroupContainer">
 
 														<!-- <input type="text" class="form-control" name="i_expired" id="i_expired" placeholder="Masukkan Tanggal Kedaluwarsa" v-model="form_data.i_expired" autocomplete="off"/> -->
-														<select class="form-control" v-model="form_data.i_expired" name="i_expired">
+														<select class="form-control" name="i_expired">
 															<option value="N">TIDAK</option>
 															<option value="Y">YA</option>
 														</select>
@@ -750,8 +750,7 @@
 					i_minstock: '',
 					i_berat: '',
 					i_specificcode: 'Y',
-					i_isactive: 'Y',
-					i_expired: 'N'
+					i_isactive: 'Y'
 					
 				}
 
