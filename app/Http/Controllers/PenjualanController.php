@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
+use App\Http\Controllers\CodeGenerator as GenerateCode;
 use Response;
 Use Auth;
 
@@ -91,7 +92,6 @@ class PenjualanController extends Controller
             $kode = $temp;
         }
         if (count($kode) > 0){
-            $outlet_user = Auth::user()->m_comp;
 
             $dataN = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
@@ -141,7 +141,7 @@ class PenjualanController extends Controller
             $data = $dataN->union($dataY)->get();
         } else {
             $data = DB::table('d_stock')
-                ->select('i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q){
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
@@ -187,6 +187,11 @@ class PenjualanController extends Controller
 
     public function savePenjualan(Request $request)
     {
+        $outlet_user = Auth::user()->m_comp;
+
+        // POS-REG/001/14/12/2018
+        $nota = GenerateCode::codePos('d_sales', 's_id', 3, 'POS-REG');
+        
         dd($request->all());
     }
 }
