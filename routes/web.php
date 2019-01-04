@@ -491,6 +491,19 @@ Route::group(['middleware' => 'auth'], function () {
 	// Inventory
 	// Penerimaan barang dari supplier
 	Route::get('/inventory/penerimaan/supplier', 'inventory\ReceptionController@index_supplier');
+	Route::post('/inventory/penerimaan/supplier/detailPo', 'inventory\ReceptionController@detailPo');
+	Route::post('/inventory/penerimaan/supplier/getPo', 'inventory\ReceptionController@getPo');
+	Route::post('/inventory/penerimaan/supplier/getEntitas_po', 'inventory\ReceptionController@getEntitas_po');
+	Route::post('/inventory/penerimaan/supplier/load_bbm', 'inventory\ReceptionController@load_bbm');
+	Route::post('/inventory/penerimaan/supplier/', 'inventory\ReceptionController@');
+	Route::post('/inventory/penerimaan/supplier/', 'inventory\ReceptionController@');
+
+
+
+
+
+
+	Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\ReceptionController@index_addSupplier');
 	Route::match(['get', 'post'], '/inventory/penerimaan/supplier/add', 'inventory\ReceptionController@add_items_from_supplier');
 	Route::get('/inventory/penerimaan/supplier/get-current-receipt/{id}', 'inventory\ReceptionController@get_current_receipt');
 	Route::get('/inventory/penerimaan/supplier/edit', 'inventory\ReceptionController@edit');
