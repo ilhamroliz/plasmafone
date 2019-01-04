@@ -123,25 +123,25 @@ class setHargaController extends Controller
             foreach ($select as $query) {
                 if ($query->i_code == null || $query->i_code == '' && $query->pd_value == null) {
                     $results[] = [
-                        'id' => Crypt::encrypt($query->i_id),
+                        'id' => $query->i_id,
                         'label' => $query->i_nama,
                         'hpp' => '0'
                     ];
                 } else if ($query->i_code == null || $query->i_code == '' && $query->pd_value != null) {
                     $results[] = [
-                        'id' => Crypt::encrypt($query->i_id),
+                        'id' => $query->i_id,
                         'label' => $query->i_nama,
                         'hpp' => $query->pd_value
                     ];
                 } else if ($query->pd_value == null) {
                     $results[] = [
-                        'id' => Crypt::encrypt($query->i_id),
+                        'id' => $query->i_id,
                         'label' => $query->i_code . ' - ' . $query->i_nama,
                         'hpp' => '0'
                     ];
                 } else {
                     $results[] = [
-                        'id' => Crypt::encrypt($query->i_id),
+                        'id' => $query->i_id,
                         'label' => $query->i_code . ' - ' . $query->i_nama,
                         'hpp' => $query->pd_value
                     ];
@@ -252,7 +252,7 @@ class setHargaController extends Controller
                 DB::beginTransaction();
                 try {
 
-                    $shoItemId = Crypt::decrypt($request->shoShowId);
+                    $shoItemId = $request->shoShowId;
                     $shoCompId = $request->shoCompId;
                     $shoCompPrice = $request->shoCompPrice;
 

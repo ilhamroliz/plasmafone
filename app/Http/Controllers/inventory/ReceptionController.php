@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 use Session;
+use App\Http\Controllers\PlasmafoneController as Plasma;
+use DataTables;
+use Carbon\Carbon;
+use Auth;
+use PDF;
+use Response;
 
 class ReceptionController extends Controller
 {
@@ -20,6 +26,254 @@ class ReceptionController extends Controller
     	return view('inventory.receipt_goods.supplier.index');
     }
 
+    public function load_bbm()
+    {
+        // menampilkan data master penerimaan barang
+        $query = DB::table('d_bbm')
+                ->select('d_bbm.*','d_supplier.*','d_purchase.*')
+                ->join('d_supplier','d_bbm.bm_supplier','=','d_supplier.s_id')
+                ->join('d_purchase','d_bbm.bm_po','=','d_purchase.p_id')
+                ->get();
+
+        $data = array();
+        $i = 1;
+        foreach ($query as $key) {
+           $row     = array();
+           $row[]   = $i++;
+           $row[]   = $key->bm_no;
+           $row[]   = $key->p_nota;
+           $row[]   = $key->s_company;
+           $row[]   = $key->bm_receiveDate;
+           $row[]   = $key->bm_createdUserID;
+           $row[]   = $key->p_nota;
+           $row[]   = $key->p_nota;
+           $row[]   = $key->p_nota;
+           $data[]  = $row;
+        }
+
+        echo json_encode(array("data"=>$data));
+    }
+
+    public function detailPo(Request $request)
+    {
+        // menampilkan table detail item purchase order
+        $id = $request->input('po');
+        $query = DB::table('d_purchase_dt')
+                ->select('d_purchase_dt.*','d_item.*')
+                ->join('d_item','d_purchase_dt.pd_item','=','d_item.i_id')
+                ->where('d_purchase_dt.pd_purchase',$id)
+                ->get();
+        
+                $data = array();
+                $i = 1;
+                foreach ($query as $key) {
+                    $row        = array();
+                    $row[]      = $i++;
+                    $row[]      = $key->i_nama;
+                    $row[]      = $key->pd_value;
+                    $row[]      = $key->pd_qty;
+                    $row[]      = '<div class="text-center edit"><input type="text" class="form-control txtedit" id="qty' . $key->pd_detailid . '"  style="text-transform: uppercase" onkeyup="updateQty(' . $key->pd_detailid . ')" /></div>';
+                    $row[]      = '<input type="hidden" id="gudangHidden'.$key->pd_detailid.'" name="tpMemberId"><input type="text" class="form-control" id="gudangShow'.$key->pd_detailid.'" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Item" onkeyup="updateGudang(' . $key->pd_detailid . ')">';
+                    $data[]     = $row;
+
+                }
+
+                echo json_encode(array("data"=>$data));
+    }
+
+    public function cariGudang(Request $request)
+    {
+        $cari = $request->term;
+        $nama = DB::table('d_gudang')
+            ->where(function ($q) use ($cari){
+                $q->orWhere('g_id', 'like', '%'.$cari.'%');
+                $q->orWhere('g_nama', 'like', '%'.$cari.'%');
+            })->get();
+
+        if ($nama == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+           
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->g_id, 'label' => $query->g_nama .'('.$query->g_kode.')'];
+               
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function updateGudang(Request $request)
+    {
+        $id = $request->input('id');
+        $gudang = $request->input('gudang');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_gudangTerima' =>$gudang
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
+    }
+
+    public function updateQty(Request $request){
+        $id = $request->input('id');
+        $qty = $request->input('qty');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_qtyTerima' =>$qty
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
+    }
+
+    public function updateTgl(Request $request){
+        $id = $request->input('id');
+        $tgl = $request->input('tgl');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_tglTerima' =>$tgl
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
+    }
+
+    public function add_bbm(Request $request)
+    {
+        // menambahkan data penerimaan barang
+        $poNumber = '1';
+        // $poNumber = $request->input('poNumber');
+
+        $query3 = DB::table('d_purchase')
+        ->select('d_purchase.*')
+        ->where('d_purchase.p_id')
+        ->get();
+
+        $query2 = DB::table('d_purchase_dt')
+        ->select('d_purchase_dt.*')
+        ->where('d_purchase_dt.pd_purchase',$poNumber)
+        ->get();
+
+        $query = DB::table('d_bbm')
+                ->select('d_bbm.*')
+                ->get();
+        
+
+        $barisBbm = count($query);
+        if($barisBbm==0) {
+            $cif ="00001";
+        }
+        else
+        {
+            foreach ($query as $row) {
+                //$a = substr($row->ID,5); 
+                $counter=intval($barisBbm); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
+                $new=intval($counter)+1;         //digit terahit ditambah 1
+            }
+            if (strlen($new)==1){ //jika counter yg didapat panjangnya 1 ex: 1
+            $vcounter="0000". '' .$new;
+            }
+            if (strlen($new)==2){  //jika counter yg didapat panjangnya 2 ex: 11
+            $vcounter="000". '' .$new;
+            }
+            if (strlen($new)==3){  //jika counter yg didapat panjangnya 2 ex: 11
+            $vcounter="00". '' .$new;
+            }
+            if (strlen($new)==4){  //jika counter yg didapat panjangnya 2 ex: 11
+            $vcounter="0". '' .$new;
+            }
+            if (strlen($new)==5){  //jika counter yg didapat panjangnya 2 ex: 11
+            $vcounter=$new;
+            }
+            $cif = $vcounter;
+        }
+
+        $m=count($query);
+                if($m == ""){
+                    $n = '1';
+                }else{
+                    $n = $m+1;
+                }
+        $user = Auth::user()->m_id;
+        $tgl = date('d');
+        $bln = date('m');
+        $thn = date('Y');
+        $code = "BBM-".$cif."/".$tgl."/".$bln."/".$thn;
+        $faktur = Carbon::now()->timestamp;
+
+        $list = array([
+            'bm_id'             =>$n,
+            'bm_faktur'         =>$faktur,
+            'bm_no'             =>$code,
+            'bm_po'             =>$poNumber,
+            'bm_supplier'       =>$query3->p_supplier,
+            'bm_mem'            =>'',
+            'bm_receiveDate'    =>$query2->pd_receivedttime,
+            'bm_orderDate'      =>$query2->pd_receivedttime,
+            'bm_needDate'       =>$query2->pd_receivedttime,
+            'bm_total'          =>$query2->pd_total_net,
+            'bm_createdDate'    =>$query2->pd_receivedttime,
+            'bm_createdUserID'  =>$user,
+            'bm_modifiedDate'   =>'',
+            'bm_modifiedUserID' =>'',
+            ]);
+
+        $insertOne = DB::table('d_bbm')->insert($list);
+
+
+       
+
+        
+    }
+
+    public function index_addSupplier()
+    {
+        return view('inventory.receipt_goods.supplier.add');
+    }
+
+    public function getPo()
+    {
+        $data = DB::table('d_purchase')
+                ->select('d_purchase.*')
+                ->where('d_purchase.po_status','PURCHASING')
+                ->get();
+        echo json_encode($data);
+
+    }
+
+    public function getEntitas_po(Request $request)
+    {
+        $po = $request->input('po');
+        $query = DB::table('d_purchase')
+        ->select('d_purchase.*','d_supplier.*')
+        ->join('d_supplier','d_purchase.p_supplier','=','d_supplier.s_id')
+        ->where('d_purchase.p_id',$po)
+        ->get();
+
+
+        foreach ($query as $key) {
+            $nama = $key->s_company;
+            $tgl = $key->p_date;
+        }
+
+        $data = array(
+            "s_company"=>$nama,
+            "p_date" =>$tgl
+        );
+
+        echo json_encode($data);
+    }
+// -------------------------------------------- other script----------------------------------------
     public function add_items_from_supplier(Request $request)
     {
     	if ($request->isMethod('post')) {
