@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use Response;
+Use Auth;
 
 class PenjualanController extends Controller
 {
@@ -16,13 +17,17 @@ class PenjualanController extends Controller
     public function cariMember(Request $request)
     {
         $cari = $request->term;
+        $results = [];
         $nama = DB::table('m_member')
             ->where(function ($q) use ($cari){
                 $q->orWhere('m_name', 'like', '%'.$cari.'%');
                 $q->orWhere('m_telp', 'like', '%'.$cari.'%');
+                $q->orWhere('m_id', 'like', '%'.$cari.'%');
             })->get();
 
-        if ($nama == null) {
+        
+
+        if (count($nama) < 1) {
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($nama as $query) {
@@ -86,7 +91,10 @@ class PenjualanController extends Controller
             $kode = $temp;
         }
         if (count($kode) > 0){
+            $outlet_user = Auth::user()->m_comp;
+
             $dataN = DB::table('d_stock')
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
@@ -97,7 +105,8 @@ class PenjualanController extends Controller
                     $a->on('sd_stock', '=', 's_id');
                 })
                 ->join('d_item', 'i_id', '=', 's_item')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
+                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
@@ -106,6 +115,7 @@ class PenjualanController extends Controller
                 ->groupBy('sm_specificcode');
 
             $dataY = DB::table('d_stock')
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
@@ -119,7 +129,8 @@ class PenjualanController extends Controller
                     $a->whereNotIn('sd_specificcode', $kode);
                 })
                 ->join('d_item', 'i_id', '=', 's_item')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
+                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
@@ -130,6 +141,7 @@ class PenjualanController extends Controller
             $data = $dataN->union($dataY)->get();
         } else {
             $data = DB::table('d_stock')
+                ->select('i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q){
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
@@ -141,7 +153,8 @@ class PenjualanController extends Controller
                     $a->on('sd_specificcode', '=', 'sm_specificcode');
                 })
                 ->join('d_item', 'i_id', '=', 's_item')
-                ->select('i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
+                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
@@ -159,5 +172,21 @@ class PenjualanController extends Controller
             }
         }
         return Response::json($results);
+    }
+
+    public function getDetailMember($id = null)
+    {
+        $query = DB::table('m_member')
+                    ->select('m_member.m_address', 'm_group.g_name')
+                    ->join('m_group', 'm_member.m_jenis', '=', 'm_group.g_id')
+                    ->where('m_member.m_id', $id)
+                    ->first();
+
+        return Response::json(['jenis' => $query->g_name, 'alamat' => $query->m_address]);
+    }
+
+    public function savePenjualan(Request $request)
+    {
+        dd($request->all());
     }
 }
