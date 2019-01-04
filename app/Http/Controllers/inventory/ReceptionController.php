@@ -72,14 +72,80 @@ class ReceptionController extends Controller
                     $row[]      = $key->i_nama;
                     $row[]      = $key->pd_value;
                     $row[]      = $key->pd_qty;
-                    $row[]      = '<div class="edit2">'. $key->pd_qty .'</div><input type="text" class="txtedit2" value="'. $key->pd_qty .'"  id="i_nama'. $key->pd_detailid . '" style="display:none">';
-                    $row[]      = '<div class="text-center edit"><input type="text" class="form-control txtedit" name="i_nama" id="i_nama' . $key->pd_detailid . '"  style="text-transform: uppercase" /></div>';
-                    $row[]      = '<div class="text-center edit"><input type="text" class="form-control txtedit" name="i_nama" id="i_nama' . $key->pd_detailid . '"  style="text-transform: uppercase" /></div>';
+                    $row[]      = '<div class="text-center edit"><input type="text" class="form-control txtedit" id="qty' . $key->pd_detailid . '"  style="text-transform: uppercase" onkeyup="updateQty(' . $key->pd_detailid . ')" /></div>';
+                    $row[]      = '<input type="hidden" id="gudangHidden'.$key->pd_detailid.'" name="tpMemberId"><input type="text" class="form-control" id="gudangShow'.$key->pd_detailid.'" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Item" onkeyup="updateGudang(' . $key->pd_detailid . ')">';
                     $data[]     = $row;
 
                 }
 
                 echo json_encode(array("data"=>$data));
+    }
+
+    public function cariGudang(Request $request)
+    {
+        $cari = $request->term;
+        $nama = DB::table('d_gudang')
+            ->where(function ($q) use ($cari){
+                $q->orWhere('g_id', 'like', '%'.$cari.'%');
+                $q->orWhere('g_nama', 'like', '%'.$cari.'%');
+            })->get();
+
+        if ($nama == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+           
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->g_id, 'label' => $query->g_nama .'('.$query->g_kode.')'];
+               
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function updateGudang(Request $request)
+    {
+        $id = $request->input('id');
+        $gudang = $request->input('gudang');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_gudangTerima' =>$gudang
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
+    }
+
+    public function updateQty(Request $request){
+        $id = $request->input('id');
+        $qty = $request->input('qty');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_qtyTerima' =>$qty
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
+    }
+
+    public function updateTgl(Request $request){
+        $id = $request->input('id');
+        $tgl = $request->input('tgl');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_tglTerima' =>$tgl
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
     }
 
     public function add_bbm(Request $request)

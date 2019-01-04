@@ -495,8 +495,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/penerimaan/supplier/getPo', 'inventory\ReceptionController@getPo');
 	Route::post('/inventory/penerimaan/supplier/getEntitas_po', 'inventory\ReceptionController@getEntitas_po');
 	Route::post('/inventory/penerimaan/supplier/load_bbm', 'inventory\ReceptionController@load_bbm');
-	Route::post('/inventory/penerimaan/supplier/', 'inventory\ReceptionController@');
-	Route::post('/inventory/penerimaan/supplier/', 'inventory\ReceptionController@');
+	Route::post('/inventory/penerimaan/supplier/updateQty', 'inventory\ReceptionController@updateQty');
+	Route::post('/inventory/penerimaan/supplier/updateTgl', 'inventory\ReceptionController@updateTgl');
+	Route::post('/inventory/penerimaan/supplier/updateGudang', 'inventory\ReceptionController@updateGudang');
+	Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
 
 
 

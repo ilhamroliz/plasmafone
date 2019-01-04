@@ -8,6 +8,25 @@
 
 <style type="text/css">
 
+
+
+.edit{
+    width: 100%;
+    height: 25px;
+}
+.editMode{
+    /*border: 1px solid black;*/
+ 
+}
+
+.txtedit{
+    display: none;
+    width: 99%;
+    height: 30px;
+}
+
+
+
 </style>
 
 @endsection
@@ -123,11 +142,22 @@
 										<div class="col-xs-8 col-lg-8 inputGroupContainer">
 											<input type="text" class="form-control" name="tgl_order" id="tgl_order" disabled=""/>
 										</div>
+										
 									</div>
 								</div>
 
-							</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="col-xs-4 col-lg-4 control-label text-left">Tanggal Masuk</label>
+										<div class="col-xs-8 col-lg-8 inputGroupContainer">
+											<input type="text" class="form-control datepicker" name="tgl_masuk" id="tgl_masuk" data-dateformat="dd/mm/YYYY"/>
+										</div>
+										
+									</div>
+								</div>
 
+
+							</div>
 						</fieldset>
 
 						
@@ -157,8 +187,7 @@
 									<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Harga Barang</th>
 									<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Jml Order</th>
 									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Jml Diterima</th>
-									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Barang</th>
-									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Barang</th>
+									<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Gudang</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -279,92 +308,117 @@
 @section('extra_script')
 	
 	<!-- PAGE RELATED PLUGIN(S) -->
+<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
-
+<script src="{{ asset('template_asset/js/notification/SmartNotification.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
+<script src="{{ asset('template_asset/js/bootstrap/bootstrap.min.js') }}"></script>
 <script type="text/javascript">
 var table_barang;
+var baseUrl = '{{ url('/') }}';
 $(document).ready(function(){
 	reload_data();
 	getPo();
-	click();
-	saveData();
 
-	$('.edit2').click(function(){ 
-        $('.txtedit2').hide();
-        $(this).next('.txtedit2').show().focus();
-        $(this).hide();
-    });
-
-	$(".txtedit2").on('focusout',function(){
-		
-		// Get edit id, field name and value
-		var id = this.id;
-		var split_id = id.split("_");
-		var field_name = split_id[0];
-		var edit_id = split_id[1];
-		var value = $(this).val();
-		
-		// Hide Input element
-		$(this).hide();
-
-		// Hide and Change Text of the container with input elmeent
-		$(this).prev('.edit2').show();
-		$(this).prev('.edit2').text(value);
-
-		// Sending AJAX request
-		$.ajax({
-			url: '{{url('/inventory/penerimaan/supplier/editPenerimaan')}}',
-			type: 'POST',
-			data: { field:field_name, value:value, id:edit_id},
-			success:function(response){
-				console.log('Save successfully'); 
-			}
-		});
-
-	});
-		
 });
-
-function click(){
-
-	$('.edit2').click(function(){ 
-        $('.txtedit2').hide();
-        $(this).next('.txtedit2').show().focus();
-        $(this).hide();
-    });
 	
-}
 
-function saveData(){
-	// Save data
-	$(".txtedit2").on('focusout',function(){
+	
+	function updateQty(id){
+			var input = $('#qty'+id).val();
+			$.ajax({
+						url : '{{url('/inventory/penerimaan/supplier/updateQty')}}',
+						type: "POST",
+						data: { 
+							'id' : id,
+							'qty' : input,
+							_token : '{{ csrf_token() }}'
+
+
+						},
+						dataType: "JSON",
+						success: function(data)
+						{
+							$.smallBox({
+							title : "Berhasil",
+							content : 'Data telah ditambahkan...!',
+							color : "#739E73",
+							timeout: 4000,
+							icon : "fa fa-check bounce animated"
+							});
+							$('#dt_tambah').DataTable().ajax.reload();
+							
+						},
+						
+				}); 
 		
-		// Get edit id, field name and value
-		var id = this.id;
-		var split_id = id.split("_");
-		var field_name = split_id[0];
-		var edit_id = split_id[1];
-		var value = $(this).val();
+		}
+
+		function updateTgl(id){
+			var input = $('#tgl'+id).val();
+			$.ajax({
+						url : '{{url('/inventory/penerimaan/supplier/updateTgl')}}',
+						type: "POST",
+						data: { 
+							'id' : id,
+							'tgl' : input,
+							_token : '{{ csrf_token() }}'
+
+						},
+						dataType: "JSON",
+						success: function(data)
+						{
+							$.smallBox({
+							title : "Berhasil",
+							content : 'Data telah ditambahkan...!',
+							color : "#739E73",
+							timeout: 4000,
+							icon : "fa fa-check bounce animated"
+							});
+							$('#dt_tambah').DataTable().ajax.reload();
+							
+						},
+						
+				}); 
 		
-		// Hide Input element
-		$(this).hide();
+		}
 
-		// Hide and Change Text of the container with input elmeent
-		$(this).prev('.edit2').show();
-		$(this).prev('.edit2').text(value);
+		function updateGudang(ids){
+			var input = $('#gudangHidden'+ids).val();
+			var input = $('#gudangShow'+ids).val();
+			$('#gudangShow'+ids).autocomplete({
+				source: baseUrl+'/inventory/penerimaan/supplier/cariGudang',
+				minLength: 2,
+				select: function(event, data) {
+					$('#gudangHidden'+ids).val(data.item.id);
+					$('#gudangShow'+ids).val(data.item.label);
+					if(input ==''){
 
-		// Sending AJAX request
-		$.ajax({
-			url: '{{url('/inventory/penerimaan/supplier/editPenerimaan')}}',
-			type: 'POST',
-			data: { field:field_name, value:value, id:edit_id},
-			success:function(response){
-				console.log('Save successfully'); 
-			}
-		});
-
-	});
-}
+					}else{
+							$.ajax({
+								url : '{{url('/inventory/penerimaan/supplier/updateGudang')}}',
+								type: "POST",
+								data: { 
+									'id' : ids,
+									'gudang' : $('#gudangHidden'+ids).val(),
+									_token : '{{ csrf_token() }}'
+								},
+								dataType: "JSON",
+								success: function(data)
+								{
+									reload_table();
+								},
+								
+							}); 
+					}
+				}
+			});
+		}
 
 function reload_data(){
 	table_barang= $('#dt_barang').DataTable({
