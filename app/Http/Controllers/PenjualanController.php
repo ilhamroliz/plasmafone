@@ -168,7 +168,7 @@ class PenjualanController extends Controller
                 ->get();
         }
 
-        $results = [];
+        /*$results = [];
         if (count($data) < 1) {
             $results[] = ['message' => 'Tidak ditemukan'];
         } else {
@@ -178,7 +178,16 @@ class PenjualanController extends Controller
             // }
             $results = ['message' => 'Ditemukan', 'data' => $data];
         }
-        return json_encode($results);
+        return json_encode($results);*/
+        $results = [];
+        if (count($data) < 1) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($data as $query) {
+                $results[] = ['id' => $query->s_id, 'label' => $query->i_code. ' - ' . $query->i_nama . $query->sd_specificcode, 'data' => $query];
+            }
+        }
+        return Response::json($results);
     }
 
     public function cariStock(Request $request)

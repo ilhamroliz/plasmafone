@@ -673,8 +673,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
 	Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
 	Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
-	Route::get('pointofsales/simpan', 'PenjualanController@savePenjualan');
-	Route::get('pointofsales/search-stock', 'PenjualanController@searchStock');
+	Route::get('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
+	Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
 	//==============
 	
 	// =====Penjualan Tempo=====
