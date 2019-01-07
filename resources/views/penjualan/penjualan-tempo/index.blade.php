@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Penjualan Reguler')
+@section('title', 'Penjualan Tempo')
 
 @section('extra_style')
 
@@ -18,7 +18,7 @@
 
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li>Home</li><li>Penjualan</li><li>Penjualan Reguler</li>
+            <li>Home</li><li>Penjualan</li><li>Penjualan Tempo</li>
         </ol>
 
     </div>
@@ -34,7 +34,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-lg fa-handshake-o"></i>
-                    Penjualan <span><i class="fa fa-angle-double-right"></i> Penjualan Reguler </span>
+                    Penjualan <span><i class="fa fa-angle-double-right"></i> Penjualan Tempo </span>
                 </h1>
             </div>
         </div>
@@ -44,7 +44,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
-                            <h2><strong>Penjualan Reguler</strong></h2>
+                            <h2><strong>Penjualan Tempo</strong></h2>
                         </header>
                         <div role="content">
                             <!-- widget content -->
@@ -231,8 +231,8 @@
     <script>
     var namaGlobal = null;
     var qtyGlobal = null;
-    var idGlobal = null;
-    var idItem = null;
+    var idGlobal = [];
+    var idItem = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -256,14 +256,12 @@
 
         $( "#cari-stock" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-stock',
-            minLength: 1,
+            minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
                 // console.log(data.item);
             }
         });
-
-        
 
         function getDetailMember(id)
         {
@@ -291,10 +289,9 @@
     })
 
     function setStock(info){
-        // console.log(info);
         var data = info.data;
         var price = 0;
-        namaGlobal = data.i_code+" - "+data.i_nama;
+        namaGlobal = data.i_nama;
         stockGlobal = data.s_qty;
 
         if(data.gp_price != null) {
@@ -337,85 +334,7 @@
         }
     });
 
-    $("#cari-stock").on('keyup',function(e) {
-        if(e.which == 13) {
-            if (idItem == null) {
-                searchStock();
-                
-            } else {
-                $('#tambahketable').click();
-            }
-        }
-    });
-
-    function searchStock() {
-        axios.get(baseUrl + '/pointofsales/search-stock', {
-            params: {
-                term : $('#cari-stock').val(),
-                _token : $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        .then(function (response) {
-            console.log(response.data.data.i_id);
-            if (response.data.message == "Tidak ditemukan") {
-                $.smallBox({
-                    title : "Gagal",
-                    content : "Upsss. Barang tidak ditemukan",
-                    color : "#A90329",
-                    timeout: 5000,
-                    icon : "fa fa-times bounce animated"
-                });
-            } else {
-                setStock(response.data);
-                // $('#tambahketable').click();
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .then(function () {
-            // always executed
-        });
-
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
-        // $.ajax({
-        //     url: baseUrl + '/pointofsales/search-stock',
-        //     type: 'get',
-        //     data: {term : $('#cari-stock').val()},
-        //     success: function(response){
-        //         if (response.data.message == "Tidak ditemukan") {
-        //             $.smallBox({
-        //                 title : "Gagal",
-        //                 content : "Upsss. Barang tidak ditemukan",
-        //                 color : "#A90329",
-        //                 timeout: 5000,
-        //                 icon : "fa fa-times bounce animated"
-        //             });
-        //         } else {
-        //             setStock(response.data.data);
-        //             // $('#tambahketable').click();
-        //         }
-        //     }, error:function(x, e) {
-        //         if (x.status == 0) {
-        //             alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-        //         } else if (x.status == 404) {
-        //             alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-        //         } else if (x.status == 500) {
-        //             alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-        //         } else if (e == 'parsererror') {
-        //             alert('Error.\nParsing JSON Request failed.');
-        //         } else if (e == 'timeout'){
-        //             alert('Request Time out. Harap coba lagi nanti');
-        //         } else {
-        //             alert('Unknow Error.\n' + x.responseText);
-        //         }
-        //     }
-        // })
-    }
+    
 
     function simpanmember() {
         overlay();
@@ -487,8 +406,6 @@
         qtyGlobal = $('#qty').val();
         if (qtyGlobal > stockGlobal){
             qtyGlobal = stockGlobal;
-        } else if (qtyGlobal === null || qtyGlobal === "") {
-            qtyGlobal = 1;
         }
         var row = '';
         if (spesifikGlobal == 'N'){
@@ -732,11 +649,11 @@
             }
         });
         $.ajax({
-            url: baseUrl + '/pointofsales/simpan',
+            url: baseUrl + '/pointofsalestempo/simpan',
             type: 'get',
             data: $('#form-penjualan').serialize(),
             success: function(response){
-                console.log(response);
+
             }, error:function(x, e) {
                 if (x.status == 0) {
                     alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
