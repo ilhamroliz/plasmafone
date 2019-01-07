@@ -625,7 +625,8 @@ Route::group(['middleware' => 'auth'], function () {
 	//=== MONITORING PENJUALAN
 
 	Route::get('/man-penjualan/monitoring-penjualan', 'manajemen_penjualan\monitoringPenjualanController@index');
-
+	Route::post('/man-penjualan/monitoring-penjualan/realtime', 'manajemen_penjualan\monitoringPenjualanController@realtime');
+	Route::
 
 	//=== End MONITORING PENJUALAN
 
