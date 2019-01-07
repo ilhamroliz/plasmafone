@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Tambah Konfirmasi')
+@section('title', 'Master Barang')
 
 <?php 
 	use App\Http\Controllers\PlasmafoneController as Access;
@@ -43,7 +43,7 @@
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
 
-			<li>Home</li><li>Pembelian</li><li>Konfirmasi Pembelian</li>
+			<li>Home</li><li>Pembelian</li><li>Rencana Pembelian</li>
 
 		</ol>
 		<!-- end breadcrumb -->
@@ -65,7 +65,7 @@
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Konfirmasi Pembelian
+						 Rencana Pembelian
 					</span>
                 </h1>
             </div>
@@ -73,7 +73,7 @@
 
                 <div class="page-title">
 
-                    <a href="{{ url('pembelian/konfirmasi-pembelian') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+                    <a href="{{ url('pembelian/rencana-pembelian') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 
                 </div>
 
@@ -114,7 +114,7 @@
                     <header role="heading">
                         <div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
                         </div>
-                        <h2><strong>Tambah Konfirmasi Pembelian</strong></h2>
+                        <h2><strong>Tambah Rencana Pembelian</strong></h2>
 
                     <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
@@ -122,20 +122,22 @@
 						<div>
 							
 							<!-- widget content -->
+							
 							<div class="widget-body no-padding">
 
 								<!-- widget body text-->
 								
 								<div class="tab-content padding-10">
+								
 
 									<div class="tab-pane fade in active" id="hr1">
 										
-										<table id="dt_tambah" class="table table-striped table-bordered table-hover" width="100%">
+										<table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>			                
 
 												<tr>
-                                                    <th data-hide="phone,tablet">No</th>
+													<th data-hide="phone,tablet">No</th>
                                                     <th data-hide="phone,tablet">Nama Supplier</th>
                                                     <th data-hide="phone,tablet">Nama Barang</th>
                                                     <th data-hide="phone,tablet">Qty</th>
@@ -152,7 +154,13 @@
 										</table>
 										
 									</div>
-
+									<div class="form-group">
+										<div class="row">
+											<div class="col-md-12">
+                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">Tambah Semua Rencana</button>
+											</div>
+										</div>
+                                    </div>
 
 								</div>
 								
@@ -160,7 +168,7 @@
 								
 								<!-- widget footer -->
 								<div class="widget-footer text-right">
-									
+								
 									
 								</div>
 								<!-- end widget footer -->
@@ -189,9 +197,8 @@
 
 		</section>
 		<!-- end widget grid -->
-
 		<!-- Modal -->
-        <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -293,7 +300,7 @@
                                                     <section class="col col-6">
                                                             <label class="label">Supplier</label>
                                                             <label class="select">
-                                                                <select id="dt_supplier" onchange="getTelp()">
+                                                                <select id="dt_supplier2" onchange="getTelp()">
                                                                     <option value="0" disabled="">Pilih Supplier</option>
                                                                 </select> <i></i> </label>
                                                         </section>
@@ -306,17 +313,7 @@
                                                     </div>
                                                     
                                                 </fieldset>
-                                                <footer>
-                                                    <button  class="btn btn-danger" id="btn_ditolak" onclick="tolak()">
-                                                        Rencana Di Tolak
-                                                    </button>
-                                                    <button  class="btn btn-primary" id="btn_disetujui" onclick="setuju()">
-                                                        Rencana Di Setujui
-                                                    </button>
-                                                    <button  class="btn btn-warning" id="btn_tutup" onclick="tutup()">
-                                                        Tutup
-                                                    </button>
-                                                </footer>
+                                                
                                             </form>						
                                             
                                         </div>
@@ -327,6 +324,17 @@
                                     
                                 </div>
                                 <!-- end widget -->
+								<footer>
+                                                    <button  class="btn btn-danger" id="btn_ditolak" onclick="tolak()">
+                                                        Rencana Di Tolak
+                                                    </button>
+                                                    <button  class="btn btn-primary" id="btn_disetujui" onclick="setuju()">
+                                                        Rencana Di Setujui
+                                                    </button>
+                                                    <button  class="btn btn-warning" id="btn_tutup" onclick="tutup()">
+                                                        Tutup
+                                                    </button>
+                                                </footer>
 				
 							</div>
 							<!-- <div class="modal-footer">
@@ -340,9 +348,11 @@
 						</div><!-- /.modal-content -->
 					</div><!-- /.modal-dialog -->
 				</div><!-- /.modal -->
-
+		
 	</div>
 	<!-- END MAIN CONTENT -->
+
+	
 @endsection
 
 @section('extra_script')
@@ -352,26 +362,29 @@
 		var tambahKonfirmasi;
 		var input = $('#dt_harga2').val();
 		var input2 = $('#dt_angka').val();
-
+		var tambahRencana;
         $(document).ready(function () {
-           load_table();
+			$( "#tpMemberNama" ).autocomplete({
+				source: baseUrl+'/pembelian/request-pembelian/cariItem',
+				minLength: 2,
+				select: function(event, data) {
+					$('#tpMemberId').val(data.item.id);
+					$('#tpMemberNama').val(data.item.label);
+				}
+			});
 
-		//    var tanpa_rupiah = document.getElementById('dt_harga');
-		// 	tanpa_rupiah.addEventListener('keyup', function(e)
-		// 	{
-		// 		tanpa_rupiah.value = formatRupiah(this.value);
-		// 	});
+			$.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-
-
-			
-
+			reload_data();
+            
         });
 
-
-
-function formatRupiah(angka, prefix)
-    {
+		function formatRupiah(angka, prefix)
+    	{
 			var number_string = angka.replace(/[^,\d]/g, '').toString(),
 				split    = number_string.split(','),
 				sisa     = split[0].length % 3,
@@ -387,67 +400,17 @@ function formatRupiah(angka, prefix)
 			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
 		}
 
+
         function tutup(){
             $('#detailModal').modal('hide');
         }
-
-		function load_table()
-		{
-
-			var tambahKonfirmasi;
-			var responsiveHelper_dt_basic = undefined;
-            var responsiveHelper_datatable_fixed_column = undefined;
-            var responsiveHelper_datatable_col_reorder = undefined;
-            var responsiveHelper_datatable_tabletools = undefined;
-
-            var breakpointDefinition = {
-                tablet : 1024,
-                phone : 480
-            };
-
-            setTimeout(function () {
-
-                tambahKonfirmasi = $('#dt_tambah').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('/pembelian/konfirmasi-pembelian/view_confirmAdd') }}",
-                "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
-                    },
-                "columns":[
-                    {"data": "pr_idPlan"},
-                    {"data": "c_name"},
-                    {"data": "i_nama"},
-                    {"data": "pr_qtyApp"},
-                    {"data": "aksi"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
-                    }
-                },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-             $('#overlay').fadeOut(200);
-            }, 1000);
-		}
 
 		function getTelp(){
 			$.ajax({
 				url : '{{url('/pembelian/konfirmasi-pembelian/getTelp')}}',
 				type: "GET",
 				data: { 
-					"s_id" : $('dt_supplier').val(),
+					"s_id" : $('dt_supplier2').val(),
 				},
 				dataType: "JSON",
 				success: function(data)
@@ -500,16 +463,16 @@ function formatRupiah(angka, prefix)
 						dataType: "JSON",
 						success: function(data)
                           {
-                            $('#dt_supplier').empty(); 
+                            $('#dt_supplier2').empty(); 
                             row = "<option value='0'>Pilih Supplier</option>";
-                            $(row).appendTo("#dt_supplier");
+                            $(row).appendTo("#dt_supplier2");
                             $.each(data, function(k, v) {
                               if (v.s_id == supplier) {
                                 row = "<option selected='' value='"+v.s_id+"'>"+v.s_company+"</option>";
                               }else{
                                 row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
                               }
-                              $(row).appendTo("#dt_supplier");
+                              $(row).appendTo("#dt_supplier2");
                             });
                           },
 					});
@@ -568,16 +531,16 @@ function formatRupiah(angka, prefix)
 						dataType: "JSON",
 						success: function(data)
                           {
-                            $('#dt_supplier').empty(); 
+                            $('#dt_supplier2').empty(); 
                             row = "<option value='0'>Pilih Supplier</option>";
-                            $(row).appendTo("#dt_supplier");
+                            $(row).appendTo("#dt_supplier2");
                             $.each(data, function(k, v) {
                               if (v.s_id == supplier) {
                                 row = "<option selected='' value='"+v.s_id+"'>"+v.s_company+"</option>";
                               }else{
                                 row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
                               }
-                              $(row).appendTo("#dt_supplier");
+                              $(row).appendTo("#dt_supplier2");
                             });
                           },
 					});
@@ -619,15 +582,16 @@ function formatRupiah(angka, prefix)
 		function setuju(){
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/confirmSetuju')}}',
-                type: "GET",
+                type: "POST",
                 data: { 
 					pr_idPlan 		: pr_idPlan,
 					pr_item 		: i_item,
 					pr_comp 		: pr_comp,
-					pr_supplier		: $('#dt_supplier').val(),
+					pr_supplier		: $('#dt_supplier2').val(),
 					pr_price		: $('#dt_harga').val(),
 					pr_qtyApp		: $('#dt_qty').val(),
 					pr_stsConf		: "CONFIRM",
+					_token : '{{ csrf_token() }}'
                 },
                 dataType: "JSON",
                 success: function(data)
@@ -644,44 +608,17 @@ function formatRupiah(angka, prefix)
 							});
 					}else{
 						
-							var rule = 	$('#detailModal').modal('hide');
+							// var rule = 	$('#detailModal').modal('hide');
 							$('#detailModal').modal('hide');
-							
-						// var rel = $('#dt_tambah').DataTable().ajax.reload();
-						// 	$('#dt_tambah').DataTable().ajax.reload();
-							if(!rule)
-							{
-								$.smallBox({
-								title : "Berhasil",
-								content : 'Data gagal direload...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-								});
-							}else{
-								var rule2 = $.smallBox({
+							$.smallBox({
 								title : "Berhasil",
 								content : 'Data telah ditambahkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
 								});
-
-								$.smallBox({
-								title : "Berhasil",
-								content : 'Data telah ditambahkan...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-								});
-
-								if(rule)
-								{
-									$('#dt_tambah').DataTable().ajax.reload();
-								}
+								$('#table-rencana').DataTable().ajax.reload();
 								
-							}
-						
 						
 					}
                 },
@@ -694,23 +631,24 @@ function formatRupiah(angka, prefix)
         function tolak(){
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/confirmTolak')}}',
-                type: "GET",
+                type: "POST",
                 data: { 
 					pr_idPlan 		: pr_idPlan,
 					pr_item 		: i_item,
 					pr_comp 		: pr_comp,
-					pr_supplier		: $('#dt_supplier').val(),
+					pr_supplier		: $('#dt_supplier2').val(),
 					pr_price		: $('#dt_harga').val(),
 					pr_qtyApp		: $('#dt_qty').val(),
 					pr_stsConf		: "CONFIRM",
+					_token : '{{ csrf_token() }}'
 					
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
-					// alert();
-                    if(data.status == 'GAGAL'){
+					if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
+						
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. data Gagal di tambahkan",
@@ -719,14 +657,19 @@ function formatRupiah(angka, prefix)
 								icon : "fa fa-times bounce animated"
 							});
 					}else{
-						$('#overlay').fadeOut(200);
+						
+							// var rule = 	$('#detailModal').modal('hide');
+							$('#detailModal').modal('hide');
 							$.smallBox({
 								title : "Berhasil",
 								content : 'Data telah ditambahkan...!',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
-							});
+								});
+								$('#table-rencana').DataTable().ajax.reload();
+								
+						
 					}
                 },
                 
@@ -764,7 +707,104 @@ function formatRupiah(angka, prefix)
 
 	}
 
-	
+
+		
+
+		function simpanRequest(){
+			$.SmartMessageBox({
+					title : "Smart Alert!",
+					content : "Apakah Anda Yakin Akan Mengajukan Request Order ?",
+					buttons : '[Tidak][Ya]'
+				}, function(ButtonPressed) {
+					if (ButtonPressed === "Ya") {
+						$.ajax({
+							url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
+							type: "GET",
+							data: { 
+							},
+							dataType: "JSON",
+							success: function(data)
+							{
+								
+								
+								if(data.status == 'gagal')
+								{
+									$.smallBox({
+										title : "Gagal",
+										content : 'Data gagal Di ajukan..!',
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+										});
+										$('#tpMemberId').val("");
+										$('#tpMemberNama').val("");
+										$('#qty').val("");
+										$('#table-rencana').DataTable().ajax.reload();
+									// $('#table-rencana').DataTable().ajax.reload();
+								}else{
+									
+									
+									$.smallBox({
+										title : "Berhasil",
+										content : 'Anda Telah Berhasil Mengajukan Request Order...!',
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+										});
+										$('#tpMemberId').val("");
+										$('#tpMemberNama').val("");
+										$('#qty').val("");
+										$('#table-rencana').DataTable().ajax.reload();
+								}
+								// $('#table-rencana').DataTable().fnDestroy();
+								
+							},
+								
+						}); 
+		
+						// $.smallBox({
+						// 	title : "Callback function",
+						// 	content : "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
+						// 	color : "#659265",
+						// 	iconSmall : "fa fa-check fa-2x fadeInRight animated",
+						// 	timeout : 4000
+						// });
+					}
+					if (ButtonPressed === "Tidak") {
+						$.smallBox({
+							title : "Peringatan...!!!",
+							content : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Pengajuan</i>",
+							color : "#C46A69",
+							iconSmall : "fa fa-times fa-2x fadeInRight animated",
+							timeout : 4000
+						});
+					}
+		
+				});
+				e.preventDefault();
+			
+			
+			
+		}
+
+
+		function reload_data(){
+        table_registrasi= $('#table-rencana').DataTable({
+				"language" : dataTableLanguage,
+				"ajax": {
+						"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd')}}',
+						"type": "POST",  
+						"data": function ( data ) {
+							data._token = '{{ csrf_token() }}';
+						},
+					},
+			} );
+		}
+
+		function reload_table(){
+			table_registrasi.ajax.reload(null, false);
+
+		}
 
 	</script>
 

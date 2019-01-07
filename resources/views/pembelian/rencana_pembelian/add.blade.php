@@ -122,6 +122,7 @@
 						<div>
 							
 							<!-- widget content -->
+							
 							<div class="widget-body no-padding">
 
 								<!-- widget body text-->
@@ -391,6 +392,14 @@
 	<script type="text/javascript">
 		var tambahRencana;
         $(document).ready(function () {
+			$( "#tpMemberNama" ).autocomplete({
+				source: baseUrl+'/pembelian/request-pembelian/cariItem',
+				minLength: 2,
+				select: function(event, data) {
+					$('#tpMemberId').val(data.item.id);
+					$('#tpMemberNama').val(data.item.label);
+				}
+			});
 
 			$.ajaxSetup({
                     headers: {
@@ -401,6 +410,32 @@
 			getMember();
             
         });
+
+		function tambah2(){
+			$.ajax({
+				url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
+				type: "POST",
+				data: { 
+					'qty' : $('#qty').val(),
+					'item' : $('#tpMemberId').val(),
+					_token : '{{ csrf_token() }}'
+				},
+				dataType: "JSON",
+				success: function(data)
+				{
+					$.smallBox({
+							title : "Berhasil",
+							content : 'Data telah ditambahkan...!',
+							color : "#739E73",
+							timeout: 4000,
+							icon : "fa fa-check bounce animated"
+							});
+							$('#dt_tambah').DataTable().ajax.reload();
+					// reload_table();
+				},
+				
+		}); 
+		}
 
 		function simpanRencana()
 		{
@@ -604,27 +639,27 @@
             
         }
 
-		function suplier(){
-			$.ajax({
-                url : '{{url('/pembelian/rencana-pembelian/itemSuplier')}}',
-                type: "GET",
-                data: { 
+		// function suplier(){
+		// 	$.ajax({
+        //         url : '{{url('/pembelian/rencana-pembelian/itemSuplier')}}',
+        //         type: "GET",
+        //         data: { 
                 
-                },
-                dataType: "JSON",
-                success: function(data)
-                {
-                    $('#dt_supplier').empty(); 
-					row = "<option selected='' value='0'>Pilih Suplier</option>";
-					$(row).appendTo("#dt_supplier");
-					$.each(data, function(k, v) {
-						row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
-						$(row).appendTo("#dt_supplier");
-					});
-                },
+        //         },
+        //         dataType: "JSON",
+        //         success: function(data)
+        //         {
+        //             $('#dt_supplier').empty(); 
+		// 			row = "<option selected='' value='0'>Pilih Suplier</option>";
+		// 			$(row).appendTo("#dt_supplier");
+		// 			$.each(data, function(k, v) {
+		// 				row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
+		// 				$(row).appendTo("#dt_supplier");
+		// 			});
+        //         },
                 
-            });  
-		}
+        //     });  
+		// }
 
         function batal(){
             $('#myModal').modal('hide');

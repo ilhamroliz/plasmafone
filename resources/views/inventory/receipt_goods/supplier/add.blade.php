@@ -284,7 +284,7 @@
 				<div class="">
 							<div class="row">
 								<div class="col-md-12">
-									<button class="btn btn-default" onclick="simpanBarang()">
+									<button class="btn btn-success col-md-12" onclick="simpanBarang()">
 										<i class="fa fa-floppy-o"></i>
 										&nbsp;Simpan
 									</button>
@@ -435,6 +435,22 @@ function reload_data(){
         } );
     }
 
+	function reload_datatable(){
+		table_barang= $('#dt_barang').DataTable({
+			"language" : dataTableLanguage,
+			"searching": false,
+            "ajax": {
+                    "url": '{{url('/inventory/penerimaan/supplier/detailPo')}}',
+                    "type": "POST",  
+                    "data": function ( data ) {
+						data._token = '{{ csrf_token() }}';
+                    },
+                },
+        } );
+
+		}
+
+
 	function reload_table(){
 		
 		$.ajax({
@@ -479,6 +495,93 @@ function reload_data(){
 			
 		});  
 	}
+
+	function simpanBarang()
+	{
+		$.SmartMessageBox({
+			title : "Peringatan Konfirmasi",
+			content : "Apakah Anda Yakin Sudah Menerima Barang ?",
+			buttons : '[Tidak][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+					$.ajax({
+						url : '{{url('/inventory/penerimaan/supplier/terimaBarang')}}',
+						type: "POST",
+						data: { 
+							po : $('#po').val(),
+							_token 	: '{{ csrf_token() }}'
+						},
+						dataType: "JSON",
+						success: function(data)
+						{
+							
+							
+							if(data.status == 'gagal')
+							{
+								$.smallBox({
+									title : "Gagal",
+									content : 'Data gagal Di ajukan..!',
+									color : "#739E73",
+									timeout: 4000,
+									icon : "fa fa-check bounce animated"
+									});
+									$('#tpMemberId').val("");
+									$('#tpMemberNama').val("");
+									$('#qty').val("");
+									$('#dt_barang').DataTable().ajax.reload();
+								// $('#table-rencana').DataTable().ajax.reload();
+							}else{
+
+								$.ajax({
+										url : '{{url('/inventory/penerimaan/supplier/getPo')}}',
+										type: "POST",
+										data: { 
+											_token 	: '{{ csrf_token() }}'
+										},
+										dataType: "JSON",
+										success: function(data)
+										{
+											$('#po').empty(); 
+											row = "<option selected='' value='00'>Pilih No Purchasing</option>";
+											$(row).appendTo("#po");
+											$.each(data, function(k, v) {
+												row = "<option value='"+v.p_id+"'>"+v.p_nota+"</option>";
+												$(row).appendTo("#po");
+											});
+
+											$.smallBox({
+											title : "Berhasil",
+											content : 'Anda Telah Berhasil Masukkan barang...!',
+											color : "#739E73",
+											timeout: 4000,
+											icon : "fa fa-check bounce animated"
+											});
+											getPo();
+											$('#dt_barang').DataTable().ajax.reload();
+										},
+										
+									});  
+								
+								
+							}
+							
+						},
+							
+					}); 
+				}
+				if (ButtonPressed === "Tidak") {
+					$.smallBox({
+						title : "Peringatan...!!!",
+						content : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Pengajuan</i>",
+						color : "#C46A69",
+						iconSmall : "fa fa-times fa-2x fadeInRight animated",
+						timeout : 4000
+					});
+				}
+
+			});
+			e.preventDefault();
+		}
 
 </script>
 
