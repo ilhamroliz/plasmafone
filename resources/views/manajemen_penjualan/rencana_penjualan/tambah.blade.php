@@ -103,7 +103,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 												<div class="col-md-3 inputGroupContainer">
                                                     <div class="input-group" style="width: 100%">
                                                         <span class="input-group-addon" style="width: 40px"><i class="fa fa-sort-numeric-desc"></i></span>                                                        
-													    <input type="text" class="form-control" id="trpQty" placeholder="Qty">
+													    <input type="number" class="form-control" id="trpQty" placeholder="Qty">
                                                     </div>                                                    
 												</div>
 
@@ -205,10 +205,21 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			var itemName = $('#trpItemNama').val();
 			var qty = $('#trpQty').val();
 
+			if($('#trpCompId').val() == ''){
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Nama Cabang Tidak Boleh Kosong ",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				return false;
+			}
+
 			table.row.add([
 				compName+'<input type="hidden" name="idComp[]" class="idComp" value="'+compId+'">',
 				itemName+'<input type="hidden" name="idItem[]" class="idItem" value="'+itemId+'">',
-				'<input type="text" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="'+qty+'">',
+				'<input type="number" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="'+qty+'">',
 				'<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
 			]).draw(false);
 
@@ -221,6 +232,18 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         });
 
 		function simpan_trp(){
+
+			if($('#trpCompId').val() == ''){
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Data Nama Cabang Tidak Boleh Kosong ",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				return false;
+			}
+
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Menyimpan Perubahan Data...');
 
@@ -237,7 +260,19 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						icon : "fa fa-check bounce animated"
 					});
 					// window.open(" {{ url('/penjualan/pemesanan-barang/print?id=') }} "+ response.nota);
-					location.reload();
+					location.href(baseUrl+'/man-penjualan/rencana-penjualan');
+
+				}else if(response.data.status == 'ada'){
+
+					$('#overlay').fadeOut(200);
+					var cabang = $('#trpCompNama').val()
+					$.smallBox({
+						title : "Gagal",
+						content : "Maaf, Data Rencana Penjualan untuk outlet "+cabang+" Sudah Ada",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
 
 				}else{
 

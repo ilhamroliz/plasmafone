@@ -191,7 +191,7 @@ $(document).ready(function () {
 			tablet : 1024,
 			phone : 480
 		};
-
+ 
 		
 		$('#dt_').on('change', function(e){
 			oTable.draw();

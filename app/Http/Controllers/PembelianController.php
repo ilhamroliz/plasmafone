@@ -13,7 +13,7 @@ use DB;
 use Session;
 use PDF;
 use Response;
-
+ 
 class PembelianController extends Controller
 {
     // ----Bagian rencana Pembelian -----
@@ -22,7 +22,7 @@ class PembelianController extends Controller
         $cari = $request->term;
         $nama = DB::table('d_item')
             ->where(function ($q) use ($cari){
-                $q->orWhere('i_id', 'like', '%'.$cari.'%');
+                $q->orWhere('i_code', 'like', '%'.$cari.'%');
                 $q->orWhere('i_nama', 'like', '%'.$cari.'%');
             })->get();
 
@@ -295,7 +295,7 @@ class PembelianController extends Controller
             $row[] = $hasil->c_name;
             $row[] = $hasil->i_nama;
             $row[] = $hasil->pr_qtyReq;
-            $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="'.$hasil->pr_qtyApp .'"  style="text-transform: uppercase" /></div>';
+            $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="'.$hasil->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="apply(' . $hasil->pr_id . ')"/></div>';
             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             $data[] = $row;
         }
@@ -675,21 +675,36 @@ class PembelianController extends Controller
             // ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
             ->get();
-        return DataTables::of($menunggu)
-            ->addColumn('input', function ($menunggu) {
 
-                return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+            $data = array();
+            $i = 1;
+            foreach ($menunggu as $key) {
+             $row = array();
+             $row[] = $i++;
+             $row[] = $key->c_name;
+             $row[] = $key->i_nama;
+             $row[] = $key->pr_qtyApp;
+             $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+             $data[] = $row;
+            }
 
-            })
-            ->addColumn('aksi', function ($menunggu) {
-                if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
-            ->rawColumns(['input', 'aksi'])
-            ->make(true);
+            echo json_encode(array("data"=>$data));
+
+        // return DataTables::of($menunggu)
+        //     ->addColumn('input', function ($menunggu) {
+
+        //         return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+
+        //     })
+        //     ->addColumn('aksi', function ($menunggu) {
+        //         if (Plasma::checkAkses(47, 'update') == false) {
+        //             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+        //         } else {
+        //             return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+        //         }
+        //     })
+        //     ->rawColumns(['input', 'aksi'])
+        //     ->make(true);
     }
 
     public function getPlan_id(Request $request)
@@ -1267,6 +1282,17 @@ class PembelianController extends Controller
             // }
         }
 
+        public function testDesc()
+    {
+        $query  = DB::table('d_item')
+        ->select('d_item.*')
+        ->orderBy('d_item.i_id','DESC')
+        ->take('1')
+        ->get();
+
+        echo json_encode($query);
+    }
+
     public function list_draftPo(Request $request)
     {
         $supplier = $request->input('supplier');
@@ -1391,24 +1417,27 @@ class PembelianController extends Controller
             
             $query = DB::table('d_purchase_confirm')
             ->select('d_purchase_confirm.*')
+            ->where('d_purchase_confirm.pr_stsConf','CONFIRM')
+            ->where('d_purchase_confirm.pr_supplier',$id)
             ->get();
 
                 $queryx = DB::table('d_purchase_dt')
-                ->select('d_purchase_dt.ide')
+                ->select('d_purchase_dt.*')
                 ->get();
 
-                $dt = count($queryx);
-                if($dt==''){
-                    $num = '1';
+                
+                $number = count($queryx);
+
+                if($number ==''){
+                    $nUrut = '1';
                 }else{
-                    $num = $dt+1;
+                    $nUrut = $number+1;
                 }
 
-                $dtx = count($queryx);
-                if($dt==''){
-                    $numx = '1';
+                if($number ==''){
+                    $nUrut1 = '1';
                 }else{
-                    $numx = $dtx+1;
+                    $nUrut1 = $number+1;
                 }
             
 
@@ -1416,9 +1445,9 @@ class PembelianController extends Controller
                         for ($i=0; $i < count($query); $i++) {
                             $temp = [
                                 // 'pr_idConf' =>$query[$i]->pr_idConf,
-                                'ide' =>$numx++,
+                                'ide' =>$nUrut1++,
                                 'pd_purchase'=>$n,
-                                'pd_detailid' =>$num++,
+                                'pd_detailid' =>$nUrut++,
                                 'pd_item' =>$query[$i]->pr_item,
                                 'pd_qty' =>$query[$i]->pr_qtyApp,
                                 'pd_value' =>$query[$i]->pr_price,
@@ -2168,8 +2197,8 @@ class PembelianController extends Controller
         foreach ($list as $hasil) {
             $row = array();
             $row[] = $hasil->i_nama;
-            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="' . $hasil->pr_qtyReq . '"  style="text-transform: uppercase" /></div>';
-            $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle"   title="Edit Data" onclick="editDumy(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle"   title="Hapus Data" onclick="hapusData(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="' . $hasil->pr_qtyReq . '"  style="text-transform: uppercase" onkeyup="editDumy(' . $hasil->pr_id . ')" /></div>';
+            $row[] = '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle"   title="Hapus Data" onclick="hapusData(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             $data[] = $row;
         }
         echo json_encode(array("data" => $data));
