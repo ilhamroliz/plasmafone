@@ -190,8 +190,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Penjualan Tempo'] == 'Y')
-					<li>
-						<a href="flot.html">Penjualan Tempo</a>
+					<li class="{{ (Request::is('penjualan-tempo') || Request::is('penjualan-tempo/*')) ? 'active' : '' }}">
+						<a href="{{ url('penjualan-tempo') }}">Penjualan Tempo</a>
 					</li>
 					@endif
 
@@ -259,8 +259,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Monitoring Penjualan'] == 'Y')
-					<li>
-						<a href="flot.html">Monitoring Penjualan</a>
+					<li class="{{ (Request::is('man-penjualan/monitoring-penjualan/*') || Request::is('man-penjualan/monitoring-penjualan')) ? 'active' : '' }}">
+						<a href="{{ url('/man-penjualan/monitoring-penjualan') }}">Monitoring Penjualan</a>
 					</li>
 					@endif
 

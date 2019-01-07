@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,17 +31,18 @@
           <entry key="project.open.time.32" value="3" />
           <entry key="project.open.time.34" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.52" value="1" />
           <entry key="project.open.time.56" value="1" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.60" value="1" />
           <entry key="project.open.time.63" value="1" />
+          <entry key="project.open.time.64" value="1" />
           <entry key="project.open.time.65" value="1" />
           <entry key="project.open.time.66" value="1" />
           <entry key="project.open.time.69" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="28" />
+          <entry key="project.opened" value="30" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -44,17 +50,17 @@
           <entry key="css" value="4" />
           <entry key="env" value="1" />
           <entry key="js" value="12" />
-          <entry key="php" value="117" />
+          <entry key="php" value="122" />
           <entry key="ts" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key=".env file" value="1" />
-          <entry key="Blade" value="42" />
+          <entry key="Blade" value="45" />
           <entry key="CSS" value="4" />
           <entry key="JavaScript" value="12" />
-          <entry key="PHP" value="75" />
+          <entry key="PHP" value="77" />
           <entry key="TypeScript" value="1" />
         </counts>
       </usages-collector>
@@ -63,16 +69,16 @@
           <entry key="dummy" value="5" />
           <entry key="env" value="17" />
           <entry key="js" value="74" />
-          <entry key="php" value="9160" />
+          <entry key="php" value="9563" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="17" />
-          <entry key="Blade" value="4289" />
+          <entry key="Blade" value="4691" />
           <entry key="HTML" value="2" />
           <entry key="JavaScript" value="74" />
-          <entry key="PHP" value="4869" />
+          <entry key="PHP" value="4870" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
@@ -90,47 +96,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="337">
+              <caret line="676" column="81" selection-start-line="676" selection-start-column="70" selection-end-line="676" selection-end-column="81" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="193">
-              <caret line="278" column="63" selection-start-line="278" selection-start-column="36" selection-end-line="278" selection-end-column="63" />
+              <caret line="730" column="18" selection-start-line="730" selection-start-column="18" selection-end-line="730" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/master/member/member_controller.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3480">
-              <caret line="154" column="24" selection-start-line="154" selection-start-column="24" selection-end-line="154" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/master/member/add.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7320">
-              <caret line="305" column="29" selection-start-line="305" selection-start-column="29" selection-end-line="305" selection-end-column="29" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/master/member/index.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3024">
-              <caret line="126" column="94" selection-start-line="126" selection-start-column="94" selection-end-line="126" selection-end-column="94" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/master/member/edit.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="303" column="25" selection-start-line="303" selection-start-column="25" selection-end-line="303" selection-end-column="25" />
+            <state relative-caret-position="335">
+              <caret line="189" column="40" selection-start-line="189" selection-start-column="40" selection-end-line="189" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -139,36 +127,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>collapse</find>
-      <find>ready</find>
-      <find>cari_userLog</find>
-      <find>auto</find>
-      <find>modal</find>
-      <find>ajax</find>
-      <find>return</find>
-      <find>respon</find>
-      <find>toast</find>
-      <find>scs</find>
-      <find>,)</find>
-      <find>datatable</find>
-      <find>row</find>
-      <find>add</find>
-      <find>row.add</find>
-      <find>update</find>
-      <find>hapus</find>
-      <find>ubahqty</find>
-      <find>Sub Group</find>
-      <find>smart</find>
-      <find>datap</find>
-      <find>date</find>
-      <find>datep</find>
-      <find>penjualan/pemesanan-barang/p</find>
-      <find>master/member/simpan-edit</find>
-      <find>simpan_edit</find>
-      <find>kecamatan</find>
       <find>getke</find>
       <find>master/member/simpan-tambah</find>
       <find>simpan</find>
+      <find>pembelian/request-pembelian/cariItem?term=hand</find>
+      <find>pembelian/request-pembelian/cariItem</find>
+      <find>cariItem</find>
+      <find>auto</find>
+      <find>onkeyup</find>
+      <find>13</find>
+      <find>setstocks(</find>
+      <find>setStocks</find>
+      <find>searchstock</find>
+      <find>pointofsales/search-stock</find>
+      <find>searchStock</find>
+      <find>console</find>
+      <find>arritem</find>
+      <find>setstock</find>
+      <find>idStock</find>
+      <find>IdItem</find>
+      <find>tambah</find>
+      <find>tambah(</find>
+      <find>sets</find>
+      <find>hapus(</find>
+      <find>&lt;form</find>
+      <find>submi</find>
+      <find>form-penjualan</find>
+      <find>coba</find>
+      <find>coba ==</find>
+      <find>idItem</find>
+      <find>hapus</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -198,17 +186,17 @@
         <option value="$PROJECT_DIR$/resources/views/partials/_header.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
-        <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_script.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_head.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/master/member/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/master/member/member_controller.php" />
         <option value="$PROJECT_DIR$/resources/views/master/member/add.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/master/member/edit.blade.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
+        <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php" />
       </list>
     </option>
   </component>
@@ -519,13 +507,13 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="web&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/routes/web.php&#10;datepicker&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datapicker/bootstrap-datepicker.js&#10;scr&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;jquer&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datatables/jquery.dataTables.min.js&#10;jquery&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/libs/jquery-2.1.1.min.js&#10;pembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PembelianController.php&#10;rencanapembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/pembelian/rencana_pembelian&#10;login&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="penjualan&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PenjualanController.php&#10;pembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PembelianController.php&#10;web&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/routes/web.php&#10;datepicker&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datapicker/bootstrap-datepicker.js&#10;scr&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;jquer&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datatables/jquery.dataTables.min.js&#10;jquery&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/libs/jquery-2.1.1.min.js&#10;rencanapembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/pembelian/rencana_pembelian&#10;login&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../perwita" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="Configurable.PHP.Blade" />
+    <property name="settings.editor.selected.configurable" value="MTConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -584,17 +572,19 @@
       <workItem from="1546242390355" duration="2216000" />
       <workItem from="1546413149144" duration="1124000" />
       <workItem from="1546497509135" duration="40000" />
+      <workItem from="1546586903281" duration="1315000" />
+      <workItem from="1546835634999" duration="4626000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99748000" />
+    <option name="totallyTimeSpent" value="105689000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3037879" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22878788" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -623,13 +613,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="20" column="8" selection-start-line="20" selection-end-line="20" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/master/item/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15897">
@@ -835,13 +818,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-473">
-          <caret line="716" column="44" lean-forward="true" selection-start-line="716" selection-start-column="44" selection-end-line="716" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/template_asset/js/plugin/datatables/jquery.dataTables.min.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -849,20 +825,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="24">
           <caret line="1" column="25423" selection-start-line="1" selection-start-column="25420" selection-end-line="1" selection-end-column="25423" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="459" lean-forward="true" selection-start-line="459" selection-end-line="459" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="129" column="49" selection-start-line="129" selection-start-column="49" selection-end-line="129" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -894,13 +856,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-105">
           <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="539" lean-forward="true" selection-start-line="539" selection-end-line="539" />
         </state>
       </provider>
     </entry>
@@ -948,15 +903,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/master/member/edit.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
+        <state relative-caret-position="7272">
           <caret line="303" column="25" selection-start-line="303" selection-start-column="25" selection-end-line="303" selection-end-column="25" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="49">
+          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-87">
+          <caret line="539" selection-start-line="539" selection-end-line="539" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-288" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="676" column="81" selection-start-line="676" selection-start-column="70" selection-end-line="676" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="335">
+          <caret line="189" column="40" selection-start-line="189" selection-start-column="40" selection-end-line="189" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="193">
-          <caret line="278" column="63" selection-start-line="278" selection-start-column="36" selection-end-line="278" selection-end-column="63" />
+          <caret line="730" column="18" selection-start-line="730" selection-start-column="18" selection-end-line="730" selection-end-column="18" />
         </state>
       </provider>
     </entry>

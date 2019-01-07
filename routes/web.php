@@ -617,10 +617,22 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/man-penjualan/rencana-penjualan/detail-dt/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@detail_dt');
 	Route::get('/man-penjualan/rencana-penjualan/pencarian', 'manajemen_penjualan\pembuatanRencanaPenjualanController@cari');
 
-	Route::get('/man-penjualan/rencana-penjualan/approve', 'manajemen_penjualan\pembuatanRencanaPenjualanController@approve');
-	Route::get('/man-penjualan/rencana-penjualan/hapus', 'manajemen_penjualan\pembuatanRencanaPenjualanController@hapus');
+	Route::get('/man-penjualan/rencana-penjualan/approve/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@approve');
+	Route::get('/man-penjualan/rencana-penjualan/hapus/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@hapus');
 
 	//=== End RENCANA PENJUALAN
+
+	//=== MONITORING PENJUALAN
+
+	Route::get('/man-penjualan/monitoring-penjualan', 'manajemen_penjualan\monitoringPenjualanController@index');
+	Route::post('/man-penjualan/monitoring-penjualan/realtime', 'manajemen_penjualan\monitoringPenjualanController@realtime');
+	Route::post('/man-penjualan/monitoring-penjualan/realtime-dt/{id}', 'manajemen_penjualan\monitoringPenjualanController@realtime_dt');
+	Route::post('/man-penjualan/monitoring-penjualan/realisasi', 'manajemen_penjualan\monitoringPenjualanController@realisasi');
+	Route::post('/man-penjualan/monitoring-penjualan/cari-realisasi', 'manajemen_penjualan\monitoringPenjualanController@cari_realisasi');
+	Route::post('/man-penjualan/monitoring-penjualan/outlet', 'manajemen_penjualan\monitoringPenjualanController@outlet');
+	Route::post('/man-penjualan/monitoring-penjualan/outlet-month', 'manajemen_penjualan\monitoringPenjualanController@outlet_month');	
+
+	//=== End MONITORING PENJUALAN
 
 	///// End MANAJEMEN PENJUALAN
 
@@ -661,8 +673,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
 	Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
 	Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
-
-	Route::get('pointofsales/simpan', 'PenjualanController@savePenjualan');
-    //
+	Route::get('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
+	Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
+	//==============
+	
+	// =====Penjualan Tempo=====
+	Route::get('penjualan-tempo', 'PenjualanController@tempo');
+	Route::get('pointofsalestempo/simpan', 'PenjualanController@savePenjualanTempo');
+	// =========================
 
 });

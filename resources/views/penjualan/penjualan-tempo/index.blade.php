@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Penjualan Reguler')
+@section('title', 'Penjualan Tempo')
 
 @section('extra_style')
 
@@ -18,7 +18,7 @@
 
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li>Home</li><li>Penjualan</li><li>Penjualan Reguler</li>
+            <li>Home</li><li>Penjualan</li><li>Penjualan Tempo</li>
         </ol>
 
     </div>
@@ -34,7 +34,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-lg fa-handshake-o"></i>
-                    Penjualan <span><i class="fa fa-angle-double-right"></i> Penjualan Reguler </span>
+                    Penjualan <span><i class="fa fa-angle-double-right"></i> Penjualan Tempo </span>
                 </h1>
             </div>
         </div>
@@ -44,7 +44,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
-                            <h2><strong>Penjualan Reguler</strong></h2>
+                            <h2><strong>Penjualan Tempo</strong></h2>
                         </header>
                         <div role="content">
                             <!-- widget content -->
@@ -232,15 +232,15 @@
     var namaGlobal = null;
     var qtyGlobal = null;
     var idGlobal = [];
-    /*var idItem = [];
-    var arrItem = [];*/
+    var idItem = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
     var kodeGlobal = null;
     var spesifikGlobal = null;
     var searchGlobal = null;
-
+    
+    
     $(document).ready(function(){
         $('.togel').click();
         $("#cari-member").focus();
@@ -256,13 +256,12 @@
 
         $( "#cari-stock" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-stock',
-            minLength: 1,
+            minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+                // console.log(data.item);
             }
         });
-
-        
 
         function getDetailMember(id)
         {
@@ -292,7 +291,7 @@
     function setStock(info){
         var data = info.data;
         var price = 0;
-        namaGlobal = data.i_code+" - "+data.i_nama;
+        namaGlobal = data.i_nama;
         stockGlobal = data.s_qty;
 
         if(data.gp_price != null) {
@@ -304,57 +303,10 @@
         }
         hargaGlobal = parseInt(price);
         idGlobal = data.s_id;
-        //idItem = data.i_id;
+        idItem = data.i_id;
         kodespesifikGlobal = data.sd_specificcode;
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
-        //arrItem.push(idItem);
-    }
-
-    function setStocks(info){
-        var data = info.data[0];
-        var price = 0;
-        var qtyItem = 0;
-        namaGlobal = data.i_code+" - "+data.i_nama;
-        stockGlobal = data.s_qty;
-
-        if(data.gp_price != null) {
-            price = data.gp_price;
-        } else if (data.gp_price != null) {
-            price = data.gp_price;
-        } else {
-            price = data.i_price;
-        }
-        hargaGlobal = parseInt(price);
-        idGlobal = data.s_id;
-        //idItem = data.i_id;
-        kodespesifikGlobal = data.sd_specificcode;
-        spesifikGlobal = data.i_specificcode;
-        kodeGlobal = data.sm_specificcode;
-        
-        if (cekIsiArrayItem(data.i_id) == 'sudah') {
-            console.log(idGlobal);
-            console.log(cekIsiArrayItem(data.i_id));
-            // qtyItem = $("#qty-"+idGlobal).val();
-            // $("#qty-"+idGlobal).val(qtyItem + 1);
-            // console.log(qtyItem);
-        } else {
-            //arrItem.push(idItem);
-            $('#tambahketable').click();
-        }
-        //console.log(arrItem);
-        
-    }
-
-    function cekIsiArrayItem(data){
-        //var hitung = arrItem.length;
-        var kirim;
-        for (var i = 0; i <= hitung; i++) {
-            if (arrItem[i] == data) {
-               return 'sudah';
-            }
-        }
-        return 'lanjut';
     }
 
     function setSearch(){
@@ -382,83 +334,7 @@
         }
     });
 
-    $('#form-penjualan').on('submit', function (event) {
-        return false;
-    })
-
-    $("#cari-stock").on('keyup',function(e) {
-        if(e.which === 13) {
-            searchStock();
-        }
-    });
-
-    function searchStock() {
-        axios.get(baseUrl + '/penjualan-reguler/search-stock', {
-            params: {
-                term : $('#cari-stock').val(),
-                _token : $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        .then(function (response) {
-            if (response.data.message == "Tidak ditemukan") {
-                $.smallBox({
-                    title : "Gagal",
-                    content : "Upsss. Barang tidak ditemukan",
-                    color : "#A90329",
-                    timeout: 5000,
-                    icon : "fa fa-times bounce animated"
-                });
-            } else {
-                setStock(response.data[0]);
-                tambah();
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .then(function () {
-            // always executed
-        });
-
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
-        // $.ajax({
-        //     url: baseUrl + '/pointofsales/search-stock',
-        //     type: 'get',
-        //     data: {term : $('#cari-stock').val()},
-        //     success: function(response){
-        //         if (response.data.message == "Tidak ditemukan") {
-        //             $.smallBox({
-        //                 title : "Gagal",
-        //                 content : "Upsss. Barang tidak ditemukan",
-        //                 color : "#A90329",
-        //                 timeout: 5000,
-        //                 icon : "fa fa-times bounce animated"
-        //             });
-        //         } else {
-        //             setStock(response.data.data);
-        //             // $('#tambahketable').click();
-        //         }
-        //     }, error:function(x, e) {
-        //         if (x.status == 0) {
-        //             alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-        //         } else if (x.status == 404) {
-        //             alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-        //         } else if (x.status == 500) {
-        //             alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-        //         } else if (e == 'parsererror') {
-        //             alert('Error.\nParsing JSON Request failed.');
-        //         } else if (e == 'timeout'){
-        //             alert('Request Time out. Harap coba lagi nanti');
-        //         } else {
-        //             alert('Unknow Error.\n' + x.responseText);
-        //         }
-        //     }
-        // })
-    }
+    
 
     function simpanmember() {
         overlay();
@@ -528,15 +404,13 @@
 
     function tambah() {
         qtyGlobal = $('#qty').val();
-        if (qtyGlobal === null || qtyGlobal === "") {
-            qtyGlobal = 1;
-        }
         if (qtyGlobal > stockGlobal){
             qtyGlobal = stockGlobal;
         }
         var row = '';
         if (spesifikGlobal == 'N'){
             var inputs = document.getElementsByClassName( 'idStock' ),
+                inputsItem = document.getElementsByClassName( 'idItem' ),
                 idStock  = [].map.call(inputs, function( input ) {
                     return parseInt(input.value);
                 });
@@ -553,6 +427,7 @@
             } else {
                 row = '<tr id="'+idGlobal+'">' +
                     '<td style="width: 32%;">'+namaGlobal+
+                    '<input type="hidden" class="idItem" name="idItem[]" value="'+idItem+'" />'+
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
@@ -560,15 +435,16 @@
                     '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '</td>' +
-                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' " id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
+                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
                     '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
-                    '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
+                    '<td style="width: 10%;" class="text-center"><button onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
 
                 $("#table-penjualan tbody").append(row);
+
                 $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                 $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
 
@@ -578,10 +454,12 @@
                         event.preventDefault();
                     }
                 });
+
             }
         } else {
             row = '<tr id="'+kodeGlobal+'" ">' +
                 '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
+                '<input type="hidden" class="idItem" name="idItem[]" value="'+idItem+'" />'+
                 '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                 '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                 '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
@@ -771,10 +649,11 @@
             }
         });
         $.ajax({
-            url: baseUrl + '/pointofsales/simpan',
+            url: baseUrl + '/pointofsalestempo/simpan',
             type: 'get',
             data: $('#form-penjualan').serialize(),
             success: function(response){
+
             }, error:function(x, e) {
                 if (x.status == 0) {
                     alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');

@@ -1,0 +1,73 @@
+<?php
+
+namespace App\Http\Controllers\manajemen_penjualan;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\PlasmafoneController;
+use Illuminate\Support\Facades\Crypt;
+
+use DataTables;
+use DB;
+use Session;
+use Auth;
+use Carbon\Carbon;
+use Response;
+
+
+class monitoringPenjualanController extends Controller
+{
+    public function index()
+    {
+        if (PlasmafoneController::checkAkses(27, 'read') == false) {
+            return view('errors.407');
+        } else {
+            return view('manajemen_penjualan.monitoring_penjualan.index');
+        }
+    }
+
+    public function realtime(Request $request)
+    {
+        // dd($request->hiddenCount[0]);
+        $realtime = DB::table('d_sales')
+            ->join('m_member', 'm_id', '=', 's_member')
+            ->join('m_company', 'c_id', '=', 's_comp')
+            ->select('s_date', 's_nota', 'm_name', 'c_name', 's_id')
+            ->where('s_id', $request->hiddenCount)
+            ->orderBy('s_date', 'desc')->get();
+
+        return json_encode([
+            'real' => $realtime
+        ]);
+
+        // return DataTables::of($realtime)
+        //     ->addIndexColumn()
+        //     ->addColumn('aksi', function ($realtime) {
+        //         return '<div class="text-center"><button class="btn btn-circle btn-primary" onclick="detil(\'' . Crypt::encrypt($realtime->s_id) . '\')"><i class="glyphicon glyphicon-list"></i></button></div>';
+        //     })
+        //     ->rawColumns(['aksi'])
+        //     ->make(true);
+    }
+
+    public function realtime_dt()
+    {
+
+    }
+
+    public function realisasi()
+    {
+
+        $realisasi = DB::table('d_sales_plan')
+            ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+            ->join('d_item', 'i_id', '=', 'spd_item')
+            ->join('d_sales_dt', 'sd_item', '=', 'spd_item')->get();
+
+        dd($realisasi);
+
+    }
+
+    public function best_outlet()
+    {
+
+    }
+}
