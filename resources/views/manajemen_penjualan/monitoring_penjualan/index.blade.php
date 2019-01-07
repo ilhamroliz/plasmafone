@@ -48,6 +48,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
             <div class="row">
 
+                <!-- Table untuk || Penjualan Realtime ||
+                    Penjualan yang ditampilkan hanya penjualan HARI INI
+                -->
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
                     <div class="jarviswidget" id="wid-id-11" 
@@ -57,6 +60,55 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                         <header>
                             <h2><strong>Data Penjualan Realtime</strong></h2>
+                        </header>
+
+                        <div>
+                            <div class="widget-body no-padding">
+
+                                <div class="tab-content padding-10">
+
+                                    <div class="tab-pane fade in active" id="hr1">
+										<table id="realtimeTable" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>
+												<tr>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-calendar-times-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal</th>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Harga</th>
+													<th style="width: 10%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+												</tr>
+											</thead>
+                                            <form id="countForm">
+                                                <input type="hidden" id="hiddenCount" name="hiddenCount">
+                                            </form>
+											<tbody id="apprshowdata">
+											</tbody>
+
+										</table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+
+                <!-- Table untuk || Realisasi Penjualan ||
+                    Setiap Row menampilkan Target Capaian Setiap Outlet untuk Setiap Item
+                -->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    <div class="jarviswidget" id="wid-id-11" 
+                        data-widget-editbutton="false" 
+                        data-widget-colorbutton="false" 
+                        data-widget-deletebutton="false">
+
+                        <header>
+                            <h2><strong>Data Realisasi Penjualan</strong></h2>
                         </header>
 
                         <div>
@@ -89,12 +141,59 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>
 												<tr>
-                                                    <th style="width: 15%"><i class="fa fa-fw fa-calendar-times-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal</th>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
                                                     <th style="width: 15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-                                                    <th style="width: 20%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-                                                    <th style="width: 20%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
-                                                    <th style="width: 20%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Harga</th>
-													<th style="width: 10%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+                                                    <th style="width: 30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                    <th style="width: 13%"><i class="fa fa-fw fa-list txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Rencana Penjualan</th>
+                                                    <th style="width: 13%"><i class="fa fa-fw fa-shopping-basket txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Realisasi Penjualan</th>
+                                                    <th style="width: 13%"><i class="fa fa-fw fa-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Target Sisa</th>
+												</tr>
+											</thead>
+                                            <form id="countForm">
+                                                <input type="hidden" id="hiddenCount" name="hiddenCount">
+                                            </form>
+											<tbody id="apprshowdata">
+											</tbody>
+
+										</table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+
+                <!-- Table Untuk || Best Outlet ||
+                    Berdasarkan Sum/ Total QTY yang terjual, serta Omset dan Laba yang didapatkan
+                -->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    <div class="jarviswidget" id="wid-id-11" 
+                        data-widget-editbutton="false" 
+                        data-widget-colorbutton="false" 
+                        data-widget-deletebutton="false">
+
+                        <header>
+                            <h2><strong>Data Outlet Terbaik</strong></h2>
+                        </header>
+
+                        <div>
+                            <div class="widget-body no-padding">
+
+                                <div class="tab-content padding-10">
+
+                                    <div class="tab-pane fade in active" id="hr1">
+										<table id="boTable" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>
+												<tr>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-shopping-basket txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Penjualan (QTY)</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Omset</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Laba</th>
 												</tr>
 											</thead>
                                             <form id="countForm">

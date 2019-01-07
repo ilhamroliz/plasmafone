@@ -54,10 +54,20 @@ class monitoringPenjualanController extends Controller
 
     }
 
-    public function data_realisasi()
+    public function realisasi()
     {
 
-        $realisasi = DB::table('d_sales_plan_dt')->join();
+        $realisasi = DB::table('d_sales_plan')
+            ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+            ->join('d_item', 'i_id', '=', 'spd_item')
+            ->join('d_sales_dt', 'sd_item', '=', 'spd_item')->get();
+
+        dd($realisasi);
+
+    }
+
+    public function best_outlet()
+    {
 
     }
 }
