@@ -243,6 +243,7 @@
     
     $(document).ready(function(){
         $('.togel').click();
+        $("#cari-member").focus();
 
         $( "#cari-member" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-member',
@@ -282,6 +283,7 @@
             .then(function () {
                 $("#detail_mem").show("slow");
                 $("#search_barang").show("slow");
+                $("#cari-stock").focus();
             });
         }
     })
@@ -430,18 +432,28 @@
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
                     '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
+                    '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '</td>' +
-                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \''+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
+                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
                     '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
                     '<td style="width: 10%;" class="text-center"><button onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
+
                 $("#table-penjualan tbody").append(row);
+
                 $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                 $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+
+                $(".qtyTable").on("keypress keyup blur",function (event) {
+                    $(this).val($(this).val().replace(/[^\d].+/, ""));
+                    if ((event.which < 48 || event.which > 57)) {
+                        event.preventDefault();
+                    }
+                });
 
             }
         } else {
@@ -452,6 +464,7 @@
                 '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                 '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
                 '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
+                '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
                 '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
                 '</td>' +
                 '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
@@ -543,19 +556,53 @@
 
     }
 
-    function ubahQty(stock, id) {
+    function ubahQty(stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {
         stock = parseInt(stock);
-        var input = parseInt($('.qty-'+id).val());
+
+        var total = 0;
+        var harga = 0;
+        var input = parseInt($('#'+inputQty).val());
+        var discPercent = $("#"+discp).val().replace("%", "");
+        var discValue = $("#"+discv).val().replace(".", "");
+        var awalHarga = $("#"+hargaAwal).val();
+            awalHarga = parseInt(awalHarga);
+
+        if (discPercent == "") {
+            discPercent = 0;
+        } else if (discPercent == 0) {
+            discPercent = 0;
+        } else {
+            discPercent = parseInt(discPercent);
+        }
+
+        if (discValue == "") {
+            discValue = 0;
+        } else if (discValue == 0) {
+            discValue = 0;
+        } else {
+            discValue = parseInt(discValue);
+        }
+
         if (isNaN(input)){
             input = 0;
         }
         if (input > stock){
             input = stock;
-            $('.qty-'+id).val(input);
+            $('#'+inputQty).val(input);
         }
-        var harga = input * hargaGlobal;
-        harga = convertToRupiah(harga);
-        $('.harga-'+idGlobal).html(harga);
+
+        if (discPercent == 0 && discValue == 0) {
+            harga += input * awalHarga;
+        } else if (discPercent != 0) {
+            harga += ((100 - discPercent)/100) * (awalHarga * input);
+        } else if (discValue != 0) {
+            harga += input * awalHarga - discValue;
+        }
+
+        
+        $('#'+grossItem).val(input * awalHarga);
+        $('#'+totalItem).val(harga);
+        $("#"+lbltotalItem).text(convertToRupiah(parseInt(harga)));
         updateTotalTampil();
     }
 
@@ -582,7 +629,7 @@
             });
 
         for (var i = 0; i < arharga.length; i++){
-            totalGross += (arharga[i] * arqty[i]);
+            totalGross += (parseInt(arharga[i]) * parseInt(arqty[i]));
         }
 
         for (var i = 0; i < artotalItem.length; i++){
