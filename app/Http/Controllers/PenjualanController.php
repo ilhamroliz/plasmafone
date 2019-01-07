@@ -336,7 +336,7 @@ class PenjualanController extends Controller
 
             foreach ($get_smiddetail as $key => $value) {
 
-                $get_countiddetail = $count_smiddetail->count()+1;
+                $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->count()+1;
                 
                 if ($get_smiddetail[$key]->sm_sisa != 0) {
 
@@ -352,8 +352,15 @@ class PenjualanController extends Controller
                     array_push($arr_hpp, $sm_hpp);
 
                     $sm_reff = $get_smiddetail[$key]->sm_nota;
-
-                    $sm_sisa = $get_smiddetail[$key]->sm_qty - $data['qtyTable'][$i];
+                    
+                    if ($get_smiddetail[$key]->sm_use != 0) {
+                        $sm_use = $data['qtyTable'][$i] + $get_smiddetail[$key]->sm_use;
+                        $sm_sisa = $get_smiddetail[$key]->sm_qty - $get_smiddetail[$key]->sm_use - $data['qtyTable'][$i];
+                    } else {
+                        $sm_use = $data['qtyTable'][$i] + $get_smiddetail[$key]->sm_use;
+                        $sm_sisa = $get_smiddetail[$key]->sm_qty - $data['qtyTable'][$i];
+                    }
+                    
 
                     // $Htotal_disc_persen += ($data['grossItem'][$i] / $data['totalGross']) * ($discPercent/100);
                     // $Htotal_disc_value += ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
@@ -379,7 +386,7 @@ class PenjualanController extends Controller
 
                         // Update in table d_stock_mutation
                         DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
-                            'sm_use' => $data['qtyTable'][$i],
+                            'sm_use' => $sm_use,
                             'sm_sisa' => $sm_sisa
                         ]);
 
