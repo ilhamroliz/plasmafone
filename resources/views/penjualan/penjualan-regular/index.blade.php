@@ -231,8 +231,8 @@
     <script>
     var namaGlobal = null;
     var qtyGlobal = null;
-    var idGlobal = [];
-    var idItem = [];
+    var idGlobal = null;
+    var idItem = null;
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -291,6 +291,7 @@
     })
 
     function setStock(info){
+        // console.log(info);
         var data = info.data;
         var price = 0;
         namaGlobal = data.i_code+" - "+data.i_nama;
@@ -338,11 +339,83 @@
 
     $("#cari-stock").on('keyup',function(e) {
         if(e.which == 13) {
-            $('#tambahketable').click();
+            if (idItem == null) {
+                searchStock();
+                
+            } else {
+                $('#tambahketable').click();
+            }
         }
     });
 
-    
+    function searchStock() {
+        axios.get(baseUrl + '/pointofsales/search-stock', {
+            params: {
+                term : $('#cari-stock').val(),
+                _token : $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .then(function (response) {
+            console.log(response.data.data.i_id);
+            if (response.data.message == "Tidak ditemukan") {
+                $.smallBox({
+                    title : "Gagal",
+                    content : "Upsss. Barang tidak ditemukan",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+            } else {
+                setStock(response.data);
+                // $('#tambahketable').click();
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
+
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //     }
+        // });
+        // $.ajax({
+        //     url: baseUrl + '/pointofsales/search-stock',
+        //     type: 'get',
+        //     data: {term : $('#cari-stock').val()},
+        //     success: function(response){
+        //         if (response.data.message == "Tidak ditemukan") {
+        //             $.smallBox({
+        //                 title : "Gagal",
+        //                 content : "Upsss. Barang tidak ditemukan",
+        //                 color : "#A90329",
+        //                 timeout: 5000,
+        //                 icon : "fa fa-times bounce animated"
+        //             });
+        //         } else {
+        //             setStock(response.data.data);
+        //             // $('#tambahketable').click();
+        //         }
+        //     }, error:function(x, e) {
+        //         if (x.status == 0) {
+        //             alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+        //         } else if (x.status == 404) {
+        //             alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+        //         } else if (x.status == 500) {
+        //             alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+        //         } else if (e == 'parsererror') {
+        //             alert('Error.\nParsing JSON Request failed.');
+        //         } else if (e == 'timeout'){
+        //             alert('Request Time out. Harap coba lagi nanti');
+        //         } else {
+        //             alert('Unknow Error.\n' + x.responseText);
+        //         }
+        //     }
+        // })
+    }
 
     function simpanmember() {
         overlay();
