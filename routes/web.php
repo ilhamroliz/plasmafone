@@ -625,7 +625,12 @@ Route::group(['middleware' => 'auth'], function () {
 	//=== MONITORING PENJUALAN
 
 	Route::get('/man-penjualan/monitoring-penjualan', 'manajemen_penjualan\monitoringPenjualanController@index');
-
+	Route::post('/man-penjualan/monitoring-penjualan/realtime', 'manajemen_penjualan\monitoringPenjualanController@realtime');
+	Route::post('/man-penjualan/monitoring-penjualan/realtime-dt/{id}', 'manajemen_penjualan\monitoringPenjualanController@realtime_dt');
+	Route::post('/man-penjualan/monitoring-penjualan/realisasi', 'manajemen_penjualan\monitoringPenjualanController@realisasi');
+	Route::post('/man-penjualan/monitoring-penjualan/cari-realisasi', 'manajemen_penjualan\monitoringPenjualanController@cari_realisasi');
+	Route::post('/man-penjualan/monitoring-penjualan/outlet', 'manajemen_penjualan\monitoringPenjualanController@outlet');
+	Route::post('/man-penjualan/monitoring-penjualan/outlet-month', 'manajemen_penjualan\monitoringPenjualanController@outlet_month');	
 
 	//=== End MONITORING PENJUALAN
 

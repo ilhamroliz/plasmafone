@@ -44,5 +44,239 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         
         </div>
 
+        <section id="widget-grid" class="">
+
+            <div class="row">
+
+                <!-- Table untuk || Penjualan Realtime ||
+                    Penjualan yang ditampilkan hanya penjualan HARI INI
+                -->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    <div class="jarviswidget" id="wid-id-11" 
+                        data-widget-editbutton="false" 
+                        data-widget-colorbutton="false" 
+                        data-widget-deletebutton="false">
+
+                        <header>
+                            <h2><strong>Data Penjualan Realtime</strong></h2>
+                        </header>
+
+                        <div>
+                            <div class="widget-body no-padding">
+
+                                <div class="tab-content padding-10">
+
+                                    <div class="tab-pane fade in active" id="hr1">
+										<table id="realtimeTable" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>
+												<tr>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-calendar-times-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal</th>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-dollar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Harga</th>
+													<th style="width: 10%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+												</tr>
+											</thead>
+                                            <form id="countForm">
+                                                <input type="hidden" id="hiddenCount" name="hiddenCount">
+                                            </form>
+											<tbody id="apprshowdata">
+											</tbody>
+
+										</table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+
+                <!-- Table untuk || Realisasi Penjualan ||
+                    Setiap Row menampilkan Target Capaian Setiap Outlet untuk Setiap Item
+                -->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    <div class="jarviswidget" id="wid-id-11" 
+                        data-widget-editbutton="false" 
+                        data-widget-colorbutton="false" 
+                        data-widget-deletebutton="false">
+
+                        <header>
+                            <h2><strong>Data Realisasi Penjualan</strong></h2>
+                        </header>
+
+                        <div>
+                            <div class="widget-body no-padding">
+								<form id="cariForm">
+									<div class="col-md-12 no-padding padding-top-15">
+										<div class="col-md-2">
+											<div class="form-group">
+												<input type="text" id="monthPick" name="monthPick" class="form-control" placeholder="MASUKKAN BULAN">                                       
+											</div>
+										</div>
+
+										<div class="col-md-4">
+											<div class="form-group">
+												<input type="hidden" id="irpCompId" name="irpCompId">
+												<input type="text" class="form-control irpCompName" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase">                                       
+											</div>
+										</div>
+
+										<div class="col-md-1">
+											<a class="btn btn-primary" onclick="cari2()"><i class="fa fa-search"></i></a>
+										</div>
+									</div>
+								</form>
+
+                                <div class="tab-content padding-10">
+
+                                    <div class="tab-pane fade in active" id="hr1">
+										<table id="realtimeTable" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>
+												<tr>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
+                                                    <th style="width: 30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                    <th style="width: 13%"><i class="fa fa-fw fa-list txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Rencana Penjualan</th>
+                                                    <th style="width: 13%"><i class="fa fa-fw fa-shopping-basket txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Realisasi Penjualan</th>
+                                                    <th style="width: 13%"><i class="fa fa-fw fa-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Target Sisa</th>
+												</tr>
+											</thead>
+                                            <form id="countForm">
+                                                <input type="hidden" id="hiddenCount" name="hiddenCount">
+                                            </form>
+											<tbody id="apprshowdata">
+											</tbody>
+
+										</table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+
+                <!-- Table Untuk || Best Outlet ||
+                    Berdasarkan Sum/ Total QTY yang terjual, serta Omset dan Laba yang didapatkan
+                -->
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    <div class="jarviswidget" id="wid-id-11" 
+                        data-widget-editbutton="false" 
+                        data-widget-colorbutton="false" 
+                        data-widget-deletebutton="false">
+
+                        <header>
+                            <h2><strong>Data Outlet Terbaik</strong></h2>
+                        </header>
+
+                        <div>
+                            <div class="widget-body no-padding">
+
+                                <div class="tab-content padding-10">
+
+                                    <div class="tab-pane fade in active" id="hr1">
+										<table id="boTable" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>
+												<tr>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+                                                    <th style="width: 15%"><i class="fa fa-fw fa-shopping-basket txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Penjualan (QTY)</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Omset</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Laba</th>
+												</tr>
+											</thead>
+                                            <form id="countForm">
+                                                <input type="hidden" id="hiddenCount" name="hiddenCount">
+                                            </form>
+											<tbody id="apprshowdata">
+											</tbody>
+
+										</table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                
+                </div>
+            
+            </div>
+        
+        </section>
+
     </div>
+@endsection
+
+@section('extra_script')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#realtimeTable').DataTable({
+                "language" : dataTableLanguage
+            });
+
+            // setInterval(function() {
+
+                axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/realtime', $('#countForm').serialize()).then((response) => {
+                    
+                    for(var i = 0; i < response.data.real.length; i++){
+                        $('#realtimeTable').DataTable().row.add([
+                            response.data.real[i].s_date,
+                            response.data.real[i].s_nota,
+                            response.data.real[i].m_name,
+                            response.data.real[i].c_name,
+                            '<div class="text-center"><button class="btn btn-circle btn-primary" onclick="detil('+response.data.real[i].s_id+')"><i class="glyphicon glyphicon-list"></i></button></div>'
+                        ]).draw(false);
+
+                        if(i == response.data.real.length){
+                            $('#hiddenCount').val(response.data.real[i].s_id);
+                        }
+                    }                    
+                });
+                
+                // $('#realtimeTable').DataTable().destroy();
+                // $('#realtimeTable').DataTable({
+				// 	"processing": true,
+				// 	"serverSide": true,
+				// 	"ajax": "{{ url('/man-penjualan/monitoring-penjualan/realtime') }}",
+				// 	"columns":[
+				// 		{"data": "s_date"},
+				// 		{"data": "s_nota"},
+				// 		{"data": "m_name"},
+				// 		{"data": "c_name"},
+				// 		{"data": "aksi"}
+				// 	],
+				// 	"autoWidth" : true,
+				// 	"language" : dataTableLanguage,
+				// 	"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+				// 	"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+				// 	"preDrawCallback" : function() {
+				// 		// Initialize the responsive datatables helper once.
+				// 		if (!responsiveHelper_dt_basic) {
+				// 			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#realtimeTable'), breakpointDefinition);
+				// 		}
+				// 	},
+				// 	"rowCallback" : function(nRow) {
+				// 		responsiveHelper_dt_basic.createExpandIcon(nRow);
+				// 	},
+				// 	"drawCallback" : function(oSettings) {
+				// 		responsiveHelper_dt_basic.respond();
+				// 	}
+				// });
+            // }, 5000);
+
+        })
+    </script>
 @endsection
