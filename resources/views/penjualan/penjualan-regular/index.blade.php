@@ -63,7 +63,7 @@
                                                             <div class="icon-addon addon-md">
                                                                 <!-- <input type="text" placeholder="Email" class="form-control"> -->
                                                                 <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
-                                                                <input type="hidden" value="" class="idMember" id="idMember">
+                                                                <input type="hidden" value="" class="idMember" id="idMember" name="idMember">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
@@ -108,6 +108,8 @@
                                                     <div class="col-md-12">
                                                         <div class="pull-right">
                                                             <h1 class="font-400 total-tampil">Rp. 0</h1>
+                                                            <input type="hidden" name="totalGross" id="totalGross">
+                                                            <input type="hidden" name="totalHarga" id="totalHarga">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -230,14 +232,18 @@
     var namaGlobal = null;
     var qtyGlobal = null;
     var idGlobal = [];
+    var idItem = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
     var kodeGlobal = null;
     var spesifikGlobal = null;
     var searchGlobal = null;
+    
+    
     $(document).ready(function(){
         $('.togel').click();
+        $("#cari-member").focus();
 
         $( "#cari-member" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-member',
@@ -253,6 +259,7 @@
             minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+                // console.log(data.item);
             }
         });
 
@@ -276,6 +283,7 @@
             .then(function () {
                 $("#detail_mem").show("slow");
                 $("#search_barang").show("slow");
+                $("#cari-stock").focus();
             });
         }
     })
@@ -295,6 +303,7 @@
         }
         hargaGlobal = parseInt(price);
         idGlobal = data.s_id;
+        idItem = data.i_id;
         kodespesifikGlobal = data.sd_specificcode;
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
@@ -401,6 +410,7 @@
         var row = '';
         if (spesifikGlobal == 'N'){
             var inputs = document.getElementsByClassName( 'idStock' ),
+                inputsItem = document.getElementsByClassName( 'idItem' ),
                 idStock  = [].map.call(inputs, function( input ) {
                     return parseInt(input.value);
                 });
@@ -417,40 +427,55 @@
             } else {
                 row = '<tr id="'+idGlobal+'">' +
                     '<td style="width: 32%;">'+namaGlobal+
+                    '<input type="hidden" class="idItem" name="idItem[]" value="'+idItem+'" />'+
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
-                    '<input type="hidden" class="harga" name="harga[]" value="'+hargaGlobal+'" />'+
+                    '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
+                    '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
+                    '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '</td>' +
-                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \''+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
+                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discp" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0 %" /></td>@endif' +
-                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discv" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                    '<td style="width: 15%;" class="harga-'+idGlobal+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
+                    '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
                     '<td style="width: 10%;" class="text-center"><button onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
+
                 $("#table-penjualan tbody").append(row);
-                $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: ' %'});
+
+                $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                 $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+
+                $(".qtyTable").on("keypress keyup blur",function (event) {
+                    $(this).val($(this).val().replace(/[^\d].+/, ""));
+                    if ((event.which < 48 || event.which > 57)) {
+                        event.preventDefault();
+                    }
+                });
 
             }
         } else {
             row = '<tr id="'+kodeGlobal+'" ">' +
                 '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
+                '<input type="hidden" class="idItem" name="idItem[]" value="'+idItem+'" />'+
                 '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                 '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                 '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
-                '<input type="hidden" class="harga" name="harga[]" value="'+hargaGlobal+'" />'+
+                '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
+                '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
+                '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
                 '</td>' +
-                '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" name="qtyTable[]" value="1" />1</td>' +
+                '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
                 '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discp"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0 %" /></td>@endif' +
-                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\')" class="discv"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
+                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
+                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
+                '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">'+convertToRupiah(hargaGlobal)+'</td>' +
                 '<td style="width: 10%;" class="text-center"><button class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
                 '</tr>';
             $("#table-penjualan tbody").append(row);
-            $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: ' %'});
+            $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
             $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
 
         }
@@ -484,50 +509,100 @@
         updateTotalTampil();
     }
 
-    function isiDiscp(discp, discv) {
-
-        var a = $("#"+discv).val();
-
+    function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
+        var total = 0;
+        var a = $("#"+discv).val(), quantity = parseInt($("#"+qty).val()), price = parseInt($("#"+harga).val()), disc = parseInt($("#"+discp).val().replace("%", ""));
+        
         if (a == "") {
             a = 0;
+            
         } else {
             a = parseInt(a);
         }
 
         if(a != 0) {
-            $("#"+discp).val("0 %");
+            $("#"+discp).val("0%");
+        } else if($("#"+discp).val().replace("%", "") == 0 && a == 0){
+            total += price * quantity;
+            $("#"+lbltotItem).text(convertToRupiah(total));
+            $("#"+totItem).val(parseInt(total));
+            $(".total-tampil").text(convertToRupiah(total));
+        } else {
+            total += ((100 - disc)/100) * (price * quantity);
+            $("#"+lbltotItem).text(convertToRupiah(total));
+            $("#"+totItem).val(parseInt(total));
+            $(".total-tampil").text(convertToRupiah(total));
         }
+        updateTotalTampil();
 
     }
 
-    function isiDiscv(discp, discv) {
-
-        var a = $("#"+discp).val();
+    function isiDiscv(discp, discv, qty, harga, lbltotItem, totItem) {
+        var total = 0;
+        var a = $("#"+discp).val(), quantity = parseInt($("#"+qty).val()), price = parseInt($("#"+harga).val()), disc = $("#"+discv).val().replace('.', '');
 
         if (a == "") {
-            a = "0 %";
+            a = "0%";
         }
 
-        if(a != "0 %") {
+        if(a != "0%") {
             $("#"+discv).val("0");
+        } else {
+            total += quantity * price - disc;
+            $("#"+lbltotItem).text(convertToRupiah(total));
+            $("#"+totItem).val(total);
         }
+        updateTotalTampil();
 
     }
 
-    function ubahQty(stock, id) {
+    function ubahQty(stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {
         stock = parseInt(stock);
-        var input = parseInt($('.qty-'+id).val());
+
+        var total = 0;
+        var harga = 0;
+        var input = parseInt($('#'+inputQty).val());
+        var discPercent = $("#"+discp).val().replace("%", "");
+        var discValue = $("#"+discv).val().replace(".", "");
+        var awalHarga = $("#"+hargaAwal).val();
+            awalHarga = parseInt(awalHarga);
+
+        if (discPercent == "") {
+            discPercent = 0;
+        } else if (discPercent == 0) {
+            discPercent = 0;
+        } else {
+            discPercent = parseInt(discPercent);
+        }
+
+        if (discValue == "") {
+            discValue = 0;
+        } else if (discValue == 0) {
+            discValue = 0;
+        } else {
+            discValue = parseInt(discValue);
+        }
+
         if (isNaN(input)){
             input = 0;
         }
         if (input > stock){
             input = stock;
-            $('.qty-'+id).val(input);
+            $('#'+inputQty).val(input);
         }
-        console.log(input);
-        var harga = input * hargaGlobal;
-        harga = convertToRupiah(harga);
-        $('.harga-'+idGlobal).html(harga);
+
+        if (discPercent == 0 && discValue == 0) {
+            harga += input * awalHarga;
+        } else if (discPercent != 0) {
+            harga += ((100 - discPercent)/100) * (awalHarga * input);
+        } else if (discValue != 0) {
+            harga += input * awalHarga - discValue;
+        }
+
+        
+        $('#'+grossItem).val(input * awalHarga);
+        $('#'+totalItem).val(harga);
+        $("#"+lbltotalItem).text(convertToRupiah(parseInt(harga)));
         updateTotalTampil();
     }
 
@@ -537,6 +612,9 @@
     }
     
     function updateTotalTampil() {
+        var totalGross = 0;
+        var totalHarga = 0;
+
         var inputs = document.getElementsByClassName( 'harga' ),
             arharga  = [].map.call(inputs, function( input ) {
                 return input.value;
@@ -545,14 +623,23 @@
             arqty  = [].map.call(inputs, function( input ) {
                 return input.value;
             });
+        var inputs = document.getElementsByClassName( 'totalItem' ),
+            artotalItem  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
 
-        var total = 0;
         for (var i = 0; i < arharga.length; i++){
-            total = total + (arharga[i] * arqty[i]);
+            totalGross += (parseInt(arharga[i]) * parseInt(arqty[i]));
         }
 
-        total = convertToRupiah(total);
-        $('.total-tampil').html(total);
+        for (var i = 0; i < artotalItem.length; i++){
+            totalHarga += parseInt(artotalItem[i]);
+        }
+
+        $("#totalGross").val(totalGross);
+        $('.total-tampil').html(convertToRupiah(totalGross));
+        $("#totalHarga").val(totalHarga);
+        
     }
 
     function simpanPenjualan() {

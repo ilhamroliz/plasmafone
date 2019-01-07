@@ -72,14 +72,80 @@ class ReceptionController extends Controller
                     $row[]      = $key->i_nama;
                     $row[]      = $key->pd_value;
                     $row[]      = $key->pd_qty;
-                    $row[]      = '<div class="edit2">'. $key->pd_qty .'</div><input type="text" class="txtedit2" value="'. $key->pd_qty .'"  id="i_nama'. $key->pd_detailid . '" style="display:none">';
-                    $row[]      = '<div class="text-center edit"><input type="text" class="form-control txtedit" name="i_nama" id="i_nama' . $key->pd_detailid . '"  style="text-transform: uppercase" /></div>';
-                    $row[]      = '<div class="text-center edit"><input type="text" class="form-control txtedit" name="i_nama" id="i_nama' . $key->pd_detailid . '"  style="text-transform: uppercase" /></div>';
+                    $row[]      = '<div class="text-center edit"><input type="text" class="form-control txtedit" id="qty' . $key->pd_detailid . '"  style="text-transform: uppercase" onkeyup="updateQty(' . $key->pd_detailid . ')" /></div>';
+                    $row[]      = '<input type="hidden" id="gudangHidden'.$key->pd_detailid.'" name="tpMemberId"><input type="text" class="form-control" id="gudangShow'.$key->pd_detailid.'" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Item" onkeyup="updateGudang(' . $key->pd_detailid . ')">';
                     $data[]     = $row;
 
                 }
 
                 echo json_encode(array("data"=>$data));
+    }
+
+    public function cariGudang(Request $request)
+    {
+        $cari = $request->term;
+        $nama = DB::table('d_gudang')
+            ->where(function ($q) use ($cari){
+                $q->orWhere('g_id', 'like', '%'.$cari.'%');
+                $q->orWhere('g_nama', 'like', '%'.$cari.'%');
+            })->get();
+
+        if ($nama == null) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+           
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->g_id, 'label' => $query->g_nama .'('.$query->g_kode.')'];
+               
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function updateGudang(Request $request)
+    {
+        $id = $request->input('id');
+        $gudang = $request->input('gudang');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_gudangTerima' =>$gudang
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
+    }
+
+    public function updateQty(Request $request){
+        $id = $request->input('id');
+        $qty = $request->input('qty');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_qtyTerima' =>$qty
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
+    }
+
+    public function updateTgl(Request $request){
+        $id = $request->input('id');
+        $tgl = $request->input('tgl');
+        $update = DB::table('d_purchase_dt')
+        ->where('pd_detailid',$id)
+        ->update([
+            'pd_tglTerima' =>$tgl
+        ]);
+        if(!$update){
+            echo "gagal";
+        }else{
+            echo "sukses";
+        }
     }
 
     public function add_bbm(Request $request)
@@ -168,6 +234,208 @@ class ReceptionController extends Controller
        
 
         
+    }
+
+    public function terimaBarang(Request $request)
+    {
+        // $id = '1';
+        $id = $request->input('po');
+        $due_date = $request->input('due_date');
+
+        $purchase = DB::table('d_purchase')
+        ->select('d_purchase.*')
+        ->where('d_purchase.p_id',$id)
+        ->get();
+
+        foreach ($purchase as $key => $p) {
+           $sup = $p->p_supplier;
+        }
+        
+
+        $masterBbm = DB::table('d_bbm')
+        ->select('d_bbm.*')
+        ->get();
+
+        $query3 = DB::table('d_bbm_dt')
+        ->select('d_bbm_dt.*')
+        ->get();
+            $noD = count($query3);
+            if($noD==''){
+                $noDetail = '1';
+            }else{
+                $noDetail = $noD+1;
+            }
+
+
+        $total =  DB::table('d_purchase_dt')
+        ->select(DB::raw('sum(d_purchase_dt.pd_qtyTerima) as Total'))
+        ->where('d_purchase_dt.pd_purchase',$id)
+        ->get();
+
+        foreach ($total as $key) {
+            $harga = $key->Total;
+        }
+
+            $barisPo = count($masterBbm);
+                if($barisPo==0) {
+                    $cif ="00001";
+                }
+                else
+                {
+                    foreach ($masterBbm as $row) {
+                        //$a = substr($row->ID,5); 
+                        $counter=intval($barisPo); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
+                        $new=intval($counter)+1;         //digit terahit ditambah 1
+                    }
+                    if (strlen($new)==1){ //jika counter yg didapat panjangnya 1 ex: 1
+                    $vcounter="0000". '' .$new;
+                    }
+                    if (strlen($new)==2){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="000". '' .$new;
+                    }
+                    if (strlen($new)==3){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="00". '' .$new;
+                    }
+                    if (strlen($new)==4){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter="0". '' .$new;
+                    }
+                    if (strlen($new)==5){  //jika counter yg didapat panjangnya 2 ex: 11
+                    $vcounter=$new;
+                    }
+                    $cif = $vcounter;
+                }
+
+                $date = Carbon::Now('Asia/jakarta');
+
+                $tgl = date('d');
+                $bln = date('m');
+                $thn = date('Y');
+
+                $m=count($masterBbm);
+                if($m == ""){
+                    $n = '1';
+                }else{
+                    $n = $m+1;
+                }
+                    
+                $code = "BBM-".$cif."/".$tgl."/".$bln."/".$thn;
+
+                $list = array([
+                    'bm_id'                 =>$n,
+                    'bm_faktur'             =>"",
+                    'bm_no'                 =>$code,
+                    'bm_po'                 =>$id,
+                    'bm_supplier'           =>$sup,
+                    'bm_mem'                =>"",
+                    'bm_receiveDate'        =>"",
+                    'bm_orderDate'          =>$date,
+                    'bm_needDate'           =>$date,
+                    'bm_total'              =>"",
+                    'bm_note'               =>"",
+                    'bm_createdDate'        =>$date,
+                    'bm_createdUserID'      =>"",
+                    'bm_modifiedDate'       =>$date,
+                    'bm_modifiedUserID'     =>""
+                    ]);
+
+        $insertOne = DB::table('d_bbm')->insert($list);
+
+        if(!$insertOne){
+           echo "GAGAL";
+        }else{
+
+            // $statusPo = DB::table('d_purchase_dt')
+            // ->select(DB::raw('sum(d_purchase_dt.pd_qtyTerima) as terima'),DB::raw('sum(d_purchase_dt.pd_qty) as order'))
+            // ->where('d_purchase_dt.pd_purchase',$id)
+            // ->groupBy('pd_purchase')
+            // ->get();
+
+            // if($statusPo->terima == $statusPo->order){
+            //     $st = "COMPLETE";
+            // }else if($statusPo->terima < $statusPo->order){
+            //     $st = "QTY KURANG";
+            // }else{
+            //     $st = "KELEBIHAN QTY";
+            // }
+
+            
+            $query = DB::table('d_purchase_dt')
+            ->select('d_purchase_dt.*')
+            ->where('d_purchase_dt.pd_purchase',$id)
+            ->get();
+
+                $queryx = DB::table('d_bbm_dt')
+                ->select('d_bbm_dt.*')
+                ->get();
+
+                
+                $number = count($queryx);
+
+                if($number ==''){
+                    $nUrut = '1';
+                }else{
+                    $nUrut = $number+1;
+                }
+
+                if($number ==''){
+                    $nUrut1 = '1';
+                }else{
+                    $nUrut1 = $number+1;
+                }
+            
+
+                        $addAkses = [];
+                        for ($i=0; $i < count($query); $i++) {
+                            $temp = [
+                                'bm_dt' =>$nUrut1++,
+                                'bm_id' =>$n,
+                                'bm_item'=>$query[$i]->pd_item,
+                                'bm_price'=>$query[$i]->pd_value,
+                                'bm_qty'=>$query[$i]->pd_qtyTerima,
+                                'bm_receiveQty' =>$query[$i]->pd_qtyTerima,
+                                'bm_receiveStatus'=>"-",
+                                'bm_factoryID' =>$query[$i]->pd_gudangTerima,
+                                'bm_note' =>"-",
+                                'bm_createdDate' =>$date,
+                                'bm_createdUserID' =>$date,
+                                'bm_modifiedDate' =>$date,
+                                'bm_modifiedUserID' =>$date
+                            ];  
+                            array_push($addAkses, $temp);
+                        }
+                $insert = DB::table('d_bbm_dt')->insert($addAkses);
+
+                if(!$insert){
+                    echo json_encode(array("status" =>"gagal"));
+                }else{
+                    $def = DB::table('d_purchase')
+                    ->select('p_id')
+                    ->where('po_status','=','PURCHASING')
+                    ->where('p_id',$id)
+                    ->get();
+
+                    foreach ($def as $key => $value) {
+                        $dat['coloum'] = $value;
+                    }
+                       
+                    $data = array();
+                    foreach ($def as $key) {
+                       $row = array();
+                       $row[] = $key->p_id;
+                       $data[] = $row;
+                    }
+                  
+                   $update = DB::table('d_purchase')
+                   ->whereIn('p_id',$data)
+                   ->update([
+                       'po_status'=>'ACCEPT'
+                   ]);
+                    // PlasmafoneController::logActivity('aksi yang dilalukan PURCHASING');
+                    echo json_encode(array("status" =>"sukses"));
+                }
+        }
+
+       
     }
 
     public function index_addSupplier()

@@ -319,12 +319,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/request-pembelian/getOutlet', 'PembelianController@getOutlet');
 	Route::get('/pembelian/request-pembelian/simpanRequest', 'PembelianController@verifikasi_simpanRequest');
 	Route::get('/pembelian/request-pembelian/addData', 'PembelianController@addData');
-	Route::get('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
+	Route::POST('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
 	Route::get('/pembelian/request-pembelian/editDumy', 'PembelianController@editDumyReq');
-	Route::get('/pembelian/request-pembelian/addDumyReq', 'PembelianController@addDumyReq');
+	Route::POST('/pembelian/request-pembelian/addDumyReq', 'PembelianController@addDumyReq');
 	Route::POST('/pembelian/request-pembelian/getInput', 'PembelianController@getBarang_input');
 	Route::get('/pembelian/request-pembelian/hapusDumy', 'PembelianController@hapusDumy');
 	Route::get('/pembelian/request-pembelian/cariItem', 'PembelianController@cariItem');
+	Route::get('/pembelian/request-pembelian/testDesc', 'PembelianController@testDesc');
 
 
 
@@ -399,13 +400,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmApp', 'PembelianController@view_confirmApp');
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmPurchase', 'PembelianController@view_confirmPurchase');
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmAll', 'PembelianController@view_confirmAll');
-	Route::get('/pembelian/konfirmasi-pembelian/view_confirmAdd', 'PembelianController@view_confirmAdd');
+	Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd', 'PembelianController@view_confirmAdd');
 
 
 	//action confirm order
-	Route::get('/pembelian/konfirmasi-pembelian/confirmSetuju', 'PembelianController@confirmSetuju');
+	Route::POST('/pembelian/konfirmasi-pembelian/confirmSetuju', 'PembelianController@confirmSetuju');
+	Route::POST('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
 	Route::get('/pembelian/konfirmasi-pembelian/getPlan_id', 'PembelianController@getPlan_id');
 	Route::get('/pembelian/konfirmasi-pembelian/getSupplier', 'PembelianController@getSupplier');
+	Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
 
 	Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
@@ -495,8 +498,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/penerimaan/supplier/getPo', 'inventory\ReceptionController@getPo');
 	Route::post('/inventory/penerimaan/supplier/getEntitas_po', 'inventory\ReceptionController@getEntitas_po');
 	Route::post('/inventory/penerimaan/supplier/load_bbm', 'inventory\ReceptionController@load_bbm');
-	Route::post('/inventory/penerimaan/supplier/', 'inventory\ReceptionController@');
-	Route::post('/inventory/penerimaan/supplier/', 'inventory\ReceptionController@');
+	Route::post('/inventory/penerimaan/supplier/updateQty', 'inventory\ReceptionController@updateQty');
+	Route::post('/inventory/penerimaan/supplier/updateTgl', 'inventory\ReceptionController@updateTgl');
+	Route::post('/inventory/penerimaan/supplier/updateGudang', 'inventory\ReceptionController@updateGudang');
+	Route::post('/inventory/penerimaan/supplier/terimaBarang', 'inventory\ReceptionController@terimaBarang');
+	Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
 
 
 
