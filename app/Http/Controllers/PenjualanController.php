@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
+use App\Http\Controllers\CodeGenerator as GenerateCode;
 use Response;
 Use Auth;
 
@@ -91,7 +92,6 @@ class PenjualanController extends Controller
             $kode = $temp;
         }
         if (count($kode) > 0){
-            $outlet_user = Auth::user()->m_comp;
 
             $dataN = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
@@ -141,7 +141,7 @@ class PenjualanController extends Controller
             $data = $dataN->union($dataY)->get();
         } else {
             $data = DB::table('d_stock')
-                ->select('i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q){
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
@@ -187,6 +187,154 @@ class PenjualanController extends Controller
 
     public function savePenjualan(Request $request)
     {
-        dd($request->all());
+        $data = $request->all();
+
+        $outlet_user = Auth::user()->m_comp;
+        $member = Auth::user()->m_id;
+
+        // POS-REG/001/14/12/2018
+        $nota = GenerateCode::codePos('d_sales', 's_id', 3, 'POS-REG');
+        
+        $Htotal_disc_persen = 0;
+        $Htotal_disc_value = 0;
+
+        for ($i=0; $i < count($data['idStock']); $i++) { 
+
+            $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_detail', 'PENAMBAHAN');
+
+            $get_smiddetail = $count_smiddetail->get();
+
+            $get_countiddetail = $count_smiddetail->count()+1;
+
+            $discPercent = implode("", explode("%", $data['discp'][$i]));
+            $discValue = implode("", explode(".", $data['discv'][$i]));
+
+            if ($data['kode'][$i] != null) {
+                $specificcode = $data['kode'][$i];
+                try{
+                    DB::table('d_stock_dt')->where(['sd_stock' => $data['idStock'][$i], 'sd_specificcode' => $specificcode])->delete();
+                    DB::commit();
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    return false;
+                }
+                
+            } else {
+                $specificcode = null;
+            }
+
+            foreach ($get_smiddetail as $key => $value) {
+                
+                if ($get_smiddetail[$key]->sm_sisa != 0) {
+
+                    if ($discPercent == 0 && $discValue == 0) {
+                        $sm_hpp = 1 * $data['harga'][$i];
+                    } else if ($discPercent != 0) {
+                        $sm_hpp = ((100 - $discPercent)/100) * ($data['harga'][$i] * 1);
+                    } else if ($discValue != 0) {
+                        $sm_hpp = 1 * $data['harga'][$i] - $discValue;
+                    }
+
+                    $sm_sisa = $get_smiddetail[$key]->sm_qty - $data['qtyTable'][$i];
+
+                    $Htotal_disc_persen += ($data['grossItem'][$i] / $data['totalGross']) * ($discPercent/100);
+                    $Htotal_disc_value += ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
+                    
+                    try{
+
+                        // Insert to table d_stock_mutation
+                        DB::table('d_stock_mutation')->insert([
+                            'sm_stock'          => $data['idStock'][$i],
+                            'sm_detailid'       => $get_countiddetail,
+                            'sm_date'           => date('Y-m-d H:m:s'),
+                            'sm_detail'         => 'PENGURANGAN',
+                            'sm_specificcode'   => $specificcode,
+                            'sm_qty'            => $data['qtyTable'][$i],
+                            'sm_use'            => 0,
+                            'sm_sisa'           => 0,
+                            'sm_hpp'            => $sm_hpp,
+                            'sm_sell'           => $data['harga'][$i],
+                            'sm_nota'           => $nota,
+                            'sm_reff'           => $nota,
+                            'sm_mem'            => $member
+                        ]);
+
+                        // Update in table d_stock_mutation
+                        DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
+                            'sm_use' => $data['qtyTable'][$i],
+                            'sm_sisa' => $sm_sisa
+                        ]);
+
+                        // update in table d_stock
+                        DB::table('d_stock')->where(['s_comp' => $outlet_user, 's_position' => $outlet_user, 's_item' => $data['idItem'][$i]])->update(['s_qty' => $sm_sisa]);
+
+                        DB::commit();
+
+                    } catch (\Exception $e) {
+                        DB::rollback();
+                        return false;
+                    }
+
+                }
+
+            }
+        }
+
+        // Insert to d_sales
+        $idsales = DB::table('d_sales')->insertGetId([
+            's_comp'                => $outlet_user,
+            's_member'              => $data['idMember'],
+            's_date'                => date('Y-m-d H:m:s'),
+            's_jenis'               => "C",
+            's_nota'                => $nota,
+            // 's_total_gross'         => $data['totalGross'],
+            's_total_gross'         => $data['totalHarga'],
+            // 's_total_disc_value'    => $Htotal_disc_value,
+            's_total_disc_value'    => 0,
+            // 's_total_disc_persen'   => $Htotal_disc_persen,
+            's_total_disc_persen'   => 0,
+            's_total_net'           => $data['totalHarga'],
+            's_salesman'            => $data['idMember']
+        ]);
+
+        for ($i=0; $i < count($data['idStock']); $i++) {
+
+            $salesdetailid = DB::table('d_sales_dt')->where('sd_sales', $idsales)->count()+1;
+
+            $discPercent = implode("", explode("%", $data['discp'][$i]));
+            $discValue = implode("", explode(".", $data['discv'][$i]));
+
+            $Dtotal_disc_persen = ($data['grossItem'][$i] / $data['totalGross']) * ($discPercent/100);
+            $Dtotal_disc_value = ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
+
+            try {
+                
+                // Insert to table d_sales_dt
+                DB::table('d_sales_dt')->insert([
+                    'sd_sales'          => $idsales,
+                    'sd_detailid'       => $salesdetailid,
+                    'sd_comp'           => $outlet_user,
+                    'sd_item'           => $data['idItem'][$i],
+                    'sd_qty'            => $data['qtyTable'][$i],
+                    'sd_value'          => $data['harga'][$i],
+                    'sd_hpp'            => $data['totalItem'][$i],
+                    // 'sd_total_gross'    => $data['grossItem'][$i],
+                    'sd_total_gross'    => $data['totalItem'][$i],
+                    'sd_disc_persen'    => 0,
+                    'sd_disc_value'     => 0,
+                    'sd_total_net'      => $data['totalItem'][$i]
+                ]);
+
+                DB::commit();
+
+            } catch (\Exception $e) {
+                DB::rollback();
+                return false;
+            }
+
+        }
+
+        return true;
+
     }
 }
