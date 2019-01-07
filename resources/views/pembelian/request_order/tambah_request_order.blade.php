@@ -140,7 +140,7 @@
                                         <input type="text" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <button class="btn btn-primary" onclick="tambah()">Tambah</button>
+                                        <button class="btn btn-primary" onclick="tambah()" id="okTambah">Tambah</button>
                                     </div>
 							</div>
 							<div class="widget-body no-padding">
@@ -175,7 +175,7 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-md-12">
-                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">Tambah Semua Rencana</button>
+                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()" >Tambah Semua Rencana</button>
 											</div>
 										</div>
                                     </div>
@@ -411,6 +411,15 @@
 				select: function(event, data) {
 					$('#tpMemberId').val(data.item.id);
 					$('#tpMemberNama').val(data.item.label);
+					$('#qty').focus();
+				}
+			});
+
+			
+				$("#qty").on("keyup",function (event) {
+				$(this).val($(this).val().replace(/[^\d].+/, ""));
+				if ((event.which == 13)) {
+					$('#okTambah').click();
 				}
 			});
 
@@ -428,7 +437,7 @@
 			$.ajax({
 				url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
 				type: "POST",
-				data: { 
+				data: {  
 					'qty' : $('#qty').val(),
 					'item' : $('#tpMemberId').val(),
 					_token : '{{ csrf_token() }}'
@@ -463,7 +472,8 @@
 							dataType: "JSON",
 							success: function(data)
 							{
-								$.smallBox({
+								if(data.status == "sukses"){
+									$.smallBox({
 										title : "Berhasil",
 										content : 'Data telah Di hapus...!',
 										color : "#739E73",
@@ -474,6 +484,20 @@
 										$('#tpMemberNama').val("");
 										$('#qty').val("");
 										$('#table-rencana').DataTable().ajax.reload();
+								}else{
+									$.smallBox({
+										title : "Berhasil",
+										content : 'Data gagal Di hapus...!',
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+										});
+										$('#tpMemberId').val("");
+										$('#tpMemberNama').val("");
+										$('#qty').val("");
+										$('#table-rencana').DataTable().ajax.reload();
+								}
+								
 							},
 							
 						}); 
@@ -489,7 +513,7 @@
 						data: { 
 							'id' : id,
 							'qty' : input,
-
+ 
 						},
 						dataType: "JSON",
 						success: function(data)
@@ -541,9 +565,19 @@
 										$('#qty').val("");
 										$('#table-rencana').DataTable().ajax.reload();
 									// $('#table-rencana').DataTable().ajax.reload();
+								}else if(data.status == 'notFound'){
+									$.smallBox({
+										title : "Peringatan",
+										content : 'Data Not Found!',
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+										});
+										$('#tpMemberId').val("");
+										$('#tpMemberNama').val("");
+										$('#qty').val("");
+										$('#table-rencana').DataTable().ajax.reload();
 								}else{
-									
-									
 									$.smallBox({
 										title : "Berhasil",
 										content : 'Anda Telah Berhasil Mengajukan Request Order...!',

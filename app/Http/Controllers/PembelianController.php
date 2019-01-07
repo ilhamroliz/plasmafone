@@ -61,7 +61,7 @@ class PembelianController extends Controller
                 'm_company.c_name'
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
             ->get();
@@ -97,7 +97,7 @@ class PembelianController extends Controller
                 'm_company.c_name'
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'DISETUJUI')
             ->get();
@@ -137,7 +137,7 @@ class PembelianController extends Controller
                 'm_company.c_name'
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'DITOLAK')
             ->get();
@@ -177,7 +177,7 @@ class PembelianController extends Controller
                 'm_company.c_name'
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->get();
 
@@ -204,61 +204,94 @@ class PembelianController extends Controller
 
 
         $pr_compReq = $request->input('comp');
+
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'WAITING';
         $code = Carbon::now()->timestamp;
-        $comp = Auth::user()->m_id;
-        $query = DB::table('d_purchase_req')
+        $numberPlan = "PL-".$code;
+        $user = Auth::user()->m_id;
+
+        if($pr_compReq =="semua"){
+            $query = DB::table('d_purchase_req')
             ->select('d_purchase_req.*','d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
             ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            ->where('d_purchase_req.pr_compReq', $comp)
             ->where('d_purchase_req.pr_stsReq', $status)
             ->get();
-            
-
-        $pr_dateApp = Carbon::now('Asia/Jakarta');
-        $pr_stsPlan = "WAITING";
-
-             $addAkses = [];
-                for ($i=0; $i < count($query); $i++) {
-                    $temp = [
-                       
-                        'pr_itemPlan'=>$query[$i]->pr_itemReq,
-                        'pr_comp' =>$query[$i]->pr_compReq,
-                        'pr_planNumber' => $code,
-                        'pr_idReq' =>$query[$i]->pr_id,
-                        'pr_qtyReq' =>$query[$i]->pr_qtyReq,
-                        'pr_qtyApp' =>$query[$i]->pr_qtyApp,
-                        'pr_stsPlan' =>$pr_stsPlan,
-                        'pr_dateRequest' =>$query[$i]->pr_dateReq,
-                        'pr_dateApp' =>$pr_dateApp,
-                        'pr_comp' => $comp
-                    ];  
-                    array_push($addAkses, $temp);
-                }
-
-        $insert = DB::table('d_purchase_plan')->insert($addAkses);
-        if (!$insert) {
-
-            $data = "GAGAL";
-            echo json_encode(array("status" => $data));
-        } else {
-               
+        }else{
+            $query = DB::table('d_purchase_req')
+            ->select('d_purchase_req.*','d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
+            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->where('d_purchase_req.pr_compReq', $pr_compReq)
+            ->where('d_purchase_req.pr_stsReq', $status)
+            ->get();
+        }
         
-            $reqOrder = DB::table('d_purchase_req')
-                ->where('d_purchase_req.pr_stsReq','WAITING')
-                ->update([
-                    'pr_stsReq' => 'DIPROSES'
-                ]);
-            if (!$reqOrder) {
+            
+        $baris = count($query);
+
+        if($baris =="0"){
+            $data = "notFound";
+            echo json_encode(array("status" => $data));
+        }else{
+            $pr_dateApp = Carbon::now('Asia/Jakarta');
+            $pr_stsPlan = "WAITING";
+    
+                 $addAkses = [];
+                    for ($i=0; $i < count($query); $i++) {
+                        $temp = [
+                           
+                            'pr_itemPlan'=>$query[$i]->pr_itemReq,
+                            'pr_comp' =>$query[$i]->pr_compReq,
+                            'pr_planNumber' => $numberPlan,
+                            'pr_idReq' =>$query[$i]->pr_id,
+                            'pr_qtyReq' =>$query[$i]->pr_qtyReq,
+                            'pr_qtyApp' =>$query[$i]->pr_qtyApp,
+                            'pr_stsPlan' =>$pr_stsPlan,
+                            'pr_dateRequest' =>$query[$i]->pr_dateReq,
+                            'pr_dateApp' =>$pr_dateApp,
+                            'pr_userId' => $user
+                        ];  
+                        array_push($addAkses, $temp);
+                    }
+    
+            $insert = DB::table('d_purchase_plan')->insert($addAkses);
+            if (!$insert) {
+    
                 $data = "GAGAL";
                 echo json_encode(array("status" => $data));
             } else {
-                $data = "SUKSES";
-                echo json_encode(array("status" => $data));
+                    if($pr_compReq =="semua"){
+                            $reqOrder = DB::table('d_purchase_req')
+                            ->where('d_purchase_req.pr_stsReq','WAITING')
+                            ->update([
+                                'pr_stsReq' => 'DIPROSES'
+                            ]);
+                        if (!$reqOrder) {
+                            $data = "GAGAL";
+                            echo json_encode(array("status" => $data));
+                        } else {
+                            $data = "SUKSES";
+                            echo json_encode(array("status" => $data));
+                        }
+                    }else{
+                        $reqOrder = DB::table('d_purchase_req')
+                        ->where('d_purchase_req.pr_stsReq','WAITING')
+                        ->where('d_purchase_req.pr_compReq',$pr_compReq)
+                        ->update([
+                            'pr_stsReq' => 'DIPROSES'
+                        ]);
+                        if (!$reqOrder) {
+                            $data = "GAGAL";
+                            echo json_encode(array("status" => $data));
+                        } else {
+                            $data = "SUKSES";
+                            echo json_encode(array("status" => $data));
+                        }
+                    }
+    
             }
-
         }
+       
 
         
 
@@ -268,7 +301,8 @@ class PembelianController extends Controller
     public function view_tambahRencana(Request $request)
     {
         $comp = $request->input('comp');
-        $tambahRencana = DB::table('d_purchase_req')
+        if($comp == "semua"){
+            $tambahRencana = DB::table('d_purchase_req')
             ->select(
                 'd_purchase_req.pr_id',
                 'd_purchase_req.pr_codeReq',
@@ -279,12 +313,31 @@ class PembelianController extends Controller
                 'd_purchase_req.pr_dateReq',
                 'd_purchase_req.pr_stsReq'
             )
-            ->join('d_mem', 'd_purchase_req.pr_compReq', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->where('d_purchase_req.pr_stsReq', 'WAITING')
+            ->get();
+        }else{
+            $tambahRencana = DB::table('d_purchase_req')
+            ->select(
+                'd_purchase_req.pr_id',
+                'd_purchase_req.pr_codeReq',
+                'm_company.c_name',
+                'd_item.i_nama',
+                'd_purchase_req.pr_qtyReq',
+                'd_purchase_req.pr_qtyApp',
+                'd_purchase_req.pr_dateReq',
+                'd_purchase_req.pr_stsReq'
+            )
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
             ->where('d_purchase_req.pr_stsReq', 'WAITING')
             ->where('d_purchase_req.pr_compReq', $comp)
             ->get();
+        }
+       
 
             $data = array();
             $i = 0;
@@ -408,7 +461,7 @@ class PembelianController extends Controller
                 'm_company.c_tlp'
             )
 
-            ->join('d_mem', 'd_purchase_req.pr_compReq', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
             ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_id', $id)
@@ -654,6 +707,7 @@ class PembelianController extends Controller
 
     public function view_confirmAdd()
     {
+
         $menunggu = DB::table('d_purchase_plan')
             ->select(
                 'd_purchase_plan.pr_idPlan',
@@ -670,8 +724,7 @@ class PembelianController extends Controller
                 'm_company.c_name'
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->join('m_company', 'd_purchase_plan.pr_comp', '=', 'm_company.c_id')
             // ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
             ->get();
@@ -745,9 +798,8 @@ class PembelianController extends Controller
 
             )
 
-            ->join('d_mem', 'd_purchase_plan.pr_comp', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_purchase_plan.pr_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             // ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_plan.pr_idPlan', $id)
             ->get();
@@ -923,8 +975,8 @@ class PembelianController extends Controller
     public function getComp_plan()
     {
         $data = DB::table('d_purchase_req')
-                ->select('d_purchase_req.pr_compReq','d_mem.m_name')
-                ->join('d_mem','d_purchase_req.pr_compReq','=','d_mem.m_id')
+                ->select('d_purchase_req.pr_compReq','m_company.c_name')
+                ->join('m_company','d_purchase_req.pr_compReq','=','m_company.c_id')
                 ->where('d_purchase_req.pr_stsReq','WAITING')
                 ->groupBy('d_purchase_req.pr_compReq')
                 ->get();
@@ -2183,15 +2235,36 @@ class PembelianController extends Controller
 
     public function ddRequest_dumy(Request $request)
     {
+        $comp = Auth::user()->m_comp;
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'DUMY';
-        $comp = Auth::user()->m_id;
-        $list = DB::table('d_purchase_req')
-            ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
-            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            ->where('d_purchase_req.pr_compReq', $comp)
-            ->where('d_purchase_req.pr_stsReq', 'DUMY')
-            ->get();
+        $user = Auth::user()->m_id;
+            $list = DB::table('d_purchase_req')
+                ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
+                ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+                ->where('d_purchase_req.pr_compReq', $comp)
+                ->where('d_purchase_req.pr_userId', $user)
+                ->where('d_purchase_req.pr_stsReq', 'DUMY')
+                ->get();
+        // if($comp == "PF00000001"){
+        //     $list = DB::table('d_purchase_req')
+        //         ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
+        //         ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+        //         ->where('d_purchase_req.pr_compReq', $comp)
+        //         ->where('d_purchase_req.pr_userId', $user)
+        //         ->where('d_purchase_req.pr_stsReq', 'DUMY')
+        //         ->get();
+        // }else{
+        //     $user = Auth::user()->m_id;
+        //     $list = DB::table('d_purchase_req')
+        //         ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
+        //         ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+        //         ->where('d_purchase_req.pr_compReq', $comp)
+        //         ->where('d_purchase_req.pr_userId', $user)
+        //         ->where('d_purchase_req.pr_stsReq', 'DUMY')
+        //         ->get();
+        // }
+        
 
         $data = array();
         foreach ($list as $hasil) {
@@ -2206,7 +2279,8 @@ class PembelianController extends Controller
 
     public function addDumyReq(Request $request)
     {
-        $comp = Auth::user()->m_id;
+        $comp = Auth::user()->m_comp;
+        $user = Auth::user()->m_id;
         $item = $request->input('item');
         $qty = $request->input('qty');
         $dateReq = Carbon::now('Asia/Jakarta');
@@ -2221,6 +2295,7 @@ class PembelianController extends Controller
                 'pr_qtyReq' => $qty,
                 'pr_dateReq' => $dateReq,
                 'pr_stsReq' => $status,
+                'pr_userId' =>$user
 
             ]);
 
@@ -2309,30 +2384,47 @@ class PembelianController extends Controller
         $id = $request->input('id');
 
         $delete = DB::table('d_purchase_req')
-            ->where('d_purchase_req.pr_compReq', $comp)
             ->where('d_purchase_req.pr_id', $id)
             ->delete();
 
-        if ($delete) {
-            $data = "ok";
-        } else {
-            $data = "gagal";
-        }
+        if (!$delete) {
 
-        echo json_encode(array("dataSet" => $data));
+            $response = "gagal";
+            echo json_encode(array("status" => $response));
+            
+        } else {
+            $response = "sukses";
+            echo json_encode(array("status" => $response));
+            
+        }
 
     }
 
 
     public function menunggu()
     {
-        $waiting = DB::table('d_purchase_req')
+        $comp = Auth::user()->m_comp;
+
+        if($comp == "PF00000001"){
+            $waiting = DB::table('d_purchase_req')
             ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
             ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_req.pr_compReq', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_stsReq', 'WAITING')
             ->get();
+        }else{
+            $id = Auth::user()->m_id;
+            $waiting = DB::table('d_purchase_req')
+            ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
+            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_req.pr_stsReq', 'WAITING')
+            ->where('d_purchase_req.pr_compReq',$comp)
+            ->where('d_purchase_req.pr_userId',$id)
+            ->get();
+        }
 
         return DataTables::of($waiting)
             ->addColumn('pr_stsReq', function ($waiting) {
@@ -2354,13 +2446,28 @@ class PembelianController extends Controller
 
     public function all()
     {
-        $all = DB::table('d_purchase_req')
+        $comp = Auth::user()->m_comp;
+
+        if($comp == "PF00000001"){
+            $all = DB::table('d_purchase_req')
             ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
             ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_req.pr_compReq', '=', 'd_mem.m_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_stsReq', 'DIPROSES')
             ->get();
+        }else{
+            $id = Auth::user()->m_comp;
+            $all = DB::table('d_purchase_req')
+            ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
+            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_req.pr_stsReq', 'DIPROSES')
+            ->where('d_purchase_req.pr_compReq',$comp)
+            ->where('d_purchase_req.pr_userId',$id)
+            ->get();
+        }
 
         return DataTables::of($all)
             ->addColumn('pr_stsReq', function ($waiting) {
@@ -2458,7 +2565,8 @@ class PembelianController extends Controller
 
     public function simpanRequest(Request $request)
     {
-        $comp = Auth::user()->m_id;
+        $comp = Auth::user()->m_comp;
+        $user = Auth::user()->m_id;
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'WAITING';
         $dumy = DB::table('d_purchase_req_dumy')
@@ -2487,27 +2595,46 @@ class PembelianController extends Controller
 
     public function verifikasi_simpanRequest()
     {
+        $comp = Auth::user()->m_comp;
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'WAITING';
-        $mem_id = Auth::user()->m_id;
+        $user = Auth::user()->m_id;
         $code = Carbon::now()->timestamp;
 
-        $update = DB::table('d_purchase_req')
-            ->where('d_purchase_req.pr_compReq', $mem_id)
-            ->where('d_purchase_req.pr_stsReq', 'DUMY')
-            ->update([
-                'pr_codeReq' => $code,
-                'pr_stsReq' => $status,
-                'pr_dateReq' => $dateReq,
-            ]);
+        $query = DB::table('d_purchase_req')
+        ->select('d_purchase_req.*')
+        ->where('d_purchase_req.pr_compReq',$comp)
+        ->where('d_purchase_req.pr_userId',$user)
+        ->where('d_purchase_req.pr_stsReq', 'DUMY')
+        ->get();
 
-        if (!$update) {
-            $response = "gagal";
+        $baris = count($query);
+        if($baris == "0"){
+            $response = "notFound";
             echo json_encode(array("status" => $response));
-        } else {
-            $response = "sukses";
-            echo json_encode(array("status" => $response));
+        }else{
+
+                $update = DB::table('d_purchase_req')
+                ->where('d_purchase_req.pr_compReq', $comp)
+                ->where('d_purchase_req.pr_userId', $user)
+                ->where('d_purchase_req.pr_stsReq', 'DUMY')
+                ->update([
+                    'pr_codeReq' => $code,
+                    'pr_stsReq' => $status,
+                    'pr_dateReq' => $dateReq,
+                ]);
+
+            if (!$update) {
+                $response = "gagal";
+                echo json_encode(array("status" => $response));
+            } else {
+                $response = "sukses";
+                echo json_encode(array("status" => $response));
+            }
+
         }
+
+        
     }
 
     public function request_order_add(Request $request)
