@@ -611,10 +611,17 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/man-penjualan/rencana-penjualan/detail-dt/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@detail_dt');
 	Route::get('/man-penjualan/rencana-penjualan/pencarian', 'manajemen_penjualan\pembuatanRencanaPenjualanController@cari');
 
-	Route::get('/man-penjualan/rencana-penjualan/approve', 'manajemen_penjualan\pembuatanRencanaPenjualanController@approve');
-	Route::get('/man-penjualan/rencana-penjualan/hapus', 'manajemen_penjualan\pembuatanRencanaPenjualanController@hapus');
+	Route::get('/man-penjualan/rencana-penjualan/approve/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@approve');
+	Route::get('/man-penjualan/rencana-penjualan/hapus/{id}', 'manajemen_penjualan\pembuatanRencanaPenjualanController@hapus');
 
 	//=== End RENCANA PENJUALAN
+
+	//=== MONITORING PENJUALAN
+
+	Route::get('/man-penjualan/monitoring-penjualan', 'manajemen_penjualan\monitoringPenjualanController@index');
+
+
+	//=== End MONITORING PENJUALAN
 
 	///// End MANAJEMEN PENJUALAN
 

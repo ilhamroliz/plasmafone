@@ -87,7 +87,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <div class="input-group" style="width: 100%">
 														<span class="input-group-addon" style="width: 40px"><i class="fa fa-building"></i></span>
 														<input type="hidden" id="erpCompId" name="erpCompId" value="{{ $sales_plan->sp_comp }}">
-														<input type="text" class="form-control" id="erpCompNama" value="{{ $sales_plan->c_name }}" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase"/>												
+														<input type="text" class="form-control" id="erpCompNama" value="{{ $sales_plan->c_name }}" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase" readonly/>												
                                                     </div>													
                                                 </div>
                                                 
