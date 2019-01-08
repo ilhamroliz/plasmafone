@@ -634,13 +634,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//=== End MONITORING PENJUALAN
 
-	//=== ANALISIS PENJUALAN
-
-	Route::get('/man-penjualan/analisis-penjualan', 'manajemen_penjualan\analisisPenjualanController@index');
-	Route::post('/man-penjualan/analisis-penjualan/analyze', 'manajemen_penjualan\analisisPenjualanController@analyze');
-
-	//=== End ANALISIS PENJUALAN
-
 	///// End MANAJEMEN PENJUALAN
 
 	// Setting Application
@@ -688,6 +681,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-tempo', 'PenjualanController@tempo');
 	Route::get('pointofsalestempo/simpan', 'PenjualanController@savePenjualanTempo');
 	// =========================
+
+    //== Layanan Perbaikan
+    Route::get('layanan-perbaikan', 'PerbaikanController@index');
 
 
 	// keuangan

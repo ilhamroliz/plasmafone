@@ -61,7 +61,7 @@
 	    </div>
 
 	    <div class="col-md-12 text-center" style="margin-top: 30px;">
-			<a href="{{ Request::previous() }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> &nbsp;Kembali</a>
+			{{--<a href="{{ Request::previous() }}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> &nbsp;Kembali</a>--}}
 			<a href="{{ url('/') }}" class="btn btn-danger"><i class="fa fa-arrow-left"></i> &nbsp;Kembali Ke Halaman Utama</a>
 	    </div>
 
