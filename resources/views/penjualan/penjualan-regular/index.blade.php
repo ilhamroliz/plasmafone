@@ -828,7 +828,16 @@
             type: 'get',
             data: $('#form-penjualan').serialize(),
             success: function(response){
-                if (response == "true") {
+                if (response == "false") {
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Terjadi kesalahan",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    
+                } else {
                     $.smallBox({
                         title : "Berhasil",
                         content : 'Transaksi Anda berhasil...!',
@@ -838,14 +847,8 @@
                     });
                     $(".tr").remove();
                     updateTotalTampil();
-                } else {
-                    $.smallBox({
-                        title : "Gagal",
-                        content : "Upsss. Terjadi kesalahan",
-                        color : "#A90329",
-                        timeout: 5000,
-                        icon : "fa fa-times bounce animated"
-                    });
+                    console.log(response);
+                    window.open(response);
                 }
             }, error:function(x, e) {
                 if (x.status == 0) {

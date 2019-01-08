@@ -2,6 +2,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <title>Nota Penjualan</title>
+        <link rel="stylesheet" type"text/css" href="style.css" media="screen"> 
+        <link rel="stylesheet" type"text/css" href="print.css" media="print">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/struk.css') }}">
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/print.css') }}">
     </head>
     <body>
         <style type="text/css">
@@ -14,11 +18,18 @@
                 font-size: 8px;
             }
             #header { 
-                position: fixed;
+                /*position: fixed;*/
                 left: 0px; 
                 right: 0px;
                 text-align: center;
-                margin-top: -60px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+            #konten{
+                 margin-top: 5px;
+            }
+            #konten p{
+                margin-bottom: 5px;
             }
             #footer { 
                 position: fixed;
@@ -39,22 +50,37 @@
                 text-align: right;
                 content: counter(page, upper-roman); 
             }
+            .total-harga{
+                float: right;
+                margin-top: 10px;
+                width: 35%;
+                padding: 5px;
+            }
+            .pull-left {
+                float: left;
+            }
+            .pull-right {
+                float: right;
+            }
+            table tr td {
+                padding: 5px;
+            }
         </style>
         <div id="header">
-            <div style="">
-                <center><p><strong>RIZQY Mobile & Comp</strong></p></center>
-                <center><p style="margin-right: 10px; margin-left: 10px">{{ $alamat }}</p></center>
+            <div>
+                <center><p><strong>PLASMAFONE</strong></p></center>
+                <center><p style="margin-right: 10px; margin-left: 10px">Ini alamat</p></center>
             </div>
 
             <br>
 
             <div style="border-bottom: solid 1px black;">
-                <p>No. Nota : {{ $informasi[0]->s_nota }}{{ $notaUlang }}</p>
+                <p>No. Nota : Ini nomor nota</p>
             </div>
         </div>
 
         <div id="footer">
-            <p class="page"><strong>Rizqy Mobile</strong></p>
+            <p class="page"><strong>Plasmafone</strong></p>
         </div>
 
         <div id="halaman">
@@ -62,128 +88,60 @@
         </div>
 
         <div id="konten">
-            <div>
-                <p>{{ $nama }}</p>
-            </div>
+            <p>Ini nama Salesman</p>
 
-            <div>
-                <p>Customer</p>
-            </div>
+            <p>Customer</p>
 
-            <div style="margin-left: 5px">
-                <p>Nama: {{ $informasi[0]->m_name }}</p>
-            </div>
+            <p>Nama: Ini nama member</p>
 
-            <div style="margin-left: 5px">
-                <p>Telepon: {{ $informasi[0]->mhp_hp }}</p>
-            </div>
+            <p>Telepon: Ini nomor telephone member</p>
 
-            <div style="margin-left: 5px">
-                <p>Tanggal: {{ Carbon\Carbon::parse($informasi[0]->s_date)->format('d-M-Y') }}</p>
-            </div>
-
-            @if($jatuhtempo != null)
-                <div style="margin-top: 2px; margin-left: 5px">
-                    <p>Jatuh Tempo: {{ Carbon\Carbon::parse($jatuhtempo)->format('d-M-Y') }}</p>
-                </div>
-            @endif
+            <p>Tanggal: Ini untuk saled date</p>
         </div>
-        <table style="page-break-inside: auto; border-bottom: border-top: .6px dashed; margin-top: 15px; width: 100%;">
+        <table style="page-break-inside: auto; border-bottom: 1px solid; margin-top: 15px; width: 100%;">
           <thead style="border-top: .6px dashed; border-bottom: .6px dashed;">
-            <tr>
-                <th class="judul border-kiri">Jumlah</th>
-                <th class="judul">Nama Barang</th>
-                <th class="judul">Harga</th>
-                <th class="judul border-kanan">Total</th>
+            <tr">
+                <th>Jumlah</th>
+                <th>Nama Barang</th>
+                <th>Harga</th>
+                <th>Total</th>
             </tr>
           </thead> 
-        @foreach($informasi as $index=>$data)
-            @if($data->sd_sales != null)
+        {{--@foreach($informasi as $index=>$data)
+            @if($data->sd_sales != null)--}}
             <tbody>
                 <tr>
-                    <td class="border-kiri" align="center">{{ $data->sd_qty }}</td>
-                    <td>{{ $data->i_jenis }} {{ $data->i_jenissub }} {{ $data->i_class }} {{ $data->i_classsub }} {{ $data->sd_specificcode }}</td>
-                    <td align="right" style="width: 30%;">Rp. {{ number_format($data->i_price, 0, '', '.').',-' }}</td>
-                    <td class="border-kanan" align="right" style="width: 30%;">Rp. {{ number_format( $data->sd_qty * $data->i_price, 0 , '' , '.' ) . ',-' }}</td>
+                    <td class="border-kiri" align="center">3</td>
+                    <td>Acer</td>
+                    <td align="right" style="width: 30%;">Rp. 1000</td>
+                    <td class="border-kanan" align="right" style="width: 30%;">Rp. 1000</td>
                 </tr>
             </tbody>
-            @endif
-        @endforeach
+            {{--@endif
+        @endforeach--}}
         </table>
 
-        <div style="float: right; page-break-inside: avoid;">
-            <table style="float: right;">
-            {{-- @if($informasi[0]->s_disc_value != 0)
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Diskon</th>
-                    <td class="border" align="right">Rp. {{ number_format($informasi[0]->s_disc_value, 0, '', '.').',-' }}</td>
-                </tr>
-            @elseif($informasi[0]->s_disc_percent != 0)
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Diskon</th>
-                    <td class="border" align="right">{{ $informasi[0]->s_disc_percent }}%</td>
-                </tr>
-            @else
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Diskon</th>
-                    <td class="border" align="right">Rp. 0,-</td>
-                </tr>
-            @endif
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Pajak</th>
-                    <td class="border" align="right">{{ $informasi[0]->s_pajak }}%</td>
-                </tr> --}}
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Total</th>
-                    <td class="border" align="right">Rp. {{ number_format($informasi[0]->s_total_net, 0, '', '.').',-' }}</td>
-                </tr>
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Bayar Cash</th>
-                    <td class="border" align="right">Rp. {{ number_format($bayar, 0, '', '.').',-' }}</td>
-                </tr>
-            @if($bca != '0')
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Melalui Bank BCA</th>
-                    <td class="border" align="right">Rp. {{ number_format($bca, 0, '', '.').',-' }}</td>
-                </tr>
-            @endif
-            @if($permata != '0')
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Melalui Bank Permata</th>
-                    <td class="border" align="right">Rp. {{ number_format($permata, 0, '', '.').',-' }}</td>
-                </tr>
-            @endif
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan kiri" colspan="1" style="text-align: left;">Total Pembayaran</th>
-                    <td class="border" align="right">Rp. {{ number_format($total, 0, '', '.').',-' }}</td>
-                </tr>
-                <tr>
-                    <td class="border-atas border-bawah border-kiri"></td>
-                    <td></td>
-                    <th class="border-atas border-kanan border-bawah kiri" colspan="1" style="text-align: left;">Kembali</th>
-                    <td class="border" align="right">Rp. {{ number_format($kembali, 0, '', '.').',-' }}</td>
-                </tr>
-            </table>
+        <div class="total-harga">
+            <div style="margin-bottom: 25px;">
+                <strong><p class="pull-left">Total</p></strong>
+                <p class="pull-right">Rp.1000.000,00</p>
+            </div>
+            
+            <div style="margin-bottom: 48px;">
+                <strong><p class="pull-left">Bayar Cash</p></strong>
+                <p class="pull-right">Rp.1000.000,00</p>
+            </div>
+            
+            <div style="margin-bottom: 70px;">
+                <strong><p class="pull-left">Total Pembayaran</p></strong>
+                <p class="pull-right">Rp.1000.000,00</p>
+            </div>
+
+            <div style="margin-bottom: 90px;">
+                <strong><p class="pull-left">Kembali</p></strong>
+                <p class="pull-right">Rp.1000.000,00</p>
+            </div>
         </div>
-        {{-- <div class="footer" style="float: left; position: absolute; bottom: 0"><strong><p>RIZQY MOBILE</p></strong></div> --}}
         
     </body>
 </html>

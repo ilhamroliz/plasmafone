@@ -675,6 +675,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
 	Route::get('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
 	Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
+	Route::get('penjualan-reguler/struk/{id}', 'PenjualanController@struck');
 	//==============
 	
 	// =====Penjualan Tempo=====
