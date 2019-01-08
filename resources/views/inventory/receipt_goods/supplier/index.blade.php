@@ -98,7 +98,8 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
 				<form id="table-form">
 					{!! csrf_field() !!}
-					<table id="dt_bbm" class="table table-striped table-bordered table-hover" width="100%">
+					<div  style="overflow-x:auto;">
+					<table id="dt_bbm" class="table table-striped table-bordered table-hover " width="100%">
 						<thead>			                
 							<tr>
 								
@@ -116,6 +117,7 @@
 						<tbody>
 						</tbody>
 					</table>
+					</div>
 				</form>
 			</div>
 		</div>

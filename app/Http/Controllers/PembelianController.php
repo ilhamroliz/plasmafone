@@ -707,74 +707,109 @@ class PembelianController extends Controller
 
     public function view_confirmAdd()
     {
+        $userCreate = Auth::user()->m_id;
 
-        $menunggu = DB::table('d_purchase_plan')
+        $cek = DB::table('d_purchase_plan_dd')
+        ->where('d_purchase_plan_dd.pr_userId',$userCreate)
+        ->delete();
+
+        $query = DB::table('d_purchase_plan')
             ->select(
-                'd_purchase_plan.pr_idPlan',
-                'd_purchase_plan.pr_idReq',
-                'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_supplier',
-                'd_purchase_plan.pr_qtyReq',
-                'd_purchase_plan.pr_qtyApp',
-                'd_purchase_plan.pr_stsPlan',
-                'd_purchase_plan.pr_dateRequest',
-                'd_purchase_plan.pr_dateApp',
-                'd_purchase_plan.pr_comp',
-                'd_item.i_nama',
-                'm_company.c_name'
+                'd_purchase_plan.*',
+                'd_item.*',
+                'm_company.*'
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
             ->join('m_company', 'd_purchase_plan.pr_comp', '=', 'm_company.c_id')
-            // ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
+            ->where('d_purchase_plan.pr_userId',$userCreate)
             ->get();
 
-            $data = array();
-            $i = 1;
-            foreach ($menunggu as $key) {
-             $row = array();
-             $row[] = $i++;
-             $row[] = $key->c_name;
-             $row[] = $key->i_nama;
-             $row[] = $key->pr_qtyApp;
-             $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-             $data[] = $row;
+            $addAkses = [];
+                    for ($i=0; $i < count($query); $i++) {
+                        $temp = [
+                            'pr_idPlan'=>$query[$i]->pr_idPlan,
+                            'pr_idReq'=>$query[$i]->pr_idReq,
+                            'pr_itemPlan'=>$query[$i]->pr_itemPlan,
+                            'pr_supplier'=>$query[$i]->pr_supplier,
+                            'pr_qtyReq'=>$query[$i]->pr_qtyReq,
+                            'pr_qtyApp'=>$query[$i]->pr_qtyApp,
+                            'pr_harga_satuan'=>"0",
+                            'pr_discount'=>"0",
+                            'pr_subtotal'=>"0",
+                            'pr_hpp'=>"0",
+                            'pr_stsPlan'=>$query[$i]->pr_stsPlan,
+                            'pr_dateRequest'=>$query[$i]->pr_dateRequest,
+                            'pr_dateApp'=>$query[$i]->pr_dateApp,
+                            'pr_comp'=>$query[$i]->pr_comp,
+                            'pr_planNumber'=>$query[$i]->pr_planNumber,
+                            'pr_userId'=>$userCreate
+                        ];  
+                        array_push($addAkses, $temp);
+                    }
+    
+            $insert = DB::table('d_purchase_plan_dd')->insert($addAkses);
+
+            if(!$insert){
+                $menunggu = DB::table('d_purchase_plan_dd')
+                ->select(
+                    'd_purchase_plan_dd.*',
+                    'd_item.i_nama',
+                    'm_company.c_name'
+                )
+                ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+                ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
+                ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
+                ->get();
+                $data = array();
+                $i = 1;
+                foreach ($menunggu as $key) {
+                $row = array();
+                $row[] = $i++;
+                $row[] = $key->c_name;
+                $row[] = $key->i_nama;
+
+                $row[] = $key->pr_qtyApp;
+                $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                $data[] = $row;
+                }
+
+                echo json_encode(array("data"=>$data));
+
+            }else{
+                $menunggu = DB::table('d_purchase_plan_dd')
+                ->select(
+                    'd_purchase_plan_dd.*',
+                    'd_item.i_nama',
+                    'm_company.c_name'
+                )
+                ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+                ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
+                ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
+                ->get();
+                $data = array();
+                $i = 1;
+                foreach ($menunggu as $key) {
+                $row = array();
+                $row[] = $i++;
+                $row[] = $key->c_name;
+                $row[] = $key->i_nama;
+                $row[] = $key->pr_qtyApp;
+                $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                $data[] = $row;
+                }
+
+                echo json_encode(array("data"=>$data));
             }
 
-            echo json_encode(array("data"=>$data));
-
-        // return DataTables::of($menunggu)
-        //     ->addColumn('input', function ($menunggu) {
-
-        //         return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
-
-        //     })
-        //     ->addColumn('aksi', function ($menunggu) {
-        //         if (Plasma::checkAkses(47, 'update') == false) {
-        //             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-        //         } else {
-        //             return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $menunggu->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-        //         }
-        //     })
-        //     ->rawColumns(['input', 'aksi'])
-        //     ->make(true);
     }
 
     public function getPlan_id(Request $request)
     {
         $id = $request->input('id');
-        $query = DB::table('d_purchase_plan')
+        $query = DB::table('d_purchase_plan_dd')
             ->SELECT(
-                'd_purchase_plan.pr_idPlan',
-                'd_purchase_plan.pr_idReq',
-                'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_supplier',
-                'd_purchase_plan.pr_qtyReq',
-                'd_purchase_plan.pr_qtyApp',
-                'd_purchase_plan.pr_stsPlan',
-                'd_purchase_plan.pr_dateRequest',
-                'd_purchase_plan.pr_dateApp',
-                'd_purchase_plan.pr_comp',
+                'd_purchase_plan_dd.*',
                 'd_item.i_id',
                 'd_item.i_kelompok',
                 'd_item.i_group',
@@ -798,10 +833,9 @@ class PembelianController extends Controller
 
             )
 
-            ->join('m_company', 'd_purchase_plan.pr_comp', '=', 'm_company.c_id')
-            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            // ->join('d_supplier', 'd_purchase_plan.pr_supplier', '=', 'd_supplier.s_id')
-            ->where('d_purchase_plan.pr_idPlan', $id)
+            ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
+            ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+            ->where('d_purchase_plan_dd.pr_idPlan', $id)
             ->get();
 
 

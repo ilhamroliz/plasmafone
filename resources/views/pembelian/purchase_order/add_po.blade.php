@@ -125,20 +125,20 @@
 									
                                 </fieldset>
                                 <fieldset class="row">
-                                    <dir class="col-md-12">
+                                    <div class="col-md-12">
                                         <table id="table_addPo" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th data-hide="phone,tablet" width="75%">Nama Barang</th>
                                                     <th data-hide="phone,tablet" width="10%">Qty</th>
-                                                    <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                    <th data-hide="phone,tablet" width="15%">Nominal</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
 									
-                                    </dir>
+                                    </div>
 									
 									
                                 </fieldset>
