@@ -311,6 +311,7 @@ class PenjualanController extends Controller
     public function savePenjualan(Request $request)
     {
         $data = $request->all();
+        $sales = $data['salesman'];
 
         $arr_hpp = [];
 
@@ -470,13 +471,13 @@ class PenjualanController extends Controller
             }
 
         }
-        $url = url('/').'/penjualan-reguler/struk/'.$idsales;
+        $url = url('/').'/penjualan-reguler/struk/'.$sales.'/'.$idsales;
         return $url;
         
 
     }
 
-    public function struck($id = null)
+    public function struck($sales = null, $id = null)
     {
         $datas = DB::table('d_sales')
                 ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total')
@@ -486,7 +487,8 @@ class PenjualanController extends Controller
                 ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
                 ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
                 ->get();
-        return view('penjualan.penjualan-regular.cetak_struck')->with(compact('datas'));
+        $salesman = $sales;
+        return view('penjualan.penjualan-regular.cetak_struck')->with(compact('datas', 'salesman'));
     }
 
     public function savePenjualanTempo(Request $request)

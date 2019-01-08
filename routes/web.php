@@ -634,6 +634,14 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//=== End MONITORING PENJUALAN
 
+	//=== ANALISIS PENJUALAN
+
+	Route::get('/man-penjualan/analisis-penjualan', 'manajemen_penjualan\analisisPenjualanController@index');
+	Route::post('/man-penjualan/analisis-penjualan/analyze', 'manajemen_penjualan\analisisPenjualanController@analyze');
+
+
+	//=== End ANALISIS PENJUALAN
+
 	///// End MANAJEMEN PENJUALAN
 
 	// Setting Application
@@ -648,6 +656,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Manajemen Pengguna
 	Route::get('/pengaturan/kelola-pengguna/tambah', 'manajemenPenggunaController@tambah_pengguna');
+	Route::post('/pengaturan/kelola-pengguna/cekuser', 'manajemenPenggunaController@cek_user');
 	Route::post('/pengaturan/kelola-pengguna/simpan', 'manajemenPenggunaController@simpan_pengguna');
 	Route::match(['get', 'post'], '/pengaturan/kelola-pengguna/edit/{id}', 'manajemenPenggunaController@edit_pengguna');
 	Route::match(['get', 'post'], '/pengaturan/kelola-pengguna/simpanEdit', 'manajemenPenggunaController@simpan_edit');
@@ -675,7 +684,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
 	Route::get('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
 	Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
-	Route::get('penjualan-reguler/struk/{id}', 'PenjualanController@struck');
+	Route::get('penjualan-reguler/struk/{sales}/{id}', 'PenjualanController@struck');
 	//==============
 	
 	// =====Penjualan Tempo=====
@@ -684,7 +693,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// =========================
 
     //== Layanan Perbaikan
-    Route::get('layanan-perbaikan', 'PerbaikanController@index');
+	Route::get('layanan-perbaikan', 'PerbaikanController@index');
 
 
 	// keuangan

@@ -279,16 +279,31 @@
 
     });
 
-    $('#passconf').keyup(function(){
+    $('#passconf').blur(function(){
         if($('#passconf').val() != $('#pass').val()){
             $.smallBox({
                 title : "PERHATIAN",
                 content : "Password tidak sesuai",
                 color : "#C46A69",
                 iconSmall : "fa fa-times animated",
-                timeout : 5000
+                timeout : 3000
             });
         }
+    })
+
+    $('#username').blur(function(){
+        var username = $('#username').val();
+        axios.post(baseUrl+'/pengaturan/kelola-pengguna/cekuser', {username:username}).then((response) => {
+            if(response.data.status == 'ada'){
+                $.smallBox({
+                title : "PERHATIAN",
+                content : "Username sudah digunakan",
+                color : "#C46A69",
+                iconSmall : "fa fa-times animated",
+                timeout : 3000
+            });
+            }
+        })
     })
 
     $(".uploadGambar").on('change', function () {

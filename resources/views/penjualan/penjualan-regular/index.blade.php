@@ -59,9 +59,20 @@
                                                 <div class="form-group">
                                                     <div class="col-md-10">
                                                         <div class="input-group input-group-md">
+                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
+                                                            <div class="icon-addon addon-md">
+                                                                <input class="form-control" id="salesman" name="salesman" placeholder="Masukkan Nama Sales" type="text"  style="text-transform: uppercase">
+                                                                {{-- <label for="cari-member" class="glyphicon glyphicon-user" rel="tooltip" title="Nama Sales"></label> --}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-10">
+                                                        <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                                             <div class="icon-addon addon-md">
-                                                                <!-- <input type="text" placeholder="Email" class="form-control"> -->
                                                                 <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
                                                                 <input type="hidden" value="" class="idMember" id="idMember" name="idMember">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
@@ -244,7 +255,7 @@
 
     $(document).ready(function(){
         $('.togel').click();
-        $("#cari-member").focus();
+        $("#salesman").focus();
 
         $( "#cari-member" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-member',
