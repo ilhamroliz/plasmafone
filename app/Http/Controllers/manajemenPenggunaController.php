@@ -176,6 +176,16 @@ class manajemenPenggunaController extends Controller
         rmdir($dirPath);
     }
 
+    public function cek_user(Request $request)
+    {
+        $cek = DB::table('d_mem')->where('m_username', $request->username)->count();
+        if ($cek > 0) {
+            return json_encode([
+                'status' => 'ada'
+            ]);
+        }
+    }
+
 
     public function simpan_pengguna(Request $request)
     {
