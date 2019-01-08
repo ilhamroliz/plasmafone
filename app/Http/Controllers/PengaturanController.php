@@ -48,7 +48,7 @@ class PengaturanController extends Controller
     public function cari_userLog(Request $request)
     {
         $cari = $request->term;
-        $nama = DB::select("select m_id, m_name from d_mem where m_name like '%" . $cari . "%' and m_status = 'AKTIF'");
+        $nama = DB::select("select m_id, m_name from d_mem where m_name like '%" . $cari . "%' and m_state = 'ACTIVE'");
 
         if ($nama == null) {
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
@@ -63,7 +63,6 @@ class PengaturanController extends Controller
 
     public function find_log(Request $request)
     {
-        // dd($request);
         if ($request->nama == "" && $request->tgl_awal != "" && $request->tgl_akhir != "") {
             $request->tgl_awal = str_replace('/', '-', $request->tgl_awal);
             $request->tgl_akhir = str_replace('/', '-', $request->tgl_akhir);
