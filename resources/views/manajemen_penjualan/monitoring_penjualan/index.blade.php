@@ -115,9 +115,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                             <div class="widget-body no-padding">
 								<form id="cariForm">
 									<div class="col-md-12 no-padding padding-top-15">
-										<div class="col-md-2">
-											<div class="form-group">
-												<input type="text" id="monthPick" name="monthPick" class="form-control" placeholder="MASUKKAN BULAN">                                       
+										<div class="col-md-4">
+											<div class="input-group" id="date-range" style="">
+												<input type="text" class="form-control datepicker" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+												<span class="input-group-addon bg-custom text-white b-0">to</span>
+												<input type="text" class="form-control datepicker" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 											</div>
 										</div>
 
@@ -137,7 +139,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 <div class="tab-content padding-10">
 
                                     <div class="tab-pane fade in active" id="hr1">
-										<table id="realtimeTable" class="table table-striped table-bordered table-hover" width="100%">
+										<table id="realisasiTable" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>
 												<tr>
@@ -186,12 +188,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 <div class="tab-content padding-10">
 
                                     <div class="tab-pane fade in active" id="hr1">
-										<table id="boTable" class="table table-striped table-bordered table-hover" width="100%">
+										<table id="outletTable" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>
 												<tr>
-                                                    <th style="width: 15%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
-                                                    <th style="width: 15%"><i class="fa fa-fw fa-shopping-basket txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Penjualan (QTY)</th>
+                                                    <th style="width: 40%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+                                                    <th style="width: 20%"><i class="fa fa-fw fa-shopping-basket txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Penjualan (QTY)</th>
                                                     <th style="width: 20%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Omset</th>
                                                     <th style="width: 20%"><i class="fa fa-fw fa-money txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Total Laba</th>
 												</tr>
@@ -227,24 +229,40 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 "language" : dataTableLanguage
             });
 
+            $('#realisasiTable').DataTable({
+                "language" : dataTableLanguage
+            });
+
+            $('#outletTable').DataTable({
+                "language" : dataTableLanguage
+            });
+
+            $( ".irpCompName" ).autocomplete({
+				source: baseUrl+'/man-penjualan/rencana-penjualan/auto-comp',
+				minLength: 2,
+				select: function(event, data) {
+					$('#irpCompId').val(data.item.id);
+				}
+			});
+
             // setInterval(function() {
 
-                axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/realtime', $('#countForm').serialize()).then((response) => {
+                // axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/realtime', $('#countForm').serialize()).then((response) => {
                     
-                    for(var i = 0; i < response.data.real.length; i++){
-                        $('#realtimeTable').DataTable().row.add([
-                            response.data.real[i].s_date,
-                            response.data.real[i].s_nota,
-                            response.data.real[i].m_name,
-                            response.data.real[i].c_name,
-                            '<div class="text-center"><button class="btn btn-circle btn-primary" onclick="detil('+response.data.real[i].s_id+')"><i class="glyphicon glyphicon-list"></i></button></div>'
-                        ]).draw(false);
+                //     for(var i = 0; i < response.data.real.length; i++){
+                //         $('#realtimeTable').DataTable().row.add([
+                //             response.data.real[i].s_date,
+                //             response.data.real[i].s_nota,
+                //             response.data.real[i].m_name,
+                //             response.data.real[i].c_name,
+                //             '<div class="text-center"><button class="btn btn-circle btn-primary" onclick="detil('+response.data.real[i].s_id+')"><i class="glyphicon glyphicon-list"></i></button></div>'
+                //         ]).draw(false);
 
-                        if(i == response.data.real.length){
-                            $('#hiddenCount').val(response.data.real[i].s_id);
-                        }
-                    }                    
-                });
+                //         if(i == response.data.real.length){
+                //             $('#hiddenCount').val(response.data.real[i].s_id);
+                //         }
+                //     }                    
+                // });
                 
                 // $('#realtimeTable').DataTable().destroy();
                 // $('#realtimeTable').DataTable({
@@ -276,6 +294,34 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				// 	}
 				// });
             // }, 5000);
+
+            axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/realisasi').then((response) => {
+
+                for(var i = 0; i < response.data.data.length; i++){
+                    $('#realisasiTable').DataTable().row.add([
+                        response.data.data[i].c_name,
+                        response.data.data[i].sp_nota,
+                        response.data.data[i].i_nama,
+                        '<div class="text-align-right">'+response.data.data[i].spd_qty+' Unit</div>',
+                        '<div class="text-align-right">'+response.data.data[i].qty+' Unit</div>',
+                        '<div class="text-align-right">'+(response.data.data[i].spd_qty - response.data.data[i].qty) +' Unit</div>'
+                    ]).draw(false);
+                }  
+
+            });
+
+            axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/outlet').then((response) => {
+
+                for(var i = 0; i < response.data.data.length; i++){
+                    $('#outletTable').DataTable().row.add([
+                        response.data.data[i].c_name,
+                        '<div class="text-align-right">'+response.data.data[i].qty+' Unit</div>',
+                        '<div><span style="float: left">Rp. </span><span style="float: right">'+response.data.data[i].net+'</span></div>',
+                        '<div><span style="float: left">Rp. </span><span style="float: right">'+0+'</span></div>'
+                    ]).draw(false);
+                }
+
+            });
 
         })
     </script>

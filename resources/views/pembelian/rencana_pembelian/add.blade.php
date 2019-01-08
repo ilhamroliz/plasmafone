@@ -130,7 +130,7 @@
 								<div class="tab-content padding-10">
 								<div class="form-group col-md-6">
                                             <select class="form-control col-md-12" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
-                                                <option selected="" value="00">----pilih semua Supplier----</option>
+                                                <option selected="" value="semua">----pilih semua Supplier----</option>
                                             </select>
                                         </div>
 
@@ -439,48 +439,80 @@
 
 		function simpanRencana()
 		{
-			$.ajax({
-				url : '{{url('/pembelian/rencana-pembelian/getRequest_dumy')}}',
-                type: "GET",
-                data: { 
-					comp : $('#dt_supplier').val(),
-                },
-                dataType: "JSON",
-				success: function(data)
-                {
-					$.smallBox({
-							title : "Berhasil",
-							content : 'Data telah ditambahkan...!',
-							color : "#739E73",
-							timeout: 4000,
-							icon : "fa fa-check bounce animated"
-							});
-							$('#dt_tambah').DataTable().ajax.reload();
-					// hasil = data.status;
-
-					// if(hasil =="gagal"){
-					// 	$.smallBox({
-					// 	title : "Berhasil",
-					// 	content : 'Data gagal direload...!',
-					// 	color : "#739E73",
-					// 	timeout: 4000,
-					// 	icon : "fa fa-check bounce animated"
-					// 	});
-					// 	$('#dt_tambah').DataTable().ajax.reload();
-					// 	$('#myModal').modal('hide');
-					// }else{
-					// 	$.smallBox({
-					// 	title : "Berhasil",
-					// 	content : 'Data telah ditambahkan...!',
-					// 	color : "#739E73",
-					// 	timeout: 4000,
-					// 	icon : "fa fa-check bounce animated"
-					// 	});
-					// 	$('#dt_tambah').DataTable().ajax.reload();
-					// 	$('#myModal').modal('hide');
-					// }
-				}
-			});
+			$.SmartMessageBox({
+					title : "Smart Alert!",
+					content : "Apakah Anda Yakin Akan Mengajukan Rencana Pembelian ?",
+					buttons : '[Tidak][Ya]'
+				}, function(ButtonPressed) {
+					if (ButtonPressed === "Ya") {
+						$.ajax({
+							url : '{{url('/pembelian/rencana-pembelian/getRequest_dumy')}}',
+							type: "GET",
+							data: { 
+								comp : $('#dt_supplier').val(),
+							},
+							dataType: "JSON",
+							success: function(data)
+							{
+								
+								
+								if(data.status == 'gagal')
+								{
+									$.smallBox({
+										title : "Gagal",
+										content : 'Data gagal Di ajukan..!',
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+										});
+										$('#dt_tambah').DataTable().ajax.reload();
+									// $('#table-rencana').DataTable().ajax.reload();
+								}else if(data.status == 'notFound'){
+									$.smallBox({
+										title : "Peringatan",
+										content : 'Data Not Found!',
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+										});
+										$('#dt_tambah').DataTable().ajax.reload();
+								}else{
+									$.smallBox({
+										title : "Berhasil",
+										content : 'Anda Telah Berhasil Mengajukan Rencana Pembelian...!',
+										color : "#739E73",
+										timeout: 4000,
+										icon : "fa fa-check bounce animated"
+										});
+										$('#dt_tambah').DataTable().ajax.reload();
+								}
+								// $('#table-rencana').DataTable().fnDestroy();
+								
+							},
+								
+						}); 
+		
+						// $.smallBox({
+						// 	title : "Callback function",
+						// 	content : "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
+						// 	color : "#659265",
+						// 	iconSmall : "fa fa-check fa-2x fadeInRight animated",
+						// 	timeout : 4000
+						// });
+					}
+					if (ButtonPressed === "Tidak") {
+						$.smallBox({
+							title : "Peringatan...!!!",
+							content : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Pengajuan</i>",
+							color : "#C46A69",
+							iconSmall : "fa fa-times fa-2x fadeInRight animated",
+							timeout : 4000
+						});
+					}
+		
+				});
+				e.preventDefault();
+			
 		}
 
 		
@@ -805,10 +837,10 @@
 				success: function(data)
 				{
 				$('#dt_supplier').empty(); 
-				row = "<option selected='' value='00'>Pilih Member</option>";
+				row = "<option selected='' value='semua'>Pilih Semua Outlet</option>";
 				$(row).appendTo("#dt_supplier");
 				$.each(data, function(k, v) {
-					row = "<option value='"+v.pr_compReq+"'>"+v.m_name+"</option>";
+					row = "<option value='"+v.pr_compReq+"'>"+v.c_name+"</option>";
 					$(row).appendTo("#dt_supplier");
 				});
 				},

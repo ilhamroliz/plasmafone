@@ -138,7 +138,7 @@
 
 												<tr>
 													<th data-hide="phone,tablet">No</th>
-                                                    <th data-hide="phone,tablet">Nama Supplier</th>
+                                                    <th data-hide="phone,tablet">Nama Outlet</th>
                                                     <th data-hide="phone,tablet">Nama Barang</th>
                                                     <th data-hide="phone,tablet">Qty</th>
                                                     <th data-hide="phone,tablet">Aksi</th>
@@ -786,7 +786,7 @@
 			
 			
 		}
-
+ 
 
 		function reload_data(){
         table_registrasi= $('#table-rencana').DataTable({
