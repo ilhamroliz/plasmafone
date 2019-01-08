@@ -279,7 +279,15 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				<ul>
 					@if($sidebar['Master Akun Keuangan'] == 'Y')
 					<li>
-						<a href="flot.html">Master Akun Keuangan</a>
+						<a href="#">Master Akun Keuangan</a>
+						<ul>
+							<li>
+								<a href="{{ url('/keuangan/coa/jenis') }}">Master COA</a>
+							</li>
+							<li>
+								<a href="flot.html">Setting Parameter</a>
+							</li>
+						</ul>
 					</li>
 					@endif
 

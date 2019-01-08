@@ -682,4 +682,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('pointofsalestempo/simpan', 'PenjualanController@savePenjualanTempo');
 	// =========================
 
+
+	// keuangan
+	Route::get('keuangan/coa/jenis', 'keuangan\keuangan@index_jenis');
+	Route::get('keuangan/coa/kelompok', 'keuangan\keuangan@index_kelompok');
+	Route::get('keuangan/coa/bukubesar', 'keuangan\keuangan@index_buku_besar');
+	Route::get('keuangan/coa/sub_bukubesar', 'keuangan\keuangan@index_sub_buku_besar');
+
 });
