@@ -470,7 +470,7 @@
 								}else if(data.status == 'notFound'){
 									$.smallBox({
 										title : "Peringatan",
-										content : 'Data Not Found!',
+										content : 'Data Yang Anda Ajukan Kosong / Tidak Ada...',
 										color : "#739E73",
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
@@ -530,13 +530,6 @@
 						dataType: "JSON",
 						success: function(data)
 						{
-							$.smallBox({
-							title : "Berhasil",
-							content : 'Data telah ditambahkan...!',
-							color : "#739E73",
-							timeout: 4000,
-							icon : "fa fa-check bounce animated"
-							});
 							$('#dt_tambah').DataTable().ajax.reload();
 							
 						},
