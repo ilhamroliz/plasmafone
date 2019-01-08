@@ -53,34 +53,40 @@
                         data-widget-deletebutton="false">
 
                         <header>
-                            <h2><strong>Analisis</strong></h2>
+                            <h2><strong>Analisis Penjualan</strong></h2>
                         </header>
 
                         <div>
                             <div class="widget-body no-padding">
 
                                 <div class="col-md-4">
-                                    <canvas id="pieChart" height="120"></canvas>
+                                    <div id="pie-chart" class="chart"></div>
                                 </div>
 
                                 <div class="col-md-8">
                                     <div class="tab-content padding-10">
-                                        <form id="byForm">
-                                            <div class="padding-bottom-10">
-                                                <select name="bySelect" id="bySelect" class="form-input">
-                                                    <option value="1">Usia Pembeli</option>
-                                                    <option value="2">Harga Item</option>
-                                                    <option value="3">Merek Item</option>
-                                                    <option value="4">Jenis Item</option>
-                                                    <option value="5">Warna Item</option>
-                                                    <option value="6">Outlet Pembelian</option>
-                                                    <option value="7">Waktu Pembelian</option>
-                                                    <option value="8">Sales</option>
-                                                </select>
-                                            </div>
-                                        </form>
+                                        <div>
+                                            <form id="byForm">
+                                                {{ csrf_field() }}
+                                                <div class="padding-bottom-10">
+                                                    <label for="bySelect">Analisa Berdasarkan : </label>
+                                                    <select name="bySelect" id="bySelect" class="form-input">
+                                                        <option value="">== Kategori ==</option>
+                                                        <option value="1">Usia Pembeli</option>
+                                                        <option value="2">Harga Item</option>
+                                                        <option value="3">Merek Item</option>
+                                                        <option value="4">Jenis Item</option>
+                                                        <option value="5">Warna Item</option>
+                                                        <option value="6">Outlet Pembelian</option>
+                                                        <option value="7">Waktu Pembelian</option>
+                                                        <option value="8">Sales</option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        
                                         <div class="tab-pane fade in active" id="hr1">
-                                            <table id="realtimeTable" class="table table-striped table-bordered table-hover" width="100%">
+                                            <table id="analisisTable" class="table table-striped table-bordered table-hover" width="100%">
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 40%"><i class="fa fa-fw fa-list txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Kategori</th>
@@ -112,9 +118,82 @@
 @endsection
 
 @section('extra_script')
+
+    <script src="js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js"></script>
     <script type="text/javascript">
+
         $(document).ready(function(){
-            
-        })
+
+            pageSetUp();
+
+            $('#analisisTable').DataTable({"language" : dataTableLanguage});
+
+        });
+
+        $('select').on('change', function (e) {
+            var optionSelected = $("option:selected", this);
+            var valueSelected = this.value;
+
+            axios.post(baseUrl+'/man-penjualan/analisis-penjualan/analyze', {nilai:valueSelected}).then((response) => {
+                $('#analisisTable').DataTable().clear();
+                for(var i = 0; i < response.data.data.length; i++){
+                    $('#analisisTable').DataTable().row.add([
+                        response.data.data[i].cat,
+                        response.data.data[i].qty,
+                        response.data.data[i].net
+                    ]).draw(false);
+                }
+
+                /* pie chart */
+
+                if ($('#pie-chart').length) {
+
+                    var data_pie = [];
+                    for (var i = 0; i < response.data.data.length; i++) {
+                        data_pie[i] = {
+                            label : response.data.data[i].cat,
+                            data : response.data.data[i].qty
+                        }
+                    }
+
+                    $.plot($("#pie-chart"), data_pie, {
+                        series : {
+                            pie : {
+                                show : true,
+                                innerRadius : 0.5,
+                                radius : 1,
+                                label : {
+                                    show : false,
+                                    radius : 2 / 3,
+                                    formatter : function(label, series) {
+                                        return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                                    },
+                                    threshold : 0.1
+                                }
+                            }
+                        },
+                        legend : {
+                            show : true,
+                            noColumns : 1, // number of colums in legend table
+                            labelFormatter : null, // fn: string -> string
+                            labelBoxBorderColor : "#000", // border color for the little label boxes
+                            container : null, // container (as jQuery object) to put legend in, null means default on top of graph
+                            position : "ne", // position of default legend container within plot
+                            margin : [5, 10], // distance from grid edge to default legend container within plot
+                            backgroundColor : "#efefef", // null means auto-detect
+                            backgroundOpacity : 1 // set to 0 to avoid background
+                        },
+                        grid : {
+                            hoverable : true,
+                            clickable : true
+                        },
+                    });
+
+                }
+
+                /* end pie chart */
+            })
+        });
+
     </script>
 @endsection

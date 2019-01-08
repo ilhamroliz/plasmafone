@@ -5,6 +5,14 @@ namespace App\Http\Controllers\manajemen_penjualan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlasmafoneController;
+use Illuminate\Support\Facades\Crypt;
+
+use DataTables;
+use DB;
+use Session;
+use Auth;
+use Carbon\Carbon;
+use Response;
 
 class analisisPenjualanController extends Controller
 {
@@ -19,7 +27,7 @@ class analisisPenjualanController extends Controller
 
     public function analyze(Request $request)
     {
-        $by = $request->bySelect;
+        $by = $request->nilai;
         $get1 = '';
         if ($by == 1) {
             $get1 = DB::table('d_sales')
@@ -35,7 +43,7 @@ class analisisPenjualanController extends Controller
             $get1 = DB::table('d_sales')
                 ->join('d_sales_dt', 'sd_sales', '=', 's_id')
                 ->join('d_item', 'i_id', '=', 'sd_item')
-                ->select('sd_item', 'i_merk', 'i_nama', DB::raw('COUNT(sd_qty) as qty'), DB::raw('COUNT(sd_total_net) as net'))
+                ->select(DB::raw('i_merk as cat'), DB::raw('IFNULL(SUM(sd_qty), 0) as qty'), DB::raw('IFNULL(ROUND(SUM(sd_total_net)), 0) as net'))
                 ->groupBy('sd_item')->get();
         } elseif ($by == 4) {
 
@@ -49,6 +57,8 @@ class analisisPenjualanController extends Controller
 
         }
 
-        dd($get1);
+        return json_encode([
+            'data' => $get1
+        ]);
     }
 }

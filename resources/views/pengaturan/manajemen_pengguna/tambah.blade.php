@@ -279,6 +279,18 @@
 
     });
 
+    $('#passconf').keyup(function(){
+        if($('#passconf').val() != $('#pass').val()){
+            $.smallBox({
+                title : "PERHATIAN",
+                content : "Password tidak sesuai",
+                color : "#C46A69",
+                iconSmall : "fa fa-times animated",
+                timeout : 5000
+            });
+        }
+    })
+
     $(".uploadGambar").on('change', function () {
         $('.save').attr('disabled', false);
         if (typeof (FileReader) != "undefined") {
