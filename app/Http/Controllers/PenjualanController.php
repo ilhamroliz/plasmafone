@@ -478,15 +478,15 @@ class PenjualanController extends Controller
 
     public function struck($id = null)
     {
-        $data = DB::table('d_sales')
-                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', '')
+        $datas = DB::table('d_sales')
+                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total')
                 ->where('d_sales.s_id', $id)
                 ->join('d_sales_dt', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
                 ->join('m_company', 'm_company.c_id', '=', 'd_sales.s_comp')
                 ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
                 ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
                 ->get();
-        return view('penjualan.penjualan-regular.cetak_struck');
+        return view('penjualan.penjualan-regular.cetak_struck')->with(compact('datas'));
     }
 
     public function savePenjualanTempo(Request $request)
