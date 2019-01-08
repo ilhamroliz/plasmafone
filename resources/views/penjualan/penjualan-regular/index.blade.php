@@ -232,8 +232,9 @@
     var namaGlobal = null;
     var qtyGlobal = null;
     var idGlobal = [];
-    /*var idItem = [];
-    var arrItem = [];*/
+    var idItem = [];
+    var iCode = [];
+    var arrCode = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -292,8 +293,15 @@
     function setStock(info){
         var data = info.data;
         var price = 0;
-        namaGlobal = data.i_code+" - "+data.i_nama;
+        if (data.i_code == "") {
+            namaGlobal = data.i_nama;
+        } else {
+            namaGlobal = data.i_code+" - "+data.i_nama;
+        }
+        
         stockGlobal = data.s_qty;
+
+        iCode = data.i_code;
 
         if(data.gp_price != null) {
             price = data.gp_price;
@@ -304,11 +312,11 @@
         }
         hargaGlobal = parseInt(price);
         idGlobal = data.s_id;
-        //idItem = data.i_id;
+        idItem = data.i_id;
         kodespesifikGlobal = data.sd_specificcode;
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
-        //arrItem.push(idItem);
+        arrCode.push(data.i_code);
     }
 
     function setStocks(info){
@@ -327,7 +335,7 @@
         }
         hargaGlobal = parseInt(price);
         idGlobal = data.s_id;
-        //idItem = data.i_id;
+        idItem = data.i_id;
         kodespesifikGlobal = data.sd_specificcode;
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
@@ -347,10 +355,10 @@
     }
 
     function cekIsiArrayItem(data){
-        //var hitung = arrItem.length;
+        var hitung = arrCode.length;
         var kirim;
         for (var i = 0; i <= hitung; i++) {
-            if (arrItem[i] == data) {
+            if (arrCode[i] == data) {
                return 'sudah';
             }
         }
@@ -388,7 +396,52 @@
 
     $("#cari-stock").on('keyup',function(e) {
         if(e.which === 13) {
-            searchStock();
+            var specificcode = $(this).val();
+            if (cekIsiArrayItem(specificcode) == "sudah") {
+                var harga = 0;
+                var kuantitas = $(".qty-"+specificcode).val();
+                var qty = parseInt(kuantitas) + 1;
+                var hrg = $("."+specificcode).val();
+                hrg = parseInt(hrg);
+                var tothrg = qty * hrg;
+                var discPercent = $(".discp-"+specificcode).val();
+                    discPercent = discPercent.replace("%", "");
+                var discValue = $(".discv-"+specificcode).val();
+                    discPercent = discPercent.replace(".", "");
+
+                if (discPercent == "") {
+                    discPercent = 0;
+                } else if (discPercent == 0) {
+                    discPercent = 0;
+                } else {
+                    discPercent = parseInt(discPercent);
+                }
+
+                if (discValue == "") {
+                    discValue = 0;
+                } else if (discValue == 0) {
+                    discValue = 0;
+                } else {
+                    discValue = parseInt(discValue);
+                }
+
+                if (discPercent == 0 && discValue == 0) {
+                    harga += qty * hrg;
+                } else if (discPercent != 0) {
+                    harga += ((100 - discPercent)/100) * (hrg * qty);
+                } else if (discValue != 0) {
+                    harga += qty * hrg - discValue;
+                }
+        
+                $(".qty-"+specificcode).val(qty);
+                $(".harga-"+specificcode).text(convertToRupiah(parseInt(harga)));
+                $(".totalItem-"+specificcode).val(parseInt(harga));
+                
+                $(this).val("");
+                updateTotalTampil();
+            } else {
+                searchStock();
+            }
         }
     });
 
@@ -551,20 +604,20 @@
                 harga = convertToRupiah(harga);
                 $('.harga-'+idGlobal).html(harga);
             } else {
-                row = '<tr id="'+idGlobal+'">' +
+                row = '<tr id="'+idGlobal+'" class="tr">' +
                     '<td style="width: 32%;">'+namaGlobal+
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
-                    '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
+                    '<input type="hidden" class="harga '+iCode+'" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                     '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
-                    '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
+                    '<input type="hidden" class="totalItem totalItem-'+iCode+'" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '</td>' +
-                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' " id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
+                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
-                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                    '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
+                    '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+' harga-'+iCode+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
                     '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
 
@@ -580,7 +633,7 @@
                 });
             }
         } else {
-            row = '<tr id="'+kodeGlobal+'" ">' +
+            row = '<tr id="'+kodeGlobal+'" class="tr">' +
                 '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                 '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                 '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
@@ -591,10 +644,10 @@
                 '</td>' +
                 '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
                 '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
-                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
+                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
+                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
                 '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">'+convertToRupiah(hargaGlobal)+'</td>' +
-                '<td style="width: 10%;" class="text-center"><button class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
+                '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
                 '</tr>';
             $("#table-penjualan tbody").append(row);
             $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
@@ -648,12 +701,12 @@
             total += price * quantity;
             $("#"+lbltotItem).text(convertToRupiah(total));
             $("#"+totItem).val(parseInt(total));
-            $(".total-tampil").text(convertToRupiah(total));
+            // $(".total-tampil").text(convertToRupiah(total));
         } else {
             total += ((100 - disc)/100) * (price * quantity);
             $("#"+lbltotItem).text(convertToRupiah(total));
             $("#"+totItem).val(parseInt(total));
-            $(".total-tampil").text(convertToRupiah(total));
+            // $(".total-tampil").text(convertToRupiah(total));
         }
         updateTotalTampil();
 
@@ -759,7 +812,7 @@
         }
 
         $("#totalGross").val(totalGross);
-        $('.total-tampil').html(convertToRupiah(totalGross));
+        $('.total-tampil').html(convertToRupiah(totalHarga));
         $("#totalHarga").val(totalHarga);
         
     }
@@ -771,10 +824,29 @@
             }
         });
         $.ajax({
-            url: baseUrl + '/pointofsales/simpan',
+            url: baseUrl + '/penjualan-reguler/simpan',
             type: 'get',
             data: $('#form-penjualan').serialize(),
             success: function(response){
+                if (response == "true") {
+                    $.smallBox({
+                        title : "Berhasil",
+                        content : 'Transaksi Anda berhasil...!',
+                        color : "#739E73",
+                        timeout: 5000,
+                        icon : "fa fa-check bounce animated"
+                    });
+                    $(".tr").remove();
+                    updateTotalTampil();
+                } else {
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Terjadi kesalahan",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                }
             }, error:function(x, e) {
                 if (x.status == 0) {
                     alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');

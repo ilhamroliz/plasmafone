@@ -35,7 +35,7 @@ class CodeGenerator
         // POS-REG/001/14/12/2018
 
         $code = DB::table($table)->select($field);
-        $countData = $code->count();
+        $countData = $code->max($field);
 
         // if ($countData == 0) {
         //     $nomor = 1;
