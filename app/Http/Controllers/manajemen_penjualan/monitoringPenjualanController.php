@@ -56,18 +56,39 @@ class monitoringPenjualanController extends Controller
 
     public function realisasi()
     {
-
+        $carbon = explode(' ', Carbon::now('Asia/Jakarta'));
+        $dash = explode('-', $carbon[0]);
+        $date = $dash[0] . '-' . $dash[1];
         $realisasi = DB::table('d_sales_plan')
+            ->join('m_company', 'c_id', '=', 'sp_comp')
             ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
             ->join('d_item', 'i_id', '=', 'spd_item')
-            ->join('d_sales_dt', 'sd_item', '=', 'spd_item')->get();
+            ->leftjoin('d_sales_dt', 'sd_item', '=', 'spd_item')
+            ->select('c_name', 'sp_nota', 'i_nama', DB::raw('IFNULL(SUM(sd_qty), 0)  as qty'), 'spd_qty')
+            // ->whereRaw('sp_date like "%' . $date . '%"')
+            ->groupBy('c_id', 'sp_nota', 'i_id')
+            ->get();
 
-        dd($realisasi);
+        // dd($realisasi);
+        return json_encode([
+            'data' => $realisasi
+        ]);
 
     }
 
-    public function best_outlet()
+    public function outlet()
     {
+        $outlet = DB::table('m_company')
+            ->leftjoin('d_sales', 's_comp', '=', 'c_id')
+            ->leftjoin('d_sales_dt', 'sd_sales', '=', 's_id')
+            ->select('c_name', DB::raw('IFNULL(SUM(sd_qty), 0) as qty'), DB::raw('IFNULL(SUM(s_total_net), 0) as net'))
+            ->groupBy('c_id')
+            ->orderBy('qty', 'desc')
+            ->get();
 
+        // dd($outlet);
+        return json_encode([
+            'data' => $outlet
+        ]);
     }
 }
