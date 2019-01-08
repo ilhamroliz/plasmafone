@@ -127,21 +127,24 @@
 
 								<!-- widget body text-->
 								
-								<div class="tab-content padding-10">
+								<div class="tab-content padding-10 ">
 								
-
+								
 									<div class="tab-pane fade in active" id="hr1">
 										
 										<table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
 
-											<thead>			                
+											<thead class="table-responsive">			                
 
 												<tr>
-													<th data-hide="phone,tablet">No</th>
+													<th data-hide="phone,tablet" class="text-center" style="width:1%">No</th>
                                                     <th data-hide="phone,tablet">Nama Outlet</th>
-                                                    <th data-hide="phone,tablet">Nama Barang</th>
-                                                    <th data-hide="phone,tablet">Qty</th>
-                                                    <th data-hide="phone,tablet">Aksi</th>
+                                                    <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
+                                                    <th data-hide="phone,tablet " class="text-center">Qty</th>
+													<!-- <th data-hide="phone,tablet" class="text-center">Harga</th>
+													<th data-hide="phone,tablet" >discount</th>
+													<th data-hide="phone,tablet" class="text-center">Subtotal</th> -->
+                                                    <th data-hide="phone,tablet" class="text-center">Aksi</th>
 
 												</tr>
 
@@ -152,15 +155,15 @@
 											</tbody>
 
 										</table>
-										
+									
 									</div>
-									<div class="form-group">
+									<!-- <div class="form-group">
 										<div class="row">
 											<div class="col-md-12">
                                        	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">Tambah Semua Rencana</button>
 											</div>
 										</div>
-                                    </div>
+                                    </div> -->
 
 								</div>
 								
