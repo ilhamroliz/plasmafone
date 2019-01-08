@@ -113,25 +113,25 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                         <div>
                             <div class="widget-body no-padding">
-								<form id="cariForm">
+								<form id="cariMPForm">
 									<div class="col-md-12 no-padding padding-top-15">
 										<div class="col-md-4">
 											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control datepicker" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+												<input type="text" class="form-control" id="tglAwal" name="tglAwal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
 												<span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control datepicker" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+												<input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 											</div>
 										</div>
 
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="hidden" id="irpCompId" name="irpCompId">
-												<input type="text" class="form-control irpCompName" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase">                                       
+												<input type="hidden" id="mpCompId" name="mpCompId">
+												<input type="text" class="form-control mpCompName" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase">                                       
 											</div>
 										</div>
 
 										<div class="col-md-1">
-											<a class="btn btn-primary" onclick="cari2()"><i class="fa fa-search"></i></a>
+											<a class="btn btn-primary" onclick="cari()"><i class="fa fa-search"></i></a>
 										</div>
 									</div>
 								</form>
@@ -148,7 +148,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <th style="width: 30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
                                                     <th style="width: 13%"><i class="fa fa-fw fa-list txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Rencana Penjualan</th>
                                                     <th style="width: 13%"><i class="fa fa-fw fa-shopping-basket txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Realisasi Penjualan</th>
-                                                    <th style="width: 13%"><i class="fa fa-fw fa-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Target Sisa</th>
+                                                    <th style="width: 13%"><i class="fa fa-fw fa-crosshairs txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Target Sisa</th>
 												</tr>
 											</thead>
                                             <form id="countForm">
@@ -237,13 +237,31 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 "language" : dataTableLanguage
             });
 
-            $( ".irpCompName" ).autocomplete({
+            $( ".mpCompName" ).autocomplete({
 				source: baseUrl+'/man-penjualan/rencana-penjualan/auto-comp',
 				minLength: 2,
 				select: function(event, data) {
-					$('#irpCompId').val(data.item.id);
+					$('#mpCompId').val(data.item.id);
 				}
 			});
+
+            $( "#tglAwal" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $( "#tglAkhir" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
 
             // setInterval(function() {
 
@@ -324,5 +342,23 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             });
 
         })
+
+        function cari(){
+            axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/realisasi', $('#cariMPForm').serialize()).then((response) => {
+                $('#realisasiTable').DataTable().clear();
+
+                for(var i = 0; i < response.data.data.length; i++){
+                    $('#realisasiTable').DataTable().row.add([
+                        response.data.data[i].c_name,
+                        response.data.data[i].sp_nota,
+                        response.data.data[i].i_nama,
+                        '<div class="text-align-right">'+response.data.data[i].spd_qty+' Unit</div>',
+                        '<div class="text-align-right">'+response.data.data[i].qty+' Unit</div>',
+                        '<div class="text-align-right">'+(response.data.data[i].spd_qty - response.data.data[i].qty) +' Unit</div>'
+                    ]).draw(false);
+                }
+
+            })
+        }
     </script>
 @endsection

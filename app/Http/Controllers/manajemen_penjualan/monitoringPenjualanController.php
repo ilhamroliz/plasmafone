@@ -54,22 +54,78 @@ class monitoringPenjualanController extends Controller
 
     }
 
-    public function realisasi()
+    public function realisasi(Request $request)
     {
         $carbon = explode(' ', Carbon::now('Asia/Jakarta'));
         $dash = explode('-', $carbon[0]);
         $date = $dash[0] . '-' . $dash[1];
-        $realisasi = DB::table('d_sales_plan')
-            ->join('m_company', 'c_id', '=', 'sp_comp')
-            ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
-            ->join('d_item', 'i_id', '=', 'spd_item')
-            ->leftjoin('d_sales_dt', 'sd_item', '=', 'spd_item')
-            ->select('c_name', 'sp_nota', 'i_nama', DB::raw('IFNULL(SUM(sd_qty), 0)  as qty'), 'spd_qty')
-            // ->whereRaw('sp_date like "%' . $date . '%"')
-            ->groupBy('c_id', 'sp_nota', 'i_id')
-            ->get();
+        $comp = $request->mpCompId;
+        $realisasi = '';
 
-        // dd($realisasi);
+        if ($request->tglAwal == "" && $request->tglAkhir == "" && $comp != "") {
+
+            $realisasi = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+                ->join('d_item', 'i_id', '=', 'spd_item')
+                ->leftjoin('d_sales_dt', 'sd_item', '=', 'spd_item')
+                ->select('sp_comp', 'c_name', 'sp_nota', 'i_nama', DB::raw('IFNULL(SUM(sd_qty), 0)  as qty'), 'spd_qty')
+                ->whereRaw('sp_date like "%' . $date . '%"')
+                ->where('sp_comp', $comp)
+                ->groupBy('c_id', 'sp_nota', 'i_id')
+                ->get();
+
+        } elseif ($request->tglAwal != null && $request->tglAkhir != null && $comp == null) {
+
+            $awal = explode('/', $request->tglAwal);
+            $akhir = explode('/', $request->tglAkhir);
+            $start = $awal[2] . '-' . $awal[1] . '-' . $awal[0];
+            $end = $akhir[2] . '-' . $akhir[1] . '-' . $akhir[0];
+
+            $realisasi = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+                ->join('d_item', 'i_id', '=', 'spd_item')
+                ->leftjoin('d_sales_dt', 'sd_item', '=', 'spd_item')
+                ->select('c_name', 'sp_nota', 'i_nama', DB::raw('IFNULL(SUM(sd_qty), 0)  as qty'), 'spd_qty')
+                ->where('sp_date', '>=', $start)
+                ->where('sp_date', '<=', $end)
+                ->groupBy('c_id', 'sp_nota', 'i_id')
+                ->get();
+
+        } elseif ($request->tglAwal != null && $request->tglAkhir != null && $comp != null) {
+
+            $awal = explode('/', $request->tglAwal);
+            $akhir = explode('/', $request->tglAkhir);
+            $start = $awal[2] . '-' . $awal[1] . '-' . $awal[0];
+            $end = $akhir[2] . '-' . $akhir[1] . '-' . $akhir[0];
+
+            $realisasi = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+                ->join('d_item', 'i_id', '=', 'spd_item')
+                ->leftjoin('d_sales_dt', 'sd_item', '=', 'spd_item')
+                ->select('c_name', 'sp_nota', 'i_nama', DB::raw('IFNULL(SUM(sd_qty), 0)  as qty'), 'spd_qty')
+                ->where('sp_date', '>=', $start)
+                ->where('sp_date', '<=', $end)
+                ->where('sp_comp', $comp)
+                ->groupBy('c_id', 'sp_nota', 'i_id')
+                ->get();
+
+        } else {
+
+            $realisasi = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->join('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+                ->join('d_item', 'i_id', '=', 'spd_item')
+                ->leftjoin('d_sales_dt', 'sd_item', '=', 'spd_item')
+                ->select('c_name', 'sp_nota', 'i_nama', DB::raw('IFNULL(SUM(sd_qty), 0)  as qty'), 'spd_qty')
+                ->whereRaw('sp_date like "%' . $date . '%"')
+                ->groupBy('c_id', 'sp_nota', 'i_id')
+                ->get();
+
+        }
+
         return json_encode([
             'data' => $realisasi
         ]);
