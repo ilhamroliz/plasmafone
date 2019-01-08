@@ -6,6 +6,7 @@
         <link rel="stylesheet" type"text/css" href="print.css" media="print">
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/struk.css') }}">
         <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/print.css') }}">
+        <script type="text/javascript">window.print();</script>
     </head>
     <body>
         <style type="text/css">
@@ -66,21 +67,48 @@
                 padding: 5px;
             }
         </style>
+
+        <?php 
+        function tgl_indo($tanggal){
+            $bulan = array (
+                1 =>   'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'November',
+                'Desember'
+            );
+            $pecahkan = explode('-', $tanggal);
+            
+            // variabel pecahkan 0 = tanggal
+            // variabel pecahkan 1 = bulan
+            // variabel pecahkan 2 = tahun
+        
+            return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+        }
+        ?>
+
         <div id="header">
             <div>
-                <center><p><strong>PLASMAFONE</strong></p></center>
-                <center><p style="margin-right: 10px; margin-left: 10px">Ini alamat</p></center>
+                <center><p><strong>{{ $datas[0]->nama_outlet }}</strong></p></center>
+                <center><p style="margin-right: 10px; margin-left: 10px">{{ $datas[0]->alamat_outlet }}</p></center>
             </div>
 
             <br>
 
             <div style="border-bottom: solid 1px black;">
-                <p>No. Nota : Ini nomor nota</p>
+                <p>No. Nota : {{ $datas[0]->nota }}</p>
             </div>
         </div>
 
         <div id="footer">
-            <p class="page"><strong>Plasmafone</strong></p>
+            <p class="page"><strong>{{ $datas[0]->nama_outlet }}</strong></p>
         </div>
 
         <div id="halaman">
@@ -92,39 +120,37 @@
 
             <p>Customer</p>
 
-            <p>Nama: Ini nama member</p>
+            <p>Nama: {{ $datas[0]->nama_member }}</p>
 
-            <p>Telepon: Ini nomor telephone member</p>
+            <p>Telepon: {{ $datas[0]->telp_member }}</p>
 
-            <p>Tanggal: Ini untuk saled date</p>
+            <p>Tanggal: {{ tgl_indo(date('Y-m-d', strtotime($datas[0]->tanggal))) }}</p>
         </div>
         <table style="page-break-inside: auto; border-bottom: 1px solid; margin-top: 15px; width: 100%;">
           <thead style="border-top: .6px dashed; border-bottom: .6px dashed;">
-            <tr">
+            <tr>
                 <th>Jumlah</th>
                 <th>Nama Barang</th>
                 <th>Harga</th>
                 <th>Total</th>
             </tr>
           </thead> 
-        {{--@foreach($informasi as $index=>$data)
-            @if($data->sd_sales != null)--}}
+        @foreach($datas as $index=>$data)
             <tbody>
                 <tr>
-                    <td class="border-kiri" align="center">3</td>
-                    <td>Acer</td>
-                    <td align="right" style="width: 30%;">Rp. 1000</td>
-                    <td class="border-kanan" align="right" style="width: 30%;">Rp. 1000</td>
+                    <td class="border-kiri" align="center">{{ $data->qty }}</td>
+                    <td>{{ $data->nama_item }}</td>
+                    <td align="right" style="width: 30%;">Rp.{{ number_format($data->total_item,2,',','.') }}</td>
+                    <td class="border-kanan" align="right" style="width: 30%;">Rp.{{ number_format($data->total,2,',','.') }}</td>
                 </tr>
             </tbody>
-            {{--@endif
-        @endforeach--}}
+        @endforeach
         </table>
 
         <div class="total-harga">
             <div style="margin-bottom: 25px;">
                 <strong><p class="pull-left">Total</p></strong>
-                <p class="pull-right">Rp.1000.000,00</p>
+                <p class="pull-right">Rp.{{ number_format($datas[0]->total,2,',','.') }}</p>
             </div>
             
             <div style="margin-bottom: 48px;">
