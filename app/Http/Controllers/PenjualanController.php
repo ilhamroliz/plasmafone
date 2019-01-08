@@ -286,7 +286,12 @@ class PenjualanController extends Controller
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($data as $query) {
-                $results[] = ['id' => $query->s_id, 'label' => $query->i_code. ' - ' . $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                if($query->i_code == "") {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                } else {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_code. ' - ' . $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                }
+                
             }
         }
         return Response::json($results);
@@ -399,8 +404,10 @@ class PenjualanController extends Controller
                             'sm_sisa' => $sm_sisa
                         ]);
 
+                        $idItem = DB::table('d_stock')->select('s_item')->where('s_id', $data['idStock'][$i])->first();
+
                         // update in table d_stock
-                        DB::table('d_stock')->where(['s_comp' => $outlet_user, 's_position' => $outlet_user, 's_item' => $data['idItem'][$i]])->update(['s_qty' => $sm_sisa]);
+                        DB::table('d_stock')->where(['s_comp' => $outlet_user, 's_position' => $outlet_user, 's_item' => $idItem->s_item])->update(['s_qty' => $sm_sisa]);
 
                         DB::commit();
 
@@ -439,19 +446,19 @@ class PenjualanController extends Controller
             $Dtotal_disc_value = ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
 
             try {
-                
+                $idItem = DB::table('d_stock')->select('s_item')->where('s_id', $data['idStock'][$i])->first();
                 // Insert to table d_sales_dt
                 DB::table('d_sales_dt')->insert([
                     'sd_sales'          => $idsales,
                     'sd_detailid'       => $salesdetailid,
                     'sd_comp'           => $outlet_user,
-                    'sd_item'           => $data['idItem'][$i],
+                    'sd_item'           => $idItem->s_item,
                     'sd_qty'            => $data['qtyTable'][$i],
                     'sd_value'          => $data['harga'][$i],
                     'sd_hpp'            => $arr_hpp[$i],
                     'sd_total_gross'    => $data['totalItem'][$i],
-                    'sd_disc_persen'    => 0,
-                    'sd_disc_value'     => 0,
+                    'sd_disc_persen'    => $Dtotal_disc_persen,
+                    'sd_disc_value'     => $Dtotal_disc_value,
                     'sd_total_net'      => $data['totalItem'][$i]
                 ]);
 
