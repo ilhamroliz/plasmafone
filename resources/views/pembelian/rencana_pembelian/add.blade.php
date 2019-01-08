@@ -830,7 +830,7 @@
 				success: function(data)
 				{
 				$('#dt_supplier').empty(); 
-				row = "<option selected='' value='semua'>Pilih Semua Outlet</option>";
+				row = "<option selected='' value='semua'>SEMUA OUTLET</option>";
 				$(row).appendTo("#dt_supplier");
 				$.each(data, function(k, v) {
 					row = "<option value='"+v.pr_compReq+"'>"+v.c_name+"</option>";

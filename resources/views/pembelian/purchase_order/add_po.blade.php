@@ -92,9 +92,9 @@
 											<fieldset>
 											<div class="form-group">
 													
-													<label class="col-md-2" for="prepend"> <h4>Pilih Supplier</h4></label>
+													<label class="col-md-2" for="prepend"> <h6>Pilih Supplier</h6></label>
 													<div class="col-md-6">
-										                <div class="icon-addon addon-lg">
+										                <div class="icon-addon addon-sm">
 														<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
 															<option selected="" value="00">----pilih semua Supplier----</option>
 														</select>
@@ -105,9 +105,9 @@
 												</div>
 
 												<div class="form-group">
-												<label class="col-md-2" for="prepend"> <h4>Tanggal Di butuhkan</h4></label>
+												<label class="col-md-2" for="prepend"> <h6>Tanggal Di butuhkan</h6></label>
 													<div class="col-md-6">
-										                <div class="icon-addon addon-lg">
+										                <div class="icon-addon addon-sm">
 														<input type="text" class="form-control datepicker" id="due_date" name="tgl_awal" placeholder="Due Date" data-dateformat="dd/mm/YYYY">
 										                    <label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
 										                </div>
