@@ -648,6 +648,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Manajemen Pengguna
 	Route::get('/pengaturan/kelola-pengguna/tambah', 'manajemenPenggunaController@tambah_pengguna');
+	Route::post('/pengaturan/kelola-pengguna/cekuser', 'manajemenPenggunaController@cek_user');
 	Route::post('/pengaturan/kelola-pengguna/simpan', 'manajemenPenggunaController@simpan_pengguna');
 	Route::match(['get', 'post'], '/pengaturan/kelola-pengguna/edit/{id}', 'manajemenPenggunaController@edit_pengguna');
 	Route::match(['get', 'post'], '/pengaturan/kelola-pengguna/simpanEdit', 'manajemenPenggunaController@simpan_edit');
@@ -684,7 +685,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// =========================
 
     //== Layanan Perbaikan
-    Route::get('layanan-perbaikan', 'PerbaikanController@index');
+	Route::get('layanan-perbaikan', 'PerbaikanController@index');
 
 
 	// keuangan
