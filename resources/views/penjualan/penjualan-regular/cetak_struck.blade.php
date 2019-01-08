@@ -116,7 +116,7 @@
         </div>
 
         <div id="konten">
-            <p>Ini nama Salesman</p>
+            <p>{{ strtoupper($salesman) }}</p>
 
             <p>Customer</p>
 
