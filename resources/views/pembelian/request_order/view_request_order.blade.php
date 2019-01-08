@@ -45,7 +45,7 @@
 					</span>
                 </h1>
             </div>
-            @if(Access::checkAkses(45, 'insert') == true)
+            @if(Access::checkAkses(49, 'insert') == true)
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 
                     <div class="page-title">
