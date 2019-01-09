@@ -23,7 +23,6 @@
                 left: 0px; 
                 right: 0px;
                 text-align: center;
-                margin-top: 5px;
                 margin-bottom: 5px;
             }
             #konten{
@@ -124,7 +123,7 @@
 
             <p>Telepon: {{ $datas[0]->telp_member }}</p>
 
-            <p>Tanggal: {{ tgl_indo(date('Y-m-d', strtotime($datas[0]->tanggal))) }}</p>
+            <p>Tanggal: {{ tgl_indo(date("d-m-Y h:i:sa", strtotime($datas[0]->tanggal))) }}</p>
         </div>
         <table style="page-break-inside: auto; border-bottom: 1px solid; margin-top: 15px; width: 100%;">
           <thead style="border-top: .6px dashed; border-bottom: .6px dashed;">
