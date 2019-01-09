@@ -126,7 +126,7 @@
 								<div class="form-group col-md-8">
 									<label class="sr-only" for="namabarang">Nama Barang</label>
 									<input type="hidden" id="tpMemberId" name="tpMemberId">
-									<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%" placeholder="Masukkan Nama Item">
+									<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%;text-transform :uppercase" placeholder="Masukkan Nama Item" >
 									<!-- <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%"> -->
 									<div id="list_barang">
 										
