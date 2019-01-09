@@ -18,7 +18,7 @@
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
-		<li>Home</li><li>Inventory</li><li>Penerimaan Barang Dari Supplier</li>
+		<li>Home</li><li>Inventory</li><li>Penerimaan Barang</li><li>Dari Supplier</li>
 	</ol>
 	<!-- end breadcrumb -->
 
@@ -98,19 +98,16 @@
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
 				<form id="table-form">
 					{!! csrf_field() !!}
-					<div  style="overflow-x:auto;">
+					<div class="table-responsive"  >
 					<table id="dt_bbm" class="table table-striped table-bordered table-hover " width="100%">
 						<thead>			                
 							<tr>
 								
-								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;No. Purchase Order</th>
-								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kategori</th>
-								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;IMEI</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode Barang</th>
-								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Barang</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Kuantitas</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Tanggal Masuk</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Supplier</th>
+								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;No.</th>
+								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode BM</th>
+								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode PO</th>
+								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Supplier</th>
+								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Status</th>
 								<th class="text-center" data-hide="phone,tablet" width="15%"> Aksi</th>
 							</tr>
 						</thead>
@@ -228,7 +225,10 @@
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 <script type="text/javascript">
+
+
 var table_bbm;
+var url = '{{url('/inventory/penerimaan/supplier/load_bbm_dt')}}';
 	$(document).ready(function(){
 			reload_data();
 	})
@@ -247,6 +247,12 @@ var table_bbm;
                 },
         } );
     }
+
+	function view_bbm_dt(id)
+	{
+		id_bbm = id;
+		window.location = url;
+	}
 
 	function reload_table(){
 		
