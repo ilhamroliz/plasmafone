@@ -199,6 +199,75 @@ class PembelianController extends Controller
 
     }
 
+    public function simpanConfirm(Request $request)
+    {
+        $pr_supplier = $request->input('supplier');
+
+        $dateReq = Carbon::now('Asia/Jakarta');
+        $status = 'WAITING';
+        $code = Carbon::now()->timestamp;
+        $numberPlan = "CONF-".$code;
+        $user = Auth::user()->m_id;
+
+        $query = DB::table('d_purchase_plan_dd')
+            ->select('d_purchase_plan_dd.*')
+            ->where('d_purchase_plan_dd.pr_stsPlan', $status)
+            ->where('d_purchase_plan_dd.pr_userId',$user)
+            ->get();
+        
+            
+        $baris = count($query);
+
+        if($baris =="0"){
+            $data = "notFound";
+            echo json_encode(array("status" => $data));
+        }else{
+            $pr_dateApp = Carbon::now('Asia/Jakarta');
+            $pr_stsPlan = "WAITING";
+    
+                 $addAkses = [];
+                    for ($i=0; $i < count($query); $i++) {
+                        $temp = [
+                            
+                            'pr_idPlan' =>$query[$i]->pr_idPlan,
+                            'pr_supplier' =>$pr_supplier,
+                            'pr_item' =>$query[$i]->pr_itemPlan,
+                            'pr_price' =>$query[$i]->pr_harga_satuan,
+                            'pr_qtyApp' =>$query[$i]->pr_qtyApp,
+                            'pr_stsConf' =>$pr_stsPlan,
+                            'pr_dateApp' =>$dateReq,
+                            'pr_comp' => Auth::user()->m_comp,
+                            'pr_confirmNumber'=>$numberPlan
+                        ];  
+                        array_push($addAkses, $temp);
+                    }
+    
+            $insert = DB::table('d_purchase_confirm')->insert($addAkses);
+            if (!$insert) {
+    
+                $data = "GAGAL";
+                echo json_encode(array("status" => $data));
+            } else {
+                $reqOrder = DB::table('d_purchase_plan')
+                        ->where('d_purchase_plan.pr_stsPlan','WAITING')
+                        ->where('d_purchase_plan.pr_userId',$user)
+                        ->update([
+                            'pr_stsPlan' => 'CONFIRM'
+                        ]);
+                        if (!$reqOrder) {
+                            $data = "GAGAL";
+                            echo json_encode(array("status" => $data));
+                        } else {
+                            $data = "SUKSES";
+                            echo json_encode(array("status" => $data));
+                        }
+                   
+            }
+        }
+       
+
+    }
+
     public function getRequest_dumy(Request $request)
     {
 
@@ -705,6 +774,34 @@ class PembelianController extends Controller
             ->make(true);
     }
 
+    public function view_confirmAdd_trans()
+    {
+        $menunggu = DB::table('d_purchase_plan_dd')
+                ->select(
+                    'd_purchase_plan_dd.*',
+                    'd_item.i_nama',
+                    'm_company.c_name'
+                )
+                ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+                ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
+                ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
+                ->get();
+                $data = array();
+                $i = 1;
+                foreach ($menunggu as $key) {
+                $row = array();
+                $row[] = $i++;
+                $row[] = $key->c_name;
+                $row[] = $key->i_nama;
+                $row[] = $key->pr_qtyApp;
+                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.$key->pr_harga_satuan .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
+                $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                $data[] = $row;
+                }
+
+                echo json_encode(array("data"=>$data));
+    }
+
     public function view_confirmAdd()
     {
         $userCreate = Auth::user()->m_id;
@@ -769,7 +866,7 @@ class PembelianController extends Controller
                 $row[] = $key->c_name;
                 $row[] = $key->i_nama;
 
-                $row[] = $key->pr_qtyApp;
+                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
                 $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
@@ -795,6 +892,7 @@ class PembelianController extends Controller
                 $row[] = $key->c_name;
                 $row[] = $key->i_nama;
                 $row[] = $key->pr_qtyApp;
+                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.$key->pr_harga_satuan .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
                 $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
@@ -2300,7 +2398,7 @@ class PembelianController extends Controller
         // }
         
 
-        $data = array();
+        $data = array(); 
         foreach ($list as $hasil) {
             $row = array();
             $row[] = $hasil->i_nama;
@@ -2365,6 +2463,28 @@ class PembelianController extends Controller
         echo json_encode($data);
     }
 
+    public function editConfirm_dummy(Request $request)
+    {
+        $comp = Auth::user()->m_id;
+        $id = $request->input('id');
+        $harga = $request->input('harga');
+
+        $update = DB::table('d_purchase_plan_dd')
+            ->where('d_purchase_plan_dd.pr_userId', $comp)
+            ->where('d_purchase_plan_dd.pr_idPlan', $id)
+            ->update([
+                'pr_harga_satuan' => $harga,
+            ]);
+
+        if ($update) {
+            $data = "ok";
+        } else {
+            $data = "gagal";
+        }
+
+        echo json_encode(array("dataSet" => $data));
+    }
+
 
 
     public function editDumyReq(Request $request)
@@ -2374,7 +2494,7 @@ class PembelianController extends Controller
         $qty = $request->input('qty');
 
         $update = DB::table('d_purchase_req')
-            ->where('d_purchase_req.pr_compReq', $comp)
+            ->where('d_purchase_req.pr_userId', $comp)
             ->where('d_purchase_req.pr_id', $id)
             ->update([
                 'pr_qtyReq' => $qty,

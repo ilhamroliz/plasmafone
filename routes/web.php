@@ -401,6 +401,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmPurchase', 'PembelianController@view_confirmPurchase');
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmAll', 'PembelianController@view_confirmAll');
 	Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd', 'PembelianController@view_confirmAdd');
+	Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans', 'PembelianController@view_confirmAdd_trans');
 
 
 	//action confirm order
@@ -409,6 +410,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/konfirmasi-pembelian/getPlan_id', 'PembelianController@getPlan_id');
 	Route::get('/pembelian/konfirmasi-pembelian/getSupplier', 'PembelianController@getSupplier');
 	Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
+	Route::post('/pembelian/konfirmasi-pembelian/editDumy', 'PembelianController@editConfirm_dummy');
+
+	Route::POST('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
 
 	Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 

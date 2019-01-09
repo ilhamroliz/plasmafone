@@ -103,6 +103,44 @@
 					</div>
 				</div>
 			@endif
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="widget-body">
+						
+						<form class="form-horizontal">
+						{{csrf_field()}}
+							<fieldset>
+							<div class="form-group">
+									
+									<label class="col-md-2" for="prepend"> <h6>Pilih Supplier</h6></label>
+									<div class="col-md-6">
+										<div class="icon-addon addon-sm">
+										<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
+											<option selected="" value="00">----pilih semua Supplier----</option>
+										</select>
+											<label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="email"></label>
+										</div>
+									</div>
+									
+								</div>
+
+								<div class="form-group">
+								<label class="col-md-2" for="prepend"> <h6>Tanggal Di butuhkan</h6></label>
+									<div class="col-md-6">
+										<div class="icon-addon addon-sm">
+										<input type="text" class="form-control datepicker" id="due_date" name="tgl_awal" placeholder="Due Date" data-dateformat="dd/mm/YYYY">
+											<label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
+										</div>
+									</div>
+									
+								</div>
+								
+							</fieldset>
+						</form>
+
+					</div>
+				</div>
+			</div>
 
 			<!-- row -->
 			<div class="row">
@@ -141,6 +179,7 @@
                                                     <th data-hide="phone,tablet">Nama Outlet</th>
                                                     <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
                                                     <th data-hide="phone,tablet " class="text-center">Qty</th>
+													<th data-hide="phone,tablet " class="text-center">Qty</th>
 													<!-- <th data-hide="phone,tablet" class="text-center">Harga</th>
 													<th data-hide="phone,tablet" >discount</th>
 													<th data-hide="phone,tablet" class="text-center">Subtotal</th> -->
@@ -157,13 +196,13 @@
 										</table>
 									
 									</div>
-									<!-- <div class="form-group">
+									<div class="form-group">
 										<div class="row">
 											<div class="col-md-12">
-                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRequest()">Tambah Semua Rencana</button>
+                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanConfirm()">Konfirmasi Semua</button>
 											</div>
 										</div>
-                                    </div> -->
+                                    </div>
 
 								</div>
 								
@@ -362,11 +401,13 @@
 
 
 	<script type="text/javascript">
+	var table_registrasi_trans;
 		var tambahKonfirmasi;
 		var input = $('#dt_harga2').val();
 		var input2 = $('#dt_angka').val();
 		var tambahRencana;
         $(document).ready(function () {
+			getSupplier();
 			$( "#tpMemberNama" ).autocomplete({
 				source: baseUrl+'/pembelian/request-pembelian/cariItem',
 				minLength: 2,
@@ -492,6 +533,28 @@
 			
             
         }
+		function getSupplier()
+		{
+			
+			$.ajax({
+				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
+				type: "GET",
+				data: { 
+				},
+				dataType: "JSON",
+				success: function(data)
+				{
+				$('#dt_supplier').empty(); 
+				row = "<option selected='' value='00'>Pilih Supplier</option>";
+				$(row).appendTo("#dt_supplier");
+				$.each(data, function(k, v) {
+					row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
+					$(row).appendTo("#dt_supplier");
+				});
+				},
+				
+			});  
+		}
 
         function getTolak(id){
            
@@ -713,17 +776,19 @@
 
 		
 
-		function simpanRequest(){
+		function simpanConfirm(){
 			$.SmartMessageBox({
 					title : "Smart Alert!",
-					content : "Apakah Anda Yakin Akan Mengajukan Request Order ?",
+					content : "Apakah Anda Yakin Akan Mengajukan Confirm Order ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
 					if (ButtonPressed === "Ya") {
 						$.ajax({
-							url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
-							type: "GET",
+							url : '{{url('/pembelian/konfirmasi-pembelian/simpanConfirm')}}',
+							type: "POST",
 							data: { 
+								'supplier' : $('#dt_supplier').val(),
+								_token : '{{ csrf_token() }}'
 							},
 							dataType: "JSON",
 							success: function(data)
@@ -804,9 +869,46 @@
 			} );
 		}
 
+		function reload_data_trans(){
+        table_registrasi_trans= $('#table-rencana').DataTable({
+				"language" : dataTableLanguage,
+				"ajax": {
+						"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans')}}',
+						"type": "POST",  
+						"data": function ( data ) {
+							data._token = '{{ csrf_token() }}';
+						},
+					},
+			} );
+		}
+ 
 		function reload_table(){
-			table_registrasi.ajax.reload(null, false);
+			table_registrasi_trans.ajax.reload(null, false);
 
+		}
+
+
+		function editTable(id)
+		{
+			var input = $('#i_nama'+id).val();
+			$.ajax({
+						url : '{{url('/pembelian/konfirmasi-pembelian/editDumy')}}',
+						type: "POST",
+						data: { 
+							'id' : id,
+							'harga' : input,
+							_token : '{{ csrf_token() }}'
+
+						},
+						dataType: "JSON",
+						success: function(data)
+						{
+							// $('#table-rencana').DataTable().ajax.reload();
+							reload_table();
+							
+						},
+						
+				}); 
 		}
 
 	</script>
