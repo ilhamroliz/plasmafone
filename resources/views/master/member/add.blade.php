@@ -203,8 +203,8 @@
 												<div class="form-group row">
 													<label class="col-md-4 control-label text-left">Provinsi</label>
 													<div class="col-md-8 inputGroupContainer">
-															<select width="100%" class="form-control" name="provinsi" id="provinsi" v-model="form_data.provinsi" onchange="getkota()">
-																<option value="" disabled>== Pilih Provinsi ==</option>
+															<select class="form-control" name="provinsi" id="provinsi" onchange="getkota()">
+																<option value="" selected disabled>== Pilih Provinsi ==</option>
 																@foreach ($provinsi as $key => $value)
 																	<option value="{{$value->wp_id}}">{{$value->wp_name}}</option>
 																@endforeach
@@ -215,8 +215,8 @@
 												<div class="form-group row">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kota</label>
 													<div class="col-xs-5 col-lg-8 inputGroupContainer">
-															<select width="100%" class="form-control" name="kota" id="kota" v-model="form_data.kota" onchange="getkecamatan()">
-																<option value="" disabled>== Pilih Kota ==</option>
+															<select class="form-control" name="kota" id="kota" onchange="getkecamatan()">
+																<option value="" selected disabled>== Pilih Kota ==</option>
 															</select>
 													</div>
 												</div>
@@ -224,8 +224,8 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Kecamatan</label>
 													<div class="col-xs-5 col-lg-8 inputGroupContainer">
-															<select width="100%" class="form-control" name="kecamatan" id="kecamatan" v-model="form_data.kecamatan" onchange="getdesa()">
-																<option value="" disabled>== Pilih Kecamatan ==</option>
+															<select class="form-control" name="kecamatan" id="kecamatan" onchange="getdesa()">
+																<option value="" selected disabled>== Pilih Kecamatan ==</option>
 															</select>
 													</div>
 												</div>
@@ -233,8 +233,8 @@
 												<div class="form-group">
 													<label class="col-xs-4 col-lg-4 control-label text-left">Desa</label>
 													<div class="col-xs-9 col-lg-8 inputGroupContainer">
-															<select class="form-control" name="desa" id="desa" v-model="form_data.desa">
-																<option value="" disabled>== Pilih Desa ==</option>
+															<select class="form-control" name="desa" id="desa">
+																<option value="" selected disabled>== Pilih Desa ==</option>
 															</select>
 													</div>
 												</div>
@@ -371,14 +371,10 @@
 						nik 	: '',
 						name 	: '',
 						telp 	: '',
-						provinsi : '',
 						address : '',
 						email 	: '',
 						tipe	: '',
-						kota	: '',
-						kecamatan	: '',
 						tanggal : '',
-						desa : '',
 						bulan	: '',
 						tahun	: ''
 					}
@@ -477,15 +473,11 @@
 					reset_form:function(){
 						this.form_data.nik 			= '';
 						this.form_data.name 		= '';
-						this.form_data.provinsi = '';
 						this.form_data.telp			= '';
 						this.form_data.address 		= '';
 						this.form_data.email 		= '';
 						this.form_data.tipe 		= '';
-						this.form_data.kota 		= '';
 						this.form_data.tanggal 		= '';
-						this.form_data.desa 		= '';
-						this.form_data.kecamatan 		= '';
 						this.form_data.bulan 		= '';
 						this.form_data.tahun 		= '';
 
@@ -516,7 +508,11 @@
 			}
 		}
 
+
 		function getkota(){
+			$('#kecamatan').find('option').remove().end().append('<option value="" selected disabled>== Pilih Kecamatan ==</option>');		
+			$('#desa').find('option').remove().end().append('<option value="" selected disabled>== Pilih Desa ==</option>');		
+
 			var html = '<option value="" disabled>== Pilih Kota ==</option>';
 			var provinsi = $('#provinsi').val();
 			$.ajax({
@@ -534,6 +530,8 @@
 		}
 
 		function getkecamatan(){
+			$('#desa').find('option').remove().end().append('<option value="" selected disabled>== Pilih Desa ==</option>');		
+
 			var html = '<option value="" disabled>== Pilih Kecamatan ==</option>';
 			var kota = $('#kota').val();
 			$.ajax({
