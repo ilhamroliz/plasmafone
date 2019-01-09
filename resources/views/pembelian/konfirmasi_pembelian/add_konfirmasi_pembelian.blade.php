@@ -124,7 +124,7 @@
 									
 								</div>
 
-								<div class="form-group">
+								<!-- <div class="form-group">
 								<label class="col-md-2" for="prepend"> <h6>Tanggal Di butuhkan</h6></label>
 									<div class="col-md-6">
 										<div class="icon-addon addon-sm">
@@ -133,7 +133,7 @@
 										</div>
 									</div>
 									
-								</div>
+								</div> -->
 								
 							</fieldset>
 						</form>
