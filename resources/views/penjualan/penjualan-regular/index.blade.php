@@ -175,7 +175,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary" type="button" onclick="simpanPenjualan()">
+                                                <button class="btn btn-primary" type="button" onclick="detailPembayaran()">
                                                     <i class="fa fa-save"></i>
                                                     Simpan
                                                 </button>
@@ -193,6 +193,25 @@
         <!-- end widget grid -->
     </div>
     <!-- END MAIN CONTENT -->
+
+    <!-- Modal Detail Pembayaran -->
+    <div class="modal fade" id="DetailPembayaran" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Detail Pembayaran</h4>
+                </div>
+                <div class="modal-body kontenpembayaran">
+                
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- End modal detail pembayaran -->
+
     <!-- Modal -->
     <div class="modal fade" id="DaftarMember" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -828,6 +847,35 @@
         
     }
 
+    function detailPembayaran(){
+        var total = $('#totalHarga').val();
+        total = convertToAngka(total);
+        $.ajax({
+            url: baseUrl + '/penjualan-reguler/detailPembayaran/'+total,
+            timeout: 5000,
+            type: 'get',
+            success: function(response){
+                $('.kontenpembayaran').empty();
+                $('.kontenpembayaran').append(response);
+                $('#DetailPembayaran').modal('show');
+            }, error:function(x, e) {
+                if (x.status == 0) {
+                    alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                } else if (x.status == 404) {
+                    alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                } else if (x.status == 500) {
+                    alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                } else if (e == 'parsererror') {
+                    alert('Error.\nParsing JSON Request failed.');
+                } else if (e == 'timeout'){
+                    alert('Request Time out. Harap coba lagi nanti');
+                } else {
+                    alert('Unknow Error.\n' + x.responseText);
+                }
+            }
+        })
+    }
+
     function simpanPenjualan() {
         $.ajaxSetup({
             headers: {
@@ -837,7 +885,7 @@
         $.ajax({
             url: baseUrl + '/penjualan-reguler/simpan',
             type: 'get',
-            data: $('#form-penjualan').serialize(),
+            data: $('#form-penjualan, #formDetailPembayaran').serialize(),
             success: function(response){
                 if (response == "false") {
                     $.smallBox({
@@ -847,6 +895,7 @@
                         timeout: 5000,
                         icon : "fa fa-times bounce animated"
                     });
+                    $('#DetailPembayaran').modal('hide');
                     
                 } else {
                     $.smallBox({
@@ -857,9 +906,16 @@
                         icon : "fa fa-check bounce animated"
                     });
                     $(".tr").remove();
+                    $("#salesman").val("");
+                    $("#cari-member").val("");
+                    $("#idMember").val("");
+                    $("#detail_mem").hide("slow");
+                    $("#search_barang").hide("slow");
+                    $("#salesman").focus();
                     updateTotalTampil();
-                    console.log(response);
-                    window.open(response);
+                    cetak(response.salesman, response.idSales);
+                    $('#DetailPembayaran').modal('hide');
+                    
                 }
             }, error:function(x, e) {
                 if (x.status == 0) {
@@ -877,6 +933,10 @@
                 }
             }
         })
+    }
+
+    function cetak(salesman, idSales){
+        window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales, '', "width=800,height=600");
     }
 
     function convertToRupiah(angka) {
