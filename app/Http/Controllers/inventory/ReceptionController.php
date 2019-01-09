@@ -26,6 +26,11 @@ class ReceptionController extends Controller
     	return view('inventory.receipt_goods.supplier.index');
     }
 
+    public function view_bbm_dt()
+    {
+    	return view('inventory.receipt_goods.supplier.view_bbm_dt');
+    }
+
     public function load_bbm()
     {
         // menampilkan data master penerimaan barang
@@ -46,7 +51,7 @@ class ReceptionController extends Controller
            $row[]   = $key->p_nota;
            $row[]   = $key->s_company;
            $row[]   = $key->selisih;
-           $row[]   = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $key->bm_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+           $row[]   = '<div class="text-center"><button type="button" class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="page('. $key->bm_id .')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
            $data[]  = $row;
         }
 

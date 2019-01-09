@@ -503,6 +503,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/penerimaan/supplier/updateGudang', 'inventory\ReceptionController@updateGudang');
 	Route::post('/inventory/penerimaan/supplier/terimaBarang', 'inventory\ReceptionController@terimaBarang');
 	Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
+	Route::get('/inventory/penerimaan/supplier/view_bbm_dt', 'inventory\ReceptionController@view_bbm_dt');
+
 
 
 

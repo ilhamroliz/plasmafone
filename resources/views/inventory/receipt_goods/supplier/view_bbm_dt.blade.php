@@ -18,7 +18,7 @@
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
-		<li>Home</li><li>Inventory</li><li>Penerimaan Barang</li><li>Dari Supplier</li>
+		<li>Home</li><li>Inventory</li><li>Penerimaan Barang</li><li>view bbm dt</li>
 	</ol>
 	<!-- end breadcrumb -->
 
@@ -225,13 +225,14 @@
 <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 <script type="text/javascript">
+var data = id_bbm;
 
 
 var table_bbm;
-var url = '{{url('/inventory/penerimaan/supplier/view_bbm_dt')}}';
 
 	$(document).ready(function(){
 			reload_data();
+            alert(data);
 	})
 
 	function reload_data(){
@@ -249,12 +250,10 @@ var url = '{{url('/inventory/penerimaan/supplier/view_bbm_dt')}}';
         } );
     }
 
-
-	function page(id)
+	function view_bbm_dt(id)
 	{
 		id_bbm = id;
-		window.location.href=url;
- 
+		window.location = url;
 	}
 
 	function reload_table(){
