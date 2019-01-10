@@ -1098,7 +1098,7 @@ class PembelianController extends Controller
         $data = DB::table('d_purchase_confirm')
                 ->select('d_purchase_confirm.pr_supplier','d_supplier.s_company')
                 ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
-                ->where('d_purchase_confirm.pr_stsConf','CONFIRM')
+                ->where('d_purchase_confirm.pr_stsConf','WAITING')
                 ->groupBy('d_purchase_confirm.pr_supplier')
                 ->get();
         echo json_encode($data);
@@ -1486,7 +1486,7 @@ class PembelianController extends Controller
                 ->select('d_purchase_confirm.*','d_supplier.*','d_item.*')
                 ->join('d_item','d_purchase_confirm.pr_item','=','d_item.i_id')
                 ->join('d_supplier','d_purchase_confirm.pr_supplier','=','d_supplier.s_id')
-                ->where('d_purchase_confirm.pr_stsConf','CONFIRM')
+                ->where('d_purchase_confirm.pr_stsConf','WAITING')
                 ->where('d_purchase_confirm.pr_supplier',$supplier)
                 ->get();
 
@@ -1495,8 +1495,8 @@ class PembelianController extends Controller
                    
                    $row = array();
         
-                    $row[] = $hasil->s_company;
-                    $row[] = $hasil->s_name;
+                    $row[] = $hasil->i_nama;
+                    $row[] = $hasil->pr_qtyApp;
                     $row[] = $hasil->pr_price;
                     $data[] = $row;
                 }
@@ -1601,7 +1601,7 @@ class PembelianController extends Controller
             
             $query = DB::table('d_purchase_confirm')
             ->select('d_purchase_confirm.*')
-            ->where('d_purchase_confirm.pr_stsConf','CONFIRM')
+            ->where('d_purchase_confirm.pr_stsConf','WAITING')
             ->where('d_purchase_confirm.pr_supplier',$id)
             ->get();
 
@@ -1649,7 +1649,7 @@ class PembelianController extends Controller
                 }else{
                     $def = DB::table('d_purchase_confirm')
                     ->select('pr_idConf')
-                    ->where('pr_stsConf','=','CONFIRM')
+                    ->where('pr_stsConf','=','WAITING')
                     ->get();
 
                     foreach ($def as $key => $value) {

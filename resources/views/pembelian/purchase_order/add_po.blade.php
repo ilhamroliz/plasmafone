@@ -202,6 +202,51 @@ $(document).ready(function () {
 
 })
 
+function updateTotalTampil() {
+        var totalGross = 0;
+        var totalHarga = 0;
+
+        var inputs = document.getElementsByClassName( 'harga' ),
+            arharga  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+        var inputs = document.getElementsByClassName( 'qtyTable' ),
+            arqty  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+        var inputs = document.getElementsByClassName( 'totalItem' ),
+            artotalItem  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+
+        for (var i = 0; i < arharga.length; i++){
+            totalGross += (parseInt(arharga[i]) * parseInt(arqty[i]));
+        }
+
+        for (var i = 0; i < artotalItem.length; i++){
+            totalHarga += parseInt(artotalItem[i]);
+        }
+
+        $("#totalGross").val(totalGross);
+        $('.total-tampil').html(convertToRupiah(totalHarga));
+        $("#totalHarga").val(totalHarga);
+        
+    }
+
+	function convertToRupiah(angka) {
+        var rupiah = '';
+        var angkarev = angka.toString().split('').reverse().join('');
+        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+        var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
+        return hasil;
+
+    }
+
+    function convertToAngka(rupiah)
+    {
+        return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+    }
+
 function reload_data(){
       // table_registrasi.ajax.reload(null, false);
         table_registrasi= $('#table_addPo').DataTable({
@@ -253,7 +298,6 @@ function getOutlet_po()
 		type: "GET",
 		data: { 
 			'id' : $('#dt_supplier').val()
-
 		},
 		dataType: "JSON",
 		success: function(data)
