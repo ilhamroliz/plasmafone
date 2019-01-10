@@ -44,13 +44,15 @@ class PembelianController extends Controller
 
     public function rencanaMenunggu()
     {
+        $prive = Auth::user()->m_comp;
+        $user = Auth::user()->m_id;
 
-        $menunggu = DB::table('d_purchase_plan')
+        if($prive == "PF00000001"){
+            $menunggu = DB::table('d_purchase_plan')
             ->select(
                 'd_purchase_plan.pr_idPlan',
                 'd_purchase_plan.pr_idReq',
                 'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_supplier',
                 'd_purchase_plan.pr_qtyReq',
                 'd_purchase_plan.pr_qtyApp',
                 'd_purchase_plan.pr_stsPlan',
@@ -66,6 +68,29 @@ class PembelianController extends Controller
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
             ->get();
 
+        }else{
+            $menunggu = DB::table('d_purchase_plan')
+            ->select(
+                'd_purchase_plan.pr_idPlan',
+                'd_purchase_plan.pr_idReq',
+                'd_purchase_plan.pr_itemPlan',
+                'd_purchase_plan.pr_qtyReq',
+                'd_purchase_plan.pr_qtyApp',
+                'd_purchase_plan.pr_stsPlan',
+                'd_purchase_plan.pr_dateRequest',
+                'd_purchase_plan.pr_dateApp',
+                'd_purchase_plan.pr_comp',
+                'd_item.i_nama',
+                'm_company.c_name'
+            )
+            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
+            ->where('d_purchase_plan.pr_comp', $prive)
+            ->get();
+        }
+        
         return DataTables::of($menunggu)
 
             ->addColumn('aksi', function ($menunggu) {
@@ -81,12 +106,13 @@ class PembelianController extends Controller
 
     public function rencanaDisetujui()
     {
-        $setujui = DB::table('d_purchase_plan')
+        $prive = Auth::user()->m_comp;
+        if($prive == "PF00000001"){
+            $setujui = DB::table('d_purchase_plan')
             ->select(
                 'd_purchase_plan.pr_idPlan',
                 'd_purchase_plan.pr_idReq',
                 'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_supplier',
                 'd_purchase_plan.pr_qtyReq',
                 'd_purchase_plan.pr_qtyApp',
                 'd_purchase_plan.pr_stsPlan',
@@ -101,6 +127,29 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'DISETUJUI')
             ->get();
+        }else{
+            $setujui = DB::table('d_purchase_plan')
+            ->select(
+                'd_purchase_plan.pr_idPlan',
+                'd_purchase_plan.pr_idReq',
+                'd_purchase_plan.pr_itemPlan',
+                'd_purchase_plan.pr_qtyReq',
+                'd_purchase_plan.pr_qtyApp',
+                'd_purchase_plan.pr_stsPlan',
+                'd_purchase_plan.pr_dateRequest',
+                'd_purchase_plan.pr_dateApp',
+                'd_purchase_plan.pr_comp',
+                'd_item.i_nama',
+                'm_company.c_name'
+            )
+            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_plan.pr_stsPlan', 'DISETUJUI')
+            ->where('d_purchase_plan.pr_comp', $prive)
+            ->get();
+        }
+        
 
         return DataTables::of($setujui)
             ->addColumn('input', function ($setujui) {
@@ -108,25 +157,27 @@ class PembelianController extends Controller
                 return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTy"  style="text-transform: uppercase" /></div>';
 
             })
-            ->addColumn('aksi', function ($setujui) {
-                if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $setujui->pr_idPlan . '\', \'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
+            // ->addColumn('aksi', function ($setujui) {
+            //     if (Plasma::checkAkses(47, 'update') == false) {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            //     } else {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $setujui->pr_idPlan . '\', \'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     }
+            // })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
     }
 
     public function rencanaDitolak()
     {
+        $prive = Auth::user()->m_comp;
+
+        if($prive == "PF00000001"){
         $ditolak = DB::table('d_purchase_plan')
             ->select(
                 'd_purchase_plan.pr_idPlan',
                 'd_purchase_plan.pr_idReq',
                 'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_supplier',
                 'd_purchase_plan.pr_qtyReq',
                 'd_purchase_plan.pr_qtyApp',
                 'd_purchase_plan.pr_stsPlan',
@@ -141,6 +192,28 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'DITOLAK')
             ->get();
+        }else{
+            $ditolak = DB::table('d_purchase_plan')
+            ->select(
+                'd_purchase_plan.pr_idPlan',
+                'd_purchase_plan.pr_idReq',
+                'd_purchase_plan.pr_itemPlan',
+                'd_purchase_plan.pr_qtyReq',
+                'd_purchase_plan.pr_qtyApp',
+                'd_purchase_plan.pr_stsPlan',
+                'd_purchase_plan.pr_dateRequest',
+                'd_purchase_plan.pr_dateApp',
+                'd_purchase_plan.pr_comp',
+                'd_item.i_nama',
+                'm_company.c_name'
+            )
+            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_plan.pr_stsPlan', 'DITOLAK')
+            ->where('d_purchase_plan.pr_comp', $prive)
+            ->get();
+        }
 
         return DataTables::of($ditolak)
             ->addColumn('input', function ($ditolak) {
@@ -148,25 +221,27 @@ class PembelianController extends Controller
                 return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTy"  style="text-transform: uppercase" /></div>';
 
             })
-            ->addColumn('aksi', function ($ditolak) {
-                if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $ditolak->pr_idPlan . '\', \'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
+            // ->addColumn('aksi', function ($ditolak) {
+            //     if (Plasma::checkAkses(47, 'update') == false) {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            //     } else {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $ditolak->pr_idPlan . '\', \'' . $ditolak->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     }
+            // })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
     }
 
     public function rencanaSemua()
     {
+        $prive = Auth::user()->m_comp;
+
+        if($prive == "PF00000001"){
         $semua = DB::table('d_purchase_plan')
             ->select(
                 'd_purchase_plan.pr_idPlan',
                 'd_purchase_plan.pr_idReq',
                 'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_supplier',
                 'd_purchase_plan.pr_qtyReq',
                 'd_purchase_plan.pr_qtyApp',
                 'd_purchase_plan.pr_stsPlan',
@@ -180,6 +255,27 @@ class PembelianController extends Controller
             ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->get();
+        }else{
+            $semua = DB::table('d_purchase_plan')
+            ->select(
+                'd_purchase_plan.pr_idPlan',
+                'd_purchase_plan.pr_idReq',
+                'd_purchase_plan.pr_itemPlan',
+                'd_purchase_plan.pr_qtyReq',
+                'd_purchase_plan.pr_qtyApp',
+                'd_purchase_plan.pr_stsPlan',
+                'd_purchase_plan.pr_dateRequest',
+                'd_purchase_plan.pr_dateApp',
+                'd_purchase_plan.pr_comp',
+                'd_item.i_nama',
+                'm_company.c_name'
+            )
+            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_plan.pr_comp',$prive)
+            ->get();
+        }
 
         return DataTables::of($semua)
             ->addColumn('input', function ($semua) {
@@ -187,13 +283,13 @@ class PembelianController extends Controller
                 return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTy"  style="text-transform: uppercase" /></div>';
 
             })
-            ->addColumn('aksi', function ($semua) {
-                if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $semua->pr_idPlan . '\', \'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
+            // ->addColumn('aksi', function ($semua) {
+            //     if (Plasma::checkAkses(47, 'update') == false) {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            //     } else {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $semua->pr_idPlan . '\', \'' . $semua->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     }
+            // })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
 
@@ -229,7 +325,7 @@ class PembelianController extends Controller
                     for ($i=0; $i < count($query); $i++) {
                         $temp = [
                             
-                            'pr_idPlan' =>$query[$i]->pr_idPlan,
+                            // 'pr_idPlan' =>$query[$i]->pr_idPlan,
                             'pr_supplier' =>$pr_supplier,
                             'pr_item' =>$query[$i]->pr_itemPlan,
                             'pr_price' =>$query[$i]->pr_harga_satuan,
@@ -253,7 +349,8 @@ class PembelianController extends Controller
                         ->where('d_purchase_plan.pr_stsPlan','WAITING')
                         ->where('d_purchase_plan.pr_userId',$user)
                         ->update([
-                            'pr_stsPlan' => 'CONFIRM'
+                            'pr_stsPlan' => 'CONFIRM',
+                            'pr_codeConf'=> $numberPlan
                         ]);
                         if (!$reqOrder) {
                             $data = "GAGAL";
@@ -811,25 +908,38 @@ class PembelianController extends Controller
         ->where('d_purchase_plan_dd.pr_userId',$userCreate)
         ->delete();
 
+        $query2 = DB::table('d_purchase_confirm')
+        ->select('d_purchase_confirm.*')
+        ->get();
+
+        $baris = count($query2);
+
+        if($baris=="0"){
+            $no = "1";
+        }else{
+            $no = $baris+1;
+        }
+
         $query = DB::table('d_purchase_plan')
             ->select(
                 'd_purchase_plan.*',
                 'd_item.*',
-                'm_company.*'
+                'm_company.*',
+                DB::raw('sum(d_purchase_plan.pr_qtyReq) as TotalQty')
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
             ->join('m_company', 'd_purchase_plan.pr_comp', '=', 'm_company.c_id')
             ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
             ->where('d_purchase_plan.pr_userId',$userCreate)
+            ->groupBy('d_purchase_plan.pr_itemPlan')
             ->get();
 
             $addAkses = [];
                     for ($i=0; $i < count($query); $i++) {
                         $temp = [
-                            'pr_idPlan'=>$query[$i]->pr_idPlan,
+                            'pr_idPlan'=>$no++,
                             'pr_idReq'=>$query[$i]->pr_idReq,
                             'pr_itemPlan'=>$query[$i]->pr_itemPlan,
-                            'pr_supplier'=>$query[$i]->pr_supplier,
                             'pr_qtyReq'=>$query[$i]->pr_qtyReq,
                             'pr_qtyApp'=>$query[$i]->pr_qtyApp,
                             'pr_harga_satuan'=>"0",
@@ -866,7 +976,7 @@ class PembelianController extends Controller
                 $row[] = $i++;
                 $row[] = $key->c_name;
                 $row[] = $key->i_nama;
-                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
+                $row[] = '<div class="text-center"><input type="text" class="editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
                 $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
@@ -2425,6 +2535,7 @@ class PembelianController extends Controller
                 'pr_compReq' => $comp,
                 'pr_itemReq' => $item,
                 'pr_qtyReq' => $qty,
+                'pr_qtyApp' => $qty,
                 'pr_dateReq' => $dateReq,
                 'pr_stsReq' => $status,
                 'pr_userId' =>$user
@@ -2555,6 +2666,8 @@ class PembelianController extends Controller
     }
 
 
+   
+
     public function menunggu()
     {
         $comp = Auth::user()->m_comp;
@@ -2586,13 +2699,13 @@ class PembelianController extends Controller
 
             })
 
-            ->addColumn('aksi', function ($waiting) {
-                if (Plasma::checkAkses(49, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
+            // ->addColumn('aksi', function ($waiting) {
+            //     if (Plasma::checkAkses(49, 'update') == false) {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            //     } else {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     }
+            // })
             ->rawColumns(['pr_stsReq', 'aksi'])
             ->make(true);
     }
@@ -2730,6 +2843,7 @@ class PembelianController extends Controller
             'pr_compReq' => $comp,
             'pr_itemReq' => $dumy->pr_item,
             'pr_qtyReq' => $dumy->pr_qty,
+            'pr_qtyReq' => $dumy->pr_qtyApp,
             'pr_dateReq' => $dateReq,
             'pr_stsReq' => $status,
         );
