@@ -26,13 +26,20 @@ class ReceptionController extends Controller
     	return view('inventory.receipt_goods.supplier.index');
     }
 
+    public function view_bbm_dt()
+    {
+    	return view('inventory.receipt_goods.supplier.view_bbm_dt');
+    }
+
     public function load_bbm()
     {
         // menampilkan data master penerimaan barang
         $query = DB::table('d_bbm')
-                ->select('d_bbm.*','d_supplier.*','d_purchase.*')
+                ->select('d_bbm.*','d_supplier.*','d_purchase.*',DB::raw('(sum(d_bbm_dt.bm_qty)-sum(d_bbm_dt.bm_receiveQty)) as selisih'))
+                ->join('d_bbm_dt','d_bbm.bm_id','=','d_bbm_dt.bm_id')
                 ->join('d_supplier','d_bbm.bm_supplier','=','d_supplier.s_id')
                 ->join('d_purchase','d_bbm.bm_po','=','d_purchase.p_id')
+                ->groupBy('d_bbm.bm_po')
                 ->get();
 
         $data = array();
@@ -43,11 +50,8 @@ class ReceptionController extends Controller
            $row[]   = $key->bm_no;
            $row[]   = $key->p_nota;
            $row[]   = $key->s_company;
-           $row[]   = $key->bm_receiveDate;
-           $row[]   = $key->bm_createdUserID;
-           $row[]   = $key->p_nota;
-           $row[]   = $key->p_nota;
-           $row[]   = $key->p_nota;
+           $row[]   = $key->selisih;
+           $row[]   = '<div class="text-center"><button type="button" class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="page('. $key->bm_id .')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
            $data[]  = $row;
         }
 
