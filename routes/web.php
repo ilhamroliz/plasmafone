@@ -709,6 +709,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-tempo/detailpembayarantempo/{total}', 'PenjualanController@detailpembayaranTempo');
 	// =========================
 
+	// =====Return Penjualan=====
+	Route::get('return-penjualan', 'ReturnPenjualanController@index');
+	// =====End Return Penjualan=====
+
     //== Layanan Perbaikan
 	Route::get('layanan-perbaikan', 'PerbaikanController@index');
 
