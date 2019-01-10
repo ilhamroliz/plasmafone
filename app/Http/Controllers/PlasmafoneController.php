@@ -55,6 +55,14 @@ class PlasmafoneController extends Controller
         return $date;
     }
 
+    public static function getOutlet()
+    {
+        $outlet = DB::table('m_company')
+            ->where('c_id', '=', Auth::user()->m_comp)
+            ->first();
+        return $outlet->c_name;
+    }
+
     public static function checkAkses($a_id, $aksi)
     {
         $m_id = Auth::user()->m_id;
