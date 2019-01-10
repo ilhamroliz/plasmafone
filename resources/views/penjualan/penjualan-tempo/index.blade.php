@@ -283,6 +283,7 @@
             minLength: 1,
             select: function(event, data) {
                 $("#salesman").val(data.item.id);
+                $("#cari-member").focus();
             }
         });
 

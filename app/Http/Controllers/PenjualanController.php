@@ -347,8 +347,13 @@ class PenjualanController extends Controller
             $outlet_user = Auth::user()->m_comp;
             $member = Auth::user()->m_id;
 
-            // POS-REG/001/14/12/2018
-            $nota = GenerateCode::codePos('d_sales', 's_id', 3, 'POS-REG');
+            if ($data['jenis_pembayaran'] == "T") {
+                // POS-TEM/001/14/12/2018
+                $nota = GenerateCode::codePos('d_sales', 's_id', 3, 'POS-TEM');
+            } else {
+                // POS-REG/001/14/12/2018
+                $nota = GenerateCode::codePos('d_sales', 's_id', 3, 'POS-REG');
+            }
             
             $Htotal_disc_persen = 0;
             $Htotal_disc_value = 0;
