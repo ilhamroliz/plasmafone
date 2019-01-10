@@ -123,7 +123,6 @@
                                                 <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" >Qty</th>
                                                 <th data-hide="phone,tablet" width="15%">Status</th>
-                                                <th data-hide="phone,tablet" >Aksi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
@@ -271,8 +270,7 @@
                     {"data": "c_name"},
                     {"data": "i_nama"},
                     {"data": "pr_qtyReq"},
-                    {"data": "pr_stsReq"},
-                    {"data": "aksi"}
+                    {"data": "pr_stsReq"}
                 ],
                 "autoWidth" : true,
                 "language" : dataTableLanguage,

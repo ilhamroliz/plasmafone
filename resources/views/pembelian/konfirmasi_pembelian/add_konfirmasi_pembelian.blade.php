@@ -43,7 +43,7 @@
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
 
-			<li>Home</li><li>Pembelian</li><li>Rencana Pembelian</li>
+			<li>Home</li><li>Pembelian</li><li>Tambah Konfirmasi Pembelian</li>
 
 		</ol>
 		<!-- end breadcrumb -->
@@ -65,7 +65,7 @@
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Rencana Pembelian
+						 Tambah Konfirmasi Pembelian
 					</span>
                 </h1>
             </div>
@@ -179,7 +179,7 @@
                                                     <th data-hide="phone,tablet">Nama Outlet</th>
                                                     <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
                                                     <th data-hide="phone,tablet " class="text-center">Qty</th>
-													<th data-hide="phone,tablet " class="text-center">Qty</th>
+													<th data-hide="phone,tablet " class="text-center">Harga Satuan</th>
 													<!-- <th data-hide="phone,tablet" class="text-center">Harga</th>
 													<th data-hide="phone,tablet" >discount</th>
 													<th data-hide="phone,tablet" class="text-center">Subtotal</th> -->
@@ -424,6 +424,10 @@
                 });
 
 			reload_data();
+
+			$("input[type='text']").on("click", function () {
+				$(this).select();
+				});
             
         });
 
@@ -777,8 +781,17 @@
 		
 
 		function simpanConfirm(){
-			$.SmartMessageBox({
-					title : "Smart Alert!",
+			if($('#dt_supplier').val() == "00" ){
+				$.smallBox({
+					title : "Gagal",
+					content : 'Supplier Belum Di Pilih..!',
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-check bounce animated"
+					});
+			}else{
+				$.SmartMessageBox({
+					title : "Konfirmasi Pembelian",
 					content : "Apakah Anda Yakin Akan Mengajukan Confirm Order ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
@@ -850,6 +863,9 @@
 		
 				});
 				e.preventDefault();
+			}
+
+			
 			
 			
 			
@@ -903,9 +919,7 @@
 						dataType: "JSON",
 						success: function(data)
 						{
-							// $('#table-rencana').DataTable().ajax.reload();
-							reload_table();
-							
+							reload_table();	
 						},
 						
 				}); 

@@ -54,10 +54,10 @@
 	<div class="project-context hidden-xs">
 
 		<span class="label">
-			{{ App\Http\Controllers\PlasmafoneController::getHari() }}
+			{{ App\Http\Controllers\PlasmafoneController::getHari() }} {{ App\Http\Controllers\PlasmafoneController::getTanggal() }}
 		</span>
 		<span class="project-selector">
-			{{ App\Http\Controllers\PlasmafoneController::getTanggal() }} </span>
+			{{ App\Http\Controllers\PlasmafoneController::getOutlet() }} </span>
 
 		<!-- Suggestion: populate this list with fetch and push technique -->
 		{{-- <ul class="dropdown-menu">

@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/partials/_header.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_header.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +30,7 @@
           <entry key="project.open.time.31" value="1" />
           <entry key="project.open.time.32" value="3" />
           <entry key="project.open.time.34" value="1" />
-          <entry key="project.open.time.4" value="1" />
+          <entry key="project.open.time.4" value="2" />
           <entry key="project.open.time.48" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.51" value="1" />
@@ -41,7 +44,7 @@
           <entry key="project.open.time.66" value="1" />
           <entry key="project.open.time.69" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="32" />
+          <entry key="project.opened" value="33" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -49,17 +52,17 @@
           <entry key="css" value="4" />
           <entry key="env" value="1" />
           <entry key="js" value="12" />
-          <entry key="php" value="136" />
+          <entry key="php" value="146" />
           <entry key="ts" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key=".env file" value="1" />
-          <entry key="Blade" value="55" />
+          <entry key="Blade" value="58" />
           <entry key="CSS" value="4" />
           <entry key="JavaScript" value="12" />
-          <entry key="PHP" value="81" />
+          <entry key="PHP" value="88" />
           <entry key="TypeScript" value="1" />
         </counts>
       </usages-collector>
@@ -68,17 +71,17 @@
           <entry key="dummy" value="5" />
           <entry key="env" value="17" />
           <entry key="js" value="74" />
-          <entry key="php" value="9951" />
+          <entry key="php" value="10084" />
           <entry key="txt" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="17" />
-          <entry key="Blade" value="4822" />
+          <entry key="Blade" value="4834" />
           <entry key="HTML" value="2" />
           <entry key="JavaScript" value="74" />
-          <entry key="PHP" value="5127" />
+          <entry key="PHP" value="5248" />
           <entry key="PLAIN_TEXT" value="10" />
         </counts>
       </usages-collector>
@@ -99,17 +102,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="16416">
-              <caret line="684" selection-start-line="684" selection-end-line="684" />
+            <state relative-caret-position="189">
+              <caret line="693" column="81" selection-start-line="693" selection-start-column="81" selection-end-line="693" selection-end-column="81" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="189">
+              <caret line="57" column="36" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="36" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/partials/_navigation.blade.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/partials/_header.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="282" column="28" selection-start-line="282" selection-start-column="28" selection-end-line="282" selection-end-column="28" />
+            <state relative-caret-position="309">
+              <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
             </state>
           </provider>
         </entry>
@@ -118,8 +130,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pembelian/request-pembelian/cariItem?term=hand</find>
-      <find>pembelian/request-pembelian/cariItem</find>
       <find>cariItem</find>
       <find>auto</find>
       <find>onkeyup</find>
@@ -148,6 +158,8 @@
       <find>tambah(</find>
       <find>layanan</find>
       <find>master</find>
+      <find>AppServiceProvider</find>
+      <find>barry</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -164,16 +176,12 @@
         <option value="$PROJECT_DIR$/vendor/nesbot/carbon/src/Carbon/Carbon.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/master/outlet/outlet_controller.php" />
         <option value="$PROJECT_DIR$/config/database.php" />
-        <option value="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" />
-        <option value="$PROJECT_DIR$/config/app.php" />
         <option value="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php" />
         <option value="$PROJECT_DIR$/template_asset/js/plugin/jquery-maskMoney/jquery.maskMoney.js" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/set_harga/index.blade.php" />
         <option value="$PROJECT_DIR$/template_asset/js/plugin/mask-money/jquery.maskMoney.js" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/PenjualanController.php" />
         <option value="$PROJECT_DIR$/resources/views/main.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/partials/_header.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/master/barang/barang_controller.php" />
@@ -191,6 +199,10 @@
         <option value="$PROJECT_DIR$/resources/views/errors/407.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/perbaikan/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" />
+        <option value="$PROJECT_DIR$/config/app.php" />
+        <option value="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php" />
+        <option value="$PROJECT_DIR$/resources/views/partials/_header.blade.php" />
       </list>
     </option>
   </component>
@@ -327,6 +339,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -351,6 +364,11 @@
               <item name="app" type="462c0819:PsiDirectoryNode" />
               <item name="Http" type="462c0819:PsiDirectoryNode" />
               <item name="Controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="config" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
@@ -389,21 +407,25 @@
               <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="vendor" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="penjualan&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PenjualanController.php&#10;pembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PembelianController.php&#10;web&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/routes/web.php&#10;datepicker&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datapicker/bootstrap-datepicker.js&#10;scr&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;jquer&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datatables/jquery.dataTables.min.js&#10;jquery&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/libs/jquery-2.1.1.min.js&#10;rencanapembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/pembelian/rencana_pembelian&#10;login&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="plasma&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PlasmafoneController.php&#10;penga&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PengaturanController.php&#10;penjualan&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PenjualanController.php&#10;pembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PembelianController.php&#10;web&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/routes/web.php&#10;datepicker&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datapicker/bootstrap-datepicker.js&#10;scr&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;jquer&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/plugin/datatables/jquery.dataTables.min.js&#10;jquery&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/js/libs/jquery-2.1.1.min.js&#10;rencanapembelian&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/pembelian/rencana_pembelian&#10;login&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../perwita" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="MTConfigurable" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -466,6 +488,7 @@
       <workItem from="1546835634999" duration="5958000" />
       <workItem from="1546913664466" duration="6295000" />
       <workItem from="1547017097133" duration="55000" />
+      <workItem from="1547093117539" duration="1217000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1546933778174</created>
@@ -478,13 +501,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="113371000" />
+    <option name="totallyTimeSpent" value="114588000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23636363" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24015151" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -553,13 +576,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="251">
           <caret line="19" column="6" selection-start-line="19" selection-start-column="6" selection-end-line="19" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Providers/AppServiceProvider.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="39" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -662,20 +678,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/partials/_header.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="84" column="61" selection-start-line="84" selection-start-column="56" selection-end-line="84" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="60" column="40" lean-forward="true" selection-start-line="49" selection-start-column="8" selection-end-line="60" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/template_asset/js/plugin/datatables/jquery.dataTables.min.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -714,13 +716,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2880">
           <caret line="120" column="91" selection-start-line="120" selection-start-column="91" selection-end-line="120" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/partials/_head.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="21" column="121" selection-start-line="21" selection-start-column="121" selection-end-line="21" selection-end-column="121" />
         </state>
       </provider>
     </entry>
@@ -792,13 +787,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/app.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="226" column="15" selection-start-line="226" selection-start-column="9" selection-end-line="226" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/errors/access_denied.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1296" />
@@ -825,13 +813,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-432">
-          <caret line="57" column="37" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/pembelian/request_order/view_request_order.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -839,17 +820,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/partials/_navigation.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16416">
-          <caret line="684" selection-start-line="684" selection-end-line="684" />
+        <state relative-caret-position="70">
+          <caret line="274" lean-forward="true" selection-start-line="274" selection-end-line="274" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/partials/_navigation.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/partials/_head.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="282" column="28" selection-start-line="282" selection-start-column="28" selection-end-line="282" selection-end-column="28" />
+        <state relative-caret-position="441">
+          <caret line="21" column="121" selection-start-line="21" selection-start-column="121" selection-end-line="21" selection-end-column="121" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Providers/AppServiceProvider.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="19" column="41" lean-forward="true" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/app.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="445">
+          <caret line="169" column="33" lean-forward="true" selection-start-line="169" selection-start-column="33" selection-end-line="169" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="693" column="81" selection-start-line="693" selection-start-column="81" selection-end-line="693" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengaturanController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="429">
+          <caret line="60" column="40" lean-forward="true" selection-start-line="49" selection-start-column="8" selection-end-line="60" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="57" column="36" selection-start-line="57" selection-start-column="27" selection-end-line="57" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/partials/_header.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="60" lean-forward="true" selection-start-line="60" selection-end-line="60" />
         </state>
       </provider>
     </entry>
