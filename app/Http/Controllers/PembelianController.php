@@ -2375,30 +2375,27 @@ class PembelianController extends Controller
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'DUMY';
         $user = Auth::user()->m_id;
+            // $list = DB::table('d_purchase_req')
+            //     ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
+            //     ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            //     ->where('d_purchase_req.pr_compReq', $comp)
+            //     ->where('d_purchase_req.pr_stsReq', 'DUMY')
+            //     ->get();
+        if($comp == "PF00000001"){
+            $list = DB::table('d_purchase_req')
+                ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
+                ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+                ->where('d_purchase_req.pr_stsReq', 'DUMY')
+                ->get();
+        }else{
+            $user = Auth::user()->m_id;
             $list = DB::table('d_purchase_req')
                 ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
                 ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
                 ->where('d_purchase_req.pr_compReq', $comp)
                 ->where('d_purchase_req.pr_stsReq', 'DUMY')
                 ->get();
-        // if($comp == "PF00000001"){
-        //     $list = DB::table('d_purchase_req')
-        //         ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
-        //         ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-        //         ->where('d_purchase_req.pr_compReq', $comp)
-        //         ->where('d_purchase_req.pr_userId', $user)
-        //         ->where('d_purchase_req.pr_stsReq', 'DUMY')
-        //         ->get();
-        // }else{
-        //     $user = Auth::user()->m_id;
-        //     $list = DB::table('d_purchase_req')
-        //         ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
-        //         ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-        //         ->where('d_purchase_req.pr_compReq', $comp)
-        //         ->where('d_purchase_req.pr_userId', $user)
-        //         ->where('d_purchase_req.pr_stsReq', 'DUMY')
-        //         ->get();
-        // }
+        }
         
 
         $data = array(); 
