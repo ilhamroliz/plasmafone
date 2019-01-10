@@ -237,7 +237,8 @@ class PembelianController extends Controller
                             'pr_stsConf' =>$pr_stsPlan,
                             'pr_dateApp' =>$dateReq,
                             'pr_comp' => Auth::user()->m_comp,
-                            'pr_confirmNumber'=>$numberPlan
+                            'pr_confirmNumber'=>$numberPlan,
+                            'total'=>$query[$i]->pr_harga_satuan * $query[$i]->pr_qtyApp
                         ];  
                         array_push($addAkses, $temp);
                     }
@@ -794,7 +795,7 @@ class PembelianController extends Controller
                 $row[] = $key->c_name;
                 $row[] = $key->i_nama;
                 $row[] = $key->pr_qtyApp;
-                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.$key->pr_harga_satuan .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
+                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.number_format($key->pr_harga_satuan) .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
                 $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
@@ -865,7 +866,6 @@ class PembelianController extends Controller
                 $row[] = $i++;
                 $row[] = $key->c_name;
                 $row[] = $key->i_nama;
-
                 $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
                 $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
@@ -1491,14 +1491,17 @@ class PembelianController extends Controller
                 ->get();
 
                 $data = array();
+                $i = 1;
                 foreach ($list as $hasil) {
                    
                    $row = array();
-        
+                    $row[] = $i++;
                     $row[] = $hasil->i_nama;
-                    $row[] = $hasil->pr_qtyApp;
-                    $row[] = $hasil->pr_price;
+                    $row[] = '<div class="text-center">'.$hasil->pr_qtyApp.'</div>';
+                    $row[] = '<div class="text-right">'.number_format($hasil->pr_price).'</div>';
+                    $row[] = '<div class="text-right">'.number_format($hasil->total).'</div>';
                     $data[] = $row;
+                  
                 }
                 echo json_encode(array("data"=>$data));
     }
@@ -1508,6 +1511,7 @@ class PembelianController extends Controller
         // $id = '1';
         $id = $request->input('id');
         $due_date = $request->input('due_date');
+        $tanggal = date('Y-m-d', strtotime(str_replace('-', '/', $due_date)));
             $queryBaris = DB::table('d_purchase')
             ->select('d_purchase.*')
             ->get();
@@ -1525,7 +1529,7 @@ class PembelianController extends Controller
 
 
         $total =  DB::table('d_purchase_confirm')
-        ->select(DB::raw('sum(d_purchase_confirm.pr_price) as Total'))
+        ->select(DB::raw('sum(d_purchase_confirm.total) as Total'))
         ->get();
 
         foreach ($total as $key) {
@@ -1590,7 +1594,7 @@ class PembelianController extends Controller
                     'p_tgl'=>$tgl,
                     'p_bln'=>$bln,
                     'p_thn'=>$thn,
-                    'p_dueDate'=>$due_date
+                    'p_dueDate'=>$tanggal
                     ]);
 
         $insertOne = DB::table('d_purchase')->insert($list);
@@ -2375,7 +2379,6 @@ class PembelianController extends Controller
                 ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
                 ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
                 ->where('d_purchase_req.pr_compReq', $comp)
-                ->where('d_purchase_req.pr_userId', $user)
                 ->where('d_purchase_req.pr_stsReq', 'DUMY')
                 ->get();
         // if($comp == "PF00000001"){

@@ -179,7 +179,7 @@
                                                     <th data-hide="phone,tablet">Nama Outlet</th>
                                                     <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
                                                     <th data-hide="phone,tablet " class="text-center">Qty</th>
-													<th data-hide="phone,tablet " class="text-center">Qty</th>
+													<th data-hide="phone,tablet " class="text-center">Harga Satuan</th>
 													<!-- <th data-hide="phone,tablet" class="text-center">Harga</th>
 													<th data-hide="phone,tablet" >discount</th>
 													<th data-hide="phone,tablet" class="text-center">Subtotal</th> -->
@@ -778,7 +778,7 @@
 
 		function simpanConfirm(){
 			$.SmartMessageBox({
-					title : "Smart Alert!",
+					title : "Konfirmasi Pembelian",
 					content : "Apakah Anda Yakin Akan Mengajukan Confirm Order ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
@@ -903,9 +903,7 @@
 						dataType: "JSON",
 						success: function(data)
 						{
-							// $('#table-rencana').DataTable().ajax.reload();
-							reload_table();
-							
+							reload_table();	
 						},
 						
 				}); 

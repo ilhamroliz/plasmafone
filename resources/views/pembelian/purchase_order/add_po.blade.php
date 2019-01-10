@@ -129,9 +129,11 @@
                                         <table id="table_addPo" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="75%">Nama Barang</th>
+													<th data-hide="phone,tablet" width="1%">No</th>
+                                                    <th data-hide="phone,tablet" width="50%">Nama Barang</th>
                                                     <th data-hide="phone,tablet" width="10%">Qty</th>
-                                                    <th data-hide="phone,tablet" width="15%">Nominal</th>
+                                                    <th data-hide="phone,tablet" width="20%">Nominal</th>
+													<th data-hide="phone,tablet" width="20%">SubTotal</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -367,8 +369,8 @@ function editDumy(id){
 		}); 
 }
 
-function simpanPo(){
-	
+function simpanPo(){		
+			
 	$.ajax({
 		url : '{{url('/pembelian/purchase-order/simpanPo')}}',
 		type: "get",
