@@ -679,18 +679,28 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-reguler', 'PenjualanController@index');
 	Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
 	Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
+	Route::get('penjualan-reguler/cari-sales', 'PenjualanController@cariSales');
 	Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
 	Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
 	Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
 	Route::get('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
 	Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
-	Route::get('penjualan-reguler/struk/{sales}/{id}', 'PenjualanController@struck');
+	Route::get('penjualan-reguler/struk/{salesman}/{id}', 'PenjualanController@struck');
 	Route::get('penjualan-reguler/detailPembayaran/{total}', 'PenjualanController@detailpembayaran');
 	//==============
 	
 	// =====Penjualan Tempo=====
 	Route::get('penjualan-tempo', 'PenjualanController@tempo');
-	Route::get('pointofsalestempo/simpan', 'PenjualanController@savePenjualanTempo');
+	Route::get('penjualan-tempo/simpan-member', 'PenjualanController@saveMember');
+	Route::get('penjualan-tempo/cari-member', 'PenjualanController@cariMember');
+	Route::get('penjualan-tempo/cari-sales', 'PenjualanController@cariSales');
+	Route::get('penjualan-tempo/cari-stock', 'PenjualanController@cariStock');
+	Route::get('penjualan-tempo/simpan-penjualan', 'PenjualanController@save');
+	Route::get('penjualan-tempo/getdetailmember/{id}', 'PenjualanController@getDetailMember');
+	Route::get('penjualan-tempo/simpan', 'PenjualanController@savePenjualan');
+	Route::get('penjualan-tempo/search-stock', 'PenjualanController@searchStock');
+	Route::get('penjualan-tempo/struktempo/{salesman}/{id}', 'PenjualanController@struckTempo');
+	Route::get('penjualan-tempo/detailpembayarantempo/{total}', 'PenjualanController@detailpembayaranTempo');
 	// =========================
 
     //== Layanan Perbaikan

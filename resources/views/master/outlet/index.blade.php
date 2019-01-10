@@ -378,6 +378,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				aktif = $('#dt_active').dataTable({
 					"processing": true,
 					"serverSide": true,
+					"orderable": false,
 					"ajax": "{{ route('outlet.getdataactive') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -410,6 +411,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				semua = $('#dt_all').dataTable({
 					"processing": true,
 					"serverSide": true,
+					"orderable": false,
 					"ajax": "{{ route('outlet.getdataall') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -443,6 +445,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				inaktif = $('#dt_inactive').dataTable({
 					"processing": true,
 					"serverSide": true,
+					"orderable": false,
 					"ajax": "{{ route('outlet.getdatanonactive') }}",
 					"columns":[
 						{"data": "c_name"},
