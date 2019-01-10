@@ -2576,7 +2576,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_stsReq', 'WAITING')
             ->where('d_purchase_req.pr_compReq',$comp)
-            ->where('d_purchase_req.pr_userId',$id)
             ->get();
         }
 
@@ -2619,7 +2618,6 @@ class PembelianController extends Controller
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
             ->where('d_purchase_req.pr_stsReq', 'DIPROSES')
             ->where('d_purchase_req.pr_compReq',$comp)
-            ->where('d_purchase_req.pr_userId',$id)
             ->get();
         }
 
