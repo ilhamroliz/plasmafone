@@ -44,7 +44,7 @@ class outlet_controller extends Controller
 
     public function getdataactive()
     {
-        $outlet_active = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'Y');
+        $outlet_active = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'Y')->orderBy('created_at', 'desc');
 
         return DataTables::of($outlet_active)
 
@@ -69,7 +69,7 @@ class outlet_controller extends Controller
 
     public function getdataall()
     {
-        $outlet_all = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive');
+        $outlet_all = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->orderBy('created_at', 'desc');
 
         return DataTables::of($outlet_all)
 
@@ -124,7 +124,7 @@ class outlet_controller extends Controller
 
     public function getdatanonactive()
     {
-        $outlet_nonactive = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'N');
+        $outlet_nonactive = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'N')->orderBy('created_at', 'desc');
 
         return DataTables::of($outlet_nonactive)
 

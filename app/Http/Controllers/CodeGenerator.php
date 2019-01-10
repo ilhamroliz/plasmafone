@@ -37,17 +37,11 @@ class CodeGenerator
         $code = DB::table($table)->select($field);
         $countData = $code->max($field);
 
-        // if ($countData == 0) {
-        //     $nomor = 1;
-        // }else{
-        //     $getData = $code->get();
-        //     $row = array();
-        //     foreach ($getData as $value) {
-        //         $row = array($value->$field);
-        //     }
-        //     $nomor = intval(substr($row[0], strlen($awalan)))+1;
-            
-        // }
+        if ($countData == null || $countData == 0) {
+            $countData = 0;
+        } else if ($countData == 999) {
+            $countData = 0;
+        }
 
         $nomor = $countData+1;
 
