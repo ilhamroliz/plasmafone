@@ -195,6 +195,21 @@
 
 												</div>
 
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Jenis</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<select class="form-control" name="jenis">
+															<option value="INTERNAL">INTERNAL</option>
+															<option value="EKSTERNAL">EKSTERNAL</option>
+														</select>
+
+													</div>
+
+												</div>
+
 											</article>
 											
 										</div>

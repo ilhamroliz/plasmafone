@@ -4,80 +4,148 @@ namespace App\Http\Controllers\inventory;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CodeGenerator as GenerateCode;
+use Response;
+Use Auth;
 use DB;
 use Session;
 
 class DistribusiController extends Controller
 {
     // Distribusi barang
-    public function index_distribusi()
+    public function index()
     {
-        $purchase = DB::table('d_inventory')->where('i_status', '!=', '1')->get();
-        return view('inventory.distribusi.index')->with(compact('purchase'));
+        return view('inventory.distribusi.index');
     }
 
-    public function show_purchase($id = null)
+    public function cariOutlet(Request $request)
     {
-        $data = DB::table('d_inventory')
-                ->select('d_inventory.*', 'd_cabang.c_nama')
-                ->join('d_purchase_order', 'd_inventory.i_po', '=', 'd_purchase_order.po_no')
-                ->join('d_request_order_dt', 'd_purchase_order.po_request_order_no', '=', 'd_request_order_dt.rdt_no')
-                ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
-                ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
-                ->where(['d_inventory.i_po'=> $id])
-                ->where(['d_inventory.i_status'=>0])
+        $cari = $request->term;
+        $results = [];
+        $nama = DB::table('m_company')
+            ->where(function ($q) use ($cari){
+                $q->orWhere('c_name', 'like', '%'.$cari.'%');
+                $q->orWhere('c_id', 'like', '%'.$cari.'%');
+            })->get();
+
+        
+
+        if (count($nama) < 1) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nama as $query) {
+                $results[] = ['id' => $query->c_id, 'label' => $query->c_name . ' ('.$query->c_tlp.')', 'nama' => $query->c_name, 'telp' => $query->c_tlp, 'alamat' => $query->c_address];
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function cariStock(Request $request)
+    {
+        
+        $cari = $request->term;
+        $kode = [];
+        if (isset($request->kode)){
+            $kode = $request->kode;
+            if (($key = array_search(null, $kode)) !== false) {
+                unset($kode[$key]);
+            }
+            $temp = [];
+            foreach ($kode as $code){
+                array_push($temp, $code);
+            }
+            $kode = $temp;
+        }
+        if (count($kode) > 0){
+
+            $dataN = DB::table('d_stock')
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->join('d_stock_mutation', function ($q) use ($kode){
+                    $q->on('sm_stock', '=', 's_id');
+                    $q->where('sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('sm_sisa', '>', '0');
+                    $q->where('sm_reff', '!=', 'Rusak');
+                })
+                ->leftJoin('d_stock_dt', function ($a) use ($kode){
+                    $a->on('sd_stock', '=', 's_id');
+                })
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
+                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->where(function ($w) use ($cari){
+                    $w->orWhere('i_nama', 'like', '%'.$cari.'%');
+                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                })
+                ->where('i_specificcode', '=', 'N')
+                ->groupBy('sm_specificcode');
+
+            $dataY = DB::table('d_stock')
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->join('d_stock_mutation', function ($q) use ($kode){
+                    $q->on('sm_stock', '=', 's_id');
+                    $q->where('sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('sm_sisa', '>', '0');
+                    $q->where('sm_reff', '!=', 'Rusak');
+                    $q->whereNotIn('sm_specificcode', $kode);
+                })
+                ->leftJoin('d_stock_dt', function ($a) use ($kode){
+                    $a->on('sd_stock', '=', 's_id');
+                    $a->on('sm_specificcode', '=', 'sd_specificcode');
+                    $a->whereNotIn('sd_specificcode', $kode);
+                })
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
+                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->where(function ($w) use ($cari){
+                    $w->orWhere('i_nama', 'like', '%'.$cari.'%');
+                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                })
+                ->where('i_specificcode', '=', 'Y')
+                ->groupBy('sm_specificcode');
+
+            $data = $dataN->union($dataY)->get();
+        } else {
+            $data = DB::table('d_stock')
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->join('d_stock_mutation', function ($q){
+                    $q->on('sm_stock', '=', 's_id');
+                    $q->where('sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('sm_sisa', '>', '0');
+                    $q->where('sm_reff', '!=', 'Rusak');
+                })
+                ->leftJoin('d_stock_dt', function ($a) {
+                    $a->on('sd_stock', '=', 's_id');
+                    $a->on('sd_specificcode', '=', 'sm_specificcode');
+                })
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
+                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->where(function ($w) use ($cari){
+                    $w->orWhere('i_nama', 'like', '%'.$cari.'%');
+                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                })
+                ->groupBy('sm_specificcode')
                 ->get();
-
-        $AWAL = 'BPB';
-        $bulanRomawi = array("", "I","II","III", "IV", "V","VI","VII","VIII","IX","X", "XI","XII");
-        $noUrutAkhir = DB::table('d_distribusi')->max('d_no_urut');
-        if ($noUrutAkhir == null) {
-            $noUrutAkhir = 0;
-        }
-        $no = 1;
-        $no_bukti = "";
-        $no_urut = $noUrutAkhir + 1;
-        $tgl = sprintf("%01s", abs(date('d')));
-        if($noUrutAkhir) {
-            $no_bukti = sprintf("%03s", abs($noUrutAkhir + 1)). '/' . $AWAL .'/'. $tgl . '/' . $bulanRomawi[date('n')] .'/' . date('Y');
-        }
-        else {
-            $no_bukti = sprintf("%03s", $no). '/' . $AWAL .'/'. $tgl . '/' . $bulanRomawi[date('n')] .'/' . date('Y');
         }
 
-        if (count($data) == 0) {
-            # code...
-            $data = null;
+        $results = [];
+        if (count($data) < 1) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($data as $query) {
+                if($query->i_code == "") {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                } else {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_code. ' - ' . $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                }
+                
+            }
         }
-
-
-        $output = array($no_bukti, $data, $no_urut);
-        echo json_encode($output);
+        return Response::json($results);
     }
-
-    public function print(Request $request)
-    {
-        $data = $request->all();
-        // print_r($data); die;
-
-        DB::table('d_distribusi')->insert([
-            'd_no_urut' => $data['nourut'],
-            'd_no_bukti'=> $data['no_bukti'],
-            'd_po'      => $data['nomor_purchase'],
-            'd_tgl'     => date('Y-m-d')
-        ]);
-
-        DB::table('d_inventory')->where('i_po', $data['nomor_purchase'])->update(['i_status'=>1, 'i_tgl_keluar'=>date('Y-m-d')]);
-
-        $data_purchase = DB::table('d_inventory')
-                        ->where('i_po', $data['nomor_purchase'])
-                        ->get();
-        $no_bukti      = $data['no_bukti'];
-        $tujuan        = $data['tujuan'];
-        $no_purchase   = $data['nomor_purchase'];
-        $mengeluarkan  = $data['mengeluarkan'];
-        $mengetahui    = $data['mengetahui'];
-        return view('inventory.distribusi.print')->with(compact('data_purchase', 'no_bukti', 'tujuan', 'no_purchase', 'mengeluarkan', 'mengetahui'));
-    }
+    
     // End distribusi barang
 }

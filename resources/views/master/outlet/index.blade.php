@@ -289,24 +289,30 @@ use App\Http\Controllers\PlasmafoneController as Access;
 													</tr>
 
 													<tr class="info">
+														<td><strong>Jenis</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_jenis"></td>
+													</tr>
+
+													<tr class="success">
 														<td><strong>Alamat</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_address"></td>
 													</tr>
 
-													<tr class="success">
+													<tr class="danger">
 														<td><strong>Keterangan</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_note"></td>
 													</tr>
 
-													<tr class="danger">
+													<tr class="warning">
 														<td><strong>Status</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_isactive"></td>
 													</tr>
 
-													<tr class="warning">
+													<tr class="info">
 														<td><strong>Dibuat</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_created"></td>
@@ -379,6 +385,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"processing": true,
 					"serverSide": true,
 					"orderable": false,
+					"order": [],
 					"ajax": "{{ route('outlet.getdataactive') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -412,6 +419,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"processing": true,
 					"serverSide": true,
 					"orderable": false,
+					"order": [],
 					"ajax": "{{ route('outlet.getdataall') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -446,6 +454,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"processing": true,
 					"serverSide": true,
 					"orderable": false,
+					"order": [],
 					"ajax": "{{ route('outlet.getdatanonactive') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -600,6 +609,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					$('#dt_code').text(response.data.data.c_id);
 					$('#dt_name').text(response.data.data.c_name);
 					$('#dt_phone').text(response.data.data.c_tlp);
+					$('#dt_jenis').text(response.data.data.c_jenis);
 					$('#dt_address').text(response.data.data.c_address);
 					$('#dt_note').text(response.data.data.c_note);
 

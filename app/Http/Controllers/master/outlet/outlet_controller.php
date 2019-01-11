@@ -204,6 +204,7 @@ class outlet_controller extends Controller
                             $outlet->c_id = GenerateCode::code('m_company', 'c_id', 8, 'PF');
                             $outlet->c_name = strtoupper($data['name']);
                             $outlet->c_tlp = $data['telp'];
+                            $outlet->c_jenis = $data['jenis'];
                             $outlet->c_address = strtoupper($data['address']);
                             $outlet->c_note = $note;
 
@@ -297,6 +298,7 @@ class outlet_controller extends Controller
                             Outlet::where(['c_id' => $data['code']])->update([
                                 'c_name' => strtoupper($data['name']),
                                 'c_tlp' => strtoupper($data['telp']),
+                                'c_jenis' => strtoupper($data['jenis']),
                                 'c_address' => strtoupper($data['address']),
                                 'c_note' => $note,
                                 'c_isactive' => strtoupper($data['isactive'])
