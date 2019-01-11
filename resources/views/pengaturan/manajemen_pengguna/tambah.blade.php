@@ -175,7 +175,7 @@
                                                 <div class="form-group">
                                                     <label class="col-xs-4 col-lg-4 control-label text-left">Alamat User</label>
                                                     <div class="col-xs-8 col-lg-8 textarea">
-                                                        <textarea name="alamat" id="alamat" class="custom-scroll" rows="3" style="width: 100%" required></textarea>
+                                                        <textarea name="alamat" id="alamat" class="custom-scroll form-control" rows="3" style="width: 100%" required></textarea>
                                                     </div>                                                
                                                 </div>
 

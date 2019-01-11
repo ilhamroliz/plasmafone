@@ -50,6 +50,7 @@
                             <!-- widget content -->
                             <div class="widget-body">
                                 <form class="form-horizontal" id="form-distribusi">
+									{{ csrf_field()}}
                                     <fieldset>
 
                                         <div class="row">
@@ -116,7 +117,8 @@
                                                 <div class="col-md-8">
                                                     <div class="input-icon-left">
                                                         <i class="fa fa-barcode"></i>
-                                                        <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+														<input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+														<input type="hidden" id="stockid" name="stockid">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -186,7 +188,10 @@
     var searchGlobal = null;
 
     $(document).ready(function(){
-        $('.togel').click();
+		if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		}
+
         $("#cari-outlet").focus();
 
         $( "#cari-outlet" ).autocomplete({
@@ -203,14 +208,18 @@
             minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
+				$("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
 
-        
-
         function getDetailOutlet(data)
         {
-            $("#detail_mem").hide("slow");
+            $("#detail_outlet").hide("slow");
             $("#search_barang").hide("slow");
             $("#cari-stock").val("");
             $("#qty").val("");
@@ -219,13 +228,12 @@
 			$("#alamat").text(data.alamat);
 			$("#detail_outlet").show("slow");
 			$("#search_barang").show("slow");
-			$("#cari-stock").focus();
+			// $("#cari-stock").focus();
         }
     })
 
     function setStock(info){
         var data = info.data;
-        var price = 0;
         if (data.i_code == "") {
             namaGlobal = data.i_nama;
         } else {
@@ -235,15 +243,6 @@
         stockGlobal = data.s_qty;
 
         iCode = data.i_code;
-
-        if(data.gp_price != null) {
-            price = data.gp_price;
-        } else if (data.gp_price != null) {
-            price = data.gp_price;
-        } else {
-            price = data.i_price;
-        }
-        hargaGlobal = parseInt(price);
         idGlobal = data.s_id;
         idItem = data.i_id;
         kodespesifikGlobal = data.sd_specificcode;
@@ -254,7 +253,6 @@
 
     function cekIsiArrayItem(data){
         var hitung = arrCode.length;
-        var kirim;
         for (var i = 0; i <= hitung; i++) {
             if (arrCode[i] == data) {
                return 'sudah';
@@ -283,7 +281,7 @@
 
     $('#form-distribusi').on('submit', function (event) {
         return false;
-    })
+    });
 
     $("#cari-stock").on('keyup',function(e) {
         if(e.which === 13) {
@@ -302,32 +300,36 @@
     });
 
     function searchStock() {
-        axios.get(baseUrl + '/distribusi-barang/search-stock', {
-            params: {
-                term : $('#cari-stock').val(),
-                _token : $('meta[name="csrf-token"]').attr('content')
-            }
-        })
-        .then(function (response) {
-            if (response.data.message == "Tidak ditemukan") {
-                $.smallBox({
-                    title : "Gagal",
-                    content : "Upsss. Barang tidak ditemukan",
-                    color : "#A90329",
-                    timeout: 5000,
-                    icon : "fa fa-times bounce animated"
-                });
-            } else {
-                setStock(response.data[0]);
-                tambah();
-            }
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-        .then(function () {
-            // always executed
-        });
+		if ($('#cari-stock').val() != "") {
+			axios.get(baseUrl + '/distribusi-barang/search-stock', {
+				params: {
+					term : $('#cari-stock').val(),
+					_token : $('meta[name="csrf-token"]').attr('content')
+				}
+			})
+			.then(function (response) {
+				if (response.data.message == "Tidak ditemukan") {
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Barang tidak ditemukan",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+				} else {
+					setStock(response.data[0]);
+					$("#stockid").val(response.data[0].data.id);
+					tambah();
+				}
+			})
+			.catch(function (error) {
+				console.log(error);
+			})
+			.then(function () {
+				// always executed
+			});
+		}
+        
     }
 
     function getData(data) {
@@ -413,8 +415,20 @@
             minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+				$("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
+		$("#stockid").val("");
+		if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		} else {
+			$("#tambahketable").attr('disabled', false);
+		}
     }
 
     function ubahQty(stock, inputQty) {
@@ -436,66 +450,104 @@
     }
 
     function simpan() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: baseUrl + '/penjualan-reguler/simpan',
-            type: 'get',
-            data: $('#form-distribusi').serialize(),
-            success: function(response){
-                if (response == "false") {
-                    $.smallBox({
-                        title : "Gagal",
-                        content : "Upsss. Terjadi kesalahan",
-                        color : "#A90329",
-                        timeout: 5000,
-                        icon : "fa fa-times bounce animated"
-                    });
-                    $('#DetailPembayaran').modal('hide');
-                    
-                } else {
-                    $.smallBox({
-                        title : "Berhasil",
-                        content : 'Transaksi Anda berhasil...!',
-                        color : "#739E73",
-                        timeout: 5000,
-                        icon : "fa fa-check bounce animated"
-                    });
-                    $(".tr").remove();
-                    $("#cari-salesman").val("");
-                    $("#cari-member").val("");
-                    $("#idMember").val("");
-                    $("#detail_mem").hide("slow");
-                    $("#search_barang").hide("slow");
-                    $("#cari-salesman").focus();
-                    updateTotalTampil();
-                    cetak(response.salesman, response.idSales);
-                    $('#DetailPembayaran').modal('hide');
-                    
-                }
-            }, error:function(x, e) {
-                if (x.status == 0) {
-                    alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-                } else if (x.status == 404) {
-                    alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-                } else if (x.status == 500) {
-                    alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-                } else if (e == 'parsererror') {
-                    alert('Error.\nParsing JSON Request failed.');
-                } else if (e == 'timeout'){
-                    alert('Request Time out. Harap coba lagi nanti');
-                } else {
-                    alert('Unknow Error.\n' + x.responseText);
-                }
-            }
-        })
+		$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan menyimpan data ini?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menghapus...');
+
+					$.ajaxSetup({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						}
+					});
+					$.ajax({
+						url: baseUrl + '/distribusi-barang/simpan',
+						type: 'post',
+						data: $('#form-distribusi').serialize(),
+						success: function(response){
+							if (response == "lengkapi data") {
+								$.smallBox({
+									title : "Peringatan!",
+									content : "Lengkapi data distribusi barang",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+								$('#overlay').fadeOut(200);
+							} else if (response == "false") {
+								$.smallBox({
+									title : "Gagal",
+									content : "Upsss. Terjadi kesalahan",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+								$('#overlay').fadeOut(200);
+								
+							} else {
+								$.smallBox({
+									title : "Berhasil",
+									content : 'Transaksi Anda berhasil...!',
+									color : "#739E73",
+									timeout: 5000,
+									icon : "fa fa-check bounce animated"
+								});
+								$(".tr").remove();
+								$("#detail_mem").hide("slow");
+								$("#search_barang").hide("slow");
+								$("#detail_outlet").hide("slow");
+            					$("#search_barang").hide("slow");
+								$("#cari-outlet").val("");
+								$("#cari-outlet").focus();
+								$('#overlay').fadeOut(200);
+
+								cetak(response.id);
+								
+							}
+						}, error:function(x, e) {
+							if (x.status == 0) {
+								alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+								$('#overlay').fadeOut(200);
+							} else if (x.status == 404) {
+								alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+								$('#overlay').fadeOut(200);
+							} else if (x.status == 500) {
+								alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+								$('#overlay').fadeOut(200);
+							} else if (e == 'parsererror') {
+								alert('Error.\nParsing JSON Request failed.');
+								$('#overlay').fadeOut(200);
+							} else if (e == 'timeout'){
+								alert('Request Time out. Harap coba lagi nanti');
+								$('#overlay').fadeOut(200);
+							} else {
+								alert('Unknow Error.\n' + x.responseText);
+								$('#overlay').fadeOut(200);
+							}
+						}
+					})
+
+				}
+	
+			});
+        
     }
 
-    function cetak(salesman, idSales){
-        window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales, '', "width=800,height=600");
+	function updateTotalTampil() {
+        var inputs = document.getElementsByClassName( 'qtyTable' ),
+            arqty  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+        
+    }
+
+    function cetak(id){
+        window.open(baseUrl + '/distribusi-barang/struk/'+id, '', "width=800,height=600");
     }
 
     function convertToRupiah(angka) {

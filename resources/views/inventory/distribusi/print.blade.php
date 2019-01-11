@@ -30,6 +30,7 @@
 	.table-bukti td {
 		padding: 15px;
     	text-align: left;
+		font-size: 14px;
 	}
 
 	table.table-barang {
@@ -38,6 +39,7 @@
 		border: 1px solid !important;
 		width: 100%;
 		border-width: 1px;
+		font-size: 12px;
 	}
 
 	table.table-barang th {
@@ -47,6 +49,7 @@
     	border-style: solid;
     	border-color: black;
     	background-color: #dedede;
+		font-size: 12px;
 	}
 
 	table.table-barang td {
@@ -55,6 +58,7 @@
     	border-width: 1px;
     	border-style: solid;
     	border-color: black;
+		font-size: 12px;
 	}
 </style>
 
@@ -91,40 +95,40 @@
 	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 </head>
 <body>
-	<img src="{{ asset('template_asset/img/hsj.png') }}" width="100%">
-	<h2 style="margin-top: 20px;"><strong><center>BUKTI PENGELUARAN BARANG</center></strong></h2>
+	{{-- <img src="{{ asset('template_asset/img/hsj.png') }}" width="100%"> --}}
+	<h2 style="margin-top: 20px; font-size: 16px;"><strong><center>BUKTI PENGELUARAN BARANG</center></strong></h2>
+	<h3 style="margin-top: 20px; font-size: 14px;"><strong><center>{{ strtoupper($from->c_name) }}</center></strong></h3>
+	<h5 style="margin-top: 20px; font-size: 14px;"><strong><center>{{ strtoupper($from->c_address) }}</center></strong></h5>
 	<table class="table-bukti" style="margin-top: 40px;">
 		<tr>
-			<td>No. Bukti</td>
+			<td>Nota</td>
 			<td class="text-center">:</td>
-			<td><strong>{{ $no_bukti }}</strong></td>
+			<td><strong>{{ $datas[0]->nota }}</strong></td>
 			<td>Tanggal</td>
 			<td class="text-center">:</td>
-			<td><strong><?php echo tgl_indo(date('Y-m-d')); ?></strong></td>
+			<td><strong>{{ $datas[0]->tanggal }}</strong></td>
 		</tr>
 		<tr>
-			<td>Ditujukan Untuk</td>
+			<td>Dari</td>
 			<td class="text-center">:</td>
-			<td><strong>{{ $tujuan }}</strong></td>
-			<td>PO. Nomor</td>
+			<td><strong>{{ $from->c_name }}</strong></td>
+			<td>Tujuan</td>
 			<td class="text-center">:</td>
-			<td><strong>{{ $no_purchase }}</strong></td>
+			<td><strong>{{ $datas[0]->tujuan }}</strong></td>
 		</tr>
 	</table>
 	<table class="table-barang" style="margin-top: 10px;">
 		<thead>
 			<tr>
-				<th class="text-center">KODE BARANG</th>
 				<th class="text-center">NAMA BARANG</th>
 				<th class="text-center">QTY</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($data_purchase as $purchase)
+			@foreach($datas as $data)
 			<tr>
-				<td>{{ $purchase->i_kode_barang }}</td>
-				<td>{{ $purchase->i_nama_barang }}</td>
-				<td><center>{{ $purchase->i_qty }}</center></td>
+				<td>{{ $data->nama_barang }}</td>
+				<td><center>{{ $data->qty }}</center></td>
 			</tr>
 			@endforeach
 		</tbody>
@@ -132,11 +136,9 @@
 	<table style="width: 100%; margin-top: 30px;">
 		<tr>
 			<td class="text-center">Yang Mengeluarkan,</td>
-			<td class="text-center">Mengetahui,</td>
 		</tr>
 		<tr>
-			<td style="padding-top: 100px; padding-left: 10%; padding-right: 10%;"><strong>{{ $mengeluarkan }}</strong></td>
-			<td style="padding-top: 100px; padding-right: 10%; padding-left: 10%;"><strong>{{ $mengetahui }}</strong></td>
+			<td style="padding-top: 100px; padding-left: 10%; padding-right: 10%;"><strong>{{ $datas[0]->petugas }}</strong></td>
 		</tr>
 	</table>
 

@@ -28,7 +28,16 @@ class pembuatanRencanaPenjualanController extends Controller
     public function auto_comp(Request $request)
     {
         $cari = $request->term;
-        $comp = DB::select("select c_id, c_name from m_company where c_name like '%" . $cari . "%'");
+        $company = Auth::user()->m_comp;
+        if ($company != "PF00000001") {
+            $comp = DB::table('m_company')
+                ->select('c_id', 'c_name')
+                ->whereRaw('c_name like "%' . $cari . '%"')
+                ->where('c_id', $company)
+                ->get();
+        } else {
+            $comp = DB::select("select c_id, c_name from m_company where c_name like '%" . $cari . "%'");
+        }
 
         if ($comp == null) {
             $hasilcomp[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
@@ -45,11 +54,20 @@ class pembuatanRencanaPenjualanController extends Controller
 
     public function get_data_approved()
     {
-
-        $appr = DB::table('d_sales_plan')
-            ->join('m_company', 'c_id', '=', 'sp_comp')
-            ->leftjoin('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
-            ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct();
+        $company = Auth::user()->m_comp;
+        $appr = '';
+        if ($company != "PF00000001") {
+            $appr = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->leftjoin('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')
+                ->where('sp_comp', $company)->distinct();
+        } else {
+            $appr = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->leftjoin('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct();
+        }
 
         return DataTables::of($appr)
             ->addColumn('aksi', function ($appr) {
@@ -72,11 +90,22 @@ class pembuatanRencanaPenjualanController extends Controller
 
     public function get_data_pending()
     {
-        $pend = DB::table('d_sales_plan')
-            ->join('m_company', 'c_id', '=', 'sp_comp')
-            ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-            ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct()
-            ->whereRaw('sp_id = spdd_sales_plan');
+        $company = Auth::user()->m_comp;
+        $appr = '';
+        if ($company != "PF00000001") {
+            $pend = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct()
+                ->whereRaw('sp_id = spdd_sales_plan')
+                ->where('sp_comp', $company);
+        } else {
+            $pend = DB::table('d_sales_plan')
+                ->join('m_company', 'c_id', '=', 'sp_comp')
+                ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct()
+                ->whereRaw('sp_id = spdd_sales_plan');
+        }
 
         return DataTables::of($pend)
             ->addColumn('aksi', function ($pend) {
@@ -100,29 +129,6 @@ class pembuatanRencanaPenjualanController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
-    }
-
-    public function getDataId()
-    {
-        $date = explode(' ', Carbon::now('Asia/Jakarta'));
-        $tgl = explode('-', $date[0]);
-
-        $cekNota = '/' . $tgl[1] . '/' . $tgl[0];
-
-        $cek = DB::table('d_sales_plan')
-            ->select(DB::raw('select CAST(MID(sp_nota, 4, 3) AS UNSIGNED)'))
-            ->whereRaw('sp_nota like "%' . $cekNota . '%"')->count();
-
-        if ($cek == 0) {
-            $temp = 1;
-        } else {
-            $temp = ($cek + 1);
-        }
-
-        $kode = sprintf("%03s", $temp);
-
-        $tempKode = 'SP-' . $kode . $cekNota;
-        return $tempKode;
     }
 
     public function detail($id)
@@ -167,26 +173,35 @@ class pembuatanRencanaPenjualanController extends Controller
             $pisah = explode('/', $request->y);
             $month = $pisah[1] . '-' . $pisah[0];
         }
+        $company = Auth::user()->m_comp;
         $data = '';
         $aksi = '';
         // dd($month);
         if ($request->x == 'a') {
-            if ($idComp == '' && $month != '') {
+            if ($company != "PF00000001") {
                 $data = DB::table('d_sales_plan')
                     ->join('m_company', 'c_id', '=', 'sp_comp')
                     ->whereRaw('sp_date like "%' . $month . '%"')
+                    ->where('sp_comp', $company)
                     ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
-            } elseif ($idComp != '' && $month == '') {
-                $data = DB::table('d_sales_plan')
-                    ->join('m_company', 'c_id', '=', 'sp_comp')
-                    ->where('sp_comp', $idComp)
-                    ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
-            } elseif ($idComp != '' && $month != '') {
-                $data = DB::table('d_sales_plan')
-                    ->join('m_company', 'c_id', '=', 'sp_comp')
-                    ->whereRaw('sp_date like "%' . $month . '%"')
-                    ->where('sp_comp', $idComp)
-                    ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+            } else {
+                if ($idComp == '' && $month != '') {
+                    $data = DB::table('d_sales_plan')
+                        ->join('m_company', 'c_id', '=', 'sp_comp')
+                        ->whereRaw('sp_date like "%' . $month . '%"')
+                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+                } elseif ($idComp != '' && $month == '') {
+                    $data = DB::table('d_sales_plan')
+                        ->join('m_company', 'c_id', '=', 'sp_comp')
+                        ->where('sp_comp', $idComp)
+                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+                } elseif ($idComp != '' && $month != '') {
+                    $data = DB::table('d_sales_plan')
+                        ->join('m_company', 'c_id', '=', 'sp_comp')
+                        ->whereRaw('sp_date like "%' . $month . '%"')
+                        ->where('sp_comp', $idComp)
+                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+                }
             }
 
             return DataTables::of($data)
@@ -208,25 +223,34 @@ class pembuatanRencanaPenjualanController extends Controller
                 ->make(true);
 
         } else {
-            if ($idComp == '' && $month != '') {
+            if ($company != "PF00000001") {
                 $data = DB::table('d_sales_plan')
                     ->join('m_company', 'c_id', '=', 'sp_comp')
                     ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
                     ->whereRaw('sp_date like "%' . $month . '%"')
+                    ->where('sp_comp', $company)
                     ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
-            } elseif ($idComp != '' && $month == '') {
-                $data = DB::table('d_sales_plan')
-                    ->join('m_company', 'c_id', '=', 'sp_comp')
-                    ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-                    ->where('sp_comp', $idComp)
-                    ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
-            } elseif ($idComp != '' && $month != '') {
-                $data = DB::table('d_sales_plan')
-                    ->join('m_company', 'c_id', '=', 'sp_comp')
-                    ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-                    ->whereRaw('sp_date like "%' . $month . '%"')
-                    ->where('sp_comp', $idComp)
-                    ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+            } else {
+                if ($idComp == '' && $month != '') {
+                    $data = DB::table('d_sales_plan')
+                        ->join('m_company', 'c_id', '=', 'sp_comp')
+                        ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
+                        ->whereRaw('sp_date like "%' . $month . '%"')
+                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+                } elseif ($idComp != '' && $month == '') {
+                    $data = DB::table('d_sales_plan')
+                        ->join('m_company', 'c_id', '=', 'sp_comp')
+                        ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
+                        ->where('sp_comp', $idComp)
+                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+                } elseif ($idComp != '' && $month != '') {
+                    $data = DB::table('d_sales_plan')
+                        ->join('m_company', 'c_id', '=', 'sp_comp')
+                        ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
+                        ->whereRaw('sp_date like "%' . $month . '%"')
+                        ->where('sp_comp', $idComp)
+                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+                }
             }
 
             return DataTables::of($data)
@@ -259,6 +283,30 @@ class pembuatanRencanaPenjualanController extends Controller
 
     }
 
+    public function getDataId($date)
+    {
+        // $date = explode(' ', Carbon::now('Asia/Jakarta'));
+        // $tgl = explode('-', $date[0]);
+
+        $cekNota = $date;
+
+        $cek = DB::table('d_sales_plan')
+            ->select(DB::raw('select CAST(MID(sp_nota, 4, 3) AS UNSIGNED)'))
+            ->whereRaw('sp_nota like "%' . $cekNota . '%"')->count();
+
+        if ($cek == 0) {
+            $temp = 1;
+        } else {
+            $temp = ($cek + 1);
+        }
+
+        $kode = sprintf("%03s", $temp);
+
+        $tempKode = 'SP-' . $kode . '/' . $cekNota;
+        return $tempKode;
+    }
+
+
     function tambah(Request $request)
     {
         if (PlasmafoneController::checkAkses(26, 'insert') == false) {
@@ -268,16 +316,20 @@ class pembuatanRencanaPenjualanController extends Controller
 
                 DB::beginTransaction();
                 try {
-
+                    // dd($request);
+                    $bulan = $request->bulanRencana;
                     $idItem = $request->idItem;
                     $qty = $request->qtyItem;
 
                     $sp_comp = $request->trpCompId;
-                    $sp_nota = $this->getDataId();
+                    $sp_nota = $this->getDataId($bulan);
+                    dd($sp_nota);
                     $sp_insert = Carbon::now('Asia/Jakarta');
                     $date = explode(' ', $sp_insert);
                     $sp_date = $date[0];
-                    $cek = DB::table('d_sales_plan')->where('sp_comp', $sp_comp)->whereRaw('RIGHT(sp_nota, 7) like "%' . substr($sp_nota, 7) . '%"')->count();
+
+                    //// CEK Eksistensi Data dengan Nota Serupa
+                    $cek = DB::table('d_sales_plan')->where('sp_comp', $sp_comp)->whereRaw('RIGHT(sp_nota, 7) like "%' . $bulan . '%"')->count();
                     if ($cek > 0) {
                         return json_encode([
                             'status' => 'ada',

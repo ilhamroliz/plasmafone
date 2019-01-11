@@ -134,7 +134,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Distribusi Barang'] == 'Y')
-					<li>
+					<li class="{{ (Request::is('distribusi-barang')) ? 'active' : '' }}">
 						<a href="{{ url('/distribusi-barang') }}">Distribusi Barang</a>
 					</li>
 					@endif
@@ -144,13 +144,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						<a href="#">Opname Barang</a>
 						<ul>
 							@if($sidebar['Opname Barang'] == 'Y')
-							<li>
-								<a href="#">Pusat</a>
+							<li class="{{ (Request::is('inventory/opname-barang/pusat')) ? 'active' : '' }}">
+								<a href="{{ url('/inventory/opname-barang/pusat') }}">Pusat</a>
 							</li>
 							@endif
 							@if($sidebar['Opname Barang Outlet'] == 'Y')
-							<li>
-								<a href="#">Outlet</a>
+							<li class="{{ (Request::is('inventory/opname-barang/outlet')) ? 'active' : '' }}">
+								<a href="{{ url('/inventory/opname-barang/outlet') }}">Outlet</a>
 							</li>
 							@endif
 						</ul>
@@ -368,14 +368,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				</a>
 				<ul>
 					@if($sidebar['Pengelolaan Pengguna'] == 'Y')
-					<li <?php if(preg_match("/akses-pengguna/i", $url)) { ?> class="active" <?php } ?>>
+					<li class="{{ (Request::is('pengaturan/akses-pengguna/*') || Request::is('pengaturan/kelola-pengguna/*') || Request::is('pengaturan/akses-pengguna')) ? 'active' : '' }}">
 						<a href="{{ url('/pengaturan/akses-pengguna') }}">Pengelolaan Pengguna</a>
-						
 					</li>
 					@endif
 
 					@if($sidebar['Log Kegiatan Pengguna'] == 'Y')
-					<li <?php if(preg_match("/log-kegiatan/i", $url)) { ?> class="active" <?php } ?>>
+					<li class="{{ (Request::is('pengaturan/log-kegiatan/*') || Request::is('pengaturan/log-kegiatan')) ? 'active' : '' }}">
 						<a href="{{ url('/pengaturan/log-kegiatan') }}">Log Kegiatan Pengguna</a>
 					</li>
 					@endif

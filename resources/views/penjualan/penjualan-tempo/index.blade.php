@@ -138,6 +138,7 @@
                                                     <div class="input-icon-left">
                                                         <i class="fa fa-barcode"></i>
                                                         <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+                                                        <input type="hidden" id="stockid" name="stockid">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -276,6 +277,9 @@
 
     $(document).ready(function(){
         $('.togel').click();
+        if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		}
         $("#cari-salesman").focus();
         
         $( "#cari-salesman" ).autocomplete({
@@ -301,10 +305,14 @@
             minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
+                $("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
-
-        
 
         function getDetailMember(id)
         {
@@ -504,6 +512,7 @@
                 });
             } else {
                 setStock(response.data[0]);
+                $("#stockid").val(response.data[0].data.id);
                 tambah();
             }
         })
@@ -720,8 +729,20 @@
             minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+                $("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
+        $("#stockid").val("");
+		if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		} else {
+			$("#tambahketable").attr('disabled', false);
+		}
         updateTotalTampil();
     }
 
@@ -861,30 +882,41 @@
     function detailPembayaran(){
         var total = $('#totalHarga').val();
         total = convertToAngka(total);
-        $.ajax({
-            url: baseUrl + '/penjualan-tempo/detailpembayarantempo/'+total,
-            timeout: 5000,
-            type: 'get',
-            success: function(response){
-                $('.kontenpembayaran').empty();
-                $('.kontenpembayaran').append(response);
-                $('#DetailPembayaran').modal('show');
-            }, error:function(x, e) {
-                if (x.status == 0) {
-                    alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-                } else if (x.status == 404) {
-                    alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-                } else if (x.status == 500) {
-                    alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-                } else if (e == 'parsererror') {
-                    alert('Error.\nParsing JSON Request failed.');
-                } else if (e == 'timeout'){
-                    alert('Request Time out. Harap coba lagi nanti');
-                } else {
-                    alert('Unknow Error.\n' + x.responseText);
+        if (isNaN(total)) {
+            $.smallBox({
+                title : "Peringatan!",
+                content : "Lengkapi data penjualan regular",
+                color : "#A90329",
+                timeout: 5000,
+                icon : "fa fa-times bounce animated"
+            });
+        } else {
+            $.ajax({
+                url: baseUrl + '/penjualan-tempo/detailpembayarantempo/'+total,
+                timeout: 5000,
+                type: 'get',
+                success: function(response){
+                    $('.kontenpembayaran').empty();
+                    $('.kontenpembayaran').append(response);
+                    $('#DetailPembayaran').modal('show');
+                }, error:function(x, e) {
+                    if (x.status == 0) {
+                        alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                    } else if (x.status == 404) {
+                        alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                    } else if (x.status == 500) {
+                        alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                    } else if (e == 'parsererror') {
+                        alert('Error.\nParsing JSON Request failed.');
+                    } else if (e == 'timeout'){
+                        alert('Request Time out. Harap coba lagi nanti');
+                    } else {
+                        alert('Unknow Error.\n' + x.responseText);
+                    }
                 }
-            }
-        })
+            })
+        }
+        
     }
 
     function simpanPenjualan() {
@@ -898,7 +930,16 @@
             type: 'get',
             data: $('#form-penjualan, #formDetailPembayaran').serialize(),
             success: function(response){
-                if (response == "false") {
+                if (response == "lengkapi data") {
+                    $.smallBox({
+                        title : "Peringatan!",
+                        content : "Lengkapi data penjualan tempo",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    $('#overlay').fadeOut(200);
+                } else if (response == "false") {
                     $.smallBox({
                         title : "Gagal",
                         content : "Upsss. Terjadi kesalahan",
