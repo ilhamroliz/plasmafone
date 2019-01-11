@@ -506,7 +506,7 @@
 								$("#cari-outlet").focus();
 								$('#overlay').fadeOut(200);
 
-								// cetak(response.salesman, response.idSales);
+								cetak(response.id);
 								
 							}
 						}, error:function(x, e) {
@@ -546,8 +546,8 @@
         
     }
 
-    function cetak(salesman, idSales){
-        window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales, '', "width=800,height=600");
+    function cetak(id){
+        window.open(baseUrl + '/distribusi-barang/struk/'+id, '', "width=800,height=600");
     }
 
     function convertToRupiah(angka) {

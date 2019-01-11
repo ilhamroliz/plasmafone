@@ -735,6 +735,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('distribusi-barang/cari-stock', 'inventory\DistribusiController@cariStock');
 	Route::get('distribusi-barang/search-stock', 'inventory\DistribusiController@searchStock');
 	Route::post('distribusi-barang/simpan', 'inventory\DistribusiController@simpan');
+	Route::get('distribusi-barang/struk/{id}', 'inventory\DistribusiController@struck');
 	// =====End Distribusi barang=====
 
     //== Layanan Perbaikan

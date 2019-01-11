@@ -4,6 +4,7 @@ namespace App\Http\Controllers\inventory;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\CodeGenerator as GenerateCode;
 use App\Http\Controllers\PlasmafoneController as Access;
 use Carbon\Carbon;
@@ -283,13 +284,36 @@ class DistribusiController extends Controller
                     Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
                 }
                 DB::commit();
-            return "true";
+                return response()->json([
+                    'status' => 'sukses',
+                    'id' => Crypt::encrypt($distribusiId)
+                ]);
             } catch (\Exception $e) {
                 DB::rollback();
                 return "false";
             }
         }
 
+    }
+
+    public function struck($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        $datas = DB::table('d_distribusi')
+                ->select('d_distribusi.d_nota as nota', 'd_distribusi.d_date as tanggal', 'm_company.c_name as tujuan', 'd_item.i_nama as nama_barang', 'd_distribusi_dt.dd_qty as qty', 'd_mem.m_name as petugas')
+                ->where('d_distribusi.d_id', $id)
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company', 'm_company.c_id', '=', 'd_distribusi.d_destination')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                ->get();
+
+        $from = DB::table('d_distribusi')
+                ->select('m_company.c_name', 'm_company.c_address')
+                ->where('d_distribusi.d_id', $id)
+                ->join('m_company', 'm_company.c_id', '=', 'd_distribusi.d_from')
+                ->first();
+        return view('inventory.distribusi.print')->with(compact('datas', 'from'));
     }
     
     // End distribusi barang
