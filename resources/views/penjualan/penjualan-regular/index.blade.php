@@ -63,7 +63,7 @@
                                                             <div class="icon-addon addon-md">
                                                                 <input class="form-control" id="cari-salesman" placeholder="Masukkan Nama Sales" type="text"  style="text-transform: uppercase">
                                                                 <input type="hidden" name="salesman" id="salesman" value="">
-                                                                <input type="hidden" name="jenis_pembayaran" value="T">
+                                                                <input type="hidden" name="jenis_pembayaran" value="C">
                                                                 <label for="salesman" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Sales"></label>
                                                             </div>
                                                         </div>
@@ -314,8 +314,6 @@
             }
         });
 
-        
-
         function getDetailMember(id)
         {
             $("#detail_mem").hide("slow");
@@ -525,44 +523,6 @@
             // always executed
         });
 
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //     }
-        // });
-        // $.ajax({
-        //     url: baseUrl + '/pointofsales/search-stock',
-        //     type: 'get',
-        //     data: {term : $('#cari-stock').val()},
-        //     success: function(response){
-        //         if (response.data.message == "Tidak ditemukan") {
-        //             $.smallBox({
-        //                 title : "Gagal",
-        //                 content : "Upsss. Barang tidak ditemukan",
-        //                 color : "#A90329",
-        //                 timeout: 5000,
-        //                 icon : "fa fa-times bounce animated"
-        //             });
-        //         } else {
-        //             setStock(response.data.data);
-        //             // $('#tambahketable').click();
-        //         }
-        //     }, error:function(x, e) {
-        //         if (x.status == 0) {
-        //             alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-        //         } else if (x.status == 404) {
-        //             alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-        //         } else if (x.status == 500) {
-        //             alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-        //         } else if (e == 'parsererror') {
-        //             alert('Error.\nParsing JSON Request failed.');
-        //         } else if (e == 'timeout'){
-        //             alert('Request Time out. Harap coba lagi nanti');
-        //         } else {
-        //             alert('Unknow Error.\n' + x.responseText);
-        //         }
-        //     }
-        // })
     }
 
     function simpanmember() {
@@ -884,30 +844,41 @@
     function detailPembayaran(){
         var total = $('#totalHarga').val();
         total = convertToAngka(total);
-        $.ajax({
-            url: baseUrl + '/penjualan-reguler/detailPembayaran/'+total,
-            timeout: 5000,
-            type: 'get',
-            success: function(response){
-                $('.kontenpembayaran').empty();
-                $('.kontenpembayaran').append(response);
-                $('#DetailPembayaran').modal('show');
-            }, error:function(x, e) {
-                if (x.status == 0) {
-                    alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-                } else if (x.status == 404) {
-                    alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-                } else if (x.status == 500) {
-                    alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-                } else if (e == 'parsererror') {
-                    alert('Error.\nParsing JSON Request failed.');
-                } else if (e == 'timeout'){
-                    alert('Request Time out. Harap coba lagi nanti');
-                } else {
-                    alert('Unknow Error.\n' + x.responseText);
+        if (isNaN(total)) {
+            $.smallBox({
+                title : "Peringatan!",
+                content : "Lengkapi data penjualan regular",
+                color : "#A90329",
+                timeout: 5000,
+                icon : "fa fa-times bounce animated"
+            });
+        } else {
+            $.ajax({
+                url: baseUrl + '/penjualan-reguler/detailPembayaran/'+total,
+                timeout: 5000,
+                type: 'get',
+                success: function(response){
+                    $('.kontenpembayaran').empty();
+                    $('.kontenpembayaran').append(response);
+                    $('#DetailPembayaran').modal('show');
+                }, error:function(x, e) {
+                    if (x.status == 0) {
+                        alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                    } else if (x.status == 404) {
+                        alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                    } else if (x.status == 500) {
+                        alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                    } else if (e == 'parsererror') {
+                        alert('Error.\nParsing JSON Request failed.');
+                    } else if (e == 'timeout'){
+                        alert('Request Time out. Harap coba lagi nanti');
+                    } else {
+                        alert('Unknow Error.\n' + x.responseText);
+                    }
                 }
-            }
-        })
+            })
+        }
+       
     }
 
     function simpanPenjualan() {
@@ -921,7 +892,16 @@
             type: 'get',
             data: $('#form-penjualan, #formDetailPembayaran').serialize(),
             success: function(response){
-                if (response == "false") {
+                if (response == "lengkapi data") {
+                    $.smallBox({
+                        title : "Peringatan!",
+                        content : "Lengkapi data penjualan regular",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    $('#overlay').fadeOut(200);
+                } else if (response == "false") {
                     $.smallBox({
                         title : "Gagal",
                         content : "Upsss. Terjadi kesalahan",

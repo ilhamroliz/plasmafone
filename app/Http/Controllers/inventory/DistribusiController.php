@@ -250,39 +250,46 @@ class DistribusiController extends Controller
     public function simpan(Request $request)
     {
         $data = $request->all();
+        $val = "";
 
-        $nota = GenerateCode::codePos('d_distribusi', 'd_id', 3, 'DISTRIBUSI');
+        if (!isset($data['idStock']) || $data['outlet'] == null) 
+        { 
+            return "lengkapi data";
+        } else {
+            $nota = GenerateCode::codePos('d_distribusi', 'd_id', 3, 'DISTRIBUSI');
 
-        DB::beginTransaction();
-        try {
-            $distribusiId = DB::table('d_distribusi')->insertGetId([
-                                'd_from' => Auth::user()->m_comp,
-                                'd_destination' => $data['outlet'],
-                                'd_nota' => $nota,
-                                'd_date' => Carbon::now('Asia/Jakarta'),
-                                'd_mem' => Auth::user()->m_id,
-                                'd_status' => 'On Going'
-                            ]);
+            DB::beginTransaction();
+            try {
+                $distribusiId = DB::table('d_distribusi')->insertGetId([
+                                    'd_from' => Auth::user()->m_comp,
+                                    'd_destination' => $data['outlet'],
+                                    'd_nota' => $nota,
+                                    'd_date' => Carbon::now('Asia/Jakarta'),
+                                    'd_mem' => Auth::user()->m_id,
+                                    'd_status' => 'On Going'
+                                ]);
 
-            for ($i=0; $i < count($data['idStock']); $i++) { 
-                $get_countiddetail = DB::table('d_distribusi_dt')->where('dd_distribusi', $distribusiId)->count()+1;
-                $compitem = DB::table('d_stock')->select('s_comp', 's_item')->where('s_id', $data['idStock'][$i])->first();
-                $namaItem = DB::table('d_stock')->select('s_comp', 's_item', 'i_nama')->where('s_id', $data['idStock'][$i])->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')->first();
-                DB::table('d_distribusi_dt')->insert([
-                    'dd_distribusi' => $distribusiId,
-                    'dd_detailid' => $get_countiddetail,
-                    'dd_comp' => $compitem->s_comp,
-                    'dd_item' => $compitem->s_item,
-                    'dd_qty' => $data['qtyTable'][$i]
-                ]);
-                Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
+                for ($i=0; $i < count($data['idStock']); $i++) { 
+                    $get_countiddetail = DB::table('d_distribusi_dt')->where('dd_distribusi', $distribusiId)->count()+1;
+                    $compitem = DB::table('d_stock')->select('s_comp', 's_item')->where('s_id', $data['idStock'][$i])->first();
+                    $namaItem = DB::table('d_stock')->select('s_comp', 's_item', 'i_nama')->where('s_id', $data['idStock'][$i])->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')->first();
+                    DB::table('d_distribusi_dt')->insert([
+                        'dd_distribusi' => $distribusiId,
+                        'dd_detailid' => $get_countiddetail,
+                        'dd_comp' => $compitem->s_comp,
+                        'dd_item' => $compitem->s_item,
+                        'dd_qty' => $data['qtyTable'][$i]
+                    ]);
+                    Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
+                }
+                DB::commit();
+            return "true";
+            } catch (\Exception $e) {
+                DB::rollback();
+                return "false";
             }
-            DB::commit();
-           return "true";
-        } catch (\Exception $e) {
-            DB::rollback();
-            return "false";
         }
+
     }
     
     // End distribusi barang

@@ -217,8 +217,6 @@
             }
         });
 
-        
-
         function getDetailOutlet(data)
         {
             $("#detail_outlet").hide("slow");
@@ -472,7 +470,16 @@
 						type: 'post',
 						data: $('#form-distribusi').serialize(),
 						success: function(response){
-							if (response == "false") {
+							if (response == "lengkapi data") {
+								$.smallBox({
+									title : "Peringatan!",
+									content : "Lengkapi data distribusi barang",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+								$('#overlay').fadeOut(200);
+							} else if (response == "false") {
 								$.smallBox({
 									title : "Gagal",
 									content : "Upsss. Terjadi kesalahan",
