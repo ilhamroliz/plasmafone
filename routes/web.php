@@ -407,7 +407,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//action confirm order
 	Route::POST('/pembelian/konfirmasi-pembelian/confirmSetuju', 'PembelianController@confirmSetuju');
-	Route::POST('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
+	Route::post('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
 	Route::get('/pembelian/konfirmasi-pembelian/getPlan_id', 'PembelianController@getPlan_id');
 	Route::get('/pembelian/konfirmasi-pembelian/getSupplier', 'PembelianController@getSupplier');
 	Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');

@@ -125,7 +125,7 @@ class PembelianController extends Controller
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
             ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_plan.pr_stsPlan', 'DISETUJUI')
+            ->where('d_purchase_plan.pr_stsPlan', 'CONFIRM')
             ->get();
         }else{
             $setujui = DB::table('d_purchase_plan')
@@ -933,12 +933,10 @@ class PembelianController extends Controller
                 'd_purchase_confirm.pr_dateApp',
                 'd_item.i_nama',
                 'd_supplier.s_company'
-            )
-            ->join('d_mem', 'd_purchase_confirm.pr_comp', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            )->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
-            ->where('d_purchase_confirm.pr_stsConf', 'CONFIRM')
+            ->where('d_purchase_confirm.pr_stsConf', 'WAITING')
             ->get();
         return DataTables::of($confirmOrder)
             ->addColumn('input', function ($confirmOrder) {
@@ -972,11 +970,10 @@ class PembelianController extends Controller
                 'd_item.i_nama',
                 'd_supplier.s_company'
             )
-            ->join('d_mem', 'd_purchase_confirm.pr_comp', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
-            ->where('d_purchase_confirm.pr_stsConf', 'PURCHASE')
+            ->where('d_purchase_confirm.pr_stsConf', 'PURCHASING')
             ->get();
 
         return DataTables::of($confirmOrder)
@@ -1011,10 +1008,10 @@ class PembelianController extends Controller
                 'd_item.i_nama',
                 'd_supplier.s_company'
             )
-            ->join('d_mem', 'd_purchase_confirm.pr_comp', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
+            
             ->get();
 
         return DataTables::of($confirmOrder)
@@ -1055,7 +1052,7 @@ class PembelianController extends Controller
                 $row[] = $key->i_nama;
                 $row[] = $key->pr_qtyApp;
                 $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.number_format($key->pr_harga_satuan) .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
-                $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
 
@@ -1100,7 +1097,7 @@ class PembelianController extends Controller
             $addAkses = [];
                     for ($i=0; $i < count($query); $i++) {
                         $temp = [
-                            'pr_idPlan'=>$no++,
+                            'pr_idPlan'=>$query[$i]->pr_idPlan,
                             'pr_idReq'=>$query[$i]->pr_idReq,
                             'pr_itemPlan'=>$query[$i]->pr_itemPlan,
                             'pr_qtyReq'=>$query[$i]->TotalQty_req,
@@ -1140,7 +1137,7 @@ class PembelianController extends Controller
                 $row[] = $key->c_name;
                 $row[] = $key->i_nama;
                 $row[] = '<div class="text-center"><input type="text" class="editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
-                $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
 
@@ -1166,7 +1163,7 @@ class PembelianController extends Controller
                 $row[] = $key->i_nama;
                 $row[] = $key->pr_qtyApp;
                 $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.$key->pr_harga_satuan .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
-                $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
 
@@ -1352,9 +1349,10 @@ class PembelianController extends Controller
                     ->where('d_purchase_plan.pr_idPlan', $pr_idPlan)
                     ->update([
                         'pr_stsPlan' => 'DITOLAK',
-                        'pr_qtyApp' => $pr_qtyApp
                     ]);
-                if (!$confOrder) {
+
+                if(!$confOrder) {
+
                     $data = "GAGAL";
                     echo json_encode(array("status" => $data));
                 } else {

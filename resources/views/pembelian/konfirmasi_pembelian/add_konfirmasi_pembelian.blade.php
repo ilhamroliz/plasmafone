@@ -112,7 +112,7 @@
 							<fieldset>
 							<div class="form-group">
 									
-									<label class="col-md-2" for="prepend"> <h6>Pilih Supplier</h6></label>
+									<label class="col-md-2" for="prepend"> <label>Pilih Supplier</label></label>
 									<div class="col-md-6">
 										<div class="icon-addon addon-sm">
 										<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
@@ -183,7 +183,7 @@
 													<!-- <th data-hide="phone,tablet" class="text-center">Harga</th>
 													<th data-hide="phone,tablet" >discount</th>
 													<th data-hide="phone,tablet" class="text-center">Subtotal</th> -->
-                                                    <th data-hide="phone,tablet" class="text-center">Aksi</th>
+                                                    <!-- <th data-hide="phone,tablet" class="text-center">Aksi</th> -->
 
 												</tr>
 
@@ -271,7 +271,9 @@
                                         
                                         <!-- widget content -->
                                         <div class="widget-body no-padding">
-                                            
+										<div id="id_plan">
+											<input type="hidden" id="pr_idPlan">
+										</div>
                                             <form id="smart-form-register" class="smart-form" name="autoSumForm">
                                                 <header>
                                                     Detail Item
@@ -283,6 +285,7 @@
                                                             <img id="dt_image" src="">
                                                         </div>
                                                     </section>
+													
                                                     <section>
                                                         <label class="label">Nama Item</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
@@ -495,6 +498,7 @@
 						$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
 
 					}
+					$('#pr_idPlan').val(data.data.pr_idPlan);
 					$('#dt_item').val(data.data.i_nama);
 					$('#dt_merk').val(data.data.i_merk);
 					$('#dt_kelompok').val(data.data.i_kelompok);
@@ -529,7 +533,8 @@
 					$('#detailModal').modal('show');
                     $('#btn_disetujui').show();
                     $('#btn_ditutup').show();
-                    $('#btn_ditolak').hide();
+					$('#btn_ditolak').hide();
+					$('#id_plan').hide();
                 },
                 
             }); 
@@ -654,7 +659,7 @@
                 url : '{{url('/pembelian/konfirmasi-pembelian/confirmSetuju')}}',
                 type: "POST",
                 data: { 
-					pr_idPlan 		: pr_idPlan,
+					pr_idPlan 		: $('#pr_idPlan').val(),
 					pr_item 		: i_item,
 					pr_comp 		: pr_comp,
 					pr_supplier		: $('#dt_supplier2').val(),
@@ -703,7 +708,7 @@
                 url : '{{url('/pembelian/konfirmasi-pembelian/confirmTolak')}}',
                 type: "POST",
                 data: { 
-					pr_idPlan 		: pr_idPlan,
+					pr_idPlan 		: $('#pr_idPlan').val(),
 					pr_item 		: i_item,
 					pr_comp 		: pr_comp,
 					pr_supplier		: $('#dt_supplier2').val(),
