@@ -370,7 +370,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/rencana-pembelian/rencanaDitolak', 'PembelianController@rencanaDitolak');
 	Route::get('/pembelian/rencana-pembelian/rencanaDisetujui', 'PembelianController@rencanaDisetujui');
 	Route::get('/pembelian/rencana-pembelian/rencanaSemua', 'PembelianController@rencanaSemua');
-	Route::get('/pembelian/rencana-pembelian/view_tambahRencana', 'PembelianController@view_tambahRencana');
+	Route::POST('/pembelian/rencana-pembelian/view_tambahRencana', 'PembelianController@view_tambahRencana');
+	Route::POST('/pembelian/rencana-pembelian/view_tambahRencana_dumy', 'PembelianController@view_tambahRencana_dumy');
 	Route::get('/pembelian/rencana-pembelian/itemSuplier', 'PembelianController@itemSuplier');
 // action data rencana pembelian
 	Route::get('/pembelian/rencana-pembelian/updateRequest', 'PembelianController@updateRequest');
@@ -382,7 +383,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 
 	Route::get('/pembelian/rencana-pembelian/getRequest_dumy', 'PembelianController@getRequest_dumy');
-	Route::get('/pembelian/rencana-pembelian/editDumy', 'PembelianController@editDumy');
+	Route::POST('/pembelian/rencana-pembelian/editDumy', 'PembelianController@editDumy');
 	Route::get('/pembelian/rencana-pembelian/getComp_plan', 'PembelianController@getComp_plan');
 
 
