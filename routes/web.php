@@ -535,7 +535,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan_pusat');
 	// End penerimaan barang dari pusat
 
-<<<<<<< HEAD
 	// Distribusi barang
 	Route::get('/inventory/distribusi', 'inventory\DistribusiController@index_distribusi');
 	Route::get('/inventory/distribusi/get-purchase/{id}', 'inventory\DistribusiController@show_purchase');
@@ -559,8 +558,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// End Inventory
 
-=======
->>>>>>> a6adb11a403b86fdbb29c9a11e9dbcd783c8ac7d
 	///// PENJUALAN
 
 	//== Set Harga
