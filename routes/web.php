@@ -407,7 +407,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//action confirm order
 	Route::POST('/pembelian/konfirmasi-pembelian/confirmSetuju', 'PembelianController@confirmSetuju');
-	Route::POST('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
+	Route::post('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
 	Route::get('/pembelian/konfirmasi-pembelian/getPlan_id', 'PembelianController@getPlan_id');
 	Route::get('/pembelian/konfirmasi-pembelian/getSupplier', 'PembelianController@getSupplier');
 	Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
@@ -535,6 +535,29 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan_pusat');
 	// End penerimaan barang dari pusat
 
+	// Distribusi barang
+	Route::get('/inventory/distribusi', 'inventory\DistribusiController@index_distribusi');
+	Route::get('/inventory/distribusi/get-purchase/{id}', 'inventory\DistribusiController@show_purchase');
+	Route::match(['get', 'post'], '/inventory/distribusi/print', 'inventory\DistribusiController@print');
+	// End ditribusi barang
+
+	//=== OPNAME BARANG
+
+	Route::get('/inventory/opname-barang/pusat', 'inventory\opnameBarangController@pusat');
+	Route::get('/inventory/opname-barang/outlet', 'inventory\opnameBarangController@outlet');
+
+	Route::get('/inventory/opname-barang/appr', 'inventory\opnameBarangController@get_approved');
+	Route::get('/inventory/opname-barang/pend', 'inventory\opnameBarangController@get_pending');
+
+	Route::post('/inventory/opname-barang/formTambah', 'inventory\opnameBarangController@form_tambah');
+	Route::post('/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
+	Route::post('/inventory/opname-barang/approve', 'inventory\opnameBarangController@approve');
+
+
+	//=== End OPNAME BARANG
+
+	// End Inventory
+
 	///// PENJUALAN
 
 	//== Set Harga
@@ -638,7 +661,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/man-penjualan/analisis-penjualan', 'manajemen_penjualan\analisisPenjualanController@index');
 	Route::post('/man-penjualan/analisis-penjualan/analyze', 'manajemen_penjualan\analisisPenjualanController@analyze');
-
 
 	//=== End ANALISIS PENJUALAN
 

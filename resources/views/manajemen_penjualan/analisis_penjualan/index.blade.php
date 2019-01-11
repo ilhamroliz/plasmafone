@@ -60,7 +60,7 @@
                             <div class="widget-body no-padding">
 
                                 <div class="col-md-12">
-                                    <div id="bar-chart" class="chart"></div>
+                                    <div id="bar-chart" class="chart" style="display: none"></div>
                                 </div>
 
                                 <div class="col-md-12">
@@ -68,10 +68,10 @@
                                         <div>
                                             <form id="byForm">
                                                 {{ csrf_field() }}
-                                                <div class="col-md-7 no-padding padding-bottom-10">
-                                                    <label for="bySelect" class="col-md-4 no-padding">Analisa Berdasarkan</label>
-                                                    <div class="col-md-8 no-padding">
-                                                        <select name="bySelect" id="bySelect" class="form-input">
+                                                <div class="col-md-12 no-padding padding-bottom-10">
+                                                    <label for="bySelect" class="col-md-2 no-padding">Analisa Berdasarkan</label>
+                                                    <div class="col-md-4 no-padding">
+                                                        <select name="bySelect" id="bySelect" class="form-control">
                                                             <option value="">== Kategori ==</option>
                                                             <option value="1">Usia Pembeli</option>
                                                             <option value="2">Harga Item</option>
@@ -83,17 +83,42 @@
                                                             <option value="8">Sales</option>
                                                         </select>
                                                     </div>
-                                                </div>
-                                                <div id="spesifikCari" style="display: block" class="col-md-7 no-padding">
-                                                    <label for="spesifik" class="col-md-4 no-padding">Pencarian Spesifik</label>
-                                                    <div class="col-md-8 no-padding">
-                                                        <input type="text" id="spesifik" class="form-control" style="width: 100%">
+                                                    <div class="col-md-3">
+                                                        <select name="forSelect" id="forSelect" class="form-control">
+                                                            <option value="">== Pilih Rentang Waktu ==</option>
+                                                        </select>
                                                     </div>
+                                                    <label class="col-md-3 no-padding">* Pilih untuk menampilkan BAR CHART</label>
+                                                </div>
+                                                
+
+                                                <div id="spes1" style="display: none" class="col-md-2 no-padding spesifik">
+                                                    <label>Pencarian Spesifik</label>
+                                                </div>
+                                                <div id="spes2" style="display: none" class="col-md-5 no-padding spesifik">
+                                                    <div class="input-group" id="date-range" style="">
+                                                        <input type="text" class="form-control" id="tglAwal" name="tglAwal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+                                                        <span class="input-group-addon bg-custom text-white b-0">to</span>
+                                                        <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+                                                    </div>
+                                                </div>
+                                                <div id="spes3" style="display: none" class="col-md-1 spesifik">
+                                                    <a class="btn btn-primary" style="width: 100%" onclick="cariWaktu()"><i class="fa fa-search"></i></a>
                                                 </div>
                                             </form>
                                         </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 padding-bottom-10" style="padding-right: 0px">
+                                    <div class="tab-content padding-10">
+
+                                        <div class="col-md-4 no-padding">
+                                            <div id="pie-chart" class="chart"></div>
+                                        </div>
                                         
-                                        <div class="tab-pane fade in active" id="hr1">
+                                        <div class="tab-pane fade in active col-md-8" id="hr1">
                                             <table id="analisisTable" class="table table-striped table-bordered table-hover" width="100%">
                                                 <thead>
                                                     <tr>
@@ -103,7 +128,7 @@
                                                     </tr>
                                                 </thead>
 
-                                                <tbody id="apprshowdata">
+                                                <tbody id="showdata">
                                                 </tbody>
                                             </table>
                                         </div>
@@ -159,18 +184,52 @@
 
             $('#analisisTable').DataTable({
                 "order": [],
-                "language" : dataTableLanguage});
+                "searching" : false,
+                "language" : dataTableLanguage    
+            });
 
         });
 
-        $('select').on('change', function (e) {
-            $('#analisisTable').DataTable().clear();
+        $('#bySelect').on('change', function (e) {
+            $('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+    		$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+
+            $( "#tglAwal" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $( "#tglAkhir" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            document.getElementById("bar-chart").style.display = "none";
+            if($('#bySelect').val() != '7'){
+                document.getElementById("spes1").style.display = "block";
+                document.getElementById("spes2").style.display = "block";
+                document.getElementById("spes3").style.display = "block";
+            } 
+
+            // document.getElementByClassName("spesifik").style.display = "block";
 
             var optionSelected = $("option:selected", this);
             var valueSelected = this.value;
             var total = 0;
 
             axios.post(baseUrl+'/man-penjualan/analisis-penjualan/analyze', {nilai:valueSelected}).then((response) => {
+                $('#analisisTable').DataTable().clear();
+
                 for(var i = 0; i < response.data.data.length; i++){
                     $('#analisisTable').DataTable().row.add([
                         response.data.data[i].cat,
@@ -180,124 +239,186 @@
                     total = total + parseInt(response.data.data[i].sd_qty);
                 }
 
-                ///== BAR CHART
+                /* pie chart */
 
+                var data_pie = [];
+                var series = response.data.data.length;
+                for (var i = 0; i < series; i++) {
+                    data_pie[i] = {
+                        label : response.data.data[i].cat,
+                        data : response.data.data[i].sd_qty
+                    }
+                }
+
+                $.plot($("#pie-chart"), data_pie, {
+                    series : {
+                        pie : {
+                            show : true,
+                            innerRadius : 0.5,
+                            radius : 1,
+                            label : {
+                                show : false,
+                                radius : 2 / 3,
+                                formatter : function(label, series) {
+                                    return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                                },
+                                threshold : 0.1
+                            }
+                        }
+                    },
+                    legend : {
+                        show : true,
+                        noColumns : 1, // number of colums in legend table
+                        labelFormatter : null, // fn: string -> string
+                        labelBoxBorderColor : "#000", // border color for the little label boxes
+                        container : null, // container (as jQuery object) to put legend in, null means default on top of graph
+                        position : "ne", // position of default legend container within plot
+                        margin : [0, 0], // distance from grid edge to default legend container within plot
+                        backgroundColor : "#efefef", // null means auto-detect
+                        backgroundOpacity : 1 // set to 0 to avoid background
+                    },
+                    grid : {
+                        hoverable : true,
+                        clickable : true
+                    },
+                    tooltip : true,
+                    tooltipOpts : {
+                        content : "<span>%y/"+total+"</span>",
+                        defaultTheme : false
+                    }
+                });
+
+                /* end pie chart */
+            })
+
+            $('#overlay').fadeOut(200);
+        });
+
+        $('#forSelect').on('change', function (e) {
+            document.getElementById("bar-chart").style.display = "block";
+
+            ///== BAR CHART
+            var ds = new Array();
+            for(var i = 0; i < response.data.data.length; i++){
                 var data1 = []; /// Deklarasi var data+i
-                for (var i = 0; i <= 12; i += 1)
-                    data1.push([i, parseInt(Math.random() * 30)]);
-
-                var data2 = [];
-                for (var i = 0; i <= 12; i += 1)
-                    data2.push([i, parseInt(Math.random() * 30)]);
-
-                var data3 = [];
-                for (var i = 0; i <= 12; i += 1)
-                    data3.push([i, parseInt(Math.random() * 30)]);
-
-                var ds = new Array();
-
+                for (var j = 0; j < 12; j++){
+                    data1.push([j, parseInt(response.data.data[i].sd_qty)])
+                }
+                
                 ds.push({
                     data : data1,
                     bars : {
+                        content : response.data.data[i].cat,
                         show : true,
                         barWidth : 0.1,
-                        order : 1, /// Diganti i+1
+                        order : i + 1, 
                     }
                 });
-                ds.push({
-                    data : data2,
-                    bars : {
-                        show : true,
-                        barWidth : 0.1,
-                        order : 2
-                    }
-                });
-                ds.push({
-                    data : data3,
-                    bars : {
-                        show : true,
-                        barWidth : 0.1,
-                        order : 3
-                    }
-                });
+            }
 
-                //Display graph
-                $.plot($("#bar-chart"), ds, {
-                    colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
-                    grid : {
-                        show : true,
-                        hoverable : true,
-                        clickable : true,
-                        tickColor : $chrt_border_color,
-                        borderWidth : 0,
-                        borderColor : $chrt_border_color,
+            //Display graph
+            $.plot($("#bar-chart"), ds, {
+                colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
+                grid : {
+                    show : true,
+                    hoverable : true,
+                    clickable : true,
+                    tickColor : $chrt_border_color,
+                    borderWidth : 0,
+                    borderColor : $chrt_border_color,
+                },
+                legend : true,
+                tooltip : true,
+                tooltipOpts : {
+                    content : "<b>%x</b> = <span>%y</span>",
+                    defaultTheme : false
+                }
+
+            });
+
+            /* end bar chart */
+
+
+            ///== End BAR CHART
+        });
+
+        function cariWaktu(){
+            $('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+
+    		$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+            var total = 0;
+            var nilai = $('#bySelect').val();
+            var tglAwal = $('#tglAwal').val();
+            var tglAkhir = $('#tglAkhir').val();
+
+            axios.post(baseUrl+'/man-penjualan/analisis-penjualan/analyze', {nilai: nilai, tglAwal: tglAwal, tglAkhir: tglAkhir}).then((response) => {
+                $('#analisisTable').DataTable().clear();
+                
+                for(var i = 0; i < response.data.data.length; i++){
+                    $('#analisisTable').DataTable().row.add([
+                        response.data.data[i].cat,
+                        '<div class="text-align-right">'+response.data.data[i].sd_qty+' Unit</div>',
+                        '<div><span style="float: left">Rp. </span><span style="float: right">'+accounting.formatMoney(response.data.data[i].sd_total_net, "", 2, ".", ",")+'</span></div>'
+                    ]).draw(false);
+                    total = total + parseInt(response.data.data[i].sd_qty);
+                }
+
+                /* pie chart */
+
+                var data_pie = [];
+                var series = response.data.data.length;
+                for (var i = 0; i < series; i++) {
+                    data_pie[i] = {
+                        label : response.data.data[i].cat,
+                        data : response.data.data[i].sd_qty
+                    }
+                }
+
+                $.plot($("#pie-chart"), data_pie, {
+                    series : {
+                        pie : {
+                            show : true,
+                            innerRadius : 0.5,
+                            radius : 1,
+                            label : {
+                                show : false,
+                                radius : 2 / 3,
+                                formatter : function(label, series) {
+                                    return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
+                                },
+                                threshold : 0.1
+                            }
+                        }
                     },
-                    legend : true,
+                    legend : {
+                        show : true,
+                        noColumns : 1, // number of colums in legend table
+                        labelFormatter : null, // fn: string -> string
+                        labelBoxBorderColor : "#000", // border color for the little label boxes
+                        container : null, // container (as jQuery object) to put legend in, null means default on top of graph
+                        position : "ne", // position of default legend container within plot
+                        margin : [0, 0], // distance from grid edge to default legend container within plot
+                        backgroundColor : "#efefef", // null means auto-detect
+                        backgroundOpacity : 1 // set to 0 to avoid background
+                    },
+                    grid : {
+                        hoverable : true,
+                        clickable : true
+                    },
                     tooltip : true,
                     tooltipOpts : {
-                        content : "<b>%x</b> = <span>%y</span>",
+                        content : "<span>%y/"+total+"</span>",
                         defaultTheme : false
                     }
-
                 });
 
-				/* end bar chart */
+                /* end pie chart */
+            });
+            $('#overlay').fadeOut(200);
 
-
-                ///== End BAR CHART
-
-                // /* pie chart */
-
-                // var data_pie = [];
-                // var series = response.data.data.length;
-                // for (var i = 0; i < series; i++) {
-                //     data_pie[i] = {
-                //         label : response.data.data[i].cat,
-                //         data : response.data.data[i].sd_qty
-                //     }
-                // }
-
-                // $.plot($("#pie-chart"), data_pie, {
-                //     series : {
-                //         pie : {
-                //             show : true,
-                //             innerRadius : 0.5,
-                //             radius : 1,
-                //             label : {
-                //                 show : false,
-                //                 radius : 2 / 3,
-                //                 formatter : function(label, series) {
-                //                     return '<div style="font-size:11px;text-align:center;padding:4px;color:white;">' + label + '<br/>' + Math.round(series.percent) + '%</div>';
-                //                 },
-                //                 threshold : 0.1
-                //             }
-                //         }
-                //     },
-                //     legend : {
-                //         show : true,
-                //         noColumns : 1, // number of colums in legend table
-                //         labelFormatter : null, // fn: string -> string
-                //         labelBoxBorderColor : "#000", // border color for the little label boxes
-                //         container : null, // container (as jQuery object) to put legend in, null means default on top of graph
-                //         position : "ne", // position of default legend container within plot
-                //         margin : [5, 5], // distance from grid edge to default legend container within plot
-                //         backgroundColor : "#efefef", // null means auto-detect
-                //         backgroundOpacity : 1 // set to 0 to avoid background
-                //     },
-                //     grid : {
-                //         hoverable : true,
-                //         clickable : true
-                //     },
-                //     tooltip : true,
-                //     tooltipOpts : {
-                //         content : "<span>%y/"+total+"</span>",
-                //         defaultTheme : false
-                //     }
-                // });
-
-                // /* end pie chart */
-            })
-        });
+        }
 
     </script>
 @endsection

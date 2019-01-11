@@ -31,11 +31,25 @@ class pemesananBarangController extends Controller
 
     public function get_data_proses()
     {
-        $proses = pemesanan::where('i_status', 'PROSES')
-            ->join('m_member', 'm_member.m_id', '=', 'i_member')
-            ->join('m_company', 'c_id', '=', 'i_comp')
-            ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-            ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))->orderBy('i_nota', 'desc');
+        $company = Auth::user()->m_comp;
+        $proses = '';
+        if ($company != "PF00000001") {
+            $proses = pemesanan::where('i_status', 'PROSES')
+                ->join('m_member', 'm_member.m_id', '=', 'i_member')
+                ->join('m_company', 'c_id', '=', 'i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
+                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->where('i_comp', $company)
+                ->orderBy('i_nota', 'desc');
+
+        } else {
+            $proses = pemesanan::where('i_status', 'PROSES')
+                ->join('m_member', 'm_member.m_id', '=', 'i_member')
+                ->join('m_company', 'c_id', '=', 'i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
+                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->orderBy('i_nota', 'desc');
+        }
 
         return DataTables::of($proses)
             ->addColumn('aksi', function ($proses) {
@@ -54,11 +68,25 @@ class pemesananBarangController extends Controller
 
     public function get_data_done()
     {
-        $done = pemesanan::where('i_status', 'DONE')
-            ->join('m_member', 'm_member.m_id', '=', 'i_member')
-            ->join('m_company', 'c_id', '=', 'i_comp')
-            ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-            ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))->orderBy('i_nota', 'desc');
+        $company = Auth::user()->m_comp;
+        $done = '';
+        if ($company != "PF00000001") {
+            $done = pemesanan::where('i_status', 'DONE')
+                ->join('m_member', 'm_member.m_id', '=', 'i_member')
+                ->join('m_company', 'c_id', '=', 'i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
+                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->where('i_comp', $company)
+                ->orderBy('i_nota', 'desc');
+
+        } else {
+            $done = pemesanan::where('i_status', 'DONE')
+                ->join('m_member', 'm_member.m_id', '=', 'i_member')
+                ->join('m_company', 'c_id', '=', 'i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
+                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->orderBy('i_nota', 'desc');
+        }
 
         return DataTables::of($done)
             ->addColumn('aksi', function ($done) {
@@ -77,11 +105,26 @@ class pemesananBarangController extends Controller
 
     public function get_data_cancel()
     {
-        $cancel = pemesanan::where('i_status', 'CANCEL')
-            ->join('m_member', 'm_member.m_id', '=', 'i_member')
-            ->join('m_company', 'c_id', '=', 'i_comp')
-            ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-            ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))->orderBy('i_nota', 'desc');
+        $company = Auth::user()->m_comp;
+        $done = '';
+        if ($company != "PF00000001") {
+            $cancel = pemesanan::where('i_status', 'CANCEL')
+                ->join('m_member', 'm_member.m_id', '=', 'i_member')
+                ->join('m_company', 'c_id', '=', 'i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
+                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->where('i_comp', $company)
+                ->orderBy('i_nota', 'desc');
+
+        } else {
+            $cancel = pemesanan::where('i_status', 'CANCEL')
+                ->join('m_member', 'm_member.m_id', '=', 'i_member')
+                ->join('m_company', 'c_id', '=', 'i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
+                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->orderBy('i_nota', 'desc');
+
+        }
 
         return DataTables::of($cancel)
             ->addColumn('aksi', function ($cancel) {
@@ -161,20 +204,44 @@ class pemesananBarangController extends Controller
 
         $hasilitem = array();
         $item = DB::table('d_item')
-            ->select('i_id', 'i_nama', 'i_price')
-            ->whereRaw('i_nama like "%' . $cari . '%"')
+            ->select('i_id', 'i_nama', 'i_code', 'i_price')
             ->whereNotIn('i_id', $idItem)
-            ->get();
+            ->where(function ($query) use ($cari) {
+                $query->whereRaw('i_nama like "%' . $cari . '%"')
+                    ->orWhereRaw('concat(coalesce(i_code, ""), " ", coalesce(i_nama, "")) like "%' . $cari . '%"');
+            })
+            ->take(50)->get();
 
         if ($item == null) {
             $hasilitem[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($item as $query) {
-                $hasilitem[] = [
-                    'id' => $query->i_id,
-                    'label' => $query->i_nama,
-                    'harga' => $query->i_price
-                ];
+
+                if ($query->i_code == null || $query->i_code == '' && $query->i_price == null) {
+                    $hasilitem[] = [
+                        'id' => $query->i_id,
+                        'label' => $query->i_nama,
+                        'harga' => '0'
+                    ];
+                } else if ($query->i_code == null || $query->i_code == '' && $query->i_price != null) {
+                    $hasilitem[] = [
+                        'id' => $query->i_id,
+                        'label' => $query->i_nama,
+                        'harga' => $query->i_price
+                    ];
+                } else if ($query->i_price == null) {
+                    $hasilitem[] = [
+                        'id' => $query->i_id,
+                        'label' => $query->i_code . ' - ' . $query->i_nama,
+                        'harga' => $query->i_price
+                    ];
+                } else {
+                    $hasilitem[] = [
+                        'id' => $query->i_id,
+                        'label' => $query->i_code . ' - ' . $query->i_nama,
+                        'harga' => $query->i_price
+                    ];
+                }
             }
         }
 
