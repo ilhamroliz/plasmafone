@@ -391,6 +391,8 @@
 
 	<script type="text/javascript">
 		var tambahRencana;
+		var tambahRencana_dumy;
+
         $(document).ready(function () {
 			$( "#tpMemberNama" ).autocomplete({
 				source: baseUrl+'/pembelian/request-pembelian/cariItem',
@@ -456,7 +458,7 @@
 							{
 								
 								
-								if(data.status == 'gagal')
+								if(data.status == 'GAGAL')
 								{
 									$.smallBox({
 										title : "Gagal",
@@ -465,7 +467,7 @@
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
 										});
-										$('#dt_tambah').DataTable().ajax.reload();
+										reload_table();
 									// $('#table-rencana').DataTable().ajax.reload();
 								}else if(data.status == 'notFound'){
 									$.smallBox({
@@ -475,7 +477,7 @@
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
 										});
-										$('#dt_tambah').DataTable().ajax.reload();
+										reload_table();
 								}else{
 									$.smallBox({
 										title : "Berhasil",
@@ -484,7 +486,7 @@
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
 										});
-										$('#dt_tambah').DataTable().ajax.reload();
+										reload_table();
 								}
 								// $('#table-rencana').DataTable().fnDestroy();
 								
@@ -537,6 +539,29 @@
 				}); 
 		
 		}
+
+		function editTable(id)
+		{
+			var input = $('#i_nama'+id).val();
+			$.ajax({
+						url : '{{url('/pembelian/rencana-pembelian/editDumy')}}',
+						type: "POST",
+						data: { 
+							'id' : id,
+							'qty' : input,
+							_token : '{{ csrf_token() }}'
+
+						},
+						dataType: "JSON",
+						success: function(data)
+						{
+							reload_table_dumy();
+							// $('#dt_tambah').DataTable().ajax.reload();
+						},
+						
+				}); 
+		}
+
 
         function edit(id){
             
@@ -696,13 +721,40 @@
 
           "ajax": {
                     "url": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
-                    "type": "GET",  
+                    "type": "POST",  
                     "data": function ( data ) {
-                        data.comp = $('#dt_supplier').val();
+						data.comp = $('#dt_supplier').val();
+						data._token = '{{ csrf_token() }}';
+                    },
+                },
+        } );
+	}
+	
+	function load_table_registrasi_reload(){
+      // table_registrasi.ajax.reload(null, false);
+	  tambahRencana_dumy= $('#dt_tambah').DataTable({
+
+          "ajax": {
+                    "url": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana_dumy') }}",
+                    "type": "POST",  
+                    "data": function ( data ) {
+						data.comp = $('#dt_supplier').val();
+						data._token = '{{ csrf_token() }}';
                     },
                 },
         } );
     }
+
+	function reload_table_dumy(){
+		tambahRencana_dumy.ajax.reload(null, false);
+	
+			}
+			
+	function reload_table(){
+			tambahRencana.ajax.reload(null, false);
+	
+   		 }
+
 
 		// function load_table()
 		// {
@@ -758,11 +810,7 @@
         //     }, 1000);
 		// }
 
-		function reload_table(){
-			tambahRencana.ajax.reload(null, false);
-	// $('#dt_tambah').dataTable().ajax.reload();
-   		 }
-
+		
 
         function tambah(){
             $.ajax({
