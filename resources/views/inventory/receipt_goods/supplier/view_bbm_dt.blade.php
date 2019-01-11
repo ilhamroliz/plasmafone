@@ -228,7 +228,7 @@
 var data = id_bbm;
 
 
-var table_bbm;
+var table_bbm; 
 
 	$(document).ready(function(){
 			reload_data();

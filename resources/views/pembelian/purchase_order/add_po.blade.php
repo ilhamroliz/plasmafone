@@ -108,7 +108,18 @@
 												<label class="col-md-2" for="prepend"> <h6>Tanggal Di butuhkan</h6></label>
 													<div class="col-md-6">
 										                <div class="icon-addon addon-sm">
-														<input type="text" class="form-control datepicker" id="due_date" name="tgl_awal" placeholder="Due Date" data-dateformat="dd/mm/YYYY">
+														<input type="text" class="form-control" id="due_date" name="tgl_awal" placeholder="Due Date" >
+										                    <label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
+										                </div>
+													</div>
+													
+												</div>
+
+												<div class="form-group">
+												<label class="col-md-2" for="prepend"> <h6>Jatuh Tempo</h6></label>
+													<div class="col-md-6">
+										                <div class="icon-addon addon-sm">
+														<input type="text" class="form-control" id="jt" name="tgl_awal" placeholder="jatuh Tempo" >
 										                    <label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
 										                </div>
 													</div>
@@ -186,6 +197,21 @@ $('#load-status-text').text('Sedang Mengambil Data...');
 
 $(document).ready(function () {
 
+	$('#due_date').datepicker({
+		
+		format: "dd/mm/yyyy",
+		autoclose: true
+	});
+	var tanggal = new Date().getDate();
+	var bulan = new Date().getMonth();
+	var tahun = new Date().getFullYear();
+	
+		// var bulan = date.getMonth();
+		// var tahun = date.getFullYear();
+		// var arrbulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+		var arrbulan = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+		$('#due_date').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+
 	reload_data();
 	getSupplier();
 	getOutlet_po();
@@ -206,7 +232,9 @@ $(document).ready(function () {
 
 function updateTotalTampil() {
         var totalGross = 0;
-        var totalHarga = 0;
+		var totalHarga = 0;
+		
+
 
         var inputs = document.getElementsByClassName( 'harga' ),
             arharga  = [].map.call(inputs, function( input ) {
@@ -227,8 +255,9 @@ function updateTotalTampil() {
 
         for (var i = 0; i < artotalItem.length; i++){
             totalHarga += parseInt(artotalItem[i]);
-        }
-
+		}
+		
+		
         $("#totalGross").val(totalGross);
         $('.total-tampil').html(convertToRupiah(totalHarga));
         $("#totalHarga").val(totalHarga);
