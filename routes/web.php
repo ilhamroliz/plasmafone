@@ -302,6 +302,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// End Master Member
 
+    //master pembayaran
+    Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
+    //end pembayaran
+
 	// Pembelian
 
 	// Request Order

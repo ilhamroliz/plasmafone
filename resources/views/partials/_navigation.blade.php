@@ -57,6 +57,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						<a href="{{ url('/master/outlet') }}">Master Outlet</a>
 					</li>
 					@endif
+
+                    @if($sidebar['Master Pembayaran'] == 'Y')
+                        <li class="{{ (Request::is('master/pembayaran/*') || Request::is('master/pembayaran')) ? 'active' : '' }}">
+                            <a href="{{ url('/master/pembayaran') }}">Master Pembayaran</a>
+                        </li>
+                    @endif
 				</ul>
 			</li>
 			@endif
