@@ -138,6 +138,7 @@
                                                     <div class="input-icon-left">
                                                         <i class="fa fa-barcode"></i>
                                                         <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+                                                        <input type="hidden" id="stockid" name="stockid">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -276,6 +277,9 @@
 
     $(document).ready(function(){
         $('.togel').click();
+        if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		}
         $("#cari-salesman").focus();
         
         $( "#cari-salesman" ).autocomplete({
@@ -301,6 +305,12 @@
             minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
+                $("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
 
@@ -504,6 +514,7 @@
                 });
             } else {
                 setStock(response.data[0]);
+                $("#stockid").val(response.data[0].data.id);
                 tambah();
             }
         })
@@ -720,8 +731,20 @@
             minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+                $("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
+        $("#stockid").val("");
+		if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		} else {
+			$("#tambahketable").attr('disabled', false);
+		}
         updateTotalTampil();
     }
 
