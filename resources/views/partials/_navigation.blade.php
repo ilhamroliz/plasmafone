@@ -129,7 +129,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					@if($sidebar['Distribusi Barang'] == 'Y')
 					<li>
-						<a href="{{ url('/inventory/distribusi') }}">Distribusi Barang</a>
+						<a href="{{ url('/distribusi-barang') }}">Distribusi Barang</a>
 					</li>
 					@endif
 

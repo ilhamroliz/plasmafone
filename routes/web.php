@@ -534,13 +534,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan_pusat');
 	// End penerimaan barang dari pusat
 
-	// Distribusi barang
-	Route::get('/inventory/distribusi', 'inventory\DistribusiController@index_distribusi');
-	Route::get('/inventory/distribusi/get-purchase/{id}', 'inventory\DistribusiController@show_purchase');
-	Route::match(['get', 'post'], '/inventory/distribusi/print', 'inventory\DistribusiController@print');
-	// End ditribusi barang
-	// End Inventory
-
 	///// PENJUALAN
 
 	//== Set Harga
@@ -712,6 +705,13 @@ Route::group(['middleware' => 'auth'], function () {
 	// =====Return Penjualan=====
 	Route::get('return-penjualan', 'ReturnPenjualanController@index');
 	// =====End Return Penjualan=====
+
+	// =====Distribusi Barang=====
+	Route::get('distribusi-barang', 'inventory\DistribusiController@index');
+	Route::get('distribusi-barang/cari-outlet', 'inventory\DistribusiController@cariOutlet');
+	Route::get('distribusi-barang/cari-stock', 'inventory\DistribusiController@cariStock');
+	Route::get('distribusi-barang/search-stock', 'PenjualanController@searchStock');
+	// =====End Distribusi barang=====
 
     //== Layanan Perbaikan
 	Route::get('layanan-perbaikan', 'PerbaikanController@index');
