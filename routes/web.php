@@ -535,6 +535,22 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/inventory/distribusi/get-purchase/{id}', 'inventory\DistribusiController@show_purchase');
 	Route::match(['get', 'post'], '/inventory/distribusi/print', 'inventory\DistribusiController@print');
 	// End ditribusi barang
+
+	//=== OPNAME BARANG
+
+	Route::get('/inventory/opname-barang/pusat', 'inventory\opnameBarangController@pusat');
+	Route::get('/inventory/opname-barang/outlet', 'inventory\opnameBarangController@outlet');
+
+	Route::get('/inventory/opname-barang/appr', 'inventory\opnameBarangController@get_approved');
+	Route::get('/inventory/opname-barang/pend', 'inventory\opnameBarangController@get_pending');
+
+	Route::post('/inventory/opname-barang/formTambah', 'inventory\opnameBarangController@form_tambah');
+	Route::post('/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
+	Route::post('/inventory/opname-barang/approve', 'inventory\opnameBarangController@approve');
+
+
+	//=== End OPNAME BARANG
+
 	// End Inventory
 
 	///// PENJUALAN
@@ -640,7 +656,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/man-penjualan/analisis-penjualan', 'manajemen_penjualan\analisisPenjualanController@index');
 	Route::post('/man-penjualan/analisis-penjualan/analyze', 'manajemen_penjualan\analisisPenjualanController@analyze');
-
 
 	//=== End ANALISIS PENJUALAN
 

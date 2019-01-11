@@ -22,7 +22,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Manajemen Penjualan</li><li>Rencana Pembelian Barang</li>
+			<li>Home</li><li>Inventory</li><li>Opname Barang Pusat</li>
 		</ol>
 
 	</div>
@@ -37,13 +37,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-sliders"></i>
-                    Manajemen Penjualan <span><i class="fa fa-angle-double-right"></i> Pembuatan Rencana Penjualan </span>
+                    Inventory <span><i class="fa fa-angle-double-right"></i> Opname Barang Pusat </span>
                 </h1>
             </div>
 
             @if(Plasma::checkAkses(26, 'insert') == true)
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right padding-top-10">
-                <button class="btn btn-success" onclick="tambah()"><i class="fa fa-plus"></i>&nbsp;Tambah Rencana Penjualan</button>
+                <button class="btn btn-success" onclick="tambah()"><i class="fa fa-plus"></i>&nbsp;Tambah Opname Pusat</button>
             </div>
             @endif
 

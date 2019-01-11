@@ -3,7 +3,7 @@
 @section('title', 'Pembuatan Rencana Penjualan')
 
 @section('extra_style')
-    
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/MonthPicker.css') }}">
 @endsection
     
 <?php 
@@ -88,7 +88,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 													    <input type="text" class="form-control" id="trpCompNama" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase"/>												
                                                     </div>													
 												</div>
-                                                
+												<label class="col-md-2"><strong>Rencana Untuk Bulan :</strong></label>
+												<div class="col-md-3">
+													<input type="text" id="bulanRencana" name="bulanRencana" class="form-control" placeholder="MASUKKAN BULAN" style="width: 100%">                                       
+												</div>
 											</div>
 
 											<div class="form-group col-md-12 padding-top-10">
@@ -108,7 +111,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 												</div>
 
 												<div class="col-md-2">
-													<a class="btn btn-success" style="width: 100%" onclick="tambah_row()"><i class="fa fa-plus"></i>Tambah</a>
+													<a class="btn btn-success" id="addRow" style="width: 100%" onclick="tambah_row()"><i class="fa fa-plus"></i>Tambah</a>
 												</div>
 											</div>
 										</div>
@@ -167,11 +170,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 @endsection
 
 @section('extra_script')
+	<script src="{{ asset('template_asset/js/MonthPicker.js') }}"></script>
 	<script type="text/javascript">
 
 		var table;
 
 		$(document).ready(function(){
+
+			$('#bulanRencana').MonthPicker({
+                Button: false
+            });
 
 			table = $('#trpTable').DataTable({
 				"paging": false,
@@ -185,16 +193,25 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				select: function(event, data) {
 					$('#trpCompId').val(data.item.id);
 					$('#trpCompNama').val(data.item.label);
+					document.getElementById("trpCompNama").readOnly = true;
 				}
 			});
 
 			$( "#trpItemNama" ).autocomplete({
-				source: baseUrl+'/penjualan/set-harga/outlet/auto-CodeNItem',
+				source: baseUrl+'/penjualan/pemesanan-barang/get-item',
 				minLength: 2,
 				select: function(event, data) {
 					$('#trpItemId').val(data.item.id);
 					$('#trpItemNama').val(data.item.label);
 				}
+			});
+
+			var input = document.getElementById("trpQty");
+			input.addEventListener("keyup", function(event) {
+			event.preventDefault();
+			if (event.keyCode === 13) {
+				document.getElementById("addRow").click();
+			}
 			});
 		});
 
@@ -205,17 +222,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			var itemName = $('#trpItemNama').val();
 			var qty = $('#trpQty').val();
 
-			if($('#trpCompId').val() == ''){
-				$.smallBox({
-					title : "Gagal",
-					content : "Maaf, Data Nama Cabang Tidak Boleh Kosong ",
-					color : "#A90329",
-					timeout: 4000,
-					icon : "fa fa-times bounce animated"
-				});
-				return false;
-			}
-
 			table.row.add([
 				compName+'<input type="hidden" name="idComp[]" class="idComp" value="'+compId+'">',
 				itemName+'<input type="hidden" name="idItem[]" class="idItem" value="'+itemId+'">',
@@ -223,12 +229,46 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				'<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
 			]).draw(false);
 
+			var inputs = document.getElementsByClassName( 'idItem' ),
+			names  = [].map.call(inputs, function( input ) {
+				return input.value;
+			});
+
+			$( "#trpItemNama" ).autocomplete({
+				source: function(request, response) {
+					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#trpItemNama").val() }, 
+							response);
+				},
+				minLength: 3,
+				select: function(event, data) {
+					$('#trpItemId').val(data.item.id);
+					$('#trpItemNama').val(data.item.label);
+				}
+			});
+
+
 			$('#trpItemNama').val('');
 			$('#trpQty').val('');
 		}
 
 		$('.trpTable tbody').on( 'click', 'button.btnhapus', function () {
-            table.row( $(this).parents('tr') ).remove().draw();
+			table.row( $(this).parents('tr') ).remove().draw();
+			var inputs = document.getElementsByClassName( 'idItem' ),
+			names  = [].map.call(inputs, function( input ) {
+				return input.value;
+			});
+
+			$( "#trpItemNama" ).autocomplete({
+				source: function(request, response) {
+					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#trpItemNama").val() }, 
+							response);
+				},
+				minLength: 3,
+				select: function(event, data) {
+					$('#trpItemId').val(data.item.id);
+					$('#trpItemNama').val(data.item.label);
+				}
+			});
         });
 
 		function simpan_trp(){
@@ -236,7 +276,18 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			if($('#trpCompId').val() == ''){
 				$.smallBox({
 					title : "Gagal",
-					content : "Maaf, Data Nama Cabang Tidak Boleh Kosong ",
+					content : "Maaf, Data Nama CABANG Tidak Boleh Kosong ",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				return false;
+			}
+
+			if($('#bulanRencana').val() == ''){
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Masukkan BULAN Tidak Boleh Kosong ",
 					color : "#A90329",
 					timeout: 4000,
 					icon : "fa fa-times bounce animated"
