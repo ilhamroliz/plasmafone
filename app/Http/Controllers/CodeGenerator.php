@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Illuminate\Support\Carbon;
 
 class CodeGenerator
 {
@@ -42,6 +43,24 @@ class CodeGenerator
         } else if ($countData == 999) {
             $countData = 0;
         }
+
+        $nomor = $countData+1;
+
+
+        if ($lebar > 0) {
+            $angka = $awalan.'/'.str_pad($nomor, $lebar,"0", STR_PAD_LEFT).'/'.date('d/m/Y');
+        }else{
+            $angka = $awalan.'/'.$nomor.'/'.date('d/m/Y');
+        }
+
+        return $angka;
+    }
+
+    public static function codePenjualan($table, $field, $mulai=0, $panjang=0, $lebar=0, $awalan)
+    {
+        $code = DB::table($table)->where(DB::raw('substr('.$field.', '.$mulai.', '.$panjang.')'), '=', Carbon::now('Asia/Jakarta')->format('d/m/Y'));
+            
+        $countData = $code->count();
 
         $nomor = $countData+1;
 

@@ -257,7 +257,7 @@ class DistribusiController extends Controller
         { 
             return "lengkapi data";
         } else {
-            $nota = GenerateCode::codePos('d_distribusi', 'd_id', 3, 'DISTRIBUSI');
+            $nota = GenerateCode::codePenjualan('d_distribusi', 'd_nota', 16, 10, 3, 'DISTRIBUSI');
 
             DB::beginTransaction();
             try {

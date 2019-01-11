@@ -353,10 +353,10 @@ class PenjualanController extends Controller
 
                 if ($data['jenis_pembayaran'] == "T") {
                     // POS-TEM/001/14/12/2018
-                    $nota = GenerateCode::codePos('d_sales', 's_id', 3, 'POS-TEM');
+                    $nota = GenerateCode::codePenjualan('d_sales', 's_nota', 13, 10, 3, 'POS-TEM');
                 } else {
                     // POS-REG/001/14/12/2018
-                    $nota = GenerateCode::codePos('d_sales', 's_id', 3, 'POS-REG');
+                    $nota = GenerateCode::codePenjualan('d_sales', 's_nota', 13, 10, 3, 'POS-REG');
                 }
                 
                 $Htotal_disc_persen = 0;
