@@ -389,6 +389,7 @@ class PembelianController extends Controller
             $query = DB::table('d_purchase_req')
             ->select('d_purchase_req.*','d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq','d_purchase_req_dumy.pr_qtyApp_dumy')
             ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->join('d_purchase_req_dumy','d_purchase_req.pr_id','=','d_purchase_req_dumy.pr_id')
             ->where('d_purchase_req.pr_compReq', $pr_compReq)
             ->where('d_purchase_req.pr_stsReq', $status)
             ->get();
@@ -1086,7 +1087,8 @@ class PembelianController extends Controller
                 'd_purchase_plan.*',
                 'd_item.*',
                 'm_company.*',
-                DB::raw('sum(d_purchase_plan.pr_qtyReq) as TotalQty')
+                DB::raw('sum(d_purchase_plan.pr_qtyReq) as TotalQty_req'),
+                DB::raw('sum(d_purchase_plan.pr_qtyApp) as TotalQty_app')
             )
             ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
             ->join('m_company', 'd_purchase_plan.pr_comp', '=', 'm_company.c_id')
@@ -1101,8 +1103,8 @@ class PembelianController extends Controller
                             'pr_idPlan'=>$no++,
                             'pr_idReq'=>$query[$i]->pr_idReq,
                             'pr_itemPlan'=>$query[$i]->pr_itemPlan,
-                            'pr_qtyReq'=>$query[$i]->pr_qtyReq,
-                            'pr_qtyApp'=>$query[$i]->pr_qtyApp,
+                            'pr_qtyReq'=>$query[$i]->TotalQty_req,
+                            'pr_qtyApp'=>$query[$i]->TotalQty_app,
                             'pr_harga_satuan'=>"0",
                             'pr_discount'=>"0",
                             'pr_subtotal'=>"0",
