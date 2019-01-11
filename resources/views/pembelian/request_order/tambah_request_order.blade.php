@@ -112,11 +112,14 @@
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
                     <header role="heading">
-                        <div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
+                        <div class="jarviswidget-ctrls" role="menu">
+							<!-- <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a>  -->
+							<!-- <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> -->
                         </div>
                         <h2><strong>Tambah Rencana Pembelian</strong></h2>
 
-                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
+                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+					</header>
 
 						<!-- widget div-->
 						<div>
@@ -500,7 +503,7 @@
 								
 							},
 							
-						}); 
+						});  
 			
 			 
 		}
@@ -536,7 +539,7 @@
 
 		function simpanRequest(){
 			$.SmartMessageBox({
-					title : "Smart Alert!",
+					title : "Konfirmasi...!",
 					content : "Apakah Anda Yakin Akan Mengajukan Request Order ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {

@@ -39,7 +39,7 @@ class ReceptionController extends Controller
                 ->join('d_bbm_dt','d_bbm.bm_id','=','d_bbm_dt.bm_id')
                 ->join('d_supplier','d_bbm.bm_supplier','=','d_supplier.s_id')
                 ->join('d_purchase','d_bbm.bm_po','=','d_purchase.p_id')
-                ->groupBy('d_bbm_dt.bm_id')
+                ->groupBy('d_bbm.bm_po')
                 ->get();
 
         $data = array();

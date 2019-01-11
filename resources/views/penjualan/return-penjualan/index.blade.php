@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Outlet')
+@section('title', 'Return Penjualan')
 
 @section('extra_style')
 
@@ -22,7 +22,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Data Master</li><li>Master Outlet</li>
+			<li>Home</li><li>Penjualan</li><li>Return Penjualan</li>
 		</ol>
 
 	</div>
@@ -43,7 +43,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					<i class="fa-fw fa fa-asterisk"></i>
 
-					Data Master <span><i class="fa fa-angle-double-right"></i> Master Outlet </span>
+					Penjualan <span><i class="fa fa-angle-double-right"></i> Return Penjualan </span>
 
 				</h1>
 
@@ -95,125 +95,33 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-						<header>
-							
-							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
-
-								<li class="active">
-
-									<a data-toggle="tab" href="#hr1"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Aktif </span> </a>
-
-								</li>
-
-								<li>
-
-									<a data-toggle="tab" href="#hr2"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Semua </span></a>
-
-								</li>
-
-								<li>
-
-									<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Non Aktif </span></a>
-
-								</li>
-
-							</ul>
-
-						</header>
-
 						<div>
 							
 							<div class="widget-body no-padding">
 
-								<div class="tab-content padding-10">
+								<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
-									<div class="tab-pane fade in active" id="hr1">
+                                    <thead>		
 
-										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+                                        <tr>
 
-											<thead>		
+                                            <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
 
-												<tr>
+                                            <th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+                                            <th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
 
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+                                            <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
+                                        </tr>
 
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+                                    </thead>
 
-												</tr>
+                                    <tbody>
 
-											</thead>
+                                    </tbody>
 
-											<tbody>
-
-											</tbody>
-
-										</table>
-
-									</div>
-
-									<div class="tab-pane fade" id="hr2">
-
-										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
-
-											<thead>		
-
-												<tr>
-
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
-
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
-
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-
-													<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
-
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
-												</tr>
-
-											</thead>
-
-											<tbody>
-
-											</tbody>
-
-										</table>
-
-									</div>
-
-									<div class="tab-pane fade" id="hr3">
-
-										<table id="dt_inactive" class="table table-striped table-bordered table-hover" width="100%">
-
-											<thead>		
-
-												<tr>
-
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
-
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
-
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
-												</tr>
-
-											</thead>
-
-											<tbody>
-
-											</tbody>
-
-										</table>
-
-									</div>
-
-								</div>
+                                </table>
 
 							</div>
 
@@ -289,30 +197,24 @@ use App\Http\Controllers\PlasmafoneController as Access;
 													</tr>
 
 													<tr class="info">
-														<td><strong>Jenis</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_jenis"></td>
-													</tr>
-
-													<tr class="success">
 														<td><strong>Alamat</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_address"></td>
 													</tr>
 
-													<tr class="danger">
+													<tr class="success">
 														<td><strong>Keterangan</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_note"></td>
 													</tr>
 
-													<tr class="warning">
+													<tr class="danger">
 														<td><strong>Status</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_isactive"></td>
 													</tr>
 
-													<tr class="info">
+													<tr class="warning">
 														<td><strong>Dibuat</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_created"></td>
@@ -385,7 +287,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"processing": true,
 					"serverSide": true,
 					"orderable": false,
-					"order": [],
 					"ajax": "{{ route('outlet.getdataactive') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -419,7 +320,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"processing": true,
 					"serverSide": true,
 					"orderable": false,
-					"order": [],
 					"ajax": "{{ route('outlet.getdataall') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -454,7 +354,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"processing": true,
 					"serverSide": true,
 					"orderable": false,
-					"order": [],
 					"ajax": "{{ route('outlet.getdatanonactive') }}",
 					"columns":[
 						{"data": "c_name"},
@@ -609,7 +508,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					$('#dt_code').text(response.data.data.c_id);
 					$('#dt_name').text(response.data.data.c_name);
 					$('#dt_phone').text(response.data.data.c_tlp);
-					$('#dt_jenis').text(response.data.data.c_jenis);
 					$('#dt_address').text(response.data.data.c_address);
 					$('#dt_note').text(response.data.data.c_note);
 

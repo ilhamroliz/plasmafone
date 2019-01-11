@@ -45,7 +45,7 @@
 					</span>
                 </h1>
             </div>
-            @if(Access::checkAkses(45, 'insert') == true)
+            @if(Access::checkAkses(2, 'insert') == true)
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 
                     <div class="page-title">
@@ -100,12 +100,7 @@
                                 <li>
                                     <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
                                                                          class="fa fa-lg fa-check"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Disetujui </span></a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#hr3"> <i style="color: #A90329;"
-                                                                         class="fa fa-lg fa-close"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Ditolak </span></a>
+                                            class="hidden-mobile hidden-tablet"> Confirm </span></a>
                                 </li>
                                 <li>
                                     <a data-toggle="tab" href="#hr4"> <i style="color: #A90329;"
@@ -138,21 +133,6 @@
                                     </div>
                                     <div class="tab-pane fade" id="hr2">
                                         <table id="dt_disetujui" class="table table-striped table-bordered table-hover"
-                                               width="100%">
-                                            <thead>
-                                            <tr>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane fade" id="hr3">
-                                        <table id="dt_ditolak" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>

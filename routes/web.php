@@ -370,7 +370,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/rencana-pembelian/rencanaDitolak', 'PembelianController@rencanaDitolak');
 	Route::get('/pembelian/rencana-pembelian/rencanaDisetujui', 'PembelianController@rencanaDisetujui');
 	Route::get('/pembelian/rencana-pembelian/rencanaSemua', 'PembelianController@rencanaSemua');
-	Route::get('/pembelian/rencana-pembelian/view_tambahRencana', 'PembelianController@view_tambahRencana');
+	Route::POST('/pembelian/rencana-pembelian/view_tambahRencana', 'PembelianController@view_tambahRencana');
+	Route::POST('/pembelian/rencana-pembelian/view_tambahRencana_dumy', 'PembelianController@view_tambahRencana_dumy');
 	Route::get('/pembelian/rencana-pembelian/itemSuplier', 'PembelianController@itemSuplier');
 // action data rencana pembelian
 	Route::get('/pembelian/rencana-pembelian/updateRequest', 'PembelianController@updateRequest');
@@ -382,7 +383,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 
 	Route::get('/pembelian/rencana-pembelian/getRequest_dumy', 'PembelianController@getRequest_dumy');
-	Route::get('/pembelian/rencana-pembelian/editDumy', 'PembelianController@editDumy');
+	Route::POST('/pembelian/rencana-pembelian/editDumy', 'PembelianController@editDumy');
 	Route::get('/pembelian/rencana-pembelian/getComp_plan', 'PembelianController@getComp_plan');
 
 
@@ -401,14 +402,18 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmPurchase', 'PembelianController@view_confirmPurchase');
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmAll', 'PembelianController@view_confirmAll');
 	Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd', 'PembelianController@view_confirmAdd');
+	Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans', 'PembelianController@view_confirmAdd_trans');
 
 
 	//action confirm order
 	Route::POST('/pembelian/konfirmasi-pembelian/confirmSetuju', 'PembelianController@confirmSetuju');
-	Route::POST('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
+	Route::post('/pembelian/konfirmasi-pembelian/confirmTolak', 'PembelianController@confirmTolak');
 	Route::get('/pembelian/konfirmasi-pembelian/getPlan_id', 'PembelianController@getPlan_id');
 	Route::get('/pembelian/konfirmasi-pembelian/getSupplier', 'PembelianController@getSupplier');
 	Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
+	Route::post('/pembelian/konfirmasi-pembelian/editDumy', 'PembelianController@editConfirm_dummy');
+
+	Route::POST('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
 
 	Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
@@ -530,6 +535,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan_pusat');
 	// End penerimaan barang dari pusat
 
+<<<<<<< HEAD
 	// Distribusi barang
 	Route::get('/inventory/distribusi', 'inventory\DistribusiController@index_distribusi');
 	Route::get('/inventory/distribusi/get-purchase/{id}', 'inventory\DistribusiController@show_purchase');
@@ -553,6 +559,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// End Inventory
 
+=======
+>>>>>>> a6adb11a403b86fdbb29c9a11e9dbcd783c8ac7d
 	///// PENJUALAN
 
 	//== Set Harga
@@ -696,19 +704,41 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-reguler', 'PenjualanController@index');
 	Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
 	Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
+	Route::get('penjualan-reguler/cari-sales', 'PenjualanController@cariSales');
 	Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
 	Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
 	Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
 	Route::get('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
 	Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
-	Route::get('penjualan-reguler/struk/{sales}/{id}', 'PenjualanController@struck');
+	Route::get('penjualan-reguler/struk/{salesman}/{id}', 'PenjualanController@struck');
 	Route::get('penjualan-reguler/detailPembayaran/{total}', 'PenjualanController@detailpembayaran');
 	//==============
 	
 	// =====Penjualan Tempo=====
 	Route::get('penjualan-tempo', 'PenjualanController@tempo');
-	Route::get('pointofsalestempo/simpan', 'PenjualanController@savePenjualanTempo');
+	Route::get('penjualan-tempo/simpan-member', 'PenjualanController@saveMember');
+	Route::get('penjualan-tempo/cari-member', 'PenjualanController@cariMember');
+	Route::get('penjualan-tempo/cari-sales', 'PenjualanController@cariSales');
+	Route::get('penjualan-tempo/cari-stock', 'PenjualanController@cariStock');
+	Route::get('penjualan-tempo/simpan-penjualan', 'PenjualanController@save');
+	Route::get('penjualan-tempo/getdetailmember/{id}', 'PenjualanController@getDetailMember');
+	Route::get('penjualan-tempo/simpan', 'PenjualanController@savePenjualan');
+	Route::get('penjualan-tempo/search-stock', 'PenjualanController@searchStock');
+	Route::get('penjualan-tempo/struktempo/{salesman}/{id}', 'PenjualanController@struckTempo');
+	Route::get('penjualan-tempo/detailpembayarantempo/{total}', 'PenjualanController@detailpembayaranTempo');
 	// =========================
+
+	// =====Return Penjualan=====
+	Route::get('return-penjualan', 'ReturnPenjualanController@index');
+	// =====End Return Penjualan=====
+
+	// =====Distribusi Barang=====
+	Route::get('distribusi-barang', 'inventory\DistribusiController@index');
+	Route::get('distribusi-barang/cari-outlet', 'inventory\DistribusiController@cariOutlet');
+	Route::get('distribusi-barang/cari-stock', 'inventory\DistribusiController@cariStock');
+	Route::get('distribusi-barang/search-stock', 'inventory\DistribusiController@searchStock');
+	Route::post('distribusi-barang/simpan', 'inventory\DistribusiController@simpan');
+	// =====End Distribusi barang=====
 
     //== Layanan Perbaikan
 	Route::get('layanan-perbaikan', 'PerbaikanController@index');

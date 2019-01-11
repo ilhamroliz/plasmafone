@@ -246,7 +246,7 @@ var url = '{{url('/inventory/penerimaan/supplier/view_bbm_dt')}}';
 						data._token = '{{ csrf_token() }}';
                     },
                 },
-        } );
+        } ); 
     }
 
 

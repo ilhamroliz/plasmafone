@@ -212,6 +212,21 @@
 
 												</div>
 
+												<div class="form-group">
+
+													<label class="col-xs-4 col-lg-4 control-label text-left">Jenis</label>
+
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+														<select class="form-control" name="jenis">
+															<option value="INTERNAL" @if($outlet->c_jenis == "INTERNAL") selected @endif>INTERNAL</option>
+															<option value="EKSTERNAL" @if($outlet->c_jenis == "EKSTERNAL") selected @endif>EKSTERNAL</option>
+														</select>
+
+													</div>
+
+												</div>
+
 											</article>
 											
 										</div>

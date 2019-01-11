@@ -44,7 +44,7 @@ class outlet_controller extends Controller
 
     public function getdataactive()
     {
-        $outlet_active = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'Y');
+        $outlet_active = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'Y')->orderBy('created_at', 'desc');
 
         return DataTables::of($outlet_active)
 
@@ -69,7 +69,7 @@ class outlet_controller extends Controller
 
     public function getdataall()
     {
-        $outlet_all = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive');
+        $outlet_all = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->orderBy('created_at', 'desc');
 
         return DataTables::of($outlet_all)
 
@@ -124,7 +124,7 @@ class outlet_controller extends Controller
 
     public function getdatanonactive()
     {
-        $outlet_nonactive = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'N');
+        $outlet_nonactive = Outlet::select('c_id', 'c_name', 'c_tlp', 'c_address', 'c_isactive')->where('c_isactive', 'N')->orderBy('created_at', 'desc');
 
         return DataTables::of($outlet_nonactive)
 
@@ -204,6 +204,7 @@ class outlet_controller extends Controller
                             $outlet->c_id = GenerateCode::code('m_company', 'c_id', 8, 'PF');
                             $outlet->c_name = strtoupper($data['name']);
                             $outlet->c_tlp = $data['telp'];
+                            $outlet->c_jenis = $data['jenis'];
                             $outlet->c_address = strtoupper($data['address']);
                             $outlet->c_note = $note;
 
@@ -297,6 +298,7 @@ class outlet_controller extends Controller
                             Outlet::where(['c_id' => $data['code']])->update([
                                 'c_name' => strtoupper($data['name']),
                                 'c_tlp' => strtoupper($data['telp']),
+                                'c_jenis' => strtoupper($data['jenis']),
                                 'c_address' => strtoupper($data['address']),
                                 'c_note' => $note,
                                 'c_isactive' => strtoupper($data['isactive'])

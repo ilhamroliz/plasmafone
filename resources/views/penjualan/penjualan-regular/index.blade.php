@@ -61,8 +61,10 @@
                                                         <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
                                                             <div class="icon-addon addon-md">
-                                                                <input class="form-control" id="salesman" name="salesman" placeholder="Masukkan Nama Sales" type="text"  style="text-transform: uppercase">
-                                                                {{-- <label for="cari-member" class="glyphicon glyphicon-user" rel="tooltip" title="Nama Sales"></label> --}}
+                                                                <input class="form-control" id="cari-salesman" placeholder="Masukkan Nama Sales" type="text"  style="text-transform: uppercase">
+                                                                <input type="hidden" name="salesman" id="salesman" value="">
+                                                                <input type="hidden" name="jenis_pembayaran" value="T">
+                                                                <label for="salesman" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Sales"></label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -136,6 +138,7 @@
                                                     <div class="input-icon-left">
                                                         <i class="fa fa-barcode"></i>
                                                         <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
+                                                        <input type="hidden" id="stockid" name="stockid">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -274,7 +277,19 @@
 
     $(document).ready(function(){
         $('.togel').click();
-        $("#salesman").focus();
+        if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		}
+        $("#cari-salesman").focus();
+        
+        $( "#cari-salesman" ).autocomplete({
+            source: baseUrl+'/penjualan-reguler/cari-sales',
+            minLength: 1,
+            select: function(event, data) {
+                $("#salesman").val(data.item.id);
+                $("#cari-member").focus();
+            }
+        });
 
         $( "#cari-member" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-member',
@@ -290,6 +305,12 @@
             minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
+                $("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
 
@@ -493,6 +514,7 @@
                 });
             } else {
                 setStock(response.data[0]);
+                $("#stockid").val(response.data[0].data.id);
                 tambah();
             }
         })
@@ -709,8 +731,20 @@
             minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+                $("#stockid").val(data.item.id);
+				if ($("#stockid").val() == "") {
+					$("#tambahketable").attr('disabled', true);
+				} else {
+					$("#tambahketable").attr('disabled', false);
+				}
             }
         });
+        $("#stockid").val("");
+		if ($("#stockid").val() == "") {
+			$("#tambahketable").attr('disabled', true);
+		} else {
+			$("#tambahketable").attr('disabled', false);
+		}
         updateTotalTampil();
     }
 
@@ -906,12 +940,12 @@
                         icon : "fa fa-check bounce animated"
                     });
                     $(".tr").remove();
-                    $("#salesman").val("");
+                    $("#cari-salesman").val("");
                     $("#cari-member").val("");
                     $("#idMember").val("");
                     $("#detail_mem").hide("slow");
                     $("#search_barang").hide("slow");
-                    $("#salesman").focus();
+                    $("#cari-salesman").focus();
                     updateTotalTampil();
                     cetak(response.salesman, response.idSales);
                     $('#DetailPembayaran').modal('hide');
