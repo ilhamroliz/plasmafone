@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use Session;
 use App\Http\Controllers\PlasmafoneController as Plasma;
+use App\Http\Controllers\PlasmafoneController as Access;
 use DataTables;
 use Carbon\Carbon;
 use Auth;
@@ -18,11 +19,6 @@ class ReceptionController extends Controller
 	// Penerimaan barang dari supplier
     public function index_supplier()
     {
-    	// $data = DB::table('d_inventory')
-    	// 		->select('d_inventory.*', 'd_supplier.s_company')
-    	// 		->where('d_inventory.i_from', '=', 'Supplier')
-    	// 		->join('d_supplier', 'd_inventory.i_id_supplier', '=', 'd_supplier.s_id')
-    	// 		->get();
     	return view('inventory.receipt_goods.supplier.index');
     }
 
@@ -727,23 +723,40 @@ class ReceptionController extends Controller
     }
     // End penerimaan barang dari pusat
 
-    // Distribusi barang
-    // public function index_distribusi()
-    // {
-    //     $purchase = DB::table('d_inventory')->get();
-    //     return view('inventory.distribusi.index')->with(compact('purchase'));
-    // }
+    // Penerimaan barang dari distribusi
+    public function index_distribusi()
+    {
+        return view('inventory.penerimaan-barang.distribusi.index');
+    }
 
-    // public function show_purchase($id = null)
-    // {
-    //     $data = DB::table('d_inventory')
-    //             ->where('i_po', $id)
-    //             ->get();
-    //     if (count($data) == 0) {
-    //         # code...
-    //         $data = null;
-    //     }
-    //     echo json_encode($data);
-    // }
-    // End distribusi barang
+    public function dataDistribusiProses()
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi_dt.dd_qty_received', null);
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                if (Access::checkAkses(10, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $data->id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $data->id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $data->id . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+                }
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+    // End penerimaan barang dari distribusi
 }

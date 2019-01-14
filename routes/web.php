@@ -513,13 +513,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/penerimaan/supplier/terimaBarang', 'inventory\ReceptionController@terimaBarang');
 	Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
 	Route::get('/inventory/penerimaan/supplier/view_bbm_dt', 'inventory\ReceptionController@view_bbm_dt');
-
-
-
-
-
-
-
 	Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\ReceptionController@index_addSupplier');
 	Route::match(['get', 'post'], '/inventory/penerimaan/supplier/add', 'inventory\ReceptionController@add_items_from_supplier');
 	Route::get('/inventory/penerimaan/supplier/get-current-receipt/{id}', 'inventory\ReceptionController@get_current_receipt');
@@ -529,15 +522,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/inventory/penerimaan/supplier/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan');
 	// End penerimaan barang dari supplier
 
-	// Penerimaan barang dari pusat
-	Route::get('/inventory/penerimaan/pusat', 'inventory\ReceptionController@index_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/add', 'inventory\ReceptionController@add_items_from_pusat');
-	Route::get('/inventory/penerimaan/pusat/get-current-receipt-pusat/{id}', 'inventory\ReceptionController@get_current_receipt_pusat');
-	Route::get('/inventory/penerimaan/pusat/edit', 'inventory\ReceptionController@edit_barang_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/edit-multiple', 'inventory\ReceptionController@multiple_edit_penerimaan_barang_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/update', 'inventory\ReceptionController@update_penerimaan_barang_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan_pusat');
-	// End penerimaan barang dari pusat
+	// Penerimaan barang distribusi
+	Route::get('/inventory/penerimaan/distribusi', 'inventory\ReceptionController@index_distribusi');
+	Route::get('/inventory/penerimaan/distribusi/proses', 'inventory\ReceptionController@dataDistribusiProses')->name('distribusi.proses');
+	// End penerimaan barang distribusi
 
 	// Distribusi barang
 	Route::get('/inventory/distribusi', 'inventory\DistribusiController@index_distribusi');
