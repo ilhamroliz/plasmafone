@@ -43,7 +43,7 @@ class ReceptionController extends Controller
         foreach ($query as $key) {
            $row     = array();
            $row[]   = $i++;
-           $row[]   = $key->bm_no;
+        //    $row[]   = $key->bm_no;
            $row[]   = $key->p_nota;
            $row[]   = $key->s_company;
            $row[]   = $key->selisih;
