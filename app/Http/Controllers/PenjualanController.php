@@ -441,8 +441,6 @@ class PenjualanController extends Controller
                                 // update in table d_stock
                                 DB::table('d_stock')->where(['s_comp' => $outlet_user, 's_position' => $outlet_user, 's_item' => $idItem->s_item])->update(['s_qty' => $sm_sisa]);
 
-                                
-
                         }
 
                     }
