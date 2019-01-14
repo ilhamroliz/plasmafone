@@ -76,7 +76,103 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				</div>
 			@endif
 
-			<!-- row -->
+            <!-- row -->
+            <div class="row">
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+                        <header>
+
+                            			
+                            
+                        </header>
+
+                        <div>
+                            
+                            <div class="widget-body">
+
+                                <form class="form-horizontal" method="post">
+                                    {{ csrf_field() }}
+
+                                    <fieldset>  
+
+                                        <div class="row">
+
+                                            <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+
+                                                <div class="form-group">
+
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Nota</label>
+
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+                                                        <div class="input-group">
+
+                                                            <span class="input-group-addon"><i class="fa fa-building"></i></span>
+
+                                                            <input type="text" class="form-control" readonly style="text-transform: uppercase" value="{{ $data->nota }}" />
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Dari Outlet</label>
+
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+                                                        <div class="input-group">
+
+                                                            <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+
+                                                            <input type="text" class="form-control" style="text-transform: uppercase" readonly value="{{ $data->from }}" />
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group">
+
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Tujuan Outlet</label>
+
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+                                                        <div class="input-group">
+
+                                                            <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+
+                                                            <input type="text" class="form-control" style="text-transform: uppercase" readonly value="{{ $data->destination }}" />
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </article>
+                                            
+                                        </div>
+
+                                    </fieldset>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
 			<div class="row">
 
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -85,21 +181,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 						<header>
 							
-							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
-
-								<li class="active">
-
-									<a data-toggle="tab" href="#hr1"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Proses </span> </a>
-
-								</li>
-
-								<li>
-
-									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Diterima </span></a>
-
-								</li>
-
-							</ul>
+                            <h2><strong>Daftar Item</strong></h2>
 
 						</header>
 
@@ -107,67 +189,27 @@ use App\Http\Controllers\PlasmafoneController as Access;
 							
 							<div class="widget-body no-padding">
 
-								<div class="tab-content padding-10">
+								<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
-									<div class="tab-pane fade in active" id="hr1">
+                                    <thead>		
 
-										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+                                        <tr>
 
-											<thead>		
+                                            <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
 
-												<tr>
+                                            <th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
+                                            <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
+                                        </tr>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
+                                    </thead>
 
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+                                    <tbody>
 
-												</tr>
+                                    </tbody>
 
-											</thead>
-
-											<tbody>
-
-											</tbody>
-
-										</table>
-
-									</div>
-
-									<div class="tab-pane fade" id="hr2">
-
-										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
-
-											<thead>		
-
-												<tr>
-
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
-
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
-
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
-
-													<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
-
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
-												</tr>
-
-											</thead>
-
-											<tbody>
-
-											</tbody>
-
-										</table>
-
-									</div>
-
-								</div>
+                                </table>
 
 							</div>
 
@@ -179,123 +221,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</div>
 
 			<!-- end row -->
-
-			<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-			<div class="modal-dialog">
-
-				<div class="modal-content">
-
-					<div class="modal-header">
-
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-
-						<h4 class="modal-title" id="myModalLabel">Detail</h4>
-
-					</div>
-
-					<div class="modal-body">
-		
-						<div class="row">
-
-							<!-- Widget ID (each widget will need unique ID)-->
-							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-
-								<header>
-
-									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
-
-									<h2 id="title_detail"></h2>
-
-								</header>
-
-								<!-- widget div-->
-								<div>
-
-									<!-- widget content -->
-									<div class="widget-body no-padding">
-										
-										<div class="table-responsive">
-											
-											<table class="table">
-
-												<tbody>
-
-													<tr class="success">
-														<td><strong>Nota</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_nota"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Dari Outlet</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_from"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>Tujuan Outlet</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_destination"></td>
-													</tr>
-
-													<tr class="info">
-														<td><strong>Item</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_item"></td>
-													</tr>
-
-													<tr class="success">
-														<td><strong>Kuantitas</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_qty"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Tanggal Distribusi</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_tgl"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>Status</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_status"></td>
-													</tr>
-
-													<tr class="info">
-														<td><strong>Oleh</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_by"></td>
-													</tr>
-
-												</tbody>
-
-											</table>
-											
-										</div>
-
-									</div>
-									<!-- end widget content -->
-
-								</div>
-								<!-- end widget div -->
-
-							</div>
-							<!-- end widget -->
-						</div>
-		
-					</div>
-
-				</div><!-- /.modal-content -->
-
-			</div><!-- /.modal-dialog -->
-
-		</div>
-		<!-- /.modal -->
 
 		</section>
 		<!-- end widget grid -->
@@ -314,7 +239,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
-		var aktif, semua;
+		var aktif;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -340,11 +265,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"serverSide": true,
 					"orderable": false,
 					"order": [],
-					"ajax": "{{ route('distribusi.proses') }}",
+					"ajax": "{{ url('/inventory/penerimaan/distribusi/get-item/'.$id) }}",
 					"columns":[
-						{"data": "nota"},
-						{"data": "from"},
-						{"data": "destination"},
+						{"data": "nama_item"},
+						{"data": "qty"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -364,49 +288,14 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						responsiveHelper_dt_basic.respond();
 					}
 				});
+                $('#overlay').fadeOut(200);
 
 			}, 500);
-
-			setTimeout(function () {
-
-				semua = $('#dt_all').dataTable({
-					"processing": true,
-					"serverSide": true,
-					"orderable": false,
-					"order": [],
-					"ajax": "{{ route('outlet.getdataall') }}",
-					"columns":[
-						{"data": "c_name"},
-						{"data": "c_tlp"},
-						{"data": "c_address"},
-						{"data": "active"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
-					}
-				});
-                $('#overlay').fadeOut(200);
-			}, 1000);
 
 		/* END BASIC */
 
 		function refresh_tab(){
 		    aktif.api().ajax.reload();
-		    semua.api().ajax.reload();
 		}
 
 

@@ -282,8 +282,11 @@ class DistribusiController extends Controller
 
                 for ($i=0; $i < count($data['idStock']); $i++) { 
                     $get_countiddetail = DB::table('d_distribusi_dt')->where('dd_distribusi', $distribusiId)->count()+1;
+
                     $compitem = DB::table('d_stock')->select('s_comp', 's_item')->where('s_id', $data['idStock'][$i])->first();
+
                     $namaItem = DB::table('d_stock')->select('s_comp', 's_item', 'i_nama')->where('s_id', $data['idStock'][$i])->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')->first();
+                    
                     DB::table('d_distribusi_dt')->insert([
                         'dd_distribusi' => $distribusiId,
                         'dd_detailid' => $get_countiddetail,
