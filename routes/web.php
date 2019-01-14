@@ -303,7 +303,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// End Master Member
 
     //master pembayaran
-    Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
+	Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
     //end pembayaran
 
 	// Pembelian
@@ -550,8 +550,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/inventory/opname-barang/pusat', 'inventory\opnameBarangController@pusat');
 	Route::get('/inventory/opname-barang/outlet', 'inventory\opnameBarangController@outlet');
 
+	Route::get('/inventory/opname-barang/auto-comp-noPusat', 'inventory\opnameBarangController@auto_comp_noPusat');
+
 	Route::get('/inventory/opname-barang/appr', 'inventory\opnameBarangController@get_approved');
 	Route::get('/inventory/opname-barang/pend', 'inventory\opnameBarangController@get_pending');
+
+	///DataTable Inputan form Tambah Opname
+	Route::post('/inventory/opname-barang/get-stock-code', 'inventory\opnameBarangController@get_stock_code');
+
+	Route::post('/inventory/opname-barang/cariItemStock', 'inventory\opnameBarangController@cari_item_stock');
 
 	Route::post('/inventory/opname-barang/formTambah', 'inventory\opnameBarangController@form_tambah');
 	Route::post('/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
