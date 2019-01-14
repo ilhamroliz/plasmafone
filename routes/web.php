@@ -304,6 +304,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //master pembayaran
 	Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
+    Route::get('master/pembayaran/get-dataY', 'master\pembayaran\MasterPembayaranController@getDataY');
     //end pembayaran
 
 	// Pembelian
