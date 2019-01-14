@@ -36,7 +36,7 @@ class PenjualanController extends Controller
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($nama as $query) {
-                $results[] = ['id' => $query->m_id, 'label' => $query->m_name . ' ('.$query->m_id.')'];
+                $results[] = ['id' => $query->m_id, 'label' => $query->m_name];
             }
         }
         return Response::json($results);

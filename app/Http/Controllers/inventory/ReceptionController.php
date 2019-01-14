@@ -606,7 +606,7 @@ class ReceptionController extends Controller
                 ]);
     }
     // End penerimaan barang dari supplier
-
+    
     // Penerimaan barang dari pusat
     public function index_pusat()
     {
@@ -724,6 +724,10 @@ class ReceptionController extends Controller
     }
     // End penerimaan barang dari pusat
 
+    // ############################################################
+    // Pagar pemisah antara kita
+    // ############################################################
+
     // Penerimaan barang dari distribusi
     public function index_distribusi()
     {
@@ -815,7 +819,7 @@ class ReceptionController extends Controller
 
             if (Access::checkAkses(10, 'update') == true) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp; Terima</button></div>';
+                return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp; Terima</button></div>';
 
             }
 

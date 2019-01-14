@@ -85,7 +85,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                         <header>
 
-                            			
+                                <h2><strong>Distribusi</strong></h2>
                             
                         </header>
 
@@ -197,7 +197,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                                             <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
 
-                                            <th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
+                                            <th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
 
                                             <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 

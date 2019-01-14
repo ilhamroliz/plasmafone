@@ -240,7 +240,7 @@
                                 <div class="col-md-12">
                                     <div class="input-icon-left">
                                         <i class="fa fa-phone"></i>
-                                        <input class="form-control" id="nomor-member" placeholder="MASUKKAN NOMOR PEMBELI" type="text">
+                                        <input class="form-control" id="nomor-member" placeholder="MASUKKAN NOMOR TELEPHONE YANG BISA DIHUBUNGI" type="text">
                                     </div>
                                 </div>
                             </div>
