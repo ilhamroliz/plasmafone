@@ -82,6 +82,7 @@ class DistribusiController extends Controller
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->where('i_specificcode', '=', 'N')
+                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('sm_specificcode');
 
             $dataY = DB::table('d_stock')
@@ -107,6 +108,7 @@ class DistribusiController extends Controller
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->where('i_specificcode', '=', 'Y')
+                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('sm_specificcode');
 
             $data = $dataN->union($dataY)->get();
@@ -131,6 +133,7 @@ class DistribusiController extends Controller
                     $w->orWhere('i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('sm_specificcode')
                 ->get();
         }
@@ -187,6 +190,7 @@ class DistribusiController extends Controller
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->where('i_specificcode', '=', 'N')
+                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('sm_specificcode');
 
             $dataY = DB::table('d_stock')
@@ -211,6 +215,7 @@ class DistribusiController extends Controller
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->where('i_specificcode', '=', 'Y')
+                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('sm_specificcode');
 
             $data = $dataN->union($dataY)->get();
@@ -234,6 +239,7 @@ class DistribusiController extends Controller
                     $w->orWhere('i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('sm_specificcode')
                 ->get();
         }
@@ -251,16 +257,20 @@ class DistribusiController extends Controller
     public function simpan(Request $request)
     {
         $data = $request->all();
-        $val = "";
 
         if (!isset($data['idStock']) || $data['outlet'] == null) 
         { 
             return "lengkapi data";
         } else {
-            $nota = GenerateCode::codePenjualan('d_distribusi', 'd_nota', 16, 10, 3, 'DISTRIBUSI');
+            $nota = GenerateCode::codeInventory('d_distribusi', 'd_nota', 9, 10, 3, 'DST');
 
             DB::beginTransaction();
             try {
+
+                $arr_hpp = [];
+                $outlet_user = Auth::user()->m_comp;
+                $member = Auth::user()->m_id;
+
                 $distribusiId = DB::table('d_distribusi')->insertGetId([
                                     'd_from' => Auth::user()->m_comp,
                                     'd_destination' => $data['outlet'],
@@ -282,7 +292,77 @@ class DistribusiController extends Controller
                         'dd_qty' => $data['qtyTable'][$i]
                     ]);
                     Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
+
+                    if ($data['kode'][$i] != null) {
+                        $specificcode = $data['kode'][$i];
+                        
+                        DB::table('d_stock_dt')->where(['sd_stock' => $data['idStock'][$i], 'sd_specificcode' => $specificcode])->delete();
+                        
+                    } else {
+                        $specificcode = null;
+                    }
+
+                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_detail', 'PENAMBAHAN');
+
+                    $get_smiddetail = $count_smiddetail->get();
+
+                    foreach ($get_smiddetail as $key => $value) {
+
+                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->count()+1;
+                        
+                        if ($get_smiddetail[$key]->sm_sisa != 0) {
+
+                            $sm_hpp = $get_smiddetail[$key]->sm_hpp;
+                            array_push($arr_hpp, $sm_hpp);
+
+                            $sm_reff = $get_smiddetail[$key]->sm_nota;
+                            
+                            if ($get_smiddetail[$key]->sm_use != 0) {
+                                $sm_use = $data['qtyTable'][$i] + $get_smiddetail[$key]->sm_use;
+                                $sm_sisa = $get_smiddetail[$key]->sm_qty - $get_smiddetail[$key]->sm_use - $data['qtyTable'][$i];
+                            } else {
+                                $sm_use = $data['qtyTable'][$i] + $get_smiddetail[$key]->sm_use;
+                                $sm_sisa = $get_smiddetail[$key]->sm_qty - $data['qtyTable'][$i];
+                            }
+
+                            // Insert to table d_stock_mutation
+                            DB::table('d_stock_mutation')->insert([
+                                'sm_stock'          => $data['idStock'][$i],
+                                'sm_detailid'       => $get_countiddetail,
+                                'sm_date'           => date('Y-m-d H:m:s'),
+                                'sm_detail'         => 'PENGURANGAN',
+                                'sm_specificcode'   => $specificcode,
+                                'sm_qty'            => $data['qtyTable'][$i],
+                                'sm_use'            => 0,
+                                'sm_sisa'           => 0,
+                                'sm_hpp'            => $sm_hpp,
+                                'sm_sell'           => $data['harga'][$i],
+                                'sm_nota'           => $nota,
+                                'sm_reff'           => $sm_reff,
+                                'sm_mem'            => $member
+                            ]);
+
+                            // Update in table d_stock_mutation
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
+                                'sm_use' => $sm_use,
+                                'sm_sisa' => $sm_sisa
+                            ]);
+
+                            // Update d_stock
+                            DB::table('d_stock')
+                            ->where('s_id', $data['idStock'][$i])
+                            ->update([
+                                's_qty' => $sm_sisa,
+                                's_status' => 'On Going'
+                            ]);
+
+                        }
+
+                    }
                 }
+
+                // d_stock.s_comp = Auth::user()->m_comp
+
                 DB::commit();
                 return response()->json([
                     'status' => 'sukses',
@@ -290,7 +370,7 @@ class DistribusiController extends Controller
                 ]);
             } catch (\Exception $e) {
                 DB::rollback();
-                return "false";
+                return "false => ".$e;
             }
         }
 

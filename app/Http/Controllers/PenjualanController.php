@@ -413,33 +413,36 @@ class PenjualanController extends Controller
                             // $Htotal_disc_value += ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
                             
 
-                                // Insert to table d_stock_mutation
-                                DB::table('d_stock_mutation')->insert([
-                                    'sm_stock'          => $data['idStock'][$i],
-                                    'sm_detailid'       => $get_countiddetail,
-                                    'sm_date'           => date('Y-m-d H:m:s'),
-                                    'sm_detail'         => 'PENGURANGAN',
-                                    'sm_specificcode'   => $specificcode,
-                                    'sm_qty'            => $data['qtyTable'][$i],
-                                    'sm_use'            => 0,
-                                    'sm_sisa'           => 0,
-                                    'sm_hpp'            => $sm_hpp,
-                                    'sm_sell'           => $data['harga'][$i],
-                                    'sm_nota'           => $nota,
-                                    'sm_reff'           => $sm_reff,
-                                    'sm_mem'            => $member
-                                ]);
+                            // Insert to table d_stock_mutation
+                            DB::table('d_stock_mutation')->insert([
+                                'sm_stock'          => $data['idStock'][$i],
+                                'sm_detailid'       => $get_countiddetail,
+                                'sm_date'           => date('Y-m-d H:m:s'),
+                                'sm_detail'         => 'PENGURANGAN',
+                                'sm_specificcode'   => $specificcode,
+                                'sm_qty'            => $data['qtyTable'][$i],
+                                'sm_use'            => 0,
+                                'sm_sisa'           => 0,
+                                'sm_hpp'            => $sm_hpp,
+                                'sm_sell'           => $data['harga'][$i],
+                                'sm_nota'           => $nota,
+                                'sm_reff'           => $sm_reff,
+                                'sm_mem'            => $member
+                            ]);
 
-                                // Update in table d_stock_mutation
-                                DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
-                                    'sm_use' => $sm_use,
-                                    'sm_sisa' => $sm_sisa
-                                ]);
+                            // Update in table d_stock_mutation
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
+                                'sm_use' => $sm_use,
+                                'sm_sisa' => $sm_sisa
+                            ]);
 
-                                $idItem = DB::table('d_stock')->select('s_item')->where('s_id', $data['idStock'][$i])->first();
-
-                                // update in table d_stock
-                                DB::table('d_stock')->where(['s_comp' => $outlet_user, 's_position' => $outlet_user, 's_item' => $idItem->s_item])->update(['s_qty' => $sm_sisa]);
+                            // Update d_stock
+                            DB::table('d_stock')
+                            ->where('s_id', $data['idStock'][$i])
+                            ->update([
+                                's_qty' => $sm_sisa,
+                                's_status' => 'On Going'
+                            ]);
 
                         }
 
@@ -470,23 +473,21 @@ class PenjualanController extends Controller
                     $Dtotal_disc_persen = ($data['grossItem'][$i] / $data['totalGross']) * ($discPercent/100);
                     $Dtotal_disc_value = ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
 
-                        $idItem = DB::table('d_stock')->select('s_item')->where('s_id', $data['idStock'][$i])->first();
-                        // Insert to table d_sales_dt
-                        DB::table('d_sales_dt')->insert([
-                            'sd_sales'          => $idsales,
-                            'sd_detailid'       => $salesdetailid,
-                            'sd_comp'           => $outlet_user,
-                            'sd_item'           => $idItem->s_item,
-                            'sd_qty'            => $data['qtyTable'][$i],
-                            'sd_value'          => $data['harga'][$i],
-                            'sd_hpp'            => $arr_hpp[$i],
-                            'sd_total_gross'    => $data['totalItem'][$i],
-                            'sd_disc_persen'    => $Dtotal_disc_persen,
-                            'sd_disc_value'     => $Dtotal_disc_value,
-                            'sd_total_net'      => $data['totalItem'][$i]
-                        ]);
-
-                    
+                    $idItem = DB::table('d_stock')->select('s_item')->where('s_id', $data['idStock'][$i])->first();
+                    // Insert to table d_sales_dt
+                    DB::table('d_sales_dt')->insert([
+                        'sd_sales'          => $idsales,
+                        'sd_detailid'       => $salesdetailid,
+                        'sd_comp'           => $outlet_user,
+                        'sd_item'           => $idItem->s_item,
+                        'sd_qty'            => $data['qtyTable'][$i],
+                        'sd_value'          => $data['harga'][$i],
+                        'sd_hpp'            => $arr_hpp[$i],
+                        'sd_total_gross'    => $data['totalItem'][$i],
+                        'sd_disc_persen'    => $Dtotal_disc_persen,
+                        'sd_disc_value'     => $Dtotal_disc_value,
+                        'sd_total_net'      => $data['totalItem'][$i]
+                    ]);
 
                 }
                 DB::commit();
