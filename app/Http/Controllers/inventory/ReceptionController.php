@@ -8,6 +8,7 @@ use DB;
 use Session;
 use App\Http\Controllers\PlasmafoneController as Plasma;
 use App\Http\Controllers\PlasmafoneController as Access;
+use Illuminate\Support\Facades\Crypt;
 use DataTables;
 use Carbon\Carbon;
 use Auth;
@@ -744,11 +745,11 @@ class ReceptionController extends Controller
 
                 if (Access::checkAkses(10, 'update') == false) {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $data->id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $data->id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $data->id . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<a href="'.url("/inventory/penerimaan/distribusi/edit/".Crypt::encrypt($data->id)).'" class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data"><i class="glyphicon glyphicon-arrow-down"></i></a></div>';
 
                 }
 
@@ -757,6 +758,72 @@ class ReceptionController extends Controller
             ->rawColumns(['aksi'])
 
             ->make(true);
+    }
+
+    public function detail($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_distribusi.d_status as status', 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', $id)
+                    ->first();
+            return response()->json(['status' => 'OK', 'data' => $data]);
+
+        }
+    }
+
+    public function editDistribusi($id = null)
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi.d_id', Crypt::decrypt($id))
+                ->first();
+
+        return view('inventory.penerimaan-barang.distribusi.edit')->with(compact('data', 'id'));
+    }
+
+    public function getItem($id = null)
+    {
+        $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_distribusi.d_status as status', 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', Crypt::decrypt($id));
+
+        return DataTables::of($data)
+
+        ->addColumn('aksi', function ($data) {
+
+            if (Access::checkAkses(10, 'update') == true) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp; Terima</button></div>';
+
+            }
+
+        })
+
+        ->rawColumns(['aksi'])
+
+        ->make(true);
     }
     // End penerimaan barang dari distribusi
 }
