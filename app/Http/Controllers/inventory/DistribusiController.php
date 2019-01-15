@@ -355,7 +355,7 @@ class DistribusiController extends Controller
                             DB::table('d_stock')
                             ->where('s_id', $data['idStock'][$i])
                             ->update([
-                                's_qty' => $sm_sisa,
+                                // 's_qty' => $sm_sisa,
                                 's_status' => 'On Going'
                             ]);
 
