@@ -207,7 +207,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                                             <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
 
-                                            <th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
+											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
+											
+											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty Diterima</th>
 
                                             <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
@@ -321,6 +323,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"columns":[
 						{"data": "nama_item"},
 						{"data": "qty"},
+						{"data": "qty_received"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -371,15 +374,29 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 				} else {
 
-					console.log(response.data.qtyReceived);
-					var qty = 0;
-					if (response.data.qtyReceived == null) {
+					console.log(response.data.qtySisa);
+					var qty = 0, qtyReceived = 0;
+					if (response.data.qtySisa == null) {
 						qty = 0;
 					} else {
-						qty = response.data.qtyReceived;
+						qty = response.data.qtySisa;
 					}
 
-					row = '<div class="form-group col-md-8" id="form_qty">'+
+					if (response.data.qtyReceived == null) {
+						qtyReceived = 0;
+					} else {
+						qtyReceived = response.data.qtyReceived;
+					}
+
+					row = '<div class="form-group col-md-12" id="form_qty">'+
+									'<label for="bayar" class="row text-left col-md-6 control-label"><h4>Kuantitas yang sudah diterima:</h4></label>'+
+									'<div class="input-group col-md-6">'+
+										'<h4>'+
+											'<div style="float: right;">'+
+												'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row">'+
+											'</div>'+
+										'</h4>'+
+									'</div><br>'+
 									'<label for="bayar" class="row text-left col-md-6 control-label"><h4>Kuantitas:</h4></label>'+
 									'<div class="input-group col-md-6">'+
 										'<h4>'+
@@ -389,7 +406,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 												'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
 												'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
 												'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
-												'<input type="text" value="'+qty+'" onkeyup="qtyTerima(\''+response.data.qty+'\')" id="qty" name="qty" class="qty row">'+
+												'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+												'<input type="text" value="" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row">'+
 											'</div>'+
 										'</h4>'+
 									'</div>'+
@@ -414,13 +432,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			$('#form_qty').remove();
 		}
 
-		function qtyTerima(qtyDistribusi) {
+		function qtyTerima(qtySisa) {
 			var input = $("#qty").val();
 			if (isNaN(input)){
 				input = 0;
 			}
-			if (input > qtyDistribusi){
-				input = qtyDistribusi;
+			if (input > qtySisa){
+				input = qtySisa;
 				$("#qty").val(input);
 			}
 		}

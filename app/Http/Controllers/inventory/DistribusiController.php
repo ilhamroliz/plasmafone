@@ -276,8 +276,7 @@ class DistribusiController extends Controller
                                     'd_destination' => $data['outlet'],
                                     'd_nota' => $nota,
                                     'd_date' => Carbon::now('Asia/Jakarta'),
-                                    'd_mem' => Auth::user()->m_id,
-                                    'd_status' => 'On Going'
+                                    'd_mem' => Auth::user()->m_id
                                 ]);
 
                 for ($i=0; $i < count($data['idStock']); $i++) { 
@@ -292,7 +291,10 @@ class DistribusiController extends Controller
                         'dd_detailid' => $get_countiddetail,
                         'dd_comp' => $compitem->s_comp,
                         'dd_item' => $compitem->s_item,
-                        'dd_qty' => $data['qtyTable'][$i]
+                        'dd_qty' => $data['qtyTable'][$i],
+                        'dd_qty_received' => 0,
+                        'dd_qty_sisa' => $data['qtyTable'][$i],
+                        'dd_status' => 'On Going'
                     ]);
                     Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
 
@@ -355,8 +357,7 @@ class DistribusiController extends Controller
                             DB::table('d_stock')
                             ->where('s_id', $data['idStock'][$i])
                             ->update([
-                                // 's_qty' => $sm_sisa,
-                                's_status' => 'On Going'
+                                's_qty' => $sm_sisa,
                             ]);
 
                         }
