@@ -145,13 +145,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 												<tr>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
 
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
 
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
 
-													<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
 
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
@@ -374,12 +374,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"serverSide": true,
 					"orderable": false,
 					"order": [],
-					"ajax": "{{ route('outlet.getdataall') }}",
+					"ajax": "{{ route('distribusi.terima') }}",
 					"columns":[
-						{"data": "c_name"},
-						{"data": "c_tlp"},
-						{"data": "c_address"},
-						{"data": "active"},
+						{"data": "nota"},
+						{"data": "from"},
+						{"data": "destination"},
+						{"data": "status"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,

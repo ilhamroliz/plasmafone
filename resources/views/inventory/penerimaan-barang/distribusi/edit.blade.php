@@ -49,6 +49,16 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			</div>
 
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+				<div class="page-title">
+
+					<a href="{{ url('/inventory/penerimaan/distribusi') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+
+				</div>
+
+			</div>
+
 		</div>
 
 		<!-- widget grid -->

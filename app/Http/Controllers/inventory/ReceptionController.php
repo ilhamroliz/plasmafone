@@ -741,7 +741,8 @@ class ReceptionController extends Controller
                 ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                 ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                 ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
-                ->where('d_distribusi_dt.dd_qty_received', null);
+                ->where('d_distribusi_dt.dd_qty_received', null)
+                ->orWhere('d_distribusi_dt.dd_qty_received', 0);
 
         return DataTables::of($data)
 
@@ -760,6 +761,34 @@ class ReceptionController extends Controller
             })
 
             ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
+    public function dataDistribusiTerima()
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi.d_status', 'Received');
+
+        return DataTables::of($data)
+
+            ->addColumn('status', function ($data) {
+
+                return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
+
+            })
+
+            ->addColumn('aksi', function ($data) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            })
+
+            ->rawColumns(['status','aksi'])
 
             ->make(true);
     }

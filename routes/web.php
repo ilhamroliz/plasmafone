@@ -526,6 +526,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Penerimaan barang distribusi
 	Route::get('/inventory/penerimaan/distribusi', 'inventory\ReceptionController@index_distribusi');
 	Route::get('/inventory/penerimaan/distribusi/proses', 'inventory\ReceptionController@dataDistribusiProses')->name('distribusi.proses');
+	Route::get('/inventory/penerimaan/distribusi/terima', 'inventory\ReceptionController@dataDistribusiTerima')->name('distribusi.terima');
 	Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
 	Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
 	Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
