@@ -78,9 +78,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div class="col-md-12 no-padding padding-top-15">
 										<div class="col-md-4">
 											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control" id="tglAwal" name="tglAwal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+												<input type="text" class="form-control" id="tglAwal" name="tglAwal" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy" value="{{ $date }}">
 												<span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+												<input type="text" class="form-control" id="tglAkhir" name="tglAkhir" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy" value="{{ $date }}">
 											</div>
 										</div>
 
@@ -93,8 +93,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                         
                                         <div class="col-md-3">
 											<div class="form-group">
-												<input type="hidden" id="osCompId" name="osCompId">
-												<input type="text" class="form-control osCompName" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase">                                       
+												<input type="hidden" id="osCompId" name="osCompId" value="{{ Auth::user()->m_comp }}">
+												<input type="text" class="form-control osCompName" value="PLASMAFONE PUSAT" readonly>                                       
 											</div>
 										</div>
 
@@ -289,33 +289,37 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                             class="row no-padding margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15" 
                             style="border-top: 1px solid black; display: none">
 
-                            <div class="col-md-12">
-								<label class="col-md-2">Qty Sistem</label>
-                                <div class="col-md-4">
+                            <div class="col-md-6">
+								<label class="col-md-4">Qty Sistem</label>
+                                <div class="col-md-8">
                                     <input type="text" class="form-control text-align-right" id="osQtyS" name="osQtyS" readonly>
 								</div>
 								
-								<label class="col-md-2">HPP</label>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control text-align-right" id="osHpp" name="osHpp">
-								</div>
-                            </div>
-
-							<div class="col-md-12">
 								@if(Auth::user()->m_level < 5)
-									<label class="col-md-2 margin-top-5">AKSI</label>
-									<div class="col-md-4 margin-top-5">
+									<label class="col-md-4 margin-top-5">AKSI</label>
+									<div class="col-md-8 margin-top-5">
 										<select name="aksiSelect" id="aksiSelect" class="form-control">
 											<option value="" selected disabled>== PILIH AKSI ==</option>
 											<option value="1">Samakan dengan SISTEM</option>
 											<option value="2">Samakan dengan REAL</option>
 										</select>
 									</div>
-									<div class="col-md-2"></div>
-								@else
-									<div class="col-md-8"></div>
 								@endif
-								<div class="col-md-4">
+                            </div>
+
+							<div class="col-md-6">
+								<label class="col-md-4 margin-bottom-5 qtyR" style="display:none">Qty Real</label>
+                                <div class="col-md-8 margin-bottom-5 qtyR" style="display:none">
+                                    <input type="text" class="form-control text-align-right" id="osQtyR" name="osQtyR">
+								</div>
+
+								<label class="col-md-4">HPP</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control text-align-right" id="osHpp" name="osHpp">
+								</div>
+								
+								<div class="col-md-4"></div>
+								<div class="col-md-8">
 									<div class="note">
 										HPP Terakhir adalah Rp. <strong id="hppNote"></strong>
 									</div>
@@ -529,32 +533,33 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             setTimeout(function () {
 
 				pendTab = $('#pendTable').DataTable({
-					// "processing": true,
-					// "serverSide": true,
-					// "order": [],
-					// "ajax": "{{ url('/inventory/opname-barang/pend') }}",
-					// "columns":[
-					// 	// {"data": "sp_nota"},
-					// 	// {"data": "c_name"},
-					// 	// {"data": "sp_update"},
-					// 	// {"data": "aksi"}
-					// ],
-					// "autoWidth" : true,
-					// "language" : dataTableLanguage,
-					// "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					// "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-					// "preDrawCallback" : function() {
-					// 	// Initialize the responsive datatables helper once.
-					// 	if (!responsiveHelper_dt_basic) {
-					// 		responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#pendTable'), breakpointDefinition);
-					// 	}
-					// },
-					// "rowCallback" : function(nRow) {
-					// 	responsiveHelper_dt_basic.createExpandIcon(nRow);
-					// },
-					// "drawCallback" : function(oSettings) {
-					// 	responsiveHelper_dt_basic.respond();
-					// }
+					"processing": true,
+					"serverSide": true,
+					"order": [],
+					"ajax": "{{ url('/inventory/opname-barang/pend') }}",
+					"columns":[
+						{"data": "o_reff"},
+						{"data": "o_date"},
+						{"data": "c_name"},
+						{"data": "i_nama"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+					"language" : dataTableLanguage,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#pendTable'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					}
 				});
 
 			}, 500);
@@ -562,32 +567,33 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			setTimeout(function () {
 
 				apprTab = $('#apprTable').DataTable({
-					// "processing": true,
-					// "serverSide": true,
-					// "order": [],
-					// "ajax": "{{ url('/inventory/opname-barang/appr') }}",
-					// "columns":[
-					// 	// {"data": "sp_nota"},
-					// 	// {"data": "c_name"},
-					// 	// {"data": "sp_update"},
-					// 	// {"data": "aksi"}
-					// ],
-					// "autoWidth" : true,
-					// "language" : dataTableLanguage,
-					// "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					// "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-					// "preDrawCallback" : function() {
-					// 	// Initialize the responsive datatables helper once.
-					// 	if (!responsiveHelper_dt_basic) {
-					// 		responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#apprTable'), breakpointDefinition);
-					// 	}
-					// },
-					// "rowCallback" : function(nRow) {
-					// 	responsiveHelper_dt_basic.createExpandIcon(nRow);
-					// },
-					// "drawCallback" : function(oSettings) {
-					// 	responsiveHelper_dt_basic.respond();
-					// }
+					"processing": true,
+					"serverSide": true,
+					"order": [],
+					"ajax": "{{ url('/inventory/opname-barang/appr') }}",
+					"columns":[
+						{"data": "o_reff"},
+						{"data": "o_date"},
+						{"data": "c_name"},
+						{"data": "i_nama"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+					"language" : dataTableLanguage,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#apprTable'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					}
 				});
 
 			}, 1000);
@@ -634,6 +640,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('.codeExpTable tbody').on( 'click', 'a.btnhapus', function () {
 			codeExpTable.row( $(this).parents('tr') ).remove().draw();
 		});
+
+		function detail(id){
+			axios.post()
+		}
 
 		function cari2(){
 			
@@ -730,6 +740,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				speccode = response.data.ce[0].i_specificcode;
 				expired = response.data.ce[0].i_expired;
 
+				$('#divTableCode').css("display", "none");
+				$('#divTableExp').css("display", "none");
+				$('#divTableCodeExp').css("display", "none");
+
 				codeTable.clear();
 				expTable.clear();
 				codeExpTable.clear();
@@ -760,6 +774,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						'<td><input type="text" class="form-control qty" name="qty[]"></td>',
 						'<td><a class="btn btn-success" onclick="addRowExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
 					]).draw(false);
+				}else{
+					$(".qtyR").css("display", "block");			
+					$("#osQtyR").maskMoney({precision: 0, thousands: '.', suffix: ' Unit'});
 				}
 
 				$('#divQtyHpp').css("display", "block");
@@ -814,6 +831,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			var note = '';
 
 			var ar = $();
+			var data = '';
 			if(speccode == 'Y' && expired == 'N'){
 				for (var i = 0; i < codeTable.rows()[0].length; i++) { 
 					ar = ar.add(codeTable.row(i).node())
@@ -832,7 +850,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			}
 
 			
-			var data = ar.find('select,input,textarea').serialize() +'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note;
+			var data = ar.find('select,input,textarea').serialize() +'&qtyR='+QtyR+'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note+'&sc='+speccode+'&ex='+expired;
 
 			axios.post(baseUrl+'/inventory/opname-barang/tambah', data)
 			.then((response) => {
