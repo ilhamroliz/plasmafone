@@ -262,7 +262,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
-		var aktif, semua, inaktif;
+		var aktif;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -314,165 +314,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			}, 500);
 
-			setTimeout(function () {
-
-				semua = $('#dt_all').dataTable({
-					"processing": true,
-					"serverSide": true,
-					"orderable": false,
-					"ajax": "{{ route('outlet.getdataall') }}",
-					"columns":[
-						{"data": "c_name"},
-						{"data": "c_tlp"},
-						{"data": "c_address"},
-						{"data": "active"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
-					}
-				});
-
-			}, 1000);
-
-			setTimeout(function () {
-
-				inaktif = $('#dt_inactive').dataTable({
-					"processing": true,
-					"serverSide": true,
-					"orderable": false,
-					"ajax": "{{ route('outlet.getdatanonactive') }}",
-					"columns":[
-						{"data": "c_name"},
-						{"data": "c_tlp"},
-						{"data": "c_address"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_inactive'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
-					}
-				});
-
-				$('#overlay').fadeOut(200);
-
-			}, 1500);
-
 		/* END BASIC */
 
 		function refresh_tab(){
 		    aktif.api().ajax.reload();
-		    semua.api().ajax.reload();
-		    inaktif.api().ajax.reload();
 		}
 
-		// function hapus(val){
-
-		// 	$.SmartMessageBox({
-		// 		title : "Pesan!",
-		// 		content : 'Apakah Anda yakin akan manghapus data outlet <i>"'+val+'"</i>',
-		// 		buttons : '[Batal][Ya]'
-		// 	}, function(ButtonPressed) {
-		// 		if (ButtonPressed === "Ya") {
-
-		// 			$('#overlay').fadeIn(200);
-		// 			$('#load-status-text').text('Sedang Menghapus...');
-
-		// 			axios.get(baseUrl+'/master/outlet/delete/'+val).then((response) => {
-
-		// 				if(response.data.status == 'berhasil'){
-		// 					refresh_tab();
-		// 					$('#overlay').fadeOut(200);
-
-		// 					$.smallBox({
-		// 						title : "Berhasil",
-		// 						content : 'Data outlet <i>"'+val+'"</i> berhasil dihapus...!',
-		// 						color : "#739E73",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-check bounce animated"
-		// 					});
-
-		// 				}else if(response.data.status == 'tidak ada'){
-
-		// 					$('#overlay').fadeOut(200);
-
-		// 					$.smallBox({
-		// 						title : "Gagal",
-		// 						content : "Upsss. Data yang ingin Anda hapus sudah tidak ada...!",
-		// 						color : "#A90329",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-times bounce animated"
-		// 					});
-
-		// 				}else if(response.data.status == 'd_mem ada'){
-
-		// 					$('#overlay').fadeOut(200);
-
-		// 					$.smallBox({
-		// 						title : "Gagal",
-		// 						content : "Upsss. Data yang ingin Anda hapus masih dipakai oleh member...!",
-		// 						color : "#A90329",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-times bounce animated"
-		// 					});
-
-		// 				}else{
-		// 					$('#overlay').fadeOut(200);
-		// 					console.log(response);
-		// 					$.smallBox({
-		// 						title : "Gagal",
-		// 						content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-		// 						color : "#A90329",
-		// 						timeout: 4000,
-		// 						icon : "fa fa-times bounce animated"
-		// 					});
-
-		// 				}
-
-		// 			}).catch((err) => {
-		// 				out();
-		// 				$.smallBox({
-		// 					title : "Gagal",
-		// 					content : "Upsss. Gagal menghapus data...! Coba lagi dengan mulai ulang halaman",
-		// 					color : "#A90329",
-		// 					timeout: 4000,
-		// 					icon : "fa fa-times bounce animated"
-		// 				});
-						
-		// 			}).then(function(){
-		// 				$('#overlay').fadeOut(200);
-		// 			})
-
-		// 		}
-	
-		// 	});
-
-		// }
+		
 
 		function edit(val){
 

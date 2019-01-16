@@ -247,7 +247,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 													</tr>
 
 													<tr class="success">
-														<td><strong>Yang Mengeluarkan</strong></td>
+														<td><strong>Petugas</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_by"></td>
 													</tr>

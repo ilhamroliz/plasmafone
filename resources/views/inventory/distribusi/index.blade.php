@@ -69,6 +69,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div id="detail_outlet" style="display: none">
                                                     <div class="form-group">
 
@@ -188,6 +189,7 @@
     var searchGlobal = null;
 
     $(document).ready(function(){
+        $("#cari-outlet").val("");
 		if ($("#stockid").val() == "") {
 			$("#tambahketable").attr('disabled', true);
 		}

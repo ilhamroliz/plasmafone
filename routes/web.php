@@ -567,8 +567,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	///// PENJUALAN
 
-	//== Set Harga
-
+	// ####################################
+	// Setting Harga
+	// ####################################
 	Route::get('/penjualan/set-harga', 'penjualan\setHargaController@index');
 	Route::get('/penjualan/set-harga/getdataharga', [
 		'uses' => 'penjualan\setHargaController@get_data_group',
@@ -585,6 +586,17 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/penjualan/set-harga/editHarga', 'penjualan\setHargaController@edit_harga');
 	Route::match(['get', 'post'], '/penjualan/set-harga/hapusGroup/{id}', 'penjualan\setHargaController@hapus_group');
 	Route::match(['get', 'post'], '/penjualan/set-harga/hapusHarga', 'penjualan\setHargaController@hapus_harga');
+	// ####################################
+	// End Setting Harga
+	// ####################################
+
+	// ####################################
+	// Return Penjualan
+	// ####################################
+	Route::get('/penjualan/return-penjualan', 'penjualan\ReturnPenjualanController@index')->name('return-penjualan');
+	// ####################################
+	// End Return Penjualan
+	// ####################################
 
 	/////// OUTLET
 

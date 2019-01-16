@@ -282,7 +282,7 @@ class DistribusiController extends Controller
                 for ($i=0; $i < count($data['idStock']); $i++) { 
                     $get_countiddetail = DB::table('d_distribusi_dt')->where('dd_distribusi', $distribusiId)->count()+1;
 
-                    $compitem = DB::table('d_stock')->select('s_comp', 's_item')->where('s_id', $data['idStock'][$i])->first();
+                    $compitem = DB::table('d_stock')->select('s_comp', 's_position', 's_item')->where('s_id', $data['idStock'][$i])->first();
 
                     $namaItem = DB::table('d_stock')->select('s_comp', 's_item', 'i_nama')->where('s_id', $data['idStock'][$i])->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')->first();
                     
@@ -298,10 +298,38 @@ class DistribusiController extends Controller
                     ]);
                     Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
 
+                    // insert d_stock
+                    $sid = DB::table('d_stock')->max('s_id')+1;
+                    DB::table('d_stock')->insert([
+                        's_id' => $sid,
+                        's_comp' => $compitem->s_comp,
+                        's_position' => $data['outlet'],
+                        's_item' => $compitem->s_item,
+                        's_qty' => $data['qtyTable'][$i],
+                        's_status' => 'On Going'
+                    ]);
+                            
+                    $stockId = DB::table('d_stock')->select('s_id')->where([
+                                    's_id' => $sid,
+                                    's_comp' => $compitem->s_comp,
+                                    's_position' => $data['outlet'],
+                                    's_item' => $compitem->s_item,
+                                    's_qty' => $data['qtyTable'][$i],
+                                    's_status' => 'On Going'
+                                ])->first();
+                    $stockId = $stockId->s_id;
+
                     if ($data['kode'][$i] != null) {
                         $specificcode = $data['kode'][$i];
-                        
-                        DB::table('d_stock_dt')->where(['sd_stock' => $data['idStock'][$i], 'sd_specificcode' => $specificcode])->delete();
+
+                        $cnt_stockid = DB::table('d_stock_dt')->where('sd_stock', $stockId)->count()+1;
+
+                        // Insert stock_dt
+                        DB::table('d_stock_dt')->insert([
+                            'sd_stock' => $stockId,
+                            'sd_detailid' => $cnt_stockid,
+                            'sd_specificcode' => $specificcode
+                        ]);
                         
                     } else {
                         $specificcode = null;
@@ -365,8 +393,6 @@ class DistribusiController extends Controller
                     }
                 }
 
-                // d_stock.s_comp = Auth::user()->m_comp
-
                 DB::commit();
                 return response()->json([
                     'status' => 'sukses',
@@ -374,7 +400,7 @@ class DistribusiController extends Controller
                 ]);
             } catch (\Exception $e) {
                 DB::rollback();
-                return "false => ".$e;
+                return "false";
             }
         }
 
@@ -397,7 +423,7 @@ class DistribusiController extends Controller
                 ->where('d_distribusi.d_id', $id)
                 ->join('m_company', 'm_company.c_id', '=', 'd_distribusi.d_from')
                 ->first();
-        return view('inventory.distribusi.print')->with(compact('datas', 'from'));
+        return view('inventory.distribusi.struck')->with(compact('datas', 'from'));
     }
     
     // End distribusi barang
