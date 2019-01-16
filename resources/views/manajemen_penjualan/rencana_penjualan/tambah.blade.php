@@ -208,10 +208,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			var input = document.getElementById("trpQty");
 			input.addEventListener("keyup", function(event) {
-			event.preventDefault();
-			if (event.keyCode === 13) {
-				document.getElementById("addRow").click();
-			}
+				event.preventDefault();
+				if (event.keyCode === 13) {
+					document.getElementById("addRow").click();
+				}
 			});
 		});
 

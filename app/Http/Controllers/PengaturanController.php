@@ -197,7 +197,8 @@ class PengaturanController extends Controller
     {
         $user = DB::table('d_mem')
             ->join('m_level', 'l_id', '=', 'm_level')
-            ->select('d_mem.*', 'l_name')
+            ->join('m_company', 'c_id', '=', 'm_comp')
+            ->select('d_mem.*', 'l_name', 'c_name')
             ->orderBy('m_id')
             ->get();
         $user = collect($user);

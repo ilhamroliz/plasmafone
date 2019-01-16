@@ -304,7 +304,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //master pembayaran
 	Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
-    Route::get('master/pembayaran/get-dataY', 'master\pembayaran\MasterPembayaranController@getDataY');
+	Route::get('master/pembayaran/get-dataY', 'master\pembayaran\MasterPembayaranController@getDataY');
     //end pembayaran
 
 	// Pembelian
@@ -555,11 +555,11 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/opname-barang/get-stock-code', 'inventory\opnameBarangController@get_stock_code');
 
 	Route::post('/inventory/opname-barang/cariItemStock', 'inventory\opnameBarangController@cari_item_stock');
+	Route::post('/inventory/opname-barang/getCompName', 'inventory\opnameBarangController@get_cn');
 
 	Route::post('/inventory/opname-barang/formTambah', 'inventory\opnameBarangController@form_tambah');
 	Route::post('/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
 	Route::post('/inventory/opname-barang/approve', 'inventory\opnameBarangController@approve');
-
 
 	//=== End OPNAME BARANG
 

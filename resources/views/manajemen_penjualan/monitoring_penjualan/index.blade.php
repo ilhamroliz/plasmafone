@@ -117,9 +117,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div class="col-md-12 no-padding padding-top-15">
 										<div class="col-md-4">
 											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control" id="tglAwal" name="tglAwal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+                                                <input type="text" class="form-control" id="tglAwal" name="tglAwal" value="{{ $startDate }}" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
 												<span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+                                                <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 											</div>
 										</div>
 
@@ -154,7 +154,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <form id="countForm">
                                                 <input type="hidden" id="hiddenCount" name="hiddenCount">
                                             </form>
-											<tbody id="apprshowdata">
+											<tbody id="relShowdata">
 											</tbody>
 
 										</table>
@@ -185,6 +185,22 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         <div>
                             <div class="widget-body no-padding">
 
+                                <form id="cariOTForm">
+									<div class="col-md-12 no-padding padding-top-15">
+										<div class="col-md-4">
+											<div class="input-group" id="date-range" style="">
+                                                <input type="text" class="form-control" id="tglAwalOT" name="tglAwalOT" value="{{ $startDate }}" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+												<span class="input-group-addon bg-custom text-white b-0">to</span>
+                                                <input type="text" class="form-control" id="tglAkhirOT" name="tglAkhirOT" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+											</div>
+										</div>
+
+										<div class="col-md-1">
+											<a class="btn btn-primary" onclick="cariOT()"><i class="fa fa-search"></i></a>
+										</div>
+									</div>
+								</form>
+
                                 <div class="tab-content padding-10">
 
                                     <div class="tab-pane fade in active" id="hr1">
@@ -201,7 +217,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <form id="countForm">
                                                 <input type="hidden" id="hiddenCount" name="hiddenCount">
                                             </form>
-											<tbody id="apprshowdata">
+											<tbody id="outShowdata">
 											</tbody>
 
 										</table>
@@ -234,7 +250,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             });
 
             $('#outletTable').DataTable({
-                "language" : dataTableLanguage
+                "language" : dataTableLanguage,
+                "order" : []
             });
 
             $( ".mpCompName" ).autocomplete({
@@ -255,6 +272,24 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             });
 
             $( "#tglAkhir" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $( "#tglAwalOT" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $( "#tglAkhirOT" ).datepicker({
                 language: "id",
                 format: 'dd/mm/yyyy',
                 prevText: '<i class="fa fa-chevron-left"></i>',
@@ -345,6 +380,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
         function cari(){
             axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/realisasi', $('#cariMPForm').serialize()).then((response) => {
+                $('#relShowdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
                 $('#realisasiTable').DataTable().clear();
 
                 for(var i = 0; i < response.data.data.length; i++){
@@ -355,6 +392,24 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         '<div class="text-align-right">'+response.data.data[i].spd_qty+' Unit</div>',
                         '<div class="text-align-right">'+response.data.data[i].qty+' Unit</div>',
                         '<div class="text-align-right">'+(response.data.data[i].spd_qty - response.data.data[i].qty) +' Unit</div>'
+                    ]).draw(false);
+                }
+
+            })
+        }
+
+        function cariOT(){
+            axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/outlet', $('#cariOTForm').serialize()).then((response) => {
+                $('#outShowdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+                $('#outletTable').DataTable().clear();
+
+                for(var i = 0; i < response.data.data.length; i++){
+                    $('#outletTable').DataTable().row.add([
+                        response.data.data[i].c_name,
+                        '<div class="text-align-right">'+response.data.data[i].qty+' Unit</div>',
+                        '<div><span style="float: left">Rp. </span><span style="float: right">'+response.data.data[i].net+'</span></div>',
+                        '<div><span style="float: left">Rp. </span><span style="float: right">'+0+'</span></div>'
                     ]).draw(false);
                 }
 

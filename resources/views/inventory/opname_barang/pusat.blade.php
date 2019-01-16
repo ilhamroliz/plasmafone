@@ -5,10 +5,7 @@
 @section('extra_style')
 	<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/MonthPicker.css') }}">
 	<style>
-		/* .ui-autocomplete-input {
-			z-index: 9999;
-		} */
-		.ui-autocomplete { z-index:2147483647; }
+
 	</style>
 @endsection
     
@@ -245,8 +242,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         
         <!-- Modal untuk Form Tambah Opname -->
 		<div class="modal fade" id="tambahModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog ui-front" id="modalWidth" style="width: 60%">
-				<div class="modal-content">
+			<div class="modal-dialog ui-front" id="modalWidth" style="width: 70%">
+				<div class="modal-content" >
 					<div class="modal-header">
 
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -260,134 +257,152 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					<div class="modal-body">
                         <div class="row no-padding margin-bottom-10 padding-bottom-10">
 							<form id="formOsTambah">
-							<div class="col-md-12 margin-bottom-5">
-								<div class="col-md-7">
-									<input type="hidden" id="idComp" name="idComp" value="{{Auth::user()->m_comp}}">
-                                    <input type="text" class="form-control" id="nameComp" name="nameComp" value="Plasmafone Pusat" style="text-transform: uppercase" readonly>
-                                </div>
+
+							<div class="col-md-12">
+								<label class="col-md-5">Lokasi Barang</label>
+															
+								<label class="col-md-7">Nama Barang</label>
 							</div>
+
                             <div class="col-md-12">
-                                <div class="col-md-7">
+								<div class="col-md-5">
+									<input type="hidden" id="idComp" name="idComp" value="{{Auth::user()->m_comp}}">									
+									<input type="text" class="form-control" id="nameComp" name="nameComp" value="Plasmafone Pusat" style="text-transform: uppercase" readonly>
+								</div>
+
+								<div class="col-md-6">
                                     <input type="hidden" id="idItem" name="idItem">
-                                    <input type="text" class="form-control" id="nameItem" name="nameItem placeholder="Masukkan Nama Item" style="text-transform: uppercase">
+                                    <input type="text" class="form-control" id="nameItem" name="nameItem" placeholder="Masukkan Nama Item" style="text-transform: uppercase">
                                 </div>
 
                                 <div class="col-md-1">
-                                    <a class="btn btn-primary" onclick="cariTambah()"><i class="fa fa-search"></i></a>
+                                    <a class="btn btn-primary" onclick="cariTambah()" style="width: 100%"><i class="fa fa-search"></i></a>
                                 </div>
                             </div>
                         </div>
 						
+						<!-- ////////////////////////////////////////////////////////////////////////////////////////
+						== BAGIAN QTY HPP dll ==-->
+
                         <div 
                             id="divQtyHpp"
                             class="row no-padding margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15" 
                             style="border-top: 1px solid black; display: none">
 
                             <div class="col-md-12">
-                                <div class="col-md-6 no-padding">
-                                    <label class="col-md-4"><h4>Qty Sistem</h4></label>
-                                    <div class="col-md-7 no-padding">
-                                        <input type="text" class="form-control text-align-right" id="osQtyS" name="osQtyS" readonly>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6 no-padding">
-                                    <label class="col-md-4"><h4>Qty Real</h4></label>
-                                    <div class="col-md-7 no-padding">
-                                        <input type="text" class="form-control text-align-right" id="osQtyR" name="osQtyR">
-                                    </div>                                    
-                                </div>
+								<label class="col-md-2">Qty Sistem</label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control text-align-right" id="osQtyS" name="osQtyS" readonly>
+								</div>
+								
+								<label class="col-md-2">HPP</label>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control text-align-right" id="osHpp" name="osHpp">
+								</div>
                             </div>
 
-                            <div class="col-md-12 padding-top-10">
-                                <div class="col-md-6 no-padding">
-                                    <label class="col-md-4"><h4>HPP</h4></label>
-                                    <div class="col-md-7 no-padding">
-                                        <input type="text" class="form-control text-align-right" id="osHpp" name="osHpp">
-                                    </div>                                    
-								</div>
+							<div class="col-md-12">
 								@if(Auth::user()->m_level < 5)
-								<div class="col-md-6 no-padding" id="divAksi" style="display: none">
-                                    <label class="col-md-4"><h4>AKSI</h4></label>
-                                    <div class="col-md-7 no-padding">
-                                        <select name="aksiSelect" id="aksiSelect" class="form-control">
+									<label class="col-md-2 margin-top-5">AKSI</label>
+									<div class="col-md-4 margin-top-5">
+										<select name="aksiSelect" id="aksiSelect" class="form-control">
 											<option value="" selected disabled>== PILIH AKSI ==</option>
 											<option value="1">Samakan dengan SISTEM</option>
 											<option value="2">Samakan dengan REAL</option>
 										</select>
-                                    </div>                                    
-								</div>
+									</div>
+									<div class="col-md-2"></div>
+								@else
+									<div class="col-md-8"></div>
 								@endif
-							</div>
-							
-							<div class="col-md-12">
-								<div class="col-md-2"></div>
-								<div class="col-md-4 no-padding">
+								<div class="col-md-4">
 									<div class="note">
-										HPP Terakhir adalah Rp. <strong id="hppNote">9.000.000</strong>
+										HPP Terakhir adalah Rp. <strong id="hppNote"></strong>
 									</div>
 								</div>
-                            </div>
+                            </div>						
+							
                         </div>
 
-
+						<!-- //////////////////// -->
+						<!-- Bagian untuk TABLE's -->
                         <div
                             id="divTableExp"
                             class="row margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15 form-actions" 
                             style="border-top: 1px solid black; display: none; ">
 
-                            <table id="expTable" class="table table-striped table-bordered table-hover expTable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 25%"><i class="fa fa-fw fa-shopping-cart txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Unit</th>
-                                        <th style="width: 50%"><i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal Kadaluarsa</th>
-                                        <th style="width: 25%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-                                    </tr>
-                                </thead>
+							<div class="col-md-8">
+								<table id="expTable" class="table table-striped table-bordered table-hover expTable">
+									<thead>
+										<tr>
+											<th style="width: 60%"><i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal Kadaluarsa</th>
+											<th style="width: 15%"><i class="fa fa-fw fa-shopping-cart txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Unit</th>
+											<th style="width: 25%" class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+										</tr>
+									</thead>
 
-                                <tbody id="apprshowdata">
-                                    <tr>
-                                        <td>
-											<input type="text" class="form-control qty" name="qty[]" style="width: 100%">
-										</td>
-                                        <td class="text-align-left">
-											<select name="" id="" style="width: 20%; float: left" class="form-control">
-												<option value="" selected disabled>TGL</option>
-											</select>
-											<select name="" id="" style="width: 40%; float: left; margin-left: 4%" class="form-control">
-												<option value="" selected disabled>BULAN</option>
-											</select>
-											<select name="" id="" style="width: 30%; float: left; margin-left: 4%" class="form-control">
-												<option value="" selected disabled>TAHUN</option>
-											</select>
-                                        </td>
-                                        <td>
-											<div class="text-center">
-												<a class="btn btn-success" style="width: 100%" onclick="addRow()"><i class="fa fa-plus"></i></a>
-											</div>
-										</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+									<tbody id="expshowdata">
+										<tr>
+											<td class="text-align-left">
+												<select name="" id="" style="width: 20%; float: left" class="form-control">
+													<option value="" selected disabled>TGL</option>
+												</select>
+												<select name="" id="" style="width: 40%; float: left; margin-left: 4%" class="form-control">
+													<option value="" selected disabled>BULAN</option>
+												</select>
+												<select name="" id="" style="width: 30%; float: left; margin-left: 4%" class="form-control">
+													<option value="" selected disabled>TAHUN</option>
+												</select>
+											</td>
+											<td>
+												<input type="text" class="form-control qty" name="qty[]" style="width: 100%">
+											</td>											
+											<td>
+												<div class="text-center">
+													<a class="btn btn-success" style="width: 100%" onclick="addRow()"><i class="fa fa-plus"></i></a>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+							<div class="col-md-4 no-padding">
+								<label class="col-md-12 text-align-left">Catatan</label>
+								<div class="col-md-12">
+									<textarea class="form-control" name="noteE" id="noteE" rows="5"></textarea>
+								</div>
+							</div>
 
 						</div>
 						
 						<div
 							id="divTableCode"
                             class="row margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15 form-actions" 
-                            style="border-top: 1px solid black; display: none">
+							style="border-top: 1px solid black; display: none">
+							
 
-							<table id="codeTable" class="table table-striped table-bordered table-hover expTable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 37%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Tercatat</th>
-                                        <th style="width: 37%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Input</th>
-                                    </tr>
-                                </thead>
+							<div class="col-md-6">
+								<label class="col-md-12 no-padding text-align-left">Table Input IMEI</label>
+								<table id="codeTable" class="table table-striped table-bordered table-hover codeTable">
+									<thead>
+										<tr>
+											<th style="width: 50%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Input</th>
+											<th style="width: 20%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Aksi</th>
+										</tr>
+									</thead>
 
-                                <tbody id="apprshowdata">
-                                </tbody>
-                            </table>
+									<tbody id="codeshowdata">
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="col-md-6">
+								<label class="col-md-12 text-align-left">Catatan</label>
+								<div class="col-md-12">
+									<textarea class="form-control" name="noteC" id="noteC" rows="5"></textarea>
+								</div>
+							</div>
 
 						</div>
 
@@ -395,21 +410,30 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						<div
 							id="divTableCodeExp"
                             class="row margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15 form-actions" 
-                            style="border-top: 1px solid black; display: none">
+							style="border-top: 1px solid black; display: none">
+							
+							<div class="col-md-9">
+								<table id="codeExpTable" class="table table-striped table-bordered table-hover codeExpTable">
+									<thead>
+										<tr>
+											<th style="width: 20%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Input</th>
+											<th style="width: 50%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal Kadaluarsa</th>
+											<th style="width: 30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Aksi</th>
+										</tr>
+									</thead>
 
-							<table id="codeTable" class="table table-striped table-bordered table-hover expTable">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Tercatat</th>
-										<th style="width: 30%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Input</th>
-										<th style="width: 25%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal Kadaluarsa</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody id="apprshowdata">
-                                
-                                </tbody>
-							</table>
+									<tbody id="codeexpshowdata">
+									
+									</tbody>
+								</table>
+							</div>
+							
+							<div class="col-md-3 no-padding">
+								<label class="col-md-12 text-align-left">Catatan</label>
+								<div class="col-md-12">
+									<textarea class="form-control" name="noteCE" id="noteCE" rows="5"></textarea>
+								</div>
+							</div>
 							
 						</div>
 
@@ -434,6 +458,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 @section('extra_script')
 <script src="{{ asset('template_asset/js/MonthPicker.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
+
     <script type="text/javascript">
         var appr, pend;
 		var expTable, codeTable, codeExpTable;
@@ -446,24 +472,27 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"order" : [],
 				"searching": false,
 				"autoWidth" : false,
-				"pageLength" : 3,
-				"lengthChange": false
+				"scrollY": "100px",
+				"paging": false,
+				"info" : false,
 			});
 
 			codeTable = $('#codeTable').DataTable({
 				"order" : [],
 				"searching": false,
 				"autoWidth" : false,
-				"pageLength" : 3,
-				"lengthChange": false
+				"scrollY": "100px",
+				"paging": false,
+				"info" : false
 			});
 
 			codeExpTable = $('#codeExpTable').DataTable({
 				"order" : [],
 				"searching": false,
 				"autoWidth" : false,
-				"pageLength" : 3,
-				"lengthChange": false
+				"scrollY": "100px",
+				"paging": false,
+				"info" : false,
 			});
 
             $('#monthPick').MonthPicker({
@@ -495,6 +524,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     $('#osCompId').val(data.item.id);
                 }
             })
+
 
             setTimeout(function () {
 
@@ -564,16 +594,45 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		});
 
-		function addRow(){
-			expTable.row.add([
-				'<input type="text" class="form-control qty" name="qty[]" style="width: 100%">',
-				'<select name="" id="" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="" id="" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="" id="" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select>',
-				'<div class="text-center"><button class="btn btn-success" style="width: 48%" onclick="addRow()"><i class="fa fa-plus"></i></button> <button class="btn btn-danger btnhapus" style="width: 48%"><i class="fa fa-minus"></i></button></div>'
+		function addRowCodeExp(){
+			codeExpTable.row.add([
+				'<td><input type="text" class="form-control qty" name="qty[]"></td>',
+				'<td><select name="" id="" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="" id="" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="" id="" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',				
+				'<td><div class="text-center"><a class="btn btn-success" onclick="addRowCodeExp()"><i class="fa fa-plus"></i></a> <a class="btn btn-danger btnhapus"><i class="fa fa-minus"></i></a></div></td>'
 			]).draw(false);
 		}
 
-		$('.expTable tbody').on( 'click', 'button.btnhapus', function () {
+		function addRowCode(){
+			// var id = codeTable.rows().count() + 1;
+			codeTable.row.add([
+				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%"></td>',
+				'<td><a class="btn btn-success" onclick="addRowCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
+			]).draw(false);
+			// $('#'+id).focus();
+
+		}
+
+		function addRowExp(){
+			// var id = codeTable.rows().count() + 1;
+			expTable.row.add([
+				'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
+				'<td><input type="text" class="form-control qty" name="qty[]"></td>',
+				'<td><a class="btn btn-success" onclick="addRowExp()"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus"><i class="fa fa-minus"></i></a></td>'
+			]).draw(false);
+			// $('#'+id).focus();
+
+		}
+
+		$('.expTable tbody').on( 'click', 'a.btnhapus', function () {
 			expTable.row( $(this).parents('tr') ).remove().draw();
+		});
+
+		$('.codeTable tbody').on( 'click', 'a.btnhapus', function () {
+			codeTable.row( $(this).parents('tr') ).remove().draw();
+		});
+
+		$('.codeExpTable tbody').on( 'click', 'a.btnhapus', function () {
+			codeExpTable.row( $(this).parents('tr') ).remove().draw();
 		});
 
 		function cari2(){
@@ -655,112 +714,72 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		}
 
 		function cariTambah(){
+
 			idItem = $('#idItem').val();
 			idComp = $('#idComp').val();
+
 			axios.post(baseUrl+'/inventory/opname-barang/cariItemStock', {idItem: idItem, idComp: idComp}).then((response) => {
-				$('#osQtyS').val(response.data.data[0].qty);
-				$('#divQtyHpp').css("display", "block");
+				
+				$('#osQtyS').val(accounting.formatMoney(response.data.data[0].qty, "", 0, ".", ",")+' Unit');
 				$('#osHpp').maskMoney({precision: 0, thousands: '.'});
-				$('#osQtyR').maskMoney({precision: 0, thousands: '.'});
+				$('#osHpp').val(accounting.formatMoney(response.data.hpp[0].hpp, "", 0, ".", ","));
+				$('#hppNote').text(accounting.formatMoney(response.data.hpp[0].hpp, "", 0, ".", ","));
 
-				speccode = response.data.data[0].i_specificcode;
-				expired = response.data.data[0].i_expired;
+				// $('#osQtyR').maskMoney({precision: 0, thousands: '.'});
 
-			});
-		}
-
-		$('#aksiSelect').on('change', function (e) {
-			if($('#aksiSelect').val() == '2'){
-				var QtyS = $('#osQtyS').val();
-				var QtyR = $('#osQtyR').val();
-				var countT = parseInt(QtyR) - parseInt(QtyS);
-
-				$('#divTableCode').css("display", "none");
-				$('#divTableExp').css("display", "none");
-				$('#divTableCodeExp').css("display", "none");
+				speccode = response.data.ce[0].i_specificcode;
+				expired = response.data.ce[0].i_expired;
 
 				codeTable.clear();
 				expTable.clear();
 				codeExpTable.clear();
 
-				if(parseInt(QtyS) < parseInt(QtyR)){
+				if(speccode == 'Y' && expired == 'N'){
 
-					if(speccode == 'Y' && expired == 'N'){
+					$('#divTableCode').css("display", "block");
 
-						axios.post(baseUrl+'/inventory/opname-barang/get-stock-code', {idItem: idItem}).then((response) => {
+					codeTable.row.add([
+						'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%"></td>',
+						'<td><a class="btn btn-success" onclick="addRowCode()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
+					]).draw(false);	
 
-							if(countT < QtyS){
+				}else if(speccode == 'Y' && expired == 'Y'){
+					$('#divTableCodeExp').css("display", "block");
 
-								for(var a = 0; a < response.data.code.length; a++){
+					codeExpTable.row.add([
+						'<td><input type="text" class="form-control imeiI" name="imeiI[]"></td>',
+						'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
+						'<td><a class="btn btn-success" onclick="addRowCodeExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
+					]).draw(false);
 
-									if(a < countT){
-										codeTable.row.add([
-											'<td><input type="text" class="form-control imeiS" name="imeiS[]" value="'+response.data.code[a].sd_specificcode+'" style="width: 100%" readonly></td>',
-											'<td><input type="text" class="form-control imeiI" name="imeiI[]" style="width: 100%"></td>'
-										]).draw(false);
-									}else{
-										codeTable.row.add([
-											'<td><input type="text" class="form-control imeiS" name="imeiS[]" value="'+response.data.code[a].sd_specificcode+'" style="width: 100%" readonly></td>',
-											'<td><input type="text" class="form-control imeiI" name="imeiI[]" style="width: 100%" readonly></td>'
-										]).draw(false);
-									}									
-								}
+				}else if(speccode == 'N' && expired == 'Y'){
+					$('#divTableExp').css("display", "block");
 
-							}else if(countT > QtyS){
-
-								for(var a = 0; a < countT; a++){
-
-									if(a < QtyS){
-										codeTable.row.add([
-											'<td><input type="text" class="form-control imeiS" name="imeiS[]" value="'+response.data.code[a].sd_specificcode+'" style="width: 100%" readonly></td>',
-											'<td><input type="text" class="form-control imeiI" name="imeiI[]" style="width: 100%"></td>'
-										]).draw(false);
-									}else{
-										codeTable.row.add([
-											'<td><input type="text" class="form-control imeiS" name="imeiS[]" style="width: 100%" readonly></td>',
-											'<td><input type="text" class="form-control imeiI" name="imeiI[]" style="width: 100%" ></td>'
-										]).draw(false);
-									}
-								}
-
-							}else{
-
-								codeTable.row.add([
-									'<td><input type="text" class="form-control imeiS" name="imeiS[]" value="'+response.data.code[a].sd_specificcode+'" style="width: 100%" readonly></td>',
-									'<td><input type="text" class="form-control imeiI" name="imeiI[]" style="width: 100%"></td>'
-								]).draw(false);
-
-							}
-						});
-
-						$('#divTableCode').css("display", "block");
-
-					}else if(speccode == 'Y' && expired == 'Y'){
-
-						for(var i = 0; i < countT; i++){
-							codeTable.row.add([
-								'<td><input type="text" class="form-control imeiS" name="imeiS[]" style="width: 100%"></td>',
-                                '<td><input type="text" class="form-control imeiI" name="imeiI[]" style="width: 100%"></td>',
-								'<td class="text-align-left"><select name="" id="" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="" id="" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="" id="" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>'
-							]).draw(false);
-						}
-
-						$('#divTableCode').css("display", "block");
-
-						$('#divTableCodeExp').css("display", "block");
-
-					}else if(speccode == 'N' && expired == 'Y'){
-
-						$('#divTableExp').css("display", "block");
-
-					}
-
+					expTable.row.add([
+						'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
+						'<td><input type="text" class="form-control qty" name="qty[]"></td>',
+						'<td><a class="btn btn-success" onclick="addRowExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
+					]).draw(false);
 				}
 
-			}else{
+				$('#divQtyHpp').css("display", "block");
+				$('#divBtnAksi').css("display", "block");
+
+			});
+			
+		}
+
+		$('#aksiSelect').on('change', function (e) {
+			if($('#aksiSelect').val() == '1'){
+
 				$('#divTableCode').css("display", "none");
 				$('#divTableExp').css("display", "none");
 				$('#divTableCodeExp').css("display", "none");
+
+			}else{
+
+				cariTambah();
+
 			}
 
 		});
@@ -778,36 +797,67 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#divTableExp').css("display", "none");
 			$('#divTableCodeExp').css("display", "none");
 		});
-
-		$('#osQtyR').blur(function(){
-			var QtyS = $('#osQtyS').val();
-			var QtyR = $('#osQtyR').val();
-			if(QtyR != QtyS){
-				$('#divAksi').css("display", "block");
-			}else{
-				$('#divAksi').css("display", "none");
-			}
-
-			$('#divBtnAksi').css("display", "block");
-		});
 		
         function tambah(){
             $('#tambahModal').modal('show');
         }
 
 		function simpanOs(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Menyimpan Data...');
+
 			var QtyS = $('#osQtyS').val();
 			var QtyR = $('#osQtyR').val();
-			var idItem = $('#osItemId').val();
+			var idItem = $('#idItem').val();
+			var idComp = $('#idComp').val();
+			var aksi = $('#aksiSelect').val();
+			var note = '';
 
-			var ar = $()
-			for (var i = 0; i < codeTable.rows()[0].length; i++) { 
-				ar = ar.add(codeTable.row(i).node())
+			var ar = $();
+			if(speccode == 'Y' && expired == 'N'){
+				for (var i = 0; i < codeTable.rows()[0].length; i++) { 
+					ar = ar.add(codeTable.row(i).node())
+				}
+				note = $('#noteC').val();
+			}else if(speccode == 'N' && expired == 'Y'){
+				for (var i = 0; i < expTable.rows()[0].length; i++) { 
+					ar = ar.add(expTable.row(i).node())
+				}
+				note = $('#noteE').val();
+			}else if(speccode == 'Y' && expired == 'Y'){
+				for (var i = 0; i < codeExpTable.rows()[0].length; i++) { 
+					ar = ar.add(codeExpTable.row(i).node())
+				}
+				note = $('#noteCE').val();
 			}
-			var data = ar.find('select,input,textarea').serialize() +'&qtyR='+QtyR+'&qtyS='+QtyS+'&idItem='+idItem;
+
+			
+			var data = ar.find('select,input,textarea').serialize() +'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note;
+
 			axios.post(baseUrl+'/inventory/opname-barang/tambah', data)
 			.then((response) => {
-				
+
+				if(response.data.status == 'obSukses'){
+					$('#tambahModal').modal('hide');
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Berhasil",
+						content : 'Data Opname Barang Berhasil Disimpan...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+					});
+				}else{
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Maaf, Opname Barang Gagal Disimpan ",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+				}
+
 			});
 		}
 
