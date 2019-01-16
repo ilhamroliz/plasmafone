@@ -80,4 +80,7 @@
         /* add padding to account for vertical scrollbar */
         padding-right: 20px;
     } 
+	/* .modal-backdrop{
+		position: relative;
+	} */
 </style>

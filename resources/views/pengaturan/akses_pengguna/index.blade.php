@@ -139,10 +139,11 @@
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
 									<thead>			                
 										<tr>
-											<th class="text-center">Nama User</th>
-											<th class="text-center">Username</th>
-											<th class="text-center">Level</th>
-											<th class="text-center">Aksi</th>
+											<th class="text-center" style="width: 25%">Nama User</th>
+											<th class="text-center" style="width: 15%">Username</th>
+											<th class="text-center" style="width: 25%">Outlet</th>
+											<th class="text-center" style="width: 15%">Level</th>
+											<th class="text-center" style="width: 20%">Aksi</th>
 										</tr>
 									</thead>
 								</table>
@@ -274,7 +275,7 @@
 				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
 				"t"+
 				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-				"autoWidth" : true,
+				"autoWidth" : false,
 				"language" : dataTableLanguage,
 				"preDrawCallback" : function() {
 					// Initialize the responsive datatables helper once.
@@ -297,10 +298,11 @@
 					"type": "post",
 				},
 				columns: [
-					{data: 'm_name', name: 'm_name'},
-					{data: 'm_username', name: 'm_username'},
-					{data: 'l_name', name: 'l_name'},
-					{data: 'aksi', name: 'aksi'}
+					{data: 'm_name'},
+					{data: 'm_username'},
+					{data: 'c_name'},
+					{data: 'l_name'},
+					{data: 'aksi'}
 				],
 				responsive: false,
 				//"language": dataTableLanguage,

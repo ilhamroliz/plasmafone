@@ -8,6 +8,7 @@
     
 <?php 
 use App\Http\Controllers\PlasmafoneController as Plasma;
+use Carbon\Carbon;
 ?>
 
 @section('ribbon')
@@ -75,7 +76,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div class="col-md-12 no-padding padding-top-15">
 										<div class="col-md-2">
 											<div class="form-group">
-												<input type="text" id="monthPick" name="monthPick" class="form-control" placeholder="MASUKKAN BULAN">                                       
+												<input type="text" id="monthPick" name="monthPick" class="form-control" value="{{$month}}" placeholder="MASUKKAN BULAN">                                       
 											</div>
 										</div>
 										@if(Auth::user()->m_comp == "PF00000001")
@@ -236,7 +237,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
             $('#monthPick').MonthPicker({
                 Button: false
-            });
+			});
+			
+			// var date = {{ Carbon::now('Asia/Jakarta')->format('m/Y') }};
+			// $('#monthPick').val(date);
 
             $('.irpCompName').autocomplete({
                 source: baseUrl+'/man-penjualan/rencana-penjualan/auto-comp',
