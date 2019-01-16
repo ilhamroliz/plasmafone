@@ -1130,20 +1130,30 @@ class ReceptionController extends Controller
                 }
 
                 // delete stock on going
+                $qtystock = DB::table('d_stock')
+                            ->where('s_comp', $data['comp'])
+                            ->where('s_position', $data['destination'])
+                            ->where('s_item', $data['iditem'])
+                            ->where('s_status', 'On Going')
+                            ->first();
+
+                DB::table('d_stock')
+                ->where('s_comp', $data['comp'])
+                ->where('s_position', $data['destination'])
+                ->where('s_item', $data['iditem'])
+                ->where('s_status', 'On Going')
+                ->update([
+                    's_qty' => $qtystock->s_qty - $data['qty']
+                ]);
+
                 $checkidstock = DB::table('d_stock')
                                 ->where('s_comp', $data['comp'])
                                 ->where('s_position', $data['destination'])
                                 ->where('s_item', $data['iditem'])
                                 ->where('s_status', 'On Going')
-                                ->count();
-                if ($checkidstock > 0) {
-                    $getidstock = DB::table('d_stock')
-                                    ->where('s_comp', $data['comp'])
-                                    ->where('s_position', $data['destination'])
-                                    ->where('s_item', $data['iditem'])
-                                    ->where('s_status', 'On Going')
-                                    ->first();
-                    DB::table('d_stock')->where('s_id', $getidstock->s_id)->delete();
+                                ->first();
+                if ($checkidstock->s_qty == 0) {
+                    DB::table('d_stock')->where('s_id', $checkidstock->s_id)->delete();
                 }
                 
 

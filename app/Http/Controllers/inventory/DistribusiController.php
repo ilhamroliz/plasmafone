@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Crypt;
 use App\Http\Controllers\CodeGenerator as GenerateCode;
 use App\Http\Controllers\PlasmafoneController as Access;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Carbon\Carbon;
 use Response;
 Use Auth;
@@ -408,7 +409,11 @@ class DistribusiController extends Controller
 
     public function struck($id = null)
     {
-        $id = Crypt::decrypt($id);
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
         $datas = DB::table('d_distribusi')
                 ->select('d_distribusi.d_nota as nota', 'd_distribusi.d_date as tanggal', 'm_company.c_name as tujuan', 'd_item.i_nama as nama_barang', 'd_distribusi_dt.dd_qty as qty', 'd_mem.m_name as petugas')
                 ->where('d_distribusi.d_id', $id)
