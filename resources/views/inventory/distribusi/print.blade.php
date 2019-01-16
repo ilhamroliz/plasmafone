@@ -106,7 +106,7 @@
 			<td><strong>{{ $datas[0]->nota }}</strong></td>
 			<td>Tanggal</td>
 			<td class="text-center">:</td>
-			<td><strong>{{ $datas[0]->tanggal }}</strong></td>
+			<td><strong>{{ date('d-m-Y H:m:sa', strtotime($datas[0]->tanggal)) }}</strong></td>
 		</tr>
 		<tr>
 			<td>Dari</td>

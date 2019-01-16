@@ -49,6 +49,16 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			</div>
 
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+				<div class="page-title">
+
+					<a href="{{ url('/inventory/penerimaan/distribusi') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+
+				</div>
+
+			</div>
+
 		</div>
 
 		<!-- widget grid -->
@@ -197,7 +207,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                                             <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
 
-                                            <th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
+											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
+											
+											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty Diterima</th>
 
                                             <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
@@ -221,6 +233,48 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</div>
 
 			<!-- end row -->
+
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+				<div class="modal-dialog">
+
+					<div class="modal-content">
+
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel">Jumlah barang yang diterima</h4>
+
+						</div>
+						<form id="form_qtyReceived">{{ csrf_field() }}
+							<div class="modal-body">
+				
+								<div class="row terima">
+									
+								</div>
+				
+							</div>
+						</form>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
+								Batal
+							</button>
+							<button type="button" class="btn btn-primary" onclick="simpan()">
+								Simpan
+							</button>
+						</div>
+
+					</div><!-- /.modal-content -->
+
+				</div><!-- /.modal-dialog -->
+
+			</div>
+			<!-- /.modal -->
 
 		</section>
 		<!-- end widget grid -->
@@ -269,6 +323,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"columns":[
 						{"data": "nama_item"},
 						{"data": "qty"},
+						{"data": "qty_received"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -298,23 +353,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		    aktif.api().ajax.reload();
 		}
 
-
-		function edit(val){
-
+		function terima(id, item){
+			hapus();
 			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Memproses...');
+			$('#load-status-text').text('Sedang Mengambil Data...');
+			var row = '';
 
-			window.location = baseUrl+'/master/outlet/edit/'+val;
-
-		}
-
-		function detail(id){
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Mengambil data...');
-
-			var status;
-
-			axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail/'+id).then(response => {
+			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item).then(response => {
 
 				if (response.data.status == 'Access denied') {
 
@@ -329,181 +374,136 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 				} else {
 
-					$('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
-					$('#dt_nota').text(response.data.data.nota);
-					$('#dt_from').text(response.data.data.from);
-					$('#dt_destination').text(response.data.data.destination);
-					$('#dt_item').text(response.data.data.nama_item);
-					$('#dt_qty').text(response.data.data.qty);
-					$('#dt_tgl').text(response.data.data.tanggal);
-					$('#dt_status').text(response.data.data.status);
-					$('#dt_by').text(response.data.data.by);
+					console.log(response.data.qtySisa);
+					var qty = 0, qtyReceived = 0;
+					if (response.data.qtySisa == null) {
+						qty = 0;
+					} else {
+						qty = response.data.qtySisa;
+					}
+
+					if (response.data.qtyReceived == null) {
+						qtyReceived = 0;
+					} else {
+						qtyReceived = response.data.qtyReceived;
+					}
+
+					row = '<div class="form-group col-md-12" id="form_qty">'+
+									'<label for="bayar" class="row text-left col-md-6 control-label"><h4>Kuantitas yang sudah diterima:</h4></label>'+
+									'<div class="input-group col-md-6">'+
+										'<h4>'+
+											'<div style="float: right;">'+
+												'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row">'+
+											'</div>'+
+										'</h4>'+
+									'</div><br>'+
+									'<label for="bayar" class="row text-left col-md-6 control-label"><h4>Kuantitas:</h4></label>'+
+									'<div class="input-group col-md-6">'+
+										'<h4>'+
+											'<div style="float: right;">'+
+												'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
+												'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
+												'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
+												'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
+												'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
+												'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+												'<input type="text" value="" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row">'+
+											'</div>'+
+										'</h4>'+
+									'</div>'+
+								'</div>';
+
+					$(".terima").append(row);
+					$(".qty").on("keypress keyup blur",function (event) {
+						$(this).val($(this).val().replace(/[^\d].+/, ""));
+						if ((event.which < 48 || event.which > 57)) {
+							event.preventDefault();
+						}
+					});
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 
 				}
 
+				})
+		}
+
+		function hapus() {
+			$('#form_qty').remove();
+		}
+
+		function qtyTerima(qtySisa) {
+			var input = $("#qty").val();
+			if (isNaN(input)){
+				input = 0;
+			}
+			if (input > qtySisa){
+				input = qtySisa;
+				$("#qty").val(input);
+			}
+		}
+
+		function simpan() {
+			$('#overlay').fadeIn(200);
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
+			$.ajax({
+				url: baseUrl + '/inventory/penerimaan/distribusi/item-receive/add',
+				type: 'post',
+				data: $('#form_qtyReceived').serialize(),
+				success: function(response){
+					if (response == "lengkapi data") {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Peringatan!",
+							content : "Masukkan kuantitas barang yang diterima!",
+							color : "#A90329",
+							timeout: 5000,
+							icon : "fa fa-times bounce animated"
+						});
+						$('#qty').focus();
+					} else if (response == "false") {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Gagal",
+							content : "Upsss. Terjadi kesalahan",
+							color : "#A90329",
+							timeout: 5000,
+							icon : "fa fa-times bounce animated"
+						});
+						
+					} else {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Berhasil",
+							content : 'Transaksi Anda berhasil...!',
+							color : "#739E73",
+							timeout: 5000,
+							icon : "fa fa-check bounce animated"
+						});
+						$('#myModal').modal('hide');
+						refresh_tab();
+					}
+				}, error:function(x, e) {
+					if (x.status == 0) {
+						alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+					} else if (x.status == 404) {
+						alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+					} else if (x.status == 500) {
+						alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+					} else if (e == 'parsererror') {
+						alert('Error.\nParsing JSON Request failed.');
+					} else if (e == 'timeout'){
+						alert('Request Time out. Harap coba lagi nanti');
+					} else {
+						alert('Unknow Error.\n' + x.responseText);
+					}
+				}
 			})
-		}
-
-		function statusactive(id, name){
-			$.SmartMessageBox({
-				title : "Pesan!",
-				content : 'Apakah Anda yakin akan mengaktifkan data outlet <i>"'+name+'"</i>?',
-				buttons : '[Batal][Ya]'
-			}, function(ButtonPressed) {
-				if (ButtonPressed === "Ya") {
-
-					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Memproses...');
-
-					axios.get(baseUrl+'/master/outlet/active/'+id).then((response) => {
-
-						if (response.data.status == 'Access denied') {
-
-							$('#overlay').fadeOut(200);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-								color : "#A90329",
-								timeout: 5000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						} else if(response.data.status == 'berhasil'){
-							refresh_tab();
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Berhasil",
-								content : 'Data outlet berhasil diaktifkan...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-							});
-
-						}else if(response.data.status == 'tidak ada'){
-
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda aktifkan sudah tidak ada...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else{
-							$('#overlay').fadeOut(200);
-							// console.log(response);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}
-
-					}).catch((err) => {
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "Gagal",
-							content : "Upsss. Gagal mengaktifkan data...! Coba lagi dengan mulai ulang halaman",
-							color : "#A90329",
-							timeout: 4000,
-							icon : "fa fa-times bounce animated"
-						});
-						
-					}).then(function(){
-						$('#overlay').fadeOut(200);
-					})
-
-				}
-	
-			});
-		}
-
-		function statusnonactive(id, name){
-			$.SmartMessageBox({
-				title : "Pesan!",
-				content : 'Apakah Anda yakin akan menonaktifkan data outlet <i>"'+name+'"</i>?',
-				buttons : '[Batal][Ya]'
-			}, function(ButtonPressed) {
-				if (ButtonPressed === "Ya") {
-
-					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Memproses...');
-
-					axios.get(baseUrl+'/master/outlet/nonactive/'+id).then((response) => {
-
-						if (response.data.status == 'Access denied') {
-
-							$('#overlay').fadeOut(200);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-								color : "#A90329",
-								timeout: 5000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else if(response.data.status == 'berhasil'){
-							refresh_tab();
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Berhasil",
-								content : 'Data outlet berhasil dinonaktifkan...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-							});
-
-						}else if(response.data.status == 'tidak ada'){
-
-							$('#overlay').fadeOut(200);
-
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Data yang ingin Anda nonaktifkan sudah tidak ada...!",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}else{
-							$('#overlay').fadeOut(200);
-							console.log(response);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
-								color : "#A90329",
-								timeout: 4000,
-								icon : "fa fa-times bounce animated"
-							});
-
-						}
-
-					}).catch((err) => {
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "Gagal",
-							content : "Upsss. Gagal menonaktifkan data...! Coba lagi dengan mulai ulang halaman",
-							color : "#A90329",
-							timeout: 4000,
-							icon : "fa fa-times bounce animated"
-						});
-						
-					}).then(function(){
-						$('#overlay').fadeOut(200);
-					})
-
-				}
-	
-			});
+			
 		}
 
 	</script>

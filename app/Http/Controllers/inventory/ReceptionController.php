@@ -741,7 +741,9 @@ class ReceptionController extends Controller
                 ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                 ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                 ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
-                ->where('d_distribusi_dt.dd_qty_received', null);
+                ->where('d_distribusi_dt.dd_status', 'On Going')
+                ->orWhere('d_distribusi_dt.dd_qty_received', '<', 'd_distribusi_dt.dd_qty')
+                ->groupBy('d_distribusi.d_nota');
 
         return DataTables::of($data)
 
@@ -764,6 +766,56 @@ class ReceptionController extends Controller
             ->make(true);
     }
 
+    public function dataDistribusiTerima()
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                ->orWhere('d_distribusi_dt.dd_status', 'Received')
+                ->groupBy('d_distribusi.d_nota');
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detailTerima(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
+    public function detailTerima($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', $id)
+                    ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                    ->get();
+            return response()->json(['status' => 'OK', 'data' => $data]);
+
+        }
+    }
+
     public function detail($id = null)
     {
         $id = Crypt::decrypt($id);
@@ -776,14 +828,15 @@ class ReceptionController extends Controller
         } else {
 
             $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_distribusi.d_status as status', 'd_mem.m_name as by')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
                     ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
                     ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
                     ->where('d_distribusi.d_id', $id)
-                    ->first();
+                    ->where('d_distribusi_dt.dd_status', 'On Going')
+                    ->get();
             return response()->json(['status' => 'OK', 'data' => $data]);
 
         }
@@ -802,10 +855,34 @@ class ReceptionController extends Controller
         return view('inventory.penerimaan-barang.distribusi.edit')->with(compact('data', 'id'));
     }
 
+    public function itemReceive($id = null, $item = null)
+    {
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_detailid as iddetail', 'd_distribusi_dt.dd_comp as comp', 'd_distribusi_dt.dd_qty_received as qtyReceived', 'd_distribusi_dt.dd_qty_sisa as qtySisa', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', Crypt::decrypt($id))
+                    ->where('d_distribusi_dt.dd_item', Crypt::decrypt($item))
+                    ->first();
+            return json_encode($data);
+        }
+        
+    }
+
     public function getItem($id = null)
     {
         $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_distribusi.d_status as status', 'd_mem.m_name as by')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
@@ -819,7 +896,11 @@ class ReceptionController extends Controller
 
             if (Access::checkAkses(10, 'update') == true) {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-floppy-disk"></i>&nbsp; Terima</button></div>';
+                if ($data->qty == $data->qty_received) {
+                    return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Terima</button></div>';
+                }
 
             }
 
@@ -828,6 +909,122 @@ class ReceptionController extends Controller
         ->rawColumns(['aksi'])
 
         ->make(true);
+    }
+
+    public function itemReceiveAdd(Request $request)
+    {
+        $data = $request->all();
+
+        if ($data['qty'] == null || $data['qty'] == 0) {
+            return "lengkapi data";
+        } else {
+            
+            DB::beginTransaction();
+            try {
+                // update distribusi
+                $get_received = DB::table('d_distribusi_dt')
+                ->where('dd_distribusi', $data['idditribusi'])
+                ->where('dd_detailid', $data['iddetail'])
+                ->where('dd_comp', $data['comp'])
+                ->where('dd_item', $data['iditem'])
+                ->where('dd_qty', $data['qtydistribusi'])->first();
+
+                DB::table('d_distribusi_dt')
+                ->where('dd_distribusi', $data['idditribusi'])
+                ->where('dd_detailid', $data['iddetail'])
+                ->where('dd_comp', $data['comp'])
+                ->where('dd_item', $data['iditem'])
+                ->where('dd_qty', $data['qtydistribusi'])
+                ->update([
+                    'dd_qty_received' => $data['qty'] + $get_received->dd_qty_received,
+                    'dd_qty_sisa' => $get_received->dd_qty - ($data['qty'] + $get_received->dd_qty_received),
+                    'dd_receivetime' => Carbon::now('Asia/Jakarta')
+                ]);
+
+                $check_sisa = DB::table('d_distribusi_dt')
+                            ->where('dd_distribusi', $data['idditribusi'])
+                            ->where('dd_detailid', $data['iddetail'])
+                            ->where('dd_comp', $data['comp'])
+                            ->where('dd_item', $data['iditem'])
+                            ->where('dd_qty', $data['qtydistribusi'])
+                            ->first();
+
+                if ($check_sisa->dd_qty_sisa == 0) {
+                    DB::table('d_distribusi_dt')
+                    ->where('dd_distribusi', $data['idditribusi'])
+                    ->where('dd_detailid', $data['iddetail'])
+                    ->where('dd_comp', $data['comp'])
+                    ->where('dd_item', $data['iditem'])
+                    ->where('dd_qty', $data['qtydistribusi'])
+                    ->update([
+                        'dd_status' => 'Received'
+                    ]);
+                }
+
+                // update stock mutasi
+                $nota = DB::table('d_distribusi')->select('d_nota')->where('d_id', $data['idditribusi'])->first();
+
+                $mutasi = DB::table('d_stock_mutation')->where('sm_nota', $nota->d_nota)->where('sm_detail', 'PENGURANGAN')->first();
+
+                $sm_detailid = DB::table('d_stock_mutation')->where('sm_stock', $mutasi->sm_stock)->count()+1;
+
+                $s_code = $mutasi->sm_specificcode;
+                $expired = $mutasi->sm_expired;
+
+                if ($s_code == null || $s_code == "") {
+                    $s_code = null;
+                }
+
+                if ($expired == null || $expired == "") {
+                    $expired = null;
+                }
+
+                DB::table('d_stock_mutation')->insert([
+                    'sm_stock' => $mutasi->sm_stock,
+                    'sm_detailid' => $sm_detailid,
+                    'sm_date' => Carbon::now('Asia/Jakarta'),
+                    'sm_detail' => 'PENAMBAHAN',
+                    'sm_specificcode' => $s_code,
+                    'sm_expired' => $expired,
+                    'sm_qty' => $data['qty'],
+                    'sm_use' => 0,
+                    'sm_sisa' => $data['qty'],
+                    'sm_hpp' => $mutasi->sm_hpp,
+                    'sm_sell' => $mutasi->sm_sell,
+                    'sm_nota' => $nota->d_nota,
+                    'sm_reff' => $nota->d_nota,
+                    'sm_mem' =>  Auth::user()->m_id
+                ]);
+                
+                // update d_stock_dt & d_stock
+                if ($mutasi->sm_specificcode != null) {
+                    $sd_detailid = DB::table('d_stock_dt')->where('sd_stock', $mutasi->sm_stock)->count()+1;
+                    DB::table('d_stock_dt')->insert([
+                        'sd_stock' => $mutasi->sm_stock,
+                        'sd_detailid' => $sd_detailid,
+                        'sd_specificcode' => $mutasi->sm_specificcode
+                    ]);
+                }
+
+                $dst = DB::table('d_distribusi')->select('d_destination')->where('d_id', $data['idditribusi'])->first();
+
+                DB::table('d_stock')->insert([
+                    's_id' => DB::table('d_stock')->max('s_id')+1,
+                    's_comp' => $dst->d_destination,
+                    's_position' => $dst->d_destination,
+                    's_item' => $data['iditem'],
+                    's_qty' => $data['qty'],
+                    's_status' => 'On Destination'
+                ]);
+
+                DB::commit();
+                return 'true';
+            } catch (\Exception $e) {
+                DB::rollback();
+                return 'false';
+            }
+
+        }
     }
     // End penerimaan barang dari distribusi
 }
