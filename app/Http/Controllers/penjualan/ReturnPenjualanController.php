@@ -9,6 +9,6 @@ class ReturnPenjualanController extends Controller
 {
     public function index()
     {
-        return view('');
+        return view('penjualan.return-penjualan.index');
     }
 }

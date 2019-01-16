@@ -135,7 +135,7 @@
 	</table>
 	<table style="width: 100%; margin-top: 30px;">
 		<tr>
-			<td class="text-center">Yang Mengeluarkan,</td>
+			<td class="text-center">Petugas,</td>
 		</tr>
 		<tr>
 			<td style="padding-top: 100px; padding-left: 10%; padding-right: 10%;"><strong>{{ $datas[0]->petugas }}</strong></td>

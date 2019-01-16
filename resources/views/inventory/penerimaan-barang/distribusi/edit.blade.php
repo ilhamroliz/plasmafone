@@ -247,11 +247,19 @@ use App\Http\Controllers\PlasmafoneController as Access;
 								&times;
 							</button>
 
-							<h4 class="modal-title" id="myModalLabel">Jumlah barang yang diterima</h4>
+							<h4 class="modal-title" id="myModalLabel"><strong>Jumlah barang yang diterima</strong></h4>
 
 						</div>
 						<form id="form_qtyReceived">{{ csrf_field() }}
 							<div class="modal-body">
+
+								<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="text-center col-md-12 control-label" id="nama_item" style="font-weight:bold"></label>
+											</div>
+										</div>
+								</div><br>
 				
 								<div class="row terima">
 									
@@ -388,31 +396,54 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						qtyReceived = response.data.qtyReceived;
 					}
 
-					row = '<div class="form-group col-md-12" id="form_qty">'+
-									'<label for="bayar" class="row text-left col-md-6 control-label"><h4>Kuantitas yang sudah diterima:</h4></label>'+
-									'<div class="input-group col-md-6">'+
-										'<h4>'+
-											'<div style="float: right;">'+
-												'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row">'+
-											'</div>'+
-										'</h4>'+
-									'</div><br>'+
-									'<label for="bayar" class="row text-left col-md-6 control-label"><h4>Kuantitas:</h4></label>'+
-									'<div class="input-group col-md-6">'+
-										'<h4>'+
-											'<div style="float: right;">'+
-												'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
-												'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-												'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
-												'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
-												'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
-												'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-												'<input type="text" value="" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row">'+
-											'</div>'+
-										'</h4>'+
+					if (response.data.specificcode == 'Y') {
+						
+						row = '<div class="col-md-12" id="form_qty">'+
+									'<div class="form-group">'+
+										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
+										'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row form-control">'+
+									'</div>'+
+									// '<div class="form-group">'+
+										// '<label for="qty" class="row text-left col-md-6 control-label">Kuantitas:</label>'+
+										
+										// '<input type="text" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row">'+
+									// '</div>'+
+									'<div class="form-group">'+
+										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
+										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
+										'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
+										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
+										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
+										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
+										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+										'<label for="kode" class="row text-left col-md-6 control-label">Specific Code:</label>'+
+										'<input type="text" id="kode" name="kode" class="kode row form-control">'+
 									'</div>'+
 								'</div>';
 
+					} else {
+
+						row = '<div class="col-md-12" id="form_qty">'+
+									'<div class="form-group">'+
+										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
+										'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row form-control">'+
+									'</div>'+
+									'<div class="form-group">'+
+										'<label for="qty" class="row text-left col-md-6 control-label">Kuantitas:</label>'+
+										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
+										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
+										'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
+										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
+										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
+										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
+										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+										'<input type="text" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row form-control">'+
+									'</div>'+
+								'</div>';
+
+					}
+
+					$('#nama_item').html(response.data.nama_item);
 					$(".terima").append(row);
 					$(".qty").on("keypress keyup blur",function (event) {
 						$(this).val($(this).val().replace(/[^\d].+/, ""));
@@ -455,7 +486,17 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				type: 'post',
 				data: $('#form_qtyReceived').serialize(),
 				success: function(response){
-					if (response == "lengkapi data") {
+					if (response == 'kode salah') {
+						$('#overlay').fadeOut(200);
+						$.smallBox({
+							title : "Peringatan!",
+							content : "Kode Spesifik Salah!",
+							color : "#A90329",
+							timeout: 5000,
+							icon : "fa fa-times bounce animated"
+						});
+						$('#kode').focus();
+					} else if (response == "lengkapi data") {
 						$('#overlay').fadeOut(200);
 						$.smallBox({
 							title : "Peringatan!",
