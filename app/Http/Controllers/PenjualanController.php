@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CodeGenerator as GenerateCode;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Response;
 Use Auth;
 
@@ -495,11 +497,13 @@ class PenjualanController extends Controller
                 // return $url;
                 return response()->json([
                     'status' => 'sukses',
-                    'bayar' => '',
+                    'bayar' => $data['bayar'],
                     'salesman' => $sales->m_name,
-                    'idSales' => $idsales,
-                    'bri' => '',
-                    'bni' => ''
+                    'idSales' => Crypt::encrypt($idsales),
+                    'bri' => $data['bri'],
+                    'bni' => $data['bni'],
+                    'totPemb' => $data['total_pembayaran'],
+                    'kembali' => $data['kembali']
                 ]);
 
             } catch (\Exception $e) {
@@ -519,8 +523,13 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan-regular.detailPembayaran', compact('total'));
     }
 
-    public function struck($salesman = null, $id = null)
+    public function struck($salesman = null, $id = null, $bayar = null, $bri = null, $bni = null, $totPemb = null, $kembali = null)
     {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
         $datas = DB::table('d_sales')
                 ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total')
                 ->where('d_sales.s_id', $id)
@@ -529,7 +538,7 @@ class PenjualanController extends Controller
                 ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
                 ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
                 ->get();
-        return view('penjualan.penjualan-regular.cetak_struck')->with(compact('datas', 'salesman'));
+        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'bayar', 'bri', 'bni', 'totPemb', 'kembali'));
     }
 
     public function detailpembayaranTempo($total = null)
@@ -537,8 +546,13 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan-tempo.detailPembayaran', compact('total'));
     }
 
-    public function struckTempo($salesman = null, $id = null)
+    public function struckTempo($salesman = null, $id = null, $bayar = null, $bri = null, $bni = null, $totPemb = null, $kembali = null)
     {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
         $datas = DB::table('d_sales')
                 ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total')
                 ->where('d_sales.s_id', $id)
@@ -547,7 +561,7 @@ class PenjualanController extends Controller
                 ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
                 ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
                 ->get();
-        return view('penjualan.penjualan-tempo.cetak_struck')->with(compact('datas', 'salesman'));
+        return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'bayar', 'bri', 'bni', 'totPemb', 'kembali'));
     }
 
     

@@ -32,14 +32,16 @@
 <div class="form-group col-md-12" style="float: right;">
 	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4 style="font-weight:bold">Total Pembayaran:</h4></label>
 	<div class="input-group col-md-5 row text-right">
-    	<h4><div style="float: left;">Rp. </div><div class="row text-right TotalPembayaran" style="float: right; font-weight:bold;">0,00</div></h4>
+		<h4><div style="float: left;">Rp. </div><div class="row text-right TotalPembayaran" style="float: right; font-weight:bold;">0,00</div></h4>
+		<input type="hidden" name="total_pembayaran" id="total_pembayaran">
     </div>
 </div>
 
 <div class="form-group col-md-12" style="float: right;">
 	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4 style="font-weight:bold">Kembali:</h4></label>
 	<div class="input-group col-md-5 row text-right">
-    	<h4><div style="float: left;">Rp. </div><div class="row text-right kembali" style="float: right; font-weight:bold;">0,00</div></h4>
+		<h4><div style="float: left;">Rp. </div><div class="row text-right kembali" style="float: right; font-weight:bold;">0,00</div></h4>
+		<input type="hidden" name="kembali" id="kembali">
     </div>
 </div>
 </form>
@@ -112,6 +114,7 @@
 		var totaltemp = bayar + bca + permata;
 		var total = konversiRupiahV2(totaltemp);
 		$('.TotalPembayaran').text(total);
+		$('#total_pembayaran').val(totaltemp);
 
 		var tagihantemp = $('.totalnet').val();
 		var tagihan = konversiAngka(tagihantemp);
@@ -122,6 +125,7 @@
 		}
 		var kembali = konversiRupiahV2(kembalitemp);
 		$('.kembali').text(kembali);
+		$('#kembali').val(kembalitemp);
 
 		if (totalTagihan <= totaltemp) {
 			$('#buttonCetak').css('display', 'block');
