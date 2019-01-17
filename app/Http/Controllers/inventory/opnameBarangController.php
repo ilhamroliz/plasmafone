@@ -43,26 +43,279 @@ class opnameBarangController extends Controller
     public function pencarian(Request $request)
     {
 
-        $pcr = DB::table('d_opname')
-            ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
-            ->join('m_company', 'c_id', '=', 'o_comp')
-            ->join('d_item', 'i_id', '=', 'od_item')
-            ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
-            ->where('o_status', 'DONE');
+        $state = $request->x;
+        $tglAwal = $request->awal;
+        $tglAkhir = $request->akhir;
+        $idItem = $request->ii;
+        $idComp = $request->ic;
+        $cabang = $request->cb;
+        $pcr = '';
 
-        // dd($gappr);
-        return DataTables::of($pcr)
-            ->addColumn('aksi', function ($pcr) {
-                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
-                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                if (PlasmafoneController::checkAkses(11, 'delete') == false) {
-                    return '<div class="text-center">' . $detail . '</div>';
-                } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+        if ($state == 'a') {
+
+            if ($tglAwal != '' && $tglAkhir != '') {
+                $pisahAw = explode('/', $tglAwal);
+                $awal = $pisahAw[2] . '-' . $pisahAw[1] . '-' . $pisahAw[0];
+                $pisahAkh = explode('/', $tglAkhir);
+                $akhir = $pisahAkh[2] . '-' . $pisahAkh[1] . '-' . $pisahAkh[0];
+
+                if ($idItem == '' && $idComp == '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir);
+
+                } else if ($idItem != '' && $idComp == '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir)
+                        ->where('od_item', $idItem);
+                } else if ($idItem == '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir)
+                        ->where('o_comp', $idComp);
+
+                } else if ($idItem != '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir)
+                        ->where('o_comp', $idComp)
+                        ->where('od_item', $idItem);
                 }
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
+
+            } else {
+                if ($idItem != '' && $idComp == '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE')
+                        ->where('od_item', $idItem);
+
+                } else if ($idItem == '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE')
+                        ->where('o_comp', $idComp);
+
+                } else if ($idItem != '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE')
+                        ->where('o_comp', $idComp)
+                        ->where('od_item', $idItem);
+
+                } else {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'DONE');
+                }
+            }
+
+            if ($cabang == 'pus') {
+            // dd($gappr);
+                return DataTables::of($pcr)
+                    ->addColumn('aksi', function ($pcr) {
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        // $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                        if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '</div>';
+                        } else if (PlasmafoneController::checkAkses(11, 'delete') == true && PlasmafoneController::checkAkses(11, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                        } else if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == true) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '</div>';
+                        } else {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
+                        }
+                    })
+                    ->rawColumns(['aksi'])
+                    ->make(true);
+            } else {
+                return DataTables::of($pcr)
+                    ->addColumn('aksi', function ($pcr) {
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        // $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                        if (PlasmafoneController::checkAkses(12, 'delete') == false && PlasmafoneController::checkAkses(12, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '</div>';
+                        } else if (PlasmafoneController::checkAkses(12, 'delete') == true && PlasmafoneController::checkAkses(12, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                        } else if (PlasmafoneController::checkAkses(12, 'delete') == false && PlasmafoneController::checkAkses(12, 'update') == true) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '</div>';
+                        } else {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
+                        }
+                    })
+                    ->rawColumns(['aksi'])
+                    ->make(true);
+            }
+
+        } else {
+            if ($tglAwal != '' && $tglAkhir != '') {
+                $pisahAw = explode('/', $tglAwal);
+                $awal = $pisahAw[2] . '-' . $pisahAw[1] . '-' . $pisahAw[0];
+                $pisahAkh = explode('/', $tglAkhir);
+                $akhir = $pisahAkh[2] . '-' . $pisahAkh[1] . '-' . $pisahAkh[0];
+
+                if ($idItem == '' && $idComp == '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir);
+
+                } else if ($idItem != '' && $idComp == '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir)
+                        ->where('od_item', $idItem);
+
+                } else if ($idItem == '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir)
+                        ->where('o_comp', $idComp);
+
+                } else if ($idItem != '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING')
+                        ->where('o_date', '>=', $awal)
+                        ->where('o_date', '<=', $akhir)
+                        ->where('o_comp', $idComp)
+                        ->where('od_item', $idItem);
+                }
+
+            } else {
+                if ($idItem != '' && $idComp == '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING')
+                        ->where('od_item', $idItem);
+
+                } else if ($idItem == '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING')
+                        ->where('o_comp', $idComp);
+
+                } else if ($idItem != '' && $idComp != '') {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING')
+                        ->where('o_comp', $idComp)
+                        ->where('od_item', $idItem);
+
+                } else {
+                    $pcr = DB::table('d_opname')
+                        ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+                        ->join('m_company', 'c_id', '=', 'o_comp')
+                        ->join('d_item', 'i_id', '=', 'od_item')
+                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->where('o_status', 'PENDING');
+                }
+            }
+
+            if ($cabang == 'pus') {
+            // dd($gappr);
+                return DataTables::of($pcr)
+                    ->addColumn('aksi', function ($pcr) {
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                        if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '</div>';
+                        } else if (PlasmafoneController::checkAkses(11, 'delete') == true && PlasmafoneController::checkAkses(11, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                        } else if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == true) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '</div>';
+                        } else {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
+                        }
+                    })
+                    ->rawColumns(['aksi'])
+                    ->make(true);
+            } else {
+                return DataTables::of($pcr)
+                    ->addColumn('aksi', function ($pcr) {
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                        if (PlasmafoneController::checkAkses(12, 'delete') == false && PlasmafoneController::checkAkses(12, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '</div>';
+                        } else if (PlasmafoneController::checkAkses(12, 'delete') == true && PlasmafoneController::checkAkses(12, 'update') == false) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                        } else if (PlasmafoneController::checkAkses(12, 'delete') == false && PlasmafoneController::checkAkses(12, 'update') == true) {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '</div>';
+                        } else {
+                            return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
+                        }
+                    })
+                    ->rawColumns(['aksi'])
+                    ->make(true);
+            }
+        }
+
     }
 
     public function auto_comp_noPusat(Request $request)
@@ -111,15 +364,15 @@ class opnameBarangController extends Controller
                 $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
                 $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
-                $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                // $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                 if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
                     return '<div class="text-center">' . $detail . '</div>';
                 } else if (PlasmafoneController::checkAkses(11, 'delete') == true && PlasmafoneController::checkAkses(11, 'update') == false) {
                     return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
                 } else if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == true) {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '</div>';
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '</div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -179,9 +432,9 @@ class opnameBarangController extends Controller
                 } else if (PlasmafoneController::checkAkses(11, 'delete') == true && PlasmafoneController::checkAkses(11, 'update') == false) {
                     return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
                 } else if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == true) {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '</div>';
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '</div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $appr . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $delete . '</div>';
                 }
             })
             ->rawColumns(['aksi'])
@@ -218,11 +471,6 @@ class opnameBarangController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
-    }
-
-    public function cari_opname(Request $request)
-    {
-
     }
 
     public function cari_item_stock(Request $request)
