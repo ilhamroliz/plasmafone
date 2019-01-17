@@ -927,7 +927,7 @@
         });
         $.ajax({
             url: baseUrl + '/penjualan-tempo/simpan',
-            type: 'get',
+            type: 'post',
             data: $('#form-penjualan, #formDetailPembayaran').serialize(),
             success: function(response){
                 if (response == "lengkapi data") {
