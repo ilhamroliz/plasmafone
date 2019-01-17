@@ -158,8 +158,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Manajemen Minimum Stock'] == 'Y')
-					<li>
-						<a href="#">Minimun Stok</a>
+					<li class="{{ (Request::is('inventory/min-stock/*') || Request::is('inventory/min-stock')) ? 'active' : '' }}">
+						<a href="{{ url('/inventory/min-stock') }}">Minimum Stock</a>
 					</li>
 					@endif
 

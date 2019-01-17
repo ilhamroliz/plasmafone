@@ -578,6 +578,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 	//=== End OPNAME BARANG
 
+	//=== MINIMUM STOCK
+
+	Route::get('/inventory/min-stock', 'inventory\minimumStockController@index');
+	Route::match('/inventory/min-stock/tambah', 'inventory\minimumStockController@tambah');
+	Route::match('/inventory/min-stock/edit', 'inventory\minimumStockController@edit');
+	
+
+	//=== End MINIMUM STOCK
+
 	// End Inventory
 
 	///// PENJUALAN
