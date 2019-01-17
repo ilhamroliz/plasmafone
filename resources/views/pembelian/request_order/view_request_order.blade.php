@@ -103,11 +103,16 @@
                                                                          class="fa fa-lg fa-check"></i> <span
                                             class="hidden-mobile hidden-tablet"> DiProses </span></a>
                                 </li>
+                                <li>
+                                    <a data-toggle="tab" href="#hr3"> <i style="color: #C79121;"
+                                                                         class="fa fa-lg fa-cross"></i> <span
+                                            class="hidden-mobile hidden-tablet"> DiTolak </span></a>
+                                </li>
                                 
                             </ul>
                         </header>
                         <!-- widget div-->
-                        <div>
+                        <div> 
                         
                             <!-- widget content -->
                             <div class="widget-body no-padding">
@@ -132,6 +137,27 @@
 
                                     <div class="tab-pane fade" id="hr2">
                                         <table id="dt_all" class="table table-striped table-bordered table-hover"
+                                               width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th data-hide="phone,tablet" >No</th>
+                                                <th >Nama Outlet</th>
+                                                <th data-hide="phone,tablet" width="35%">Nama Barang</th>
+                                                <th data-hide="phone,tablet" >Qty</th>
+                                                <th data-hide="phone,tablet" width="15%">Status</th>
+                                                <!-- <th data-hide="phone,tablet" >Jml</th>
+
+                                                <th data-hide="phone,tablet" >Aksi</th> -->
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="hr3">
+                                        <table id="dt_tolak" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>
@@ -280,6 +306,43 @@
                     // Initialize the responsive datatables helper once.
                     if (!responsiveHelper_dt_basic) {
                         responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#waitingReq_table'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+            $('#overlay').fadeOut(200);
+            }, 500);
+
+            
+            setTimeout(function () {
+
+            tolak = $('#dt_tolak').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/request-pembelian/tolak') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
+                "columns":[
+                    {"data": "pr_id"},
+                    {"data": "c_name"},
+                    {"data": "i_nama"},
+                    {"data": "pr_qtyReq"},
+                    {"data": "pr_stsReq"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tolak'), breakpointDefinition);
                     }
                 },
                 "rowCallback" : function(nRow) {

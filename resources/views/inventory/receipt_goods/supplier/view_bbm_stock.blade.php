@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Penerimaan Barang Dari Supplier')
+@section('title', 'Form Masukkan Stock Barang')
 
 @section('extra_style')
 
@@ -18,7 +18,7 @@
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
-		<li>Home</li><li>Inventory</li><li>Penerimaan Barang</li><li>Dari Supplier</li>
+		<li>Home</li><li>Inventory</li><li>Penerimaan Barang</li><li>Dari Supplier</li><li>Form Masukkan Stock</li>
 	</ol>
 	<!-- end breadcrumb -->
 
@@ -42,26 +42,6 @@
 
 <!-- MAIN CONTENT -->
 <div id="content">
-
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<ul class="menu-table hide-on-small">
-				<li>
-					<!-- <a href="{{ url('/inventory/penerimaan/supplier/add') }}"> -->
-					<a href="{{ url('/inventory/penerimaan/supplier/formAdd') }}">
-						<i class="fa fa-plus"></i> &nbsp;Terima Barang
-					</a>
-				</li>
-
-				<li class="">
-					<a href="{{ url('/inventory/penerimaan/supplier/formAdd_stock') }}">
-						<i class="fa fa-table"></i> &nbsp;Masukkan Stock Barang
-					</a>
-				</li>
-					
-			</ul>
-		</div>
-	</div>
 
 	<!-- widget grid -->
 	<section id="widget-grid" class="">
@@ -94,15 +74,15 @@
 				<form id="table-form">
 					{!! csrf_field() !!}
 					<div class="table-responsive"  >
-					<table id="dt_bbm" class="table table-striped table-bordered table-hover " width="100%">
+					<table id="dt_bbmStock" class="table table-striped table-bordered table-hover " width="100%">
 						<thead>			                
 							<tr>
 								
 								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;No.</th>
 								<!-- <th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode BM</th> -->
-								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode PO</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Supplier</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Status</th>
+								<!-- <th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode PO</th> -->
+								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Nama Barang</th>
+								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Qty</th>
 								<th class="text-center" data-hide="phone,tablet" width="15%"> Aksi</th>
 							</tr>
 						</thead>
@@ -137,7 +117,7 @@
 										<label class="label col col-2">Order Nomor</label>
 										<div class="col col-10">
 											<label class="input"> <i class="icon-append fa fa-user"></i>
-												<input type="text" disabled name="ro_no" id="ro_no" placeholder="aaaaaaaaaaaaa" />
+												<input type="text" disabled name="ro_no" id="ro_no" />
 											</label>
 										</div>
 									</div>
@@ -230,47 +210,17 @@ var url = '{{url('/inventory/penerimaan/supplier/view_bbm_dt')}}';
 	})
 
 	function reload_data(){
-		table_bbm= $('#dt_bbm').DataTable({
+		table_bbm= $('#dt_bbmStock').DataTable({
 			"language" : dataTableLanguage,
 			"searching": false,
             "ajax": {
-                    "url": '{{url('/inventory/penerimaan/supplier/load_bbm')}}',
+                    "url": '{{url('/inventory/penerimaan/supplier/view_bbmStock')}}',
                     "type": "POST",  
                     "data": function ( data ) {
-                        
 						data._token = '{{ csrf_token() }}';
                     },
                 },
         } ); 
-    }
-
-
-	function page(id)
-	{
-		id_bbm = id;
-		window.location.href=url;
- 
-	}
-
-	function reload_table(){
-		
-		$.ajax({
-			url : '{{url('/inventory/penerimaan/supplier/getEntitas_po')}}',
-			type: "POST",
-			data: { 
-				po: $('#po').val(),
-				_token 	: '{{ csrf_token() }}'
-			},
-			dataType: "JSON",
-			success: function(data)
-			{
-				
-				$('#supplier').val(data.s_company);
-				$('#tgl_order').val(data.p_date);
-				table_barang.ajax.reload(null, false);
-			}
-		});
-
     }
 
 	function openModal(){

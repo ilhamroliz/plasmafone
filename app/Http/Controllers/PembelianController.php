@@ -994,7 +994,7 @@ class PembelianController extends Controller
     }
 
     public function view_confirmAll()
-    {
+    { 
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
                 'd_purchase_confirm.pr_idConf',
@@ -1133,8 +1133,7 @@ class PembelianController extends Controller
                 $i = 1;
                 foreach ($menunggu as $key) {
                 $row = array();
-                $row[] = $i++;
-                $row[] = $key->c_name;
+                
                 $row[] = $key->i_nama;
                 $row[] = '<div class="text-center"><input type="text" class="editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
                 // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
@@ -1158,8 +1157,7 @@ class PembelianController extends Controller
                 $i = 1;
                 foreach ($menunggu as $key) {
                 $row = array();
-                $row[] = $i++;
-                $row[] = $key->c_name;
+               
                 $row[] = $key->i_nama;
                 $row[] = $key->pr_qtyApp;
                 $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.$key->pr_harga_satuan .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
@@ -2682,6 +2680,7 @@ class PembelianController extends Controller
 
     public function addDumyReq(Request $request)
     {
+     
         $comp = Auth::user()->m_comp;
         $user = Auth::user()->m_id;
         $item = $request->input('item');
@@ -2689,27 +2688,221 @@ class PembelianController extends Controller
         $dateReq = Carbon::now('Asia/Jakarta');
         $status = 'DUMY';
 
-        $insert = DB::table('d_purchase_req')
+        $cek_item = DB::table('d_purchase_req')
+        ->select('d_purchase_req.pr_itemReq')
+        ->where('d_purchase_req.pr_itemReq','=',$item)
+        ->where('d_purchase_req.pr_userId','=',$user)
+        ->where('d_purchase_req.pr_stsReq','=','DUMY')
+        ->get();
+
+        $kuantiti = DB::table('d_purchase_req')
+        ->select('d_purchase_req.pr_qtyReq')
+        ->where('d_purchase_req.pr_itemReq','=',$item)
+        ->where('d_purchase_req.pr_userId','=',$user)
+        ->where('d_purchase_req.pr_stsReq','=','DUMY')
+        ->get();
+
+        $baris = count($cek_item);
+
+        if($baris =='0' and $qty !=''){
+            $insert = DB::table('d_purchase_req')
+                ->insert([
+    
+                    'pr_codeReq' => '',
+                    'pr_compReq' => $comp,
+                    'pr_itemReq' => $item,
+                    'pr_qtyReq' => $qty,
+                    'pr_qtyApp' => $qty,
+                    'pr_dateReq' => $dateReq,
+                    'pr_stsReq' => $status,
+                    'pr_userId' =>$user
+    
+                ]);
+    
+                if ($insert) {
+                    $sts = "SUKSES";
+                    echo json_encode(array("data" => $sts));
+                } else {
+                    $sts = "GAGAL";
+                    echo json_encode(array("data" => $sts));
+                }
+        }else if($baris =='0' and $qty ==''){
+            $insert = DB::table('d_purchase_req')
             ->insert([
 
                 'pr_codeReq' => '',
                 'pr_compReq' => $comp,
                 'pr_itemReq' => $item,
-                'pr_qtyReq' => $qty,
-                'pr_qtyApp' => $qty,
+                'pr_qtyReq' => '1',
+                'pr_qtyApp' => '1',
                 'pr_dateReq' => $dateReq,
                 'pr_stsReq' => $status,
                 'pr_userId' =>$user
 
             ]);
 
-        if ($insert) {
-            $status = "SUKSES";
-        } else {
-            $status = "GAGAL";
+            if ($insert) {
+                $sts = "SUKSES";
+                echo json_encode(array("data" => $sts));
+            } else {
+                $sts = "GAGAL";
+                echo json_encode(array("data" => $sts));
+            }
+        }else if($baris !='0' and $qty ==''){
+            $kuantiti = DB::table('d_purchase_req')
+            ->select('d_purchase_req.pr_qtyReq')
+            ->where('d_purchase_req.pr_itemReq','=',$item)
+            ->where('d_purchase_req.pr_userId','=',$user)
+            ->where('d_purchase_req.pr_stsReq','=','DUMY')
+            ->get();
+
+            foreach ($kuantiti as $key) {
+                $k = $key->pr_qtyReq;
+            }
+
+            $update_qty = DB::table('d_purchase_req')
+            ->where('d_purchase_req.pr_userId','=',$user)
+            ->where('d_purchase_req.pr_itemReq','=',$item)
+            ->update([
+                'pr_qtyReq' => $k+1,
+                'pr_qtyApp' => $k+1
+            ]);
+
+            if ($update_qty) {
+                $sts = "SUKSES";
+                echo json_encode(array("data" => $sts));
+            } else {
+                $sts = "GAGA1";
+                echo json_encode(array("data" => $sts));
+            }
+        }else if($baris !='0' and $qty !=''){
+
+            $kuantiti = DB::table('d_purchase_req')
+            ->select('d_purchase_req.pr_qtyReq')
+            ->where('d_purchase_req.pr_itemReq','=',$item)
+            ->where('d_purchase_req.pr_userId','=',$user)
+            ->where('d_purchase_req.pr_stsReq','=','DUMY')
+            ->get();
+
+            foreach ($kuantiti as $key) {
+                $k = $key->pr_qtyReq;
+            }
+
+            $update_qty = DB::table('d_purchase_req')
+            ->where('d_purchase_req.pr_userId','=',$user)
+            ->where('d_purchase_req.pr_itemReq','=',$item)
+            ->update([
+                'pr_qtyReq' => $k+$qty,
+                'pr_qtyApp' => $k+$qty
+            ]);
+
+            if ($update_qty) {
+                $sts = "SUKSES";
+                echo json_encode(array("data" => $sts));
+            } else {
+                $sts = "GAGA1";
+                echo json_encode(array("data" => $sts));
+            }
         }
 
-        echo json_encode(array("data" => $status));
+        
+        
+
+       
+        
+        // if($cek_item =='' and $qty !='' ){
+        //     $insert = DB::table('d_purchase_req')
+        //     ->insert([
+
+        //         'pr_codeReq' => '',
+        //         'pr_compReq' => $comp,
+        //         'pr_itemReq' => $item,
+        //         'pr_qtyReq' => $qty,
+        //         'pr_qtyApp' => $qty,
+        //         'pr_dateReq' => $dateReq,
+        //         'pr_stsReq' => $status,
+        //         'pr_userId' =>$user
+
+        //     ]);
+
+        //     if ($insert) {
+        //         $sts = "SUKSES";
+        //         echo json_encode(array("data" => $sts));
+        //     } else {
+        //         $sts = "GAGAL";
+        //         echo json_encode(array("data" => $sts));
+        //     }
+        // }else if($cek_item =='' and $qty =='' ){
+        //     $insert = DB::table('d_purchase_req')
+        //     ->insert([
+
+        //         'pr_codeReq' => '',
+        //         'pr_compReq' => $comp,
+        //         'pr_itemReq' => $item,
+        //         'pr_qtyReq' => '1',
+        //         'pr_qtyApp' => '1',
+        //         'pr_dateReq' => $dateReq,
+        //         'pr_stsReq' => $status,
+        //         'pr_userId' =>$user
+
+        //     ]);
+
+        //     if ($insert) {
+        //         $sts = "SUKSES";
+        //         echo json_encode(array("data" => $sts));
+        //     } else {
+        //         $sts = "GAGAL";
+        //         echo json_encode(array("data" => $sts));
+        //     }
+        // }else if($cek_item !='' and $qty==''){
+        //     $update_qty = DB::table('d_purchase_req')
+        //     ->where('d_purchase_req.pr_userId','=',$user)
+        //     ->where('d_purchase_req.pr_itemReq','=',$cek_item)
+        //     ->update([
+        //         'pr_qtyReq' => $kuantitas+1,
+        //         'pr_qtyApp' => $kuantitas+1
+        //     ]);
+
+        //     if ($update_qty) {
+        //         $sts = "SUKSES";
+        //         echo json_encode(array("data" => $sts));
+        //     } else {
+        //         $sts = "GAGA1";
+        //         echo json_encode(array("data" => $sts));
+        //     }
+        // }else if($cek_item !='' and $qty!=''){
+        //     $kuantiti = DB::table('d_purchase_req')
+        //     ->select('d_purchase_req.pr_qtyReq')
+        //     ->where('d_purchase_req.pr_itemReq','=',$item)
+        //     ->where('d_purchase_req.pr_userId','=',$user)
+        //     ->where('d_purchase_req.pr_stsReq','=','DUMY')
+        //     ->get();
+
+
+        //     foreach ($kuantiti as $key) {
+        //         $kuantitas = $key->pr_qtyReq;
+        //      }
+     
+        //     $update_qty2 = DB::table('d_purchase_req')
+        //     ->where('d_purchase_req.pr_userId','=',$user)
+        //     ->where('d_purchase_req.pr_itemReq','=',$cek_item)
+        //     ->update([
+        //         'pr_qtyReq' => $kuantitas+1,
+        //         'pr_qtyApp' => $kuantitas+1,
+        //     ]);
+
+        //     if ($update_qty2) {
+        //         $sts = "SUKSES";
+        //         echo json_encode(array("data" => $sts));
+        //     } else {
+        //         $sts = "GAGA1";
+        //         echo json_encode(array("data" => $sts));
+        //     }
+        // }
+
+       
+
+        
     }
 
     public function getDumyReq()
@@ -2856,7 +3049,49 @@ class PembelianController extends Controller
         return DataTables::of($waiting)
             ->addColumn('pr_stsReq', function ($waiting) {
 
-                return "<span class='label label-danger'>MENUNGGU...</span>";
+                return "<span class='label label-warning' style='padding:5%'>MENUNGGU...</span>";
+
+            })
+
+            // ->addColumn('aksi', function ($waiting) {
+            //     if (Plasma::checkAkses(49, 'update') == false) {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            //     } else {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     }
+            // })
+            ->rawColumns(['pr_stsReq', 'aksi'])
+            ->make(true);
+    }
+
+    public function requestTolak()
+    {
+        $comp = Auth::user()->m_comp;
+
+        if($comp == "PF00000001"){
+            $tolak = DB::table('d_purchase_req')
+            ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
+            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_req.pr_stsReq', 'DITOLAK')
+            ->get();
+        }else{
+            $id = Auth::user()->m_id;
+            $tolak = DB::table('d_purchase_req')
+            ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
+            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_req.pr_stsReq', 'DITOLAK')
+            ->where('d_purchase_req.pr_compReq',$comp)
+            ->get();
+        }
+
+        return DataTables::of($tolak)
+            ->addColumn('pr_stsReq', function ($tolak) {
+
+                return "<span class='label label-danger' style='padding:5%'>DITOLAK...</span>";
 
             })
 
@@ -2898,7 +3133,7 @@ class PembelianController extends Controller
         return DataTables::of($all)
             ->addColumn('pr_stsReq', function ($waiting) {
 
-                return "<span class='label label-danger'>PROSES PURCASHING...</span>";
+                return "<span class='label label-success' style='padding:5%'>PROSES PURCASHING...</span>";
 
             })
             // ->addColumn('input', function ($all) {

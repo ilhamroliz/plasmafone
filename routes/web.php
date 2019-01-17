@@ -312,6 +312,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/pembelian/request-pembelian/t', 'PembelianController@menunggu');
 	Route::get('/pembelian/request-pembelian/a', 'PembelianController@all');
+	Route::get('/pembelian/request-pembelian/tolak', 'PembelianController@requestTolak');
 	// 1
 	Route::get('/pembelian/request-pembelian', 'PembelianController@request_order');
 	Route::get('/pembelian/request-pembelian/ddRequest', 'PembelianController@ddRequest');
@@ -394,7 +395,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-	// End Rencana Pembelian
+	// End Rencana Pembelian 
 
 	// Konfirmasi Pembelian page
 
@@ -502,6 +503,9 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Inventory
 	// Penerimaan barang dari supplier
+	Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\ReceptionController@index_addSupplier');
+	Route::get('/inventory/penerimaan/supplier/formAdd_stock', 'inventory\ReceptionController@index_formAdd_stock');
+	Route::post('/inventory/penerimaan/supplier/view_bbmStock', 'inventory\ReceptionController@view_bbm_stock');
 	Route::get('/inventory/penerimaan/supplier', 'inventory\ReceptionController@index_supplier');
 	Route::post('/inventory/penerimaan/supplier/detailPo', 'inventory\ReceptionController@detailPo');
 	Route::post('/inventory/penerimaan/supplier/getPo', 'inventory\ReceptionController@getPo');
@@ -514,13 +518,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
 	Route::get('/inventory/penerimaan/supplier/view_bbm_dt', 'inventory\ReceptionController@view_bbm_dt');
 
-
-
-
-
-
-
-	Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\ReceptionController@index_addSupplier');
+	
 	Route::match(['get', 'post'], '/inventory/penerimaan/supplier/add', 'inventory\ReceptionController@add_items_from_supplier');
 	Route::get('/inventory/penerimaan/supplier/get-current-receipt/{id}', 'inventory\ReceptionController@get_current_receipt');
 	Route::get('/inventory/penerimaan/supplier/edit', 'inventory\ReceptionController@edit');

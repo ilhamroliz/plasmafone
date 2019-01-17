@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Barang')
+@section('title', 'Request Order')
 
 <?php 
 	use App\Http\Controllers\PlasmafoneController as Access;
@@ -140,7 +140,7 @@
                                    
                                     <div class="form-group col-md-2">
                                         <label class="sr-only" for="kuantitas">QTY</label>
-                                        <input type="text" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%" autocomplete="off">
+                                        <input type="number" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <button class="btn btn-primary" onclick="tambah()" id="okTambah">Tambah</button>
@@ -434,7 +434,7 @@
 
 			reload_data();
             
-        });
+        }); 
 
 		function tambah(){
 			$.ajax({
@@ -445,10 +445,11 @@
 					'item' : $('#tpMemberId').val(),
 					_token : '{{ csrf_token() }}'
 				},
-				dataType: "JSON",
+				dataType: "JSON", 
 				success: function(data)
 				{
-					$.smallBox({
+					if(data.data =='SUKSES'){
+						$.smallBox({
 							title : "Berhasil",
 							content : 'Data telah ditambahkan...!',
 							color : "#739E73",
@@ -459,6 +460,20 @@
 							$('#tpMemberNama').val("");
 							$('#qty').val("");
 							$('#table-rencana').DataTable().ajax.reload();
+					}else{
+						$.smallBox({
+							title : "GAGAL",
+							content : 'Data telah GAGAL ditambahkan...!',
+							color : "#739E73",
+							timeout: 4000,
+							icon : "fa fa-check bounce animated"
+							});
+							$('#tpMemberId').val("");
+							$('#tpMemberNama').val("");
+							$('#qty').val("");
+							$('#table-rencana').DataTable().ajax.reload();
+					}
+					
 					// reload_table();
 				},
 				
@@ -592,6 +607,7 @@
 										$('#tpMemberNama').val("");
 										$('#qty').val("");
 										$('#table-rencana').DataTable().ajax.reload();
+										$('#tpMemberNama').focus();
 								}
 								// $('#table-rencana').DataTable().fnDestroy();
 								

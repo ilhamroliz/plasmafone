@@ -392,7 +392,7 @@ function editDumy(id){
 						
 					
 					$('#table-rencana').DataTable().ajax.reload();
-					
+					 
 				},
 				
 		}); 
