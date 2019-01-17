@@ -40,7 +40,7 @@ class barang_controller extends Controller
     public function detail($id)
     {
         if (Access::checkAkses(45, 'read') == true) {
-            $item = Item::where(['i_id' => Crypt::decrypt($id)])->first();
+            $item = Item::select('*', DB::raw('DATE_FORMAT(created_at, "%d-%m-%Y") as dibuat'))->where(['i_id' => Crypt::decrypt($id)])->first();
             return response()->json(['status' => 'OK', 'data' => $item]);
         } else {
             return json_encode([
