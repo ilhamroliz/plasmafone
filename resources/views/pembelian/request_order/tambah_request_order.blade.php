@@ -460,6 +460,7 @@
 							$('#tpMemberNama').val("");
 							$('#qty').val("");
 							$('#table-rencana').DataTable().ajax.reload();
+							$('#tpMemberNama').focus();
 					}else{
 						$.smallBox({
 							title : "GAGAL",
@@ -472,6 +473,7 @@
 							$('#tpMemberNama').val("");
 							$('#qty').val("");
 							$('#table-rencana').DataTable().ajax.reload();
+							$('#tpMemberNama').focus();
 					}
 					
 					// reload_table();
@@ -614,14 +616,6 @@
 							},
 								
 						}); 
-		
-						// $.smallBox({
-						// 	title : "Callback function",
-						// 	content : "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
-						// 	color : "#659265",
-						// 	iconSmall : "fa fa-check fa-2x fadeInRight animated",
-						// 	timeout : 4000
-						// });
 					}
 					if (ButtonPressed === "Tidak") {
 						$.smallBox({
@@ -658,59 +652,6 @@
 			table_registrasi.ajax.reload(null, false);
 
 		}
-		// function load_table()
-		// {
-		// 	var tambahRencana;
-		// 	var responsiveHelper_dt_basic = undefined;
-        //     var responsiveHelper_datatable_fixed_column = undefined;
-        //     var responsiveHelper_datatable_col_reorder = undefined;
-        //     var responsiveHelper_datatable_tabletools = undefined;
-
-        //     var breakpointDefinition = {
-        //         tablet : 1024,
-        //         phone : 480
-        //     };
-
-        //     setTimeout(function () {
-
-        //     tambahRencana = $('#dt_tambah').dataTable({
-        //         "processing": true,
-        //         "serverSide": true,
-		// 		// "data" : {
-		// 		// 	"comp" : $('#dt_supplier').val(),
-		// 		// },
-        //         "ajax": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
-        //         "fnCreatedRow": function (row, data, index) {
-        //             $('td', row).eq(0).html(index + 1);
-        //             },
-        //         "columns":[
-        //             {"data": "pr_id"},
-        //             {"data": "c_name"},
-        //             {"data": "i_nama"},
-        //             {"data": "pr_qtyReq"},
-		// 			{"data": "input"},
-        //             {"data": "aksi"}
-        //         ],
-        //         "autoWidth" : true,
-        //         "language" : dataTableLanguage,
-        //         "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-        //         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-        //         "preDrawCallback" : function() {
-        //             // Initialize the responsive datatables helper once.
-        //             if (!responsiveHelper_dt_basic) {
-        //                 responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
-        //             }
-        //         },
-        //         "rowCallback" : function(nRow) {
-        //             responsiveHelper_dt_basic.createExpandIcon(nRow);
-        //         },
-        //         "drawCallback" : function(oSettings) {
-        //             responsiveHelper_dt_basic.respond();
-        //         }
-        //     });
-        //      $('#overlay').fadeOut(200);
-        //     }, 1000);
-		// }
 
 
 	</script>
