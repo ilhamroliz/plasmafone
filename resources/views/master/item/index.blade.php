@@ -769,9 +769,6 @@
 		$(document).ready(function(){
 			$(".harga-outlet").maskMoney({thousands:'.', precision: 0});
 
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Menyiapkan...');
-
 			// $('#tabs').tabs();
 
 			let selected = [];
@@ -818,7 +815,7 @@
 					}
 				});
 
-			}, 500);
+			}, 10);
 
 			setTimeout(function () {
 
@@ -884,9 +881,6 @@
 						responsiveHelper_dt_basic.respond();
 					}
 				});
-
-				$('#overlay').fadeOut(200);
-
 			}, 1500);
 
 			$('.harga-outlet').on('change paste keyup', function(e){
