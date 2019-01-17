@@ -428,6 +428,11 @@ class DistribusiController extends Controller
                 ->where('d_distribusi.d_id', $id)
                 ->join('m_company', 'm_company.c_id', '=', 'd_distribusi.d_from')
                 ->first();
+
+        if ($datas == null) {
+            return view('errors/404');
+        }
+
         return view('inventory.distribusi.struck')->with(compact('datas', 'from'));
     }
     
