@@ -168,7 +168,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							&times;
 						</button>
 
-						<h4 class="modal-title" id="myModalLabel">Detail Rencana Penjualan</h4>
+						<h4 class="modal-title" id="myModalLabel">Detail Opname Barang Pusat</h4>
 
 					</div>
 
@@ -190,41 +190,119 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div class="widget-body no-padding">											
 										<div class="table-responsive">
 
-											{{-- <div class="row no-padding"> --}}
-												<div class="col-md-12 padding-top-10 ">
-													<div class="form-group">
-														<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
-														<label class="col-md-1">:</label>
-														<label class="col-md-8" id="spNota"></label>
+											<div class="col-md-12 padding-top-10 ">
+												<div class="form-group">
+													<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
+													<label class="col-md-1">:</label>
+													<label class="col-md-8" id="obNota"></label>
+												</div>												
+											</div>
+
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="col-md-3" style="float:left"><strong>Lokasi Barang</strong></label>
+													<label class="col-md-1">:</label>
+													<div class="col-md-8">
+														<label id="obCabang"></label>
 													</div>
+												</div>	
+											</div>
 
-													<div class="form-group">
-														<label class="col-md-3" style="float:left"><strong>Nama Cabang</strong></label>
-														<label class="col-md-1">:</label>
-														<div class="col-md-8">
-															<label id="spCabang"></label>
-														</div>
-													</div>													
-												</div>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="col-md-3" style="float:left"><strong>Nama Barang</strong></label>
+													<label class="col-md-1">:</label>
+													<div class="col-md-8">
+														<label id="obBarang"></label>
+													</div>
+												</div>	
+											</div>
 
-												<table id="drpTable" class="table table-striped table-bordered table-hover">
-													<thead>		
-														<tr>
-															<th style="width: 10%">&nbsp;No.</th>
-															<th style="width: 60%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
-															<th style="width: 30%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
-														</tr>
-													</thead>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="col-md-3" style="float:left"><strong>Qty Sistem</strong></label>
+													<label class="col-md-1">:</label>
+													<div class="col-md-8">
+														<label id="obQtyS"></label>
+													</div>
+												</div>	
+											</div>
 
-													<tbody>
-													</tbody>
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="col-md-3" style="float:left"><strong>Qty Real</strong></label>
+													<label class="col-md-1">:</label>
+													<div class="col-md-8">
+														<label id="obQtyR"></label>
+													</div>
+												</div>	
+											</div>
 
-												</table>
-
-
-											{{-- </div> --}}
+											<div class="col-md-12">
+												<div class="form-group">
+													<label class="col-md-3" style="float:left"><strong>AKSI</strong></label>
+													<label class="col-md-1">:</label>
+													<div class="col-md-8">
+														<label id="obAksi"></label>
+													</div>
+												</div>	
+											</div>
 																
 										</div>
+
+										<!-- Tabel untuk detil opname barang-->
+										<!-- TABEL C-->
+										<div class="col-md-12">
+											<table 
+												id="dobCTable" 
+												class="table table-striped table-bordered table-hover margin-top-10"
+												style="display:none; margin-top: 20px;">
+
+												<thead id="dobCHead">
+													<th>No.</th>
+													<th>Kode Spesifik</th>		
+												</thead>
+
+												<tbody id="dobCBody">
+												</tbody>
+
+											</table>
+										</div>										
+
+										{{-- <!-- TABEL E-->
+										<table 
+											id="dobETable" 
+											class="table table-striped table-bordered table-hover margin-top-10"
+											style="display:none; margin-top: 20px">
+
+											<thead id="dobEHead">
+												<th style="width: 15%">No.</th>
+												<th style="width: 50%">Tanggal Kadaluarsa</th>
+												<th style="width: 35%">Qty</th>		
+											</thead>
+
+											<tbody id="dobEBody">
+											</tbody>
+
+										</table>
+
+										<!-- TABEL CE-->
+										<table 
+											id="dobCETable" 
+											class="table table-striped table-bordered table-hover margin-top-10"
+											style=" margin-top: 20px">
+
+											<thead id="dobCEHead">
+												<th style="width: 15%">No.</th>
+												<th style="width: 45%">Kode Spesifik</th>
+												<th style="wdith: 40%">Tanggal Kadaluarsa</th>		
+											</thead>
+
+											<tbody id="dobCEBody">
+											</tbody>
+
+										</table> --}}
+
 									</div>
 									<!-- end widget content -->
 								</div>
@@ -472,6 +550,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		var idItem, idComp;
 
         $(document).ready(function(){
+			dobCTable = $('#dobCTable').DataTable({
+				"order" : [],
+				"searching": false,
+				"autoWidth" : true,
+				"pageLength" : 5,
+				"info" : false,
+			});
+
 			expTable = $('#expTable').DataTable({
 				"order" : [],
 				"searching": false,
@@ -642,7 +728,47 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		});
 
 		function detail(id){
-			axios.post()
+			axios.post(baseUrl+'/inventory/opname-barang/detail?id='+id).then((response) => {
+
+				$('#obNota').html(response.data.data[0].o_reff);
+				$('#obCabang').html(response.data.data[0].c_name);
+				$('#obBarang').html(response.data.data[0].i_nama);
+				if(response.data.data[0].o_action == 'REAL'){
+					$('#obAksi').html('Menyesuaikan Qty Real')
+				}else if(response.data.data[0].o_action == 'SYSTEM'){
+					$('#obAksi').html('Menyesuaikan Qty System')
+				}
+
+				$qtyR = 0;
+				$qtyS = 0;
+
+				dobCTable.clear();
+
+				for($ob = 0; $ob < response.data.data.length; $ob++){
+					$qtyR = $qtyR + parseInt(response.data.data[$ob].od_qty_real);
+					$qtyS = $qtyS + parseInt(response.data.data[$ob].od_qty_system);
+
+					$sc = response.data.data[$ob].i_specificcode;
+					$ex = response.data.data[$ob].i_expired;
+
+					if($sc == 'Y' && $ex == 'N'){
+
+						dobCTable.row.add([
+							($ob+1),
+							response.data.data[$ob].od_specificcode
+						]).draw(false);
+						
+					}
+					
+				}
+				$('#dobCTable').css("display", "block");
+
+				$('#obQtyS').html($qtyS+' Unit');
+				$('#obQtyR').html($qtyR+' Unit');
+
+			})
+
+			$('#detilModal').modal('show');
 		}
 
 		function cari2(){
@@ -651,21 +777,24 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#load-status-text').text('Sedang Mencari Data ...');
 
 			var status;
-			var mp = $('#monthPick').val();
-			var ci = $('#irpCompId').val();
+			var awal = $('#tglAwal').val();
+			var akhir = $('#tglAkhir').val();
+			var idItem = $('#osItemId').val();
+			var idComp = $('#osCompId').val();
 
-			if($('#hr1').hasClass("active") == true){
+			if($('#hr2').hasClass("active") == true){
 
 				$('#apprTable').DataTable().destroy();
 
 				$('#apprTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/man-penjualan/rencana-penjualan/pencarian') }}"+"?x=a&y="+mp+"&z="+ci,
+					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
 					"columns":[
-						{"data": "sp_nota"},
+						{"data": "o_reff"},
+						{"data": "o_date"},
 						{"data": "c_name"},
-						{"data": "sp_update"},
+						{"data": "i_nama"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -686,18 +815,19 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					}
 				});
 
-			}else if($('#hr2').hasClass("active") == true){
+			}else if($('#hr1').hasClass("active") == true){
 
 				$('#pendTable').DataTable().destroy();
 				
 				$('#pendTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/man-penjualan/rencana-penjualan/pencarian') }}"+"?x=p&y="+mp+"&z="+ci,
+					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=p&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
 					"columns":[
-						{"data": "sp_nota"},
+						{"data": "o_reff"},
+						{"data": "o_date"},
 						{"data": "c_name"},
-						{"data": "sp_update"},
+						{"data": "i_nama"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -719,7 +849,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				});
 
 			}
-			$('#irpCompId').val('');
+			$('#osItemId').val('');
+			$('#osCompId').val('');
 			$('#overlay').fadeOut(200);
 		}
 
@@ -883,29 +1014,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             location.href = ('{{ url('/man-penjualan/rencana-penjualan/edit') }}/'+id);
         }
 
-		function detil(id){
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Mengambil Data...');
-
-			axios.get(baseUrl+'/man-penjualan/rencana-penjualan/detail'+'/'+id).then((response) => {
-
-				$('#spNota').text(response.data.sp.sp_nota);
-				$('#spCabang').text(response.data.sp.c_name);
-
-				for(var i=0; i<response.data.data.length; i++){
-
-					table.row.add([
-						i+1,
-						response.data.data[i].i_nama,
-						response.data.data[i].qty
-					]).draw(false);
-				}
-
-				$('#overlay').fadeOut(200);
-				$('#detilModal').modal('show');
-			});
-		}
-
 		function approve(id){
 
 			$('#overlay').fadeIn(200);
@@ -941,7 +1049,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		function hapus(id){
 			$.SmartMessageBox({
 				title : "Pesan!",
-				content : 'Apakah Anda yakin akan manghapus data Rencana Pembelian ini ?',
+				content : 'Apakah Anda yakin akan manghapus data Opname Barang ini ?',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
 				if (ButtonPressed === "Ya") {
@@ -949,12 +1057,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#overlay').fadeIn(200);
 					$('#load-status-text').text('Sedang Menyimpan Perubahan Data...');
 
-					axios.get(baseUrl+'/man-penjualan/rencana-penjualan/hapus'+'/'+id).then((response) => {
-						if(response.data.status == 'hrpSukses'){
+					axios.post(baseUrl+'/inventory/opname-barang/hapus?id='+id).then((response) => {
+						if(response.data.status == 'hobSukses'){
 							$('#overlay').fadeOut(200);
 							$.smallBox({
 								title : "Berhasil",
-								content : 'Data Rencana Penjualan '+response.data.data+' Berhasil Dihapus !',
+								content : 'Data Opname Barang '+response.data.data+' Berhasil Dihapus !',
 								color : "#739E73",
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
@@ -964,7 +1072,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							$('#overlay').fadeOut(200);
 							$.smallBox({
 								title : "Gagal",
-								content : "Maaf, Data Rencana Penjualan "+response.data.data+" Gagal Dihapus ",
+								content : "Maaf, Data Opname Barang "+response.data.data+" Gagal Dihapus ",
 								color : "#A90329",
 								timeout: 4000,
 								icon : "fa fa-times bounce animated"

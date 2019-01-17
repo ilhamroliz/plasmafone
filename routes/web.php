@@ -550,20 +550,31 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/inventory/opname-barang/appr', 'inventory\opnameBarangController@get_approved');
 	Route::get('/inventory/opname-barang/pend', 'inventory\opnameBarangController@get_pending');
+	Route::get('/inventory/opname-barang/apprO', 'inventory\opnameBarangController@get_approved_outlet');
+	Route::get('/inventory/opname-barang/pendO', 'inventory\opnameBarangController@get_pending_outlet');
 
 	///DataTable Inputan form Tambah Opname
 	Route::post('/inventory/opname-barang/get-stock-code', 'inventory\opnameBarangController@get_stock_code');
 	Route::post('/inventory/opname-barang/detail', 'inventory\opnameBarangController@detail');
+
+	Route::get('/inventory/opname-barang/pencarian', 'inventory\opnameBarangController@pencarian');
 
 	Route::post('/inventory/opname-barang/cariItemStock', 'inventory\opnameBarangController@cari_item_stock');
 	Route::post('/inventory/opname-barang/getCompName', 'inventory\opnameBarangController@get_cn');
 
 	Route::post('/inventory/opname-barang/formTambah', 'inventory\opnameBarangController@form_tambah');
 	Route::post('/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
+	Route::post('/inventory/opname-barang/tambahOutlet', 'inventory\opnameBarangController@tambahOutlet');
 
 	Route::post('/inventory/opname-barang/edit', 'inventory\opnameBarangController@edit');
+	Route::post('/inventory/opname-barang/editOutlet', 'inventory\opnameBarangController@editOutlet');
+
 	Route::post('/inventory/opname-barang/approve', 'inventory\opnameBarangController@approve');
+	Route::post('/inventory/opname-barang/approveOutlet', 'inventory\opnameBarangController@approveOutlet');
+
 	Route::post('/inventory/opname-barang/hapus', 'inventory\opnameBarangController@hapus');
+	Route::post('/inventory/opname-barang/hapusOutlet', 'inventory\opnameBarangController@hapusOutlet');
+
 
 	//=== End OPNAME BARANG
 
