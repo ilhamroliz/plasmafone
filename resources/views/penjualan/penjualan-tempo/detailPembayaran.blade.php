@@ -1,57 +1,45 @@
 
 <div class="form-group col-md-12" style="border-bottom: 1px solid #c90d18; padding-bottom: 15px;">
-	<label class="row text-left col-md-8 control-label" style="text-align: left;"><h4>Total Tagihan:</h4></label>
-	<div class="input-group col-md-4 row text-right">
-    	<h4><div style="float: left;">Rp. </div><div class="row text-right" style="float: right;"> {{ number_format($total, 0, '', '.').',00' }}</div></h4>
+	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4 style="font-weight:bold">Total Tagihan:</h4></label>
+	<div class="input-group col-md-5 row text-right">
+    	<h4><div style="float: left;">Rp. </div><div class="row text-right" style="float: right; font-weight:bold;"> {{ number_format($total, 0, '', '.').',00' }}</div></h4>
     	<input type="hidden" class="totalnet" name="total" value="Rp. {{ number_format($total, 0, '', '.').',00' }}">
     </div>
 </div>
 
 {{-- ===================================================================================================== --}}
 <form id="formDetailPembayaran">
-<div class="form-group col-md-8" style="float: right;">
-	<label for="bayar" class="row text-left col-md-6 control-label" style="text-align: left;"><h4>Cash:</h4></label>
-	<div class="input-group col-md-6">
-		<h4>
-    		<div style="float: right;">
-    			<input type="text" value="" name="bayar" class="bayar row text-right" style="text-align: right;" onkeyup="hitung()">
-    		</div>
-    	</h4>
+<div class="form-group col-md-12" style="float: right;">
+	<label for="bayar" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">Cash:</h4></label>
+	<div class="input-group col-md-5" style="float:right; margin-right:20px;">
+		<input type="text" value="" name="bayar" class="bayar row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">
     </div>
 </div>
 
-<div class="form-group col-md-8" style="float: right;">
-	<label for="bca" class="row text-left col-md-6 control-label" style="text-align: left;"><h4>BRI:</h4></label>
-	<div class="input-group col-md-6">
-		<h4>
-    		<div style="float: right;">
-    			<input type="text" value="" name="bri" class="bca row text-right" style="text-align: right;" onkeyup="hitung()">
-    		</div>
-    	</h4>
+<div class="form-group col-md-12" style="float: right;">
+	<label for="bca" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">BRI:</h4></label>
+	<div class="input-group col-md-5" style="float:right; margin-right:20px;">
+		<input type="text" value="" name="bri" class="bca row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">
     </div>
 </div>
-<div class="form-group col-md-8" style="float: right; border-bottom: 1px solid #c90d18; padding-bottom: 15px;">
-	<label for="permata" class="row text-left col-md-6 control-label" style="text-align: left;"><h4>BNI:</h4></label>
-	<div class="input-group col-md-6">
-		<h4>
-    		<div style="float: right;">
-    			<input type="text" value="" name="bni" class="permata row text-right" style="text-align: right;" onkeyup="hitung()">
-    		</div>
-    	</h4>
+<div class="form-group col-md-12" style="float: right; border-bottom: 1px solid #c90d18; padding-bottom: 15px;">
+	<label for="permata" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">BNI:</h4></label>
+	<div class="input-group col-md-5" style="float:right; margin-right:20px;">
+		<input type="text" value="" name="bni" class="permata row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">
     </div>
 </div>
 
-<div class="form-group col-md-8" style="float: right;">
-	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4>Total Pembayaran:</h4></label>
+<div class="form-group col-md-12" style="float: right;">
+	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4 style="font-weight:bold">Total Pembayaran:</h4></label>
 	<div class="input-group col-md-5 row text-right">
-    	<h4><div style="float: left;">Rp. </div><div class="row text-right TotalPembayaran" style="float: right;">0,00</div></h4>
+    	<h4><div style="float: left;">Rp. </div><div class="row text-right TotalPembayaran" style="float: right; font-weight:bold;">0,00</div></h4>
     </div>
 </div>
 
-<div class="form-group col-md-8" style="float: right;">
-	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4>Kembali:</h4></label>
+<div class="form-group col-md-12" style="float: right;">
+	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4 style="font-weight:bold">Kembali:</h4></label>
 	<div class="input-group col-md-5 row text-right">
-    	<h4><div style="float: left;">Rp. </div><div class="row text-right kembali" style="float: right;">0,00</div></h4>
+    	<h4><div style="float: left;">Rp. </div><div class="row text-right kembali" style="float: right; font-weight:bold;">0,00</div></h4>
     </div>
 </div>
 </form>
