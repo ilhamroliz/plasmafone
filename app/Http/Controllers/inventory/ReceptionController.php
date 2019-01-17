@@ -444,6 +444,32 @@ class ReceptionController extends Controller
         return view('inventory.receipt_goods.supplier.add');
     }
 
+    public function index_formAdd_stock()
+    {
+        return view('inventory.receipt_goods.supplier.view_bbm_stock');
+    }
+
+    public function view_bbm_stock()
+    {
+        $query = DB::table('d_bbm_dt')
+        ->select('d_bbm_dt.*','d_item.*')
+        ->join('d_item','d_bbm_dt.bm_item','=','d_item.i_id')
+        ->get();
+
+        $data = array();
+        $no = 1;
+        foreach ($query as $key) {
+            $row = array();
+            $row[] = $no++;
+            $row[] = $key->i_nama;
+            $row[] = $key->bm_receiveQty;
+            $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $key->bm_dt . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            $data[] = $row;
+        }
+
+        echo json_encode(array("data"=>$data));
+    }
+
     public function getPo()
     {
         $data = DB::table('d_purchase')

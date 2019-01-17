@@ -150,8 +150,7 @@
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
                     <header role="heading">
-                        <div class="jarviswidget-ctrls" role="menu">   <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
-                        </div>
+                        
                         <h2><strong>Tambah Rencana Pembelian</strong></h2>
 
                     <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
@@ -175,15 +174,11 @@
 											<thead class="table-responsive">			                
 
 												<tr>
-													<th data-hide="phone,tablet" class="text-center" style="width:1%">No</th>
-                                                    <th data-hide="phone,tablet">Nama Outlet</th>
+													
+                                                   
                                                     <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
                                                     <th data-hide="phone,tablet " class="text-center">Qty</th>
 													<th data-hide="phone,tablet " class="text-center">Harga Satuan</th>
-													<!-- <th data-hide="phone,tablet" class="text-center">Harga</th>
-													<th data-hide="phone,tablet" >discount</th>
-													<th data-hide="phone,tablet" class="text-center">Subtotal</th> -->
-                                                    <!-- <th data-hide="phone,tablet" class="text-center">Aksi</th> -->
 
 												</tr>
 
