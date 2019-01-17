@@ -687,7 +687,7 @@ class barang_controller extends Controller
                 DB::rollback();
 
                 // something went wrong
-                return redirect()->back()->wiith('flash_message_error', 'Gagal memproses...! "Terjadi kesalahan server" Mohon coba lagi ');
+                return redirect()->back()->with('flash_message_error', 'Gagal memproses...! "Terjadi kesalahan server" Mohon coba lagi ');
 
             }
 
