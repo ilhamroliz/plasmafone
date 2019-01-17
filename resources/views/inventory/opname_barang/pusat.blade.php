@@ -550,6 +550,24 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		var idItem, idComp;
 
         $(document).ready(function(){
+			$( "#tglAwal" ).datepicker({
+				language: "id",
+				format: 'dd/mm/yyyy',
+				prevText: '<i class="fa fa-chevron-left"></i>',
+				nextText: '<i class="fa fa-chevron-right"></i>',
+				autoclose: true,
+				todayHighlight: true
+			});
+
+			$( "#tglAkhir" ).datepicker({
+				language: "id",
+				format: 'dd/mm/yyyy',
+				prevText: '<i class="fa fa-chevron-left"></i>',
+				nextText: '<i class="fa fa-chevron-right"></i>',
+				autoclose: true,
+				todayHighlight: true
+			});
+
 			dobCTable = $('#dobCTable').DataTable({
 				"order" : [],
 				"searching": false,
@@ -598,7 +616,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 }
 			})
 			
-			$('#osItemName').autocomplete({
+			$('.osItemName').autocomplete({
 				// "option", "appendTo", ".eventInsForm",
                 source: baseUrl+'/penjualan/pemesanan-barang/get-item',
                 minLength: 2,
@@ -771,7 +789,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#detilModal').modal('show');
 		}
 
-		function cari2(){
+		function cari(){
 			
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mencari Data ...');
@@ -789,7 +807,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#apprTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?cb=pus&x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
 					"columns":[
 						{"data": "o_reff"},
 						{"data": "o_date"},
@@ -822,7 +840,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#pendTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=p&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?cb=pus&x=p&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
 					"columns":[
 						{"data": "o_reff"},
 						{"data": "o_date"},
@@ -1011,7 +1029,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		}
 
         function edit(id){
-            location.href = ('{{ url('/man-penjualan/rencana-penjualan/edit') }}/'+id);
+            $('#tambahModal').modal('show');
         }
 
 		function approve(id){

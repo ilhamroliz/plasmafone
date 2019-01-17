@@ -792,7 +792,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#apprTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/man-penjualan/rencana-penjualan/pencarian') }}"+"?x=a&y="+mp+"&z="+ci,
+					"ajax": "{{ url('/man-penjualan/rencana-penjualan/pencarian') }}"+"cb=out&x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
 					"columns":[
 						{"data": "sp_nota"},
 						{"data": "c_name"},
@@ -824,7 +824,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#pendTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/man-penjualan/rencana-penjualan/pencarian') }}"+"?x=p&y="+mp+"&z="+ci,
+					"ajax": "{{ url('/man-penjualan/rencana-penjualan/pencarian') }}"+"cb=out&x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
 					"columns":[
 						{"data": "sp_nota"},
 						{"data": "c_name"},

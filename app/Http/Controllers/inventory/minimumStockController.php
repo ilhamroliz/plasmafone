@@ -16,4 +16,14 @@ class minimumStockController extends Controller
             return view('inventory.minimum_stock.index');
         }
     }
+
+    public function tambah(Request $request)
+    {
+
+    }
+
+    public function edit(Request $request)
+    {
+
+    }
 }

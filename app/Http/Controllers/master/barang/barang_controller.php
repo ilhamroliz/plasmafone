@@ -40,7 +40,7 @@ class barang_controller extends Controller
     public function detail($id)
     {
         if (Access::checkAkses(45, 'read') == true) {
-            $item = Item::where(['i_id' => Crypt::decrypt($id)])->first();
+            $item = Item::select('*', DB::raw('DATE_FORMAT(created_at, "%d-%m-%Y") as dibuat'))->where(['i_id' => Crypt::decrypt($id)])->first();
             return response()->json(['status' => 'OK', 'data' => $item]);
         } else {
             return json_encode([
@@ -83,7 +83,7 @@ class barang_controller extends Controller
 
     public function getdataall()
     {
-        $items_all = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price');
+        $items_all = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price', 'i_isactive');
 
         return DataTables::of($items_all)
 
@@ -673,11 +673,9 @@ class barang_controller extends Controller
             for ($i=0; $i < count($values_outlet); $i++) { 
                 $values[] = array('op_outlet' => $values_outlet[$i], 'op_item' => Crypt::decrypt($item), 'op_price' => 0);
             }
-
             DB::beginTransaction();
 
             try{
-
                 DB::table('d_outlet_price')->insert($values);
 
                 DB::commit();
@@ -685,9 +683,8 @@ class barang_controller extends Controller
             } catch (\Exception $e) {
 
                 DB::rollback();
-
                 // something went wrong
-                return redirect()->back()->wiith('flash_message_error', 'Gagal memproses...! "Terjadi kesalahan server" Mohon coba lagi ');
+                return redirect()->back()->with('flash_message_error', 'Gagal memproses...! "Terjadi kesalahan server" Mohon coba lagi ');
 
             }
 
