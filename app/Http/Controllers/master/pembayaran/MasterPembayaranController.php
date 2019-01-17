@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\master\pembayaran;
 
+use App\Http\Controllers\PlasmafoneController;
 use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Http\Request;
@@ -81,6 +82,7 @@ class MasterPembayaranController extends Controller
                     'p_akun' => $akun,
                     'p_isactive' => 'Y'
                 ]);
+            PlasmafoneController::logActivity('Menyimpan Jenis Pembayaran');
             DB::commit();
             return response()->json([
                 'status' => 'sukses'
@@ -123,6 +125,7 @@ class MasterPembayaranController extends Controller
                     'p_no' => $nomor,
                     'p_akun' => $akun,
                 ]);
+            PlasmafoneController::logActivity('Memperbarui jenis pembayaran');
             DB::commit();
             return response()->json([
                 'status' => 'sukses'
@@ -146,6 +149,7 @@ class MasterPembayaranController extends Controller
                 ->update([
                     'p_isactive' => 'N'
                 ]);
+            PlasmafoneController::logActivity('Menonaktifkan jenis pembayaran');
             DB::commit();
             return response()->json([
                 'status' => 'sukses'
@@ -169,6 +173,7 @@ class MasterPembayaranController extends Controller
                 ->update([
                     'p_isactive' => 'Y'
                 ]);
+            PlasmafoneController::logActivity('Mengaktifkan jenis pembayaran');
             DB::commit();
             return response()->json([
                 'status' => 'sukses'
@@ -233,6 +238,7 @@ class MasterPembayaranController extends Controller
                         'op_outlet' => $outlet,
                         'op_pembayaran' => $payment
                     ]);
+                PlasmafoneController::logActivity('Menyimpan data jenis pembayaran outlet');
                 DB::commit();
                 return response()->json([
                     'status' => 'sukses'
@@ -255,6 +261,8 @@ class MasterPembayaranController extends Controller
             DB::table('d_outlet_payment')
                 ->where('op_id', '=', $id)
                 ->delete();
+
+            PlasmafoneController::logActivity('Menghapus Jenis Pembayaran di Outlet');
             DB::commit();
             return response()->json([
                 'status' => 'sukses'
