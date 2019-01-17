@@ -240,7 +240,7 @@
                                 <div class="col-md-12">
                                     <div class="input-icon-left">
                                         <i class="fa fa-phone"></i>
-                                        <input class="form-control" id="nomor-member" placeholder="MASUKKAN NOMOR PEMBELI" type="text">
+                                        <input class="form-control" id="nomor-member" placeholder="MASUKKAN NOMOR TELEPHONE YANG BISA DIHUBUNGI" type="text">
                                     </div>
                                 </div>
                             </div>
@@ -889,7 +889,7 @@
         });
         $.ajax({
             url: baseUrl + '/penjualan-reguler/simpan',
-            type: 'get',
+            type: 'post',
             data: $('#form-penjualan, #formDetailPembayaran').serialize(),
             success: function(response){
                 if (response == "lengkapi data") {
@@ -927,7 +927,7 @@
                     $("#search_barang").hide("slow");
                     $("#cari-salesman").focus();
                     updateTotalTampil();
-                    cetak(response.salesman, response.idSales);
+                    cetak(response.salesman, response.idSales, response.totPemb, response.kembali);
                     $('#DetailPembayaran').modal('hide');
                     
                 }
@@ -949,8 +949,8 @@
         })
     }
 
-    function cetak(salesman, idSales){
-        window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales, '', "width=800,height=600");
+    function cetak(salesman, idSales, totPemb, kembali){
+        window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales+'/'+totPemb+'/'+kembali, '', "width=800,height=600");
     }
 
     function convertToRupiah(angka) {

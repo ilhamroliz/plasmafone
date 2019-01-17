@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Return Penjualan')
+@section('title', 'Inventory|Penerimaan Barang Dari Distribusi')
 
 @section('extra_style')
 
@@ -22,7 +22,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Penjualan</li><li>Return Penjualan</li>
+			<li>Home</li><li>Inventory</li><li>Penerimaan Barang Dari Distribusi</li>
 		</ol>
 
 	</div>
@@ -43,23 +43,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					<i class="fa-fw fa fa-asterisk"></i>
 
-					Penjualan <span><i class="fa fa-angle-double-right"></i> Return Penjualan </span>
+					Inventory <span><i class="fa fa-angle-double-right"></i> Penerimaan Barang Dari Distribusi </span>
 
 				</h1>
 
 			</div>
-
-			@if(Access::checkAkses(48, 'insert') == true)
-			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
-
-				<div class="page-title">
-
-					<a href="{{ url('/master/outlet/add') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
-
-				</div>
-
-			</div>
-			@endif
 
 		</div>
 
@@ -95,33 +83,89 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
+						<header>
+							
+							<ul id="widget-tab-1" class="nav nav-tabs pull-left">
+
+								<li class="active">
+
+									<a data-toggle="tab" href="#hr1"> <i style="color: #C79121;" class="fa fa-lg fa-align-justify"></i> <span class="hidden-mobile hidden-tablet"> Proses </span> </a>
+
+								</li>
+
+								<li>
+
+									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Diterima </span></a>
+
+								</li>
+
+							</ul>
+
+						</header>
+
 						<div>
 							
 							<div class="widget-body no-padding">
 
-								<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
+								<div class="tab-content padding-10">
 
-                                    <thead>		
+									<div class="tab-pane fade in active" id="hr1">
 
-                                        <tr>
+										<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
-                                            <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+											<thead>		
 
-                                            <th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+												<tr>
 
-                                            <th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
 
-                                            <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
 
-                                        </tr>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
 
-                                    </thead>
+													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
-                                    <tbody>
+												</tr>
 
-                                    </tbody>
+											</thead>
 
-                                </table>
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+									<div class="tab-pane fade" id="hr2">
+
+										<table id="dt_all" class="table table-striped table-bordered table-hover" width="100%">
+
+											<thead>		
+
+												<tr>
+
+													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
+
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
+
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
+
+													<th class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+
+												</tr>
+
+											</thead>
+
+											<tbody>
+
+											</tbody>
+
+										</table>
+
+									</div>
+
+								</div>
 
 							</div>
 
@@ -147,7 +191,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 							&times;
 						</button>
 
-						<h4 class="modal-title" id="myModalLabel">Detail Outlet</h4>
+						<h4 class="modal-title" id="myModalLabel">Detail</h4>
 
 					</div>
 
@@ -179,49 +223,50 @@ use App\Http\Controllers\PlasmafoneController as Access;
 												<tbody>
 
 													<tr class="success">
-														<td><strong>Kode Outlet</strong></td>
+														<td><strong>Nota</strong></td>
 														<td><strong>:</strong></td>
-														<td id="dt_code"></td>
+														<td id="dt_nota"></td>
 													</tr>
 
 													<tr class="danger">
-														<td><strong>Nama Outlet</strong></td>
+														<td><strong>Dari Outlet</strong></td>
 														<td><strong>:</strong></td>
-														<td id="dt_name"></td>
+														<td id="dt_from"></td>
 													</tr>
 
 													<tr class="warning">
-														<td><strong>Telephone</strong></td>
+														<td><strong>Tujuan Outlet</strong></td>
 														<td><strong>:</strong></td>
-														<td id="dt_phone"></td>
+														<td id="dt_destination"></td>
 													</tr>
 
 													<tr class="info">
-														<td><strong>Alamat</strong></td>
+														<td><strong>Tanggal Distribusi</strong></td>
 														<td><strong>:</strong></td>
-														<td id="dt_address"></td>
+														<td id="dt_tgl"></td>
 													</tr>
 
 													<tr class="success">
-														<td><strong>Keterangan</strong></td>
+														<td><strong>Petugas</strong></td>
 														<td><strong>:</strong></td>
-														<td id="dt_note"></td>
-													</tr>
-
-													<tr class="danger">
-														<td><strong>Status</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_isactive"></td>
-													</tr>
-
-													<tr class="warning">
-														<td><strong>Dibuat</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_created"></td>
+														<td id="dt_by"></td>
 													</tr>
 
 												</tbody>
 
+											</table>
+
+											<table class="table table-bordered" id="table_item">
+												<thead>
+													<tr class="text-center">
+														<td>Item</td>
+														<td>Qty</td>
+														<td>Qty Diterima</td>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
 											</table>
 											
 										</div>
@@ -262,7 +307,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
-		var aktif;
+		var aktif, semua;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -287,11 +332,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"processing": true,
 					"serverSide": true,
 					"orderable": false,
-					"ajax": "{{ route('outlet.getdataactive') }}",
+					"order": [],
+					"ajax": "{{ route('distribusi.proses') }}",
 					"columns":[
-						{"data": "c_name"},
-						{"data": "c_tlp"},
-						{"data": "c_address"},
+						{"data": "nota"},
+						{"data": "from"},
+						{"data": "destination"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -314,13 +360,47 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			}, 500);
 
+			setTimeout(function () {
+
+				semua = $('#dt_all').dataTable({
+					"processing": true,
+					"serverSide": true,
+					"orderable": false,
+					"order": [],
+					"ajax": "{{ route('distribusi.terima') }}",
+					"columns":[
+						{"data": "nota"},
+						{"data": "from"},
+						{"data": "destination"},
+						{"data": "aksi"}
+					],
+					"autoWidth" : true,
+					"language" : dataTableLanguage,
+					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+					"preDrawCallback" : function() {
+						// Initialize the responsive datatables helper once.
+						if (!responsiveHelper_dt_basic) {
+							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
+						}
+					},
+					"rowCallback" : function(nRow) {
+						responsiveHelper_dt_basic.createExpandIcon(nRow);
+					},
+					"drawCallback" : function(oSettings) {
+						responsiveHelper_dt_basic.respond();
+					}
+				});
+                $('#overlay').fadeOut(200);
+			}, 1000);
+
 		/* END BASIC */
 
 		function refresh_tab(){
 		    aktif.api().ajax.reload();
+		    semua.api().ajax.reload();
 		}
 
-		
 
 		function edit(val){
 
@@ -331,13 +411,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 		}
 
-		function detail(id){
+		function detailTerima(id){
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
 
 			var status;
 
-			axios.get(baseUrl+'/master/outlet/detail/'+id).then(response => {
+			axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail-terima/'+id).then(response => {
 
 				if (response.data.status == 'Access denied') {
 
@@ -351,26 +431,60 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					});
 
 				} else {
+					var row = '';
+					$('.tr').remove();
+					$('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
+					$('#dt_nota').text(response.data.data[0].nota);
+					$('#dt_from').text(response.data.data[0].from);
+					$('#dt_destination').text(response.data.data[0].destination);
+					$('#dt_tgl').text(response.data.data[0].tanggal);
+					$('#dt_by').text(response.data.data[0].by);
+					response.data.data.forEach(function(element) {
+						console.log(element);
+						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+						$('#table_item tbody').append(row)
+					});
+					$('#overlay').fadeOut(200);
+					$('#myModal').modal('show');
 
-					$('#title_detail').html('<strong>Detail Outlet "'+response.data.data.c_name+'"</strong>');
-					$('#dt_code').text(response.data.data.c_id);
-					$('#dt_name').text(response.data.data.c_name);
-					$('#dt_phone').text(response.data.data.c_tlp);
-					$('#dt_address').text(response.data.data.c_address);
-					$('#dt_note').text(response.data.data.c_note);
+				}
 
-					if(response.data.data.c_isactive == "Y"){
+				})
+		}
 
-						status = "AKTIF";
+		function detail(id){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Mengambil data...');
 
-					}else{
+			var status;
 
-						status = "NON AKTIF";
+			axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail/'+id).then(response => {
 
-					}
+				if (response.data.status == 'Access denied') {
 
-					$('#dt_isactive').text(status);
-					$('#dt_created').text(response.data.data.created_at);
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				} else {
+					var row = '';
+					$('.tr').remove();
+					$('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
+					$('#dt_nota').text(response.data.data[0].nota);
+					$('#dt_from').text(response.data.data[0].from);
+					$('#dt_destination').text(response.data.data[0].destination);
+					$('#dt_tgl').text(response.data.data[0].tanggal);
+					$('#dt_by').text(response.data.data[0].by);
+					response.data.data.forEach(function(element) {
+						console.log(element);
+						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+						$('#table_item tbody').append(row)
+					});
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 

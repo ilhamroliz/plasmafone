@@ -77,7 +77,8 @@
 		<!-- SmartChat UI : plugin -->
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.ui.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.manager.min.js') }}"></script>
-		
+        <!-- Month Picker -->
+        <script src="{{ asset('template_asset/js/MonthPicker.js') }}"></script>
 		<!-- Datatables -->
 		<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>

@@ -69,6 +69,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div id="detail_outlet" style="display: none">
                                                     <div class="form-group">
 
@@ -188,6 +189,7 @@
     var searchGlobal = null;
 
     $(document).ready(function(){
+        $("#cari-outlet").val("");
 		if ($("#stockid").val() == "") {
 			$("#tambahketable").attr('disabled', true);
 		}
@@ -234,6 +236,7 @@
 
     function setStock(info){
         var data = info.data;
+        var price = 0;
         if (data.i_code == "") {
             namaGlobal = data.i_nama;
         } else {
@@ -241,6 +244,15 @@
         }
         
         stockGlobal = data.s_qty;
+
+        if(data.gp_price != null) {
+            price = data.gp_price;
+        } else if (data.gp_price != null) {
+            price = data.gp_price;
+        } else {
+            price = data.i_price;
+        }
+        hargaGlobal = parseInt(price);
 
         iCode = data.i_code;
         idGlobal = data.s_id;
@@ -363,6 +375,7 @@
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
+                    '<input type="hidden" class="harga '+iCode+'" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                     '</td>' +
                     '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
@@ -383,6 +396,7 @@
                 '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                 '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                 '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
+                '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                 '</td>' +
                 '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
                 '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
@@ -505,7 +519,7 @@
 								$("#cari-outlet").val("");
 								$("#cari-outlet").focus();
 								$('#overlay').fadeOut(200);
-
+                                console.log(response);
 								cetak(response.id);
 								
 							}

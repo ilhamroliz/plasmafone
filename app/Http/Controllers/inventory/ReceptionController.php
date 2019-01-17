@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use DB;
 use Session;
 use App\Http\Controllers\PlasmafoneController as Plasma;
+use App\Http\Controllers\PlasmafoneController as Access;
+use Illuminate\Support\Facades\Crypt;
 use DataTables;
 use Carbon\Carbon;
 use Auth;
@@ -18,11 +20,6 @@ class ReceptionController extends Controller
 	// Penerimaan barang dari supplier
     public function index_supplier()
     {
-    	// $data = DB::table('d_inventory')
-    	// 		->select('d_inventory.*', 'd_supplier.s_company')
-    	// 		->where('d_inventory.i_from', '=', 'Supplier')
-    	// 		->join('d_supplier', 'd_inventory.i_id_supplier', '=', 'd_supplier.s_id')
-    	// 		->get();
     	return view('inventory.receipt_goods.supplier.index');
     }
 
@@ -635,7 +632,7 @@ class ReceptionController extends Controller
                 ]);
     }
     // End penerimaan barang dari supplier
-
+    
     // Penerimaan barang dari pusat
     public function index_pusat()
     {
@@ -753,23 +750,532 @@ class ReceptionController extends Controller
     }
     // End penerimaan barang dari pusat
 
-    // Distribusi barang
-    // public function index_distribusi()
-    // {
-    //     $purchase = DB::table('d_inventory')->get();
-    //     return view('inventory.distribusi.index')->with(compact('purchase'));
-    // }
+    // ############################################################
+    // Pagar pemisah antara kita
+    // ############################################################
 
-    // public function show_purchase($id = null)
-    // {
-    //     $data = DB::table('d_inventory')
-    //             ->where('i_po', $id)
-    //             ->get();
-    //     if (count($data) == 0) {
-    //         # code...
-    //         $data = null;
-    //     }
-    //     echo json_encode($data);
-    // }
-    // End distribusi barang
+    // Penerimaan barang dari distribusi
+    public function index_distribusi()
+    {
+        return view('inventory.penerimaan-barang.distribusi.index');
+    }
+
+    public function dataDistribusiProses()
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi_dt.dd_status', 'On Going')
+                ->orWhere('d_distribusi_dt.dd_qty_received', '<', 'd_distribusi_dt.dd_qty')
+                ->groupBy('d_distribusi.d_nota');
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                if (Access::checkAkses(10, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<a href="'.url("/inventory/penerimaan/distribusi/edit/".Crypt::encrypt($data->id)).'" class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data"><i class="glyphicon glyphicon-arrow-down"></i></a></div>';
+
+                }
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
+    public function dataDistribusiTerima()
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                ->orWhere('d_distribusi_dt.dd_status', 'Received')
+                ->groupBy('d_distribusi.d_nota');
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detailTerima(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
+    public function detailTerima($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', $id)
+                    ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                    ->get();
+            return response()->json(['status' => 'OK', 'data' => $data]);
+
+        }
+    }
+
+    public function detail($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', $id)
+                    // ->where('d_distribusi_dt.dd_status', 'On Going')
+                    ->get();
+            return response()->json(['status' => 'OK', 'data' => $data]);
+
+        }
+    }
+
+    public function editDistribusi($id = null)
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi.d_id', Crypt::decrypt($id))
+                ->first();
+
+        return view('inventory.penerimaan-barang.distribusi.edit')->with(compact('data', 'id'));
+    }
+
+    public function itemReceive($id = null, $item = null)
+    {
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_distribusi.d_destination as tujuan', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_detailid as iddetail', 'd_distribusi_dt.dd_comp as comp', 'd_distribusi_dt.dd_qty_received as qtyReceived', 'd_distribusi_dt.dd_qty_sisa as qtySisa', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', 'd_item.i_specificcode as specificcode', 'd_item.i_nama as nama_item')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', Crypt::decrypt($id))
+                    ->where('d_distribusi_dt.dd_item', Crypt::decrypt($item))
+                    ->first();
+            return json_encode($data);
+        }
+        
+    }
+
+    public function getItem($id = null)
+    {
+        $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', Crypt::decrypt($id));
+
+        return DataTables::of($data)
+
+        ->addColumn('aksi', function ($data) {
+
+            if (Access::checkAkses(10, 'update') == true) {
+
+                if ($data->qty == $data->qty_received) {
+                    return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
+                } else {
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Terima</button></div>';
+                }
+
+            }
+
+        })
+
+        ->rawColumns(['aksi'])
+
+        ->make(true);
+    }
+
+    public function itemReceiveAdd(Request $request)
+    {
+        $data = $request->all();
+
+        if (!isset($data['qty'])) {
+
+            $check_code = DB::table('d_stock')
+                        ->join('d_stock_dt', 'd_stock.s_id', '=', 'd_stock_dt.sd_stock')
+                        ->where('d_stock.s_comp', '=', $data['comp'])
+                        ->where('d_stock.s_position', '=', $data['comp'])
+                        ->where('d_stock.s_item', '=', $data['iditem'])
+                        ->where('d_stock.s_status', 'On Going')
+                        ->where('d_stock_dt.sd_specificcode', $data['kode'])
+                        ->count();
+
+            if ($check_code == 0) {
+                return 'kode salah';
+            } else {
+                DB::beginTransaction();
+                try{
+                     // check stock
+                    $dst = DB::table('d_distribusi')->select('d_from', 'd_destination')->where('d_id', $data['idditribusi'])->first();
+
+                    $check_stock_outlet = DB::table('d_stock')
+                                        ->where('s_comp', $dst->d_destination)
+                                        ->where('s_position', $dst->d_destination)
+                                        ->where('s_item', $data['iditem'])
+                                        ->count();
+
+                    if ($check_stock_outlet == 0) {
+                        // create new
+                        $sid = DB::table('d_stock')->max('s_id')+1;
+                        DB::table('d_stock')->insert([
+                            's_id'          => $sid,
+                            's_comp'        => $dst->d_destination,
+                            's_position'    => $dst->d_destination,
+                            's_item'        => $data['iditem'],
+                            's_qty'         => 1,
+                            's_status'      => 'On Destination'
+                        ]);
+    
+                        $idstock = DB::table('d_stock')->select('s_id')->where([
+                                        's_id'          => $sid,
+                                        's_comp'        => $dst->d_destination,
+                                        's_position'    => $dst->d_destination,
+                                        's_item'        => $data['iditem'],
+                                        's_qty'         => 1,
+                                        's_status'      => 'On Destination'
+                                    ])->first();
+                        $idstock = $idstock->s_id;
+                    } else {
+                        // update qty
+                        $get_qty = DB::table('d_stock')->select('s_id','s_qty')->where(['s_comp' => $dst->d_destination, 's_position' => $dst->d_destination, 's_item' => $data['iditem']])->first();
+                        DB::table('d_stock')->where(['s_comp' => $dst->d_destination, 's_position' => $dst->d_destination, 's_item' => $data['iditem']])->update([
+                            's_qty' => 1 + $get_qty->s_qty,
+                            's_status' => 'On Destination'
+                        ]);
+    
+                        $idstock = $get_qty->s_id;
+                    }
+
+                    // delete kode
+                    $getidstock = DB::table('d_stock')
+                                    ->where('s_comp', $data['comp'])
+                                    ->where('s_position', $data['destination'])
+                                    ->where('s_item', $data['iditem'])
+                                    ->where('s_status', 'On Destination')
+                                    ->first();
+                    $getidstock2 = DB::table('d_stock')
+                                    ->where('s_comp', $data['comp'])
+                                    ->where('s_position', $data['destination'])
+                                    ->where('s_item', $data['iditem'])
+                                    ->where('s_status', 'On Going')
+                                    ->first();
+                    DB::table('d_stock_dt')->where('sd_stock', $getidstock->s_id)->delete();
+                    DB::table('d_stock_dt')->where('sd_stock', $getidstock2->s_id)->delete();
+                    DB::table('d_stock')->where('s_id', $getidstock2->s_id)->delete();
+
+                    // update distribusi
+                    $get_received = DB::table('d_distribusi_dt')
+                    ->where('dd_distribusi', $data['idditribusi'])
+                    ->where('dd_detailid', $data['iddetail'])
+                    ->where('dd_comp', $data['comp'])
+                    ->where('dd_item', $data['iditem'])
+                    ->where('dd_qty', $data['qtydistribusi'])->first();
+
+                    DB::table('d_distribusi_dt')
+                    ->where('dd_distribusi', $data['idditribusi'])
+                    ->where('dd_detailid', $data['iddetail'])
+                    ->where('dd_comp', $data['comp'])
+                    ->where('dd_item', $data['iditem'])
+                    ->where('dd_qty', $data['qtydistribusi'])
+                    ->update([
+                        'dd_qty_received' => 1 + $get_received->dd_qty_received,
+                        'dd_qty_sisa' => $get_received->dd_qty - (1 + $get_received->dd_qty_received),
+                        'dd_receivetime' => Carbon::now('Asia/Jakarta')
+                    ]);
+
+                    $check_sisa = DB::table('d_distribusi_dt')
+                                ->where('dd_distribusi', $data['idditribusi'])
+                                ->where('dd_detailid', $data['iddetail'])
+                                ->where('dd_comp', $data['comp'])
+                                ->where('dd_item', $data['iditem'])
+                                ->where('dd_qty', $data['qtydistribusi'])
+                                ->first();
+
+                    if ($check_sisa->dd_qty_sisa == 0) {
+                        DB::table('d_distribusi_dt')
+                        ->where('dd_distribusi', $data['idditribusi'])
+                        ->where('dd_detailid', $data['iddetail'])
+                        ->where('dd_comp', $data['comp'])
+                        ->where('dd_item', $data['iditem'])
+                        ->where('dd_qty', $data['qtydistribusi'])
+                        ->update([
+                            'dd_status' => 'Received'
+                        ]);
+                    }
+
+                    // update stock mutasi
+                    $nota = DB::table('d_distribusi')->select('d_nota')->where('d_id', $data['idditribusi'])->first();
+
+                    $mutasi = DB::table('d_stock_mutation')->where('sm_nota', $nota->d_nota)->where('sm_detail', 'PENGURANGAN')->first();
+
+                    $sm_detailid = DB::table('d_stock_mutation')->where('sm_stock', $idstock)->count()+1;
+
+                    $s_code = $mutasi->sm_specificcode;
+                    $expired = $mutasi->sm_expired;
+
+                    if ($s_code == null || $s_code == "") {
+                        $s_code = null;
+                    }
+
+                    if ($expired == null || $expired == "") {
+                        $expired = null;
+                    }
+
+                    DB::table('d_stock_mutation')->insert([
+                        'sm_stock' => $idstock,
+                        'sm_detailid' => $sm_detailid,
+                        'sm_date' => Carbon::now('Asia/Jakarta'),
+                        'sm_detail' => 'PENAMBAHAN',
+                        'sm_specificcode' => $s_code,
+                        'sm_expired' => $expired,
+                        'sm_qty' => 1,
+                        'sm_use' => 0,
+                        'sm_sisa' => 1,
+                        'sm_hpp' => $mutasi->sm_hpp,
+                        'sm_sell' => $mutasi->sm_sell,
+                        'sm_nota' => $nota->d_nota,
+                        'sm_reff' => $nota->d_nota,
+                        'sm_mem' =>  Auth::user()->m_id
+                    ]);
+                    
+                    // update d_stock_dt & d_stock
+                    if ($mutasi->sm_specificcode != null) {
+                        $sd_detailid = DB::table('d_stock_dt')->where('sd_stock', $idstock)->count()+1;
+                        DB::table('d_stock_dt')->insert([
+                            'sd_stock' =>$idstock,
+                            'sd_detailid' => $sd_detailid,
+                            'sd_specificcode' => $mutasi->sm_specificcode
+                        ]);
+                    }
+
+                    DB::commit();
+                    return 'true';
+                } catch(\Exception $e) {
+                    DB::rollback();
+                    return 'false => '.$e;
+                }
+            }
+
+        } else if ($data['qty'] == null || $data['qty'] == 0) {
+            return "lengkapi data";
+        } else {
+            
+            DB::beginTransaction();
+            try {
+                // check stock
+                $dst = DB::table('d_distribusi')->select('d_from', 'd_destination')->where('d_id', $data['idditribusi'])->first();
+
+                $check_stock_outlet = DB::table('d_stock')
+                                    ->where('s_comp', $dst->d_destination)
+                                    ->where('s_position', $dst->d_destination)
+                                    ->where('s_item', $data['iditem'])
+                                    ->count();
+                
+                if ($check_stock_outlet == 0) {
+                    // create new
+                    $sid = DB::table('d_stock')->max('s_id')+1;
+                    DB::table('d_stock')->insert([
+                        's_id'          => $sid,
+                        's_comp'        => $dst->d_destination,
+                        's_position'    => $dst->d_destination,
+                        's_item'        => $data['iditem'],
+                        's_qty'         => $data['qty'],
+                        's_status'      => 'On Destination'
+                    ]);
+
+                    $idstock = DB::table('d_stock')->select('s_id')->where([
+                                    's_id'          => $sid,
+                                    's_comp'        => $dst->d_destination,
+                                    's_position'    => $dst->d_destination,
+                                    's_item'        => $data['iditem'],
+                                    's_qty'         => $data['qty'],
+                                    's_status'      => 'On Destination'
+                                ])->first();
+                    $idstock = $idstock->s_id;
+                } else {
+                    // update qty
+                    $get_qty = DB::table('d_stock')->select('s_id','s_qty')->where(['s_comp' => $dst->d_destination, 's_position' => $dst->d_destination, 's_item' => $data['iditem']])->first();
+                    DB::table('d_stock')->where(['s_comp' => $dst->d_destination, 's_position' => $dst->d_destination, 's_item' => $data['iditem']])->update([
+                        's_qty' => $data['qty'] + $get_qty->s_qty,
+                        's_status' => 'On Destination'
+                    ]);
+
+                    $idstock = $get_qty->s_id;
+                }
+
+                // delete stock on going
+                $qtystock = DB::table('d_stock')
+                            ->where('s_comp', $data['comp'])
+                            ->where('s_position', $data['destination'])
+                            ->where('s_item', $data['iditem'])
+                            ->where('s_status', 'On Going')
+                            ->first();
+
+                DB::table('d_stock')
+                ->where('s_comp', $data['comp'])
+                ->where('s_position', $data['destination'])
+                ->where('s_item', $data['iditem'])
+                ->where('s_status', 'On Going')
+                ->update([
+                    's_qty' => $qtystock->s_qty - $data['qty']
+                ]);
+
+                $checkidstock = DB::table('d_stock')
+                                ->where('s_comp', $data['comp'])
+                                ->where('s_position', $data['destination'])
+                                ->where('s_item', $data['iditem'])
+                                ->where('s_status', 'On Going')
+                                ->first();
+                if ($checkidstock->s_qty == 0) {
+                    DB::table('d_stock')->where('s_id', $checkidstock->s_id)->delete();
+                }
+                
+
+                // update distribusi
+                $get_received = DB::table('d_distribusi_dt')
+                                ->where('dd_distribusi', $data['idditribusi'])
+                                ->where('dd_detailid', $data['iddetail'])
+                                ->where('dd_comp', $data['comp'])
+                                ->where('dd_item', $data['iditem'])
+                                ->where('dd_qty', $data['qtydistribusi'])->first();
+
+                DB::table('d_distribusi_dt')
+                ->where('dd_distribusi', $data['idditribusi'])
+                ->where('dd_detailid', $data['iddetail'])
+                ->where('dd_comp', $data['comp'])
+                ->where('dd_item', $data['iditem'])
+                ->where('dd_qty', $data['qtydistribusi'])
+                ->update([
+                    'dd_qty_received' => $data['qty'] + $get_received->dd_qty_received,
+                    'dd_qty_sisa' => $get_received->dd_qty - ($data['qty'] + $get_received->dd_qty_received),
+                    'dd_receivetime' => Carbon::now('Asia/Jakarta')
+                ]);
+
+                $check_sisa = DB::table('d_distribusi_dt')
+                            ->where('dd_distribusi', $data['idditribusi'])
+                            ->where('dd_detailid', $data['iddetail'])
+                            ->where('dd_comp', $data['comp'])
+                            ->where('dd_item', $data['iditem'])
+                            ->where('dd_qty', $data['qtydistribusi'])
+                            ->first();
+
+                if ($check_sisa->dd_qty_sisa == 0) {
+                    DB::table('d_distribusi_dt')
+                    ->where('dd_distribusi', $data['idditribusi'])
+                    ->where('dd_detailid', $data['iddetail'])
+                    ->where('dd_comp', $data['comp'])
+                    ->where('dd_item', $data['iditem'])
+                    ->where('dd_qty', $data['qtydistribusi'])
+                    ->update([
+                        'dd_status' => 'Received'
+                    ]);
+                }
+
+                // update stock mutasi
+                $nota = DB::table('d_distribusi')->select('d_nota')->where('d_id', $data['idditribusi'])->first();
+
+                $mutasi = DB::table('d_stock_mutation')->where('sm_nota', $nota->d_nota)->where('sm_detail', 'PENGURANGAN')->first();
+
+                $sm_detailid = DB::table('d_stock_mutation')->where('sm_stock', $idstock)->count()+1;
+
+                $s_code = $mutasi->sm_specificcode;
+                $expired = $mutasi->sm_expired;
+
+                if ($s_code == null || $s_code == "") {
+                    $s_code = null;
+                }
+
+                if ($expired == null || $expired == "") {
+                    $expired = null;
+                }
+
+                DB::table('d_stock_mutation')->insert([
+                    'sm_stock' => $idstock,
+                    'sm_detailid' => $sm_detailid,
+                    'sm_date' => Carbon::now('Asia/Jakarta'),
+                    'sm_detail' => 'PENAMBAHAN',
+                    'sm_specificcode' => $s_code,
+                    'sm_expired' => $expired,
+                    'sm_qty' => $data['qty'],
+                    'sm_use' => 0,
+                    'sm_sisa' => $data['qty'],
+                    'sm_hpp' => $mutasi->sm_hpp,
+                    'sm_sell' => $mutasi->sm_sell,
+                    'sm_nota' => $nota->d_nota,
+                    'sm_reff' => $nota->d_nota,
+                    'sm_mem' =>  Auth::user()->m_id
+                ]);
+                
+                // update d_stock_dt & d_stock
+                if ($mutasi->sm_specificcode != null) {
+                    $sd_detailid = DB::table('d_stock_dt')->where('sd_stock', $mutasi->$idstock)->count()+1;
+                    DB::table('d_stock_dt')->insert([
+                        'sd_stock' =>$idstock,
+                        'sd_detailid' => $sd_detailid,
+                        'sd_specificcode' => $mutasi->sm_specificcode
+                    ]);
+                }
+
+                DB::commit();
+                return 'true';
+            } catch (\Exception $e) {
+                DB::rollback();
+                return 'false';
+            }
+
+        }
+    }
+    // End penerimaan barang dari distribusi
 }

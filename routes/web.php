@@ -303,7 +303,17 @@ Route::group(['middleware' => 'auth'], function () {
 	// End Master Member
 
     //master pembayaran
-    Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
+	Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
+    Route::get('master/pembayaran/get-dataY', 'master\pembayaran\MasterPembayaranController@getDataY');
+    Route::get('master/pembayaran/get-dataN', 'master\pembayaran\MasterPembayaranController@getDataN');
+    Route::get('master/pembayaran/get-outlet-payment', 'master\pembayaran\MasterPembayaranController@getOutletPayment');
+    Route::post('master/pembayaran/simpan', 'master\pembayaran\MasterPembayaranController@save');
+    Route::post('master/pembayaran/simpan-payment', 'master\pembayaran\MasterPembayaranController@saveOutletPayment');
+    Route::post('master/pembayaran/delete-payment', 'master\pembayaran\MasterPembayaranController@deleteOutletPayment');
+    Route::get('master/pembayaran/update', 'master\pembayaran\MasterPembayaranController@update');
+    Route::get('master/pembayaran/get-detail', 'master\pembayaran\MasterPembayaranController@getDetail');
+    Route::get('master/pembayaran/nonaktif', 'master\pembayaran\MasterPembayaranController@setNonaktif');
+    Route::get('master/pembayaran/aktifkan', 'master\pembayaran\MasterPembayaranController@setAktif');
     //end pembayaran
 
 	// Pembelian
@@ -517,8 +527,12 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/penerimaan/supplier/terimaBarang', 'inventory\ReceptionController@terimaBarang');
 	Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
 	Route::get('/inventory/penerimaan/supplier/view_bbm_dt', 'inventory\ReceptionController@view_bbm_dt');
+<<<<<<< HEAD
 
 	
+=======
+	Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\ReceptionController@index_addSupplier');
+>>>>>>> cc36a6fb0f61f727ab9a3aecb5b6fa924dfc1da5
 	Route::match(['get', 'post'], '/inventory/penerimaan/supplier/add', 'inventory\ReceptionController@add_items_from_supplier');
 	Route::get('/inventory/penerimaan/supplier/get-current-receipt/{id}', 'inventory\ReceptionController@get_current_receipt');
 	Route::get('/inventory/penerimaan/supplier/edit', 'inventory\ReceptionController@edit');
@@ -527,15 +541,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::match(['get', 'post'], '/inventory/penerimaan/supplier/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan');
 	// End penerimaan barang dari supplier
 
-	// Penerimaan barang dari pusat
-	Route::get('/inventory/penerimaan/pusat', 'inventory\ReceptionController@index_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/add', 'inventory\ReceptionController@add_items_from_pusat');
-	Route::get('/inventory/penerimaan/pusat/get-current-receipt-pusat/{id}', 'inventory\ReceptionController@get_current_receipt_pusat');
-	Route::get('/inventory/penerimaan/pusat/edit', 'inventory\ReceptionController@edit_barang_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/edit-multiple', 'inventory\ReceptionController@multiple_edit_penerimaan_barang_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/update', 'inventory\ReceptionController@update_penerimaan_barang_pusat');
-	Route::match(['get', 'post'], '/inventory/penerimaan/pusat/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan_pusat');
-	// End penerimaan barang dari pusat
+	// Penerimaan barang distribusi
+	Route::get('/inventory/penerimaan/distribusi', 'inventory\ReceptionController@index_distribusi');
+	Route::get('/inventory/penerimaan/distribusi/proses', 'inventory\ReceptionController@dataDistribusiProses')->name('distribusi.proses');
+	Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
+	Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
+	Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
+	// End penerimaan barang distribusi
 
 	// Distribusi barang
 	Route::get('/inventory/distribusi', 'inventory\DistribusiController@index_distribusi');
@@ -548,8 +560,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/inventory/opname-barang/pusat', 'inventory\opnameBarangController@pusat');
 	Route::get('/inventory/opname-barang/outlet', 'inventory\opnameBarangController@outlet');
 
+	Route::get('/inventory/opname-barang/auto-comp-noPusat', 'inventory\opnameBarangController@auto_comp_noPusat');
+
 	Route::get('/inventory/opname-barang/appr', 'inventory\opnameBarangController@get_approved');
 	Route::get('/inventory/opname-barang/pend', 'inventory\opnameBarangController@get_pending');
+
+	///DataTable Inputan form Tambah Opname
+	Route::post('/inventory/opname-barang/get-stock-code', 'inventory\opnameBarangController@get_stock_code');
+
+	Route::post('/inventory/opname-barang/cariItemStock', 'inventory\opnameBarangController@cari_item_stock');
 
 	Route::post('/inventory/opname-barang/formTambah', 'inventory\opnameBarangController@form_tambah');
 	Route::post('/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
@@ -707,9 +726,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-reguler/cari-stock', 'PenjualanController@cariStock');
 	Route::get('penjualan-reguler/simpan-penjualan', 'PenjualanController@save');
 	Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
-	Route::get('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
+	Route::post('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
 	Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
-	Route::get('penjualan-reguler/struk/{salesman}/{id}', 'PenjualanController@struck');
+	Route::get('penjualan-reguler/struk/{salesman}/{id}/{totPemb}/{kembali}', 'PenjualanController@struck');
 	Route::get('penjualan-reguler/detailPembayaran/{total}', 'PenjualanController@detailpembayaran');
 	//==============
 	
@@ -721,9 +740,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('penjualan-tempo/cari-stock', 'PenjualanController@cariStock');
 	Route::get('penjualan-tempo/simpan-penjualan', 'PenjualanController@save');
 	Route::get('penjualan-tempo/getdetailmember/{id}', 'PenjualanController@getDetailMember');
-	Route::get('penjualan-tempo/simpan', 'PenjualanController@savePenjualan');
+	Route::post('penjualan-tempo/simpan', 'PenjualanController@savePenjualan');
 	Route::get('penjualan-tempo/search-stock', 'PenjualanController@searchStock');
-	Route::get('penjualan-tempo/struktempo/{salesman}/{id}', 'PenjualanController@struckTempo');
+	Route::get('penjualan-tempo/struktempo/{salesman}/{id}/{totPemb}/{kembali}', 'PenjualanController@struckTempo');
 	Route::get('penjualan-tempo/detailpembayarantempo/{total}', 'PenjualanController@detailpembayaranTempo');
 	// =========================
 
