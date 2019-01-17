@@ -527,12 +527,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/penerimaan/supplier/terimaBarang', 'inventory\ReceptionController@terimaBarang');
 	Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
 	Route::get('/inventory/penerimaan/supplier/view_bbm_dt', 'inventory\ReceptionController@view_bbm_dt');
-<<<<<<< HEAD
 
-	
-=======
+
 	Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\ReceptionController@index_addSupplier');
->>>>>>> cc36a6fb0f61f727ab9a3aecb5b6fa924dfc1da5
+
 	Route::match(['get', 'post'], '/inventory/penerimaan/supplier/add', 'inventory\ReceptionController@add_items_from_supplier');
 	Route::get('/inventory/penerimaan/supplier/get-current-receipt/{id}', 'inventory\ReceptionController@get_current_receipt');
 	Route::get('/inventory/penerimaan/supplier/edit', 'inventory\ReceptionController@edit');
