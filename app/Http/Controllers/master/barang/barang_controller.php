@@ -83,7 +83,7 @@ class barang_controller extends Controller
 
     public function getdataall()
     {
-        $items_all = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price');
+        $items_all = Item::select('i_id', 'i_merk', 'i_nama', 'i_code', 'i_price', 'i_isactive');
 
         return DataTables::of($items_all)
 
