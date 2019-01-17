@@ -580,7 +580,7 @@ class PenjualanController extends Controller
             return view('errors/404');
         }
 
-        return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'bayar', 'bri', 'bni', 'totPemb', 'kembali'));
+        return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'totPemb', 'kembali'));
     }
 
     
