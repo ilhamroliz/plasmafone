@@ -305,6 +305,15 @@ Route::group(['middleware' => 'auth'], function () {
     //master pembayaran
 	Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
     Route::get('master/pembayaran/get-dataY', 'master\pembayaran\MasterPembayaranController@getDataY');
+    Route::get('master/pembayaran/get-dataN', 'master\pembayaran\MasterPembayaranController@getDataN');
+    Route::get('master/pembayaran/get-outlet-payment', 'master\pembayaran\MasterPembayaranController@getOutletPayment');
+    Route::post('master/pembayaran/simpan', 'master\pembayaran\MasterPembayaranController@save');
+    Route::post('master/pembayaran/simpan-payment', 'master\pembayaran\MasterPembayaranController@saveOutletPayment');
+    Route::post('master/pembayaran/delete-payment', 'master\pembayaran\MasterPembayaranController@deleteOutletPayment');
+    Route::get('master/pembayaran/update', 'master\pembayaran\MasterPembayaranController@update');
+    Route::get('master/pembayaran/get-detail', 'master\pembayaran\MasterPembayaranController@getDetail');
+    Route::get('master/pembayaran/nonaktif', 'master\pembayaran\MasterPembayaranController@setNonaktif');
+    Route::get('master/pembayaran/aktifkan', 'master\pembayaran\MasterPembayaranController@setAktif');
     //end pembayaran
 
 	// Pembelian
