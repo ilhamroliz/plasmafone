@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/resources/views/master/item/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/master/item/index.blade.php" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +55,7 @@
           <entry key="css" value="4" />
           <entry key="env" value="1" />
           <entry key="js" value="15" />
-          <entry key="php" value="180" />
+          <entry key="php" value="181" />
           <entry key="rnc" value="1" />
           <entry key="ts" value="1" />
         </counts>
@@ -61,7 +63,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key=".env file" value="1" />
-          <entry key="Blade" value="72" />
+          <entry key="Blade" value="73" />
           <entry key="CSS" value="4" />
           <entry key="JavaScript" value="15" />
           <entry key="PHP" value="108" />
@@ -74,14 +76,14 @@
           <entry key="dummy" value="5" />
           <entry key="env" value="17" />
           <entry key="js" value="74" />
-          <entry key="php" value="16642" />
+          <entry key="php" value="16645" />
           <entry key="txt" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key=".env file" value="17" />
-          <entry key="Blade" value="7971" />
+          <entry key="Blade" value="7974" />
           <entry key="HTML" value="16" />
           <entry key="JavaScript" value="74" />
           <entry key="PHP" value="8655" />
@@ -102,11 +104,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5985">
-              <caret line="305" selection-start-line="305" selection-end-line="305" />
+            <state relative-caret-position="630">
+              <caret line="32" column="25" lean-forward="true" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/resources/views/master/item/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="146">
+              <caret line="882" column="19" selection-start-line="882" selection-start-column="19" selection-end-line="882" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -214,6 +225,7 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/master/pembayaran/MasterPembayaranController.php" />
         <option value="$PROJECT_DIR$/resources/views/master/pembayaran/index.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/resources/views/master/item/index.blade.php" />
       </list>
     </option>
   </component>
@@ -434,6 +446,14 @@
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="master" type="462c0819:PsiDirectoryNode" />
+              <item name="item" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="master" type="462c0819:PsiDirectoryNode" />
               <item name="member" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -570,7 +590,7 @@
       <workItem from="1547548984623" duration="101000" />
       <workItem from="1547565460623" duration="3645000" />
       <workItem from="1547610516283" duration="11132000" />
-      <workItem from="1547688418692" duration="8837000" />
+      <workItem from="1547688418692" duration="9602000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1546933778174</created>
@@ -611,7 +631,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="158597000" />
+    <option name="totallyTimeSpent" value="159362000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
@@ -724,13 +744,6 @@
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-288" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/master/item/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="503">
-          <caret line="377" lean-forward="true" selection-end-line="1452" selection-end-column="11" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/errors/access_denied.blade.php">
@@ -990,8 +1003,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5985">
-          <caret line="305" selection-start-line="305" selection-end-line="305" />
+        <state relative-caret-position="630">
+          <caret line="32" column="25" lean-forward="true" selection-start-line="32" selection-start-column="25" selection-end-line="32" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/master/item/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="882" column="19" selection-start-line="882" selection-start-column="19" selection-end-line="882" selection-end-column="19" />
         </state>
       </provider>
     </entry>
