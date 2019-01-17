@@ -25,7 +25,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Inventory</li><li>Opname Barang Pusat</li>
+			<li>Home</li><li>Inventory</li><li>Manajemen Minimum Stock</li>
 		</ol>
 
 	</div>
@@ -40,13 +40,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-cube"></i>
-                    Inventory <span><i class="fa fa-angle-double-right"></i> Opname Barang Pusat </span>
+                    Inventory <span><i class="fa fa-angle-double-right"></i> Manajemen Minimum Stock </span>
                 </h1>
             </div>
 
             @if(Plasma::checkAkses(11, 'insert') == true)
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right padding-top-10">
-                <button class="btn btn-success" onclick="tambah()"><i class="fa fa-plus"></i>&nbsp;Tambah Opname Pusat</button>
+                <button class="btn btn-success" onclick="tambah()"><i class="fa fa-plus"></i>&nbsp;Tambah Minimum Stock</button>
             </div>
             @endif
 
@@ -76,13 +76,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                             <div class="widget-body no-padding">
 								<form id="cariMPForm">
 									<div class="col-md-12 no-padding padding-top-15">
-										<div class="col-md-4">
-											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control" id="tglAwal" name="tglAwal" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy" value="{{ $date }}">
-												<span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control" id="tglAkhir" name="tglAkhir" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy" value="{{ $date }}">
-											</div>
-										</div>
 
 										<div class="col-md-4">
 											<div class="form-group">

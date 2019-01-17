@@ -22,7 +22,9 @@ class monitoringPenjualanController extends Controller
         if (PlasmafoneController::checkAkses(27, 'read') == false) {
             return view('errors.407');
         } else {
-            return view('manajemen_penjualan.monitoring_penjualan.index');
+            $startDate = Carbon::now()->startOfMonth()->format('d/m/Y');
+            $endDate = Carbon::now()->format('d/m/Y');
+            return view('manajemen_penjualan.monitoring_penjualan.index')->with(compact('startDate', 'endDate'));
         }
     }
 
@@ -56,9 +58,10 @@ class monitoringPenjualanController extends Controller
 
     public function realisasi(Request $request)
     {
-        $carbon = explode(' ', Carbon::now('Asia/Jakarta'));
-        $dash = explode('-', $carbon[0]);
-        $date = $dash[0] . '-' . $dash[1];
+        // $carbon = explode(' ', Carbon::now('Asia/Jakarta'));
+        // $dash = explode('-', $carbon[0]);
+        // $date = $dash[0] . '-' . $dash[1];
+        $date = Carbon::now('Asia/Jakarta')->format('Y-m');
         $comp = $request->mpCompId;
         $realisasi = '';
 
@@ -132,15 +135,34 @@ class monitoringPenjualanController extends Controller
 
     }
 
-    public function outlet()
+    public function outlet(Request $request)
     {
+        // dd($request);
+        $awal = '';
+        $akhir = '';
+        $outlet = '';
+
+        if ($request->tglAwalOT != '' && $request->tglAkhirOT != '') {
+            $daw = explode('/', $request->tglAwalOT);
+            $dak = explode('/', $request->tglAkhirOT);
+
+            $awal = $daw[2] . '-' . $daw[1] . '-' . $daw[0];
+            $akhir = $dak[2] . '-' . $dak[1] . '-' . $dak[0];
+        } else {
+            $awal = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $akhir = Carbon::now()->format('Y-m-d');
+        }
+
         $outlet = DB::table('m_company')
             ->leftjoin('d_sales', 's_comp', '=', 'c_id')
             ->leftjoin('d_sales_dt', 'sd_sales', '=', 's_id')
             ->select('c_name', DB::raw('IFNULL(SUM(sd_qty), 0) as qty'), DB::raw('IFNULL(SUM(s_total_net), 0) as net'))
+            ->where('s_date', '>=', $awal)
+            ->where('s_date', '<=', $akhir)
             ->groupBy('c_id')
             ->orderBy('qty', 'desc')
-            ->get();
+            ->get();       
+        
 
         // dd($outlet);
         return json_encode([

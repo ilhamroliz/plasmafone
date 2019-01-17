@@ -21,7 +21,8 @@ class pembuatanRencanaPenjualanController extends Controller
         if (PlasmafoneController::checkAkses(26, 'read') == false) {
             return view('errors.407');
         } else {
-            return view('manajemen_penjualan.rencana_penjualan.index');
+            $month = Carbon::now('Asia/Jakarta')->format('m/Y');
+            return view('manajemen_penjualan.rencana_penjualan.index')->with(compact('month'));
         }
     }
 
@@ -55,18 +56,21 @@ class pembuatanRencanaPenjualanController extends Controller
     public function get_data_approved()
     {
         $company = Auth::user()->m_comp;
+        $date = Carbon::now('Asia/Jakarta')->format('m/Y');
         $appr = '';
         if ($company != "PF00000001") {
             $appr = DB::table('d_sales_plan')
                 ->join('m_company', 'c_id', '=', 'sp_comp')
                 ->leftjoin('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
                 ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')
-                ->where('sp_comp', $company)->distinct();
+                ->where('sp_comp', $company)
+                ->whereRaw('sp_nota like "%' . $date . '%"')->distinct();
         } else {
             $appr = DB::table('d_sales_plan')
                 ->join('m_company', 'c_id', '=', 'sp_comp')
                 ->leftjoin('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
-                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct();
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')
+                ->whereRaw('sp_nota like "%' . $date . '%"')->distinct();
         }
 
         return DataTables::of($appr)
@@ -91,6 +95,7 @@ class pembuatanRencanaPenjualanController extends Controller
     public function get_data_pending()
     {
         $company = Auth::user()->m_comp;
+        $date = Carbon::now('Asia/Jakarta')->format('m/Y');
         $appr = '';
         if ($company != "PF00000001") {
             $pend = DB::table('d_sales_plan')
@@ -98,13 +103,15 @@ class pembuatanRencanaPenjualanController extends Controller
                 ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
                 ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct()
                 ->whereRaw('sp_id = spdd_sales_plan')
-                ->where('sp_comp', $company);
+                ->where('sp_comp', $company)
+                ->whereRaw('sp_nota like "%' . $date . '%"');
         } else {
             $pend = DB::table('d_sales_plan')
                 ->join('m_company', 'c_id', '=', 'sp_comp')
                 ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
                 ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct()
-                ->whereRaw('sp_id = spdd_sales_plan');
+                ->whereRaw('sp_id = spdd_sales_plan')
+                ->whereRaw('sp_nota like "%' . $date . '%"');
         }
 
         return DataTables::of($pend)
@@ -285,9 +292,6 @@ class pembuatanRencanaPenjualanController extends Controller
 
     public function getDataId($date)
     {
-        // $date = explode(' ', Carbon::now('Asia/Jakarta'));
-        // $tgl = explode('-', $date[0]);
-
         $cekNota = $date;
 
         $cek = DB::table('d_sales_plan')

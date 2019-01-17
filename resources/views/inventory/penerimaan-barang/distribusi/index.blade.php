@@ -145,15 +145,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 												<tr>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
 
-													<th width="15%"><i class="fa fa-fw fa-phone txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No.Telephone</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
 
-													<th data-hide="phone" data-class="expand"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Alamat</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
 
-													<th><i class="fa fa-fw fa-check-square-o txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Status</th>
-
-													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
 												</tr>
 
@@ -243,37 +241,32 @@ use App\Http\Controllers\PlasmafoneController as Access;
 													</tr>
 
 													<tr class="info">
-														<td><strong>Item</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_item"></td>
-													</tr>
-
-													<tr class="success">
-														<td><strong>Kuantitas</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_qty"></td>
-													</tr>
-
-													<tr class="danger">
 														<td><strong>Tanggal Distribusi</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_tgl"></td>
 													</tr>
 
-													<tr class="warning">
-														<td><strong>Status</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_status"></td>
-													</tr>
-
-													<tr class="info">
-														<td><strong>Oleh</strong></td>
+													<tr class="success">
+														<td><strong>Petugas</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_by"></td>
 													</tr>
 
 												</tbody>
 
+											</table>
+
+											<table class="table table-bordered" id="table_item">
+												<thead>
+													<tr class="text-center">
+														<td>Item</td>
+														<td>Qty</td>
+														<td>Qty Diterima</td>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
 											</table>
 											
 										</div>
@@ -374,12 +367,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"serverSide": true,
 					"orderable": false,
 					"order": [],
-					"ajax": "{{ route('outlet.getdataall') }}",
+					"ajax": "{{ route('distribusi.terima') }}",
 					"columns":[
-						{"data": "c_name"},
-						{"data": "c_tlp"},
-						{"data": "c_address"},
-						{"data": "active"},
+						{"data": "nota"},
+						{"data": "from"},
+						{"data": "destination"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -419,6 +411,47 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 		}
 
+		function detailTerima(id){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Mengambil data...');
+
+			var status;
+
+			axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail-terima/'+id).then(response => {
+
+				if (response.data.status == 'Access denied') {
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				} else {
+					var row = '';
+					$('.tr').remove();
+					$('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
+					$('#dt_nota').text(response.data.data[0].nota);
+					$('#dt_from').text(response.data.data[0].from);
+					$('#dt_destination').text(response.data.data[0].destination);
+					$('#dt_tgl').text(response.data.data[0].tanggal);
+					$('#dt_by').text(response.data.data[0].by);
+					response.data.data.forEach(function(element) {
+						console.log(element);
+						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+						$('#table_item tbody').append(row)
+					});
+					$('#overlay').fadeOut(200);
+					$('#myModal').modal('show');
+
+				}
+
+				})
+		}
+
 		function detail(id){
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
@@ -439,16 +472,19 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					});
 
 				} else {
-
+					var row = '';
+					$('.tr').remove();
 					$('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
-					$('#dt_nota').text(response.data.data.nota);
-					$('#dt_from').text(response.data.data.from);
-					$('#dt_destination').text(response.data.data.destination);
-					$('#dt_item').text(response.data.data.nama_item);
-					$('#dt_qty').text(response.data.data.qty);
-					$('#dt_tgl').text(response.data.data.tanggal);
-					$('#dt_status').text(response.data.data.status);
-					$('#dt_by').text(response.data.data.by);
+					$('#dt_nota').text(response.data.data[0].nota);
+					$('#dt_from').text(response.data.data[0].from);
+					$('#dt_destination').text(response.data.data[0].destination);
+					$('#dt_tgl').text(response.data.data[0].tanggal);
+					$('#dt_by').text(response.data.data[0].by);
+					response.data.data.forEach(function(element) {
+						console.log(element);
+						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+						$('#table_item tbody').append(row)
+					});
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 
