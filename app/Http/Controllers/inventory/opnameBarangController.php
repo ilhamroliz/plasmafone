@@ -21,7 +21,8 @@ class opnameBarangController extends Controller
         if (PlasmafoneController::checkAkses(11, 'read') == false) {
             return view('errors.407');
         } else {
-            return view('inventory.opname_barang.pusat');
+            $date = Carbon::now()->format('d/m/Y');
+            return view('inventory.opname_barang.pusat')->with(compact('date'));
         }
     }
 
@@ -30,7 +31,8 @@ class opnameBarangController extends Controller
         if (PlasmafoneController::checkAkses(12, 'read') == false) {
             return view('errors.407');
         } else {
-            return view('inventory.opname_barang.outlet');
+            $date = Carbon::now()->format('d/m/Y');
+            return view('inventory.opname_barang.outlet')->with(compact('date'));
         }
     }
 
@@ -67,11 +69,102 @@ class opnameBarangController extends Controller
     public function get_approved()
     {
 
+        $gappr = DB::table('d_opname')
+            ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+            ->join('m_company', 'c_id', '=', 'o_comp')
+            ->join('d_item', 'i_id', '=', 'od_item')
+            ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+            ->where('o_status', 'DONE');
+
+        // dd($gappr);
+        return DataTables::of($gappr)
+            ->addColumn('aksi', function ($gappr) {
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                if (PlasmafoneController::checkAkses(11, 'delete') == false) {
+                    return '<div class="text-center">' . $detail . '</div>';
+                } else {
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                }
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
     public function get_pending()
     {
+        $gpend = DB::table('d_opname')
+            ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+            ->join('m_company', 'c_id', '=', 'o_comp')
+            ->join('d_item', 'i_id', '=', 'od_item')
+            ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+            ->where('o_status', 'PENDING');
 
+        // dd($gpend);
+        return DataTables::of($gpend)
+            ->addColumn('aksi', function ($gpend) {
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                if (PlasmafoneController::checkAkses(11, 'delete') == false) {
+                    return '<div class="text-center">' . $detail . '</div>';
+                } else {
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                }
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    public function get_approved_outlet()
+    {
+        $comp = Auth::user()->m_comp;
+        $gappr = DB::table('d_opname')
+            ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+            ->join('m_company', 'c_id', '=', 'o_comp')
+            ->join('d_item', 'i_id', '=', 'od_item')
+            ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+            ->where('o_status', 'DONE')
+            ->where('o_comp', $comp);
+
+        // dd($gappr);
+        return DataTables::of($gappr)
+            ->addColumn('aksi', function ($gappr) {
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                if (PlasmafoneController::checkAkses(11, 'delete') == false) {
+                    return '<div class="text-center">' . $detail . '</div>';
+                } else {
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                }
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    public function get_pending_outlet()
+    {
+        $comp = Auth::user()->m_comp;
+        $gpend = DB::table('d_opname')
+            ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+            ->join('m_company', 'c_id', '=', 'o_comp')
+            ->join('d_item', 'i_id', '=', 'od_item')
+            ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+            ->where('o_status', 'PENDING')
+            ->where('o_comp', $comp);
+
+        // dd($gpend);
+        return DataTables::of($gpend)
+            ->addColumn('aksi', function ($gpend) {
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                if (PlasmafoneController::checkAkses(11, 'delete') == false) {
+                    return '<div class="text-center">' . $detail . '</div>';
+                } else {
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $delete . '</div>';
+                }
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
     public function cari_opname(Request $request)
@@ -140,7 +233,20 @@ class opnameBarangController extends Controller
 
     public function detil_opname($id)
     {
+        $id = Crypt::decrypt($id);
+        $detil = DB::table('d_opname')
+            ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
+            ->join('m_company', 'c_id', '=', 'o_id')
+            ->join('d_item', 'i_id', '=', 'od_item')
+            ->join('d_mem', 'm_id', '=', 'o_mem')
+            ->where('o_id', $id)
+            ->select('o_reff', 'c_name', 'i_nama', 'm_name', 'od_specificcode', 'i_specificcode', 'i_expired', DB::raw('COUNT(od_qty_real) as qtyR'), DB::raw('COUNT(od_qty_system) as qtyS'))
+            ->get();
 
+        dd($detil);
+        return json_encode([
+            'data' => $detil
+        ]);
     }
 
     public function form_tambah()
@@ -171,8 +277,13 @@ class opnameBarangController extends Controller
 
     public function tambah(Request $request)
     {
+        // dd($request);
         DB::beginTransaction();
         try {
+            ///?? INISIALISASI Variabel
+            $sc = $request->sc;
+            $ex = $request->ex;
+
             $countId = DB::table('d_opname')->max('o_id');
             $o_id = $countId + 1;
             $o_comp = $request->idComp;
@@ -195,8 +306,8 @@ class opnameBarangController extends Controller
             }
 
             $o_note = $request->note;
-
-            //// Jika tidak ada masukkan table
+            
+            //// Insert Data ke D_OPNAME
             DB::table('d_opname')
                 ->insert([
                     'o_id' => $o_id,
@@ -209,50 +320,96 @@ class opnameBarangController extends Controller
                     'o_note' => $o_note
                 ]);
 
-            ///// Untuk Opname Detail
+            ////////////////////////////////////////////////
+            ////////////////////////////////////////////////
+
+            //+++ INSERT OPNAME DT
+            //////////////////////
+            // HANYA dilakukan jika Spec Code == Y
+            // SEMUA data Tabel MASUK SEMUA ke tabel D_OPNAME_DT
+
             $idItem = $request->idItem;
-            $imeiR = $request->imeiR;
-            $sd_array = array();
-            $od_array = array();
 
-            for ($i = 0; $i < count($imeiR); $i++) {
-                $cek = DB::table('d_stock')
-                    ->join('d_stock_dt', 'sd_stock', '=', 's_id')
-                    ->where('sd_specificcode', $imeiR[$i])->count();
+            if ($sc == 'Y' && $ex == 'N' || $sc == 'Y' && $ex == 'Y') {
 
-                if ($cek == 0) {
-                    array_push($sd_array, $imeiR[$i]);
-                }
+                $imeiR = $request->imeiR;
+                $sd_array = array();
+                $od_array = array();
 
-                $aray = ([
-                    'od_opname' => $o_id,
-                    'od_detailid' => $i + 1,
-                    'od_item' => $idItem,
-                    'od_qty_real' => 1,
-                    'od_qty_system' => $cek,
-                    'od_specificcode' => $imeiR[$i]
-                ]);
-                array_push($od_array, $aray);
-            }
+                for ($i = 0; $i < count($imeiR); $i++) {
+                    $cek = DB::table('d_stock')
+                        ->join('d_stock_dt', 'sd_stock', '=', 's_id')
+                        ->where('sd_specificcode', $imeiR[$i])->count();
 
-            if (!empty($sd_array)) {
-                $getIdS = DB::table('d_stock')->where('s_item', $idItem)->select('s_id')->first();
-                $maxIdS = DB::table('d_stock_dt')->where('sd_stock', $getIdS->s_id)->max('sd_detailid');
-                $usd_array = array();
-                for ($j = 0; $j < count($sd_array); $j++) {
+                    //// Jika Data Item tersebut tidak ada di dalam sistem
+                    if ($cek == 0) {
+                        array_push($sd_array, $imeiR[$i]);
+                    }
+                    //////////////////////////////////////////////////////
+
                     $aray = ([
-                        'sd_stock' => $getIdS->s_id,
-                        'sd_detailid' => $maxIdS + ($j + 1),
-                        'sd_specificcode' => $sd_array[$j]
+                        'od_opname' => $o_id,
+                        'od_detailid' => $i + 1,
+                        'od_item' => $idItem,
+                        'od_qty_real' => 1,
+                        'od_qty_system' => $cek,
+                        'od_specificcode' => $imeiR[$i]
                     ]);
-                    array_push($usd_array, $aray);
+                    array_push($od_array, $aray);
                 }
 
-                DB::table('d_stock_dt')->insert($usd_array);
+                DB::table('d_opname_dt')->insert($od_array);
+
+            } else {
+                $pisah = explode(' ', $request->qtyR);
+                $qtyR = $pisah[0];
+                $qtyExp = $request->qty;
+                $qty = '';
+
+                if ($qtyR != '' || $qtyR != null) {
+                    $qty = $qtyR;
+                } else {
+                    $qty = 0;
+                    for ($c = 0; $c < count($qtyExp); $c++) {
+                        $qty = $qty + intval($qtyExp[$c]);
+                    }
+                }
+
+                $cekS = DB::table('d_stock')->where('s_item', $idItem)->select('s_qty')->first();
+
+                DB::table('d_opname_dt')->insert([
+                    'od_opname' => $o_id,
+                    'od_detailid' => 1,
+                    'od_item' => $idItem,
+                    'od_qty_real' => $qty,
+                    'od_qty_system' => $cekS->s_qty,
+                    'od_specificcode' => ''
+                ]);
 
             }
 
-            DB::table('d_opname_dt')->insert($od_array);
+            /////
+            ////////////////////////////////////////////
+
+            // ///// UPDATE pada data D_STOCK_DT
+            // ///// Jika Barang tidak memiliki IMEI maka Tidak memasukan ke D_STOCK_DT
+            // if (!empty($sd_array)) {
+            //     $getIdS = DB::table('d_stock')->where('s_item', $idItem)->select('s_id')->first();
+            //     $maxIdS = DB::table('d_stock_dt')->where('sd_stock', $getIdS->s_id)->max('sd_detailid');
+            //     $usd_array = array();
+            //     for ($j = 0; $j < count($sd_array); $j++) {
+            //         $aray = ([
+            //             'sd_stock' => $getIdS->s_id,
+            //             'sd_detailid' => $maxIdS + ($j + 1),
+            //             'sd_specificcode' => $sd_array[$j]
+            //         ]);
+            //         array_push($usd_array, $aray);
+            //     }
+
+            //     DB::table('d_stock_dt')->insert($usd_array);
+
+            // }
+
 
             DB::commit();
             return json_encode([
