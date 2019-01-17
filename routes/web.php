@@ -481,6 +481,10 @@ Route::group(['middleware' => 'auth'], function () {
 	// Route::get('/newprint', 'PembelianController@new_print');
 
 	// End Return Barang
+    Route::get('pembelian/refund', 'RefundController@index');
+    // Refund
+
+    //end Refund
 
 	// Pembelian end
 

@@ -103,8 +103,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Refund'] == 'Y')
-					<li>
-						<a href="#">Refund</a>
+					<li class="{{ (Request::is('pembelian/refund') || Request::is('pembelian/refund/*')) ? 'active' : '' }}">
+						<a href="{{ url('pembelian/refund') }}">Refund</a>
 					</li>
 					@endif
 				</ul>
