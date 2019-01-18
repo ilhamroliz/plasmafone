@@ -405,6 +405,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/konfirmasi-pembelian/view_confirmAll', 'PembelianController@view_confirmAll');
 	Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd', 'PembelianController@view_confirmAdd');
 	Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans', 'PembelianController@view_confirmAdd_trans');
+	Route::post('/pembelian/konfirmasi-pembelian/tampilSupplier', 'PembelianController@tampilSupplier');
 
 
 	//action confirm order

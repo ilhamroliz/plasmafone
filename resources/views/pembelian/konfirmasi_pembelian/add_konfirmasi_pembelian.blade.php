@@ -841,7 +841,7 @@
 
 	function tampilSupplier(){
 		$.ajax({
-			url : '{{url('')}}',
+			url : '{{url('/pembelian/konfirmasi-pembelian/tampilSupplier')}}',
 			type : 'POST',
 			data : {
 				'supplier' : $('#dt_supplier').val(),
