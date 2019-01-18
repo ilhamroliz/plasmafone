@@ -586,47 +586,53 @@
 								<div>
 
 									<!-- widget content -->
-									<div class="widget-body no-padding">
+									<div class="widget-body">
 										
 										<div class="table-responsive">
 
-												<table class="table">
+											<table class="table">
 
-													<tbody>
-	
-														<tr class="success">
-															<td><strong>Nota</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_nota2"></td>
-														</tr>
-	
-														<tr class="danger">
-															<td><strong>Dari Outlet</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_from2"></td>
-														</tr>
-	
-														<tr class="warning">
-															<td><strong>Tujuan Outlet</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_destination2"></td>
-														</tr>
-	
-														<tr class="info">
-															<td><strong>Tanggal Distribusi</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_tgl2"></td>
-														</tr>
-	
-														<tr class="success">
-															<td><strong>Petugas</strong></td>
-															<td><strong>:</strong></td>
-															<td id="dt_by2"></td>
-														</tr>
-	
-													</tbody>
-	
-												</table>
+												<tbody>
+
+													<tr class="success">
+														<td><strong>Nota</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_nota2"></td>
+													</tr>
+
+													<tr class="danger">
+														<td><strong>Dari Outlet</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_from2"></td>
+													</tr>
+
+													<tr class="warning">
+														<td><strong>Tujuan Outlet</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_destination2"></td>
+													</tr>
+
+													<tr class="info">
+														<td><strong>Tanggal Distribusi</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_tgl2"></td>
+													</tr>
+
+													<tr class="success">
+														<td><strong>Petugas</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_by2"></td>
+													</tr>
+
+													<tr class="danger" id="namaItem_dt" style="display:none">
+														<td><strong>Nama Item</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_namaItems"></td>
+													</tr>
+
+												</tbody>
+
+											</table>
 
 											<table id="table_edit" class="table table-striped table-bordered table-hover" width="100%">
 
@@ -651,6 +657,26 @@
 												</tbody>
 	
 											</table>
+
+											<form id="form_editDistribusi" method="post">
+												<div class="row" id="form_edit" style="display:none">
+													<input type="hidden" name="distribusi" id="distribusi">
+													<input type="hidden" name="comp" id="comp">
+													<input type="hidden" name="item" id="item">
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="tags"> Qty Distribusi</label>
+															<input type="text" class="form-control" name="qty_distribusi" id="qty_distribusi" onkeyup="qtyChange()" placeholder="Qty Distribusi" />
+														</div>
+													</div>
+													<div class="col-md-6">
+														<div class="form-group">
+															<label for="tags"> Qty Diterima</label>
+															<input type="text" readonly class="form-control" name="qty_diterima" id="qty_diterima" placeholder="Qty Diterima" />
+														</div>
+													</div>
+												</div>
+											</form>
 											
 										</div>
 
@@ -664,6 +690,15 @@
 							<!-- end widget -->
 						</div>
 		
+					</div>
+
+					<div class="modal-footer" id="footer_edit" style="display:none">
+						<button type="button" class="btn btn-default" id="btn_cancel">
+							Kembali
+						</button>
+						<button type="button" class="btn btn-primary" onclick="simpan()">
+							Simpan
+						</button>
 					</div>
 
 				</div><!-- /.modal-content -->
@@ -871,11 +906,62 @@
 		    semua.api().ajax.reload();
 		}
 
+		function qtyChange(){
+			var qtyDistribusi = parseInt($('#qty_distribusi').val());
+			var qtyDiterima = parseInt($('#qty_diterima').val());
+
+			if (qtyDistribusi < qtyDiterima) {
+				$('#qty_distribusi').val(qtyDiterima);
+			}
+		}
+		
+		function simpan(){
+			axios.post(baseUrl+'/distribusi-barang/edit', $('#form_editDistribusi').serialize()).then(response => {
+
+				if (response.data.status == 'Access denied') {
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				} else {
+					
+
+				}
+
+			})
+		}
+
+		function ubah(distribusi, item, comp, namaItem, qtyDistribusi, qtyReceived){
+			$('#table_edit').DataTable().destroy();
+			$('#table_edit').hide();
+			$('#dt_namaItems').text(namaItem);
+			$('#distribusi').val(distribusi);
+			$('#comp').val(comp);
+			$('#item').val(item);
+			$('#qty_distribusi').val(qtyDistribusi);
+			$('#qty_diterima').val(qtyReceived);
+			$('#namaItem_dt').show('slow');
+			$('#btn_cancel').attr('onclick', 'edit("'+distribusi+'")');
+			$('#form_edit').show('slow');
+			$('#footer_edit').show('slow');
+			
+		}
+
 		function edit(id){
 			var tbl_edit = '';
+			$('#form_edit').hide();
 			$('#table_edit').DataTable().destroy();
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Memproses...');
+			$('#namaItem_dt').hide();
+			$('#table_edit').show();
+			$('#footer_edit').hide();
 
 			tbl_edit = $('#table_edit').dataTable({
 				"processing": true,
