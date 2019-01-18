@@ -1145,7 +1145,7 @@
 			});
 		}
 
-		function remove(distribusi, dDistribusi, nota, item){
+		function remove(distribusi, dDistribusi, nota, item, from, destination, qtyDistribusi){
 			$.SmartMessageBox({
 				title : "Pesan!",
 				content : 'Apakah Anda yakin akan menghapus data ini?',
@@ -1164,18 +1164,9 @@
 					$.ajax({
 						url: baseUrl + '/distribusi-barang/hapus',
 						type: 'post',
-						data: {distribusi: distribusi, detail: dDistribusi, nota: nota, item: item},
+						data: {distribusi: distribusi, detail: dDistribusi, nota: nota, item: item, from: from, destination: destination, qtyDistribusi: qtyDistribusi},
 						success: function(response){
-							if (response == "lengkapi data") {
-								$.smallBox({
-									title : "Peringatan!",
-									content : "Lengkapi data distribusi barang",
-									color : "#A90329",
-									timeout: 5000,
-									icon : "fa fa-times bounce animated"
-								});
-								$('#overlay').fadeOut(200);
-							} else if (response == "false") {
+							if (response == "false") {
 								$.smallBox({
 									title : "Gagal",
 									content : "Upsss. Terjadi kesalahan",
@@ -1194,6 +1185,8 @@
 									icon : "fa fa-check bounce animated"
 								});
 								$('#overlay').fadeOut(200);
+								$('#deleteModal').modal('hide');
+								refresh_tab();
 								
 							}
 						}, error:function(x, e) {
