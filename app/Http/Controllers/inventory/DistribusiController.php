@@ -36,6 +36,12 @@ class DistribusiController extends Controller
         return view('inventory.distribusi.add');
     }
 
+    public function edit(Request $request)
+    {
+        $data = $request->all();
+        dd($data);
+    }
+
     public function getProses()
     {
         $proses = DB::table('d_distribusi')
@@ -45,6 +51,7 @@ class DistribusiController extends Controller
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
                     ->where('d_distribusi_dt.dd_status', 'On Going')
                     ->orWhere('d_distribusi_dt.dd_qty_received', '<', 'd_distribusi_dt.dd_qty')
+                    ->orderBy('d_distribusi.d_date', 'desc')
                     ->groupBy('d_distribusi.d_nota');
 
         return DataTables::of($proses)
@@ -163,10 +170,10 @@ class DistribusiController extends Controller
             if (Access::checkAkses(9, 'update') == true) {
 
                 if ($data->status == "Received") {
-                    return '<div class="text-center"><button disabled="disabled" class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="ubah(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+                    return '<div class="text-center"><button disabled="disabled" class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data"><i class="glyphicon glyphicon-edit"></i></button></div>';
                 }
 
-                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="ubah(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->idItem) . '\', \'' . Crypt::encrypt($data->dd_comp) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="ubah(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->idItem) . '\', \'' . Crypt::encrypt($data->dd_comp) .'\', \'' . $data->nama_item .'\', \'' . $data->qty .'\', \'' . $data->qty_received .'\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
 
             }
 
