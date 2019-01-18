@@ -303,6 +303,15 @@ Route::group(['middleware' => 'auth'], function () {
     //master pembayaran
 	Route::get('master/pembayaran', 'master\pembayaran\MasterPembayaranController@index');
 	Route::get('master/pembayaran/get-dataY', 'master\pembayaran\MasterPembayaranController@getDataY');
+    Route::get('master/pembayaran/get-dataN', 'master\pembayaran\MasterPembayaranController@getDataN');
+    Route::get('master/pembayaran/get-outlet-payment', 'master\pembayaran\MasterPembayaranController@getOutletPayment');
+    Route::get('master/pembayaran/nonaktif', 'master\pembayaran\MasterPembayaranController@setNonaktif');
+    Route::get('master/pembayaran/aktifkan', 'master\pembayaran\MasterPembayaranController@setAktif');
+    Route::get('master/pembayaran/get-detail', 'master\pembayaran\MasterPembayaranController@getDetail');
+    Route::get('master/pembayaran/update', 'master\pembayaran\MasterPembayaranController@update');
+    Route::post('master/pembayaran/simpan-payment', 'master\pembayaran\MasterPembayaranController@saveOutletPayment');
+    Route::post('master/pembayaran/delete-payment', 'master\pembayaran\MasterPembayaranController@deleteOutletPayment');
+    Route::post('master/pembayaran/simpan', 'master\pembayaran\MasterPembayaranController@save');
     //end pembayaran
 
 	// Pembelian
@@ -481,9 +490,11 @@ Route::group(['middleware' => 'auth'], function () {
 	// Route::get('/newprint', 'PembelianController@new_print');
 
 	// End Return Barang
-    Route::get('pembelian/refund', 'RefundController@index');
-    // Refund
 
+    // Refund
+    Route::get('pembelian/refund', 'RefundController@index');
+    Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
+    Route::get('pembelian/refund/tambah', 'RefundController@add');
     //end Refund
 
 	// Pembelian end

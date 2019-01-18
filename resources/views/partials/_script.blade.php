@@ -71,9 +71,6 @@
 		<script src="{{ asset('template_asset/js/app.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
 
-        <!-- Datepicker -->
-        <script src="{{ asset('template_asset/js/plugin/datapicker/bootstrap-datepicker.js') }}"></script>
-
 		<!-- SmartChat UI : plugin -->
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.ui.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/smart-chat-ui/smart.chat.manager.min.js') }}"></script>
@@ -85,6 +82,8 @@
 		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 		<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+        <!-- Datepicker -->
+        <script src="{{ asset('template_asset/js/plugin/datapicker/bootstrap-datepicker.js') }}"></script>
 		<!-- <script src="{{ asset('template_asset/jquery/jquery.autocomplete.min.js') }}"></script> -->
 		<script>
 		var responsiveHelper_dt_basic = undefined;
