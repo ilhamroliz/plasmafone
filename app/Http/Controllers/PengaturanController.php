@@ -39,7 +39,8 @@ class PengaturanController extends Controller
     public function log_kegiatan()
     {
         if (Plasmafone::checkAkses(43, 'read') == true) {
-            return view('pengaturan.log_activity.index');
+            $date = Carbon::now()->format('d/m/Y');
+            return view('pengaturan.log_activity.index')->with(compact('date'));
         } else {
             return view('errors.access_denied');
         }

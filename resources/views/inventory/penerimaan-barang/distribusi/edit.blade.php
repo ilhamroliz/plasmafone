@@ -437,7 +437,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
 										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
 										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-										'<input type="text" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row form-control">'+
+										'<input type="text" autofocus id="qty" name="qty" class="qty row form-control">'+
 									'</div>'+
 								'</div>';
 
@@ -450,7 +450,20 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						if ((event.which < 48 || event.which > 57)) {
 							event.preventDefault();
 						}
+						
+						
 					});
+					$('.qty').on("keyup", function (evt){
+						evt.preventDefault();
+						var input = parseInt($(this).val());
+						
+						if (isNaN(input)){
+							input = 0;
+						}
+						if (input > parseInt(response.data.qtySisa)){
+							$(this).val(response.data.qtySisa);
+						}
+					})
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 
@@ -464,12 +477,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		}
 
 		function qtyTerima(qtySisa) {
-			var input = $("#qty").val();
+			var input = parseInt($("#qty").val());
 			if (isNaN(input)){
 				input = 0;
 			}
-			if (input > qtySisa){
-				input = qtySisa;
+			if (input > parseInt(qtySisa)){
 				$("#qty").val(input);
 			}
 		}

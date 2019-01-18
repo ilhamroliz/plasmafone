@@ -403,7 +403,7 @@
 		var tambahKonfirmasi;
 		var input = $('#dt_harga2').val();
 		var input2 = $('#dt_angka').val();
-		var tambahRencana;
+		var tambahRencana; 
         $(document).ready(function () {
 			getSupplier();
 			$( "#tpMemberNama" ).autocomplete({
@@ -426,8 +426,48 @@
 			$("input[type='text']").on("click", function () {
 				$(this).select();
 				});
+
+			$(document).on("click","span",function(){
+				$(this).find("span[class~='caption']").hide();
+				$(this).find("input[class~='editor']").fadeIn().focus();
+				// alert();
+			});
             
         });
+
+		function editFor(id)
+		{
+			$('#span'+id).hide();
+			$('#i_nama'+id).show();
+		
+		}
+
+		$(document).on("keydown",".editor",function(e){
+			if(e.keyCode==13){
+
+			var target=$(e.target); 
+			var harga=target.val();
+			var id=target.attr("data-id");
+
+			$.ajax({
+						url : '{{url('/pembelian/konfirmasi-pembelian/editDumy')}}',
+						type: "POST",
+						data: { 
+							'id' : id,
+							'harga' : harga,
+							_token : '{{ csrf_token() }}'
+
+						},
+						dataType: "JSON",
+						success: function(data)
+						{
+							reload_table();	
+						},
+						
+				}); 
+			}
+
+			});
 
 		function formatRupiah(angka, prefix)
     	{
@@ -873,16 +913,43 @@
  
 
 		function reload_data(){
-        table_registrasi= $('#table-rencana').DataTable({
-				"language" : dataTableLanguage,
-				"ajax": {
-						"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd')}}',
-						"type": "POST",  
-						"data": function ( data ) {
-							data._token = '{{ csrf_token() }}';
+        // table_registrasi= $('#table-rencana').DataTable({
+		// 		"language" : dataTableLanguage,
+		// 		"ajax": {
+		// 				"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd')}}',
+		// 				"type": "POST",  
+		// 				"data": function ( data ) {
+		// 					data._token = '{{ csrf_token() }}';
+		// 				},
+		// 			},
+		// 	} );
+
+		$.ajax({
+						url : '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd')}}',
+						type: "POST",
+						data: {
+							_token : '{{ csrf_token() }}'
+
 						},
-					},
-			} );
+						dataType: "JSON",
+						success: function(data)
+						{
+							if(data.data == 'SUKSES'){
+								reload_data_trans();	
+							}else{
+								$.smallBox({
+									title : "Peringatan...!!!",
+									content : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Pengajuan</i>",
+									color : "#C46A69",
+									iconSmall : "fa fa-times fa-2x fadeInRight animated",
+									timeout : 4000
+								});
+
+							}
+							
+						},
+						
+				}); 
 		}
 
 		function reload_data_trans(){
@@ -899,6 +966,7 @@
 		}
  
 		function reload_table(){
+			
 			table_registrasi_trans.ajax.reload(null, false);
 
 		}

@@ -116,11 +116,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								<form id="cariMPForm">
 									<div class="col-md-12 no-padding padding-top-15">
 										<div class="col-md-4">
-											<div class="input-group" id="date-range" style="">
-                                                <input type="text" class="form-control" id="tglAwal" name="tglAwal" value="{{ $startDate }}" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
-												<span class="input-group-addon bg-custom text-white b-0">to</span>
-                                                <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
-											</div>
+
+                                            <div>
+                                                <div class="input-group input-daterange date-range">
+                                                    <input type="text" class="form-control" id="tglAwal" name="tglAwal" value="{{ $startDate }}" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+                                                    <span class="input-group-addon bg-custom text-white b-0">to</span>
+                                                    <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+                                                </div>
+                                            </div>
+											
 										</div>
 
 										<div class="col-md-4">
@@ -188,11 +192,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 <form id="cariOTForm">
 									<div class="col-md-12 no-padding padding-top-15">
 										<div class="col-md-4">
-											<div class="input-group" id="date-range" style="">
-                                                <input type="text" class="form-control" id="tglAwalOT" name="tglAwalOT" value="{{ $startDate }}" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
-												<span class="input-group-addon bg-custom text-white b-0">to</span>
-                                                <input type="text" class="form-control" id="tglAkhirOT" name="tglAkhirOT" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
-											</div>
+
+                                            <div>
+                                                <div class="input-group input-daterange date-range">
+                                                    <input type="text" class="form-control" id="tglAwalOT" name="tglAwalOT" value="{{ $startDate }}" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+                                                    <span class="input-group-addon bg-custom text-white b-0">to</span>
+                                                    <input type="text" class="form-control" id="tglAkhirOT" name="tglAkhirOT" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+                                                </div>
+                                            </div>
+											
 										</div>
 
 										<div class="col-md-1">
@@ -262,34 +270,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				}
 			});
 
-            $( "#tglAwal" ).datepicker({
-                language: "id",
-                format: 'dd/mm/yyyy',
-                prevText: '<i class="fa fa-chevron-left"></i>',
-                nextText: '<i class="fa fa-chevron-right"></i>',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-            $( "#tglAkhir" ).datepicker({
-                language: "id",
-                format: 'dd/mm/yyyy',
-                prevText: '<i class="fa fa-chevron-left"></i>',
-                nextText: '<i class="fa fa-chevron-right"></i>',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-            $( "#tglAwalOT" ).datepicker({
-                language: "id",
-                format: 'dd/mm/yyyy',
-                prevText: '<i class="fa fa-chevron-left"></i>',
-                nextText: '<i class="fa fa-chevron-right"></i>',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-            $( "#tglAkhirOT" ).datepicker({
+            $( ".date-range" ).datepicker({
                 language: "id",
                 format: 'dd/mm/yyyy',
                 prevText: '<i class="fa fa-chevron-left"></i>',

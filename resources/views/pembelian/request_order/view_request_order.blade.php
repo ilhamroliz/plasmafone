@@ -136,6 +136,23 @@
                                     </div>
 
                                     <div class="tab-pane fade" id="hr2">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 text-right" style="margin-top:1%;margin-bottom:1%">
+                                        <div class="col-md-4 pull-right" >
+											<div class="input-group" id="date-range" style="">
+												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+												<span class="input-group-addon bg-custom text-white b-0">ke</span>
+												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+                            
+                                            </div>
+										</div>
+                                        <div class="col-md-7 pull-right">
+											<div class="form-group">
+												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()" >
+													<i class="fa fa-search"></i>
+												</button>
+											</div>											
+										</div>
+                                    </div>
                                         <table id="dt_all" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
@@ -215,7 +232,7 @@
     
 
 	<script type="text/javascript">
-		var menunggu, diproses, semua,inaktif;
+		var menunggu, diproses, semua,inaktif, table_proses;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -224,6 +241,31 @@
 
 
      $(document).ready(function(){
+
+        var tanggal = new Date().getDate();
+        var bulan = new Date().getMonth();
+        var tahun = new Date().getFullYear();
+        var arrbulan = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+        $('#tgl_awal').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+        $('#tgl_akhir').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+
+        $( "#tgl_awal" ).datepicker({
+			language: "id",
+			format: 'dd/mm/yyyy',
+			prevText: '<i class="fa fa-chevron-left"></i>',
+			nextText: '<i class="fa fa-chevron-right"></i>',
+			autoclose: true,
+			todayHighlight: true
+		});
+
+		$( "#tgl_akhir" ).datepicker({
+			language: "id",
+			format: 'dd/mm/yyyy',
+			prevText: '<i class="fa fa-chevron-left"></i>',
+			nextText: '<i class="fa fa-chevron-right"></i>',
+			autoclose: true,
+			todayHighlight: true
+		});
 
             $('#overlay').fadeIn(200);
             $('#load-status-text').text('Sedang Menyiapkan...');
@@ -243,45 +285,7 @@
                 phone : 480
             };
 
-            setTimeout(function () {
-
-            semua = $('#dt_all').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('/pembelian/request-pembelian/a') }}",
-                "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
-                    },
-                "columns":[
-                    {"data": "pr_id"},
-                    {"data": "c_name"},
-                    {"data": "i_nama"},
-                    {"data": "pr_qtyReq"},
-                    {"data": "pr_stsReq"},
-                    // {"data": "input"},
-                    // {"data": "aksi"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-                    }
-                },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-             $('#overlay').fadeOut(200);
-            }, 1000);
-
-
+            
             setTimeout(function () {
 
             menunggu = $('#waitingReq_table').dataTable({
@@ -355,6 +359,8 @@
             $('#overlay').fadeOut(200);
             }, 500);
 
+            tampil_diproses();
+
 
             
 
@@ -367,6 +373,26 @@
 		    diproses.api().ajax.reload();
 		    semua.api().ajax.reload();
 		}
+
+        function tampil_diproses(){
+                table_proses= $('#dt_all').DataTable({
+                    "ajax": {
+                                "url": '{{url('/pembelian/request-pembelian/a')}}',
+                                "type": 'post',  
+                                "data": function ( data ) {
+                                    data.tgl_akhir = $('#tgl_akhir').val();
+                                    data.tgl_awal = $('#tgl_awal').val();
+                                    data._token = '{{ csrf_token() }}';
+                                },
+                            },
+                    } );
+               
+            };
+
+        function search(){
+            table_proses.ajax.reload(null, false);
+        }
+
 
 		function hapus(val){
 
