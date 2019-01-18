@@ -76,14 +76,30 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                         <div class="col-md-12">
                                             <label class="input"> <i class="icon-append fa fa-font"></i>
                                                 <input type="text" name="username" id="namabarang" placeholder="Masukkan Nama/Kode Barang" style="text-transform: uppercase">
-                                                <b class="tooltip tooltip-bottom-right">Masukkan Nama/Kode Barang</b> </label>
+                                                <b class="tooltip tooltip-bottom-right">Masukkan Nama/Kode Barang</b>
+                                            </label>
+                                        </div>
+                                    </section>
+                                    <section class="form-group">
+                                        <div class="col col-6 padding-left-0">
+                                            <label class="input"> <i class="icon-append fa fa-money"></i>
+                                                <input type="text" name="username" id="namabarang" placeholder="Harga Baru" style="text-transform: uppercase">
+                                                <b class="tooltip tooltip-bottom-right">Harga Baru</b>
+                                            </label>
+                                        </div>
+                                        <div class="col col-6 padding-right-0">
+                                            <label class="input"> <i class="icon-append fa fa-money"></i>
+                                                <input type="text" name="username" id="namabarang" placeholder="Harga Terakhir" style="text-transform: uppercase">
+                                                <b class="tooltip tooltip-bottom-right">Harga Terakhir</b>
+                                            </label>
                                         </div>
                                     </section>
                                     <section class="form-group">
                                         <div class="col-md-12">
                                             <label class="input"> <i class="icon-append fa fa-barcode"></i>
-                                                <input type="text" name="username" placeholder="Masukkan Kode Spesifik">
-                                                <b class="tooltip tooltip-bottom-right">Masukkan Kode Spesifik</b> </label>
+                                                <input type="text" name="username" placeholder="Masukkan Kode Spesifik" style="text-transform: uppercase">
+                                                <b class="tooltip tooltip-bottom-right">Masukkan Kode Spesifik</b>
+                                            </label>
                                         </div>
                                     </section>
                                     <section class="form-group">
@@ -92,7 +108,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <tr>
                                                 <th style="width: 25%;">Posisi</th>
                                                 <th style="width: 40%;">Kode Spesifik</th>
-                                                <th style="width: 20%;">Nota DO</th>
+                                                <th style="width: 20%;">Harga</th>
                                                 <th style="width: 15%;">Aksi</th>
                                             </tr>
                                             </thead>

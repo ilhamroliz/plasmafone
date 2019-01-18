@@ -79,7 +79,14 @@
         overflow-x: hidden;
         /* add padding to account for vertical scrollbar */
         padding-right: 20px;
-    } 
+    }
+    .padding-left-0 {
+        padding-left: 0px !important;
+    }
+
+    .padding-right-0 {
+        padding-right: 0px !important;
+    }
 	/* .modal-backdrop{
 		position: relative;
 	} */
