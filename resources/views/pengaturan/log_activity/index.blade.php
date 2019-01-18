@@ -105,11 +105,15 @@
 								<div class="row form-group">
 									<div class="col-lg-12 col-md-12 col-sm-12">
 										<div class="col-md-4">
-											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
-												<span class="input-group-addon bg-custom text-white b-0">to</span>
-												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+
+											<div>
+												<div class="input-group input-daterange" id="date-range">
+													<input type="text" class="form-control" id="tgl_awal" name="tgl_awal"  placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+													<span class="input-group-addon bg-custom text-white b-0">to</span>
+													<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir"  placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+												</div>
 											</div>
+											
 										</div>
 										<div class="col-md-7">
 											<div class="form-group">
@@ -179,16 +183,7 @@
 			language: dataTableLanguage
 		});
 
-		$( "#tgl_awal" ).datepicker({
-			language: "id",
-			format: 'dd/mm/yyyy',
-			prevText: '<i class="fa fa-chevron-left"></i>',
-			nextText: '<i class="fa fa-chevron-right"></i>',
-			autoclose: true,
-			todayHighlight: true
-		});
-
-		$( "#tgl_akhir" ).datepicker({
+		$( "#date-range" ).datepicker({
 			language: "id",
 			format: 'dd/mm/yyyy',
 			prevText: '<i class="fa fa-chevron-left"></i>',
