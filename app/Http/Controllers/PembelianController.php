@@ -1363,11 +1363,11 @@ class PembelianController extends Controller
                 $i = 1;
                 foreach ($menunggu as $key) {
                 $row = array();
-                $row[] = $i++;
-                $row[] = $key->c_name;
                 $row[] = $key->i_nama;
                 $row[] = $key->pr_qtyApp;
-                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.number_format($key->pr_harga_satuan) .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
+                $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . number_format($key->pr_harga_satuan) . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' .  number_format($key->pr_harga_satuan) . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
+                // $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . $key->pr_harga_satuan . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' . $key->pr_harga_satuan . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
+                // $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.number_format($key->pr_harga_satuan) .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
                 // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 $data[] = $row;
                 }
@@ -1434,55 +1434,65 @@ class PembelianController extends Controller
     
             $insert = DB::table('d_purchase_plan_dd')->insert($addAkses);
 
-            if(!$insert){
-                $menunggu = DB::table('d_purchase_plan_dd')
-                ->select(
-                    'd_purchase_plan_dd.*',
-                    'd_item.i_nama',
-                    'm_company.c_name'
-                )
-                ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
-                ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
-                ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
-                ->get();
-                $data = array();
-                $i = 1;
-                foreach ($menunggu as $key) {
-                $row = array();
-                
-                $row[] = $key->i_nama;
-                $row[] = '<div class="text-center"><input type="text" class="editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
-                // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                $data[] = $row;
-                }
-
-                echo json_encode(array("data"=>$data));
-
+            if($insert){
+                $status = "SUKSES";
+                echo json_encode(array("data"=>$status));
             }else{
-                $menunggu = DB::table('d_purchase_plan_dd')
-                ->select(
-                    'd_purchase_plan_dd.*',
-                    'd_item.i_nama',
-                    'm_company.c_name'
-                )
-                ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
-                ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
-                ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
-                ->get();
-                $data = array();
-                $i = 1;
-                foreach ($menunggu as $key) {
-                $row = array();
-               
-                $row[] = $key->i_nama;
-                $row[] = $key->pr_qtyApp;
-                $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.$key->pr_harga_satuan .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
-                // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                $data[] = $row;
-                }
-
-                echo json_encode(array("data"=>$data));
+                $status = "GAGAL";
+                echo json_encode(array("data"=>$status));
             }
+
+            // if(!$insert){
+            //     $menunggu = DB::table('d_purchase_plan_dd')
+            //     ->select(
+            //         'd_purchase_plan_dd.*',
+            //         'd_item.i_nama',
+            //         'm_company.c_name'
+            //     )
+            //     ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+            //     ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
+            //     ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
+            //     ->get();
+            //     $data = array();
+            //     $i = 1;
+            //     foreach ($menunggu as $key) {
+            //     $row = array();
+                
+            //     $row[] = $key->i_nama;
+            //     $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . $key->pr_harga_satuan . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' . $key->pr_harga_satuan . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
+            //     // $row[] = '<div class="text-center"><input type="text" class="editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
+            //     // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     $data[] = $row;
+            //     }
+
+            //     echo json_encode(array("data"=>$data));
+
+            // }else{
+            //     $menunggu = DB::table('d_purchase_plan_dd')
+            //     ->select(
+            //         'd_purchase_plan_dd.*',
+            //         'd_item.i_nama',
+            //         'm_company.c_name'
+            //     )
+            //     ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+            //     ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
+            //     ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
+            //     ->get();
+            //     $data = array();
+            //     $i = 1;
+            //     foreach ($menunggu as $key) {
+            //     $row = array();
+               
+            //     $row[] = $key->i_nama;
+            //     $row[] = $key->pr_qtyApp;
+            //     $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . $key->pr_harga_satuan . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' . $key->pr_harga_satuan . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
+            //     // $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.$key->pr_harga_satuan .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
+            //     // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     $data[] = $row;
+            //     }
+
+            //     echo json_encode(array("data"=>$data));
+            // }
 
     }
 
