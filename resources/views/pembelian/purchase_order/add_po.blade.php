@@ -92,10 +92,10 @@
 											<fieldset>
 											<div class="form-group">
 													
-													<label class="col-md-2" for="prepend"> <h6>Pilih Supplier</h6></label>
-													<div class="col-md-6">
+													<label class="col-md-2" for="prepend">Pilih Supplier</label>
+													<div class="col-md-3">
 										                <div class="icon-addon addon-sm">
-														<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
+														<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="tampilData()">
 															<option selected="" value="00">----pilih semua Supplier----</option>
 														</select>
 										                    <label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="email"></label>
@@ -105,8 +105,8 @@
 												</div>
 
 												<div class="form-group">
-												<label class="col-md-2" for="prepend"> <h6>Tanggal Di butuhkan</h6></label>
-													<div class="col-md-6">
+												<label class="col-md-2" for="prepend"> Jatuh Tempo</label>
+													<div class="col-md-3">
 										                <div class="icon-addon addon-sm">
 														<input type="text" class="form-control" id="due_date" name="tgl_awal" placeholder="Due Date" >
 										                    <label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
@@ -116,14 +116,38 @@
 												</div>
 
 												<div class="form-group">
-												<label class="col-md-2" for="prepend"> <h6>Jatuh Tempo</h6></label>
-													<div class="col-md-6">
-										                <div class="icon-addon addon-sm">
-														<input type="text" class="form-control" id="jt" name="tgl_awal" placeholder="jatuh Tempo" >
-										                    <label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
-										                </div>
+													<label class="col-md-2" for="prepend" > <label>PIC</label></label>
+													<div class="col-md-3">
+														<div class="icon-addon addon-sm">
+														<input class="form-control col-md-10" name="" id="pic" style="padding-right:50%" readonly>
+															<label for="email" class="glyphicon glyphicon-user" rel="tooltip" title="" ></label>
+														</div>
 													</div>
-													
+												</div>
+												<div class="form-group">
+													<label class="col-md-2" for="prepend" > <label>No Telepon</label></label>
+													<div class="col-md-3">
+														<div class="icon-addon addon-sm">
+														<input class="form-control col-md-3" name="" id="telepon" style="padding-right:50%" readonly>
+															<label for="email" class="glyphicon glyphicon-phone-alt" rel="tooltip" title="" ></label>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-2" for="prepend" > <label>No FAx</label></label>
+													<div class="col-md-3">
+														<div class="icon-addon addon-sm">
+														<input class="form-control col-md-10" name="" id="fax" style="padding-right:50%" readonly>
+															<label for="email" class="glyphicon glyphicon-print" rel="tooltip" title="" ></label>
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<label class="col-md-2" for="prepend" > <label>Alamat</label></label>
+													<div class="col-md-3">
+														<textarea class="form-control" name="" id="alamat" style="padding-right:50%" readonly></textarea>
+														</div>
+													</div>
 												</div>
 												
 											</fieldset>
@@ -215,7 +239,7 @@ $(document).ready(function () {
 		// var arrbulan = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
 		var arrbulan = ["01","02","03","04","05","06","07","08","09","10","11","12"];
 		$('#due_date').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
-
+		
 	reload_data();
 	getSupplier();
 	getOutlet_po();
@@ -229,6 +253,13 @@ $(document).ready(function () {
 			oTable.draw();
 			e.preventDefault();
 		})
+
+
+
+// -------------------------------------------------------
+
+
+// --------------------------------------------------------
 
 	
 
@@ -281,6 +312,30 @@ function updateTotalTampil() {
     {
         return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
     }
+
+function tampilData(){
+	tampilSupplier();
+	reload_table();
+}
+
+function tampilSupplier(){
+		$.ajax({
+			url : '{{url('/pembelian/konfirmasi-pembelian/tampilSupplier')}}',
+			type : 'POST',
+			data : {
+				'supplier' : $('#dt_supplier').val(),
+					_token : '{{ csrf_token() }}'
+			},
+			dataType : "JSON",
+			success : function(data){
+				$('#pic').val(data.s_name);
+				$('#telepon').val(data.s_phone);
+				$('#fax').val(data.s_fax);
+				$('#alamat').val(data.s_address);
+			}
+
+		});
+	}
 
 function reload_data(){
       // table_registrasi.ajax.reload(null, false);
