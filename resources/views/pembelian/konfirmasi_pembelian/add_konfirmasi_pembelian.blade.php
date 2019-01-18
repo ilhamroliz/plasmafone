@@ -153,7 +153,7 @@
 									<div class="form-group">
 										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:10%"> <label>Alamat</label></label>
 										<div class="col-md-3">
-											<textarea class="form-control" name="" id="fax" style="padding-right:50%" readonly></textarea>
+											<textarea class="form-control" name="" id="alamat" style="padding-right:50%" readonly></textarea>
 											</div>
 										</div>
 									</div>

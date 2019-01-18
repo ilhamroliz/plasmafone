@@ -1304,13 +1304,9 @@ class PembelianController extends Controller
             ->addColumn('pr_price', function ($confirmOrder) {
 
                 return ''.number_format($confirmOrder->pr_price, 0).'';
-                //  ''.number_format($confirmOrder->pr_price, 0).'';
+                
 
             })
-
-
-            
-            
             ->addColumn('aksi', function ($confirmOrder) {
                 if (Plasma::checkAkses(47, 'update') == false) {
                     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
@@ -1320,6 +1316,31 @@ class PembelianController extends Controller
             })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
+    }
+
+    public function tampilSupplier(Request $request)
+    {
+        $supplier = $request->input('supplier');
+        $query = DB::table('d_supplier')
+        ->select('d_supplier.*')
+        ->where('d_supplier.s_id','=',$supplier)
+        ->get();
+
+        foreach ($query as $key){
+            $s_name = $key->s_name;
+            $s_phone = $key->s_phone;
+            $s_fax = $key->s_fax;
+            $s_address = $key->s_address;
+          }
+
+          $data = array(
+              's_name'=>$s_name,
+              's_phone'=>$s_phone,
+              's_fax'=>$s_fax,
+              's_address'=>$s_address
+          );
+
+          echo json_encode($data);
     }
 
     public function view_confirmAll()
