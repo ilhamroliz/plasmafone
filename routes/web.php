@@ -19,7 +19,7 @@ Route::get('/helper', function () {
 
 Route::get("/", function () {
 	if (Auth::check()) {
-		return redirect()->route("home");
+		return redirect()->route("dashboard");
 	} else {
 		return redirect()->route("login");
 	}
@@ -535,12 +535,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('/inventory/penerimaan/distribusi/item-receive/add', 'inventory\ReceptionController@itemReceiveAdd');
 	// End penerimaan barang distribusi
 
-	// Distribusi barang
-	Route::get('/inventory/distribusi', 'inventory\DistribusiController@index_distribusi');
-	Route::get('/inventory/distribusi/get-purchase/{id}', 'inventory\DistribusiController@show_purchase');
-	Route::match(['get', 'post'], '/inventory/distribusi/print', 'inventory\DistribusiController@print');
-	// End ditribusi barang
-
 	//=== OPNAME BARANG
 
 	Route::get('/inventory/opname-barang/pusat', 'inventory\opnameBarangController@pusat');
@@ -774,6 +768,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// =====Distribusi Barang=====
 	Route::get('distribusi-barang', 'inventory\DistribusiController@index');
+	Route::get('distribusi-barang/proses', 'inventory\DistribusiController@getProses')->name('distribusi.getproses');
+	Route::get('distribusi-barang/terima', 'inventory\DistribusiController@getTerima')->name('distribusi.getterima');
+	Route::get('distribusi-barang/detail/{id}', 'inventory\DistribusiController@detail');
+	Route::get('distribusi-barang/detail-edit/{id}', 'inventory\DistribusiController@detailEdit');
+	Route::get('distribusi-barang/detail-terima/{id}', 'inventory\DistribusiController@detailTerima');
+	Route::get('distribusi/tambah-distribusi', 'inventory\DistribusiController@add');
 	Route::get('distribusi-barang/cari-outlet', 'inventory\DistribusiController@cariOutlet');
 	Route::get('distribusi-barang/cari-stock', 'inventory\DistribusiController@cariStock');
 	Route::get('distribusi-barang/search-stock', 'inventory\DistribusiController@searchStock');

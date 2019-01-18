@@ -36,7 +36,7 @@
 	<!-- MAIN CONTENT -->
 	<div id="content">
 
-		<div class="row hidden-mobile">
+		<div class="row">
 
 			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 

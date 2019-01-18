@@ -10,6 +10,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Carbon\Carbon;
 use Response;
+use DataTables;
 Use Auth;
 use DB;
 use Session;
@@ -19,7 +20,161 @@ class DistribusiController extends Controller
     // Distribusi barang
     public function index()
     {
+        if (Access::checkAkses(9, 'read') == false) {
+            return view('errors/407');
+        }
         return view('inventory.distribusi.index');
+    }
+
+    public function add()
+    {
+        if (Access::checkAkses(9, 'insert') == false) {
+
+            return view('errors/407');
+
+        }
+        return view('inventory.distribusi.add');
+    }
+
+    public function getProses()
+    {
+        $proses = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_detailid', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->where('d_distribusi_dt.dd_status', 'On Going')
+                    ->orWhere('d_distribusi_dt.dd_qty_received', '<', 'd_distribusi_dt.dd_qty')
+                    ->groupBy('d_distribusi.d_nota');
+
+        return DataTables::of($proses)
+
+        ->addColumn('aksi', function ($proses) {
+
+            if (Access::checkAkses(9, 'update') == false) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            } else {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="hapus(\'' . Crypt::encrypt($proses->id) . '\', \'' . $proses->dd_detailid . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+
+            }
+
+        })
+
+        ->rawColumns(['aksi'])
+
+        ->make(true);
+    }
+
+    public function getTerima()
+    {
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                ->orWhere('d_distribusi_dt.dd_status', 'Received')
+                ->groupBy('d_distribusi.d_nota');
+
+        return DataTables::of($data)
+
+        ->addColumn('aksi', function ($data) {
+
+            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detailTerima(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+        })
+
+        ->rawColumns(['aksi'])
+
+        ->make(true);
+    }
+
+    public function detail($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', $id)
+                    ->get();
+            return response()->json(['status' => 'OK', 'data' => $data]);
+
+        }
+    }
+
+    public function detailTerima($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', $id)
+                    ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                    ->get();
+            return response()->json(['status' => 'OK', 'data' => $data]);
+
+        }
+    }
+
+    public function detailEdit($id = null)
+    {
+        $id = Crypt::decrypt($id);
+
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_item as idItem', 'd_distribusi_dt.dd_comp', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi_dt.dd_status as status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                ->where('d_distribusi.d_id', $id);
+
+        return DataTables::of($data)
+
+        ->addColumn('aksi', function ($data) {
+
+            if (Access::checkAkses(9, 'update') == true) {
+
+                if ($data->status == "Received") {
+                    return '<div class="text-center"><button disabled="disabled" class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="ubah(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+                }
+
+                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="ubah(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->idItem) . '\', \'' . Crypt::encrypt($data->dd_comp) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+            }
+
+        })
+
+        ->rawColumns(['aksi'])
+
+        ->make(true);
     }
 
     public function cariOutlet(Request $request)
