@@ -41,6 +41,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     Pembelian <span><i class="fa fa-angle-double-right"></i> Refund </span>
                 </h1>
             </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right padding-top-10">
+                @if(Plasma::checkAkses(6, 'insert') == true)
+                    <a class="btn btn-success" type="button" href="{{ url('pembelian/refund/tambah') }}"><i class="fa fa-plus"></i>&nbsp;Tambah Refund</a>
+                @endif
+            </div>
 
         </div>
 
@@ -63,7 +68,56 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         <div role="content">
                             <div class="widget-body no-padding form-horizontal">
                                 <div class="tab-content padding-10">
-
+                                    <div class="form-group">
+                                        <div class="col-md-3">
+                                            <div>
+                                                <div class="input-group input-daterange" id="date-range" style="">
+                                                    <input type="text" class="form-control" id="tglAwal" name="tglAwal" placeholder="Start" >
+                                                    <span class="input-group-addon bg-custom text-white b-0"></span>
+                                                    <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" placeholder="End">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <select class="select2" id="status">
+                                                <option value="all">Semua</option>
+                                                <option value="Y">Disetujui</option>
+                                                <option value="P">Menunggu</option>
+                                                <option value="N">Ditolak</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="select2" id="supplier">
+                                                <option value="Y">Semua Supplier</option>
+                                                @foreach($supplier as $dataSup)
+                                                    <option value="{{ $dataSup->s_id }}">{{ $dataSup->s_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" id="namaitem" placeholder="Masukan Nama Barang" style="text-transform: uppercase">
+                                            <input type="hidden" class="form-control" id="item">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <table class="table table-striped table-bordered table-hover" width="100%" id="historyrefund" style="cursor: pointer">
+                                                <thead>
+                                                <tr>
+                                                    <th style="width: 15%;">Tanggal</th>
+                                                    <th style="width: 15%;">Supplier</th>
+                                                    <th style="width: 15%;">Nota</th>
+                                                    <th style="width: 35%;">Barang</th>
+                                                    <th style="width: 10%;">Status</th>
+                                                    <th style="width: 10%;">Aksi</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -77,6 +131,19 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 @section('extra_script')
     <script type="text/javascript">
-
+        $(document).ready(function () {
+            $('#date-range').datepicker({
+                autoclose: true,
+                todayHighlight: true
+            });
+            $( "#namaitem" ).autocomplete({
+                source: baseUrl+'/penjualan-reguler/cari-sales',
+                minLength: 1,
+                select: function(event, data) {
+                    $("#salesman").val(data.item.id);
+                    $("#cari-member").focus();
+                }
+            });
+        })
     </script>
 @endsection
