@@ -129,7 +129,7 @@
 								<div class="tab-content padding-10">
 								<div class="form-group col-md-6">
                                             <select class="form-control col-md-12" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
-                                                <option selected="" value="semua">----pilih semua Supplier----</option>
+                                                <option selected="" value="semua">----Pilih Semua Outlet----</option>
                                             </select>
                                         </div>
 
@@ -726,6 +726,9 @@
 						data._token = '{{ csrf_token() }}';
                     },
                 },
+		"language": {
+					"emptyTable": "Data Sedang Di proses Oleh User Lain"
+					},
         } );
 	}
 	
@@ -741,7 +744,10 @@
 						data._token = '{{ csrf_token() }}';
                     },
                 },
-        } );
+		"language": {
+			"emptyTable": "Data Sedang Di proses Oleh User Lain"
+			},
+        });
     }
 
 	function reload_table_dumy(){
@@ -877,7 +883,7 @@
 				success: function(data)
 				{
 				$('#dt_supplier').empty(); 
-				row = "<option selected='' value='semua'>SEMUA OUTLET</option>";
+				row = "<option selected='' value='semua'>----Pilih Semua Outlet----</option>";
 				$(row).appendTo("#dt_supplier");
 				$.each(data, function(k, v) {
 					row = "<option value='"+v.pr_compReq+"'>"+v.c_name+"</option>";

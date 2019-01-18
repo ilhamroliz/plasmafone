@@ -102,11 +102,7 @@
                                                                          class="fa fa-lg fa-check"></i> <span
                                             class="hidden-mobile hidden-tablet">Purchasing</span></a>
                                 </li>
-                                <li>
-                                    <a data-toggle="tab" href="#hr3"> <i style="color: #C79121;"
-                                                                         class="fa fa-lg fa-list"></i> <span
-                                            class="hidden-mobile hidden-tablet">Semua</span></a>
-                                </li>
+                                
                                 
                             </ul>
                         </header>
@@ -116,7 +112,7 @@
                             <div class="widget-body no-padding">
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
-                                    <div class="tab-pane fade in active" id="table-waiting">
+                                    <div class="tab-pane fade in active" id="hr1">
                                         <table id="dt_co" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
@@ -138,7 +134,7 @@
                                             <thead>
                                             <tr>
                                                 
-                                                <th data-hide="phone,tablet" width="15%">No</th>
+                                                <th data-hide="phone,tablet" width="1%">No</th>
                                                 <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Harga</th>
@@ -156,7 +152,7 @@
                                             <thead>
                                             <tr>
                                                 
-                                                <th data-hide="phone,tablet" width="15%">No</th>
+                                                <th data-hide="phone,tablet" width="1%">No</th>
                                                 <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>

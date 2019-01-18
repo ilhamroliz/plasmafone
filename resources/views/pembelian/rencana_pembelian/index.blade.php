@@ -102,11 +102,7 @@
                                                                          class="fa fa-lg fa-check"></i> <span
                                             class="hidden-mobile hidden-tablet"> Confirm </span></a>
                                 </li>
-                                <li>
-                                    <a data-toggle="tab" href="#hr4"> <i style="color: #A90329;"
-                                                                         class="fa fa-lg fa-list"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Semua </span></a>
-                                </li>
+                                
                             </ul>
                         </header>
                         <!-- widget div-->
@@ -146,21 +142,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade" id="hr4">
-                                        <table id="dt_semua" class="table table-striped table-bordered table-hover"
-                                               width="100%">
-                                            <thead>
-                                            <tr>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    
                                 </div>
                                 <!-- end widget body text-->
 

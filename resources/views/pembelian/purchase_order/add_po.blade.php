@@ -198,10 +198,14 @@ $('#load-status-text').text('Sedang Mengambil Data...');
 $(document).ready(function () {
 
 	$('#due_date').datepicker({
-		
-		format: "dd/mm/yyyy",
-		autoclose: true
+		language: "id",
+		format: 'dd/mm/yyyy',
+		prevText: '<i class="fa fa-chevron-left"></i>',
+		nextText: '<i class="fa fa-chevron-right"></i>',
+		autoclose: true,
+		todayHighlight: true
 	});
+	
 	var tanggal = new Date().getDate();
 	var bulan = new Date().getMonth();
 	var tahun = new Date().getFullYear();

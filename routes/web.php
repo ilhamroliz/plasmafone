@@ -267,8 +267,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('/master/outlet/nonactive/{id}', 'master\outlet\outlet_controller@nonactive');
 
-	// Route::get('/master/outlet/delete/{id}', 'master\outlet\outlet_controller@delete');
-
 	// End Master Outlet
 
 	// Master Member
@@ -312,7 +310,12 @@ Route::group(['middleware' => 'auth'], function () {
 	// Request Order
 
 	Route::get('/pembelian/request-pembelian/t', 'PembelianController@menunggu');
+
+	Route::post('/pembelian/request-pembelian/a', 'PembelianController@all');
+	Route::get('/pembelian/request-pembelian/tolak', 'PembelianController@requestTolak');
+
 	Route::get('/pembelian/request-pembelian/a', 'PembelianController@all');
+
 	// 1
 	Route::get('/pembelian/request-pembelian', 'PembelianController@request_order');
 	Route::get('/pembelian/request-pembelian/ddRequest', 'PembelianController@ddRequest');
@@ -352,17 +355,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Rencana Pembelian
 
-// <<<<<<< HEAD
-// 	Route::get('/pembelian/rencana-pembelian','PembelianController@rencana_pembelian');
-// 	Route::get('/pembelian/rencana-pembelian/tambah','PembelianController@addRencana');
-// 	Route::get('/pembelian/rencana-pembelian/get-item','PembelianController@getItem');
-// 	Route::post('/pembelian/rencana-pembelian/request-order-status','PembelianController@request_order_status');
-// =======
-// 	Route::get('/pembelian/rencana-pembelian', 'PembelianController@rencana_pembelian');
-// 	Route::get('/pembelian/rencana-pembelian/tambah', 'PembelianController@addRencana');
-
-// 	Route::post('/pembelian/rencana-pembelian/request-order-status', 'PembelianController@request_order_status');
-// >>>>>>> ff228b106c4823a9d890f856329d75eab291d36e
 
 	Route::get('/pembelian/rencana-pembelian', 'PembelianController@rencana_pembelian');
 	Route::get('/pembelian/rencana-pembelian/tambah', 'PembelianController@addRencana');
@@ -390,10 +382,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/pembelian/rencana-pembelian/getRequest_dumy', 'PembelianController@getRequest_dumy');
 	Route::POST('/pembelian/rencana-pembelian/editDumy', 'PembelianController@editDumy');
 	Route::get('/pembelian/rencana-pembelian/getComp_plan', 'PembelianController@getComp_plan');
-
-
-
-
 
 	// End Rencana Pembelian
 
@@ -498,6 +486,10 @@ Route::group(['middleware' => 'auth'], function () {
 	// Route::get('/newprint', 'PembelianController@new_print');
 
 	// End Return Barang
+    Route::get('pembelian/refund', 'RefundController@index');
+    // Refund
+
+    //end Refund
 
 	// Pembelian end
 
