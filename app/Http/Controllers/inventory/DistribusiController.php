@@ -42,10 +42,15 @@ class DistribusiController extends Controller
         dd($data);
     }
 
+    public function delete()
+    {
+        // 
+    }
+
     public function getProses()
     {
         $proses = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_detailid', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_detailid', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_distribusi_dt.dd_qty_received as qty_received')
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
@@ -64,7 +69,15 @@ class DistribusiController extends Controller
 
             } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="hapus(\'' . Crypt::encrypt($proses->id) . '\', \'' . $proses->dd_detailid . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+                if ($proses->qty_received == 0) {
+                    
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="hapus(\'' . Crypt::encrypt($proses->id) . '\', \'' . $proses->dd_detailid . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+                    
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+                }
 
             }
 
@@ -182,6 +195,46 @@ class DistribusiController extends Controller
         ->rawColumns(['aksi'])
 
         ->make(true);
+    }
+
+    public function detailDelete($id = null)
+    {
+        $id = Crypt::decrypt($id);
+
+        $data = DB::table('d_distribusi')
+                ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_detailid as detailid', 'd_distribusi_dt.dd_item as idItem', 'd_distribusi_dt.dd_comp', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi_dt.dd_status as status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                ->where('d_distribusi.d_id', $id);
+
+        return DataTables::of($data)
+
+        ->addColumn('aksi', function ($data) {
+
+            if (Access::checkAkses(9, 'update') == true) {
+
+                if ($data->qty_received != 0) {
+                    return '<div class="text-center"><button disabled="disabled" class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data"><i class="glyphicon glyphicon-trash"></i></button></div>';
+                }
+
+                return '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="remove(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->detailid) . '\', \'' . $data->nota . '\', \'' . Crypt::encrypt($data->idItem) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+
+            }
+
+        })
+
+        ->rawColumns(['aksi'])
+
+        ->make(true);
+    }
+
+    public function hapus(Request $request)
+    {
+        $data = $request->all();
+        dd($data);
     }
 
     public function cariOutlet(Request $request)

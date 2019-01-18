@@ -769,7 +769,7 @@ class ReceptionController extends Controller
                 ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
                 ->where('d_distribusi_dt.dd_status', 'On Going')
                 ->orWhere('d_distribusi_dt.dd_qty_received', '<', 'd_distribusi_dt.dd_qty')
-                ->orderBy('d_distribusi.d_date', 'desc')
+                ->orderBy('d_distribusi.d_date', 'asc')
                 ->groupBy('d_distribusi.d_nota');
 
         return DataTables::of($data)

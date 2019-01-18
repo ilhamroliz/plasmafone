@@ -706,6 +706,133 @@
 			</div><!-- /.modal-dialog -->
 
 		</div>
+
+		<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+
+					<div class="modal-header">
+
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+
+						<h4 class="modal-title" id="myModalLabel">Hapus Distribusi</h4>
+
+					</div>
+
+					<div class="modal-body">
+		
+						<div class="row">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+								<header>
+
+									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+									<h2 id="title_detail3"></h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget content -->
+									<div class="widget-body">
+										
+										<div class="table-responsive">
+
+											<table class="table">
+
+												<tbody>
+
+													<tr class="success">
+														<td><strong>Nota</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_nota3"></td>
+													</tr>
+
+													<tr class="danger">
+														<td><strong>Dari Outlet</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_from3"></td>
+													</tr>
+
+													<tr class="warning">
+														<td><strong>Tujuan Outlet</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_destination3"></td>
+													</tr>
+
+													<tr class="info">
+														<td><strong>Tanggal Distribusi</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_tgl3"></td>
+													</tr>
+
+													<tr class="success">
+														<td><strong>Petugas</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_by3"></td>
+													</tr>
+
+													<tr class="danger" id="namaItem_dt3" style="display:none">
+														<td><strong>Nama Item</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_namaItems3"></td>
+													</tr>
+
+												</tbody>
+
+											</table>
+
+											<table id="table_delete" class="table table-striped table-bordered table-hover" width="100%">
+
+												<thead>			                
+	
+													<tr>
+	
+														<th><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nama Barang</th>
+	
+														<th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Qty Distribusi</th>
+	
+														<th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Qty Diterima</th>
+	
+														<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+	
+													</tr>
+	
+												</thead>
+	
+												<tbody>
+													
+												</tbody>
+	
+											</table>
+											
+										</div>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+						</div>
+		
+					</div>
+
+				</div><!-- /.modal-content -->
+
+			</div><!-- /.modal-dialog -->
+
+		</div>
 		<!-- /.modal -->
 
 	</div>
@@ -951,6 +1078,150 @@
 			$('#form_edit').show('slow');
 			$('#footer_edit').show('slow');
 			
+		}
+
+		function hapus(id){
+			var table_delete = '';
+			$('#form_edit').hide();
+			$('#table_delete').DataTable().destroy();
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Memproses...');
+			$('#namaItem_dt').hide();
+			$('#table_delete').show();
+			$('#footer_edit').hide();
+
+			table_delete = $('#table_delete').dataTable({
+				"processing": true,
+				"serverSide": true,
+				"ajax": "{{ url('distribusi-barang/detail-delete/') }}"+"/"+id,
+				"columns":[
+					{"data": "nama_item"},
+					{"data": "qty"},
+					{"data": "qty_received"},
+					{"data": "aksi"}
+				],
+				"autoWidth" : true,
+				"language" : dataTableLanguage,
+				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+				"preDrawCallback" : function() {
+					// Initialize the responsive datatables helper once.
+					if (!responsiveHelper_dt_basic) {
+						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+					}
+				},
+				"rowCallback" : function(nRow) {
+					responsiveHelper_dt_basic.createExpandIcon(nRow);
+				},
+				"drawCallback" : function(oSettings) {
+					responsiveHelper_dt_basic.respond();
+				}
+			});
+
+			axios.get(baseUrl+'/distribusi-barang/detail/'+id).then(response => {
+
+				if (response.data.status == 'Access denied') {
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				} else {
+					$('#title_detail3').html('<strong>Hapus Distribusi Barang</strong>');
+					$('#dt_nota3').text(response.data.data[0].nota);
+					$('#dt_from3').text(response.data.data[0].from);
+					$('#dt_destination3').text(response.data.data[0].destination);
+					$('#dt_tgl3').text(response.data.data[0].date);
+					$('#dt_by3').text(response.data.data[0].by);
+					$('#overlay').fadeOut(200);
+					$('#deleteModal').modal('show');
+				}
+
+			});
+		}
+
+		function remove(distribusi, dDistribusi, nota, item){
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan menghapus data ini?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menghapus...');
+
+					$.ajaxSetup({
+						headers: {
+							'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+						}
+					});
+					$.ajax({
+						url: baseUrl + '/distribusi-barang/hapus',
+						type: 'post',
+						data: {distribusi: distribusi, detail: dDistribusi, nota: nota, item: item},
+						success: function(response){
+							if (response == "lengkapi data") {
+								$.smallBox({
+									title : "Peringatan!",
+									content : "Lengkapi data distribusi barang",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+								$('#overlay').fadeOut(200);
+							} else if (response == "false") {
+								$.smallBox({
+									title : "Gagal",
+									content : "Upsss. Terjadi kesalahan",
+									color : "#A90329",
+									timeout: 5000,
+									icon : "fa fa-times bounce animated"
+								});
+								$('#overlay').fadeOut(200);
+								
+							} else {
+								$.smallBox({
+									title : "Berhasil",
+									content : 'Transaksi Anda berhasil...!',
+									color : "#739E73",
+									timeout: 5000,
+									icon : "fa fa-check bounce animated"
+								});
+								$('#overlay').fadeOut(200);
+								
+							}
+						}, error:function(x, e) {
+							if (x.status == 0) {
+								alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+								$('#overlay').fadeOut(200);
+							} else if (x.status == 404) {
+								alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+								$('#overlay').fadeOut(200);
+							} else if (x.status == 500) {
+								alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+								$('#overlay').fadeOut(200);
+							} else if (e == 'parsererror') {
+								alert('Error.\nParsing JSON Request failed.');
+								$('#overlay').fadeOut(200);
+							} else if (e == 'timeout'){
+								alert('Request Time out. Harap coba lagi nanti');
+								$('#overlay').fadeOut(200);
+							} else {
+								alert('Unknow Error.\n' + x.responseText);
+								$('#overlay').fadeOut(200);
+							}
+						}
+					})
+
+				}
+	
+			});
 		}
 
 		function edit(id){

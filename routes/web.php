@@ -764,6 +764,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('distribusi-barang/terima', 'inventory\DistribusiController@getTerima')->name('distribusi.getterima');
 	Route::get('distribusi-barang/detail/{id}', 'inventory\DistribusiController@detail');
 	Route::get('distribusi-barang/detail-edit/{id}', 'inventory\DistribusiController@detailEdit');
+	Route::get('distribusi-barang/detail-delete/{id}', 'inventory\DistribusiController@detailDelete');
 	Route::get('distribusi-barang/detail-terima/{id}', 'inventory\DistribusiController@detailTerima');
 	Route::get('distribusi/tambah-distribusi', 'inventory\DistribusiController@add');
 	Route::get('distribusi-barang/cari-outlet', 'inventory\DistribusiController@cariOutlet');
@@ -771,6 +772,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('distribusi-barang/search-stock', 'inventory\DistribusiController@searchStock');
 	Route::post('distribusi-barang/simpan', 'inventory\DistribusiController@simpan');
 	Route::post('distribusi-barang/edit', 'inventory\DistribusiController@edit');
+	Route::post('distribusi-barang/hapus', 'inventory\DistribusiController@hapus');
 	Route::get('distribusi-barang/struk/{id}', 'inventory\DistribusiController@struck');
 	// =====End Distribusi barang=====
 

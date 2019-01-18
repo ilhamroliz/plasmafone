@@ -162,7 +162,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary" type="button" onclick="simpan()">
+                                                <button class="btn btn-primary" disabled type="button" onclick="simpan()" id="btn_simpan">
                                                     <i class="fa fa-save"></i>
                                                     Simpan
                                                 </button>
@@ -452,6 +452,10 @@
 		} else {
 			$("#tambahketable").attr('disabled', false);
 		}
+        var x = $("#table-distribusi tbody tr").length;
+        if (x != 0) {
+            $("#btn_simpan").removeAttr('disabled');
+        }
     }
 
     function ubahQty(stock, inputQty) {
@@ -470,6 +474,10 @@
 
     function hapus(id) {
         $('#'+id).remove();
+        var x = $("#table-distribusi tbody tr").length;
+        if (x == 0) {
+            $("#btn_simpan").attr('disabled', true);
+        }
     }
 
     function simpan() {
