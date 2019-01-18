@@ -1242,6 +1242,7 @@ class PembelianController extends Controller
                 'd_purchase_confirm.pr_idConf',
                 'd_purchase_confirm.pr_idPlan',
                 'd_purchase_confirm.pr_supplier',
+                'd_purchase_confirm.pr_confirmNumber',
                 'd_purchase_confirm.pr_item',
                 'd_purchase_confirm.pr_price',
                 'd_purchase_confirm.pr_qtyApp',
@@ -1277,6 +1278,7 @@ class PembelianController extends Controller
             ->select(
                 'd_purchase_confirm.pr_idConf',
                 'd_purchase_confirm.pr_idPlan',
+                'd_purchase_confirm.pr_confirmNumber',
                 'd_purchase_confirm.pr_supplier',
                 'd_purchase_confirm.pr_item',
                 'd_purchase_confirm.pr_price',
@@ -1298,6 +1300,17 @@ class PembelianController extends Controller
                 return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
 
             })
+
+            ->addColumn('pr_price', function ($confirmOrder) {
+
+                return ''.number_format($confirmOrder->pr_price, 0).'';
+                //  ''.number_format($confirmOrder->pr_price, 0).'';
+
+            })
+
+
+            
+            
             ->addColumn('aksi', function ($confirmOrder) {
                 if (Plasma::checkAkses(47, 'update') == false) {
                     return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';

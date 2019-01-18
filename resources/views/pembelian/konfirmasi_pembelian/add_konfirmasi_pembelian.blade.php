@@ -110,34 +110,56 @@
 						<form class="form-horizontal">
 						{{csrf_field()}}
 							<fieldset>
-							<div class="form-group">
-									
-									<label class="col-md-2" for="prepend"> <label>Pilih Supplier</label></label>
-									<div class="col-md-6">
-										<div class="icon-addon addon-sm">
-										<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
-											<option selected="" value="00">----pilih semua Supplier----</option>
-										</select>
-											<label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="email"></label>
+								<div class="form-group">
+										
+										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>Pilih Supplier</label></label>
+										<div class="col-md-3">
+											<div class="icon-addon addon-sm">
+											<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="tampilSupplier()">
+												<option selected="" value="00">----pilih semua Supplier----</option>
+											</select>
+												<label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="email"></label>
+											</div>
+										</div>
+										
+									</div>
+									<div class="form-group">
+										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>PIC</label></label>
+										<div class="col-md-3">
+											<div class="icon-addon addon-sm">
+											<input class="form-control col-md-10" name="" id="pic" style="padding-right:50%" readonly>
+												<label for="email" class="glyphicon glyphicon-user" rel="tooltip" title="" ></label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>No Telepon</label></label>
+										<div class="col-md-3">
+											<div class="icon-addon addon-sm">
+											<input class="form-control col-md-3" name="" id="telepon" style="padding-right:50%" readonly>
+												<label for="email" class="glyphicon glyphicon-phone-alt" rel="tooltip" title="" ></label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>No FAx</label></label>
+										<div class="col-md-3">
+											<div class="icon-addon addon-sm">
+											<input class="form-control col-md-10" name="" id="fax" style="padding-right:50%" readonly>
+												<label for="email" class="glyphicon glyphicon-print" rel="tooltip" title="" ></label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:10%"> <label>Alamat</label></label>
+										<div class="col-md-3">
+											<textarea class="form-control" name="" id="fax" style="padding-right:50%" readonly></textarea>
+											</div>
 										</div>
 									</div>
 									
-								</div>
-
-								<!-- <div class="form-group">
-								<label class="col-md-2" for="prepend"> <h6>Tanggal Di butuhkan</h6></label>
-									<div class="col-md-6">
-										<div class="icon-addon addon-sm">
-										<input type="text" class="form-control datepicker" id="due_date" name="tgl_awal" placeholder="Due Date" data-dateformat="dd/mm/YYYY">
-											<label for="email" class="glyphicon glyphicon-list" rel="tooltip" title="" data-original-title="email"></label>
-										</div>
-									</div>
-									
-								</div> -->
-								
 							</fieldset>
 						</form>
-
 					</div>
 				</div>
 			</div>
@@ -815,6 +837,25 @@
 			
 		}
 
+	}
+
+	function tampilSupplier(){
+		$.ajax({
+			url : '{{url('')}}',
+			type : 'POST',
+			data : {
+				'supplier' : $('#dt_supplier').val(),
+					_token : '{{ csrf_token() }}'
+			},
+			dataType : "JSON",
+			success : function(data){
+				$('#pic').val(data.s_name);
+				$('#telepon').val(data.s_phone);
+				$('#fax').val(data.s_fax);
+				$('#alamat').val(data.s_address);
+			}
+
+		});
 	}
 
 
