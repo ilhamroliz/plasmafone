@@ -557,6 +557,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					<div class="modal-body">
                         <div class="row no-padding margin-bottom-10 padding-bottom-10">
 							<form id="formOsTambah">
+                                <input type="hidden" id="idS">
 
 							<div class="col-md-12">
 								<label class="col-md-5">Lokasi Barang</label>
@@ -566,8 +567,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                             <div class="col-md-12">
 								<div class="col-md-5">
-									<input type="hidden" id="idComp" name="idComp" value="{{Auth::user()->m_comp}}">
-									<input type="text" class="form-control" id="nameComp" name="nameComp" value="Plasmafone Pusat" style="text-transform: uppercase" readonly>
+									<input type="hidden" id="eobIdComp" name="eobIdComp" value="{{Auth::user()->m_comp}}">
+									<input type="text" class="form-control" id="eobNameComp" name="eobNameComp" value="Plasmafone Pusat" style="text-transform: uppercase" readonly>
 								</div>
 
 								<div class="col-md-6">
@@ -585,7 +586,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						== BAGIAN QTY HPP dll ==-->
 
                         <div
-                            id="divQtyHpp"
+                            id="eobQtyHpp"
                             class="row no-padding margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15"
                             style="border-top: 1px solid black">
 
@@ -608,8 +609,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                             </div>
 
 							<div class="col-md-6">
-								<label class="col-md-4 margin-bottom-5 qtyR" style="display:none">Qty Real</label>
-                                <div class="col-md-8 margin-bottom-5 qtyR" style="display:none">
+								<label class="col-md-4 margin-bottom-5 eobQtyR">Qty Real</label>
+                                <div class="col-md-8 margin-bottom-5 eobQtyR">
                                     <input type="text" class="form-control text-align-right" id="eobQtyR" name="eobQtyR">
 								</div>
 
@@ -636,7 +637,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                             style="border-top: 1px solid black; display: none; ">
 
 							<div class="col-md-8">
-								<table id="expTable" class="table table-striped table-bordered table-hover expTable">
+								<table id="eoBxpTable" class="table table-striped table-bordered table-hover eobExpTable">
 									<thead>
 										<tr>
 											<th style="width: 60%"><i class="fa fa-fw fa-calendar txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tanggal Kadaluarsa</th>
@@ -645,7 +646,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 										</tr>
 									</thead>
 
-									<tbody id="expshowdata">
+									<tbody id="eobexpshowdata">
 										<tr>
 											<td class="text-align-left">
 												<select name="" id="" style="width: 20%; float: left" class="form-control">
@@ -674,21 +675,21 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							<div class="col-md-4 no-padding">
 								<label class="col-md-12 text-align-left">Catatan</label>
 								<div class="col-md-12">
-									<textarea class="form-control" name="noteE" id="noteE" rows="5"></textarea>
+									<textarea class="form-control" name="eobNoteE" id="eobNoteE" rows="5"></textarea>
 								</div>
 							</div>
 
 						</div>
 
 						<div
-							id="divTableCode"
+							id="eobTableCode"
                             class="row margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15 form-actions"
 							style="border-top: 1px solid black; display: none">
 
 
 							<div class="col-md-6">
 								<label class="col-md-12 no-padding text-align-left">Table Input IMEI</label>
-								<table id="codeTable" class="table table-striped table-bordered table-hover codeTable">
+								<table id="eobCodeTable" class="table table-striped table-bordered table-hover eobCodeTable">
 									<thead>
 										<tr>
 											<th style="width: 50%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Input</th>
@@ -696,7 +697,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 										</tr>
 									</thead>
 
-									<tbody id="codeshowdata">
+									<tbody id="eobcodeshowdata">
 									</tbody>
 								</table>
 							</div>
@@ -704,7 +705,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							<div class="col-md-6">
 								<label class="col-md-12 text-align-left">Catatan</label>
 								<div class="col-md-12">
-									<textarea class="form-control" name="noteC" id="noteC" rows="5"></textarea>
+									<textarea class="form-control" name="eobNoteC" id="eobNoteC" rows="5"></textarea>
 								</div>
 							</div>
 
@@ -712,12 +713,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 
 						<div
-							id="divTableCodeExp"
+							id="eobTableCodeExp"
                             class="row margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15 form-actions"
 							style="border-top: 1px solid black; display: none">
 
 							<div class="col-md-9">
-								<table id="codeExpTable" class="table table-striped table-bordered table-hover codeExpTable">
+								<table id="eobCodeExpTable" class="table table-striped table-bordered table-hover eobCodeExpTable">
 									<thead>
 										<tr>
 											<th style="width: 20%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;IMEI Input</th>
@@ -726,7 +727,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 										</tr>
 									</thead>
 
-									<tbody id="codeexpshowdata">
+									<tbody id="eobcodeexpshowdata">
 
 									</tbody>
 								</table>
@@ -735,7 +736,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							<div class="col-md-3 no-padding">
 								<label class="col-md-12 text-align-left">Catatan</label>
 								<div class="col-md-12">
-									<textarea class="form-control" name="noteCE" id="noteCE" rows="5"></textarea>
+									<textarea class="form-control" name="eobNoteCE" id="eobNoteCE" rows="5"></textarea>
 								</div>
 							</div>
 
@@ -744,11 +745,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						</form>
 
                         <div
-                            id="divBtnAksi"
+                            id="eobBtnAksi"
                             class="row margin-bottom-10 margin-top-10 padding-bottom-10 padding-top-15 form-actions"
-                            style="border-top: 1px solid black; display: none">
+                            style="border-top: 1px solid black">
 
-                            <button class="btn btn-primary" onclick="simpanOs()"><i class="fa fa-floppy-o"></i>&nbsp;Simpan</button>
+                            <button class="btn btn-primary" onclick="simpanEOB()"><i class="fa fa-floppy-o"></i>&nbsp;Simpan</button>
                         </div>
 
 					</div>
@@ -766,7 +767,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
     <script type="text/javascript">
         var appr, pend;
-		var expTable, codeTable, codeExpTable;
+		var expTable, codeTable, codeExpTable, dobCTable, eobCodeTable;
 		var apprTab, pendTab;
 		var speccode, expired;
 		var idItem, idComp;
@@ -779,6 +780,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				nextText: '<i class="fa fa-chevron-right"></i>',
 				autoclose: true,
 				todayHighlight: true
+			});
+
+            eobCodeTable = $('#eobCodeTable').DataTable({
+				"order" : [],
+				"searching": false,
+				"autoWidth" : false,
+				"scrollY": "100px",
+				"paging": false,
+				"info" : false,
 			});
 
 			dobCTable = $('#dobCTable').DataTable({
@@ -845,6 +855,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     $('#osCompId').val(data.item.id);
                 }
             })
+
+            var input = document.getElementById("nameItem");
+			input.addEventListener("keyup", function(event) {
+				event.preventDefault();
+				if (event.keyCode === 13) {
+					cariTambah();
+				}
+			});
 
 
             setTimeout(function () {
@@ -928,9 +946,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		function addRowCode(){
 			// var id = codeTable.rows().count() + 1;
 			codeTable.row.add([
-				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%"></td>',
+				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnterC(event)"></td>',
 				'<td><a class="btn btn-success" onclick="addRowCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
 			]).draw(false);
+            // $(this).parents('tr').find('input').focus();
+            $('tbody#codeshowdata tr:last td:first input').focus();
 			// $('#'+id).focus();
 
 		}
@@ -946,16 +966,49 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		}
 
+        function addRowEOBCode(){
+			// var id = codeTable.rows().count() + 1;
+			eobCodeTable.row.add([
+				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)"></td>',
+				'<td><a class="btn btn-success" onclick="addRowEOBCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
+			]).draw(false);
+            $('tbody#eobcodeshowdata tr:last td:first input').focus();
+			// $('#'+id).focus();
+
+		}
+
+        // handle enter plain javascript
+        function handleEnter(e){
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                addRowEOBCode();
+            }
+        }
+
+        function handleEnterC(e){
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                addRowCode();
+                // $(this).next('input').focus();
+            }
+        }
+
 		$('.expTable tbody').on( 'click', 'a.btnhapus', function () {
 			expTable.row( $(this).parents('tr') ).remove().draw();
 		});
 
 		$('.codeTable tbody').on( 'click', 'a.btnhapus', function () {
 			codeTable.row( $(this).parents('tr') ).remove().draw();
+            $('tbody#codeshowdata tr:last td:first input').focus();
 		});
 
 		$('.codeExpTable tbody').on( 'click', 'a.btnhapus', function () {
 			codeExpTable.row( $(this).parents('tr') ).remove().draw();
+		});
+
+        $('.eobCodeTable tbody').on( 'click', 'a.btnhapus', function () {
+			eobCodeTable.row( $(this).parents('tr') ).remove().draw();
+            $('tbody#eobcodeshowdata tr:last td:first input').focus();
 		});
 
 		function detail(id){
@@ -1091,11 +1144,23 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			idComp = $('#idComp').val();
 
 			axios.post(baseUrl+'/inventory/opname-barang/cariItemStock', {idItem: idItem, idComp: idComp}).then((response) => {
+                // alert(response.data.hpp.length);
 
-				$('#osQtyS').val(accounting.formatMoney(response.data.data[0].qty, "", 0, ".", ",")+' Unit');
-				$('#osHpp').maskMoney({precision: 0, thousands: '.'});
-				$('#osHpp').val(accounting.formatMoney(response.data.hpp[0].hpp, "", 0, ".", ","));
-				$('#hppNote').text(accounting.formatMoney(response.data.hpp[0].hpp, "", 0, ".", ","));
+                if(response.data.hpp[0].hpp == null){
+                    $('#osHpp').maskMoney({precision: 0, thousands: '.'});
+				    $('#osHpp').val(accounting.formatMoney(0, "", 0, ".", ","));
+                    $('#hppNote').text(accounting.formatMoney(0, "", 0, ".", ","));
+                }else{
+                    $('#osHpp').maskMoney({precision: 0, thousands: '.'});
+                    $('#osHpp').val(accounting.formatMoney(response.data.hpp[0].hpp, "", 0, ".", ","));
+                    $('#hppNote').text(accounting.formatMoney(response.data.hpp[0].hpp, "", 0, ".", ","));
+                }
+
+                if(response.data.data.length == 0){
+                    $('#osQtyS').val(accounting.formatMoney(0, "", 0, ".", ",")+' Unit');
+                }else{
+                    $('#osQtyS').val(accounting.formatMoney(response.data.data[0].qty, "", 0, ".", ",")+' Unit');
+                }
 
 				// $('#osQtyR').maskMoney({precision: 0, thousands: '.'});
 
@@ -1115,7 +1180,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#divTableCode').css("display", "block");
 
 					codeTable.row.add([
-						'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%"></td>',
+						'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnterC(event)"></td>',
 						'<td><a class="btn btn-success" onclick="addRowCode()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
 					]).draw(false);
 
@@ -1244,29 +1309,108 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
         function edit(id){
 			axios.get(baseUrl+'/inventory/opname-barang/edit?id='+id).then((response) => {
-				$('#eobIdItem').val(response.data.edit[0].i_id);
+				$('#eobIdItem').val(response.data.edit[0].od_item);
 				$('#eobNameItem').val(response.data.edit[0].i_nama);
+                $('#eobIdComp').val(response.data.edit[0].o_comp);
+                $('#eobHpp').val(accounting.formatMoney(response.data.hpp, "", 0, ".", ","));
+                $('#eobHpp').maskMoney({precision: 0, thousands: '.'});
+                $('#eobQtyS').val(response.data.edit[0].od_qty_system+' Unit');
 				document.getElementById("eobNameItem").readOnly = true;
+
+                $('#idS').val(id);
+
+                speccode = response.data.edit[0].i_specificcode;
+				expired = response.data.edit[0].i_expired;
+
 				if(response.data.edit[0].o_action == 'REAL'){
 					$('#eobAksiSelect').val('2');
 				}else if(response.data.edit[0].o_action == 'SYSTEM'){
 					$('#eobAksiSelect').val('1');
 				}
 
+                if(response.data.edit[0].i_specificcode == 'Y'){
+                    $('.eobQtyR').css("display", "none");
+                    $('#eobTableCode').css("display", "block");
 
-				var eobQR = 0;
-				var eobQS = 0;
-				for(var eob = 0; eob < response.data.edit.length; eob++){
-					eobQR = eobQR + parseInt(reponse.data.edit[eob].od_qty_real);
-					eobQS = eobQS + parseInt(response.data.edit[eob].od_qty_system);
+                    eobCodeTable.clear();
+                    for(var i = 0; i < response.data.edit.length; i++){
+                        if(i == 0){
+                            eobCodeTable.row.add([
+                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
+                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:100%"><i class="fa fa-plus"></i></a>'
+                            ]).draw(false);
+                        }else{
+                            eobCodeTable.row.add([
+                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
+                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a>'
+                            ]).draw(false);
+                        }
 
+                    }
 
-				}
+                }else{
 
-				$('#eobQtyS').val(eobQS+ ' Unit');
+                    $('#eobTableCode').css("display", "none");
+                    $('#eobQtyR').val(response.data.edit[0].od_qty_real+' Unit');
+                    $('.eobQtyR').css("display", "block");
+                }
 
 			});
             $('#editModal').modal('show');
+        }
+
+        function simpanEOB(){
+
+            $('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Menyimpan Data...');
+
+            var id = $('#idS').val();
+			var QtyS = $('#eobQtyS').val();
+			var QtyR = $('#eobQtyR').val();
+			var idItem = $('#eobIdItem').val();
+			var idComp = $('#eobIdComp').val();
+			var aksi = $('#eobAksiSelect').val();
+            var hpp = $('#eobHpp').val();
+			var note = '';
+
+			var ar = $();
+			var dataTab = '';
+			if(speccode == 'Y'){
+				for (var i = 0; i < eobCodeTable.rows()[0].length; i++) {
+					ar = ar.add(eobCodeTable.row(i).node())
+				}
+				note = $('#eobNoteC').val();
+                var dataTab = ar.find('select,input,textarea').serialize();
+			}
+
+			var data = ar.find('select,input,textarea').serialize() +'&qtyR='+QtyR+'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note+'&sc='+speccode+'&ex='+expired+'&hpp='+hpp+'&id='+id;
+
+			axios.post(baseUrl+'/inventory/opname-barang/edit', data)
+			.then((response) => {
+
+				if(response.data.status == 'obSukses'){
+					$('#tambahModal').modal('hide');
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Berhasil",
+						content : 'Data Opname Barang Berhasil Disimpan...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+					});
+				}else{
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Maaf, Opname Barang Gagal Disimpan ",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
+					});
+				}
+
+			});
+
         }
 
 		function appr(id){

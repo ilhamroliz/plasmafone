@@ -10,10 +10,10 @@
 <!-- RIBBON -->
 <div id="ribbon">
 
-	<span class="ribbon-button-alignment"> 
+	<span class="ribbon-button-alignment">
 		<span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.." data-html="true" onclick="location.reload()">
 			<i class="fa fa-refresh"></i>
-		</span> 
+		</span>
 	</span>
 
 	<!-- breadcrumb -->
@@ -50,7 +50,7 @@
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -71,37 +71,37 @@
 				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 					<h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-cog"></i> Pengelolaan Pengguna <span>> Log Kegiatan Pengguna</span></h1>
 				</div>
-				
+
 				<!-- NEW WIDGET START -->
 				<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<!-- Widget ID (each widget will need unique ID)-->
-					<div class="jarviswidget" id="wid-id-0" 
-						data-widget-colorbutton="false" 
-						data-widget-deletebutton="false" 
+					<div class="jarviswidget" id="wid-id-0"
+						data-widget-colorbutton="false"
+						data-widget-deletebutton="false"
 						data-widget-editbutton="false"
 						data-widget-custombutton="false"
 						data-widget-sortable="false">
 
 						<header>
-							<h2><strong>Log Kegiatan Pengguna</strong></h2>											
+							<h2><strong>Log Kegiatan Pengguna</strong></h2>
 						</header>
 
 						<!-- widget div-->
 						<div>
 
-							
+
 							<!-- widget edit box -->
 						<div class="jarviswidget-editbox">
 								<!-- This area used as dropdown edit box -->
 								<input class="form-control" type="text">
 								<span class="note"><i class="fa fa-check text-success"></i> Change title to update and save instantly!</span>
-								
+
 							</div>
 							<!-- end widget edit box -->
-							
+
 							<!-- widget content -->
 							<div class="widget-body">
-								
+
 								<div class="row form-group">
 									<div class="col-lg-12 col-md-12 col-sm-12">
 										<div class="col-md-4">
@@ -113,17 +113,17 @@
 													<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir"  placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 												</div>
 											</div>
-											
+
 										</div>
 										<div class="col-md-7">
 											<div class="form-group">
-												<input type="hidden" name="searchhidden" id="searchhidden">												
+												<input type="hidden" name="searchhidden" id="searchhidden">
 												<input type="text" id="search" class="form-control" name="search" placeholder="Cari Berdasarkan Nama User" style="width: 80%; float: left">
 
 												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()" style="width: 10%; margin-left: 5%">
 													<i class="fa fa-search"></i>
 												</button>
-											</div>											
+											</div>
 										</div>
 
 										<div class="col-md-1 no-padding no-margin hapuslog">
@@ -133,24 +133,24 @@
 
 								{!! csrf_field() !!}
 								<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-									<thead>			                
+									<thead>
 										<tr>
-                                            <th class="text-center">Nama</th>
-											<th class="text-center">Outlet</th>
-											<th class="text-center">Aktivitas</th>
-											<th class="text-center">Waktu Akses</th>
+                                            <th class="text-center" style="width: 20%">Nama</th>
+											<th class="text-center" style="width: 25%">Outlet</th>
+											<th class="text-center" style="width: 40%">Aktivitas</th>
+											<th class="text-center" style="width: 15%">Waktu Akses</th>
 										</tr>
 									</thead>
 									<tbody id="showdata">
-										
+
 									</tbody>
 								</table>
 							</div>
 							<!-- end widget content -->
-							
+
 						</div>
 						<!-- end widget div -->
-						
+
 					</div>
 					<!-- end widget -->
 				</article>
@@ -192,19 +192,19 @@
 			todayHighlight: true
 		});
 
-	}); 
+	});
 
 	function getData(data){
 		$('#searchhidden').val(data.id);
 	}
 
 	function search(){
-		
+
 		$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 		var tgl_awal = $('#tgl_awal').val();
 		var tgl_akhir = $('#tgl_akhir').val();
 		var nama = $('#searchhidden').val();
-		
+
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Mencari Data ...');
 		$.ajaxSetup({
