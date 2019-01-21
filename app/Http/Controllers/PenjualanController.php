@@ -381,6 +381,21 @@ class PenjualanController extends Controller
         return json_encode($regular);
     }
 
+    public function editPenjualanRegular($id = null)
+    {
+        $id = Crypt::decrypt($id);
+
+        $data = DB::table('d_sales')
+                ->select('d_sales.*', 'd_sales_dt.*', 'm_member.*', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item')
+                ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
+                ->join('d_mem', 'd_sales.s_salesman', '=', 'd_mem.m_id')
+                ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
+                ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+                ->where('d_sales.s_id', $id)->get();
+
+        return view('penjualan.penjualan-regular.edit')->with(compact('data'));
+    }
+
     public function savePenjualan(Request $request)
     {
         $data = $request->all();

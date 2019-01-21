@@ -71,8 +71,8 @@
                                                         <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
                                                             <div class="icon-addon addon-md">
-                                                                <input class="form-control" id="cari-salesman" placeholder="Masukkan Nama Sales" type="text"  style="text-transform: uppercase">
-                                                                <input type="hidden" name="salesman" id="salesman" value="">
+                                                                <input class="form-control" id="cari-salesman" readonly placeholder="Masukkan Nama Sales" type="text"  style="text-transform: uppercase" value="{{ $data[0]->salesman }}">
+                                                                <input type="hidden" name="salesman" id="salesman" value="{{ $data[0]->s_salesman }}">
                                                                 <input type="hidden" name="jenis_pembayaran" value="C">
                                                                 <label for="salesman" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Sales"></label>
                                                             </div>
@@ -85,15 +85,15 @@
                                                         <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                                             <div class="icon-addon addon-md">
-                                                                <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
-                                                                <input type="hidden" value="" class="idMember" id="idMember" name="idMember">
+                                                            <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase" value="{{$data[0]->m_name}}" readonly>
+                                                                <input type="hidden" value="" class="idMember" id="idMember" name="idMember" value="{{ $data[0]->s_member }}">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-1">
-                                                    <button type="button" data-toggle="modal" data-target="#DaftarMember" class="btn btn-primary" title="Tambah Pembeli"><i class="fa fa-user-plus"></i></button>
+                                                    {{-- <button type="button" data-toggle="modal" data-target="#DaftarMember" class="btn btn-primary" title="Tambah Pembeli"><i class="fa fa-user-plus"></i></button> --}}
                                                     </div>
                                                     
                                                 </div>
@@ -180,7 +180,11 @@
                                                         <th style="width: 10%;">Aksi</th>
                                                     </tr>
                                                     </thead>
-                                                    <tbody></tbody>
+                                                    <tbody>
+                                                        @foreach ($data as $item)
+                                                            
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
                                         </div>

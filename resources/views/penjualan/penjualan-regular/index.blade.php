@@ -1135,71 +1135,75 @@
 			});
 		}
 
-		function edit(id){
-			var tbl_edit = '';
-			$('#form_edit').hide();
-			$('#table_edit').DataTable().destroy();
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Memproses...');
-			$('#namaItem_dt').hide();
-			$('#table_edit').show();
-			$('#footer_edit').hide();
+        function edit(id){
+            window.location = baseUrl + '/penjualan-reguler/edit/' + id;
+        }
 
-			tbl_edit = $('#table_edit').dataTable({
-				"processing": true,
-				"serverSide": true,
-				"ajax": "{{ url('distribusi-barang/detail-edit/') }}"+"/"+id,
-				"columns":[
-					{"data": "nama_item"},
-					{"data": "qty"},
-					{"data": "qty_received"},
-					{"data": "aksi"}
-				],
-				"autoWidth" : true,
-				"language" : dataTableLanguage,
-				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-				"preDrawCallback" : function() {
-					// Initialize the responsive datatables helper once.
-					if (!responsiveHelper_dt_basic) {
-						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-					}
-				},
-				"rowCallback" : function(nRow) {
-					responsiveHelper_dt_basic.createExpandIcon(nRow);
-				},
-				"drawCallback" : function(oSettings) {
-					responsiveHelper_dt_basic.respond();
-				}
-			});
+		// function edit(id){
+		// 	var tbl_edit = '';
+		// 	$('#form_edit').hide();
+		// 	$('#table_edit').DataTable().destroy();
+		// 	$('#overlay').fadeIn(200);
+		// 	$('#load-status-text').text('Sedang Memproses...');
+		// 	$('#namaItem_dt').hide();
+		// 	$('#table_edit').show();
+		// 	$('#footer_edit').hide();
 
-			axios.get(baseUrl+'/distribusi-barang/detail/'+id).then(response => {
+		// 	tbl_edit = $('#table_edit').dataTable({
+		// 		"processing": true,
+		// 		"serverSide": true,
+		// 		"ajax": "{{ url('distribusi-barang/detail-edit/') }}"+"/"+id,
+		// 		"columns":[
+		// 			{"data": "nama_item"},
+		// 			{"data": "qty"},
+		// 			{"data": "qty_received"},
+		// 			{"data": "aksi"}
+		// 		],
+		// 		"autoWidth" : true,
+		// 		"language" : dataTableLanguage,
+		// 		"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+		// 		"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+		// 		"preDrawCallback" : function() {
+		// 			// Initialize the responsive datatables helper once.
+		// 			if (!responsiveHelper_dt_basic) {
+		// 				responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+		// 			}
+		// 		},
+		// 		"rowCallback" : function(nRow) {
+		// 			responsiveHelper_dt_basic.createExpandIcon(nRow);
+		// 		},
+		// 		"drawCallback" : function(oSettings) {
+		// 			responsiveHelper_dt_basic.respond();
+		// 		}
+		// 	});
 
-				if (response.data.status == 'Access denied') {
+		// 	axios.get(baseUrl+'/distribusi-barang/detail/'+id).then(response => {
 
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-						color : "#A90329",
-						timeout: 5000,
-						icon : "fa fa-times bounce animated"
-					});
+		// 		if (response.data.status == 'Access denied') {
 
-				} else {
-					$('#title_detail2').html('<strong>Detail Distribusi Barang</strong>');
-					$('#dt_nota2').text(response.data.data[0].nota);
-					$('#dt_from2').text(response.data.data[0].from);
-					$('#dt_destination2').text(response.data.data[0].destination);
-					$('#dt_tgl2').text(response.data.data[0].date);
-					$('#dt_by2').text(response.data.data[0].by);
-					$('#overlay').fadeOut(200);
-					$('#editModal').modal('show');
-				}
+		// 			$('#overlay').fadeOut(200);
+		// 			$.smallBox({
+		// 				title : "Gagal",
+		// 				content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+		// 				color : "#A90329",
+		// 				timeout: 5000,
+		// 				icon : "fa fa-times bounce animated"
+		// 			});
 
-			})
+		// 		} else {
+		// 			$('#title_detail2').html('<strong>Detail Distribusi Barang</strong>');
+		// 			$('#dt_nota2').text(response.data.data[0].nota);
+		// 			$('#dt_from2').text(response.data.data[0].from);
+		// 			$('#dt_destination2').text(response.data.data[0].destination);
+		// 			$('#dt_tgl2').text(response.data.data[0].date);
+		// 			$('#dt_by2').text(response.data.data[0].by);
+		// 			$('#overlay').fadeOut(200);
+		// 			$('#editModal').modal('show');
+		// 		}
 
-		}
+		// 	})
+
+		// }
 
 		function detail(id){
 			$('#overlay').fadeIn(200);
