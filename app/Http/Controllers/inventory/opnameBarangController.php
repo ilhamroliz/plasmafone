@@ -1105,6 +1105,31 @@ class opnameBarangController extends Controller
 
     }
 
+    public function get_edit(Request $request)
+    {
+        $id = Crypt::decrypt($request->id);
+
+        $getDataEdit = DB::table('d_opname')
+            ->join('d_opname_dt', 'od_opname', '=', 'o_id')
+            ->join('d_item', 'i_id', '=', 'od_item')
+            ->join('m_company', 'c_id', '=', 'o_comp')
+            ->where('o_id', $id)
+            ->select('o_comp', 'c_name', 'od_item', 'i_nama', 'od_qty_real', 'od_qty_system', 'o_action', 'od_specificcode', 'i_specificcode')->get();
+
+        $getHppEdit = DB::table('d_stock')
+            ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
+            ->where('s_item', $getDataEdit[0]->od_item)
+            ->select('sm_hpp')
+            ->orderBy('sm_detailid', 'desc')
+            ->get();
+
+        // dd($getHppEdit);
+        return json_encode([
+            'edit' => $getDataEdit,
+            'hpp' => $getHppEdit[0]->sm_hpp
+        ]);
+    }
+
     public function edit(Request $request)
     {
         $id = Crypt::decrypt($request->id);
@@ -1536,25 +1561,8 @@ class opnameBarangController extends Controller
 
         }
 
-        $getDataEdit = DB::table('d_opname')
-            ->join('d_opname_dt', 'od_opname', '=', 'o_id')
-            ->join('d_item', 'i_id', '=', 'od_item')
-            ->join('m_company', 'c_id', '=', 'o_comp')
-            ->where('o_id', $id)
-            ->select('o_comp', 'c_name', 'od_item', 'i_nama', 'od_qty_real', 'od_qty_system', 'o_action', 'od_specificcode', 'i_specificcode')->get();
-
-        $getHppEdit = DB::table('d_stock')
-            ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
-            ->where('s_item', $getDataEdit[0]->od_item)
-            ->select('sm_hpp')
-            ->orderBy('sm_detailid', 'desc')
-            ->get();
-
-        // dd($getHppEdit);
-        return json_encode([
-            'edit' => $getDataEdit,
-            'hpp' => $getHppEdit[0]->sm_hpp
-        ]);
+        $id = Crypt::encrypt($id);
+        return view('inventory.opname_barang.edit')->with(compact('id'));
     }
 
     public function approve(Request $request)

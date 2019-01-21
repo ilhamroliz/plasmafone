@@ -564,6 +564,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::match(['get', 'post'], '/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
     Route::match(['get', 'post'], '/inventory/opname-barang/tambahOutlet', 'inventory\opnameBarangController@tambahOutlet');
 
+    Route::get('/inventory/opname-barang/get-edit', 'inventory\opnameBarangController@get_edit');
     Route::match(['get', 'post'], '/inventory/opname-barang/edit', 'inventory\opnameBarangController@edit');
     Route::match(['get', 'post'], '/inventory/opname-barang/editOutlet', 'inventory\opnameBarangController@editOutlet');
 

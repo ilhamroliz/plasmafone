@@ -1150,23 +1150,23 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						'<td><a class="btn btn-success" onclick="addRowCode()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
 					]).draw(false);
 
-				}else if(speccode == 'Y' && expired == 'Y'){
-					$('#divTableCodeExp').css("display", "block");
+				// }else if(speccode == 'Y' && expired == 'Y'){
+				// 	$('#divTableCodeExp').css("display", "block");
 
-					codeExpTable.row.add([
-						'<td><input type="text" class="form-control imeiI" name="imeiI[]"></td>',
-						'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-						'<td><a class="btn btn-success" onclick="addRowCodeExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
-					]).draw(false);
+				// 	codeExpTable.row.add([
+				// 		'<td><input type="text" class="form-control imeiI" name="imeiI[]"></td>',
+				// 		'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
+				// 		'<td><a class="btn btn-success" onclick="addRowCodeExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
+				// 	]).draw(false);
 
-				}else if(speccode == 'N' && expired == 'Y'){
-					$('#divTableExp').css("display", "block");
+				// }else if(speccode == 'N' && expired == 'Y'){
+				// 	$('#divTableExp').css("display", "block");
 
-					expTable.row.add([
-						'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-						'<td><input type="text" class="form-control qty" name="qty[]"></td>',
-						'<td><a class="btn btn-success" onclick="addRowExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
-					]).draw(false);
+				// 	expTable.row.add([
+				// 		'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
+				// 		'<td><input type="text" class="form-control qty" name="qty[]"></td>',
+				// 		'<td><a class="btn btn-success" onclick="addRowExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
+				// 	]).draw(false);
 				}else{
 					$(".qtyR").css("display", "block");
 					$("#osQtyR").maskMoney({precision: 0, thousands: '.', suffix: ' Unit'});

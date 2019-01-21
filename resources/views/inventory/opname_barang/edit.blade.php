@@ -81,6 +81,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         <div class="widget-body">
                             <form id="trpForm" class="form-inline" role="form">
                                 {{csrf_field()}}
+                                <input type="hidden" id="idOpname" value="{{ $id }}">
                                 <fieldset>
 									 <div class="row no-padding margin-bottom-10 padding-bottom-10">
                                         <form id="formOsTambah">
@@ -157,9 +158,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 
                                     <!-- ======================================= -->
-                                    <div class="col-md-12" id="divCodeTable">
+                                    <div id="divCodeTable">
 
-                                        <table id="codeTable" class="table table-striped table-bordered table-hover codeTable" width="100%">
+                                        <table id="codeTable" class="table table-striped table-bordered table-hover codeTable" style="width: 100%">
                                             <thead>
                                                 <tr>
 													<th data-hide="phone,tablet" style="width: 80%">Specific Code</th>
@@ -173,12 +174,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 									</div>
 
-									<div class="col-md-12 no-padding" id="divNote" style="display:none">
-										<div class="col-md-2">
+									<div class="col-md-12 no-padding" id="divNote">
+										<div class="col-md-1">
 											<label><b>Catatan :</b></label>
 										</div>
 
-										<div class="col-md-10 inputGroupContainer">
+										<div class="col-md-11 inputGroupContainer">
 											<div class="input-group" style="width: 100%">
 												<textarea class="form-control" name="codeNote" id="codeNote" rows="2"></textarea>
 											</div>
@@ -189,7 +190,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								<div class="form-actions" id="divAksi" style="display:none">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <a class="btn btn-block btn-primary text-center" onclick="simpanTOB()">Simpan Opname Barang</a>
+                                            <a class="btn btn-block btn-primary text-center" onclick="simpanEOB()">Simpan Opname Barang</a>
                                         </div>
                                     </div>
                                 </div>
@@ -213,7 +214,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
     <script type="text/javascript">
         var appr, pend;
-		var expTable, codeTable, codeExpTable, dobCTable, eobCodeTable;
+		var codeTable;
 		var apprTab, pendTab;
 		var speccode, expired;
 		var idItem, idComp;
@@ -253,14 +254,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				}
 			});
 
-            axios.get(baseUrl+'/inventory/opname-barang/edit?id='+id).then((response) => {
+            var id = $('#idOpname').val();
+            axios.get(baseUrl+'/inventory/opname-barang/get-edit?id='+id).then((response) => {
+
 				$('#idItem').val(response.data.edit[0].od_item);
 				$('#nameItem').val(response.data.edit[0].i_nama);
                 $('#idComp').val(response.data.edit[0].o_comp);
-                $('#hpp').val(accounting.formatMoney(response.data.hpp, "", 0, ".", ","));
-                $('#hpp').maskMoney({precision: 0, thousands: '.'});
+                $('#osHpp').val(accounting.formatMoney(response.data.hpp, "", 0, ".", ","));
+                $('#osHpp').maskMoney({precision: 0, thousands: '.'});
                 $('#osQtyS').val(response.data.edit[0].od_qty_system+' Unit');
-				document.getElementById("eobNameItem").readOnly = true;
+				document.getElementById("nameItem").readOnly = true;
 
                 $('#idS').val(id);
 
@@ -268,26 +271,31 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				expired = response.data.edit[0].i_expired;
 
 				if(response.data.edit[0].o_action == 'REAL'){
-					$('#eobAksiSelect').val('2');
+					$('#aksiSelect').val('2');
 				}else if(response.data.edit[0].o_action == 'SYSTEM'){
-					$('#eobAksiSelect').val('1');
+					$('#aksiSelect').val('1');
 				}
 
                 if(response.data.edit[0].i_specificcode == 'Y'){
-                    $('.eobQtyR').css("display", "none");
-                    $('#eobTableCode').css("display", "block");
+                    $('.osQtyR').css("display", "none");
 
-                    eobCodeTable.clear();
+                    codeTable.clear();
+                    $('#codeTable').css("display", "block");
+
                     for(var i = 0; i < response.data.edit.length; i++){
+
                         if(i == 0){
-                            eobCodeTable.row.add([
-                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
-                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:100%"><i class="fa fa-plus"></i></a>'
+
+                            codeTable.row.add([
+                                '<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%; text-transform: uppercase" onkeypress="handleEnterC(event)" value="'+response.data.edit[0].od_specificcode+'"></td>',
+                                '<td><a class="btn btn-success" onclick="addRowCode()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
                             ]).draw(false);
+
                         }else{
-                            eobCodeTable.row.add([
-                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
-                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a>'
+
+                            codeTable.row.add([
+                                '<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%; text-transform: uppercase" onkeypress="handleEnterC(event)" value="'+response.data.edit[i].od_specificcode+'"></td>',
+                                '<td><a class="btn btn-success" onclick="addRowCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
                             ]).draw(false);
                         }
 
@@ -295,10 +303,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                 }else{
 
-                    $('#eobTableCode').css("display", "none");
-                    $('#eobQtyR').val(response.data.edit[0].od_qty_real+' Unit');
-                    $('.eobQtyR').css("display", "block");
+                    $('#codeTable').css("display", "none");
+                    $('#osQtyR').val(response.data.edit[0].od_qty_real+' Unit');
+                    $('.osQtyR').css("display", "block");
                 }
+
+                $('#divQtyHpp').css("display", "block");
+				$('#divAksi').css("display", "block");
 
 			});
 

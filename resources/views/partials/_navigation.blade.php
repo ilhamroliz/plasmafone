@@ -6,7 +6,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 	<!-- User info -->
 	<div class="login-info">
-		<span> <!-- User image size is adjusted inside CSS, it should stay as it --> 
+		<span> <!-- User image size is adjusted inside CSS, it should stay as it -->
 			<a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
 				@if(auth()->user()->m_img != '' || auth()->user()->m_img != null)
 				<img src="{{ asset('img/user/'.auth()->user()->m_img) }}" alt="me" class="online" />
@@ -16,8 +16,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				<span>
 					{{ (!is_null(auth()->user()->id_karyawan)) ? auth()->user()->karyawan->m_username.' '.auth()->user()->karyawan->nama_lengkap : auth()->user()->m_name }}
 				</span>
-			</a> 
-			
+			</a>
+
 		</span>
 	</div>
 	<!-- end user info -->
@@ -144,7 +144,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						<a href="#">Opname Barang</a>
 						<ul>
 							@if($sidebar['Opname Barang'] == 'Y')
-							<li class="{{ (Request::is('inventory/opname-barang/pusat')) ? 'active' : '' }}">
+							<li class="{{ (Request::is('inventory/opname-barang/pusat')) ||  (Request::is('inventory/opname-barang/tambah')) ||  (Request::is('inventory/opname-barang/edit')) ? 'active' : '' }}">
 								<a href="{{ url('/inventory/opname-barang/pusat') }}">Pusat</a>
 							</li>
 							@endif
@@ -238,7 +238,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			@if($sidebar['Layanan Perbaikan'] == 'Y')
 			<li class="{{ (Request::is('layanan-perbaikan/*') || Request::is('layanan-perbaikan')) ? 'active' : '' }}">
 				<a href="#">
-					<i class="fa fa-lg fa-fw fa-wrench"></i> 
+					<i class="fa fa-lg fa-fw fa-wrench"></i>
 					<span class="menu-item-parent">Layanan Perbaikan</span>
 				</a>
 				<ul>
@@ -254,7 +254,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			@if($sidebar['Manajemen Penjualan'] == 'Y')
 			<li>
 				<a href="#">
-					<i class="fa fa-lg fa-fw fa-sliders"></i> 
+					<i class="fa fa-lg fa-fw fa-sliders"></i>
 					<span class="menu-item-parent">Manajemen Penjualan</span>
 				</a>
 				<ul>
@@ -363,7 +363,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			@if($sidebar['Manajemen Aplikasi'] == 'Y')
 			<li>
 				<a href="#">
-					<i class="fa fa-lg fa-fw fa-cog"></i> 
+					<i class="fa fa-lg fa-fw fa-cog"></i>
 					<span class="menu-item-parent">Manajemen Aplikasi</span>
 				</a>
 				<ul>
@@ -382,11 +382,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				</ul>
 			</li>
 			@endif
-			
+
 		</ul>
 	</nav>
-	<span class="minifyme" data-action="minifyMenu"> 
-		<i class="fa fa-arrow-circle-left hit"></i> 
+	<span class="minifyme" data-action="minifyMenu">
+		<i class="fa fa-arrow-circle-left hit"></i>
 	</span>
 
 </aside>
