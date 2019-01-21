@@ -9,6 +9,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Response;
+use DataTables;
 Use Auth;
 
 class PenjualanController extends Controller
@@ -16,6 +17,11 @@ class PenjualanController extends Controller
     public function index()
     {
         return view('penjualan.penjualan-regular.index');
+    }
+
+    public function add_regular()
+    {
+        return view('penjualan.penjualan-regular.add');
     }
 
     public function tempo()
@@ -332,6 +338,47 @@ class PenjualanController extends Controller
                     ->first();
 
         return Response::json(['jenis' => $query->g_name, 'alamat' => $query->m_address]);
+    }
+
+    public function getPenjualanRegular()
+    {
+        $regular = DB::table('d_sales')
+                    ->select('d_sales.s_id as id', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_sales.s_nota as nota')
+                    ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
+                    ->where('d_sales.s_jenis', 'C')
+                    ->orderBy('d_sales.s_date', 'desc');
+
+        return DataTables::of($regular)
+
+        ->addColumn('aksi', function ($regular) {
+
+            if (Access::checkAkses(16, 'update') == false) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            } else {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+
+            }
+
+        })
+
+        ->rawColumns(['aksi'])
+
+        ->make(true);
+    }
+
+    public function getPenjualanRegularDetail($id = null)
+    {
+        $id = Crypt::decrypt($id);
+        $regular = DB::table('d_sales')
+                    ->select('d_sales.*', 'd_sales_dt.*', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item')
+                    ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
+                    ->join('d_mem', 'd_sales.s_salesman', '=', 'd_mem.m_id')
+                    ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
+                    ->where('d_sales.s_id', $id)->get();
+        return json_encode($regular);
     }
 
     public function savePenjualan(Request $request)

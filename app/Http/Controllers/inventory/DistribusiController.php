@@ -546,6 +546,7 @@ class DistribusiController extends Controller
                 $outlet_user = Auth::user()->m_comp;
                 $member = Auth::user()->m_id;
 
+                // insert distribusi
                 $distribusiId = DB::table('d_distribusi')->insertGetId([
                                     'd_from' => Auth::user()->m_comp,
                                     'd_destination' => $data['outlet'],
@@ -567,6 +568,7 @@ class DistribusiController extends Controller
 
                     $namaItem = DB::table('d_stock')->select('s_comp', 's_item', 'i_nama')->where('s_id', $data['idStock'][$i])->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')->first();
                     
+                    // insert distribusi_dt
                     DB::table('d_distribusi_dt')->insert([
                         'dd_distribusi' => $distribusiId,
                         'dd_detailid' => $get_countiddetail,
@@ -604,6 +606,9 @@ class DistribusiController extends Controller
                         $specificcode = $data['kode'][$i];
 
                         $cnt_stockid = DB::table('d_stock_dt')->where('sd_stock', $stockId)->count()+1;
+
+                        // Delete specificcode
+                        DB::table('d_stock_dt')->where('sd_stock', $data['idStock'][$i])->where('sd_specificcode', $specificcode)->delete();
 
                         // Insert stock_dt
                         DB::table('d_stock_dt')->insert([
@@ -674,9 +679,8 @@ class DistribusiController extends Controller
                             ->update([
                                 's_qty' => $sm_sisa,
                             ]);
-
+                            break;
                         }
-
                     }
                 }
 
