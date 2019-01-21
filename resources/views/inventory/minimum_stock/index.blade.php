@@ -671,6 +671,22 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
         }
 
+        function active(id){
+
+        }
+
+        function nonactive(id){
+            $.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan menonaktifkan Minimum Stock untuk item ini ?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
+
+                }
+            })
+        }
+
 		function approve(id){
 
 			$('#overlay').fadeIn(200);
