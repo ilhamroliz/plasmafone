@@ -273,40 +273,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 											</table>
 										</div>
 
-										{{-- <!-- TABEL E-->
-										<table
-											id="dobETable"
-											class="table table-striped table-bordered table-hover margin-top-10"
-											style="display:none; margin-top: 20px">
-
-											<thead id="dobEHead">
-												<th style="width: 15%">No.</th>
-												<th style="width: 50%">Tanggal Kadaluarsa</th>
-												<th style="width: 35%">Qty</th>
-											</thead>
-
-											<tbody id="dobEBody">
-											</tbody>
-
-										</table>
-
-										<!-- TABEL CE-->
-										<table
-											id="dobCETable"
-											class="table table-striped table-bordered table-hover margin-top-10"
-											style=" margin-top: 20px">
-
-											<thead id="dobCEHead">
-												<th style="width: 15%">No.</th>
-												<th style="width: 45%">Kode Spesifik</th>
-												<th style="wdith: 40%">Tanggal Kadaluarsa</th>
-											</thead>
-
-											<tbody id="dobCEBody">
-											</tbody>
-
-										</table> --}}
-
 									</div>
 									<!-- end widget content -->
 								</div>
@@ -1243,7 +1209,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		});
 
         function tambah(){
-            $('#tambahModal').modal('show');
+            location.href = ('{{ url('/inventory/opname-barang/tambah') }}');
         }
 
 		function simpanOs(){
@@ -1308,108 +1274,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		}
 
         function edit(id){
-			axios.get(baseUrl+'/inventory/opname-barang/edit?id='+id).then((response) => {
-				$('#eobIdItem').val(response.data.edit[0].od_item);
-				$('#eobNameItem').val(response.data.edit[0].i_nama);
-                $('#eobIdComp').val(response.data.edit[0].o_comp);
-                $('#eobHpp').val(accounting.formatMoney(response.data.hpp, "", 0, ".", ","));
-                $('#eobHpp').maskMoney({precision: 0, thousands: '.'});
-                $('#eobQtyS').val(response.data.edit[0].od_qty_system+' Unit');
-				document.getElementById("eobNameItem").readOnly = true;
 
-                $('#idS').val(id);
-
-                speccode = response.data.edit[0].i_specificcode;
-				expired = response.data.edit[0].i_expired;
-
-				if(response.data.edit[0].o_action == 'REAL'){
-					$('#eobAksiSelect').val('2');
-				}else if(response.data.edit[0].o_action == 'SYSTEM'){
-					$('#eobAksiSelect').val('1');
-				}
-
-                if(response.data.edit[0].i_specificcode == 'Y'){
-                    $('.eobQtyR').css("display", "none");
-                    $('#eobTableCode').css("display", "block");
-
-                    eobCodeTable.clear();
-                    for(var i = 0; i < response.data.edit.length; i++){
-                        if(i == 0){
-                            eobCodeTable.row.add([
-                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
-                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:100%"><i class="fa fa-plus"></i></a>'
-                            ]).draw(false);
-                        }else{
-                            eobCodeTable.row.add([
-                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
-                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a>'
-                            ]).draw(false);
-                        }
-
-                    }
-
-                }else{
-
-                    $('#eobTableCode').css("display", "none");
-                    $('#eobQtyR').val(response.data.edit[0].od_qty_real+' Unit');
-                    $('.eobQtyR').css("display", "block");
-                }
-
-			});
-            $('#editModal').modal('show');
-        }
-
-        function simpanEOB(){
-
-            $('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Menyimpan Data...');
-
-            var id = $('#idS').val();
-			var QtyS = $('#eobQtyS').val();
-			var QtyR = $('#eobQtyR').val();
-			var idItem = $('#eobIdItem').val();
-			var idComp = $('#eobIdComp').val();
-			var aksi = $('#eobAksiSelect').val();
-            var hpp = $('#eobHpp').val();
-			var note = '';
-
-			var ar = $();
-			var dataTab = '';
-			if(speccode == 'Y'){
-				for (var i = 0; i < eobCodeTable.rows()[0].length; i++) {
-					ar = ar.add(eobCodeTable.row(i).node())
-				}
-				note = $('#eobNoteC').val();
-                var dataTab = ar.find('select,input,textarea').serialize();
-			}
-
-			var data = ar.find('select,input,textarea').serialize() +'&qtyR='+QtyR+'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note+'&sc='+speccode+'&ex='+expired+'&hpp='+hpp+'&id='+id;
-
-			axios.post(baseUrl+'/inventory/opname-barang/edit', data)
-			.then((response) => {
-
-				if(response.data.status == 'obSukses'){
-					$('#tambahModal').modal('hide');
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Berhasil",
-						content : 'Data Opname Barang Berhasil Disimpan...!',
-						color : "#739E73",
-						timeout: 4000,
-						icon : "fa fa-check bounce animated"
-					});
-				}else{
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Maaf, Opname Barang Gagal Disimpan ",
-						color : "#A90329",
-						timeout: 4000,
-						icon : "fa fa-times bounce animated"
-					});
-				}
-
-			});
+            location.href = ('{{ url('/inventory/opname-barang/edit?id=') }}' + id);
 
         }
 

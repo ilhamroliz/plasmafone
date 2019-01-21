@@ -603,47 +603,48 @@ class opnameBarangController extends Controller
 
     public function tambah(Request $request)
     {
-        // dd($request);
-        DB::beginTransaction();
-        try {
+        if ($request->isMethod('post')) {
+            // dd($request);
+            DB::beginTransaction();
+            try {
             ///?? INISIALISASI Variabel
-            $sc = $request->sc;
-            $ex = $request->ex;
+                $sc = $request->sc;
+                $ex = $request->ex;
 
-            $countId = DB::table('d_opname')->max('o_id');
-            $o_id = $countId + 1;
-            $o_comp = $request->idComp;
-            $o_date = Carbon::now('Asia/Jakarta')->format('Y-m-d');
-            $date = Carbon::now('Asia/Jakarta')->format('d/m/Y');
-            $o_reff = $this->getDataId($date);
-            $o_mem = Auth::user()->m_id;
-            $o_status = '';
-            $o_action = '';
-            if (Auth::user()->m_level < 5) {
-                $o_status = 'DONE';
-                if ($request->aksi == '1') {
-                    $o_action = 'SYSTEM';
-                } elseif ($request->aksi == '2') {
-                    $o_action = 'REAL';
+                $countId = DB::table('d_opname')->max('o_id');
+                $o_id = $countId + 1;
+                $o_comp = $request->idComp;
+                $o_date = Carbon::now('Asia/Jakarta')->format('Y-m-d');
+                $date = Carbon::now('Asia/Jakarta')->format('d/m/Y');
+                $o_reff = $this->getDataId($date);
+                $o_mem = Auth::user()->m_id;
+                $o_status = '';
+                $o_action = '';
+                if (Auth::user()->m_level < 5) {
+                    $o_status = 'DONE';
+                    if ($request->aksi == '1') {
+                        $o_action = 'SYSTEM';
+                    } elseif ($request->aksi == '2') {
+                        $o_action = 'REAL';
+                    }
+                } else {
+                    $o_status = 'PENDING';
                 }
-            } else {
-                $o_status = 'PENDING';
-            }
 
-            $o_note = $request->note;
+                $o_note = $request->note;
 
             //// Insert Data ke D_OPNAME
-            DB::table('d_opname')
-                ->insert([
-                    'o_id' => $o_id,
-                    'o_comp' => $o_comp,
-                    'o_date' => $o_date,
-                    'o_reff' => $o_reff,
-                    'o_mem' => $o_mem,
-                    'o_status' => $o_status,
-                    'o_action' => $o_action,
-                    'o_note' => $o_note
-                ]);
+                DB::table('d_opname')
+                    ->insert([
+                        'o_id' => $o_id,
+                        'o_comp' => $o_comp,
+                        'o_date' => $o_date,
+                        'o_reff' => $o_reff,
+                        'o_mem' => $o_mem,
+                        'o_status' => $o_status,
+                        'o_action' => $o_action,
+                        'o_note' => $o_note
+                    ]);
 
             ////////////////////////////////////////////////
             ////////////////////////////////////////////////
@@ -653,49 +654,49 @@ class opnameBarangController extends Controller
             // HANYA dilakukan jika Spec Code == Y
             // SEMUA data Tabel MASUK SEMUA ke tabel D_OPNAME_DT
 
-            $idItem = $request->idItem;
-            $imeiR = $request->imeiR;
-            $getSell = DB::table('d_item')->where('i_id', $idItem)->select('i_price')->first();
+                $idItem = $request->idItem;
+                $imeiR = $request->imeiR;
+                $getSell = DB::table('d_item')->where('i_id', $idItem)->select('i_price')->first();
 
             // MEMBUAT D_STOCK Baru jika item untuk lokasi tersebut belum ada di D_STOCK
-            $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_comp', $o_comp)->count();
-            if ($cekStockExist == 0) {
-                $getMaxStock = DB::table('d_stock')->max('s_id');
-                DB::table('d_stock')->insert([
-                    's_id' => $getMaxStock + 1, 's_comp' => $o_comp, 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
-                ]);
-            }
-
-            $getIdS = DB::table('d_stock')->where('s_item', $idItem)->select('s_id')->first();
-
-            if ($sc == 'Y' && $ex == 'N' || $sc == 'Y' && $ex == 'Y') {
-
-                $sd_array = array();
-                $od_array = array();
-
-                for ($i = 0; $i < count($imeiR); $i++) {
-                    $cek = DB::table('d_stock')
-                        ->join('d_stock_dt', 'sd_stock', '=', 's_id')
-                        ->where('sd_specificcode', $imeiR[$i])->count();
-
-                    //// Jika Data Item tersebut tidak ada di dalam sistem
-                    if ($cek == 0) {
-                        array_push($sd_array, $imeiR[$i]);
-                    }
-                    //////////////////////////////////////////////////////
-
-                    $aray = ([
-                        'od_opname' => $o_id,
-                        'od_detailid' => $i + 1,
-                        'od_item' => $idItem,
-                        'od_qty_real' => 1,
-                        'od_qty_system' => $cek,
-                        'od_specificcode' => $imeiR[$i]
+                $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_comp', $o_comp)->count();
+                if ($cekStockExist == 0) {
+                    $getMaxStock = DB::table('d_stock')->max('s_id');
+                    DB::table('d_stock')->insert([
+                        's_id' => $getMaxStock + 1, 's_comp' => $o_comp, 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
                     ]);
-                    array_push($od_array, $aray);
                 }
 
-                DB::table('d_opname_dt')->insert($od_array);
+                $getIdS = DB::table('d_stock')->where('s_item', $idItem)->select('s_id')->first();
+
+                if ($sc == 'Y' && $ex == 'N' || $sc == 'Y' && $ex == 'Y') {
+
+                    $sd_array = array();
+                    $od_array = array();
+
+                    for ($i = 0; $i < count($imeiR); $i++) {
+                        $cek = DB::table('d_stock')
+                            ->join('d_stock_dt', 'sd_stock', '=', 's_id')
+                            ->where('sd_specificcode', $imeiR[$i])->count();
+
+                    //// Jika Data Item tersebut tidak ada di dalam sistem
+                        if ($cek == 0) {
+                            array_push($sd_array, $imeiR[$i]);
+                        }
+                    //////////////////////////////////////////////////////
+
+                        $aray = ([
+                            'od_opname' => $o_id,
+                            'od_detailid' => $i + 1,
+                            'od_item' => $idItem,
+                            'od_qty_real' => 1,
+                            'od_qty_system' => $cek,
+                            'od_specificcode' => strtoupper($imeiR[$i])
+                        ]);
+                        array_push($od_array, $aray);
+                    }
+
+                    DB::table('d_opname_dt')->insert($od_array);
 
 
                 /////
@@ -704,271 +705,254 @@ class opnameBarangController extends Controller
                 // ///// Jika Barang tidak memiliki IMEI maka Tidak memasukan ke D_STOCK_DT
 
                 // Cek untuk Barang Di SISTEM yang tidak ada dalam list REAL
-                $getDH = DB::table('d_stock_dt')
-                    ->join('d_stock', 's_id', '=', 'sd_stock')
-                    ->where('s_item', $idItem)
-                    ->whereNotIn('sd_specificcode', $imeiR)
-                    ->select('sd_specificcode')
-                    ->get();
-                $arayDH = array();
-                foreach ($getDH as $gdh) {
-                    array_push($arayDH, $gdh->sd_specificcode);
-                }
+                    $getDH = DB::table('d_stock_dt')
+                        ->join('d_stock', 's_id', '=', 'sd_stock')
+                        ->where('s_item', $idItem)
+                        ->whereNotIn('sd_specificcode', $imeiR)
+                        ->select('sd_specificcode')
+                        ->get();
+                    $arayDH = array();
+                    foreach ($getDH as $gdh) {
+                        array_push($arayDH, $gdh->sd_specificcode);
+                    }
 
                 // Cek untuk Barang REAL yang tidak ada didalam tabel Barang SISTEM
-                $arayDT = array();
-                for ($rt = 0; $rt < count($imeiR); $rt++) {
-                    $cekLebih = DB::table('d_stock_dt')->where('sd_specificcode', $imeiR[$rt])->count();
-                    if ($cekLebih == 0) {
-                        array_push($arayDT, $imeiR[$rt]);
+                    $arayDT = array();
+                    for ($rt = 0; $rt < count($imeiR); $rt++) {
+                        $cekLebih = DB::table('d_stock_dt')->where('sd_specificcode', $imeiR[$rt])->count();
+                        if ($cekLebih == 0) {
+                            array_push($arayDT, $imeiR[$rt]);
+                        }
                     }
-                }
 
 
                 /// HAPUS di D_STOCK_DT
-                DB::table('d_stock_dt')->whereIn('sd_specificcode', $arayDH)->delete();
+                    DB::table('d_stock_dt')->whereIn('sd_specificcode', $arayDH)->delete();
 
                 /// TAMBAH di D_STOCK_DT
-                $countSD = DB::table('d_stock_dt')->where('sd_stock', $getIdS->s_id)->count();
+                    $countSD = DB::table('d_stock_dt')->where('sd_stock', $getIdS->s_id)->count();
                 // dd($countSD);
 
-                $getMax = '';
-                if ($countSD == 0) {
-                    $getMax = 0;
-                } else {
-                    $getMax = DB::table('d_stock_dt')->where('sd_stock', $getIdS->s_id)->max('sd_detailid');
-                }
+                    $getMax = '';
+                    if ($countSD == 0) {
+                        $getMax = 0;
+                    } else {
+                        $getMax = DB::table('d_stock_dt')->where('sd_stock', $getIdS->s_id)->max('sd_detailid');
+                    }
 
-                $arayInsert = array();
-                for ($dt = 0; $dt < count($arayDT); $dt++) {
-                    $aray = ([
-                        'sd_stock' => $getIdS->s_id,
-                        'sd_detailid' => $getMax + ($dt + 1),
-                        'sd_specificcode' => $arayDT[$dt]
-                    ]);
-                    array_push($arayInsert, $aray);
-                }
-                DB::table('d_stock_dt')->insert($arayInsert);
+                    $arayInsert = array();
+                    for ($dt = 0; $dt < count($arayDT); $dt++) {
+                        $aray = ([
+                            'sd_stock' => $getIdS->s_id,
+                            'sd_detailid' => $getMax + ($dt + 1),
+                            'sd_specificcode' => strtoupper($arayDT[$dt])
+                        ]);
+                        array_push($arayInsert, $aray);
+                    }
+                    DB::table('d_stock_dt')->insert($arayInsert);
 
 
                 /////
                 ////////////////////////////////////////////
                 // ///// UPDATE pada data D_STOCK_MUTATION
                 // ///// Mekanisme PENAMBAHAN Barang
-                $countTB = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->count();
-                if ($countTB == 0) {
-                    $getMaxSMT = 0;
-                } else {
-                    $getMaxSMT = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->max('sm_detailid');
-                }
+                    $countTB = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->count();
+                    if ($countTB == 0) {
+                        $getMaxSMT = 0;
+                    } else {
+                        $getMaxSMT = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->max('sm_detailid');
+                    }
 
-                $arayInsPNB = array();
-                for ($dt = 0; $dt < count($arayDT); $dt++) {
-                    $arayT = ([
-                        'sm_stock' => $getIdS->s_id,
-                        'sm_detailid' => $getMaxSMT + ($dt + 1),
-                        'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
-                        'sm_detail' => 'PENAMBAHAN',
-                        'sm_specificcode' => $arayDT[$dt],
-                        'sm_expired' => '',
-                        'sm_qty' => 1,
-                        'sm_use' => 0,
-                        'sm_sisa' => 1,
-                        'sm_hpp' => implode(explode('.', $request->hpp)),
-                        'sm_sell' => $getSell->i_price,
-                        'sm_nota' => $o_reff,
-                        'sm_reff' => $o_reff,
-                        'sm_mem' => Auth::user()->m_id
-                    ]);
-                    array_push($arayInsPNB, $arayT);
-                }
-                DB::table('d_stock_mutation')->insert($arayInsPNB);
-
-
-                if (!empty($arayDH)) {
-                    /// Ambil SM_REFF untuk Specifik Code yang sama pada PENAMBAHAN
-                    $getReff = DB::table('d_stock_mutation')->whereIn('sm_specificcode', $arayDH)->select('sm_reff')->get();
-
-                    /// Update SM_USE dan SM_SISA menjadi 1 dan 0
-                    DB::table('d_stock_mutation')->whereIn('sm_specificcode', $arayDH)->update(['sm_use' => 1, 'sm_sisa' => 0]);
-                    $date = Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s');
-                    $getMaxSMH = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->max('sm_detailid');
-
-                    /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
-                    $arayInsPGR = array();
-                    for ($dk = 0; $dk < count($arayDH); $dk++) {
-
-                        $arayK = ([
+                    $arayInsPNB = array();
+                    for ($dt = 0; $dt < count($arayDT); $dt++) {
+                        $arayT = ([
                             'sm_stock' => $getIdS->s_id,
-                            'sm_detailid' => $getMaxSMH + ($dk + 1),
-                            'sm_date' => $date,
-                            'sm_detail' => 'PENGURANGAN',
-                            'sm_specificcode' => $arayDH[$dk],
-                            'sm_expired' => '',
+                            'sm_detailid' => $getMaxSMT + ($dt + 1),
+                            'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
+                            'sm_detail' => 'PENAMBAHAN',
+                            'sm_specificcode' => strtoupper($arayDT[$dt]),
                             'sm_qty' => 1,
-                            'sm_use' => 1,
-                            'sm_sisa' => 0,
-                            'sm_hpp' => $request->hpp,
+                            'sm_use' => 0,
+                            'sm_sisa' => 1,
+                            'sm_hpp' => implode(explode('.', $request->hpp)),
                             'sm_sell' => $getSell->i_price,
                             'sm_nota' => $o_reff,
-                            'sm_reff' => $getReff[$dk]->sm_reff,
+                            'sm_reff' => $o_reff,
                             'sm_mem' => Auth::user()->m_id
                         ]);
-                        array_push($arayInsPGR, $arayK);
+                        array_push($arayInsPNB, $arayT);
                     }
-                    DB::table('d_stock_mutation')->insert($arayInsPGR);
-                }
+                    DB::table('d_stock_mutation')->insert($arayInsPNB);
 
-                DB::table('d_stock')->where('s_id', $getIdS->s_id)->update(['s_qty' => count($imeiR)]);
 
-            } else {
+                    if (!empty($arayDH)) {
+                    /// Ambil SM_REFF untuk Specifik Code yang sama pada PENAMBAHAN
+                        $getReff = DB::table('d_stock_mutation')->whereIn('sm_specificcode', $arayDH)->select('sm_reff')->get();
 
-                $pisah = explode(' ', $request->qtyR);
-                $qtyR = $pisah[0];
-                $pisah2 = explode(' ', $request->qtyS);
-                $qtyS = $pisah2[0];
-                $qtyExp = $request->qty;
-                $qty = '';
+                    /// Update SM_USE dan SM_SISA menjadi 1 dan 0
+                        DB::table('d_stock_mutation')->whereIn('sm_specificcode', $arayDH)->update(['sm_use' => 1, 'sm_sisa' => 0]);
+                        $date = Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s');
+                        $getMaxSMH = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->max('sm_detailid');
 
-                if ($qtyR != '' || $qtyR != null) {
-                    $qty = $qtyR;
+                    /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
+                        $arayInsPGR = array();
+                        for ($dk = 0; $dk < count($arayDH); $dk++) {
+
+                            $arayK = ([
+                                'sm_stock' => $getIdS->s_id,
+                                'sm_detailid' => $getMaxSMH + ($dk + 1),
+                                'sm_date' => $date,
+                                'sm_detail' => 'PENGURANGAN',
+                                'sm_specificcode' => strtoupper($arayDH[$dk]),
+                                'sm_qty' => 1,
+                                'sm_use' => 1,
+                                'sm_sisa' => 0,
+                                'sm_hpp' => $request->hpp,
+                                'sm_sell' => $getSell->i_price,
+                                'sm_nota' => $o_reff,
+                                'sm_reff' => $getReff[$dk]->sm_reff,
+                                'sm_mem' => Auth::user()->m_id
+                            ]);
+                            array_push($arayInsPGR, $arayK);
+                        }
+                        DB::table('d_stock_mutation')->insert($arayInsPGR);
+                    }
+
+                    DB::table('d_stock')->where('s_id', $getIdS->s_id)->update(['s_qty' => count($imeiR)]);
+
                 } else {
-                    $qty = 0;
-                    for ($c = 0; $c < count($qtyExp); $c++) {
-                        $qty = $qty + intval($qtyExp[$c]);
+
+                    $pisah = explode(' ', $request->qtyR);
+                    $qtyR = $pisah[0];
+                    $pisah2 = explode(' ', $request->qtyS);
+                    $qtyS = $pisah2[0];
+                    $qtyExp = $request->qty;
+                    $qty = '';
+
+                    if ($qtyR != '' || $qtyR != null) {
+                        $qty = $qtyR;
+                    } else {
+                        $qty = 0;
+                        for ($c = 0; $c < count($qtyExp); $c++) {
+                            $qty = $qty + intval($qtyExp[$c]);
+                        }
                     }
-                }
 
-                $cekS = DB::table('d_stock')->where('s_item', $idItem)->select('s_qty')->first();
+                    $cekS = DB::table('d_stock')->where('s_item', $idItem)->select('s_qty')->first();
 
-                DB::table('d_opname_dt')->insert([
-                    'od_opname' => $o_id,
-                    'od_detailid' => 1,
-                    'od_item' => $idItem,
-                    'od_qty_real' => $qty,
-                    'od_qty_system' => $cekS->s_qty,
-                    'od_specificcode' => ''
-                ]);
+                    DB::table('d_opname_dt')->insert([
+                        'od_opname' => $o_id,
+                        'od_detailid' => 1,
+                        'od_item' => $idItem,
+                        'od_qty_real' => $qty,
+                        'od_qty_system' => $cekS->s_qty,
+                    ]);
 
 
                 /// UPDATE STOCK MUTASI untuk barang yang tidak memiliki SPESIFIK KODE
                 /// == PENAMBAHAN
-                if ($qtyR > $qtyS) {
-                    $getMaxSMT = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->max('sm_detailid');
-                    DB::table('d_stock_mutation')->insert([
-                        'sm_stock' => $getIdS->s_id,
-                        'sm_detailid' => $getMaxSMT + 1,
-                        'sm_date' => Carbon::now('Asia/Jakarta'),
-                        'sm_detail' => 'PENAMBAHAN',
-                        'sm_specificcode' => '',
-                        'sm_expired' => '',
-                        'sm_qty' => $qtyR - $qtyS,
-                        'sm_use' => 0,
-                        'sm_sisa' => $qtyR - $qtyS,
-                        'sm_hpp' => implode(explode('.', $request->hpp)),
-                        'sm_sell' => $getSell->i_price,
-                        'sm_nota' => $o_reff,
-                        'sm_reff' => $o_reff,
-                        'sm_mem' => Auth::user()->m_id
-                    ]);
-                } else {
+                    if ($qtyR > $qtyS) {
+                        $getMaxSMT = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->max('sm_detailid');
+                        DB::table('d_stock_mutation')->insert([
+                            'sm_stock' => $getIdS->s_id,
+                            'sm_detailid' => $getMaxSMT + 1,
+                            'sm_date' => Carbon::now('Asia/Jakarta'),
+                            'sm_detail' => 'PENAMBAHAN',
+                            'sm_qty' => $qtyR - $qtyS,
+                            'sm_use' => 0,
+                            'sm_sisa' => $qtyR - $qtyS,
+                            'sm_hpp' => implode(explode('.', $request->hpp)),
+                            'sm_sell' => $getSell->i_price,
+                            'sm_nota' => $o_reff,
+                            'sm_reff' => $o_reff,
+                            'sm_mem' => Auth::user()->m_id
+                        ]);
+                    } else {
 
                     /// == PENGURANGAN
-                    $data = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->where('sm_sisa', '!=', 0)->get();
+                        $data = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->where('sm_sisa', '!=', 0)->get();
 
-                    for ($smc = 0; $smc < count($data); $smc++) {
+                        for ($smc = 0; $smc < count($data); $smc++) {
 
-                        $opk = abs($qtyR - $qtyS);
+                            $opk = abs($qtyR - $qtyS);
 
-                        if ($data[$smc]->sm_sisa < $opk) {
+                            if ($data[$smc]->sm_sisa < $opk) {
 
-                            DB::table('d_stock_mutation')
-                                ->where('sm_stock', $data[$smc]->sm_stock)
-                                ->where('sm_detail_id', $data[$smc]->sm_detailid)
-                                ->update([
-                                    'sm_use' => $data[$smc]->sm_qty,
-                                    'sm_sisa' => 0
+                                DB::table('d_stock_mutation')
+                                    ->where('sm_stock', $data[$smc]->sm_stock)
+                                    ->where('sm_detail_id', $data[$smc]->sm_detailid)
+                                    ->update([
+                                        'sm_use' => $data[$smc]->sm_qty,
+                                        'sm_sisa' => 0
+                                    ]);
+
+                                $opk = $opk - $data[$smc]->sm_sisa;
+                                $getMax = DB::table('d_stock_mutation')->where('sm_stock', $data[$smc]->sm_stock)->max('sm_detailid');
+                                DB::table('d_stock_mutation')->insert([
+                                    'sm_stock' => $getIdS->s_id,
+                                    'sm_detailid' => $getMax + 1,
+                                    'sm_date' => Carbon::now('Asia/Jakarta'),
+                                    'sm_detail' => 'PENGURANGAN',
+                                    'sm_qty' => $data[$smc]->sm_qty,
+                                    'sm_use' => 0,
+                                    'sm_sisa' => 0,
+                                    'sm_hpp' => $data[$smc]->sm_hpp,
+                                    'sm_sell' => $getSell->i_price,
+                                    'sm_nota' => $o_reff,
+                                    'sm_reff' => $data[$smc]->sm_nota,
+                                    'sm_mem' => Auth::user()->m_id
                                 ]);
 
-                            $opk = $opk - $data[$smc]->sm_sisa;
-                            $getMax = DB::table('d_stock_mutation')->where('sm_stock', $data[$smc]->sm_stock)->max('sm_detailid');
-                            DB::table('d_stock_mutation')->insert([
-                                'sm_stock' => $getIdS->s_id,
-                                'sm_detailid' => $getMax + 1,
-                                'sm_date' => Carbon::now('Asia/Jakarta'),
-                                'sm_detail' => 'PENGURANGAN',
-                                'sm_specificcode' => '',
-                                'sm_expired' => '',
-                                'sm_qty' => $data[$smc]->sm_qty,
-                                'sm_use' => 0,
-                                'sm_sisa' => 0,
-                                'sm_hpp' => $data[$smc]->sm_hpp,
-                                'sm_sell' => $getSell->i_price,
-                                'sm_nota' => $o_reff,
-                                'sm_reff' => $data[$smc]->sm_nota,
-                                'sm_mem' => Auth::user()->m_id
-                            ]);
+                            } else {
 
-                        } else {
+                                $use = $opk + $data[$smc]->sm_use;
+                                $sisa = $data[$smc]->sm_qty - $use;
 
-                            $use = $opk + $data[$smc]->sm_use;
-                            $sisa = $data[$smc]->sm_qty - $use;
+                                DB::table('d_stock_mutation')
+                                    ->where('sm_stock', $data[$smc]->sm_stock)
+                                    ->where('sm_detailid', $data[$smc]->sm_detailid)
+                                    ->update([
+                                        'sm_use' => $use,
+                                        'sm_sisa' => $sisa
+                                    ]);
 
-                            DB::table('d_stock_mutation')
-                                ->where('sm_stock', $data[$smc]->sm_stock)
-                                ->where('sm_detailid', $data[$smc]->sm_detailid)
-                                ->update([
-                                    'sm_use' => $use,
-                                    'sm_sisa' => $sisa
+                                $getMax = DB::table('d_stock_mutation')->where('sm_stock', $data[$smc]->sm_stock)->max('sm_detailid');
+                                DB::table('d_stock_mutation')->insert([
+                                    'sm_stock' => $getIdS->s_id,
+                                    'sm_detailid' => $getMax + 1,
+                                    'sm_date' => Carbon::now('Asia/Jakarta'),
+                                    'sm_detail' => 'PENGURANGAN',
+                                    'sm_qty' => $opk,
+                                    'sm_use' => 0,
+                                    'sm_sisa' => 0,
+                                    'sm_hpp' => $data[$smc]->sm_hpp,
+                                    'sm_sell' => $getSell->i_price,
+                                    'sm_nota' => $o_reff,
+                                    'sm_reff' => $data[$smc]->sm_nota,
+                                    'sm_mem' => Auth::user()->m_id
                                 ]);
 
-                            $getMax = DB::table('d_stock_mutation')->where('sm_stock', $data[$smc]->sm_stock)->max('sm_detailid');
-                            DB::table('d_stock_mutation')->insert([
-                                'sm_stock' => $getIdS->s_id,
-                                'sm_detailid' => $getMax + 1,
-                                'sm_date' => Carbon::now('Asia/Jakarta'),
-                                'sm_detail' => 'PENGURANGAN',
-                                'sm_specificcode' => '',
-                                'sm_expired' => '',
-                                'sm_qty' => $opk,
-                                'sm_use' => 0,
-                                'sm_sisa' => 0,
-                                'sm_hpp' => $data[$smc]->sm_hpp,
-                                'sm_sell' => $getSell->i_price,
-                                'sm_nota' => $o_reff,
-                                'sm_reff' => $data[$smc]->sm_nota,
-                                'sm_mem' => Auth::user()->m_id
-                            ]);
-
-                            $smc = count($data) + 1;
+                                $smc = count($data) + 1;
+                            }
                         }
                     }
                 }
+
+
+                DB::commit();
+                return json_encode([
+                    'status' => 'obSukses'
+                ]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return json_encode([
+                    'status' => 'obGagal',
+                    'msg' => $e
+                ]);
             }
-
-
-            // //// UPDATE pada data D_STOCK_MUTATION
-            /////// === Jika barang memiliki Specific Code
-            // //// Setelah data dicocokkan, lakukan pengurangan pada D_STOCK_MUTATION yaitu barang2 yang ada di sistem tetapi tidak ada di REAL
-            // //// lalu lakukan juga PENAMBAHAN BARANG yang ada REAL nya tapi tidak ada di dalam SISTEM
-
-            /////// === Jika barang tidak memiliki Specific Code
-            // //// Jika Barang Sistem Lebih BESAR daripada Barang REAL, lakukan PENGURANGAN
-            // (pengurangan menggunakan perulangan untuk mengurangi Pembelian Terdahulu FIRST (FIFO))
-            // //// Jika Barang Sistem Lebih KECIL daripada Barang REAL, lakukan PENAMBAHAN
-
-            DB::commit();
-            return json_encode([
-                'status' => 'obSukses'
-            ]);
-        } catch (\Exception $e) {
-            DB::rollback();
-            return json_encode([
-                'status' => 'obGagal',
-                'msg' => $e
-            ]);
         }
 
+        return view('inventory.opname_barang.tambah');
     }
 
     public function tambahOutlet(Request $request)
@@ -1238,7 +1222,6 @@ class opnameBarangController extends Controller
                 $idItem = $request->idItem;
                 $idComp = $request->idComp;
                 $imeiR = $request->imeiR;
-                $idOpname = DB::table('d_opname')->where('o_comp', $idComp)->where('o_item', $idItem)->select('o_id')->first();
                 $getSell = DB::table('d_item')->where('i_id', $idItem)->select('i_price')->first();
 
                 // MEMBUAT D_STOCK Baru jika item untuk lokasi tersebut belum ada di D_STOCK
@@ -1275,7 +1258,7 @@ class opnameBarangController extends Controller
 
                         //////////////////////////////////////////////////////
                         $aray = ([
-                            'od_opname' => $idOpname->o_id,
+                            'od_opname' => $id,
                             'od_detailid' => $i + 1,
                             'od_item' => $idItem,
                             'od_qty_real' => 1,
@@ -1305,7 +1288,6 @@ class opnameBarangController extends Controller
                     foreach ($getDH as $gdh) {
                         array_push($arayDH, $gdh->sd_specificcode);
                     }
-                    dd("oke");
 
                     // Cek untuk Barang REAL yang tidak ada didalam tabel Barang SISTEM
                     $arayDT = array();
@@ -1368,14 +1350,13 @@ class opnameBarangController extends Controller
                             'sm_sisa' => 1,
                             'sm_hpp' => implode(explode('.', $request->hpp)),
                             'sm_sell' => $getSell->i_price,
-                            'sm_nota' => $o_reff,
-                            'sm_reff' => $o_reff,
+                            'sm_nota' => $getNota->o_reff,
+                            'sm_reff' => $getNota->o_reff,
                             'sm_mem' => Auth::user()->m_id
                         ]);
                         array_push($arayInsPNB, $arayT);
                     }
                     DB::table('d_stock_mutation')->insert($arayInsPNB);
-
 
                     if (!empty($arayDH)) {
                     /// Ambil SM_REFF untuk Specifik Code yang sama pada PENAMBAHAN
@@ -1389,6 +1370,7 @@ class opnameBarangController extends Controller
                     /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
                         $arayInsPGR = array();
                         for ($dk = 0; $dk < count($arayDH); $dk++) {
+                            dd($arayDH);
 
                             $arayK = ([
                                 'sm_stock' => $getIdS->s_id,
@@ -1402,7 +1384,7 @@ class opnameBarangController extends Controller
                                 'sm_sisa' => 0,
                                 'sm_hpp' => $request->hpp,
                                 'sm_sell' => $getSell->i_price,
-                                'sm_nota' => $o_reff,
+                                'sm_nota' => $getNota->o_reff,
                                 'sm_reff' => $getReff[$dk]->sm_reff,
                                 'sm_mem' => Auth::user()->m_id
                             ]);
@@ -1412,6 +1394,7 @@ class opnameBarangController extends Controller
                     }
 
                     DB::table('d_stock')->where('s_id', $getIdS->s_id)->update(['s_qty' => count($imeiR)]);
+
 
                 } else {
 

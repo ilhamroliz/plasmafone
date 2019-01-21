@@ -561,8 +561,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/inventory/opname-barang/getCompName', 'inventory\opnameBarangController@get_cn');
 
     Route::post('/inventory/opname-barang/formTambah', 'inventory\opnameBarangController@form_tambah');
-    Route::post('/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
-    Route::post('/inventory/opname-barang/tambahOutlet', 'inventory\opnameBarangController@tambahOutlet');
+    Route::match(['get', 'post'], '/inventory/opname-barang/tambah', 'inventory\opnameBarangController@tambah');
+    Route::match(['get', 'post'], '/inventory/opname-barang/tambahOutlet', 'inventory\opnameBarangController@tambahOutlet');
 
     Route::match(['get', 'post'], '/inventory/opname-barang/edit', 'inventory\opnameBarangController@edit');
     Route::match(['get', 'post'], '/inventory/opname-barang/editOutlet', 'inventory\opnameBarangController@editOutlet');
