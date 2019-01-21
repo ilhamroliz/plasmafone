@@ -117,6 +117,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 												<tr>
 
+													<th><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal</th>
+
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
 
 													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
@@ -144,6 +146,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 											<thead>		
 
 												<tr>
+
+													<th><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal</th>
 
 													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
 
@@ -335,6 +339,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"order": [],
 					"ajax": "{{ route('distribusi.proses') }}",
 					"columns":[
+						{"data": "tanggal"},
 						{"data": "nota"},
 						{"data": "from"},
 						{"data": "destination"},
@@ -369,6 +374,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"order": [],
 					"ajax": "{{ route('distribusi.terima') }}",
 					"columns":[
+						{"data": "tanggal"},
 						{"data": "nota"},
 						{"data": "from"},
 						{"data": "destination"},
