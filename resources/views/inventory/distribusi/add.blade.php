@@ -190,6 +190,7 @@
     var idItem = [];
     var iCode = [];
     var arrCode = [];
+    var arrIdStock = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -270,12 +271,23 @@
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
         arrCode.push(data.i_code);
+        arrIdStock.push(data.s_id);
     }
 
     function cekIsiArrayItem(data){
         var hitung = arrCode.length;
         for (var i = 0; i <= hitung; i++) {
             if (arrCode[i] == data) {
+               return 'sudah';
+            }
+        }
+        return 'lanjut';
+    }
+
+    function cekIsiArrayStockN(data){
+        var hitung = arrIdStock.length;
+        for (var i = 0; i <= hitung; i++) {
+            if (arrIdStock[i] == data) {
                return 'sudah';
             }
         }
@@ -400,7 +412,8 @@
                 });
             }
         } else {
-            row = '<tr id="'+kodeGlobal+'" class="tr">' +
+            if (arrIdStock.length == 1) {
+                row = '<tr id="'+idGlobal+'" class="tr">' +
                 '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                 '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                 '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
@@ -410,7 +423,16 @@
                 '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
                 '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
                 '</tr>';
-            $("#table-distribusi tbody").append(row);
+                $("#table-distribusi tbody").append(row);
+            } else {
+                $.smallBox({
+                    title : "Pesan!",
+                    content : "Item sudah ditambahkan",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+            }
 
         }
         $('#cari-stock').val('');
