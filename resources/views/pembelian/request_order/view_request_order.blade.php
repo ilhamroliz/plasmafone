@@ -123,7 +123,7 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet" >No</th>
+                                                <th data-hide="phone,tablet" width="1%">No</th>
                                                 <th >Nama Outlet</th>
                                                 <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" >Qty</th>
@@ -157,7 +157,7 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet" >No</th>
+                                                <th data-hide="phone,tablet" width="1%">No</th>
                                                 <th >Nama Outlet</th>
                                                 <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" >Qty</th>
@@ -178,7 +178,7 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet" >No</th>
+                                                <th data-hide="phone,tablet" width="1%" >No</th>
                                                 <th >Nama Outlet</th>
                                                 <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" >Qty</th>
@@ -385,6 +385,9 @@
                                     data._token = '{{ csrf_token() }}';
                                 },
                             },
+                    "fnCreatedRow": function (row, data, index) {
+                        $('td', row).eq(0).html(index + 1);
+                        },
                     } );
                
             };

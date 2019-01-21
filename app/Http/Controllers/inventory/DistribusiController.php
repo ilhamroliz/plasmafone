@@ -42,11 +42,6 @@ class DistribusiController extends Controller
         dd($data);
     }
 
-    public function delete()
-    {
-        // 
-    }
-
     public function getProses()
     {
         $proses = DB::table('d_distribusi')
@@ -202,7 +197,7 @@ class DistribusiController extends Controller
         $id = Crypt::decrypt($id);
 
         $data = DB::table('d_distribusi')
-                ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_detailid as detailid', 'd_distribusi_dt.dd_item as idItem', 'd_distribusi_dt.dd_comp', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi_dt.dd_status as status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_detailid as detailid', 'd_distribusi_dt.dd_item as idItem', 'd_distribusi_dt.dd_comp', 'd_distribusi.d_from', 'd_distribusi.d_destination', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi_dt.dd_status as status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
                 ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                 ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                 ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
@@ -220,7 +215,7 @@ class DistribusiController extends Controller
                     return '<div class="text-center"><button disabled="disabled" class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
 
-                return '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="remove(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->detailid) . '\', \'' . $data->nota . '\', \'' . Crypt::encrypt($data->idItem) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+                return '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="remove(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->detailid) . '\', \'' . $data->nota . '\', \'' . Crypt::encrypt($data->idItem) . '\', \'' . $data->d_from . '\', \'' . $data->d_destination . '\', \'' . $data->qty . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
 
             }
 
@@ -234,7 +229,71 @@ class DistribusiController extends Controller
     public function hapus(Request $request)
     {
         $data = $request->all();
-        dd($data);
+        
+        DB::beginTransaction();
+        try {
+            $stock_mutasi = DB::table('d_stock_mutation')
+                            ->select('sm_stock', 'sm_detailid', 'sm_qty', 'sm_specificcode', 'sm_reff')
+                            ->where('sm_nota', $data['nota'])
+                            ->where('sm_detail', 'PENGURANGAN')
+                            ->first();
+
+            if ($stock_mutasi->sm_specificcode != null) {
+                
+                $check = DB::table('d_stock_dt')->where('sd_stock', $stock_mutasi->sm_stock)->where('sm_specificcode', $stock_mutasi->sm_specificcode)->count();
+
+                if ($check > 0) {
+                    DB::table('d_stock_dt')->where('sd_stock', $stock_mutasi->sm_stock)->where('sm_specificcode', $stock_mutasi->sm_specificcode)->delete();
+                }
+
+            }
+
+            DB::table('d_stock')
+            ->where('s_comp', $data['from'])
+            ->where('s_position', $data['destination'])
+            ->where('s_item', Crypt::decrypt($data['item']))
+            ->where('s_qty', $data['qtyDistribusi'])
+            ->where('s_status', 'On Going')
+            ->delete();
+
+            $stock = DB::table('d_stock')->select('s_qty')->where('s_id', $stock_mutasi->sm_stock)->first();
+
+            DB::table('d_stock')->where('s_id', $stock_mutasi->sm_stock)
+            ->update([
+                's_qty' => $stock->s_qty + $stock_mutasi->sm_qty
+            ]);
+
+            $stock_m = DB::table('d_stock_mutation')->select('sm_sisa', 'sm_use')->where('sm_nota', $stock_mutasi->sm_reff)->first();
+
+            DB::table('d_stock_mutation')->where('sm_nota', $stock_mutasi->sm_reff)
+            ->update([
+                'sm_sisa' => $stock_m->sm_sisa + $stock_mutasi->sm_qty,
+                'sm_use' => $stock_m->sm_use - $stock_mutasi->sm_qty
+            ]);
+
+            DB::table('d_stock_mutation')->where('sm_nota', $data['nota'])->where('sm_detail', 'PENGURANGAN')->delete();
+
+            DB::table('d_distribusi_dt')
+            ->where('dd_distribusi', Crypt::decrypt($data['distribusi']))
+            ->where('dd_detailid', Crypt::decrypt($data['detail']))
+            ->where('dd_comp', $data['from'])
+            ->where('dd_item', Crypt::decrypt($data['item']))
+            ->where('dd_qty_received', 0)
+            ->where('dd_status', 'On Going')
+            ->delete();
+
+            $distribusidt = DB::table('d_distribusi_dt')->where('dd_distribusi', Crypt::decrypt($data['distribusi']))->count();
+
+            if ($distribusidt == 0) {
+                DB::table('d_distribusi')->where('d_id', Crypt::decrypt($data['distribusi']))->delete();
+            }
+
+            DB::commit();
+            return "true";
+        } catch (\Exception $e) {
+            DB::rollback();
+            return "false => ".$e;
+        }
     }
 
     public function cariOutlet(Request $request)
@@ -496,7 +555,13 @@ class DistribusiController extends Controller
                                 ]);
 
                 for ($i=0; $i < count($data['idStock']); $i++) { 
-                    $get_countiddetail = DB::table('d_distribusi_dt')->where('dd_distribusi', $distribusiId)->count()+1;
+                    $get_countiddetail = DB::table('d_distribusi_dt')->where('dd_distribusi', $distribusiId)->max('dd_detailid');
+
+                    if ($get_countiddetail == null || $get_countiddetail == "") {
+                        $get_countiddetail = 1;
+                    } else {
+                        $get_countiddetail = $get_countiddetail + 1;
+                    }
 
                     $compitem = DB::table('d_stock')->select('s_comp', 's_position', 's_item')->where('s_id', $data['idStock'][$i])->first();
 
@@ -557,7 +622,13 @@ class DistribusiController extends Controller
 
                     foreach ($get_smiddetail as $key => $value) {
 
-                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->count()+1;
+                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->max('sm_detailid');
+
+                        if ($get_countiddetail == null || $get_countiddetail == "") {
+                            $get_countiddetail = 1;
+                        } else {
+                            $get_countiddetail = $get_countiddetail + 1;
+                        }
                         
                         if ($get_smiddetail[$key]->sm_sisa != 0) {
 

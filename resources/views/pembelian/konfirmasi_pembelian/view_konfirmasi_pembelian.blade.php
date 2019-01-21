@@ -118,7 +118,7 @@
                                             <thead>
                                             <tr>
                                                 <th data-hide="phone,tablet" width="15%">No</th>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                <th data-hide="phone,tablet" width="15%">No Confirm</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
                                                 <th data-hide="phone,tablet" width="15%">Status</th>
@@ -135,7 +135,7 @@
                                             <tr>
                                                 
                                                 <th data-hide="phone,tablet" width="1%">No</th>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                <th data-hide="phone,tablet" width="15%">No Confirm</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Harga</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
@@ -153,7 +153,7 @@
                                             <tr>
                                                 
                                                 <th data-hide="phone,tablet" width="1%">No</th>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                <th data-hide="phone,tablet" width="15%">No Confirm</th>
                                                 <th width="30%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
                                                 <th data-hide="phone,tablet" width="15%">Status</th>
@@ -233,7 +233,7 @@
                     },
                 "columns":[
                     {"data": "pr_idConf"},
-                    {"data": "s_company"},
+                    {"data": "pr_confirmNumber"},
                     {"data": "i_nama"},
                     {"data": "pr_qtyApp"},
                     {"data": "pr_stsConf"},
@@ -272,7 +272,7 @@
                     },
                 "columns":[
                     {"data": "pr_idConf"},
-                    {"data": "s_company"},
+                    {"data": "pr_confirmNumber"},
                     {"data": "i_nama"},
                     {"data": "pr_price"},
                     {"data": "pr_qtyApp"},
