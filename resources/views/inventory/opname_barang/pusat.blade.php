@@ -260,7 +260,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 											<table
 												id="dobCTable"
 												class="table table-striped table-bordered table-hover margin-top-10"
-												style="display:none; margin-top: 20px;">
+												style="display:none; margin-top: 20px; width: 100%">
 
 												<thead id="dobCHead">
 													<th>No.</th>
@@ -272,40 +272,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											</table>
 										</div>
-
-										{{-- <!-- TABEL E-->
-										<table
-											id="dobETable"
-											class="table table-striped table-bordered table-hover margin-top-10"
-											style="display:none; margin-top: 20px">
-
-											<thead id="dobEHead">
-												<th style="width: 15%">No.</th>
-												<th style="width: 50%">Tanggal Kadaluarsa</th>
-												<th style="width: 35%">Qty</th>
-											</thead>
-
-											<tbody id="dobEBody">
-											</tbody>
-
-										</table>
-
-										<!-- TABEL CE-->
-										<table
-											id="dobCETable"
-											class="table table-striped table-bordered table-hover margin-top-10"
-											style=" margin-top: 20px">
-
-											<thead id="dobCEHead">
-												<th style="width: 15%">No.</th>
-												<th style="width: 45%">Kode Spesifik</th>
-												<th style="wdith: 40%">Tanggal Kadaluarsa</th>
-											</thead>
-
-											<tbody id="dobCEBody">
-											</tbody>
-
-										</table> --}}
 
 									</div>
 									<!-- end widget content -->
@@ -782,47 +748,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				todayHighlight: true
 			});
 
-            eobCodeTable = $('#eobCodeTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
-				"info" : false,
-			});
-
 			dobCTable = $('#dobCTable').DataTable({
 				"order" : [],
 				"searching": false,
-				"autoWidth" : true,
+				"autoWidth" : false,
 				"pageLength" : 5,
-				"info" : false,
-			});
-
-			expTable = $('#expTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
-				"info" : false,
-			});
-
-			codeTable = $('#codeTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
-				"info" : false
-			});
-
-			codeExpTable = $('#codeExpTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
 				"info" : false,
 			});
 
@@ -935,82 +865,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		});
 
-		function addRowCodeExp(){
-			codeExpTable.row.add([
-				'<td><input type="text" class="form-control qty" name="qty[]"></td>',
-				'<td><select name="" id="" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="" id="" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="" id="" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-				'<td><div class="text-center"><a class="btn btn-success" onclick="addRowCodeExp()"><i class="fa fa-plus"></i></a> <a class="btn btn-danger btnhapus"><i class="fa fa-minus"></i></a></div></td>'
-			]).draw(false);
-		}
-
-		function addRowCode(){
-			// var id = codeTable.rows().count() + 1;
-			codeTable.row.add([
-				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnterC(event)"></td>',
-				'<td><a class="btn btn-success" onclick="addRowCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
-			]).draw(false);
-            // $(this).parents('tr').find('input').focus();
-            $('tbody#codeshowdata tr:last td:first input').focus();
-			// $('#'+id).focus();
-
-		}
-
-		function addRowExp(){
-			// var id = codeTable.rows().count() + 1;
-			expTable.row.add([
-				'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-				'<td><input type="text" class="form-control qty" name="qty[]"></td>',
-				'<td><a class="btn btn-success" onclick="addRowExp()"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus"><i class="fa fa-minus"></i></a></td>'
-			]).draw(false);
-			// $('#'+id).focus();
-
-		}
-
-        function addRowEOBCode(){
-			// var id = codeTable.rows().count() + 1;
-			eobCodeTable.row.add([
-				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)"></td>',
-				'<td><a class="btn btn-success" onclick="addRowEOBCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
-			]).draw(false);
-            $('tbody#eobcodeshowdata tr:last td:first input').focus();
-			// $('#'+id).focus();
-
-		}
-
-        // handle enter plain javascript
-        function handleEnter(e){
-            var keycode = (e.keyCode ? e.keyCode : e.which);
-            if (keycode == '13') {
-                addRowEOBCode();
-            }
-        }
-
-        function handleEnterC(e){
-            var keycode = (e.keyCode ? e.keyCode : e.which);
-            if (keycode == '13') {
-                addRowCode();
-                // $(this).next('input').focus();
-            }
-        }
-
-		$('.expTable tbody').on( 'click', 'a.btnhapus', function () {
-			expTable.row( $(this).parents('tr') ).remove().draw();
-		});
-
-		$('.codeTable tbody').on( 'click', 'a.btnhapus', function () {
-			codeTable.row( $(this).parents('tr') ).remove().draw();
-            $('tbody#codeshowdata tr:last td:first input').focus();
-		});
-
-		$('.codeExpTable tbody').on( 'click', 'a.btnhapus', function () {
-			codeExpTable.row( $(this).parents('tr') ).remove().draw();
-		});
-
-        $('.eobCodeTable tbody').on( 'click', 'a.btnhapus', function () {
-			eobCodeTable.row( $(this).parents('tr') ).remove().draw();
-            $('tbody#eobcodeshowdata tr:last td:first input').focus();
-		});
-
 		function detail(id){
 			axios.post(baseUrl+'/inventory/opname-barang/detail?id='+id).then((response) => {
 
@@ -1027,6 +881,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$qtyS = 0;
 
 				dobCTable.clear();
+                $('#dobCTable').css("display", "block");
 
 				for($ob = 0; $ob < response.data.data.length; $ob++){
 					$qtyR = $qtyR + parseInt(response.data.data[$ob].od_qty_real);
@@ -1038,14 +893,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					if($sc == 'Y' && $ex == 'N'){
 
 						dobCTable.row.add([
-							($ob+1),
-							response.data.data[$ob].od_specificcode
+							'<td>'+($ob+1)+'</td>',
+							'<td>'+response.data.data[$ob].od_specificcode+'</td>'
 						]).draw(false);
 
 					}
 
 				}
-				$('#dobCTable').css("display", "block");
 
 				$('#obQtyS').html($qtyS+' Unit');
 				$('#obQtyR').html($qtyR+' Unit');
@@ -1184,23 +1038,23 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						'<td><a class="btn btn-success" onclick="addRowCode()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
 					]).draw(false);
 
-				}else if(speccode == 'Y' && expired == 'Y'){
-					$('#divTableCodeExp').css("display", "block");
+				// }else if(speccode == 'Y' && expired == 'Y'){
+				// 	$('#divTableCodeExp').css("display", "block");
 
-					codeExpTable.row.add([
-						'<td><input type="text" class="form-control imeiI" name="imeiI[]"></td>',
-						'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-						'<td><a class="btn btn-success" onclick="addRowCodeExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
-					]).draw(false);
+				// 	codeExpTable.row.add([
+				// 		'<td><input type="text" class="form-control imeiI" name="imeiI[]"></td>',
+				// 		'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
+				// 		'<td><a class="btn btn-success" onclick="addRowCodeExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
+				// 	]).draw(false);
 
-				}else if(speccode == 'N' && expired == 'Y'){
-					$('#divTableExp').css("display", "block");
+				// }else if(speccode == 'N' && expired == 'Y'){
+				// 	$('#divTableExp').css("display", "block");
 
-					expTable.row.add([
-						'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-						'<td><input type="text" class="form-control qty" name="qty[]"></td>',
-						'<td><a class="btn btn-success" onclick="addRowExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
-					]).draw(false);
+				// 	expTable.row.add([
+				// 		'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
+				// 		'<td><input type="text" class="form-control qty" name="qty[]"></td>',
+				// 		'<td><a class="btn btn-success" onclick="addRowExp()" style="width:100%"><i class="fa fa-plus"></i></a></td>'
+				// 	]).draw(false);
 				}else{
 					$(".qtyR").css("display", "block");
 					$("#osQtyR").maskMoney({precision: 0, thousands: '.', suffix: ' Unit'});
@@ -1243,7 +1097,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		});
 
         function tambah(){
-            $('#tambahModal').modal('show');
+            location.href = ('{{ url('/inventory/opname-barang/tambah') }}');
         }
 
 		function simpanOs(){
@@ -1308,108 +1162,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		}
 
         function edit(id){
-			axios.get(baseUrl+'/inventory/opname-barang/edit?id='+id).then((response) => {
-				$('#eobIdItem').val(response.data.edit[0].od_item);
-				$('#eobNameItem').val(response.data.edit[0].i_nama);
-                $('#eobIdComp').val(response.data.edit[0].o_comp);
-                $('#eobHpp').val(accounting.formatMoney(response.data.hpp, "", 0, ".", ","));
-                $('#eobHpp').maskMoney({precision: 0, thousands: '.'});
-                $('#eobQtyS').val(response.data.edit[0].od_qty_system+' Unit');
-				document.getElementById("eobNameItem").readOnly = true;
 
-                $('#idS').val(id);
-
-                speccode = response.data.edit[0].i_specificcode;
-				expired = response.data.edit[0].i_expired;
-
-				if(response.data.edit[0].o_action == 'REAL'){
-					$('#eobAksiSelect').val('2');
-				}else if(response.data.edit[0].o_action == 'SYSTEM'){
-					$('#eobAksiSelect').val('1');
-				}
-
-                if(response.data.edit[0].i_specificcode == 'Y'){
-                    $('.eobQtyR').css("display", "none");
-                    $('#eobTableCode').css("display", "block");
-
-                    eobCodeTable.clear();
-                    for(var i = 0; i < response.data.edit.length; i++){
-                        if(i == 0){
-                            eobCodeTable.row.add([
-                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
-                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:100%"><i class="fa fa-plus"></i></a>'
-                            ]).draw(false);
-                        }else{
-                            eobCodeTable.row.add([
-                                '<input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)" value="'+response.data.edit[i].od_specificcode+'">',
-                                '<a class="btn btn-success" onclick="addRowEOBCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a>'
-                            ]).draw(false);
-                        }
-
-                    }
-
-                }else{
-
-                    $('#eobTableCode').css("display", "none");
-                    $('#eobQtyR').val(response.data.edit[0].od_qty_real+' Unit');
-                    $('.eobQtyR').css("display", "block");
-                }
-
-			});
-            $('#editModal').modal('show');
-        }
-
-        function simpanEOB(){
-
-            $('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Menyimpan Data...');
-
-            var id = $('#idS').val();
-			var QtyS = $('#eobQtyS').val();
-			var QtyR = $('#eobQtyR').val();
-			var idItem = $('#eobIdItem').val();
-			var idComp = $('#eobIdComp').val();
-			var aksi = $('#eobAksiSelect').val();
-            var hpp = $('#eobHpp').val();
-			var note = '';
-
-			var ar = $();
-			var dataTab = '';
-			if(speccode == 'Y'){
-				for (var i = 0; i < eobCodeTable.rows()[0].length; i++) {
-					ar = ar.add(eobCodeTable.row(i).node())
-				}
-				note = $('#eobNoteC').val();
-                var dataTab = ar.find('select,input,textarea').serialize();
-			}
-
-			var data = ar.find('select,input,textarea').serialize() +'&qtyR='+QtyR+'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note+'&sc='+speccode+'&ex='+expired+'&hpp='+hpp+'&id='+id;
-
-			axios.post(baseUrl+'/inventory/opname-barang/edit', data)
-			.then((response) => {
-
-				if(response.data.status == 'obSukses'){
-					$('#tambahModal').modal('hide');
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Berhasil",
-						content : 'Data Opname Barang Berhasil Disimpan...!',
-						color : "#739E73",
-						timeout: 4000,
-						icon : "fa fa-check bounce animated"
-					});
-				}else{
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Maaf, Opname Barang Gagal Disimpan ",
-						color : "#A90329",
-						timeout: 4000,
-						icon : "fa fa-times bounce animated"
-					});
-				}
-
-			});
+            location.href = ('{{ url('/inventory/opname-barang/edit?id=') }}' + id);
 
         }
 
