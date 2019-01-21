@@ -268,6 +268,7 @@
     var idItem = [];
     var iCode = [];
     var arrCode = [];
+    var arrIdStock = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -366,6 +367,7 @@
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
         arrCode.push(data.i_code);
+        arrIdStock.push(data.s_id);
     }
 
     function setStocks(info){
@@ -645,25 +647,35 @@
                 });
             }
         } else {
-            row = '<tr id="'+kodeGlobal+'" class="tr">' +
-                '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
-                '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
-                '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
-                '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
-                '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
-                '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
-                '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
-                '</td>' +
-                '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
-                '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
-                '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">'+convertToRupiah(hargaGlobal)+'</td>' +
-                '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
-                '</tr>';
-            $("#table-penjualan tbody").append(row);
-            $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
-            $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+            if (arrIdStock.length == 1) {
+                row = '<tr id="'+idGlobal+'" class="tr">' +
+                    '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
+                    '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
+                    '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
+                    '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
+                    '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
+                    '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
+                    '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
+                    '</td>' +
+                    '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
+                    '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
+                    '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
+                    '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">'+convertToRupiah(hargaGlobal)+'</td>' +
+                    '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
+                    '</tr>';
+                $("#table-penjualan tbody").append(row);
+                $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
+                $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+            } else {
+                $.smallBox({
+                    title : "Pesan!",
+                    content : "Item sudah ditambahkan",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+            }
 
         }
         $('#cari-stock').val('');

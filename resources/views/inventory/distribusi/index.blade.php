@@ -314,11 +314,13 @@
 
 												<tr>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
+													<th><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal</th>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue "></i>&nbsp;Nota</th>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Asal Outlet</th>
+
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Tujuan Outlet</th>
 
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
@@ -342,11 +344,13 @@
 
 												<tr>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
+													<th><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal</th>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota</th>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Asal Outlet</th>
+
+													<th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Tujuan Outlet</th>
 
 													<th class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
@@ -870,6 +874,7 @@
 					"serverSide": true,
 					"ajax": "{{ route('distribusi.getproses') }}",
 					"columns":[
+						{"data": "tanggal"},
 						{"data": "nota"},
 						{"data": "from"},
 						{"data": "destination"},
@@ -902,6 +907,7 @@
 					"serverSide": true,
 					"ajax": "{{ route('distribusi.getterima') }}",
 					"columns":[
+						{"data": "tanggal"},
 						{"data": "nota"},
 						{"data": "from"},
 						{"data": "destination"},
