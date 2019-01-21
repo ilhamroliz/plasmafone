@@ -747,6 +747,10 @@ Route::group(['middleware' => 'auth'], function () {
 	// main route end
 	//=== Penjualan Reguler
     Route::get('penjualan-reguler', 'PenjualanController@index');
+    Route::get('penjualan-reguler/get', 'PenjualanController@getPenjualanRegular')->name('penjualan.regular');
+    Route::get('penjualan-reguler/get-detail/{id}', 'PenjualanController@getPenjualanRegularDetail');
+    Route::get('penjualan-reguler/edit/{id}', 'PenjualanController@editPenjualanRegular');
+    Route::get('penjualan-reguler/tambah', 'PenjualanController@add_regular');
     Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
     Route::get('penjualan-reguler/cari-member', 'PenjualanController@cariMember');
     Route::get('penjualan-reguler/cari-sales', 'PenjualanController@cariSales');
