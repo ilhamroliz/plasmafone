@@ -31,6 +31,7 @@ class PenjualanController extends Controller
             ->where(function ($q) use ($cari){
                 $q->orWhere('m_id', 'like', '%'.$cari.'%');
                 $q->orWhere('m_name', 'like', '%'.$cari.'%');
+                $q->where('m_comp', '=', Auth::user()->m_comp);
             })->get();
 
         
