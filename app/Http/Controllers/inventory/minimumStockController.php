@@ -74,7 +74,7 @@ class minimumStockController extends Controller
             ->make(true);
     }
 
-    public function get_alert()
+    public function cek_warn()
     {
 
     }
