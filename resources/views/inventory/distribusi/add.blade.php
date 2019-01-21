@@ -421,7 +421,7 @@
                 '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                 '</td>' +
                 '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
-                '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+kodeGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
+                '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
                 '</tr>';
                 $("#table-distribusi tbody").append(row);
             } else {
