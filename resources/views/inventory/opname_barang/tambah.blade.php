@@ -46,7 +46,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 				<div class="page-title">
-					<a href="{{ url('/inventory/penerimaan/distribusi') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+					<a href="{{ url('/inventory/opname-barang/pusat') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 				</div>
 			</div>
 

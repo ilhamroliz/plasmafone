@@ -25,7 +25,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
-			<li>Home</li><li>Inventory</li><li>Opname Barang Pusat</li>
+			<li>Home</li><li>Inventory</li><li>Opname Barang Outlet</li>
 		</ol>
 
 	</div>
@@ -40,7 +40,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-cube"></i>
-                    Inventory <span><i class="fa fa-angle-double-right"></i> Opname Barang Pusat </span>
+                    Inventory <span><i class="fa fa-angle-double-right"></i> Opname Barang Outlet </span>
                 </h1>
             </div>
 
@@ -62,7 +62,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     <header role="heading">
                         <div class="jarviswidget-ctrls" role="menu"><a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
                         </div>
-                        <h2><strong>Form Edit Data Opname Barang Pusat</strong></h2>
+                        <h2><strong>Form Edit Data Opname Barang Outlet</strong></h2>
 
                         <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
                     </header>
@@ -100,8 +100,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </div>
 
                                             <div class="col-md-5">
+                                                @if(Auth::user()->m_comp == "PF00000001")
+                                                <input type="hidden" id="idComp" name="idComp">
+                                                <input type="text" class="form-control" id="nameComp" name="nameComp" style="text-transform: uppercase; width: 100%" readonly>
+                                                @else
                                                 <input type="hidden" id="idComp" name="idComp" value="{{Auth::user()->m_comp}}">
-                                                <input type="text" class="form-control" id="nameComp" name="nameComp" value="Plasmafone Pusat" style="text-transform: uppercase; width: 100%" readonly>
+                                                <input type="text" class="form-control" id="nameComp" name="nameComp" value="{{ $m_comp }}" style="text-transform: uppercase; width: 100%" readonly>
+                                                @endif
                                             </div>
 
                                             <div class="col-md-1">

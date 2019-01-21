@@ -260,7 +260,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 											<table
 												id="dobCTable"
 												class="table table-striped table-bordered table-hover margin-top-10"
-												style="display:none; margin-top: 20px;">
+												style="display:none; margin-top: 20px; width: 100%">
 
 												<thead id="dobCHead">
 													<th>No.</th>
@@ -748,47 +748,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				todayHighlight: true
 			});
 
-            eobCodeTable = $('#eobCodeTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
-				"info" : false,
-			});
-
 			dobCTable = $('#dobCTable').DataTable({
 				"order" : [],
 				"searching": false,
-				"autoWidth" : true,
+				"autoWidth" : false,
 				"pageLength" : 5,
-				"info" : false,
-			});
-
-			expTable = $('#expTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
-				"info" : false,
-			});
-
-			codeTable = $('#codeTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
-				"info" : false
-			});
-
-			codeExpTable = $('#codeExpTable').DataTable({
-				"order" : [],
-				"searching": false,
-				"autoWidth" : false,
-				"scrollY": "100px",
-				"paging": false,
 				"info" : false,
 			});
 
@@ -901,82 +865,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		});
 
-		function addRowCodeExp(){
-			codeExpTable.row.add([
-				'<td><input type="text" class="form-control qty" name="qty[]"></td>',
-				'<td><select name="" id="" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="" id="" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="" id="" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-				'<td><div class="text-center"><a class="btn btn-success" onclick="addRowCodeExp()"><i class="fa fa-plus"></i></a> <a class="btn btn-danger btnhapus"><i class="fa fa-minus"></i></a></div></td>'
-			]).draw(false);
-		}
-
-		function addRowCode(){
-			// var id = codeTable.rows().count() + 1;
-			codeTable.row.add([
-				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnterC(event)"></td>',
-				'<td><a class="btn btn-success" onclick="addRowCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
-			]).draw(false);
-            // $(this).parents('tr').find('input').focus();
-            $('tbody#codeshowdata tr:last td:first input').focus();
-			// $('#'+id).focus();
-
-		}
-
-		function addRowExp(){
-			// var id = codeTable.rows().count() + 1;
-			expTable.row.add([
-				'<td class="text-align-left"><select name="tgl[]" style="width: 20%; float: left" class="form-control"><option value="" selected disabled>TGL</option></select><select name="bln[]" style="width: 40%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>BULAN</option></select><select name="thn[]" style="width: 30%; float: left; margin-left: 4%" class="form-control"><option value="" selected disabled>TAHUN</option></select></td>',
-				'<td><input type="text" class="form-control qty" name="qty[]"></td>',
-				'<td><a class="btn btn-success" onclick="addRowExp()"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus"><i class="fa fa-minus"></i></a></td>'
-			]).draw(false);
-			// $('#'+id).focus();
-
-		}
-
-        function addRowEOBCode(){
-			// var id = codeTable.rows().count() + 1;
-			eobCodeTable.row.add([
-				'<td><input type="text" class="form-control imeiR" name="imeiR[]" style="width:100%" onkeypress="handleEnter(event)"></td>',
-				'<td><a class="btn btn-success" onclick="addRowEOBCode()" style="width:47%; margin-right: 6%"><i class="fa fa-plus"></i></a><a class="btn btn-danger btnhapus" style="width:47%"><i class="fa fa-minus"></i></a></td>'
-			]).draw(false);
-            $('tbody#eobcodeshowdata tr:last td:first input').focus();
-			// $('#'+id).focus();
-
-		}
-
-        // handle enter plain javascript
-        function handleEnter(e){
-            var keycode = (e.keyCode ? e.keyCode : e.which);
-            if (keycode == '13') {
-                addRowEOBCode();
-            }
-        }
-
-        function handleEnterC(e){
-            var keycode = (e.keyCode ? e.keyCode : e.which);
-            if (keycode == '13') {
-                addRowCode();
-                // $(this).next('input').focus();
-            }
-        }
-
-		$('.expTable tbody').on( 'click', 'a.btnhapus', function () {
-			expTable.row( $(this).parents('tr') ).remove().draw();
-		});
-
-		$('.codeTable tbody').on( 'click', 'a.btnhapus', function () {
-			codeTable.row( $(this).parents('tr') ).remove().draw();
-            $('tbody#codeshowdata tr:last td:first input').focus();
-		});
-
-		$('.codeExpTable tbody').on( 'click', 'a.btnhapus', function () {
-			codeExpTable.row( $(this).parents('tr') ).remove().draw();
-		});
-
-        $('.eobCodeTable tbody').on( 'click', 'a.btnhapus', function () {
-			eobCodeTable.row( $(this).parents('tr') ).remove().draw();
-            $('tbody#eobcodeshowdata tr:last td:first input').focus();
-		});
-
 		function detail(id){
 			axios.post(baseUrl+'/inventory/opname-barang/detail?id='+id).then((response) => {
 
@@ -993,6 +881,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$qtyS = 0;
 
 				dobCTable.clear();
+                $('#dobCTable').css("display", "block");
 
 				for($ob = 0; $ob < response.data.data.length; $ob++){
 					$qtyR = $qtyR + parseInt(response.data.data[$ob].od_qty_real);
@@ -1004,14 +893,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					if($sc == 'Y' && $ex == 'N'){
 
 						dobCTable.row.add([
-							($ob+1),
-							response.data.data[$ob].od_specificcode
+							'<td>'+($ob+1)+'</td>',
+							'<td>'+response.data.data[$ob].od_specificcode+'</td>'
 						]).draw(false);
 
 					}
 
 				}
-				$('#dobCTable').css("display", "block");
 
 				$('#obQtyS').html($qtyS+' Unit');
 				$('#obQtyR').html($qtyR+' Unit');
