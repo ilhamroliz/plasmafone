@@ -380,7 +380,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			var data = ar.find('select,input,textarea').serialize() +'&qtyR='+QtyR+'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note+'&sc='+speccode+'&ex='+expired+'&hpp='+hpp+'&id='+id;
 
-			axios.post(baseUrl+'/inventory/opname-barang/edit', data)
+			axios.post(baseUrl+'/inventory/opname-barang/editOutlet', data)
 			.then((response) => {
 
 				if(response.data.status == 'eobSukses'){
@@ -392,7 +392,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						color : "#739E73",
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"
-					});
+                    });
 				}else{
 					$('#overlay').fadeOut(200);
 					$.smallBox({

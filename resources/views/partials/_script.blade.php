@@ -103,13 +103,47 @@
 
 				$('[data-toggle="tooltip"]').tooltip();
 
-                // setInterval( function() {
+                setInterval( function() {
 
-                //     axios.post(baseUrl+'/inventory/min-stock/cek-warn').then((response) => {
+                    axios.post(baseUrl+'/inventory/min-stock/cek-warn').then((response) => {
 
-                //     })
+						if(response.data.data.length == 1){
+							$('#warn-notif').html('<ul class="notification-body">'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'</ul>');
+						}else if(response.data.data.length == 2){
+							$('#warn-notif').html('<ul class="notification-body">'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[1].s_min - response.data.data[1].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'</ul>');
+						}else if(response.data.data.length == 3){
+							$('#warn-notif').html('<ul class="notification-body">'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[1].s_min - response.data.data[1].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[2].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[2].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[2].s_min - response.data.data[2].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'</ul>');
+						}else if(response.data.data.length == 4){
+							$('#warn-notif').html('<ul class="notification-body">'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[1].s_min - response.data.data[1].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[2].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[2].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[2].s_min - response.data.data[2].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[3].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[3].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[3].s_min - response.data.data[3].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'</ul>');
+						}else if(response.data.data.length >= 4){
+							$('#warn-notif').html('<ul class="notification-body">'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[1].s_min - response.data.data[1].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[2].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[2].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[2].s_min - response.data.data[2].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[3].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[3].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[3].s_min - response.data.data[3].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[4].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[4].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[4].s_min - response.data.data[4].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+									'</ul>');
+						}
 
-                // }, 3000);
+						$('#countBadge').html(response.data.count);
+
+					});
+
+                }, 5000);
 			});
 
 		</script>

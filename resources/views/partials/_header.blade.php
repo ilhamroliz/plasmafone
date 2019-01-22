@@ -7,7 +7,7 @@
 
 		<!-- Note: The activity badge color changes when clicked and resets the number to 0
 		Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
-		<span id="activity" class="activity-dropdown"> <i class="fa fa-bell-o"></i> <b class="badge"></b> </span>
+		<span id="activity" class="activity-dropdown"> <i class="fa fa-bell-o"></i> <b id="countBadge" class="badge"></b> </span>
 
 		<!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
 		<div class="ajax-dropdown">
@@ -21,9 +21,9 @@
 
 
 			<!-- notification content -->
-			<div class="ajax-notifications custom-scroll">
+			<div id="warn-notif" class="ajax-notifications custom-scroll">
 
-				<ul class="notification-body">
+				{{-- <ul class="notification-body">
                     <li>
                         <span class="unread">
                             <a href="javascript:void(0);" class="msg">
@@ -90,7 +90,7 @@
                             </a>
                         </span>
                     </li>
-                </ul>
+                </ul> --}}
 
 			</div>
 			<!-- end notification content -->

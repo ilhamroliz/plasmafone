@@ -104,7 +104,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                 <input type="text" class="form-control" id="nameComp" name="nameComp" placeholder="Masukkan Lokasi Barang" style="text-transform: uppercase; width: 100%">
                                                 @else
                                                 <input type="hidden" id="idComp" name="idComp" value="{{Auth::user()->m_comp}}">
-                                                <input type="text" class="form-control" id="nameComp" name="nameComp" value="Plasmafone Pusat" style="text-transform: uppercase; width: 100%" readonly>
+                                                <input type="text" class="form-control" id="nameComp" name="nameComp" value="{{ $getCN->c_name }}" style="text-transform: uppercase; width: 100%" readonly>
                                                 @endif
                                             </div>
 
@@ -380,7 +380,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			var data = ar.find('select,input,textarea').serialize() +'&qtyR='+QtyR+'&qtyS='+QtyS+'&idItem='+idItem+'&idComp='+idComp+'&aksi='+aksi+'&note='+note+'&sc='+speccode+'&ex='+expired+'&hpp='+hpp;
 
-			axios.post(baseUrl+'/inventory/opname-barang/tambah', data)
+			axios.post(baseUrl+'/inventory/opname-barang/tambahOutlet', data)
 			.then((response) => {
 
 				if(response.data.status == 'obSukses'){
@@ -392,7 +392,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						color : "#739E73",
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"
-					});
+                    });
 				}else{
 					$('#overlay').fadeOut(200);
 					$.smallBox({
