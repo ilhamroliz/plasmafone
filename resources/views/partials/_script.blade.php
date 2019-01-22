@@ -153,46 +153,18 @@
 				$('#overlay').fadeOut(200);
 			}
 
-            function formatRupiah2(angka, prefix = undefined)
-            {
-                var number_string = angka.toString(),
-                    split	= number_string.split(','),
-                    sisa 	= split[0].length % 3,
-                    rupiah 	= split[0].substr(0, sisa),
-                    ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+            function convertToRupiah(angka) {
+                var rupiah = '';
+                var angkarev = angka.toString().split('').reverse().join('');
+                for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+                var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
+                return hasil;
 
-                if (ribuan) {
-                    separator = sisa ? '.' : '';
-                    rupiah += separator + ribuan.join('.');
-                }
-
-                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
             }
 
-            function formatRupiah(angka, prefix = undefined)
+            function convertToAngka(rupiah)
             {
-                var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                    split	= number_string.split(','),
-                    sisa 	= split[0].length % 3,
-                    rupiah 	= split[0].substr(0, sisa),
-                    ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
-
-                if (ribuan) {
-                    separator = sisa ? '.' : '';
-                    rupiah += separator + ribuan.join('.');
-                }
-
-                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-            }
-
-            function isNumberKey(evt)
-            {
-                var charCode = (evt.which) ? evt.which : evt.keyCode;
-                if (charCode > 31 && (charCode < 48 || charCode > 57))
-                    return false;
-                return true;
+                return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
             }
 
 		</script>

@@ -829,12 +829,24 @@
 
     function hapus(id) {
         $('#'+id).remove();
-        console.log(removeIdStock(arrIdStock, id).toString());
+        remove_array_value(arrIdStock, id);
         updateTotalTampil();
     }
 
-    function removeIdStock(array, element) {
-        return array.filter(el => el !== element);
+    function remove_array_value(array, value) {
+        var index = array.indexOf(value);
+        if (index >= 0) {
+            array.splice(index, 1);
+            reindex_array(array);
+        }
+    }
+
+    function reindex_array(array) {
+        var arrIdStock = [];
+        for (var key in array) {
+            arrIdStock.push(array[key]);
+        }
+        console.log(arrIdStock);
     }
     
     function updateTotalTampil() {
@@ -980,18 +992,6 @@
         window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales+'/'+totPemb+'/'+kembali, '', "width=800,height=600");
     }
 
-    function convertToRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
-        return hasil;
 
-    }
-
-    function convertToAngka(rupiah)
-    {
-        return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
-    }
 </script>
 @endsection
