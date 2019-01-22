@@ -829,7 +829,12 @@
 
     function hapus(id) {
         $('#'+id).remove();
+        console.log(removeIdStock(arrIdStock, id).toString());
         updateTotalTampil();
+    }
+
+    function removeIdStock(array, element) {
+        return array.filter(el => el !== element);
     }
     
     function updateTotalTampil() {
