@@ -506,14 +506,6 @@ class PenjualanController extends Controller
                                 'sm_use' => $sm_use,
                                 'sm_sisa' => $sm_sisa
                             ]);
-
-                            // Update d_stock
-                            DB::table('d_stock')
-                            ->where('s_id', $data['idStock'][$i])
-                            ->update([
-                                's_qty' => $sm_sisa,
-                                's_status' => 'On Going'
-                            ]);
                             break;
                         }
 
@@ -608,23 +600,14 @@ class PenjualanController extends Controller
         }
 
         $datas = DB::table('d_sales')
-                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total', DB::raw('coalesce(concat(" (", sm_specificcode, ")"), "") as specificcode'))
                 ->where('d_sales.s_id', $id)
                 ->join('d_sales_dt', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
                 ->join('m_company', 'm_company.c_id', '=', 'd_sales.s_comp')
                 ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
                 ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
-                ->join('d_stock', function ($q){
-                    $q->on('sd_item', '=', 's_item');
-                    $q->where('d_stock.s_comp', '=', 'd_sales.s_comp');
-                })
                 ->join('d_stock_mutation', function ($x){
-                    $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
-                    $x->where('sm_detail', '=', 'PENAMBAHAN');
-                })
-                ->leftJoin('d_stock_dt', function ($a) {
-                    $a->on('sd_stock', '=', 'd_stock.s_id');
-                    $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutationsm_specificcode');
+                    $x->on('d_stock_mutation.sm_nota', '=', 'd_sales.s_nota');
                 })
                 ->get();
 

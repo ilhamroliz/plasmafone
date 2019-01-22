@@ -659,7 +659,6 @@
                 });
             }
         } else {
-            console.log(arrKodeGlobal.includes(kodeGlobal));
             if (arrKodeGlobal.includes(kodeGlobal) == true) {
                 $.smallBox({
                     title : "Pesan!",
@@ -963,7 +962,7 @@
                     $("#search_barang").hide("slow");
                     $("#cari-salesman").focus();
                     updateTotalTampil();
-                    cetak(response.salesman, response.idSales, response.totPemb, response.kembali);
+                    cetak(response.salesman, response.idSales,  response.totPemb, response.kembali);
                     $('#DetailPembayaran').modal('hide');
                     
                 }
