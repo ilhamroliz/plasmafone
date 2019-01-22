@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CodeGenerator as GenerateCode;
@@ -467,6 +468,7 @@ class PenjualanController extends Controller
                             // }
 
                             $sm_hpp = $get_smiddetail[$key]->sm_hpp;
+                            $sm_sell = $get_smiddetail[$key]->sm_sell;
                             array_push($arr_hpp, $sm_hpp);
 
                             $sm_reff = $get_smiddetail[$key]->sm_nota;
@@ -495,7 +497,7 @@ class PenjualanController extends Controller
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $data['harga'][$i],
+                                'sm_sell'           => $sm_sell,
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
@@ -649,6 +651,7 @@ class PenjualanController extends Controller
 
     public function delete($id = null)
     {
+        $getMutasi = null;
         try{
             $id = Crypt::decrypt($id);
         }catch (DecryptException $r){
@@ -665,7 +668,68 @@ class PenjualanController extends Controller
 
             $getMutasi = DB::table('d_stock_mutation')
                 ->where('sm_stock', $getStock->sm_stock)
-                ->where('sm_nota', $getStock->sm_reff)->first();
+                ->where('sm_nota', $getStock->sm_reff)
+                ->where('sm_hpp', $getStock->sm_hpp)->first();
+
+//            if ($getMutasi == null){
+//                // creat new mutasi
+//                $smdetailid = DB::table('d_stock_mutation')->where('sm_stock', $getStock->sm_stock)->max('sm_detailid');
+//
+//                if ($smdetailid == null){
+//                    $smdetailid = 1;
+//                } else {
+//                    $smdetailid = $smdetailid + 1;
+//                }
+//
+//                if ($getStock->sm_specificcode == null){
+//                    $specificcode = null;
+//                } else {
+//                    $specificcode = $getStock->sm_specificcode;
+//                    $iddetail = DB::table('d_stock_dt')->where('sd_stock', $getStock->sm_stock)->max('sd_detailid');
+//
+//                    if ($iddetail == null){
+//                        $iddetail = 1;
+//                    } else {
+//                        $iddetail = $iddetail + 1;
+//                    }
+//
+//                    //insert new code
+//                    DB::table('d_stock_dt')->insert([
+//                        'sd_stock' => $getStock->sm_stock,
+//                        'sd_detailid' => $iddetail,
+//                        'sd_specificcode' => $specificcode
+//                    ]);
+//                }
+//
+//                // update code
+//                $stockid = DB::table('d_stock')->where('s_id', $getStock->sm_stock)->first();
+//                DB::table('d_stock')->where('s_id', $getStock->sm_stock)->update([
+//                    's_qty' => $stockid->s_qty + $getStock->sm_qty
+//                ]);
+//
+//                $getnotaawal = DB::table('d_stock_mutation')->where('sm_nota', $getStock->sm_reff)->first();
+//
+//                DB::table('d_stock_mutation')->insert([
+//                    'sm_stock' => $getStock->sm_stock,
+//                    'sm_detailid' => $smdetailid,
+//                    'sm_date' => Carbon::now(),
+//                    'sm_detail' => 'PENAMBAHAN',
+//                    'sm_specificcode' => $specificcode,
+//                    'sm_qty' => $getStock->sm_qty,
+//                    'sm_use' => 0,
+//                    'sm_sisa' => $getStock->sm_qty,
+//                    'sm_hpp' => $getStock->sm_hpp,
+//                    'sm_sell' => $getStock->sm_sell,
+//                    'sm_nota' => $getnotaawal->sm_nota,
+//                    'sm_reff' => $getnotaawal->sm_reff,
+//                    'sm_mem' => $getnotaawal->sm_mem
+//                ]);
+//
+//                $getMutasi = DB::table('d_stock_mutation')
+//                    ->where('sm_stock', $getStock->sm_stock)
+//                    ->where('sm_nota', $getStock->sm_reff)
+//                    ->where('sm_hpp', $getStock->sm_hpp)->first();
+//            }
 
             if ($getStock->sm_specificcode != null){
                 // update stock mutasi
@@ -715,14 +779,6 @@ class PenjualanController extends Controller
                         'sm_use' => $getMutasi->sm_use - $getStock->sm_qty
                     ]);
 
-                $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $getStock->sm_stock)->max('sd_detailid');
-
-                if ($maxStockdt == null){
-                    $maxStockdt = 1;
-                } else {
-                    $maxStockdt = $maxStockdt + 1;
-                }
-
                 // update dstock
                 $dstock = DB::table('d_stock')->where('s_id', $getStock->sm_stock)->first();
 
@@ -741,7 +797,7 @@ class PenjualanController extends Controller
             return 'true';
         }catch (\Exception $e){
             DB::rollback();
-            return 'false';
+            return 'false => '.$e;
         }
     }
     
