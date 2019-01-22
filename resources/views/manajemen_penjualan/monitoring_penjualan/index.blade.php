@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/MonthPicker.css') }}">
 @endsection
 
-<?php 
+<?php
 use App\Http\Controllers\PlasmafoneController as Plasma;
 ?>
 
@@ -14,10 +14,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 	<!-- RIBBON -->
 	<div id="ribbon">
 
-		<span class="ribbon-button-alignment"> 
+		<span class="ribbon-button-alignment">
 			<span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.." data-html="true" onclick="location.reload()">
 				<i class="fa fa-refresh"></i>
-			</span> 
+			</span>
 		</span>
 
 		<!-- breadcrumb -->
@@ -41,7 +41,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     Manajemen Penjualan <span><i class="fa fa-angle-double-right"></i> Monitoring Penjualan </span>
                 </h1>
             </div>
-        
+
         </div>
 
         <section id="widget-grid" class="">
@@ -53,9 +53,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 -->
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                    <div class="jarviswidget" id="wid-id-11" 
-                        data-widget-editbutton="false" 
-                        data-widget-colorbutton="false" 
+                    <div class="jarviswidget" id="wid-id-11"
+                        data-widget-editbutton="false"
+                        data-widget-colorbutton="false"
                         data-widget-deletebutton="false">
 
                         <header>
@@ -92,9 +92,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 </div>
                             </div>
                         </div>
-                    
+
                     </div>
-                
+
                 </div>
 
                 <!-- Table untuk || Realisasi Penjualan ||
@@ -102,9 +102,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 -->
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                    <div class="jarviswidget" id="wid-id-11" 
-                        data-widget-editbutton="false" 
-                        data-widget-colorbutton="false" 
+                    <div class="jarviswidget" id="wid-id-11"
+                        data-widget-editbutton="false"
+                        data-widget-colorbutton="false"
                         data-widget-deletebutton="false">
 
                         <header>
@@ -124,13 +124,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
                                                 </div>
                                             </div>
-											
+
 										</div>
 
 										<div class="col-md-4">
 											<div class="form-group">
 												<input type="hidden" id="mpCompId" name="mpCompId">
-												<input type="text" class="form-control mpCompName" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase">                                       
+												<input type="text" class="form-control mpCompName" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase">
 											</div>
 										</div>
 
@@ -167,9 +167,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 </div>
                             </div>
                         </div>
-                    
+
                     </div>
-                
+
                 </div>
 
                 <!-- Table Untuk || Best Outlet ||
@@ -177,9 +177,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 -->
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                    <div class="jarviswidget" id="wid-id-11" 
-                        data-widget-editbutton="false" 
-                        data-widget-colorbutton="false" 
+                    <div class="jarviswidget" id="wid-id-11"
+                        data-widget-editbutton="false"
+                        data-widget-colorbutton="false"
                         data-widget-deletebutton="false">
 
                         <header>
@@ -200,7 +200,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <input type="text" class="form-control" id="tglAkhirOT" name="tglAkhirOT" value="{{ $endDate }}" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
                                                 </div>
                                             </div>
-											
+
 										</div>
 
 										<div class="col-md-1">
@@ -234,13 +234,13 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                 </div>
                             </div>
                         </div>
-                    
+
                     </div>
-                
+
                 </div>
-            
+
             </div>
-        
+
         </section>
 
     </div>
@@ -282,7 +282,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             // setInterval(function() {
 
                 // axios.post(baseUrl+'/man-penjualan/monitoring-penjualan/realtime', $('#countForm').serialize()).then((response) => {
-                    
+
                 //     for(var i = 0; i < response.data.real.length; i++){
                 //         $('#realtimeTable').DataTable().row.add([
                 //             response.data.real[i].s_date,
@@ -295,9 +295,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 //         if(i == response.data.real.length){
                 //             $('#hiddenCount').val(response.data.real[i].s_id);
                 //         }
-                //     }                    
+                //     }
                 // });
-                
+
                 // $('#realtimeTable').DataTable().destroy();
                 // $('#realtimeTable').DataTable({
 				// 	"processing": true,
@@ -340,7 +340,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         '<div class="text-align-right">'+response.data.data[i].qty+' Unit</div>',
                         '<div class="text-align-right">'+(response.data.data[i].spd_qty - response.data.data[i].qty) +' Unit</div>'
                     ]).draw(false);
-                }  
+                }
 
             });
 

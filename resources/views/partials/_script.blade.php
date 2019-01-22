@@ -8,7 +8,7 @@
 
 		<script src="{{ asset('template_asset/js/libs/jquery-2.1.1.min.js') }}"></script>
 
-		<script src="{{ asset('template_asset/js/libs/jquery-ui-1.10.3.min.js') }}"></script>		
+		<script src="{{ asset('template_asset/js/libs/jquery-ui-1.10.3.min.js') }}"></script>
 
 		<!-- IMPORTANT: APP CONFIG -->
 		<script src="{{ asset('template_asset/js/app.config.js') }}"></script>
@@ -16,7 +16,7 @@
 		<script src="{{ asset('template_asset/plugins/lodash/core.js') }}"></script>
 
 		<!-- JS TOUCH : include this plugin for mobile drag / drop touch events-->
-		<script src="{{ asset('template_asset/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js') }}"></script> 
+		<script src="{{ asset('template_asset/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js') }}"></script>
 
 		<!-- BOOTSTRAP JS -->
 		<script src="{{ asset('template_asset/js/bootstrap/bootstrap.min.js') }}"></script>
@@ -90,7 +90,7 @@
 		var responsiveHelper_datatable_fixed_column = undefined;
 		var responsiveHelper_datatable_col_reorder = undefined;
 		var responsiveHelper_datatable_tabletools = undefined;
-		
+
 		var breakpointDefinition = {
 			tablet : 1024,
 			phone : 480
@@ -103,6 +103,13 @@
 
 				$('[data-toggle="tooltip"]').tooltip();
 
+                // setInterval( function() {
+
+                //     axios.post(baseUrl+'/inventory/min-stock/cek-warn').then((response) => {
+
+                //     })
+
+                // }, 3000);
 			});
 
 		</script>

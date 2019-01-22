@@ -501,6 +501,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pembelian/refund', 'RefundController@index');
     Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
     Route::get('pembelian/refund/tambah', 'RefundController@add');
+    Route::get('pembelian/refund/get-data', 'RefundController@getDataItem');
     //end Refund
 
 	// Pembelian end
@@ -585,7 +586,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('inventory/min-stock/get-nonactive', 'inventory\minimumStockController@get_nonactive');
 
     Route::match(['get', 'post'], '/inventory/min-stock/tambah', 'inventory\minimumStockController@tambah');
+
     Route::match(['get', 'post'], '/inventory/min-stock/edit', 'inventory\minimumStockController@edit');
+
     Route::post('inventory/min-stock/cek-warn', 'inventory\minimumStockController@cek_warn');
 
 	//=== End MINIMUM STOCK

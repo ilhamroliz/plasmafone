@@ -40,10 +40,11 @@ class minimumStockController extends Controller
             ->addColumn('aksi', function ($getActive) {
                 $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
-                if (PlasmafoneController::checkAkses(11, 'update') == false) {
+                $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Set Nonactive" onclick="nonactive(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
+                if (PlasmafoneController::checkAkses(13, 'update') == false) {
                     return '<div class="text-center">' . $detail . '</div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '</div>';
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $nonactive . '</div>';
                 }
             })
             ->rawColumns(['s_min', 'aksi'])
@@ -63,18 +64,18 @@ class minimumStockController extends Controller
             })
             ->addColumn('aksi', function ($getNonActive) {
                 $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($getNonActive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($getNonActive->s_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
-                if (PlasmafoneController::checkAkses(11, 'update') == false) {
+                $active = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Set Active" onclick="active(\'' . Crypt::encrypt($getNonActive->s_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                if (PlasmafoneController::checkAkses(13, 'update') == false) {
                     return '<div class="text-center">' . $detail . '</div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '</div>';
+                    return '<div class="text-center">' . $detail . '&nbsp;' . $active . '</div>';
                 }
             })
             ->rawColumns(['s_min', 'aksi'])
             ->make(true);
     }
 
-    public function get_alert()
+    public function cek_warn()
     {
 
     }
@@ -132,5 +133,23 @@ class minimumStockController extends Controller
     public function edit(Request $request)
     {
 
+    }
+
+    public function set_active()
+    {
+        if (PlasmafoneController::checkAkses(13, 'update') == false) {
+            return view('errors.407');
+        } else {
+
+        }
+    }
+
+    public function set_nonactive()
+    {
+        if (PlasmafoneController::checkAkses(13, 'update') == false) {
+            return view('errors.407');
+        } else {
+
+        }
     }
 }

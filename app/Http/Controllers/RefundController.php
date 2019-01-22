@@ -54,4 +54,18 @@ class RefundController extends Controller
         }
         return Response::json($hasil);
     }
+
+    public function getDataItem(Request $request)
+    {
+        $idStock = $request->id;
+        $data = DB::table('d_stock')
+            ->join('d_stock_dt', 'sd_stock', '=', 's_id')
+            ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
+            ->select('sd_specificcode', 'sm_hpp')
+            ->where('s_id', '=', $idStock)
+            ->groupBy('sd_specificcode')
+            ->get();
+
+        return Response::json($data);
+    }
 }
