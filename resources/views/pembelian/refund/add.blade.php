@@ -7,6 +7,27 @@
         .smart-form fieldset {
             padding: 10px 14px 5px;
         }
+        .smart-form button {
+            display: inline-block;
+            margin-bottom: 0;
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            touch-action: manipulation;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+            padding: 6px 12px;
+            font-size: 13px;
+            line-height: 1.42857143;
+            border-radius: 2px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            float: right;
+        }
     </style>
 @endsection
 
@@ -73,14 +94,17 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                             <div class="widget-body padding-10">
                                 <form id="form-tambah" class="smart-form form-horizontal">
                                     <section class="form-group">
-                                        <div class="col-md-12">
+                                        <div class="col-md-11">
                                             <label class="input"> <i class="icon-append fa fa-font"></i>
                                                 <input type="text" name="username" id="namabarang" placeholder="Masukkan Nama/Kode Barang" style="text-transform: uppercase">
                                                 <b class="tooltip tooltip-bottom-right">Masukkan Nama/Kode Barang</b>
                                             </label>
                                         </div>
+                                        <div class="col-md-1">
+                                            <button type="button" class="btn btn-primary" onclick="cari()"><i class="fa fa-search"></i></button>
+                                        </div>
                                     </section>
-                                    <section class="form-group">
+                                    <section class="form-group baris-1" style="display: none">
                                         <div class="col col-6 padding-left-0">
                                             <label class="input"> <i class="icon-append fa fa-money"></i>
                                                 <input type="text" name="username" id="namabarang" placeholder="Harga Baru" style="text-transform: uppercase">
@@ -94,7 +118,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </label>
                                         </div>
                                     </section>
-                                    <section class="form-group">
+                                    <section class="form-group baris-1" style="display: none">
                                         <div class="col-md-12">
                                             <label class="input"> <i class="icon-append fa fa-barcode"></i>
                                                 <input type="text" name="username" placeholder="Masukkan Kode Spesifik" style="text-transform: uppercase">
@@ -102,7 +126,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </label>
                                         </div>
                                     </section>
-                                    <section class="form-group">
+                                    <section class="form-group baris-1" style="display: none">
                                         <table class="table table-striped table-bordered table-hover" width="100%" id="historyrefund" style="cursor: pointer">
                                             <thead>
                                             <tr>
@@ -175,9 +199,47 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 source: baseUrl+'/pembelian/refund/get-item',
                 minLength: 1,
                 select: function(event, data) {
-
+                    setData(data);
                 }
             });
         })
+
+        function setData(data) {
+            overlay();
+            var id = data.item.id;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: baseUrl + '/pembelian/refund/get-data',
+                type: 'get',
+                data: {id: id},
+                success: function(response){
+                    out();
+                }, error:function(x, e) {
+                    out();
+                    if (x.status == 0) {
+                        alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                    } else if (x.status == 404) {
+                        alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                    } else if (x.status == 500) {
+                        alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                    } else if (e == 'parsererror') {
+                        alert('Error.\nParsing JSON Request failed.');
+                    } else if (e == 'timeout'){
+                        alert('Request Time out. Harap coba lagi nanti');
+                    } else {
+                        alert('Unknow Error.\n' + x.responseText);
+                    }
+                }
+            })
+        }
+
+        function cari() {
+            $('.baris-1').show('slow');
+        }
+
     </script>
 @endsection

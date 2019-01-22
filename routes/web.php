@@ -501,6 +501,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pembelian/refund', 'RefundController@index');
     Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
     Route::get('pembelian/refund/tambah', 'RefundController@add');
+    Route::get('pembelian/refund/get-data', 'RefundController@getDataItem');
     //end Refund
 
 	// Pembelian end
@@ -752,6 +753,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('penjualan-reguler', 'PenjualanController@index');
     Route::get('penjualan-reguler/get', 'PenjualanController@getPenjualanRegular')->name('penjualan.regular');
     Route::get('penjualan-reguler/get-detail/{id}', 'PenjualanController@getPenjualanRegularDetail');
+    Route::get('penjualan-reguler/delete/{id}', 'PenjualanController@delete');
     Route::get('penjualan-reguler/edit/{id}', 'PenjualanController@editPenjualanRegular');
     Route::get('penjualan-reguler/tambah', 'PenjualanController@add_regular');
     Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
@@ -762,7 +764,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('penjualan-reguler/getdetailmember/{id}', 'PenjualanController@getDetailMember');
     Route::post('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
     Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
-    Route::get('penjualan-reguler/struk/{salesman}/{id}/{bayar}/{bri}/{bni}/{totPemb}/{kembali}', 'PenjualanController@struck');
+    Route::get('penjualan-reguler/struk/{salesman}/{id}/{totPemb}/{kembali}', 'PenjualanController@struck');
     Route::get('penjualan-reguler/detailPembayaran/{total}', 'PenjualanController@detailpembayaran');
 	//==============
 

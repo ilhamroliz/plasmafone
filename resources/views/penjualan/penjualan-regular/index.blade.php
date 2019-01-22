@@ -1063,16 +1063,16 @@
 			});
 		}
 
-		function remove(distribusi, dDistribusi, nota, item, from, destination, qtyDistribusi){
+		function remove(id){
 			$.SmartMessageBox({
 				title : "Pesan!",
-				content : 'Apakah Anda yakin akan menghapus data ini?',
+				content : 'Apakah Anda yakin akan membatalkan penjualan ini?',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
 				if (ButtonPressed === "Ya") {
 
 					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
+					$('#load-status-text').text('Sedang Memproses...');
 
 					$.ajaxSetup({
 						headers: {
@@ -1080,11 +1080,20 @@
 						}
 					});
 					$.ajax({
-						url: baseUrl + '/distribusi-barang/hapus',
-						type: 'post',
-						data: {distribusi: distribusi, detail: dDistribusi, nota: nota, item: item, from: from, destination: destination, qtyDistribusi: qtyDistribusi},
+						url: baseUrl + '/penjualan-reguler/delete/'+id,
+						type: 'get',
 						success: function(response){
-							if (response == "false") {
+                            if (response == "Not Found") {
+                                $.smallBox({
+                                    title : "Gagal",
+                                    content : "Data tidak ditemukan",
+                                    color : "#A90329",
+                                    timeout: 5000,
+                                    icon : "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response == "false") {
 								$.smallBox({
 									title : "Gagal",
 									content : "Upsss. Terjadi kesalahan",
@@ -1097,7 +1106,7 @@
 							} else {
 								$.smallBox({
 									title : "Berhasil",
-									content : 'Transaksi Anda berhasil...!',
+									content : 'Transaksi Anda berhasil dibatalkan...!',
 									color : "#739E73",
 									timeout: 5000,
 									icon : "fa fa-check bounce animated"
@@ -1138,72 +1147,6 @@
         function edit(id){
             window.location = baseUrl + '/penjualan-reguler/edit/' + id;
         }
-
-		// function edit(id){
-		// 	var tbl_edit = '';
-		// 	$('#form_edit').hide();
-		// 	$('#table_edit').DataTable().destroy();
-		// 	$('#overlay').fadeIn(200);
-		// 	$('#load-status-text').text('Sedang Memproses...');
-		// 	$('#namaItem_dt').hide();
-		// 	$('#table_edit').show();
-		// 	$('#footer_edit').hide();
-
-		// 	tbl_edit = $('#table_edit').dataTable({
-		// 		"processing": true,
-		// 		"serverSide": true,
-		// 		"ajax": "{{ url('distribusi-barang/detail-edit/') }}"+"/"+id,
-		// 		"columns":[
-		// 			{"data": "nama_item"},
-		// 			{"data": "qty"},
-		// 			{"data": "qty_received"},
-		// 			{"data": "aksi"}
-		// 		],
-		// 		"autoWidth" : true,
-		// 		"language" : dataTableLanguage,
-		// 		"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-		// 		"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-		// 		"preDrawCallback" : function() {
-		// 			// Initialize the responsive datatables helper once.
-		// 			if (!responsiveHelper_dt_basic) {
-		// 				responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-		// 			}
-		// 		},
-		// 		"rowCallback" : function(nRow) {
-		// 			responsiveHelper_dt_basic.createExpandIcon(nRow);
-		// 		},
-		// 		"drawCallback" : function(oSettings) {
-		// 			responsiveHelper_dt_basic.respond();
-		// 		}
-		// 	});
-
-		// 	axios.get(baseUrl+'/distribusi-barang/detail/'+id).then(response => {
-
-		// 		if (response.data.status == 'Access denied') {
-
-		// 			$('#overlay').fadeOut(200);
-		// 			$.smallBox({
-		// 				title : "Gagal",
-		// 				content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-		// 				color : "#A90329",
-		// 				timeout: 5000,
-		// 				icon : "fa fa-times bounce animated"
-		// 			});
-
-		// 		} else {
-		// 			$('#title_detail2').html('<strong>Detail Distribusi Barang</strong>');
-		// 			$('#dt_nota2').text(response.data.data[0].nota);
-		// 			$('#dt_from2').text(response.data.data[0].from);
-		// 			$('#dt_destination2').text(response.data.data[0].destination);
-		// 			$('#dt_tgl2').text(response.data.data[0].date);
-		// 			$('#dt_by2').text(response.data.data[0].by);
-		// 			$('#overlay').fadeOut(200);
-		// 			$('#editModal').modal('show');
-		// 		}
-
-		// 	})
-
-		// }
 
 		function detail(id){
 			$('#overlay').fadeIn(200);
@@ -1286,47 +1229,47 @@
 				})
 		}
 
-		function formatRupiah2(angka, prefix = undefined)
-		{
-			var number_string = angka.toString(),
-				split	= number_string.split(','),
-				sisa 	= split[0].length % 3,
-				rupiah 	= split[0].substr(0, sisa),
-				ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
-				
-			if (ribuan) {
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
-			
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-		}
+        function formatRupiah2(angka, prefix = undefined)
+        {
+            var number_string = angka.toString(),
+                split	= number_string.split(','),
+                sisa 	= split[0].length % 3,
+                rupiah 	= split[0].substr(0, sisa),
+                ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
 
-		function formatRupiah(angka, prefix = undefined)
-		{
-			var number_string = angka.replace(/[^,\d]/g, '').toString(),
-				split	= number_string.split(','),
-				sisa 	= split[0].length % 3,
-				rupiah 	= split[0].substr(0, sisa),
-				ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
-				
-			if (ribuan) {
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
-			
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-		}
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
 
-		function isNumberKey(evt)
-		{
-		    var charCode = (evt.which) ? evt.which : evt.keyCode;
-		    if (charCode > 31 && (charCode < 48 || charCode > 57))
-		        return false;
-		    return true;
-		}
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        function formatRupiah(angka, prefix = undefined)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split	= number_string.split(','),
+                sisa 	= split[0].length % 3,
+                rupiah 	= split[0].substr(0, sisa),
+                ribuan 	= split[0].substr(sisa).match(/\d{1,3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        function isNumberKey(evt)
+        {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57))
+                return false;
+            return true;
+        }
 
 		function validate(evt) {
 			var theEvent = evt || window.event;

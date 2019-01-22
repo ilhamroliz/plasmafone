@@ -6,7 +6,7 @@
 	<head>
 		
 		@include('partials._head')
-			@yield('extra_style')
+        @yield('extra_style')
 
 	</head>
 	

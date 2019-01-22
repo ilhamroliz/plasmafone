@@ -279,6 +279,8 @@
     var iCode = [];
     var arrCode = [];
     var arrIdStock = [];
+    var arrIdGlobal = [];
+    var arrKodeGlobal = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -657,7 +659,16 @@
                 });
             }
         } else {
-            if (arrIdStock.length == 1) {
+            if (arrKodeGlobal.includes(kodeGlobal) == true) {
+                $.smallBox({
+                    title : "Pesan!",
+                    content : "Item sudah ditambahkan",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+
+            } else {
                 row = '<tr id="'+idGlobal+'" class="tr">' +
                     '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
@@ -677,14 +688,7 @@
                 $("#table-penjualan tbody").append(row);
                 $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                 $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
-            } else {
-                $.smallBox({
-                    title : "Pesan!",
-                    content : "Item sudah ditambahkan",
-                    color : "#A90329",
-                    timeout: 5000,
-                    icon : "fa fa-times bounce animated"
-                });
+                setArrayId();
             }
 
         }
@@ -728,6 +732,14 @@
 			$("#tambahketable").attr('disabled', false);
 		}
         updateTotalTampil();
+    }
+
+    function setArrayId() {
+        var inputs = document.getElementsByClassName('kode'),
+            code  = [].map.call(inputs, function( input ) {
+                return input.value.toString();
+            });
+        arrKodeGlobal = code;
     }
 
     function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
@@ -829,6 +841,7 @@
 
     function hapus(id) {
         $('#'+id).remove();
+        setArrayId();
         updateTotalTampil();
     }
     
@@ -949,7 +962,7 @@
                     $("#search_barang").hide("slow");
                     $("#cari-salesman").focus();
                     updateTotalTampil();
-                    cetak(response.salesman, response.idSales, response.totPemb, response.kembali);
+                    cetak(response.salesman, response.idSales,  response.totPemb, response.kembali);
                     $('#DetailPembayaran').modal('hide');
                     
                 }
@@ -975,18 +988,6 @@
         window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales+'/'+totPemb+'/'+kembali, '', "width=800,height=600");
     }
 
-    function convertToRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
-        return hasil;
 
-    }
-
-    function convertToAngka(rupiah)
-    {
-        return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
-    }
 </script>
 @endsection
