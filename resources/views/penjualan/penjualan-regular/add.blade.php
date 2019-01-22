@@ -279,6 +279,8 @@
     var iCode = [];
     var arrCode = [];
     var arrIdStock = [];
+    var arrIdGlobal = [];
+    var arrKodeGlobal = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -657,7 +659,17 @@
                 });
             }
         } else {
-            if (arrIdStock.length == 1) {
+            console.log(arrKodeGlobal.includes(kodeGlobal));
+            if (arrKodeGlobal.includes(kodeGlobal) == true) {
+                $.smallBox({
+                    title : "Pesan!",
+                    content : "Item sudah ditambahkan",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+
+            } else {
                 row = '<tr id="'+idGlobal+'" class="tr">' +
                     '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
@@ -677,14 +689,7 @@
                 $("#table-penjualan tbody").append(row);
                 $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                 $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
-            } else {
-                $.smallBox({
-                    title : "Pesan!",
-                    content : "Item sudah ditambahkan",
-                    color : "#A90329",
-                    timeout: 5000,
-                    icon : "fa fa-times bounce animated"
-                });
+                setArrayId();
             }
 
         }
@@ -728,6 +733,14 @@
 			$("#tambahketable").attr('disabled', false);
 		}
         updateTotalTampil();
+    }
+
+    function setArrayId() {
+        var inputs = document.getElementsByClassName('kode'),
+            code  = [].map.call(inputs, function( input ) {
+                return input.value.toString();
+            });
+        arrKodeGlobal = code;
     }
 
     function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
@@ -829,24 +842,8 @@
 
     function hapus(id) {
         $('#'+id).remove();
-        remove_array_value(arrIdStock, id);
+        setArrayId();
         updateTotalTampil();
-    }
-
-    function remove_array_value(array, value) {
-        var index = array.indexOf(value);
-        if (index >= 0) {
-            array.splice(index, 1);
-            reindex_array(array);
-        }
-    }
-
-    function reindex_array(array) {
-        var arrIdStock = [];
-        for (var key in array) {
-            arrIdStock.push(array[key]);
-        }
-        console.log(arrIdStock);
     }
     
     function updateTotalTampil() {
