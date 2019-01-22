@@ -652,13 +652,97 @@ class PenjualanController extends Controller
         try{
             $id = Crypt::decrypt($id);
         }catch (DecryptException $r){
-            echo 'Not Found';
+            return json_encode('Not Found');
         }
 
-        $getSales = DB::table('d_sales')->where('s_id', $id)->first();
+        DB::beginTransaction();
+        try{
+            $getSales = DB::table('d_sales')->where('s_id', $id)->first();
 
-        $getSalesdt = DB::table('d_sales_dt')->where('sd_sales', $id)->get();
-        dd($getSalesdt);
+            $getSalesdt = DB::table('d_sales_dt')->where('sd_sales', $id)->get();
+
+            $getStock = DB::table('d_stock_mutation')->where('sm_nota', $getSales->s_nota)->first();
+
+            $getMutasi = DB::table('d_stock_mutation')
+                ->where('sm_stock', $getStock->sm_stock)
+                ->where('sm_nota', $getStock->sm_reff)->first();
+
+            if ($getStock->sm_specificcode != null){
+                // update stock mutasi
+                DB::table('d_stock_mutation')
+                    ->where('sm_stock', $getStock->sm_stock)
+                    ->where('sm_nota', $getStock->sm_reff)
+                    ->update([
+                        'sm_sisa' => $getMutasi->sm_sisa + $getStock->sm_qty,
+                        'sm_use' => $getMutasi->sm_use - $getStock->sm_qty
+                    ]);
+
+                $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $getStock->sm_stock)->max('sd_detailid');
+
+                if ($maxStockdt == null){
+                    $maxStockdt = 1;
+                } else {
+                    $maxStockdt = $maxStockdt + 1;
+                }
+
+                // insert stock_dt
+                DB::table('d_stock_dt')->insert([
+                    'sd_stock' => $getStock->sm_stock,
+                    'sd_detailid' => $maxStockdt,
+                    'sd_specificcode' => $getStock->sm_specificcode
+                ]);
+
+                // update dstock
+                $dstock = DB::table('d_stock')->where('s_id', $getStock->sm_stock)->first();
+
+                DB::table('d_stock')->where('s_id', $getStock->sm_stock)->update([
+                    's_qty' => $dstock->s_qty + $getMutasi->sm_qty
+                ]);
+
+                // delete stock mutasi
+                DB::table('d_stock_mutation')->where('sm_nota', $getSales->s_nota)->delete();
+
+                // delete d_sales_dt & d_sales
+                DB::table('d_sales_dt')->where('sd_sales', $id)->delete();
+                DB::table('d_sales')->where('s_id', $id)->delete();
+            } else {
+                // update stock mutasi
+                DB::table('d_stock_mutation')
+                    ->where('sm_stock', $getStock->sm_stock)
+                    ->where('sm_nota', $getStock->sm_reff)
+                    ->update([
+                        'sm_sisa' => $getMutasi->sm_sisa + $getStock->sm_qty,
+                        'sm_use' => $getMutasi->sm_use - $getStock->sm_qty
+                    ]);
+
+                $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $getStock->sm_stock)->max('sd_detailid');
+
+                if ($maxStockdt == null){
+                    $maxStockdt = 1;
+                } else {
+                    $maxStockdt = $maxStockdt + 1;
+                }
+
+                // update dstock
+                $dstock = DB::table('d_stock')->where('s_id', $getStock->sm_stock)->first();
+
+                DB::table('d_stock')->where('s_id', $getStock->sm_stock)->update([
+                    's_qty' => $dstock->s_qty + $getMutasi->sm_qty
+                ]);
+
+                // delete stock mutasi
+                DB::table('d_stock_mutation')->where('sm_nota', $getSales->s_nota)->delete();
+
+                // delete d_sales_dt & d_sales
+                DB::table('d_sales_dt')->where('sd_sales', $id)->delete();
+                DB::table('d_sales')->where('s_id', $id)->delete();
+            }
+            DB::commit();
+            return 'true';
+        }catch (\Exception $e){
+            DB::rollback();
+            return 'false';
+        }
     }
     
 }
