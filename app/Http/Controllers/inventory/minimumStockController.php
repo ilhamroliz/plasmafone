@@ -32,23 +32,25 @@ class minimumStockController extends Controller
             ->join('m_company', 'c_id', '=', 's_comp')
             ->join('d_item', 'i_id', '=', 's_item')
             ->where('s_min', '>', 0)
-            ->where('s_min', '>=', 's_qty');
+            ->whereRaw('s_qty <= s_min');
 
         return DataTables::of($getWarning)
+            ->addColumn('s_qty', function ($getWarning) {
+                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            })
             ->addColumn('s_min', function ($getWarning) {
                 return '<div class="text-align-right">' . $getWarning->s_min . ' Unit</div>';
             })
             ->addColumn('aksi', function ($getWarning) {
-                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($getWarning->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($getWarning->s_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
                 $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Set Nonactive" onclick="nonactive(\'' . Crypt::encrypt($getWarning->s_id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
                 if (PlasmafoneController::checkAkses(13, 'update') == false) {
-                    return '<div class="text-center">' . $detail . '</div>';
+                    return '<div class="text-center"</div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $nonactive . '</div>';
+                    return '<div class="text-center">'. $edit . '&nbsp;' . $nonactive . '</div>';
                 }
             })
-            ->rawColumns(['s_min', 'aksi'])
+            ->rawColumns(['s_qty', 's_min', 'aksi'])
             ->make(true);
     }
 
@@ -60,20 +62,22 @@ class minimumStockController extends Controller
             ->where('s_min', '>', 0);
 
         return DataTables::of($getActive)
+            ->addColumn('s_qty', function ($getWarning) {
+                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            })
             ->addColumn('s_min', function ($getActive) {
                 return '<div class="text-align-right">' . $getActive->s_min . ' Unit</div>';
             })
             ->addColumn('aksi', function ($getActive) {
-                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
                 $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Set Nonactive" onclick="nonactive(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
                 if (PlasmafoneController::checkAkses(13, 'update') == false) {
-                    return '<div class="text-center">' . $detail . '</div>';
+                    return '<div class="text-center"></div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $nonactive . '</div>';
+                    return '<div class="text-center">' . $edit . '&nbsp;' . $nonactive . '</div>';
                 }
             })
-            ->rawColumns(['s_min', 'aksi'])
+            ->rawColumns(['s_qty','s_min', 'aksi'])
             ->make(true);
     }
 
@@ -85,19 +89,21 @@ class minimumStockController extends Controller
             ->where('s_min', '=', 0);
 
         return DataTables::of($getNonActive)
+            ->addColumn('s_qty', function ($getWarning) {
+                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            })
             ->addColumn('s_min', function ($getNonActive) {
                 return '<div class="text-align-right">' . $getNonActive->s_min . ' Unit</div>';
             })
             ->addColumn('aksi', function ($getNonActive) {
-                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($getNonActive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $active = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Set Active" onclick="active(\'' . Crypt::encrypt($getNonActive->s_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                 if (PlasmafoneController::checkAkses(13, 'update') == false) {
-                    return '<div class="text-center">' . $detail . '</div>';
+                    return '<div class="text-center"></div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $active . '</div>';
+                    return '<div class="text-center">' . $active . '</div>';
                 }
             })
-            ->rawColumns(['s_min', 'aksi'])
+            ->rawColumns(['s_qty','s_min', 'aksi'])
             ->make(true);
     }
 
@@ -106,11 +112,29 @@ class minimumStockController extends Controller
         $getWarn = '';
         $getCount = '';
         if(Auth::user()->m_comp == "PF00000001"){
-            $getWarn = DB::table('d_stock')->join('d_item', 'i_id', '=', 's_item')->where('s_qty', '<=', 's_min')->take(5)->get();
-            $getCount = DB::table('d_stock')->join('d_item', 'i_id', '=', 's_item')->where('s_qty', '<=', 's_min')->count();
+            $getWarn = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '>', 0)
+                ->whereRaw('s_min >= s_qty')->get();
+            $getCount = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '>', 0)
+                ->whereRaw('s_min >= s_qty')->count();
         }else{
-            $getWarn = DB::table('d_stock')->join('d_item', 'i_id', '=', 's_item')->where('s_qty', '<=', 's_min')->where('s_position', Auth::user()->m_comp)->take(5)->get();
-            $getCount = DB::table('d_stock')->join('d_item', 'i_id', '=', 's_item')->where('s_qty', '<=', 's_min')->where('s_position', Auth::user()->m_comp)->count();
+            $getWarn = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '!=', 0)
+                ->where('s_min', '>=', 's_qty')
+                ->where('s_position', Auth::user()->m_comp)->get();
+            $getCount = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '!=', 0)
+                ->where('s_min', '>=', 's_qty')
+                ->where('s_position', Auth::user()->m_comp)->count();
         }
 
         // dd($getWarn);
@@ -176,28 +200,41 @@ class minimumStockController extends Controller
             return view('errors.407');
         } else {
            
-            DB::beginTransaction();
-            try {
-                
-                $id = Crypt::decrypt($request->id);
-                $min = $request->min;
+            $id = Crypt::decrypt($request->id);
+            if($request->isMethod('post')){
+                // dd($request);
 
-                DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => $min ]);
-           
-                DB::commit();
-                return json_encode([
-                    'status' => 'eSukses'
-                ]);
+                DB::beginTransaction();
+                try {
+                    
+                    $min = $request->minStock;
 
-            } catch (\Exception $e) {
-                
-                DB::rollback();
-                return json_encode([
-                    'status' => 'eGagal',
-                    'msg' => $e
-                ]);
+                    DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => $min ]);
+            
+                    DB::commit();
+                    return json_encode([
+                        'status' => 'eSukses'
+                    ]);
+
+                } catch (\Exception $e) {
+                    
+                    DB::rollback();
+                    return json_encode([
+                        'status' => 'eGagal',
+                        'msg' => $e
+                    ]);
+                }
             }
+            
+            $getData = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_position')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_id', $id)
+                ->select('s_position','c_name','s_item','i_nama','s_min')->first();
 
+            return json_encode([
+                'data' => $getData
+            ]);
         }
     }
 
