@@ -352,13 +352,13 @@ class PenjualanController extends Controller
 
         ->addColumn('aksi', function ($regular) {
 
-            if (Access::checkAkses(16, 'update') == false) {
+            if (Access::checkAkses(16, 'delete') == false) {
 
                 return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
             } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
 
             }
 
@@ -424,7 +424,7 @@ class PenjualanController extends Controller
                     // POS-REG/001/14/12/2018
                     $nota = GenerateCode::codePenjualan('d_sales', 's_nota', 13, 10, 3, 'POS-REG');
                 }
-                
+
                 $Htotal_disc_persen = 0;
                 $Htotal_disc_value = 0;
 
@@ -445,6 +445,12 @@ class PenjualanController extends Controller
                     } else {
                         $specificcode = null;
                     }
+
+//                    update d_stock
+                    $stockQty = DB::table('d_stock')->where('s_id', $data['idStock'][$i])->first();
+                    DB::table('d_stock')->where('s_id', $data['idStock'][$i])->update([
+                        's_qty' => $stockQty->s_qty - $data['qtyTable'][$i]
+                    ]);
 
                     foreach ($get_smiddetail as $key => $value) {
 
@@ -508,7 +514,7 @@ class PenjualanController extends Controller
                                 's_qty' => $sm_sisa,
                                 's_status' => 'On Going'
                             ]);
-
+                            break;
                         }
 
                     }
@@ -602,12 +608,24 @@ class PenjualanController extends Controller
         }
 
         $datas = DB::table('d_sales')
-                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total')
+                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->where('d_sales.s_id', $id)
                 ->join('d_sales_dt', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
                 ->join('m_company', 'm_company.c_id', '=', 'd_sales.s_comp')
                 ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
                 ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
+                ->join('d_stock', function ($q){
+                    $q->on('sd_item', '=', 's_item');
+                    $q->where('d_stock.s_comp', '=', 'd_sales.s_comp');
+                })
+                ->join('d_stock_mutation', function ($x){
+                    $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $x->where('sm_detail', '=', 'PENAMBAHAN');
+                })
+                ->leftJoin('d_stock_dt', function ($a) {
+                    $a->on('sd_stock', '=', 'd_stock.s_id');
+                    $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutationsm_specificcode');
+                })
                 ->get();
 
         if ($datas == null) {
@@ -646,5 +664,18 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'totPemb', 'kembali'));
     }
 
+    public function delete($id = null)
+    {
+        try{
+            $id = Crypt::decrypt($id);
+        }catch (DecryptException $r){
+            echo 'Not Found';
+        }
+
+        $getSales = DB::table('d_sales')->where('s_id', $id)->first();
+
+        $getSalesdt = DB::table('d_sales_dt')->where('sd_sales', $id)->get();
+        dd($getSalesdt);
+    }
     
 }
