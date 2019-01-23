@@ -68,7 +68,7 @@
         <div class="header1" style="margin-top: 10px">
             <div class="tanggal">
                 <span style="float: left; width: 10%; margin-left: 10px;">{{ $data->qty }}</span>
-                <span style="width: 60%; margin-left: -10px">{{ $data->nama_item }} {{ $data->specificcode }}</span>
+                <span style="width: 60%; margin-left: -10px">{{ $data->nama_item }} {{ $data->specificcode }} @Rp.{{ number_format($data->total_item,2,',','.') }}</span>
                 {{--<span style="margin-left: 90px;">Rp. {{ number_format($data->total_item,2,',','.') }}</span>--}}
                 <span style="width: 20%; margin-left: 5px; float: right;">Rp. {{ number_format($data->total,2,',','.') }}</span>
             </div>
