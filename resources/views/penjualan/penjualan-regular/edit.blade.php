@@ -60,6 +60,7 @@
                             <!-- widget content -->
                             <div class="widget-body">
                                 <form class="form-horizontal" id="form-penjualan">
+                                    <input type="hidden" name="idSales" value="{{ $data[0]->s_id }}">
                                     <fieldset>
 
                                         <div class="row">
@@ -86,7 +87,7 @@
                                                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                                             <div class="icon-addon addon-md">
                                                             <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase" value="{{$data[0]->m_name}}" readonly>
-                                                                <input type="hidden" value="" class="idMember" id="idMember" name="idMember" value="{{ $data[0]->s_member }}">
+                                                                <input type="hidden" class="idMember" id="idMember" name="idMember" value="{{ $data[0]->s_member }}">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
@@ -130,7 +131,7 @@
                                                 <div class="form-group">
                                                     <div class="col-md-12">
                                                         <div class="pull-right">
-                                                            <h1 class="font-400 total-tampil">Rp. {{ number_format($data[0]->s_total_net,2,',','.') }}</h1>
+                                                            <h1 class="font-400 total-tampil">Rp. {{ number_format($data[0]->s_total_net,0,',','.') }}</h1>
                                                             <input type="hidden" name="totalGross" id="totalGross" value="{{ $data[0]->s_total_gross }}">
                                                             <input type="hidden" name="totalHarga" id="totalHarga" value="{{ $data[0]->s_total_net }}">
                                                         </div>
@@ -148,7 +149,7 @@
                                                     <div class="input-icon-left">
                                                         <i class="fa fa-barcode"></i>
                                                         <input class="form-control" onkeyup="setSearch()" id="cari-stock" placeholder="Masukkan Nama Barang" type="text"  style="text-transform: uppercase">
-                                                        <input type="hidden" id="stockid" name="stockid">
+                                                        {{--<input type="hidden" id="stockid" name="stockid">--}}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -193,10 +194,10 @@
                                                                         <input type="hidden" class="totalItem totalItem-{{ $item->i_code }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ $item->sd_total_net }}">
                                                                     </td>
                                                                     <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty({{ $item->stock_qty }}, 'harga-'{{ $item->idStock }}, 'qty-'{{ $item->idStock }}, 'discp-'{{ $item->idStock }}, 'discv-'{{ $item->idStock }}, 'lbltotalItem-'{{ $item->idStock }}, 'totalItem-'{{ $item->idStock }}, 'grossItem-'{{ $item->idStock }})" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->sd_qty }}" /></td>
-                                                                    <td style="width: 15%;">@if($item->gp_price != null) {{ number_format($item->gp_price,2,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,2,',','.') }} @else {{ number_format($item->i_price,2,',','.') }} @endif</td>
-                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp('discp-'{{ $item->idStock }}, 'discv-'{{ $item->idStock }}, 'qty-'{{ $item->idStock }}, 'harga-'{{ $item->idStock }}, 'lbltotalItem-'{{ $item->idStock }}, 'totalItem-'{{ $item->idStock }})" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen }}" /></td>@endif
-                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv('discp-'{{ $item->idStock }}, 'discv-'{{ $item->idStock }}, 'qty-'{{ $item->idStock }}, 'harga-'{{ $item->idStock }}, 'lbltotalItem-'{{ $item->idStock }}, 'totalItem-'{{ $item->idStock }})" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ $item->sd_disc_value }}" /></td>@endif
-                                                                    <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}" class="harga-{{ $item->idStock }} harga-{{ $item->i_code }}">{{ number_format($item->sd_total_gross,2,',','.') }}</td>
+                                                                    <td style="width: 15%;">Rp. @if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</td>
+                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
+                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
+                                                                    <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}" class="harga-{{ $item->idStock }} harga-{{ $item->i_code }}">Rp. {{ number_format($item->sd_total_gross,0,',','.') }}</td>
                                                                     <td style="width: 10%;" class="text-center"><button type="button" onclick="hapus({{ $item->idStock }})" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                                 @else
@@ -210,10 +211,10 @@
                                                                         <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ $item->sd_total_net }}">
                                                                     </td>
                                                                     <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="1" />1</td>
-                                                                    <td style="width: 15%;">@if($item->gp_price != null) {{ number_format($item->gp_price,2,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,2,',','.') }} @else {{ number_format($item->i_price,2,',','.') }} @endif</td>
-                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp('discp-'{{ $item->idStock }}, 'discv-'{{ $item->idStock }}, 'qty-'{{ $item->idStock }}, 'harga-'{{ $item->idStock }}, 'lbltotalItem-'{{ $item->idStock }}, 'totalItem-'{{ $item->idStock }})" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen }}" /></td>@endif
-                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv('discp-'{{ $item->idStock }}, 'discv-'{{ $item->idStock }}, 'qty-'{{ $item->idStock }}, 'harga-'{{ $item->idStock }}, 'lbltotalItem-'{{ $item->idStock }}, 'totalItem-'{{ $item->idStock }})" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ $item->sd_disc_value }}" /></td>@endif
-                                                                    <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}">{{ number_format($item->sd_total_gross,2,',','.') }}</td>
+                                                                    <td style="width: 15%;">Rp. @if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</td>
+                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
+                                                                    @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
+                                                                    <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}">Rp. {{ number_format($item->sd_total_gross,0,',','.') }}</td>
                                                                     <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus({{ $item->idStock }})"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                             @endif
@@ -326,6 +327,8 @@
 
     $(document).ready(function(){
         $('.togel').click();
+        $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
+        $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
         if ($("#stockid").val() == "") {
 			$("#tambahketable").attr('disabled', true);
 		}
@@ -868,6 +871,7 @@
 
     function detailPembayaran(){
         var total = $('#totalHarga').val();
+        total = total.replace(".00", "");
         total = convertToAngka(total);
         if (isNaN(total)) {
             $.smallBox({
@@ -913,7 +917,7 @@
             }
         });
         $.ajax({
-            url: baseUrl + '/penjualan-reguler/simpan',
+            url: baseUrl + '/penjualan-reguler/edit',
             type: 'post',
             data: $('#form-penjualan, #formDetailPembayaran').serialize(),
             success: function(response){
@@ -944,13 +948,6 @@
                         timeout: 5000,
                         icon : "fa fa-check bounce animated"
                     });
-                    $(".tr").remove();
-                    $("#cari-salesman").val("");
-                    $("#cari-member").val("");
-                    $("#idMember").val("");
-                    $("#detail_mem").hide("slow");
-                    $("#search_barang").hide("slow");
-                    $("#cari-salesman").focus();
                     updateTotalTampil();
                     cetak(response.salesman, response.idSales, response.totPemb, response.kembali);
                     $('#DetailPembayaran').modal('hide');
