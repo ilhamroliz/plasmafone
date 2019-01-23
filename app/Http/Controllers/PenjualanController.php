@@ -468,7 +468,12 @@ class PenjualanController extends Controller
 
                     foreach ($get_smiddetail as $key => $value) {
 
-                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->count()+1;
+                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->max('sm_detailid');
+                        if ($get_countiddetail == null){
+                            $get_countiddetail = 1;
+                        } else {
+                            $get_countiddetail = $get_countiddetail + 1;
+                        }
                         
                         if ($get_smiddetail[$key]->sm_sisa != 0) {
 
@@ -604,9 +609,6 @@ class PenjualanController extends Controller
     public function editPenjualan(Request $request)
     {
         $data = $request->all();
-        dd($data);
-
-
 
         if (!isset($data['idStock']) || $data['idMember'] == null || $data['salesman'] == null)
         {
@@ -614,6 +616,49 @@ class PenjualanController extends Controller
         } else {
             DB::beginTransaction();
             try{
+
+                for ($i=0; $i < count($data['idStock']); $i++) {
+                    // update d_stock
+                    $dStock = DB::table('d_stock')->where('s_id', $data['idStock'][$i])->first();
+                    DB::table('d_stock')->where('s_id', $data['idStock'][$i])->update([
+                        's_qty' => $dStock->s_qty + $data['qtyTable'][$i]
+                    ]);
+
+                    if ($data['kode'][$i] != null){
+                        // insert d_stock_dt
+                        $iddetail = DB::table('d_stock_dt')->where('sd_stock', $data['idStock'][$i])->max('sd_detailid');
+                        if ($iddetail == null){
+                            $iddetail = 1;
+                        } else {
+                            $iddetail = $iddetail + 1;
+                        }
+                        DB::table('d_stock_dt')->insert([
+                            'sd_stock' => $data['idStock'][$i],
+                            'sd_detailid' => $iddetail,
+                            'sd_specificcode' => $data['kode'][$i]
+                        ]);
+                    }
+
+                    //update d_stock_mutation
+                    $notaFromReff = DB::table('d_stock_mutation')->where('sm_nota', $data['nota'])->first();
+                    $stockMutasi = DB::table('d_stock_mutation')->where('sm_nota', $notaFromReff->sm_reff)->first();
+                    DB::table('d_stock_mutation')->where('sm_nota', $notaFromReff->sm_reff)->update([
+                        'sm_use' => $stockMutasi->sm_use - $data['qtyTable'][$i],
+                        'sm_sisa' => $stockMutasi->sm_use + $data['qtyTable'][$i]
+                    ]);
+
+                    // hapus stock mutasi == batal
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $data['idStock'][$i])
+                        ->where('sm_detail', 'PENGURANGAN')
+                        ->where('sm_specificcode', $data['kode'][$i])
+                        ->where('sm_nota', $data['nota'])
+                        ->delete();
+                }
+
+                // hapus d_sales & d_sales_dt
+                DB::table('d_sales_dt')->where('sd_sales', $data['idSales'])->delete();
+                DB::table('d_sales')->where('s_id', $data['idSales'])->delete();
 
                 $sales = DB::table('d_mem')
                     ->select('m_id', 'm_name')
@@ -662,7 +707,12 @@ class PenjualanController extends Controller
 
                     foreach ($get_smiddetail as $key => $value) {
 
-                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->count()+1;
+                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->max('sm_detailid');
+                        if ($get_countiddetail == null){
+                            $get_countiddetail = 1;
+                        } else {
+                            $get_countiddetail = $get_countiddetail + 1;
+                        }
 
                         if ($get_smiddetail[$key]->sm_sisa != 0) {
 
@@ -788,7 +838,7 @@ class PenjualanController extends Controller
                 return response()->json([
                     'status' => 'gagal',
                     'data' => 'server gagal menyimpan',
-                    'eror' => $e
+                    'erorr' => $e
                 ]);
             }
         }
