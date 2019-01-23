@@ -79,12 +79,21 @@ use Carbon\Carbon;
 												<input type="text" id="monthPick" name="monthPick" class="form-control" value="{{$month}}" placeholder="MASUKKAN BULAN">                                       
 											</div>
 										</div>
-										@if(Auth::user()->m_comp == "PF00000001")
+										@if(Auth::user()->m_comp != "PF00000001")
 										<div class="col-md-4">
 											<div class="form-group">
-												<input type="hidden" id="irpCompId" name="irpCompId">
-												<input type="text" class="form-control irpCompName" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase">                                       
+												<input type="hidden" id="irpCompId" name="irpCompId" value="{{ $outlet->c_id }}">
+												<input type="text" class="form-control irpCompName" value="{{ $outlet->c_name }}" readonly>                                       
 											</div>
+										</div>
+										@else
+										<div class="col-md-4">
+											<select class="select2" id="irpCompId" name="irpCompId">
+												<option value="">Semua Outlet</option>
+												@foreach($outlet as $toko)
+													<option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
+												@endforeach
+											</select>
 										</div>
 										@endif
 										<div class="col-md-1">

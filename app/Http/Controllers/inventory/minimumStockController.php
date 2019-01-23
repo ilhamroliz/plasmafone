@@ -22,7 +22,8 @@ class minimumStockController extends Controller
             return view('errors.407');
         } else {
             $getCN = DB::table('m_company')->where('c_id', Auth::user()->m_comp)->select('c_name')->first();
-            return view('inventory.minimum_stock.index')->with(compact('getCN'));
+            $outlet = DB::table('m_company')->select('c_id', 'c_name')->get();
+            return view('inventory.minimum_stock.index')->with(compact('getCN', 'outlet'));
         }
     }
 
