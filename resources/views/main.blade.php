@@ -79,6 +79,117 @@
 			@yield('ribbon')
 			@yield('main_content')
 
+			<!-- Modal untuk Detil DN -->
+			<div class="modal fade" id="detilDNModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel">Detail Minimum Stock</h4>
+
+						</div>
+
+						<div class="modal-body">
+							<div class="row">
+
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+									<header>
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<h2 id="title_detail">Detail Minimum Stock</h2>
+									</header>
+
+									<!-- widget div-->
+									<div>
+
+										<!-- widget content -->
+										<div class="widget-body no-padding">
+											<div class="table-responsive padding-bottom-10">
+
+												<table class="table">
+													<tbody>
+														<tr class="success">
+															<td style="width: 25%">
+																<label style="float:left"><strong>Nama Barang</strong></label>
+															</td>
+															<td style="width: 5%">
+																<label>:</label>
+															</td>
+															<td style="width: 70%">
+																<label id="dnItem"></label>
+															</td>
+														</tr>
+	
+														<tr class="warning">
+															<td style="width: 25%">
+																<label style="float:left"><strong>Lokasi Barang</strong></label>
+															</td>
+															<td style="width: 5%">
+																<label>:</label>
+															</td>
+															<td style="width: 70%">
+																<label id="dnPosisi"></label>
+															</td>
+														</tr>
+
+														<tr class="danger">
+															<td style="width: 25%">
+																<label style="float:left"><strong>Pemilik Barang</strong></label>
+															</td>
+															<td style="width: 5%">
+																<label>:</label>
+															</td>
+															<td style="width: 70%">
+																<label id="dnPemilik"></label>
+															</td>
+														</tr>
+
+														<tr class="success">
+															<td style="width: 25%">
+																<label style="float:left"><strong>Minimum Stock</strong></label>
+															</td>
+															<td style="width: 5%">
+																<label>:</label>
+															</td>
+															<td style="width: 70%">
+																<label><b id="dnMinStock"></b> Unit</label>
+															</td>
+														</tr>
+
+														<tr class="info">
+															<td style="width: 25%">
+																<label style="float:left"><strong>Qty Stock</strong></label>
+															</td>
+															<td style="width: 5%">
+																<label>:</label>
+															</td>
+															<td style="width: 70%">
+																<label><b id="dnQty"></b> Unit</label>
+															</td>
+														</tr>
+
+													</tbody>													
+												</table>
+
+											</div>
+
+										</div>
+										<!-- end widget content -->
+									</div>
+									<!-- end widget div -->
+								</div>
+								<!-- end widget -->
+							</div>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
 		</div>
 		<!-- END MAIN PANEL -->
 
@@ -91,6 +202,7 @@
 		@include('partials._script')
 			@yield('extra_script')
 
+		
 	</body>
 
 </html>

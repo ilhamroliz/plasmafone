@@ -585,7 +585,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('inventory/min-stock/get-warning', 'inventory\minimumStockController@get_warning');
     Route::get('inventory/min-stock/get-active', 'inventory\minimumStockController@get_active');
     Route::get('inventory/min-stock/get-nonactive', 'inventory\minimumStockController@get_nonactive');
+    Route::get('inventory/min-stock/pencarian', 'inventory\minimumStockController@pencarian');
 
+    Route::post('inventory/min-stock/detail', 'inventory\minimumStockController@detail');
     Route::post('inventory/min-stock/active', 'inventory\minimumStockController@set_active');
     Route::post('inventory/min-stock/nonactive', 'inventory\minimumStockController@set_nonactive');
 

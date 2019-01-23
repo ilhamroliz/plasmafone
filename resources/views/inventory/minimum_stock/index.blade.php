@@ -493,16 +493,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#detilModal').modal('show');
 		}
 
-		function cari2(){
+		function cariMS(){
 
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mencari Data ...');
 
 			var status;
-			var awal = $('#tglAwal').val();
-			var akhir = $('#tglAkhir').val();
-			var idItem = $('#osItemId').val();
-			var idComp = $('#osCompId').val();
+			var idItem = $('#msItemId').val();
+			var idComp = $('#msCompId').val();
 
 			if($('#hr1').hasClass("active") == true){
 
@@ -511,7 +509,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#warningTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/min-stock/pencarian') }}"+"?x=a&ii="+idItem+"&ic="+idComp,
 					"columns":[
 						{"data": "c_name"},
 						{"data": "i_nama"},
@@ -544,7 +542,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#activeTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=p&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/min-stock/pencarian') }}"+"?x=b&ii="+idItem+"&ic="+idComp,
 					"columns":[
 						{"data": "c_name"},
 						{"data": "i_nama"},
@@ -577,7 +575,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#nonactiveTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=p&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/min-stock/pencarian') }}"+"?x=c&ii="+idItem+"&ic="+idComp,
 					"columns":[
 						{"data": "c_name"},
 						{"data": "i_nama"},
@@ -604,8 +602,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				});
 
 			}
-			$('#osItemId').val('');
-			$('#osCompId').val('');
 			$('#overlay').fadeOut(200);
 		}
 
@@ -641,6 +637,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"
 					});
+
+					$('#idItem').val('');
+					$('#idComp').val('');
+					$('#nameItem').val('');
+					$('#nameComp').val('');
+					$('#minStock').val('');
 
 				}else{
 
