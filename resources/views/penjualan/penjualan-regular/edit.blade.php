@@ -70,6 +70,18 @@
                                                 <div class="form-group">
                                                     <div class="col-md-10">
                                                         <div class="input-group input-group-md">
+                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-font"></i></span>
+                                                            <div class="icon-addon addon-md">
+                                                                <input class="form-control" id="cnota" readonly name="nota" type="text" value="{{ $data[0]->s_nota }}">
+                                                                <label for="salesman" class="glyphicon glyphicon-search" rel="tooltip" title="Nota"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="col-md-10">
+                                                        <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="glyphicon glyphicon-link"></i></span>
                                                             <div class="icon-addon addon-md">
                                                                 <input class="form-control" id="cari-salesman" readonly placeholder="Masukkan Nama Sales" type="text"  style="text-transform: uppercase" value="{{ $data[0]->salesman }}">
@@ -332,7 +344,6 @@
         if ($("#stockid").val() == "") {
 			$("#tambahketable").attr('disabled', true);
 		}
-        $("#cari-salesman").focus();
         
         $( "#cari-salesman" ).autocomplete({
             source: baseUrl+'/penjualan-reguler/cari-sales',

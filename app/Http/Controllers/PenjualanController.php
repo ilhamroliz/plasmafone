@@ -606,6 +606,8 @@ class PenjualanController extends Controller
         $data = $request->all();
         dd($data);
 
+
+
         if (!isset($data['idStock']) || $data['idMember'] == null || $data['salesman'] == null)
         {
             return "lengkapi data";
