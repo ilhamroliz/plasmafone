@@ -962,7 +962,7 @@
                     updateTotalTampil();
                     cetak(response.salesman, response.idSales, response.totHarga, response.dibayar, response.kembali);
                     $('#DetailPembayaran').modal('hide');
-                    // window.location = baseUrl + '/penjualan-reguler';
+                    window.location = baseUrl + '/penjualan-reguler';
                 }
             }, error:function(x, e) {
                 if (x.status == 0) {

@@ -863,12 +863,11 @@ class PenjualanController extends Controller
 
             } catch (\Exception $e) {
                 DB::rollback();
-                return 'false => '.$e;
-//                return response()->json([
-//                    'status' => 'gagal',
-//                    'data' => 'server gagal menyimpan',
-//                    'erorr' => $e
-//                ]);
+                return response()->json([
+                    'status' => 'gagal',
+                    'data' => 'server gagal menyimpan',
+                    'erorr' => $e
+                ]);
             }
         }
 
