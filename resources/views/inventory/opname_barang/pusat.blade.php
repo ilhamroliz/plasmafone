@@ -161,7 +161,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         </section>
 
 
-
 		<!-- Modal untuk Detil Opname Barang -->
 		<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">

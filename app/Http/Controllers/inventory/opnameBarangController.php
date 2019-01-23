@@ -23,7 +23,8 @@ class opnameBarangController extends Controller
             return view('errors.407');
         } else {
             $date = Carbon::now()->format('d/m/Y');
-            return view('inventory.opname_barang.pusat')->with(compact('date'));
+            $outlet = DB::table('m_company')->select('c_id', 'c_name')->get();
+            return view('inventory.opname_barang.pusat')->with(compact('date', 'outlet'));
         }
     }
 
@@ -37,6 +38,8 @@ class opnameBarangController extends Controller
             $getCN = '';
             if ($cid != "PF00000001") {
                 $getCN = DB::table('m_company')->select('c_name')->where('c_id', $cid)->first();
+            }else{
+                $getCN = DB::table('m_company')->where('c_id', '!=','PF00000001')->select('c_id', 'c_name')->get();
             }
             return view('inventory.opname_barang.outlet')->with(compact('date', 'getCN'));
         }
@@ -98,7 +101,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir);
@@ -108,7 +111,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
@@ -118,7 +121,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
@@ -129,7 +132,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
@@ -143,7 +146,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('od_item', $idItem);
 
@@ -152,7 +155,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_comp', $idComp);
 
@@ -161,7 +164,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_comp', $idComp)
                         ->where('od_item', $idItem);
@@ -171,7 +174,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE');
                 }
             }
@@ -229,7 +232,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir);
@@ -239,7 +242,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('od_item', 'o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
@@ -250,7 +253,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
@@ -261,7 +264,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('od_item', 'o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
@@ -275,7 +278,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('od_item', 'o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('od_item', $idItem);
 
@@ -284,7 +287,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_comp', $idComp);
 
@@ -293,7 +296,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('od_item', 'o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('od_item', 'o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_comp', $idComp)
                         ->where('od_item', $idItem);
@@ -303,7 +306,7 @@ class opnameBarangController extends Controller
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
-                        ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                        ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING');
                 }
             }
@@ -359,7 +362,7 @@ class opnameBarangController extends Controller
             ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
             ->join('m_company', 'c_id', '=', 'o_comp')
             ->join('d_item', 'i_id', '=', 'od_item')
-            ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+            ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
             ->where('o_status', 'DONE');
 
         // dd($gappr);
@@ -389,7 +392,7 @@ class opnameBarangController extends Controller
             ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
             ->join('m_company', 'c_id', '=', 'o_comp')
             ->join('d_item', 'i_id', '=', 'od_item')
-            ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+            ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
             ->where('o_status', 'PENDING');
 
         // dd($gpend);
@@ -429,7 +432,7 @@ class opnameBarangController extends Controller
                 ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                 ->join('m_company', 'c_id', '=', 'o_comp')
                 ->join('d_item', 'i_id', '=', 'od_item')
-                ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'DONE')
                 ->where('o_comp', '!=', 'PF00000001');
         } else {
@@ -437,7 +440,7 @@ class opnameBarangController extends Controller
                 ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                 ->join('m_company', 'c_id', '=', 'o_comp')
                 ->join('d_item', 'i_id', '=', 'od_item')
-                ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'DONE')
                 ->where('o_comp', $comp);
         }
@@ -471,7 +474,7 @@ class opnameBarangController extends Controller
                 ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                 ->join('m_company', 'c_id', '=', 'o_comp')
                 ->join('d_item', 'i_id', '=', 'od_item')
-                ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'PENDING')
                 ->where('o_comp', '!=', 'PF00000001');
         } else {
@@ -479,7 +482,7 @@ class opnameBarangController extends Controller
                 ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
                 ->join('m_company', 'c_id', '=', 'o_comp')
                 ->join('d_item', 'i_id', '=', 'od_item')
-                ->select('o_id', 'o_reff', 'o_date', 'c_name', 'i_nama')->distinct('o_reff')
+                ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'PENDING')
                 ->where('o_comp', $comp);
         }
@@ -1336,7 +1339,12 @@ class opnameBarangController extends Controller
                 }
             }
 
-            $getCN = DB::table('m_company')->where('c_id', Auth::user()->m_comp)->select('c_name')->first();
+            $getCN = '';
+            if(Auth::user()->m_comp == "PF00000001"){
+                $getCN = DB::table('m_company')->where('c_id', '!=', 'PF00000001')->select('c_id', 'c_name')->get();
+            }else{
+                $getCN = DB::table('m_company')->where('c_id', Auth::user()->m_comp)->select('c_name')->first();
+            }
             return view('inventory.opname_barang.tambah_outlet')->with(compact('getCN'));
         }
 
