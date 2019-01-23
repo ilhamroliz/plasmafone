@@ -26,10 +26,161 @@ class minimumStockController extends Controller
         }
     }
 
+    public function pencarian(Request $request){
+        $idItem = $request->ii;
+        $idComp = $request->ic;
+        $x = $request->x;
+        $getCari = '';
+
+        if($idItem != '' && $idComp != ''){
+            if($x == 'a'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0)
+                    ->whereRaw('s_qty <= s_min')
+                    ->where('s_item', $idItem)
+                    ->where('s_position', $idComp);
+            }else if($x == 'b'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0)
+                    ->where('s_item', $idItem)
+                    ->where('s_position', $idComp);
+            }else if($x == 'c'){ 
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '=', 0)
+                    ->where('s_item', $idItem)
+                    ->where('s_position', $idComp);
+            }
+        }else if($idItem == '' && $idComp != ''){
+            if($x == 'a'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0)
+                    ->whereRaw('s_qty <= s_min')
+                    ->where('s_position', $idComp);
+            }else if($x == 'b'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0)
+                    ->where('s_position', $idComp);
+            }else if($x == 'c'){ 
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '=', 0)
+                    ->where('s_position', $idComp);
+            }
+        }else if($idItem != '' && $idComp == ''){
+            if($x == 'a'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0)
+                    ->whereRaw('s_qty <= s_min')
+                    ->where('s_item', $idItem);
+            }else if($x == 'b'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0)
+                    ->where('s_item', $idItem);
+            }else if($x == 'c'){ 
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '=', 0)
+                    ->where('s_item', $idItem);
+            }
+        }else{
+            if($x == 'a'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0)
+                    ->whereRaw('s_qty <= s_min');
+            }else if($x == 'b'){
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '>', 0);
+            }else if($x == 'c'){ 
+                $getCari = DB::table('d_stock')
+                    ->join('m_company', 'c_id', '=', 's_position')
+                    ->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_min', '=', 0);
+            }
+        }   
+
+        if( $x == 'a' || $x == 'b'){
+            return DataTables::of($getCari)
+            ->addColumn('s_qty', function ($getCari) {
+                return '<div class="text-align-right">' . $getCari->s_qty . ' Unit</div>';
+            })
+            ->addColumn('s_min', function ($getCari) {
+                return '<div class="text-align-right">' . $getCari->s_min . ' Unit</div>';
+            })
+            ->addColumn('aksi', function ($getCari) {
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($getCari->s_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Set Nonactive" onclick="nonactive(\'' . Crypt::encrypt($getCari->s_id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
+                if (PlasmafoneController::checkAkses(13, 'update') == false) {
+                    return '<div class="text-center"</div>';
+                } else {
+                    return '<div class="text-center">'. $edit . '&nbsp;' . $nonactive . '</div>';
+                }
+            })
+            ->rawColumns(['s_qty', 's_min', 'aksi'])
+            ->make(true);
+        }else if( $x == 'c'){
+            return DataTables::of($getCari)
+            ->addColumn('s_qty', function ($getCari) {
+                return '<div class="text-align-right">' . $getCari->s_qty . ' Unit</div>';
+            })
+            ->addColumn('s_min', function ($getCari) {
+                return '<div class="text-align-right">' . $getCari->s_min . ' Unit</div>';
+            })
+            ->addColumn('aksi', function ($getCari) {
+                $active = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Set Active" onclick="active(\'' . Crypt::encrypt($getCari->s_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                if (PlasmafoneController::checkAkses(13, 'update') == false) {
+                    return '<div class="text-center"></div>';
+                } else {
+                    return '<div class="text-center">' . $active . '</div>';
+                }
+            })
+            ->rawColumns(['s_qty','s_min', 'aksi'])
+            ->make(true);
+        }
+        
+    }
+
+    public function detail(Request $request){
+        $getData = DB::table('d_stock')
+            ->join('m_company', 'c_id', '=', 's_position')
+            ->join('d_item', 'i_id', '=', 's_item')
+            ->where('s_id', $request->id)
+            ->select('c_name', 'i_nama', 's_min', 's_qty')->first();
+        
+        $getComp = DB::table('d_stock')
+            ->join('m_company', 'c_id', '=', 's_comp')
+            ->where('s_id', $request->id)
+            ->select('c_name')->first();
+        
+        return json_encode([
+            'data' => $getData,
+            'comp' =>$getComp
+        ]);
+    }
+
     public function get_warning()
     {
         $getWarning = DB::table('d_stock')
-            ->join('m_company', 'c_id', '=', 's_comp')
+            ->join('m_company', 'c_id', '=', 's_position')
             ->join('d_item', 'i_id', '=', 's_item')
             ->where('s_min', '>', 0)
             ->whereRaw('s_qty <= s_min');
@@ -57,13 +208,13 @@ class minimumStockController extends Controller
     public function get_active()
     {
         $getActive = DB::table('d_stock')
-            ->join('m_company', 'c_id', '=', 's_comp')
+            ->join('m_company', 'c_id', '=', 's_position')
             ->join('d_item', 'i_id', '=', 's_item')
             ->where('s_min', '>', 0);
 
         return DataTables::of($getActive)
-            ->addColumn('s_qty', function ($getWarning) {
-                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            ->addColumn('s_qty', function ($getActive) {
+                return '<div class="text-align-right">' . $getActive->s_qty . ' Unit</div>';
             })
             ->addColumn('s_min', function ($getActive) {
                 return '<div class="text-align-right">' . $getActive->s_min . ' Unit</div>';
@@ -84,13 +235,13 @@ class minimumStockController extends Controller
     public function get_nonactive()
     {
         $getNonActive = DB::table('d_stock')
-            ->join('m_company', 'c_id', '=', 's_comp')
+            ->join('m_company', 'c_id', '=', 's_position')
             ->join('d_item', 'i_id', '=', 's_item')
             ->where('s_min', '=', 0);
 
         return DataTables::of($getNonActive)
-            ->addColumn('s_qty', function ($getWarning) {
-                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            ->addColumn('s_qty', function ($getNonActive) {
+                return '<div class="text-align-right">' . $getNonActive->s_qty . ' Unit</div>';
             })
             ->addColumn('s_min', function ($getNonActive) {
                 return '<div class="text-align-right">' . $getNonActive->s_min . ' Unit</div>';
@@ -137,10 +288,12 @@ class minimumStockController extends Controller
                 ->where('s_position', Auth::user()->m_comp)->count();
         }
 
+        $getTime = Carbon::now('Asia/Jakarta')->format('d/m/Y h:i');
         // dd($getWarn);
         return json_encode([
             'data' => $getWarn,
-            'count' => $getCount
+            'count' => $getCount,
+            'time' => $getTime
         ]);
     }
 

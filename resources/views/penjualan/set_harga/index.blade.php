@@ -80,7 +80,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			<div class="row">
 
 				<!-- LIST GROUP MEMBER -->
-				<div class="col-xs-12 col-sm-4 col-md-4 col-lg-3">
+				<div class="col-xs-12 col-sm-4 col-md-4">
 					<!-- Widget ID (each widget will need unique ID)-->
 					<div class="jarviswidget" id="wid-id-0" 
 							data-widget-colorbutton="false"	
@@ -130,7 +130,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				<!-- End LIST GROUP MEMBER -->
 
 				<!-- Tabel Item for @ GROUP MEMBER -->
-				<div class="col-xs-12 col-sm-8 col-md-8 col-lg-9">
+				<div class="col-xs-12 col-sm-8 col-md-8">
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
@@ -377,7 +377,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			"autoWidth" : true,
 			"paging"	: false,
 			"info"	: false,
-			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-12'f>r>"+"t"+
 					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
 			"preDrawCallback" : function() {
 				// Initialize the responsive datatables helper once.
