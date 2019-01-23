@@ -403,10 +403,13 @@ class PenjualanController extends Controller
                 ->join('m_group', 'm_member.m_jenis', '=', 'm_group.g_id')
                 ->join('d_stock_mutation', 'd_sales.s_nota', '=', 'd_stock_mutation.sm_nota')
                 ->join('d_stock', 'd_stock_mutation.sm_stock', '=', 'd_stock.s_id')
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
-                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_sales_dt.sd_item')
+                ->leftjoin('d_outlet_price', function($x){
+                    $x->on('d_outlet_price.op_item', '=', 'd_sales_dt.sd_item');
+                    $x->where('op_outlet', '=', 'd_stock_detail.sd_comp');
+                })
                 ->where('d_sales.s_id', $id)
-                ->groupBy('d_sales.s_id')->get();
+                ->groupBy('d_sales_dt.sd_item')->get();
 
         return view('penjualan.penjualan-regular.edit')->with(compact('data'));
     }
