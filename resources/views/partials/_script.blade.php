@@ -103,7 +103,9 @@
 
 				$('[data-toggle="tooltip"]').tooltip();
 
-				if({{ Access::checkAkses(13, 'read') == true }}){
+				var access = '{{ Access::checkAkses(13, "read") }}';
+
+				if(access == true){
 					warn_notif();
 
 					setInterval( function() {
@@ -111,7 +113,7 @@
 						warn_notif();
 
 					}, 600000);
-				}			
+				}
 				
 			});
 

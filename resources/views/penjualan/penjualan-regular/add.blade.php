@@ -962,7 +962,7 @@
                     $("#search_barang").hide("slow");
                     $("#cari-salesman").focus();
                     updateTotalTampil();
-                    cetak(response.salesman, response.idSales,  response.totPemb, response.kembali);
+                    cetak(response.salesman, response.idSales, response.totHarga, response.dibayar, response.kembali);
                     $('#DetailPembayaran').modal('hide');
                     
                 }
@@ -984,8 +984,8 @@
         })
     }
 
-    function cetak(salesman, idSales, totPemb, kembali){
-        window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales+'/'+totPemb+'/'+kembali, '', "width=800,height=600");
+    function cetak(salesman, idSales, totHarga, dibayar, kembali){
+        window.open(baseUrl + '/penjualan-reguler/struk/'+salesman+'/'+idSales+'/'+totHarga+'/'+dibayar+'/'+kembali, '', "width=800,height=600");
     }
 
 
