@@ -34,6 +34,7 @@ class opnameBarangController extends Controller
         } else {
             $date = Carbon::now()->format('d/m/Y');
             $cid = Auth::user()->m_comp;
+            $getCN = '';
             if ($cid != "PF00000001") {
                 $getCN = DB::table('m_company')->select('c_name')->where('c_id', $cid)->first();
             }
@@ -683,15 +684,15 @@ class opnameBarangController extends Controller
                     $getSell = DB::table('d_item')->where('i_id', $idItem)->select('i_price')->first();
 
                     // MEMBUAT D_STOCK Baru jika item untuk lokasi tersebut belum ada di D_STOCK
-                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_comp', $o_comp)->count();
+                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_position', $o_comp)->count();
                     if ($cekStockExist == 0) {
                         $getMaxStock = DB::table('d_stock')->max('s_id');
                         DB::table('d_stock')->insert([
-                            's_id' => $getMaxStock + 1, 's_comp' => $o_comp, 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
+                            's_id' => $getMaxStock + 1, 's_comp' => "PF00000001", 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
                         ]);
                     }
 
-                    $getIdS = DB::table('d_stock')->where('s_item', $idItem)->where('s_position', $o_comp)->where('s_comp', $idCompM)->select('s_id')->first();
+                    $getIdS = DB::table('d_stock')->where('s_item', $idItem)->where('s_position', $o_comp)->select('s_id')->first();
 
                     if ($sc == 'Y' && $ex == 'N' || $sc == 'Y' && $ex == 'Y') {
 
@@ -987,7 +988,7 @@ class opnameBarangController extends Controller
             return view('errors.407;');
         } else {
             if ($request->isMethod('post')) {
-            // dd($request);
+                // dd($request);
                 DB::beginTransaction();
                 try {
             ///?? INISIALISASI Variabel
@@ -1016,7 +1017,7 @@ class opnameBarangController extends Controller
 
                     $o_note = $request->note;
 
-            //// Insert Data ke D_OPNAME
+                    //// Insert Data ke D_OPNAME
                     DB::table('d_opname')
                         ->insert([
                             'o_id' => $o_id,
@@ -1029,30 +1030,30 @@ class opnameBarangController extends Controller
                             'o_note' => $o_note
                         ]);
 
-            ////////////////////////////////////////////////
-            ////////////////////////////////////////////////
+                    ////////////////////////////////////////////////
+                    ////////////////////////////////////////////////
 
-            //+++ INSERT OPNAME DT
-            //////////////////////
-            // HANYA dilakukan jika Spec Code == Y
-            // SEMUA data Tabel MASUK SEMUA ke tabel D_OPNAME_DT
+                    //+++ INSERT OPNAME DT
+                    //////////////////////
+                    // HANYA dilakukan jika Spec Code == Y
+                    // SEMUA data Tabel MASUK SEMUA ke tabel D_OPNAME_DT
 
                     $idItem = $request->idItem;
                     $idCompM = Auth::user()->m_comp;
                     $imeiR = $request->imeiR;
                     $getSell = DB::table('d_item')->where('i_id', $idItem)->select('i_price')->first();
 
-            // MEMBUAT D_STOCK Baru jika item untuk lokasi tersebut belum ada di D_STOCK
-                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_comp', $o_comp)->count();
+                    // MEMBUAT D_STOCK Baru jika item untuk lokasi tersebut belum ada di D_STOCK
+                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_position', $o_comp)->count();
                     if ($cekStockExist == 0) {
                         $getMaxStock = DB::table('d_stock')->max('s_id');
                         DB::table('d_stock')->insert([
-                            's_id' => $getMaxStock + 1, 's_comp' => $o_comp, 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
+                            's_id' => $getMaxStock + 1, 's_comp' => "PF00000001", 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
                         ]);
                     }
 
-                    $getIdS = DB::table('d_stock')->where('s_item', $idItem)->where('s_comp', $idCompM)->where('s_position', $o_comp)->select('s_id')->first();
-
+                    $getIdS = DB::table('d_stock')->where('s_item', $idItem)->where('s_position', $o_comp)->select('s_id')->first();
+                    // dd($getIdS);
                     if ($sc == 'Y' && $ex == 'N' || $sc == 'Y' && $ex == 'Y') {
 
                         $sd_array = array();
@@ -1063,11 +1064,11 @@ class opnameBarangController extends Controller
                                 ->join('d_stock_dt', 'sd_stock', '=', 's_id')
                                 ->where('sd_specificcode', $imeiR[$i])->count();
 
-                    //// Jika Data Item tersebut tidak ada di dalam sistem
+                            //// Jika Data Item tersebut tidak ada di dalam sistem
                             if ($cek == 0) {
                                 array_push($sd_array, $imeiR[$i]);
                             }
-                    //////////////////////////////////////////////////////
+                            //////////////////////////////////////////////////////
 
                             $aray = ([
                                 'od_opname' => $o_id,
@@ -1082,13 +1083,12 @@ class opnameBarangController extends Controller
 
                         DB::table('d_opname_dt')->insert($od_array);
 
+                        /////
+                        ////////////////////////////////////////////
+                        // ///// UPDATE pada data D_STOCK_DT
+                        // ///// Jika Barang tidak memiliki IMEI maka Tidak memasukan ke D_STOCK_DT
 
-                /////
-                ////////////////////////////////////////////
-                // ///// UPDATE pada data D_STOCK_DT
-                // ///// Jika Barang tidak memiliki IMEI maka Tidak memasukan ke D_STOCK_DT
-
-                // Cek untuk Barang Di SISTEM yang tidak ada dalam list REAL
+                        // Cek untuk Barang Di SISTEM yang tidak ada dalam list REAL
                         $getDH = DB::table('d_stock_dt')
                             ->join('d_stock', 's_id', '=', 'sd_stock')
                             ->where('s_item', $idItem)
@@ -1100,7 +1100,7 @@ class opnameBarangController extends Controller
                             array_push($arayDH, $gdh->sd_specificcode);
                         }
 
-                // Cek untuk Barang REAL yang tidak ada didalam tabel Barang SISTEM
+                        // Cek untuk Barang REAL yang tidak ada didalam tabel Barang SISTEM
                         $arayDT = array();
                         for ($rt = 0; $rt < count($imeiR); $rt++) {
                             $cekLebih = DB::table('d_stock_dt')->where('sd_specificcode', $imeiR[$rt])->count();
@@ -1109,13 +1109,13 @@ class opnameBarangController extends Controller
                             }
                         }
 
-
-                /// HAPUS di D_STOCK_DT
+                        /// HAPUS di D_STOCK_DT
                         DB::table('d_stock_dt')->whereIn('sd_specificcode', $arayDH)->delete();
+                        // dd($getIdS->s_id);
 
-                /// TAMBAH di D_STOCK_DT
+                        /// TAMBAH di D_STOCK_DT
                         $countSD = DB::table('d_stock_dt')->where('sd_stock', $getIdS->s_id)->count();
-                // dd($countSD);
+                        // dd($countSD);
 
                         $getMax = '';
                         if ($countSD == 0) {
@@ -1136,10 +1136,10 @@ class opnameBarangController extends Controller
                         DB::table('d_stock_dt')->insert($arayInsert);
 
 
-                /////
-                ////////////////////////////////////////////
-                // ///// UPDATE pada data D_STOCK_MUTATION
-                // ///// Mekanisme PENAMBAHAN Barang
+                        /////
+                        ////////////////////////////////////////////
+                        // ///// UPDATE pada data D_STOCK_MUTATION
+                        // ///// Mekanisme PENAMBAHAN Barang
                         $countTB = DB::table('d_stock_mutation')->where('sm_stock', $getIdS->s_id)->count();
                         if ($countTB == 0) {
                             $getMaxSMT = 0;
@@ -1336,7 +1336,8 @@ class opnameBarangController extends Controller
                 }
             }
 
-            return view('inventory.opname_barang.tambah_outlet');
+            $getCN = DB::table('m_company')->where('c_id', Auth::user()->m_comp)->select('c_name')->first();
+            return view('inventory.opname_barang.tambah_outlet')->with(compact('getCN'));
         }
 
     }
@@ -1391,7 +1392,7 @@ class opnameBarangController extends Controller
                     $getItem = DB::table('d_opname_dt')->where('od_opname', $id)->select('od_item')->first();
                     $getSCEX = DB::table('d_item')->where('i_id', $getItem->od_item)->select('i_specificcode')->first();
                     $getNota = DB::table('d_opname')->where('o_id', $id)->select('o_reff')->first();
-                    $getStFromO = DB::table('d_stock')->where('s_item', $getItem->od_item)->where('s_comp', $idCompM)->where('s_position', $idPos)->select('s_id')->first();
+                    $getStFromO = DB::table('d_stock')->where('s_item', $getItem->od_item)->where('s_position', $idPos)->select('s_id')->first();
                     $idS = $getStFromO->s_id;
 
                     if ($getSCEX->i_specificcode == 'Y') {
@@ -1490,12 +1491,12 @@ class opnameBarangController extends Controller
 
                     // MEMBUAT D_STOCK Baru jika item untuk lokasi tersebut belum ada di D_STOCK
 
-                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_comp', $idCompM)->count();
+                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_position', $idPos)->count();
 
                     if ($cekStockExist == 0) {
                         $getMaxStock = DB::table('d_stock')->max('s_id');
                         DB::table('d_stock')->insert([
-                            's_id' => $getMaxStock + 1, 's_comp' => $idCompM, 's_position' => $idPos, 's_item' => $idItem, 's_qty' => 0
+                            's_id' => $getMaxStock + 1, 's_comp' => "PF00000001", 's_position' => $idPos, 's_item' => $idItem, 's_qty' => 0
                         ]);
                     }
 
@@ -1829,7 +1830,7 @@ class opnameBarangController extends Controller
                     $getItem = DB::table('d_opname_dt')->where('od_opname', $id)->select('od_item')->first();
                     $getSCEX = DB::table('d_item')->where('i_id', $getItem->od_item)->select('i_specificcode')->first();
                     $getNota = DB::table('d_opname')->where('o_id', $id)->select('o_reff')->first();
-                    $getStFromO = DB::table('d_stock')->where('s_item', $getItem->od_item)->where('s_comp', $idCompM)->where('s_position', $idPos)->select('s_id')->first();
+                    $getStFromO = DB::table('d_stock')->where('s_item', $getItem->od_item)->where('s_position', $idPos)->select('s_id')->first();
                     $idS = $getStFromO->s_id;
 
                     if ($getSCEX->i_specificcode == 'Y') {
@@ -1928,12 +1929,12 @@ class opnameBarangController extends Controller
 
                     // MEMBUAT D_STOCK Baru jika item untuk lokasi tersebut belum ada di D_STOCK
 
-                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_comp', $idCompM)->count();
+                    $cekStockExist = DB::table('d_stock')->where('s_item', $idItem)->where('s_position', $idPos)->count();
 
                     if ($cekStockExist == 0) {
                         $getMaxStock = DB::table('d_stock')->max('s_id');
                         DB::table('d_stock')->insert([
-                            's_id' => $getMaxStock + 1, 's_comp' => $idCompM, 's_position' => $idPos, 's_item' => $idItem, 's_qty' => 0
+                            's_id' => $getMaxStock + 1, 's_comp' => "PF00000001", 's_position' => $idPos, 's_item' => $idItem, 's_qty' => 0
                         ]);
                     }
 

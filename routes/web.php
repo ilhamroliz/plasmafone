@@ -582,11 +582,14 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/inventory/min-stock', 'inventory\minimumStockController@index');
 
+    Route::get('inventory/min-stock/get-warning', 'inventory\minimumStockController@get_warning');
     Route::get('inventory/min-stock/get-active', 'inventory\minimumStockController@get_active');
     Route::get('inventory/min-stock/get-nonactive', 'inventory\minimumStockController@get_nonactive');
 
-    Route::match(['get', 'post'], '/inventory/min-stock/tambah', 'inventory\minimumStockController@tambah');
+    Route::post('inventory/min-stock/active', 'inventory\minimumStockController@set_active');
+    Route::post('inventory/min-stock/nonactive', 'inventory\minimumStockController@set_nonactive');
 
+    Route::match(['get', 'post'], '/inventory/min-stock/tambah', 'inventory\minimumStockController@tambah');
     Route::match(['get', 'post'], '/inventory/min-stock/edit', 'inventory\minimumStockController@edit');
 
     Route::post('inventory/min-stock/cek-warn', 'inventory\minimumStockController@cek_warn');

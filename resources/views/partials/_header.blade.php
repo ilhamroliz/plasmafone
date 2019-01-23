@@ -7,7 +7,7 @@
 
 		<!-- Note: The activity badge color changes when clicked and resets the number to 0
 		Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
-		<span id="activity" class="activity-dropdown"> <i class="fa fa-bell-o"></i> <b class="badge"></b> </span>
+		<span id="activity" class="activity-dropdown"> <i class="fa fa-bell-o"></i> <b id="countBadge" class="badge"></b> </span>
 
 		<!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
 		<div class="ajax-dropdown">
@@ -21,82 +21,13 @@
 
 
 			<!-- notification content -->
-			<div class="ajax-notifications custom-scroll">
-
-				<ul class="notification-body">
-                    <li>
-                        <span class="unread">
-                            <a href="javascript:void(0);" class="msg">
-                                <img src="img/avatars/4.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
-                                <span class="from">HANDPHONE<i class="icon-paperclip"></i></span>
-                                <time>2 minutes ago</time>
-                                <span class="subject">ACER 2/16GB Z520 BLACK</span>
-                                <span class="msg-body">Item ini sudah melebihi 3 Unit dari Stock Minimum</span>
-                            </a>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="unread">
-                            <a href="javascript:void(0);" class="msg">
-                                <img src="img/avatars/female.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
-                                <span class="from">HANDPHONE<i class="icon-paperclip"></i></span>
-                                <time>Thursday, September 19th</time>
-                                <span class="subject">ADVAN VANDROID S3 LITE DARK GRAY</span>
-                                <span class="msg-body">Item ini telah melebihi 5 Unit dari Stock Minimum</span>
-                            </a>
-                        </span>
-                    </li>
-                    <li>
-                        <span>
-                            <a href="javascript:void(0);" class="msg">
-                                <img src="img/avatars/1.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
-                                <span class="from">Cristina Algera</span>
-                                <time>Sunday, September 15th</time>
-                                <span class="subject">Best-Selling Teethers</span>
-                                <span class="msg-body"> ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?</span>
-                            </a>
-                        </span>
-                    </li>
-                    <li>
-                        <span>
-                            <a href="javascript:void(0);" class="msg">
-                                <img src="img/avatars/male.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
-                                <span class="from">Lam Tampora</span>
-                                <time>Saturday, September 14th</time>
-                                <span class="subject">Deadline due date</span>
-                                <span class="msg-body">imus qui blanditiis praesentium voluptatum deleniti atque corrup</span>
-                            </a>
-                        </span>
-                    </li>
-                    <li>
-                        <span class="unread">
-                            <a href="javascript:void(0);" class="msg">
-                                <img src="img/avatars/sunny.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
-                                <span class="from">Project approved! <i class="icon-paperclip"></i></span>
-                                <time>September 14th</time>
-                                <span class="subject">Et harum quidem rerum facilis est et expedita distinctio</span>
-                                <span class="msg-body">...</span>
-                            </a>
-                        </span>
-                    </li>
-                    <li>
-                        <span>
-                            <a href="javascript:void(0);" class="msg">
-                                <img src="img/avatars/male.png" alt="" class="air air-top-left margin-top-5" width="40" height="40" />
-                                <span class="from">JEFF, me</span>
-                                <time>Friday, September 13th</time>
-                                <span class="subject">Bugs fixed! </span>
-                                <span class="msg-body">Nam libero tempore, cum soluta nobis est eligendi optio cumque</span>
-                            </a>
-                        </span>
-                    </li>
-                </ul>
+			<div id="warn-notif" class="ajax-notifications custom-scroll">
 
 			</div>
 			<!-- end notification content -->
 
 			<!-- footer: refresh area -->
-			<span> Last updated on: 12/12/2013 9:43AM
+			<span> Last updated on: <b id="date-notif"></b>
 				<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
 					<i class="fa fa-refresh"></i>
 				</button>

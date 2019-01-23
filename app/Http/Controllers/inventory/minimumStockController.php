@@ -26,6 +26,34 @@ class minimumStockController extends Controller
         }
     }
 
+    public function get_warning()
+    {
+        $getWarning = DB::table('d_stock')
+            ->join('m_company', 'c_id', '=', 's_comp')
+            ->join('d_item', 'i_id', '=', 's_item')
+            ->where('s_min', '>', 0)
+            ->whereRaw('s_qty <= s_min');
+
+        return DataTables::of($getWarning)
+            ->addColumn('s_qty', function ($getWarning) {
+                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            })
+            ->addColumn('s_min', function ($getWarning) {
+                return '<div class="text-align-right">' . $getWarning->s_min . ' Unit</div>';
+            })
+            ->addColumn('aksi', function ($getWarning) {
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($getWarning->s_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Set Nonactive" onclick="nonactive(\'' . Crypt::encrypt($getWarning->s_id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
+                if (PlasmafoneController::checkAkses(13, 'update') == false) {
+                    return '<div class="text-center"</div>';
+                } else {
+                    return '<div class="text-center">'. $edit . '&nbsp;' . $nonactive . '</div>';
+                }
+            })
+            ->rawColumns(['s_qty', 's_min', 'aksi'])
+            ->make(true);
+    }
+
     public function get_active()
     {
         $getActive = DB::table('d_stock')
@@ -34,20 +62,22 @@ class minimumStockController extends Controller
             ->where('s_min', '>', 0);
 
         return DataTables::of($getActive)
+            ->addColumn('s_qty', function ($getWarning) {
+                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            })
             ->addColumn('s_min', function ($getActive) {
                 return '<div class="text-align-right">' . $getActive->s_min . ' Unit</div>';
             })
             ->addColumn('aksi', function ($getActive) {
-                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
                 $nonactive = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Set Nonactive" onclick="nonactive(\'' . Crypt::encrypt($getActive->s_id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>';
                 if (PlasmafoneController::checkAkses(13, 'update') == false) {
-                    return '<div class="text-center">' . $detail . '</div>';
+                    return '<div class="text-center"></div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $edit . '&nbsp;' . $nonactive . '</div>';
+                    return '<div class="text-center">' . $edit . '&nbsp;' . $nonactive . '</div>';
                 }
             })
-            ->rawColumns(['s_min', 'aksi'])
+            ->rawColumns(['s_qty','s_min', 'aksi'])
             ->make(true);
     }
 
@@ -59,25 +89,59 @@ class minimumStockController extends Controller
             ->where('s_min', '=', 0);
 
         return DataTables::of($getNonActive)
+            ->addColumn('s_qty', function ($getWarning) {
+                return '<div class="text-align-right">' . $getWarning->s_qty . ' Unit</div>';
+            })
             ->addColumn('s_min', function ($getNonActive) {
                 return '<div class="text-align-right">' . $getNonActive->s_min . ' Unit</div>';
             })
             ->addColumn('aksi', function ($getNonActive) {
-                $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($getNonActive->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $active = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Set Active" onclick="active(\'' . Crypt::encrypt($getNonActive->s_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                 if (PlasmafoneController::checkAkses(13, 'update') == false) {
-                    return '<div class="text-center">' . $detail . '</div>';
+                    return '<div class="text-center"></div>';
                 } else {
-                    return '<div class="text-center">' . $detail . '&nbsp;' . $active . '</div>';
+                    return '<div class="text-center">' . $active . '</div>';
                 }
             })
-            ->rawColumns(['s_min', 'aksi'])
+            ->rawColumns(['s_qty','s_min', 'aksi'])
             ->make(true);
     }
 
     public function cek_warn()
     {
+        $getWarn = '';
+        $getCount = '';
+        if(Auth::user()->m_comp == "PF00000001"){
+            $getWarn = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '>', 0)
+                ->whereRaw('s_min >= s_qty')->get();
+            $getCount = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '>', 0)
+                ->whereRaw('s_min >= s_qty')->count();
+        }else{
+            $getWarn = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '!=', 0)
+                ->where('s_min', '>=', 's_qty')
+                ->where('s_position', Auth::user()->m_comp)->get();
+            $getCount = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_comp')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_min', '!=', 0)
+                ->where('s_min', '>=', 's_qty')
+                ->where('s_position', Auth::user()->m_comp)->count();
+        }
 
+        // dd($getWarn);
+        return json_encode([
+            'data' => $getWarn,
+            'count' => $getCount
+        ]);
     }
 
     public function tambah(Request $request)
@@ -132,23 +196,105 @@ class minimumStockController extends Controller
 
     public function edit(Request $request)
     {
+        if (PlasmafoneController::checkAkses(13, 'update') == false) {
+            return view('errors.407');
+        } else {
+           
+            $id = Crypt::decrypt($request->id);
+            if($request->isMethod('post')){
+                // dd($request);
 
+                DB::beginTransaction();
+                try {
+                    
+                    $min = $request->minStock;
+
+                    DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => $min ]);
+            
+                    DB::commit();
+                    return json_encode([
+                        'status' => 'eSukses'
+                    ]);
+
+                } catch (\Exception $e) {
+                    
+                    DB::rollback();
+                    return json_encode([
+                        'status' => 'eGagal',
+                        'msg' => $e
+                    ]);
+                }
+            }
+            
+            $getData = DB::table('d_stock')
+                ->join('m_company', 'c_id', '=', 's_position')
+                ->join('d_item', 'i_id', '=', 's_item')
+                ->where('s_id', $id)
+                ->select('s_position','c_name','s_item','i_nama','s_min')->first();
+
+            return json_encode([
+                'data' => $getData
+            ]);
+        }
     }
 
-    public function set_active()
+    public function set_active(Request $request)
     {
         if (PlasmafoneController::checkAkses(13, 'update') == false) {
             return view('errors.407');
         } else {
+           
+            DB::beginTransaction();
+            try {
+                
+                $id = Crypt::decrypt($request->id);
+                $min = $request->min;
+
+                DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => $min ]);
+           
+                DB::commit();
+                return json_encode([
+                    'status' => 'saSukses'
+                ]);
+
+            } catch (\Exception $e) {
+                
+                DB::rollback();
+                return json_encode([
+                    'status' => 'saGagal',
+                    'msg' => $e
+                ]);
+            }
 
         }
     }
 
-    public function set_nonactive()
+    public function set_nonactive(Request $request)
     {
         if (PlasmafoneController::checkAkses(13, 'update') == false) {
             return view('errors.407');
         } else {
+
+            DB::beginTransaction();
+            try {
+                
+                $id = Crypt::decrypt($request->id);
+                DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => 0 ]);
+                
+                DB::commit();
+                return json_encode([
+                    'status' => 'snSukses'
+                ]);
+
+            } catch (\Exception $e) {
+                
+                DB::rollback();
+                return json_encode([
+                    'status' => 'snGagal',
+                    'msg' => $e
+                ]);
+            }
+
 
         }
     }
