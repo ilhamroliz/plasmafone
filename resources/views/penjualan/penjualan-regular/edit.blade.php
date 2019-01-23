@@ -201,7 +201,7 @@
                                                                         <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
                                                                         <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
                                                                         <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
-                                                                        <input type="hidden" class="harga-{{ $item->i_code }}" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ $item->sd_value }}" />
+                                                                        <input type="hidden" class="harga" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ $item->sd_value }}" />
                                                                         <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item->idStock }}" value="{{ $item->sd_total_gross }}">
                                                                         <input type="hidden" class="totalItem totalItem-{{ $item->i_code }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ $item->sd_total_net }}">
                                                                     </td>
@@ -962,7 +962,7 @@
                     updateTotalTampil();
                     cetak(response.salesman, response.idSales, response.totHarga, response.dibayar, response.kembali);
                     $('#DetailPembayaran').modal('hide');
-                    window.location = baseUrl + '/penjualan-reguler';
+                    // window.location = baseUrl + '/penjualan-reguler';
                 }
             }, error:function(x, e) {
                 if (x.status == 0) {
