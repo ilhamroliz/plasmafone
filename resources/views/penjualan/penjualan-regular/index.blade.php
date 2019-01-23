@@ -1145,7 +1145,7 @@
 		}
 
         function edit(id){
-            window.location = baseUrl + '/penjualan-reguler/edit/' + id;
+            window.location = baseUrl + '/penjualan-reguler/edit/'+id;
         }
 
 		function detail(id){
@@ -1168,7 +1168,6 @@
 					});
 
 				} else {
-                    console.log(response);
 					var row = '';
 					$('.tr').remove();
 					$('#title_detail').html('<strong>Detail Penjualan Regular</strong>');

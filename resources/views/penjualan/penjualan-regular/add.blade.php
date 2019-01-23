@@ -367,8 +367,8 @@
 
         if(data.gp_price != null) {
             price = data.gp_price;
-        } else if (data.gp_price != null) {
-            price = data.gp_price;
+        } else if (data.op_price != null) {
+            price = data.op_price;
         } else {
             price = data.i_price;
         }

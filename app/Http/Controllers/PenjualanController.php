@@ -353,13 +353,13 @@ class PenjualanController extends Controller
 
         ->addColumn('aksi', function ($regular) {
 
-            if (Access::checkAkses(16, 'delete') == false) {
+            if (Access::checkAkses(16, 'delete') == false && Access::checkAkses(16, 'update') == false) {
 
                 return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
 
             } else {
 
-                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Penjualan" onclick="edit(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
 
             }
 
@@ -384,15 +384,28 @@ class PenjualanController extends Controller
 
     public function editPenjualanRegular($id = null)
     {
-        $id = Crypt::decrypt($id);
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
 
         $data = DB::table('d_sales')
-                ->select('d_sales.*', 'd_sales_dt.*', 'm_member.*', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item')
+                ->select('d_sales.*', 'd_sales_dt.*', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_stock.s_id as idStock', 'd_stock.s_comp as stock_comp',
+                    'd_stock.s_position as stock_position', 'd_stock.s_item as stock_item', 'd_stock.s_qty as stock_qty', 'd_stock_mutation.*', 'm_member.*',
+                    'm_group.g_name as jenis_member', 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item', 'd_item.i_specificcode as specificcode', 'd_item.i_code', 'd_item.i_price',
+                    'm_group_price.gp_price', 'd_outlet_price.op_price')
                 ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
                 ->join('d_mem', 'd_sales.s_salesman', '=', 'd_mem.m_id')
                 ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
                 ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
-                ->where('d_sales.s_id', $id)->get();
+                ->join('m_group', 'm_member.m_jenis', '=', 'm_group.g_id')
+                ->join('d_stock_mutation', 'd_sales.s_nota', '=', 'd_stock_mutation.sm_nota')
+                ->join('d_stock', 'd_stock_mutation.sm_stock', '=', 'd_stock.s_id')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->where('d_sales.s_id', $id)
+                ->groupBy('d_sales.s_id')->get();
 
         return view('penjualan.penjualan-regular.edit')->with(compact('data'));
     }
