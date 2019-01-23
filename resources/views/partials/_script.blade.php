@@ -103,7 +103,7 @@
 
 				$('[data-toggle="tooltip"]').tooltip();
 
-				if({{ Access::checkAkses( 13, 'read') == true }}){
+				if({{ Access::checkAkses(13, 'read') == true }}){
 					warn_notif();
 
 					setInterval( function() {

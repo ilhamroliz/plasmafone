@@ -75,8 +75,13 @@
         <div style="border: .6px dashed;"></div>
         <div class="hasil">
             <span style="width: 60%; float: left;"></span>
-            <span style="width: 20%; margin-left: 5px;">Total Pembayaran:</span>
-            <span style="width: 20%; float: right;">Rp. {{ number_format( $totPemb, 0 , '' , '.' ) . ',-' }}</span>
+            <span style="width: 20%; margin-left: 5px;">Total Harga:</span>
+            <span style="width: 20%; float: right;">Rp. {{ number_format( $totHarga, 0 , '' , '.' ) . ',-' }}</span>
+        </div>
+        <div class="hasil">
+            <span style="width: 60%; float: left;"></span>
+            <span style="width: 20%; margin-left: 5px;">Dibayar:</span>
+            <span style="width: 20%; float: right;">Rp. {{ number_format( $dibayar, 0 , '' , '.' ) . ',-' }}</span>
         </div>
         <div class="hasil">
             <span style="width: 60%; float: left;"></span>

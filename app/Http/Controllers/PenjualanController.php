@@ -347,6 +347,7 @@ class PenjualanController extends Controller
                     ->select('d_sales.s_id as id', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_sales.s_nota as nota')
                     ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
                     ->where('d_sales.s_jenis', 'C')
+                    ->groupBy('d_sales.s_id')
                     ->orderBy('d_sales.s_date', 'desc');
 
         return DataTables::of($regular)
@@ -590,7 +591,8 @@ class PenjualanController extends Controller
                     'idSales' => Crypt::encrypt($idsales),
                     'bri' => $data['bri'],
                     'bni' => $data['bni'],
-                    'totPemb' => $data['total_pembayaran'],
+                    'totHarga' => $data['totalHarga'],
+                    'dibayar' => $data['total_pembayaran'],
                     'kembali' => $data['kembali']
                 ]);
 
@@ -850,7 +852,7 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan-regular.detailPembayaran', compact('total'));
     }
 
-    public function struck($salesman = null, $id = null, $totPemb = null, $kembali = null)
+    public function struck($salesman = null, $id = null, $totHarga = null, $dibayar = null, $kembali = null)
     {
         try {
             $id = Crypt::decrypt($id);
@@ -868,13 +870,14 @@ class PenjualanController extends Controller
                 ->join('d_stock_mutation', function ($x){
                     $x->on('d_stock_mutation.sm_nota', '=', 'd_sales.s_nota');
                 })
+                ->groupBy('d_sales.s_id')
                 ->get();
 
         if ($datas == null) {
             return view('errors/404');
         }
 
-        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'totPemb', 'kembali'));
+        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'totHarga', 'dibayar', 'kembali'));
     }
 
     public function detailpembayaranTempo($total = null)
@@ -919,137 +922,87 @@ class PenjualanController extends Controller
         try{
             $getSales = DB::table('d_sales')->where('s_id', $id)->first();
 
-            $getSalesdt = DB::table('d_sales_dt')->where('sd_sales', $id)->get();
+            $stockMutasi = DB::table('d_stock_mutation')->where('sm_nota', $getSales->s_nota)->where('sm_detail', 'PENGURANGAN')->get();
 
-            $getStock = DB::table('d_stock_mutation')->where('sm_nota', $getSales->s_nota)->first();
+            foreach ($stockMutasi as $index => $sm){
 
-            $getMutasi = DB::table('d_stock_mutation')
-                ->where('sm_stock', $getStock->sm_stock)
-                ->where('sm_nota', $getStock->sm_reff)
-                ->where('sm_hpp', $getStock->sm_hpp)->first();
+                $getMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                    ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                    ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
 
-//            if ($getMutasi == null){
-//                // creat new mutasi
-//                $smdetailid = DB::table('d_stock_mutation')->where('sm_stock', $getStock->sm_stock)->max('sm_detailid');
-//
-//                if ($smdetailid == null){
-//                    $smdetailid = 1;
-//                } else {
-//                    $smdetailid = $smdetailid + 1;
-//                }
-//
-//                if ($getStock->sm_specificcode == null){
-//                    $specificcode = null;
-//                } else {
-//                    $specificcode = $getStock->sm_specificcode;
-//                    $iddetail = DB::table('d_stock_dt')->where('sd_stock', $getStock->sm_stock)->max('sd_detailid');
-//
-//                    if ($iddetail == null){
-//                        $iddetail = 1;
-//                    } else {
-//                        $iddetail = $iddetail + 1;
-//                    }
-//
-//                    //insert new code
-//                    DB::table('d_stock_dt')->insert([
-//                        'sd_stock' => $getStock->sm_stock,
-//                        'sd_detailid' => $iddetail,
-//                        'sd_specificcode' => $specificcode
-//                    ]);
-//                }
-//
-//                // update code
-//                $stockid = DB::table('d_stock')->where('s_id', $getStock->sm_stock)->first();
-//                DB::table('d_stock')->where('s_id', $getStock->sm_stock)->update([
-//                    's_qty' => $stockid->s_qty + $getStock->sm_qty
-//                ]);
-//
-//                $getnotaawal = DB::table('d_stock_mutation')->where('sm_nota', $getStock->sm_reff)->first();
-//
-//                DB::table('d_stock_mutation')->insert([
-//                    'sm_stock' => $getStock->sm_stock,
-//                    'sm_detailid' => $smdetailid,
-//                    'sm_date' => Carbon::now(),
-//                    'sm_detail' => 'PENAMBAHAN',
-//                    'sm_specificcode' => $specificcode,
-//                    'sm_qty' => $getStock->sm_qty,
-//                    'sm_use' => 0,
-//                    'sm_sisa' => $getStock->sm_qty,
-//                    'sm_hpp' => $getStock->sm_hpp,
-//                    'sm_sell' => $getStock->sm_sell,
-//                    'sm_nota' => $getnotaawal->sm_nota,
-//                    'sm_reff' => $getnotaawal->sm_reff,
-//                    'sm_mem' => $getnotaawal->sm_mem
-//                ]);
-//
-//                $getMutasi = DB::table('d_stock_mutation')
-//                    ->where('sm_stock', $getStock->sm_stock)
-//                    ->where('sm_nota', $getStock->sm_reff)
-//                    ->where('sm_hpp', $getStock->sm_hpp)->first();
-//            }
+                if ($stockMutasi[$index]->sm_specificcode != null){
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
 
-            if ($getStock->sm_specificcode != null){
-                // update stock mutasi
-                DB::table('d_stock_mutation')
-                    ->where('sm_stock', $getStock->sm_stock)
-                    ->where('sm_nota', $getStock->sm_reff)
-                    ->update([
-                        'sm_sisa' => $getMutasi->sm_sisa + $getStock->sm_qty,
-                        'sm_use' => $getMutasi->sm_use - $getStock->sm_qty
+                    $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $stockMutasi[$index]->sm_stock)->max('sd_detailid');
+
+                    if ($maxStockdt == null){
+                        $maxStockdt = 1;
+                    } else {
+                        $maxStockdt = $maxStockdt + 1;
+                    }
+
+                    // insert stock_dt
+                    DB::table('d_stock_dt')->insert([
+                        'sd_stock' => $stockMutasi[$index]->sm_stock,
+                        'sd_detailid' => $maxStockdt,
+                        'sd_specificcode' => $stockMutasi[$index]->sm_specificcode
                     ]);
 
-                $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $getStock->sm_stock)->max('sd_detailid');
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
 
-                if ($maxStockdt == null){
-                    $maxStockdt = 1;
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+
+                    // delete d_sales_dt & d_sales
+                    DB::table('d_sales_dt')->where('sd_sales', $id)->delete();
+                    DB::table('d_sales')->where('s_id', $id)->delete();
                 } else {
-                    $maxStockdt = $maxStockdt + 1;
-                }
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
 
-                // insert stock_dt
-                DB::table('d_stock_dt')->insert([
-                    'sd_stock' => $getStock->sm_stock,
-                    'sd_detailid' => $maxStockdt,
-                    'sd_specificcode' => $getStock->sm_specificcode
-                ]);
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
 
-                // update dstock
-                $dstock = DB::table('d_stock')->where('s_id', $getStock->sm_stock)->first();
-
-                DB::table('d_stock')->where('s_id', $getStock->sm_stock)->update([
-                    's_qty' => $dstock->s_qty + $getMutasi->sm_qty
-                ]);
-
-                // delete stock mutasi
-                DB::table('d_stock_mutation')->where('sm_nota', $getSales->s_nota)->delete();
-
-                // delete d_sales_dt & d_sales
-                DB::table('d_sales_dt')->where('sd_sales', $id)->delete();
-                DB::table('d_sales')->where('s_id', $id)->delete();
-            } else {
-                // update stock mutasi
-                DB::table('d_stock_mutation')
-                    ->where('sm_stock', $getStock->sm_stock)
-                    ->where('sm_nota', $getStock->sm_reff)
-                    ->update([
-                        'sm_sisa' => $getMutasi->sm_sisa + $getStock->sm_qty,
-                        'sm_use' => $getMutasi->sm_use - $getStock->sm_qty
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
                     ]);
 
-                // update dstock
-                $dstock = DB::table('d_stock')->where('s_id', $getStock->sm_stock)->first();
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
 
-                DB::table('d_stock')->where('s_id', $getStock->sm_stock)->update([
-                    's_qty' => $dstock->s_qty + $getMutasi->sm_qty
-                ]);
-
-                // delete stock mutasi
-                DB::table('d_stock_mutation')->where('sm_nota', $getSales->s_nota)->delete();
-
-                // delete d_sales_dt & d_sales
-                DB::table('d_sales_dt')->where('sd_sales', $id)->delete();
-                DB::table('d_sales')->where('s_id', $id)->delete();
+                    // delete d_sales_dt & d_sales
+                    DB::table('d_sales_dt')->where('sd_sales', $id)->delete();
+                    DB::table('d_sales')->where('s_id', $id)->delete();
+                }
             }
+
             DB::commit();
             return 'true';
         }catch (\Exception $e){
