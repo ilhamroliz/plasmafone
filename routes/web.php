@@ -502,6 +502,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
     Route::get('pembelian/refund/tambah', 'RefundController@add');
     Route::get('pembelian/refund/get-data', 'RefundController@getDataItem');
+    Route::get('pembelian/refund/get-supplier', 'RefundController@getSupplier');
     //end Refund
 
 	// Pembelian end
