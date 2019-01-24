@@ -146,16 +146,15 @@ class member_controller extends Controller
 
     public function getDataId()
     {
-        $cek = DB::table('d_mem')
-            ->select(DB::raw('max(right(m_id, 7)) as id'))
-            ->get();
+        $cek = DB::table('m_member')
+            ->select(DB::raw('MID(m_idmember, 4, 7) as id'))
+            ->orderBy('id')->first();
 
-        foreach ($cek as $x) {
-            $temp = ((int)$x->id + 1);
-            $kode = sprintf("%07s", $temp);
-        }
+        $temp = intval($cek->id) + 1;
+        $kode = sprintf("%07s", $temp);
 
         $tempKode = 'MPF' . $kode;
+        // dd($tempKode);
         return $tempKode;
     }
 
@@ -179,7 +178,6 @@ class member_controller extends Controller
                     ]);
 
                 } else {
-
                     $data = $request->all();
                     DB::beginTransaction();
 

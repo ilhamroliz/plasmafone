@@ -357,13 +357,15 @@ class opnameBarangController extends Controller
 
     public function get_approved()
     {
+        $date = Carbon::now()->format('d/m/Y');
 
         $gappr = DB::table('d_opname')
             ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
             ->join('m_company', 'c_id', '=', 'o_comp')
             ->join('d_item', 'i_id', '=', 'od_item')
             ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
-            ->where('o_status', 'DONE');
+            ->where('o_status', 'DONE')
+            ->whereRaw('o_reff like "%'.$date.'%"');
 
         // dd($gappr);
         return DataTables::of($gappr)
@@ -388,12 +390,14 @@ class opnameBarangController extends Controller
 
     public function get_pending()
     {
+        $date = Carbon::now()->format('d/m/Y');
         $gpend = DB::table('d_opname')
             ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
             ->join('m_company', 'c_id', '=', 'o_comp')
             ->join('d_item', 'i_id', '=', 'od_item')
             ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
-            ->where('o_status', 'PENDING');
+            ->where('o_status', 'PENDING')
+            ->whereRaw('o_reff like "%'.$date.'%"');
 
         // dd($gpend);
         return DataTables::of($gpend)
@@ -426,6 +430,7 @@ class opnameBarangController extends Controller
 
     public function get_approved_outlet()
     {
+        $date = Carbon::now()->format('d/m/Y');
         $comp = Auth::user()->m_comp;
         if ($comp == "PF00000001") {
             $gappr = DB::table('d_opname')
@@ -434,7 +439,8 @@ class opnameBarangController extends Controller
                 ->join('d_item', 'i_id', '=', 'od_item')
                 ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'DONE')
-                ->where('o_comp', '!=', 'PF00000001');
+                ->where('o_comp', '!=', 'PF00000001')
+                ->whereRaw('o_reff like "%'.$date.'%"');
         } else {
             $gappr = DB::table('d_opname')
                 ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
@@ -442,7 +448,8 @@ class opnameBarangController extends Controller
                 ->join('d_item', 'i_id', '=', 'od_item')
                 ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'DONE')
-                ->where('o_comp', $comp);
+                ->where('o_comp', $comp)
+                ->whereRaw('o_reff like "%'.$date.'%"');
         }
 
         // dd($gappr);
@@ -468,6 +475,7 @@ class opnameBarangController extends Controller
 
     public function get_pending_outlet()
     {
+        $date = Carbon::now()->format('d/m/Y');
         $comp = Auth::user()->m_comp;
         if ($comp == "PF00000001") {
             $gpend = DB::table('d_opname')
@@ -476,7 +484,8 @@ class opnameBarangController extends Controller
                 ->join('d_item', 'i_id', '=', 'od_item')
                 ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'PENDING')
-                ->where('o_comp', '!=', 'PF00000001');
+                ->where('o_comp', '!=', 'PF00000001')
+                ->whereRaw('o_reff like "%'.$date.'%"');
         } else {
             $gpend = DB::table('d_opname')
                 ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
@@ -484,7 +493,8 @@ class opnameBarangController extends Controller
                 ->join('d_item', 'i_id', '=', 'od_item')
                 ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                 ->where('o_status', 'PENDING')
-                ->where('o_comp', $comp);
+                ->where('o_comp', $comp)
+                ->whereRaw('o_reff like "%'.$date.'%"');
         }
 
         // dd($gpend);
@@ -721,6 +731,7 @@ class opnameBarangController extends Controller
                                 'od_qty_system' => $cek,
                                 'od_specificcode' => strtoupper($imeiR[$i])
                             ]);
+                            // dd($aray);
                             array_push($od_array, $aray);
                         }
 
@@ -1382,7 +1393,7 @@ class opnameBarangController extends Controller
         } else {
             $id = Crypt::decrypt($request->id);
             if ($request->isMethod('post')) {
-                // dd($request);
+                dd($request);
                 DB::beginTransaction();
                 try {
                     // DB::table('d_opname_dt')->where('od_opname', $id)->delete();
@@ -1641,7 +1652,7 @@ class opnameBarangController extends Controller
                         /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
                             $arayInsPGR = array();
                             for ($dk = 0; $dk < count($arayDH); $dk++) {
-                                dd($arayDH);
+                                // dd($arayDH);
 
                                 $arayK = ([
                                     'sm_stock' => $idS,
@@ -2079,7 +2090,7 @@ class opnameBarangController extends Controller
                         /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
                             $arayInsPGR = array();
                             for ($dk = 0; $dk < count($arayDH); $dk++) {
-                                dd($arayDH);
+                                // dd($arayDH);
 
                                 $arayK = ([
                                     'sm_stock' => $idS,

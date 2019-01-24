@@ -288,7 +288,7 @@ class setHargaController extends Controller
             }
 
 
-            $id = Crypt::decrypt($request->id);
+            $id = $request->id;
             /// == Cek APAKAH Data Outlet untuk item yang dipilih sudah ada pada tabel d_outlet
             /// jika belum ada, maka dilakukan insert data untuk outlet pada item yang dipilih
 
