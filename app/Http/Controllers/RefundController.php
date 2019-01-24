@@ -10,13 +10,18 @@ class RefundController extends Controller
 {
     public function index()
     {
-        return view('pembelian.refund.index');
+        $supplier = DB::table('d_supplier')
+            ->join('d_purchase', 'p_supplier', '=', 's_id')
+            ->orderBy('s_name')
+            ->get();
+        return view('pembelian.refund.index', compact('supplier'));
     }
 
     public function add()
     {
         $supplier = DB::table('d_supplier')
             ->join('d_purchase', 'p_supplier', '=', 's_id')
+            ->groupBy('s_id')
             ->orderBy('s_name')
             ->get();
 
