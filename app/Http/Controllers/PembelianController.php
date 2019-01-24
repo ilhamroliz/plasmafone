@@ -3056,14 +3056,12 @@ class PembelianController extends Controller
         $cek_item = DB::table('d_requestorder')
         ->select('d_requestorder.ro_item')
         ->where('d_requestorder.ro_item','=',$item)
-        // ->where('d_requestorder.ro_mem','=',$user)
         ->where('d_requestorder.ro_state','=','D')
         ->get();
 
         $kuantiti = DB::table('d_requestorder')
         ->select('d_requestorder.ro_qty')
         ->where('d_requestorder.ro_item','=',$item)
-        // ->where('d_requestorder.ro_mem','=',$user)
         ->where('d_requestorder.ro_state','=','D')
         ->get();
 
@@ -3080,8 +3078,7 @@ class PembelianController extends Controller
                     'ro_item'      => $item,
                     'ro_qty'       => $qty,
                     'ro_date'      => $dateReq,
-                    'ro_state'     => $status,
-                    'ro_mem'       => $user
+                    'ro_state'     => $status
 
                 ]);
 
@@ -3101,8 +3098,7 @@ class PembelianController extends Controller
                 'ro_item'       => $item,
                 'ro_qty'        => '1',
                 'ro_date'       => $dateReq,
-                'ro_state'      => $status,
-                'ro_mem'        => $user
+                'ro_state'      => $status
 
             ]);
 
@@ -3117,7 +3113,6 @@ class PembelianController extends Controller
             $kuantiti = DB::table('d_requestorder')
             ->select('d_requestorder.ro_qty')
             ->where('d_requestorder.ro_item','=',$item)
-            ->where('d_requestorder.ro_mem','=',$user)
             ->where('d_requestorder.ro_state','=','D')
             ->get();
 
@@ -3126,7 +3121,6 @@ class PembelianController extends Controller
             }
 
             $update_qty = DB::table('d_requestorder')
-            ->where('d_requestorder.ro_mem','=',$user)
             ->where('d_requestorder.ro_item','=',$item)
             ->update([
                 'ro_qty' => $k+1
@@ -3144,7 +3138,6 @@ class PembelianController extends Controller
             $kuantiti = DB::table('d_requestorder')
             ->select('d_requestorder.ro_qty')
             ->where('d_requestorder.ro_item','=',$item)
-            ->where('d_requestorder.ro_mem','=',$user)
             ->where('d_requestorder.ro_state','=','D')
             ->get();
 
@@ -3153,7 +3146,6 @@ class PembelianController extends Controller
             }
 
             $update_qty = DB::table('d_requestorder')
-            ->where('d_requestorder.ro_mem','=',$user)
             ->where('d_requestorder.ro_item','=',$item)
             ->update([
                 'ro_qty' => $k+$qty
@@ -3293,21 +3285,19 @@ class PembelianController extends Controller
 
         if($comp == "PF00000001"){
             $waiting = DB::table('d_requestorder')
-            ->select('d_requestorder.ro_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_state')
+            ->select('d_requestorder.ro_id', 'm_company.c_name', 'd_item.i_nama', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_state')
             ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_requestorder.ro_mem', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
             ->where('d_requestorder.ro_state', 'P')
             ->get();
         }else{
             $id = Auth::user()->m_id;
             $waiting = DB::table('d_requestorder')
-            ->select('d_requestorder.ro_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_state')
+            ->select('d_requestorder.ro_id', 'm_company.c_name', 'd_item.i_nama', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_state')
             ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_requestorder.ro_mem', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
+            ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
             ->where('d_requestorder.ro_state', 'P')
-            ->where('d_requestorder.pr_compReq',$comp)
+            ->where('d_requestorder.ro_comp',$comp)
             ->get();
         }
 
@@ -3542,7 +3532,6 @@ class PembelianController extends Controller
         $query = DB::table('d_requestorder')
             ->select('d_requestorder.*')
             ->where('d_requestorder.ro_comp',$comp)
-            ->where('d_requestorder.ro_mem',$user)
             ->where('d_requestorder.ro_state', 'D')
             ->get();
 
@@ -3554,7 +3543,6 @@ class PembelianController extends Controller
 
                 $update = DB::table('d_requestorder')
                     ->where('d_requestorder.ro_comp', $comp)
-                    ->where('d_requestorder.ro_mem', $user)
                     ->where('d_requestorder.ro_state', 'D')
                     ->update([
                         'ro_state'   => $status,

@@ -545,6 +545,7 @@
                             timeout: 4000,
                             icon   : "fa fa-check bounce animated"
                         });
+                        $('#waitingReq_table').DataTable().ajax.reload();
                     } else {
                         $.smallBox({
                             title  : "GAGAL",
@@ -553,6 +554,7 @@
                             timeout: 4000,
                             icon   : "fa fa-check bounce animated"
                         });
+                        $('#waitingReq_table').DataTable().ajax.reload();
                     }
 
                     out();
