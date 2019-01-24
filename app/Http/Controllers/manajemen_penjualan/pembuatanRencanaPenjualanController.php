@@ -364,7 +364,7 @@ class pembuatanRencanaPenjualanController extends Controller
                         ]);
                         array_push($spd_array, $aray);
                     }
-                    dd($spd_array);
+                    // dd($spd_array);
                     DB::table('d_sales_plan_dt')->insert($spd_array);
 
                     DB::commit();
@@ -504,7 +504,8 @@ class pembuatanRencanaPenjualanController extends Controller
 
                 $getSPDD = DB::table('d_sales_plan_dt_draft')->where('spdd_sales_plan', $id)->get();
 
-                dd($getSPDD);
+                // dd($getSPDD);
+                
 
                 DB::commit();
             } catch (\Exception $e) {

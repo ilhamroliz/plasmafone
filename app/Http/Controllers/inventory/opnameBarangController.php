@@ -977,8 +977,9 @@ class opnameBarangController extends Controller
                         }
                     }
 
-
+                    $log = 'Menambahkan Opname Barang pada PLASMAFONE PUSAT dengan nota ' . $o_reff;
                     DB::commit();
+                    PlasmafoneController::logActivity($log);
                     return json_encode([
                         'status' => 'obSukses'
                     ]);
@@ -1336,8 +1337,10 @@ class opnameBarangController extends Controller
                         }
                     }
 
-
+                    $getCNLog = DB::table('m_company')->where('c_id', $o_comp)->select('c_name')->first();
+                    $log = 'Menambahkan Opname Barang pada Outlet '.$getCNLog->cname.' dengan nota ' . $o_reff;
                     DB::commit();
+                    PlasmafoneController::logActivity($log);
                     return json_encode([
                         'status' => 'obSukses'
                     ]);
@@ -1803,8 +1806,9 @@ class opnameBarangController extends Controller
                         }
                     }
 
-
+                    $log = 'Menambahkan Opname Barang pada PLASMAFONE PUSAT dengan nota ' . $o_reff;
                     DB::commit();
+                    PlasmafoneController::logActivity($log);
                     return json_encode([
                         'status' => 'eobSukses'
                     ]);
@@ -2241,8 +2245,10 @@ class opnameBarangController extends Controller
                         }
                     }
 
-
+                    $getCNLog = DB::table('m_company')->where('c_id', $o_comp)->select('c_name')->first();
+                    $log = 'Mengubah Opname Barang pada Outlet '.$getCNLog->cname.' dengan nota ' . $o_reff;
                     DB::commit();
+                    PlasmafoneController::logActivity($log);
                     return json_encode([
                         'status' => 'eobSukses'
                     ]);
@@ -2272,7 +2278,11 @@ class opnameBarangController extends Controller
                     'o_status' => 'DONE'
                 ]);
 
+                $getCNINLog = DB::table('d_opname')
+                    ->where('o_id', $id)->select('o_reff')->first();
+                $log = 'Mengubah Opname Barang pada PLASMAFONE PUSAT dengan nota ' . $getCNINLog->o_reff;
                 DB::commit();
+                PlasmafoneController::logActivity($log);
                 return json_encode([
                     'status' => 'eobSukses'
                 ]);
@@ -2299,7 +2309,12 @@ class opnameBarangController extends Controller
                     'o_status' => 'DONE'
                 ]);
 
+                $getCNINLog = DB::table('d_opname')
+                    ->join('m_company', 'c_id', '=', 'o_comp')
+                    ->where('o_id', $id)->select('c_name', 'o_reff')->first();
+                $log = 'Mengubah Opname Barang pada Outlet '.$getCNINLog->c_name.' dengan nota ' . $getCNINLog->o_reff;
                 DB::commit();
+                PlasmafoneController::logActivity($log);
                 return json_encode([
                     'status' => 'eobSukses'
                 ]);
@@ -2327,6 +2342,9 @@ class opnameBarangController extends Controller
                 $id = Crypt::decrypt($request->id);
                 $getNota = DB::table('d_opname')->where('o_id', $id)->select('o_reff')->first();
 
+                $getCNINLog = DB::table('d_opname')
+                    ->where('o_id', $id)->select('o_reff')->first();
+                $log = 'Menghapus Opname Barang pada PLASMAFONE PUSAT dengan nota ' . $getCNINLog->o_reff;
 
                 /// SELECT data di Stock Mutation dengan sm_nota sama dengan nota opname
                 /// Untuk detail PENAMBAHAN cukup dihapus row nya
@@ -2426,6 +2444,7 @@ class opnameBarangController extends Controller
                 DB::table('d_opname_dt')->where('od_opname', $id)->delete();
 
                 DB::commit();
+                PlasmafoneController::logActivity($log);
                 return json_encode([
                     'status' => 'hobSukses'
                 ]);
@@ -2450,6 +2469,11 @@ class opnameBarangController extends Controller
             DB::beginTransaction();
             try {
                 $id = Crypt::decrypt($request->id);
+                $getCNINLog = DB::table('d_opname')
+                    ->join('m_company', 'c_id', '=', 'o_comp')
+                    ->where('o_id', $id)->select('c_name', 'o_reff')->first();
+                $log = 'Menghapus Opname Barang pada Outlet '.$getCNINLog->c_name.' dengan nota ' . $getCNINLog->o_reff;
+
                 $getNota = DB::table('d_opname')->where('o_id', $id)->select('o_reff')->first();
 
 
@@ -2551,6 +2575,7 @@ class opnameBarangController extends Controller
                 DB::table('d_opname_dt')->where('od_opname', $id)->delete();
 
                 DB::commit();
+                PlasmafoneController::logActivity($log);
                 return json_encode([
                     'status' => 'hobSukses'
                 ]);

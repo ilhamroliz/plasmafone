@@ -274,7 +274,11 @@ class setHargaController extends Controller
 
                     DB::table('d_outlet_price')->insert($aray);
 
+                    $item = DB::table('d_item')->select('i_nama')->where('i_id', $shoItemId)->first();
+                    $outlet = DB::table('m_company')->select('c_name')->where('c_id', $shoCompId)->first();
+                    $log = 'Meperbarui Harga Barang ' . $item->i_nama . ' pada Outlet ' . $outlet->c_name;
                     DB::commit();
+                    Plasma::logActivity($log);
                     return json_encode([
                         'status' => 'sukses'
                     ]);
@@ -291,8 +295,13 @@ class setHargaController extends Controller
             $id = $request->id;
             /// == Cek APAKAH Data Outlet untuk item yang dipilih sudah ada pada tabel d_outlet
             /// jika belum ada, maka dilakukan insert data untuk outlet pada item yang dipilih
-
-            $outlet = DB::table('m_company')->select('c_id')->get(); // id outlet 1, 2, ....
+            $outlet = '';
+            $comp = '';
+            if(Auth::user()->m_comp == "PF00000001"){
+                $outlet = DB::table('m_company')->select('c_id')->get(); // id outlet 1, 2, ....
+            }else{
+                $outlet = DB::table('m_company')->where('c_id', Auth::user()->m_comp)->select('c_id')->get(); // id outlet 1, 2, ....
+            }
 
             for ($i = 0; $i < count($outlet); $i++) {
                 $cekin = DB::table('d_outlet_price')->where('op_outlet', $outlet[$i]->c_id)->where('op_item', $id)->count();
@@ -306,25 +315,30 @@ class setHargaController extends Controller
             }
             ////////////////////////////////////////////////////////
 
-            $comp = DB::table('m_company')
-                ->leftjoin('d_outlet_price', 'op_outlet', '=', 'c_id')
-                ->where('op_item', $id)
-                ->select('c_id', 'c_name', 'op_price')->get();
+            if(Auth::user()->m_comp == "PF00000001"){
+                $comp = DB::table('m_company')
+                    ->leftjoin('d_outlet_price', 'op_outlet', '=', 'c_id')
+                    ->where('op_item', $id)
+                    ->select('c_id', 'c_name', 'op_price')->get();
+            }else{
+                $comp = DB::table('m_company')
+                    ->leftjoin('d_outlet_price', 'op_outlet', '=', 'c_id')
+                    ->where('op_item', $id)
+                    ->where('c_id', Auth::user()->m_comp)
+                    ->select('c_id', 'c_name', 'op_price')->get();
+            }
+
+            $getHPP = DB::table('d_stock')
+                ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
+                ->where('s_item', $id)
+                ->select('sm_hpp')
+                ->orderBy('sm_detailid', 'desc')
+                ->first();
 
             return json_encode([
                 'data' => $comp,
+                'hpp' => $getHPP
             ]);
-
-            // return DataTables::of($comp)
-            //     ->addColumn('compName', function ($comp) {
-            //         return '<input type="hidden" name="shoCompId[]" value="' . $comp->c_id . '">' . $comp->c_name;
-            //     })
-            //     ->addColumn('compPrice', function ($comp) {
-            //         $price = explode('.', $comp->op_price);
-            //         return '<input type="text" class="form-control shoCompPrice" name="shoCompPrice[]" value="' . $price[0] . '">';
-            //     })
-            //     ->rawColumns(['compName', 'compPrice'])
-            //     ->make(true);
         }
     }
 
