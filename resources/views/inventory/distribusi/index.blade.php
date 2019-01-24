@@ -79,7 +79,7 @@
 
 					<button class="btn btn-primary" id="btn_collapse" style="display: none"><i class="fa fa-search"></i>&nbsp;Tutup Pencarian</button>
 
-					<button class="btn btn-primary" id="btn_cari"><i class="fa fa-search"></i>&nbsp;Cari</button>
+					<button class="btn btn-primary" id="btn_cari" style="display: none"><i class="fa fa-search"></i>&nbsp;Cari</button>
 
 					<a href="{{ url('/distribusi/tambah-distribusi') }}" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
 
@@ -1078,6 +1078,9 @@
 			$('#comp').val(comp);
 			$('#item').val(item);
 			$('#qty_distribusi').val(qtyDistribusi);
+			// if (specificcode != null){
+            //     $('#qty_diterima').attr('readonly');
+            // }
 			$('#qty_diterima').val(qtyReceived);
 			$('#namaItem_dt').show('slow');
 			$('#btn_cancel').attr('onclick', 'edit("'+distribusi+'")');
