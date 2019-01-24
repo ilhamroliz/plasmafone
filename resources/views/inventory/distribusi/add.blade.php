@@ -163,8 +163,8 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <button class="btn btn-primary" disabled type="button" onclick="simpan()" id="btn_simpan">
-                                                    <i class="fa fa-save"></i>
-                                                    Simpan
+                                                    <i class="fa fa-send"></i>
+                                                    Distribusikan
                                                 </button>
                                             </div>
                                         </div>
@@ -505,13 +505,13 @@
     function simpan() {
 		$.SmartMessageBox({
 				title : "Pesan!",
-				content : 'Apakah Anda yakin akan menyimpan data ini?',
+				content : 'Apakah Anda yakin akan mendistribusikan barang ini?',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
 				if (ButtonPressed === "Ya") {
 
 					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
+					$('#load-status-text').text('Sedang Memperoses...');
 
 					$.ajaxSetup({
 						headers: {

@@ -122,6 +122,8 @@ class PenjualanController extends Controller
     public function searchStock(Request $request)
     {
         $cari = $request->term;
+        $term = explode(" - ",$cari);
+        $cari = $term[0];
         $kode = [];
         if (isset($request->kode)){
             $kode = $request->kode;
@@ -142,7 +144,6 @@ class PenjualanController extends Controller
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
                     $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
                     $a->on('sd_stock', '=', 's_id');
@@ -163,7 +164,6 @@ class PenjualanController extends Controller
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
                     $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
                     $q->whereNotIn('sm_specificcode', $kode);
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
@@ -189,7 +189,6 @@ class PenjualanController extends Controller
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
                     $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
                 })
                 ->leftJoin('d_stock_dt', function ($a) {
                     $a->on('sd_stock', '=', 's_id');
@@ -252,7 +251,6 @@ class PenjualanController extends Controller
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
                     $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
                     $a->on('sd_stock', '=', 's_id');
@@ -274,7 +272,6 @@ class PenjualanController extends Controller
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
                     $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
                     $q->whereNotIn('sm_specificcode', $kode);
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
@@ -301,7 +298,6 @@ class PenjualanController extends Controller
                     $q->on('sm_stock', '=', 's_id');
                     $q->where('sm_detail', '=', 'PENAMBAHAN');
                     $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
                 })
                 ->leftJoin('d_stock_dt', function ($a) {
                     $a->on('sd_stock', '=', 's_id');
@@ -676,7 +672,7 @@ class PenjualanController extends Controller
                 return response()->json([
                     'status' => 'gagal',
                     'data' => 'server gagal menyimpan',
-                    'eror' => $e
+                    'erorr' => $e
                 ]);
             }
         }
