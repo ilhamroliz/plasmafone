@@ -773,6 +773,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// =====Penjualan Tempo=====
     Route::get('penjualan-tempo', 'PenjualanController@tempo');
+    Route::get('penjualan-tempo/get', 'PenjualanController@getPenjualanTempo')->name('penjualan.tempo');
+    Route::get('penjualan-tempo/tambah', 'PenjualanController@add_tempo');
     Route::get('penjualan-tempo/simpan-member', 'PenjualanController@saveMember');
     Route::get('penjualan-tempo/cari-member', 'PenjualanController@cariMember');
     Route::get('penjualan-tempo/cari-sales', 'PenjualanController@cariSales');

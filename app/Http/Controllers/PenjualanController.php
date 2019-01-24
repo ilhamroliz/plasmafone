@@ -30,6 +30,11 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan-tempo.index');
     }
 
+    public function add_tempo()
+    {
+        return view('penjualan.penjualan-tempo.add');
+    }
+
     public function cariSales(Request $request)
     {
         $cari = $request->term;
@@ -369,6 +374,36 @@ class PenjualanController extends Controller
         ->rawColumns(['aksi'])
 
         ->make(true);
+    }
+
+    public function getPenjualanTempo()
+    {
+        $regular = DB::table('d_sales')
+            ->select('d_sales.s_id as id', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_sales.s_nota as nota')
+            ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
+            ->where('d_sales.s_jenis', 'T')
+            ->groupBy('d_sales.s_id')
+            ->orderBy('d_sales.s_date', 'desc');
+
+        return DataTables::of($regular)
+
+            ->addColumn('aksi', function ($regular) {
+
+                if (Access::checkAkses(16, 'delete') == false && Access::checkAkses(16, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Penjualan" onclick="edit(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($regular->id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+
+                }
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
     }
 
     public function getPenjualanRegularDetail($id = null)
@@ -1034,7 +1069,7 @@ class PenjualanController extends Controller
             return 'true';
         }catch (\Exception $e){
             DB::rollback();
-            return 'false => '.$e;
+            return 'false';
         }
     }
     
