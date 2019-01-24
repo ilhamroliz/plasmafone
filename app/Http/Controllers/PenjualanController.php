@@ -153,7 +153,7 @@ class PenjualanController extends Controller
                 ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->where('i_specificcode', '=', 'N')
                 ->groupBy('sm_specificcode');
@@ -176,7 +176,7 @@ class PenjualanController extends Controller
                 ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->where('i_specificcode', '=', 'Y')
                 ->groupBy('sm_specificcode');
@@ -192,14 +192,14 @@ class PenjualanController extends Controller
                 })
                 ->leftJoin('d_stock_dt', function ($a) {
                     $a->on('sd_stock', '=', 's_id');
-                    $a->on('sd_specificcode', '=', 'sm_specificcode');
+                    $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
                 })
                 ->join('d_item', 'i_id', '=', 's_item')
                 ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
                 ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->groupBy('sm_specificcode')
                 ->get();
@@ -285,7 +285,7 @@ class PenjualanController extends Controller
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dtsd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->where('i_specificcode', '=', 'Y')
                 ->groupBy('sm_specificcode');
@@ -309,7 +309,7 @@ class PenjualanController extends Controller
                 ->where(function ($w) use ($cari){
                     $w->orWhere('i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
                 ->groupBy('sm_specificcode')
                 ->get();
