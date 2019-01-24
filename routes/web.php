@@ -783,7 +783,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('penjualan-tempo/getdetailmember/{id}', 'PenjualanController@getDetailMember');
     Route::post('penjualan-tempo/simpan', 'PenjualanController@savePenjualan');
     Route::get('penjualan-tempo/search-stock', 'PenjualanController@searchStock');
-    Route::get('penjualan-tempo/struktempo/{salesman}/{id}/{bayar}/{bri}/{bni}/{totPemb}/{kembali}', 'PenjualanController@struckTempo');
+    Route::get('penjualan-tempo/struktempo/{salesman}/{id}/{totHarga}/{dibayar}/{kembali}', 'PenjualanController@struckTempo');
     Route::get('penjualan-tempo/detailpembayarantempo/{total}', 'PenjualanController@detailpembayaranTempo');
 	// =========================
 

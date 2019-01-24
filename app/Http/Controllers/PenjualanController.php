@@ -947,7 +947,7 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan-tempo.detailPembayaran', compact('total'));
     }
 
-    public function struckTempo($salesman = null, $id = null, $totPemb = null, $kembali = null)
+    public function struckTempo($salesman = null, $id = null, $totHarga = null, $dibayar = null, $kembali = null)
     {
         try {
             $id = Crypt::decrypt($id);
@@ -956,19 +956,24 @@ class PenjualanController extends Controller
         }
 
         $datas = DB::table('d_sales')
-                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_total_net as total_item', 'd_sales.s_total_net as total')
-                ->where('d_sales.s_id', $id)
-                ->join('d_sales_dt', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
-                ->join('m_company', 'm_company.c_id', '=', 'd_sales.s_comp')
-                ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
-                ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
-                ->get();
+            ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_value as total_item', 'd_sales_dt.sd_total_net as total', DB::raw('coalesce(concat(" (", sm_specificcode, ")"), "") as specificcode'))
+            ->where('d_sales.s_id', $id)
+            ->join('d_sales_dt', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
+            ->join('m_company', 'm_company.c_id', '=', 'd_sales.s_comp')
+            ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
+            ->join('d_item', 'd_item.i_id', '=', 'd_sales_dt.sd_item')
+            ->join('d_stock', 'd_sales_dt.sd_item', '=', 'd_stock.s_item')
+            ->join('d_stock_mutation', function($x){
+                $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+            })
+            ->groupBy('d_sales_dt.sd_item')
+            ->get();
 
         if ($datas == null) {
             return view('errors/404');
         }
 
-        return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'totPemb', 'kembali'));
+        return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'totHarga', 'dibayar', 'kembali'));
     }
 
     public function delete($id = null)

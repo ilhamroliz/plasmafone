@@ -37,6 +37,15 @@
                     Penjualan <span><i class="fa fa-angle-double-right"></i> Penjualan Tempo </span>
                 </h1>
             </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+                <div class="page-title">
+
+                    <a href="{{ url('/penjualan-tempo') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+
+                </div>
+
+            </div>
         </div>
         <!-- widget grid -->
         <section id="widget-grid" class="">
@@ -524,45 +533,6 @@
                 .then(function () {
                     // always executed
                 });
-
-            // $.ajaxSetup({
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     }
-            // });
-            // $.ajax({
-            //     url: baseUrl + '/pointofsales/search-stock',
-            //     type: 'get',
-            //     data: {term : $('#cari-stock').val()},
-            //     success: function(response){
-            //         if (response.data.message == "Tidak ditemukan") {
-            //             $.smallBox({
-            //                 title : "Gagal",
-            //                 content : "Upsss. Barang tidak ditemukan",
-            //                 color : "#A90329",
-            //                 timeout: 5000,
-            //                 icon : "fa fa-times bounce animated"
-            //             });
-            //         } else {
-            //             setStock(response.data.data);
-            //             // $('#tambahketable').click();
-            //         }
-            //     }, error:function(x, e) {
-            //         if (x.status == 0) {
-            //             alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-            //         } else if (x.status == 404) {
-            //             alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-            //         } else if (x.status == 500) {
-            //             alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-            //         } else if (e == 'parsererror') {
-            //             alert('Error.\nParsing JSON Request failed.');
-            //         } else if (e == 'timeout'){
-            //             alert('Request Time out. Harap coba lagi nanti');
-            //         } else {
-            //             alert('Unknow Error.\n' + x.responseText);
-            //         }
-            //     }
-            // })
         }
 
         function simpanmember() {
@@ -977,7 +947,7 @@
                         $("#search_barang").hide("slow");
                         $("#cari-salesman").focus();
                         updateTotalTampil();
-                        cetak(response.salesman, response.idSales, response.totPemb, response.kembali);
+                        cetak(response.salesman, response.idSales, response.totHarga, response.dibayar, response.kembali);
                         $('#DetailPembayaran').modal('hide');
 
                     }
@@ -999,8 +969,8 @@
             })
         }
 
-        function cetak(salesman, idSales, totPemb, kembali){
-            window.open(baseUrl + '/penjualan-tempo/struktempo/'+salesman+'/'+idSales+'/'+totPemb+'/'+kembali, '', "width=800,height=600");
+        function cetak(salesman, idSales, totHarga, dibayar, kembali){
+            window.open(baseUrl + '/penjualan-tempo/struktempo/'+salesman+'/'+idSales+'/'+totHarga+'/'+dibayar+'/'+kembali, '', "width=800,height=600");
         }
 
         function convertToRupiah(angka) {
