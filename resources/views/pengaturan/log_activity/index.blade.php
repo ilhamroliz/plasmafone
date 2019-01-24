@@ -180,7 +180,8 @@
 		});
 
 		table = $('#dt_basic').DataTable({
-			language: dataTableLanguage
+			language: dataTableLanguage,
+			"order": []
 		});
 
 		$( "#date-range" ).datepicker({

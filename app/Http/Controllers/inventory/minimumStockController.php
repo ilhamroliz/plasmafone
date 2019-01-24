@@ -363,9 +363,14 @@ class minimumStockController extends Controller
                     
                     $min = $request->minStock;
 
+                    $getLog = DB::table('d_stock')->join('m_company', 'c_id', '=', 's_comp')->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_id', $id)->select('c_name', 'i_nama')->first();
+
                     DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => $min ]);
             
                     DB::commit();
+                    $log = 'Mengubah Set Minimum Stock untuk Item ' . $getLog->i_nama . ' pada Cabang ' . $getLog->c_name;
+                    PlasmafoneController::logActivity($log);
                     return json_encode([
                         'status' => 'eSukses'
                     ]);
@@ -404,9 +409,14 @@ class minimumStockController extends Controller
                 $id = Crypt::decrypt($request->id);
                 $min = $request->min;
 
+                $getLog = DB::table('d_stock')->join('m_company', 'c_id', '=', 's_comp')->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_id', $id)->select('c_name', 'i_nama')->first();
+
                 DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => $min ]);
            
                 DB::commit();
+                $log = 'Mengaktifkan Set Minimum Stock untuk Item ' . $getLog->i_nama . ' pada Cabang ' . $getLog->c_name;
+                PlasmafoneController::logActivity($log);
                 return json_encode([
                     'status' => 'saSukses'
                 ]);
@@ -433,9 +443,15 @@ class minimumStockController extends Controller
             try {
                 
                 $id = Crypt::decrypt($request->id);
+
+                $getLog = DB::table('d_stock')->join('m_company', 'c_id', '=', 's_comp')->join('d_item', 'i_id', '=', 's_item')
+                    ->where('s_id', $id)->select('c_name', 'i_nama')->first();
+
                 DB::table('d_stock')->where('s_id', $id)->update([ 's_min' => 0 ]);
                 
                 DB::commit();
+                $log = 'Menonaktifkan Set Minimum Stock untuk Item ' . $getLog->i_nama . ' pada Cabang ' . $getLog->c_name;
+                PlasmafoneController::logActivity($log);
                 return json_encode([
                     'status' => 'snSukses'
                 ]);

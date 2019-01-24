@@ -410,14 +410,14 @@ class pemesananBarangController extends Controller
             try {
 
                 $id = Crypt::decrypt($id);
-                // dd($id);
                 $nota = DB::table('d_indent')->select('i_nota')->where('i_id', $id)->first();
-
+                $log = 'Menghapus Pemesanan Barang dengan nota '.$nota->i_nota;
                 DB::table('d_indent')->where('i_id', $id)->delete();
 
                 DB::table('d_indent_dt')->where('id_indent', $id)->delete();
 
                 DB::commit();
+                Plasma::logActivity($log);
                 return json_encode([
                     'status' => 'hpBerhasil',
                     'name' => $nota->i_nota
