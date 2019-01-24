@@ -52,7 +52,7 @@ class PenjualanController extends Controller
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($nama as $query) {
-                $results[] = ['id' => $query->m_id, 'label' => $query->m_name];
+                $results[] = ['id' => $query->m_id, 'label' => strtoupper($query->m_name)];
             }
         }
         return Response::json($results);
@@ -75,7 +75,7 @@ class PenjualanController extends Controller
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($nama as $query) {
-                $results[] = ['id' => $query->m_id, 'label' => $query->m_name . ' ('.$query->m_telp.')'];
+                $results[] = ['id' => $query->m_id, 'label' => strtoupper($query->m_name) . ' ('.$query->m_telp.')'];
             }
         }
         return Response::json($results);
