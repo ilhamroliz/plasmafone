@@ -205,7 +205,7 @@
                                                                         <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item->idStock }}" value="{{ $item->sd_total_gross }}">
                                                                         <input type="hidden" class="totalItem totalItem-{{ $item->i_code }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ $item->sd_total_net }}">
                                                                     </td>
-                                                                    <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty({{ $item->stock_qty }}, 'harga-'{{ $item->idStock }}, 'qty-'{{ $item->idStock }}, 'discp-'{{ $item->idStock }}, 'discv-'{{ $item->idStock }}, 'lbltotalItem-'{{ $item->idStock }}, 'totalItem-'{{ $item->idStock }}, 'grossItem-'{{ $item->idStock }})" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->sd_qty }}" /></td>
+                                                                    <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item->sd_qty }}', '{{ $item->stock_qty }}', 'harga-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}', 'grossItem-{{ $item->idStock }}')" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->sd_qty }}" /></td>
                                                                     <td style="width: 15%;">Rp. @if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</td>
                                                                     @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
                                                                     @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
@@ -794,9 +794,8 @@
 
     }
 
-    function ubahQty(stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {
-        stock = parseInt(stock);
-
+    function ubahQty(qtyTerbeli, stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {
+        stock = parseInt(stock) + parseInt(qtyTerbeli);
         var total = 0;
         var harga = 0;
         var input = parseInt($('#'+inputQty).val());
