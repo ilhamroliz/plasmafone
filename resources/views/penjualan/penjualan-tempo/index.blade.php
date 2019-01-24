@@ -1145,7 +1145,7 @@ function rupiah($angka){
         }
 
         function edit(id){
-            window.location = baseUrl + '/penjualan-reguler/edit/'+id;
+            window.location = baseUrl + '/penjualan-tempo/edit/'+id;
         }
 
         function detail(id){
