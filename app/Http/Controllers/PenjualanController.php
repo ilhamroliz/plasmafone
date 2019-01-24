@@ -575,7 +575,7 @@ class PenjualanController extends Controller
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $sm_sell,
+                                'sm_sell'           => $data['harga'][$i],
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
@@ -596,7 +596,7 @@ class PenjualanController extends Controller
                 $idsales = DB::table('d_sales')->insertGetId([
                     's_comp'                => $outlet_user,
                     's_member'              => $data['idMember'],
-                    's_date'                => date('Y-m-d H:m:s'),
+                    's_date'                => Carbon::now('Asia/Jakarta'),
                     's_jenis'               => $data['jenis_pembayaran'],
                     's_nota'                => $nota,
                     's_total_gross'         => $data['totalHarga'],
@@ -838,7 +838,7 @@ class PenjualanController extends Controller
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $sm_sell,
+                                'sm_sell'           => $data['harga'][$i],
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
@@ -954,7 +954,9 @@ class PenjualanController extends Controller
                 ->join('d_stock_mutation', function($x){
                     $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                 })
-                ->groupBy('d_sales_dt.sd_item')
+                ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+                ->groupBy(['d_sales_dt.sd_detailid', 'd_stock_mutation.sm_specificcode'])
+                ->distinct('d_stock_mutation.sm_specificcode')
                 ->get();
 
         if ($datas == null) {
