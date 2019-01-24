@@ -103,53 +103,76 @@
 
 				$('[data-toggle="tooltip"]').tooltip();
 
-				warn_notif();
+				var access = '{{ Access::checkAkses(13, "read") }}';
 
-                setInterval( function() {
-
+				if(access == true){
 					warn_notif();
 
-                }, 10000);
+					setInterval( function() {
+
+						warn_notif();
+
+					}, 600000);
+				}
+				
 			});
 
 			function warn_notif(){
 				
 				axios.post(baseUrl+'/inventory/min-stock/cek-warn').then((response) => {
 
-					if(response.data.data.length == 1){
+					if(response.data.data.length == 0){
+						$('#warn-notif').html('<div class="alert alert-transparent text-center"><h4>Semua Qty Stock Barang Melebihi Minimum Stock</h4>'+
+							'<i class="fa fa-lock fa-4x fa-border"></i></div>');
+					}else if(response.data.data.length == 1){
 						$('#warn-notif').html('<ul class="notification-body">'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[0].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[0].s_min - response.data.data[0].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
 								'<li><span><a href="{{ url('/inventory/min-stock') }}"><span class="subject text-align-right no-padding">Lihat Selengkapnya</span></a></span></li>'+
 								'</ul>');
 					}else if(response.data.data.length == 2){
 						$('#warn-notif').html('<ul class="notification-body">'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[1].s_min - response.data.data[1].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[0].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[0].s_min - response.data.data[0].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[1].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[1].s_min - response.data.data[1].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
 								'<li><span><a href="{{ url('/inventory/min-stock') }}"><span class="subject text-align-right no-padding">Lihat Selengkapnya</span></a></span></li>'+
 								'</ul>');
 					}else if(response.data.data.length == 3){
 						$('#warn-notif').html('<ul class="notification-body">'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[1].s_min - response.data.data[1].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[2].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[2].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[2].s_min - response.data.data[2].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[0].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[0].s_min - response.data.data[0].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[1].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[1].s_min - response.data.data[1].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[2].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[2].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[2].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[2].s_min - response.data.data[2].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
 								'<li><span><a href="{{ url('/inventory/min-stock') }}"><span class="subject text-align-right no-padding">Lihat Selengkapnya</span></a></span></li>'+
 								'</ul>');
 					}else if(response.data.data.length > 3){
 						$('#warn-notif').html('<ul class="notification-body">'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[0].s_min - response.data.data[0].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[1].s_min - response.data.data[1].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[2].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[2].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[2].s_min - response.data.data[2].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
-								'<li>'+'<span class="unread">'+'<a href="javascript:void(0);" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[3].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[3].i_nama+'</span>'+'<span class="msg-body">Item ini sudah melebihi '+ (response.data.data[3].s_min - response.data.data[3].s_qty) +' Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[0].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[0].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[0].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[0].s_min - response.data.data[0].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[1].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[1].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[1].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[1].s_min - response.data.data[1].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[2].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[2].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[2].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[2].s_min - response.data.data[2].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
+								'<li>'+'<span class="unread">'+'<a onclick="detil('+response.data.data[3].s_id+')" class="msg">'+'<img src="" alt="" class="air air-top-left margin-top-5" width="40" height="40" />'+'<span class="from">'+response.data.data[3].i_kelompok+'<i class="icon-paperclip"></i></span>'+'<time>2 minutes ago</time>'+'<span class="subject">'+response.data.data[3].i_nama+'</span>'+'<span class="msg-body">Item ini kurang <b>'+ (response.data.data[3].s_min - response.data.data[3].s_qty) +'</b> Unit dari Stock Minimum</span>'+'</a>'+'</span>'+'</li>'+
 								'<li><span><a href="{{ url('/inventory/min-stock') }}"><span class="subject text-align-right no-padding">Lihat Selengkapnya</span></a></span></li>'+
 								'</ul>');
 					}
 
+					$('#date-notif').html(response.data.time);
 					$('#countBadge').html(response.data.count);
 
 				});
 
 			}
 
+			function detil(id){
+
+				axios.post(baseUrl+'/inventory/min-stock/detail?id='+id).then((response) => {
+
+					$('#dnItem').html(response.data.data.i_nama);
+					$('#dnPosisi').html(response.data.data.c_name);
+					$('#dnPemilik').html(response.data.comp.c_name);
+					$('#dnMinStock').html(response.data.data.s_min);
+					$('#dnQty').html(response.data.data.s_qty);
+
+				});
+				$('#detilDNModal').modal('show');
+
+			}
 		</script>
 
 		<!-- Your GOOGLE ANALYTICS CODE Below -->

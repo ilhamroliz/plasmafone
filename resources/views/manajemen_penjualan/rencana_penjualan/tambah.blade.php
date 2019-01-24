@@ -82,13 +82,17 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 										<div class="col-sm-12 col-md-12 col-lg-12 no-padding">
 											<div class="form-group col-md-12">
                                                 <div class="col-md-7 inputGroupContainer">
-                                                    <div class="input-group" style="width: 100%">
+													<div class="input-group" style="width: 100%">
 														<span class="input-group-addon" style="width: 40px"><i class="fa fa-building"></i></span>
-														<input type="hidden" id="trpCompId" name="trpCompId">
-													    <input type="text" class="form-control" id="trpCompNama" placeholder="Masukkan Nama Cabang" style="text-transform: uppercase"/>												
-                                                    </div>													
+														<select class="select2" id="trpCompId" name="trpCompId">
+															<option value="">=== PILIH OUTLET ===</option>
+															@foreach($outlet as $toko)
+																<option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
+															@endforeach
+														</select>
+													</div>												
 												</div>
-												<label class="col-md-2"><strong>Rencana Untuk Bulan :</strong></label>
+												<label class="col-md-2"><strong>Rencana Untuk Bulan</strong></label>
 												<div class="col-md-3">
 													<input type="text" id="bulanRencana" name="bulanRencana" class="form-control" placeholder="MASUKKAN BULAN" style="width: 100%">                                       
 												</div>
@@ -217,7 +221,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		function tambah_row(){
 			var compId = $('#trpCompId').val();
-			var compName = $('#trpCompNama').val();
+			var compName = $('#trpCompId option:selected').text();
 			var itemId =  $('#trpItemId').val();
 			var itemName = $('#trpItemNama').val();
 			var qty = $('#trpQty').val();
@@ -311,7 +315,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						icon : "fa fa-check bounce animated"
 					});
 					// window.open(" {{ url('/penjualan/pemesanan-barang/print?id=') }} "+ response.nota);
-					location.href(baseUrl+'/man-penjualan/rencana-penjualan');
+					location.reload();
 
 				}else if(response.data.status == 'ada'){
 

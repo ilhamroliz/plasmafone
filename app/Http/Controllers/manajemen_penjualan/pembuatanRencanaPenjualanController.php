@@ -22,7 +22,13 @@ class pembuatanRencanaPenjualanController extends Controller
             return view('errors.407');
         } else {
             $month = Carbon::now('Asia/Jakarta')->format('m/Y');
-            return view('manajemen_penjualan.rencana_penjualan.index')->with(compact('month'));
+            $outlet = '';
+            if(Auth::user()->m_comp == "PF00000001"){
+                $outlet = DB::table('m_company')->select('c_id', 'c_name')->get();
+            }else{
+                $outlet = DB::table('m_company')->where('c_id', Auth::user()->m_comp)->select('c_id', 'c_name')->first();
+            }
+            return view('manajemen_penjualan.rencana_penjualan.index')->with(compact('month', 'outlet'));
         }
     }
 
@@ -62,14 +68,14 @@ class pembuatanRencanaPenjualanController extends Controller
             $appr = DB::table('d_sales_plan')
                 ->join('m_company', 'c_id', '=', 'sp_comp')
                 ->leftjoin('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
-                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))
                 ->where('sp_comp', $company)
                 ->whereRaw('sp_nota like "%' . $date . '%"')->distinct();
         } else {
             $appr = DB::table('d_sales_plan')
                 ->join('m_company', 'c_id', '=', 'sp_comp')
                 ->leftjoin('d_sales_plan_dt', 'spd_sales_plan', '=', 'sp_id')
-                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))
                 ->whereRaw('sp_nota like "%' . $date . '%"')->distinct();
         }
 
@@ -101,7 +107,7 @@ class pembuatanRencanaPenjualanController extends Controller
             $pend = DB::table('d_sales_plan')
                 ->join('m_company', 'c_id', '=', 'sp_comp')
                 ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct()
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->distinct()
                 ->whereRaw('sp_id = spdd_sales_plan')
                 ->where('sp_comp', $company)
                 ->whereRaw('sp_nota like "%' . $date . '%"');
@@ -109,7 +115,7 @@ class pembuatanRencanaPenjualanController extends Controller
             $pend = DB::table('d_sales_plan')
                 ->join('m_company', 'c_id', '=', 'sp_comp')
                 ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', 'sp_update')->distinct()
+                ->select('sp_id', 'sp_comp', 'c_name', 'sp_nota', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->distinct()
                 ->whereRaw('sp_id = spdd_sales_plan')
                 ->whereRaw('sp_nota like "%' . $date . '%"');
         }
@@ -167,11 +173,6 @@ class pembuatanRencanaPenjualanController extends Controller
         ]);
     }
 
-    public function detail_dt()
-    {
-
-    }
-
     public function cari(Request $request)
     {
         $idComp = $request->z;
@@ -188,26 +189,26 @@ class pembuatanRencanaPenjualanController extends Controller
             if ($company != "PF00000001") {
                 $data = DB::table('d_sales_plan')
                     ->join('m_company', 'c_id', '=', 'sp_comp')
-                    ->whereRaw('sp_date like "%' . $month . '%"')
+                    ->whereRaw('sp_nota like "%' . $request->y . '%"')
                     ->where('sp_comp', $company)
-                    ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+                    ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->get();
             } else {
                 if ($idComp == '' && $month != '') {
                     $data = DB::table('d_sales_plan')
                         ->join('m_company', 'c_id', '=', 'sp_comp')
-                        ->whereRaw('sp_date like "%' . $month . '%"')
-                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+                        ->whereRaw('sp_nota like "%' . $request->y . '%"')
+                        ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->get();
                 } elseif ($idComp != '' && $month == '') {
                     $data = DB::table('d_sales_plan')
                         ->join('m_company', 'c_id', '=', 'sp_comp')
                         ->where('sp_comp', $idComp)
-                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+                        ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->get();
                 } elseif ($idComp != '' && $month != '') {
                     $data = DB::table('d_sales_plan')
                         ->join('m_company', 'c_id', '=', 'sp_comp')
-                        ->whereRaw('sp_date like "%' . $month . '%"')
+                        ->whereRaw('sp_nota like "%' . $request->y . '%"')
                         ->where('sp_comp', $idComp)
-                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->get();
+                        ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->get();
                 }
             }
 
@@ -234,29 +235,29 @@ class pembuatanRencanaPenjualanController extends Controller
                 $data = DB::table('d_sales_plan')
                     ->join('m_company', 'c_id', '=', 'sp_comp')
                     ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-                    ->whereRaw('sp_date like "%' . $month . '%"')
+                    ->whereRaw('sp_nota like "%' . $request->y . '%"')
                     ->where('sp_comp', $company)
-                    ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+                    ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->distinct()->get();
             } else {
                 if ($idComp == '' && $month != '') {
                     $data = DB::table('d_sales_plan')
                         ->join('m_company', 'c_id', '=', 'sp_comp')
                         ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-                        ->whereRaw('sp_date like "%' . $month . '%"')
-                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+                        ->whereRaw('sp_nota like "%' . $request->y . '%"')
+                        ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->distinct()->get();
                 } elseif ($idComp != '' && $month == '') {
                     $data = DB::table('d_sales_plan')
                         ->join('m_company', 'c_id', '=', 'sp_comp')
                         ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
                         ->where('sp_comp', $idComp)
-                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+                        ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->distinct()->get();
                 } elseif ($idComp != '' && $month != '') {
                     $data = DB::table('d_sales_plan')
                         ->join('m_company', 'c_id', '=', 'sp_comp')
                         ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-                        ->whereRaw('sp_date like "%' . $month . '%"')
+                        ->whereRaw('sp_nota like "%' . $request->y . '%"')
                         ->where('sp_comp', $idComp)
-                        ->select('sp_id', 'sp_nota', 'c_name', 'sp_update')->distinct()->get();
+                        ->select('sp_id', 'sp_nota', 'c_name', DB::raw('DATE_FORMAT(sp_update, "%d/%m/%Y %H:%i:%s") as sp_update'))->distinct()->get();
                 }
             }
 
@@ -327,7 +328,7 @@ class pembuatanRencanaPenjualanController extends Controller
 
                     $sp_comp = $request->trpCompId;
                     $sp_nota = $this->getDataId($bulan);
-                    dd($sp_nota);
+                    // dd($sp_nota);
                     $sp_insert = Carbon::now('Asia/Jakarta');
                     $date = explode(' ', $sp_insert);
                     $sp_date = $date[0];
@@ -363,7 +364,7 @@ class pembuatanRencanaPenjualanController extends Controller
                         ]);
                         array_push($spd_array, $aray);
                     }
-
+                    dd($spd_array);
                     DB::table('d_sales_plan_dt')->insert($spd_array);
 
                     DB::commit();
@@ -380,7 +381,8 @@ class pembuatanRencanaPenjualanController extends Controller
 
             }
 
-            return view('manajemen_penjualan.rencana_penjualan.tambah');
+            $outlet = DB::table('m_company')->select('c_id', 'c_name')->get();
+            return view('manajemen_penjualan.rencana_penjualan.tambah')->with(compact('outlet'));
         }
     }
 

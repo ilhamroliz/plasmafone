@@ -110,9 +110,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <input type="text" class="form-control osCompName" value="{{ $getCN->c_name }}"
                                                 readonly>
                                             @else
-                                            <input type="hidden" id="osCompId" name="osCompId">
-                                            <input type="text" class="form-control osCompName" id="osCompName"
-                                                placeholder="Masukkan Lokasi Barang" style="text-transform:uppercase">
+                                            <div class="col-md-12 no-padding">
+                                                <select class="select2" id="osCompId" name="osCompId">
+                                                    <option value="">Semua Outlet</option>
+                                                    @foreach($getCN as $toko)
+                                                        <option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             @endif
                                         </div>
                                     </div>
@@ -514,7 +519,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             $('#apprTable').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"cb=out&x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+                "ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?cb=out&x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
                 "columns": [
                     {"data": "o_reff"},
                     {"data": "o_date"},
@@ -548,7 +553,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             $('#pendTable').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"cb=out&x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+                "ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?cb=out&x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
                 "columns": [
                         {"data": "o_reff"},
 						{"data": "o_date"},

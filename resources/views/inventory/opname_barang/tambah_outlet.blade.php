@@ -100,8 +100,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                                             <div class="col-md-5">
                                                 @if(Auth::user()->m_comp == "PF00000001")
-                                                <input type="hidden" id="idComp" name="idComp">
-                                                <input type="text" class="form-control" id="nameComp" name="nameComp" placeholder="Masukkan Lokasi Barang" style="text-transform: uppercase; width: 100%">
+                                                <div class="col-md-12 no-padding">
+                                                    <select class="select2" id="idComp" name="idComp">
+                                                        <option value="">Semua Outlet</option>
+                                                        @foreach($getCN as $toko)
+                                                            <option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                                 @else
                                                 <input type="hidden" id="idComp" name="idComp" value="{{Auth::user()->m_comp}}">
                                                 <input type="text" class="form-control" id="nameComp" name="nameComp" value="{{ $getCN->c_name }}" style="text-transform: uppercase; width: 100%" readonly>

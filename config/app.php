@@ -224,7 +224,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-        'Access' => App\Http\Controllers\PlasmafoneController::class
+        'Access' => App\Http\Controllers\PlasmafoneController::class,
+        'Carbon' => Illuminate\Support\Carbon::class
     ],
 
 ];

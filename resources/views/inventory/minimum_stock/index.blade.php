@@ -90,8 +90,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                                         <div class="col-md-4">
 											<div class="form-group">
-                                                <input type="hidden" id="msCompId" name="msCompId">
-                                                <input type="text" class="form-control" id="msCompName" placeholder="Masukkan Lokasi Barang" style="text-transform:uppercase">
+												<div class="col-md-12">
+													<select class="select2" id="msComp" name="msComp">
+														<option value="">Semua Outlet</option>
+														@foreach($outlet as $toko)
+															<option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
+														@endforeach
+													</select>
+												</div>
 											</div>
 										</div>
 
@@ -251,8 +257,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							<div class="col-md-12 margin-bottom-5 no-padding">
                                 <label class="col-md-3">Lokasi Barang</label>
                                 <div class="col-md-9">
-									<input type="hidden" id="idComp" name="idComp">
-									<input type="text" class="form-control" id="nameComp" name="nameComp" placeholder="Masukkan Lokasi Barang" style="text-transform: uppercase">
+									<div class="col-md-12 no-padding">
+										<select class="select2" id="idComp" name="idComp">
+											<option value="">=== Pilih Outlet ===</option>
+											@foreach($outlet as $toko)
+												<option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
+											@endforeach
+										</select>
+									</div>
 								</div>
 							</div>
 
@@ -493,16 +505,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$('#detilModal').modal('show');
 		}
 
-		function cari2(){
+		function cariMS(){
 
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mencari Data ...');
 
 			var status;
-			var awal = $('#tglAwal').val();
-			var akhir = $('#tglAkhir').val();
-			var idItem = $('#osItemId').val();
-			var idComp = $('#osCompId').val();
+			var idItem = $('#msItemId').val();
+			var idComp = $('#msComp').val();
 
 			if($('#hr1').hasClass("active") == true){
 
@@ -511,7 +521,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#warningTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=a&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/min-stock/pencarian') }}"+"?x=a&ii="+idItem+"&ic="+idComp,
 					"columns":[
 						{"data": "c_name"},
 						{"data": "i_nama"},
@@ -544,7 +554,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#activeTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=p&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/min-stock/pencarian') }}"+"?x=b&ii="+idItem+"&ic="+idComp,
 					"columns":[
 						{"data": "c_name"},
 						{"data": "i_nama"},
@@ -577,7 +587,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#nonactiveTable').DataTable({
 					"processing": true,
 					"serverSide": true,
-					"ajax": "{{ url('/inventory/opname-barang/pencarian') }}"+"?x=p&awal="+awal+"&akhir="+akhir+'&ii='+idItem+'&ic='+idComp,
+					"ajax": "{{ url('/inventory/min-stock/pencarian') }}"+"?x=c&ii="+idItem+"&ic="+idComp,
 					"columns":[
 						{"data": "c_name"},
 						{"data": "i_nama"},
@@ -604,8 +614,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				});
 
 			}
-			$('#osItemId').val('');
-			$('#osCompId').val('');
 			$('#overlay').fadeOut(200);
 		}
 
@@ -619,7 +627,20 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			var idItem = $('#idItem').val();
 			var idComp = $('#idComp').val();
-            var minStock = $('#minStock').val();
+			var minStock = $('#minStock').val();
+			
+			if(idComp == ''){
+				$('#overlay').fadeOut(200);
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Outlet Harus Dipilih",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				$('#idComp').focus();
+				return false;
+			}
 
 			axios.post(baseUrl+'/inventory/min-stock/tambah', {idItem: idItem, idComp: idComp, minStock: minStock}).then((response) => {
 
@@ -641,6 +662,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"
 					});
+
+					$('#idItem').val('');
+					$('#idComp').val('');
+					$('#nameItem').val('');
+					$('#nameComp').val('');
+					$('#minStock').val('');
 
 				}else{
 
