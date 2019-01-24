@@ -13,7 +13,7 @@ use DB;
 use Session;
 use PDF;
 use Response;
- 
+
 class PembelianController extends Controller
 {
     // ----Bagian rencana Pembelian -----
@@ -30,7 +30,11 @@ class PembelianController extends Controller
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($nama as $query) {
-                $results[] = ['id' => $query->i_id, 'label' => $query->i_code . '('.$query->i_nama.')'];
+                if ($query->i_code != null || $query->i_code != '') {
+                    $results[] = ['id' => $query->i_id, 'label' => $query->i_code.' - '.$query->i_nama ];
+                } else {
+                    $results[] = ['id' => $query->i_id, 'label' => $query->i_nama ];
+                }
             }
         }
         return Response::json($results);
@@ -90,7 +94,7 @@ class PembelianController extends Controller
             ->where('d_purchase_plan.pr_comp', $prive)
             ->get();
         }
-        
+
         return DataTables::of($menunggu)
 
             ->addColumn('aksi', function ($menunggu) {
@@ -149,7 +153,7 @@ class PembelianController extends Controller
             ->where('d_purchase_plan.pr_comp', $prive)
             ->get();
         }
-        
+
 
         return DataTables::of($setujui)
             ->addColumn('input', function ($setujui) {
@@ -299,19 +303,19 @@ class PembelianController extends Controller
     {
         $pr_supplier = $request->input('supplier');
 
-        $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'WAITING';
-        $code = Carbon::now()->timestamp;
+        $dateReq    = Carbon::now('Asia/Jakarta');
+        $status     = 'WAITING';
+        $code       = Carbon::now()->timestamp;
         $numberPlan = "CONF-".$code;
-        $user = Auth::user()->m_id;
+        $user       = Auth::user()->m_id;
 
         $query = DB::table('d_purchase_plan_dd')
             ->select('d_purchase_plan_dd.*')
             ->where('d_purchase_plan_dd.pr_stsPlan', $status)
             ->where('d_purchase_plan_dd.pr_userId',$user)
             ->get();
-        
-            
+
+
         $baris = count($query);
 
         if($baris =="0"){
@@ -320,28 +324,28 @@ class PembelianController extends Controller
         }else{
             $pr_dateApp = Carbon::now('Asia/Jakarta');
             $pr_stsPlan = "WAITING";
-    
+
                  $addAkses = [];
                     for ($i=0; $i < count($query); $i++) {
                         $temp = [
-                            
+
                             // 'pr_idPlan' =>$query[$i]->pr_idPlan,
-                            'pr_supplier' =>$pr_supplier,
-                            'pr_item' =>$query[$i]->pr_itemPlan,
-                            'pr_price' =>$query[$i]->pr_harga_satuan,
-                            'pr_qtyApp' =>$query[$i]->pr_qtyApp,
-                            'pr_stsConf' =>$pr_stsPlan,
-                            'pr_dateApp' =>$dateReq,
-                            'pr_comp' => Auth::user()->m_comp,
-                            'pr_confirmNumber'=>$numberPlan,
-                            'total'=>$query[$i]->pr_harga_satuan * $query[$i]->pr_qtyApp
-                        ];  
+                            'pr_supplier'      => $pr_supplier,
+                            'pr_item'          => $query[$i]->pr_itemPlan,
+                            'pr_price'         => $query[$i]->pr_harga_satuan,
+                            'pr_qtyApp'        => $query[$i]->pr_qtyApp,
+                            'pr_stsConf'       => $pr_stsPlan,
+                            'pr_dateApp'       => $dateReq,
+                            'pr_comp'          => Auth::user()->m_comp,
+                            'pr_confirmNumber' => $numberPlan,
+                            'total'            => $query[$i]->pr_harga_satuan * $query[$i]->pr_qtyApp
+                        ];
                         array_push($addAkses, $temp);
                     }
-    
+
             $insert = DB::table('d_purchase_confirm')->insert($addAkses);
             if (!$insert) {
-    
+
                 $data = "GAGAL";
                 echo json_encode(array("status" => $data));
             } else {
@@ -359,10 +363,10 @@ class PembelianController extends Controller
                             $data = "SUKSES";
                             echo json_encode(array("status" => $data));
                         }
-                   
+
             }
         }
-       
+
 
     }
 
@@ -372,11 +376,11 @@ class PembelianController extends Controller
 
         $pr_compReq = $request->input('comp');
 
-        $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'WAITING';
-        $code = Carbon::now()->timestamp;
+        $dateReq    = Carbon::now('Asia/Jakarta');
+        $status     = 'WAITING';
+        $code       = Carbon::now()->timestamp;
         $numberPlan = "PL-".$code;
-        $user = Auth::user()->m_id;
+        $user       = Auth::user()->m_id;
 
         if($pr_compReq =="semua"){
             $query = DB::table('d_purchase_req')
@@ -396,8 +400,8 @@ class PembelianController extends Controller
         }
 
 
-        
-            
+
+
         $baris = count($query);
 
         if($baris =="0"){
@@ -406,28 +410,28 @@ class PembelianController extends Controller
         }else{
             $pr_dateApp = Carbon::now('Asia/Jakarta');
             $pr_stsPlan = "WAITING";
-    
+
                  $addAkses = [];
                     for ($i=0; $i < count($query); $i++) {
                         $temp = [
-                           
-                            'pr_itemPlan'=>$query[$i]->pr_itemReq,
-                            'pr_comp' =>$query[$i]->pr_compReq,
-                            'pr_planNumber' => $numberPlan,
-                            'pr_idReq' =>$query[$i]->pr_id,
-                            'pr_qtyReq' =>$query[$i]->pr_qtyReq,
-                            'pr_qtyApp' =>$query[$i]->pr_qtyApp_dumy,
-                            'pr_stsPlan' =>$pr_stsPlan,
-                            'pr_dateRequest' =>$query[$i]->pr_dateReq,
-                            'pr_dateApp' =>$pr_dateApp,
-                            'pr_userId' => $user
-                        ];  
+
+                            'pr_itemPlan'    => $query[$i]->pr_itemReq,
+                            'pr_comp'        => $query[$i]->pr_compReq,
+                            'pr_planNumber'  => $numberPlan,
+                            'pr_idReq'       => $query[$i]->pr_id,
+                            'pr_qtyReq'      => $query[$i]->pr_qtyReq,
+                            'pr_qtyApp'      => $query[$i]->pr_qtyApp_dumy,
+                            'pr_stsPlan'     => $pr_stsPlan,
+                            'pr_dateRequest' => $query[$i]->pr_dateReq,
+                            'pr_dateApp'     => $pr_dateApp,
+                            'pr_userId'      => $user
+                        ];
                         array_push($addAkses, $temp);
                     }
-    
+
             $insert = DB::table('d_purchase_plan')->insert($addAkses);
             if (!$insert) {
-    
+
                 $data = "GAGAL";
                 echo json_encode(array("status" => $data));
             } else {
@@ -440,14 +444,14 @@ class PembelianController extends Controller
                     foreach ($def as $key => $value) {
                         $dat['coloum'] = $value;
                     }
-                       
+
                     $dat = array();
                     foreach ($def as $key) {
                        $row = array();
                        $row[] = $key->pr_id;
                        $dat[] = $row;
                     }
-                  
+
                    $update = DB::table('d_purchase_req')
                    ->whereIn('d_purchase_req.pr_id',$dat)
                    ->update([
@@ -460,16 +464,16 @@ class PembelianController extends Controller
 
                    $data = "SUKSES";
                     echo json_encode(array("status" => $data));
-    
+
             }
         }
-       
 
-        
+
+
 
     }
 
-    
+
     public function view_tambahRencana_dumy(Request $request)
     {
         $comp = $request->input('comp');
@@ -510,12 +514,12 @@ class PembelianController extends Controller
             ->where('d_purchase_req_dumy.pr_compReq', $comp)
             ->get();
         }
-       
+
 
             $data = array();
             $i = 0;
         foreach ($tambahRencana as $hasil) {
-           
+
             $row = array();
             $row[] = $i++;
             $row[] = $hasil->c_name;
@@ -528,7 +532,7 @@ class PembelianController extends Controller
 
         echo json_encode(array("data"=>$data));
     }
-    
+
     public function view_tambahRencana(Request $request)
     {
         $comp = $request->input('comp');
@@ -539,7 +543,7 @@ class PembelianController extends Controller
             $cek = DB::table('d_purchase_req_dumy')
             ->where('d_purchase_req_dumy.pr_userId',$userCreate)
             ->delete();
-    
+
             $query2 = DB::table('d_purchase_req')
             ->select('d_purchase_req.*')
             ->get();
@@ -572,22 +576,22 @@ class PembelianController extends Controller
                 }else{
                     $no = $baris+1;
                 }
-        
+
                     $addAkses = [];
                             for ($i=0; $i < count($query); $i++) {
                                 $temp = [
-                                    'pr_id'=>$query[$i]->pr_id,
-                                    'pr_compReq'=>$query[$i]->pr_compReq,
-                                    'pr_item'=>$query[$i]->pr_itemReq,
-                                    'pr_qtyReq_dumy'=>$query[$i]->pr_qtyReq,
-                                    'pr_qtyApp_dumy'=>$query[$i]->pr_qtyReq,
-                                    'pr_userId'=>$userCreate
-                                ];  
+                                    'pr_id'          => $query[$i]->pr_id,
+                                    'pr_compReq'     => $query[$i]->pr_compReq,
+                                    'pr_item'        => $query[$i]->pr_itemReq,
+                                    'pr_qtyReq_dumy' => $query[$i]->pr_qtyReq,
+                                    'pr_qtyApp_dumy' => $query[$i]->pr_qtyReq,
+                                    'pr_userId'      => $userCreate
+                                ];
                                 array_push($addAkses, $temp);
                             }
-            
+
                     $insert = DB::table('d_purchase_req_dumy')->insert($addAkses);
-        
+
                     if(!$insert){
                         if($comp=="semua"){
                             $tambahRencana = DB::table('d_purchase_req')
@@ -614,7 +618,7 @@ class PembelianController extends Controller
                             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                             $data[] = $row;
                             }
-        
+
                             echo json_encode(array("data"=>$data));
                         }else{
                             $tambahRencana = DB::table('d_purchase_req')
@@ -642,11 +646,11 @@ class PembelianController extends Controller
                             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                             $data[] = $row;
                             }
-            
+
                             echo json_encode(array("data"=>$data));
                         }
-                        
-        
+
+
                     }else{
                         $tambahRencana = DB::table('d_purchase_req')
                         ->select(
@@ -673,10 +677,10 @@ class PembelianController extends Controller
                         $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                         $data[] = $row;
                         }
-        
+
                         echo json_encode(array("data"=>$data));
                     }
-        
+
             }else{
                 $tambahRencana = DB::table('d_purchase_req')
                             ->select(
@@ -703,7 +707,7 @@ class PembelianController extends Controller
                             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                             $data[] = $row;
                             }
-        
+
                             echo json_encode(array("data"=>$data));
             }
 
@@ -712,7 +716,7 @@ class PembelianController extends Controller
             $cek = DB::table('d_purchase_req_dumy')
             ->where('d_purchase_req_dumy.pr_userId',$userCreate)
             ->delete();
-    
+
             $query2 = DB::table('d_purchase_req')
             ->select('d_purchase_req.*')
             ->get();
@@ -728,7 +732,7 @@ class PembelianController extends Controller
             $data = array();
             foreach ($query as $key) {
                 $row = array();
-                $row[] = $key->pr_id;
+                $row[]  = $key->pr_id;
                 $data[] = $row;
             }
 
@@ -747,22 +751,22 @@ class PembelianController extends Controller
                 }else{
                     $no = $baris+1;
                 }
-        
+
                     $addAkses = [];
                             for ($i=0; $i < count($query); $i++) {
                                 $temp = [
-                                    'pr_id'=>$query[$i]->pr_id,
-                                    'pr_compReq'=>$query[$i]->pr_compReq,
-                                    'pr_item'=>$query[$i]->pr_itemReq,
-                                    'pr_qtyReq_dumy'=>$query[$i]->pr_qtyReq,
-                                    'pr_qtyApp_dumy'=>$query[$i]->pr_qtyReq,
-                                    'pr_userId'=>$userCreate
-                                ];  
+                                    'pr_id'          => $query[$i]->pr_id,
+                                    'pr_compReq'     => $query[$i]->pr_compReq,
+                                    'pr_item'        => $query[$i]->pr_itemReq,
+                                    'pr_qtyReq_dumy' => $query[$i]->pr_qtyReq,
+                                    'pr_qtyApp_dumy' => $query[$i]->pr_qtyReq,
+                                    'pr_userId'      => $userCreate
+                                ];
                                 array_push($addAkses, $temp);
                             }
-            
+
                     $insert = DB::table('d_purchase_req_dumy')->insert($addAkses);
-        
+
                     if(!$insert){
                         if($comp=="semua"){
                             $tambahRencana = DB::table('d_purchase_req')
@@ -789,7 +793,7 @@ class PembelianController extends Controller
                             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                             $data[] = $row;
                             }
-        
+
                             echo json_encode(array("data"=>$data));
                         }else{
                             $tambahRencana = DB::table('d_purchase_req')
@@ -818,11 +822,11 @@ class PembelianController extends Controller
                             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                             $data[] = $row;
                             }
-            
+
                             echo json_encode(array("data"=>$data));
                         }
-                        
-        
+
+
                     }else{
                         $tambahRencana = DB::table('d_purchase_req')
                         ->select(
@@ -850,10 +854,10 @@ class PembelianController extends Controller
                         $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                         $data[] = $row;
                         }
-        
+
                         echo json_encode(array("data"=>$data));
                     }
-        
+
             }else{
                 $tambahRencana = DB::table('d_purchase_req')
                             ->select(
@@ -880,12 +884,12 @@ class PembelianController extends Controller
                             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                             $data[] = $row;
                             }
-        
+
                             echo json_encode(array("data"=>$data));
             }
         }
 
-    // =========================================================   
+    // =========================================================
 
         // $baris = count($query2);
 
@@ -904,10 +908,10 @@ class PembelianController extends Controller
         //                     'pr_qtyReq_dumy'=>$query[$i]->pr_qtyReq,
         //                     'pr_qtyApp_dumy'=>$query[$i]->pr_qtyReq,
         //                     'pr_userId'=>$userCreate
-        //                 ];  
+        //                 ];
         //                 array_push($addAkses, $temp);
         //             }
-    
+
         //     $insert = DB::table('d_purchase_req_dumy')->insert($addAkses);
 
         //     if(!$insert){
@@ -964,10 +968,10 @@ class PembelianController extends Controller
         //             $row[] = '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="App qty" onclick="apply(' . $key->pr_id . ')"><i class="glyphicon glyphicon-list"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $key->pr_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
         //             $data[] = $row;
         //             }
-    
+
         //             echo json_encode(array("data"=>$data));
         //         }
-                
+
 
         //     }else{
         //         $tambahRencana = DB::table('d_purchase_req')
@@ -1001,7 +1005,7 @@ class PembelianController extends Controller
     }
 
 
-    
+
 
     public function itemSuplier()
     {
@@ -1013,26 +1017,26 @@ class PembelianController extends Controller
 
     public function tambahRencana(Request $request)
     {
-        $comp = $request->input('comp');
-        $pr_idReq = $request->input('pr_idReq');
-        $pr_itemPlan = $request->input('pr_itemPlan');
-        $pr_qtyReq = $request->input('pr_qtyReq');
+        $comp           = $request->input('comp');
+        $pr_idReq       = $request->input('pr_idReq');
+        $pr_itemPlan    = $request->input('pr_itemPlan');
+        $pr_qtyReq      = $request->input('pr_qtyReq');
         $pr_dateRequest = $request->input('pr_dateRequest');
-        $pr_supplier = $request->input('supplier');
-        $pr_qtyApp = $request->input('qty');
-        $pr_dateApp = Carbon::now('Asia/Jakarta');
-        $pr_stsPlan = "WAITING";
+        $pr_supplier    = $request->input('supplier');
+        $pr_qtyApp      = $request->input('qty');
+        $pr_dateApp     = Carbon::now('Asia/Jakarta');
+        $pr_stsPlan     = "WAITING";
 
         $list = array(
-            'pr_idReq' => $pr_idReq,
-            'pr_itemPlan' => $pr_itemPlan,
-            'pr_supplier' => $pr_supplier,
-            'pr_qtyReq' => $pr_qtyReq,
-            'pr_qtyApp' => $pr_qtyApp,
-            'pr_stsPlan' => $pr_stsPlan,
+            'pr_idReq'       => $pr_idReq,
+            'pr_itemPlan'    => $pr_itemPlan,
+            'pr_supplier'    => $pr_supplier,
+            'pr_qtyReq'      => $pr_qtyReq,
+            'pr_qtyApp'      => $pr_qtyApp,
+            'pr_stsPlan'     => $pr_stsPlan,
             'pr_dateRequest' => $pr_dateRequest,
-            'pr_dateApp' => $pr_dateApp,
-            'pr_comp' => $comp
+            'pr_dateApp'     => $pr_dateApp,
+            'pr_comp'        => $comp
         );
 
         $insert = DB::table('d_purchase_plan')->insert($list);
@@ -1114,55 +1118,55 @@ class PembelianController extends Controller
 
 
         foreach ($query as $value) {
-            $pr_id2 = $value->pr_id;
-            $pr_codeReq = $value->pr_codeReq;
-            $pr_compReq = $value->pr_compReq;
-            $pr_itemReq = $value->pr_itemReq;
-            $pr_qty = $value->pr_qtyReq;
-            $pr_dateReq = $value->pr_dateReq;
-            $pr_stsReq = $value->pr_stsReq;
-            $i_id = $value->i_id;
-            $i_kelompok = $value->i_kelompok;
-            $i_group = $value->i_group;
-            $i_sub_group = $value->i_sub_group;
-            $i_merk = $value->i_merk;
-            $i_nama = $value->i_nama;
+            $pr_id2         = $value->pr_id;
+            $pr_codeReq     = $value->pr_codeReq;
+            $pr_compReq     = $value->pr_compReq;
+            $pr_itemReq     = $value->pr_itemReq;
+            $pr_qty         = $value->pr_qtyReq;
+            $pr_dateReq     = $value->pr_dateReq;
+            $pr_stsReq      = $value->pr_stsReq;
+            $i_id           = $value->i_id;
+            $i_kelompok     = $value->i_kelompok;
+            $i_group        = $value->i_group;
+            $i_sub_group    = $value->i_sub_group;
+            $i_merk         = $value->i_merk;
+            $i_nama         = $value->i_nama;
             $i_specificcode = $value->i_specificcode;
-            $i_code = $value->i_code;
-            $i_isactive = $value->i_isactive;
-            $i_price = $value->i_price;
-            $i_minstock = $value->i_minstock;
-            $i_berat = $value->i_berat;
-            $i_img = $value->i_img;
-            $c_name = $value->c_name;
-            $c_address = $value->c_address;
-            $c_tlp = $value->c_tlp;
+            $i_code         = $value->i_code;
+            $i_isactive     = $value->i_isactive;
+            $i_price        = $value->i_price;
+            $i_minstock     = $value->i_minstock;
+            $i_berat        = $value->i_berat;
+            $i_img          = $value->i_img;
+            $c_name         = $value->c_name;
+            $c_address      = $value->c_address;
+            $c_tlp          = $value->c_tlp;
         }
 
         $item = array(
-            'pr_id' => $pr_id2,
-            "pr_codeReq" => $pr_codeReq,
-            "pr_compReq" => $pr_compReq,
-            "pr_itemReq" => $pr_itemReq,
-            "pr_qtyReq" => $pr_qty,
-            "pr_dateReq" => $pr_dateReq,
-            "pr_stsReq" => $pr_stsReq,
-            "i_id" => $i_id,
-            "i_kelompok" => $i_kelompok,
-            "i_group" => $i_group,
-            "i_sub_group" => $i_sub_group,
-            "i_merk" => $i_merk,
-            "i_nama" => $i_nama,
+            'pr_id'          => $pr_id2,
+            "pr_codeReq"     => $pr_codeReq,
+            "pr_compReq"     => $pr_compReq,
+            "pr_itemReq"     => $pr_itemReq,
+            "pr_qtyReq"      => $pr_qty,
+            "pr_dateReq"     => $pr_dateReq,
+            "pr_stsReq"      => $pr_stsReq,
+            "i_id"           => $i_id,
+            "i_kelompok"     => $i_kelompok,
+            "i_group"        => $i_group,
+            "i_sub_group"    => $i_sub_group,
+            "i_merk"         => $i_merk,
+            "i_nama"         => $i_nama,
             "i_specificcode" => $i_specificcode,
-            "i_code" => $i_code,
-            "i_isactive" => $i_isactive,
-            "i_price" => $i_price,
-            "i_minstock" => $i_minstock,
-            "i_berat" => $i_berat,
-            "i_img" => $i_img,
-            "c_name" => $c_name,
-            "c_address" => $c_address,
-            "c_tlp" => $c_tlp
+            "i_code"         => $i_code,
+            "i_isactive"     => $i_isactive,
+            "i_price"        => $i_price,
+            "i_minstock"     => $i_minstock,
+            "i_berat"        => $i_berat,
+            "i_img"          => $i_img,
+            "c_name"         => $c_name,
+            "c_address"      => $c_address,
+            "c_tlp"          => $c_tlp
         );
 
         echo json_encode(array("data" => $item));
@@ -1186,14 +1190,14 @@ class PembelianController extends Controller
         }
 
         // $term = $request->input('term');
-        
+
         // $results = array();
-        
+
         // $queries = DB::table('d_item')
         //     ->where('i_id', 'LIKE', '%'.$term.'%')
         //     ->orWhere('i_nama', 'LIKE', '%'.$term.'%')
         //     ->take(5)->get();
-        
+
         // foreach ($queries as $query)
         // {
         //     $results[] = [ 'i_id' => $query->i_id, 'value' => $query->i_id.' '.$query->i_nama ];
@@ -1304,7 +1308,7 @@ class PembelianController extends Controller
             ->addColumn('pr_price', function ($confirmOrder) {
 
                 return ''.number_format($confirmOrder->pr_price, 0).'';
-                
+
 
             })
             ->addColumn('aksi', function ($confirmOrder) {
@@ -1327,24 +1331,24 @@ class PembelianController extends Controller
         ->get();
 
         foreach ($query as $key){
-            $s_name = $key->s_name;
-            $s_phone = $key->s_phone;
-            $s_fax = $key->s_fax;
+            $s_name    = $key->s_name;
+            $s_phone   = $key->s_phone;
+            $s_fax     = $key->s_fax;
             $s_address = $key->s_address;
           }
 
           $data = array(
-              's_name'=>$s_name,
-              's_phone'=>$s_phone,
-              's_fax'=>$s_fax,
-              's_address'=>$s_address
+              's_name'    => $s_name,
+              's_phone'   => $s_phone,
+              's_fax'     => $s_fax,
+              's_address' => $s_address
           );
 
           echo json_encode($data);
     }
 
     public function view_confirmAll()
-    { 
+    {
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
                 'd_purchase_confirm.pr_idConf',
@@ -1361,7 +1365,7 @@ class PembelianController extends Controller
             ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
             ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
-            
+
             ->get();
 
         return DataTables::of($confirmOrder)
@@ -1447,33 +1451,33 @@ class PembelianController extends Controller
             $addAkses = [];
                     for ($i=0; $i < count($query); $i++) {
                         $temp = [
-                            'pr_idPlan'=>$query[$i]->pr_idPlan,
-                            'pr_idReq'=>$query[$i]->pr_idReq,
-                            'pr_itemPlan'=>$query[$i]->pr_itemPlan,
-                            'pr_qtyReq'=>$query[$i]->TotalQty_req,
-                            'pr_qtyApp'=>$query[$i]->TotalQty_app,
-                            'pr_harga_satuan'=>"0",
-                            'pr_discount'=>"0",
-                            'pr_subtotal'=>"0",
-                            'pr_hpp'=>"0",
-                            'pr_stsPlan'=>$query[$i]->pr_stsPlan,
-                            'pr_dateRequest'=>$query[$i]->pr_dateRequest,
-                            'pr_dateApp'=>$query[$i]->pr_dateApp,
-                            'pr_comp'=>$query[$i]->pr_comp,
-                            'pr_planNumber'=>$query[$i]->pr_planNumber,
-                            'pr_userId'=>$userCreate
-                        ];  
+                            'pr_idPlan'       => $query[$i]->pr_idPlan,
+                            'pr_idReq'        => $query[$i]->pr_idReq,
+                            'pr_itemPlan'     => $query[$i]->pr_itemPlan,
+                            'pr_qtyReq'       => $query[$i]->TotalQty_req,
+                            'pr_qtyApp'       => $query[$i]->TotalQty_app,
+                            'pr_harga_satuan' => "0",
+                            'pr_discount'     => "0",
+                            'pr_subtotal'     => "0",
+                            'pr_hpp'          => "0",
+                            'pr_stsPlan'      => $query[$i]->pr_stsPlan,
+                            'pr_dateRequest'  => $query[$i]->pr_dateRequest,
+                            'pr_dateApp'      => $query[$i]->pr_dateApp,
+                            'pr_comp'         => $query[$i]->pr_comp,
+                            'pr_planNumber'   => $query[$i]->pr_planNumber,
+                            'pr_userId'       => $userCreate
+                        ];
                         array_push($addAkses, $temp);
                     }
-    
+
             $insert = DB::table('d_purchase_plan_dd')->insert($addAkses);
 
             if($insert){
                 $status = "SUKSES";
-                echo json_encode(array("data"=>$status));
+                echo json_encode(array("data" => $status));
             }else{
                 $status = "GAGAL";
-                echo json_encode(array("data"=>$status));
+                echo json_encode(array("data" => $status));
             }
 
             // if(!$insert){
@@ -1491,7 +1495,7 @@ class PembelianController extends Controller
             //     $i = 1;
             //     foreach ($menunggu as $key) {
             //     $row = array();
-                
+
             //     $row[] = $key->i_nama;
             //     $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . $key->pr_harga_satuan . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' . $key->pr_harga_satuan . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
             //     // $row[] = '<div class="text-center"><input type="text" class="editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="'.$key->pr_qtyApp .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan . ')"/></div>';
@@ -1516,7 +1520,7 @@ class PembelianController extends Controller
             //     $i = 1;
             //     foreach ($menunggu as $key) {
             //     $row = array();
-               
+
             //     $row[] = $key->i_nama;
             //     $row[] = $key->pr_qtyApp;
             //     $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . $key->pr_harga_satuan . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' . $key->pr_harga_satuan . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
@@ -1566,69 +1570,69 @@ class PembelianController extends Controller
 
 
         foreach ($query as $value) {
-            $pr_idPlan = $value->pr_idPlan;
-            $pr_idReq = $value->pr_idReq;
-            $pr_itemPlan = $value->pr_itemPlan;
-            $pr_supplier = $value->pr_supplier;
-            $pr_qtyApp = $value->pr_qtyApp;
-            $pr_dateApp = $value->pr_dateApp;
+            $pr_idPlan      = $value->pr_idPlan;
+            $pr_idReq       = $value->pr_idReq;
+            $pr_itemPlan    = $value->pr_itemPlan;
+            $pr_supplier    = $value->pr_supplier;
+            $pr_qtyApp      = $value->pr_qtyApp;
+            $pr_dateApp     = $value->pr_dateApp;
             $pr_dateRequest = $value->pr_dateRequest;
-            $pr_stsPlan = $value->pr_stsPlan;
-            $pr_comp = $value->pr_comp;
-            $i_id = $value->i_id;
-            $i_kelompok = $value->i_kelompok;
-            $i_sub_group = $value->i_sub_group;
-            $i_group = $value->i_group;
-            $i_merk = $value->i_merk;
-            $i_nama = $value->i_nama;
+            $pr_stsPlan     = $value->pr_stsPlan;
+            $pr_comp        = $value->pr_comp;
+            $i_id           = $value->i_id;
+            $i_kelompok     = $value->i_kelompok;
+            $i_sub_group    = $value->i_sub_group;
+            $i_group        = $value->i_group;
+            $i_merk         = $value->i_merk;
+            $i_nama         = $value->i_nama;
             $i_specificcode = $value->i_specificcode;
-            $i_code = $value->i_code;
-            $i_isactive = $value->i_isactive;
-            $i_price = $value->i_price;
-            $i_minstock = $value->i_minstock;
-            $i_berat = $value->i_berat;
-            $i_img = $value->i_img;
-            $c_name = $value->c_name;
-            $c_address = $value->c_address;
-            $c_tlp = $value->c_tlp;
+            $i_code         = $value->i_code;
+            $i_isactive     = $value->i_isactive;
+            $i_price        = $value->i_price;
+            $i_minstock     = $value->i_minstock;
+            $i_berat        = $value->i_berat;
+            $i_img          = $value->i_img;
+            $c_name         = $value->c_name;
+            $c_address      = $value->c_address;
+            $c_tlp          = $value->c_tlp;
             // $s_id = $value->s_id;
             // $s_company = $value->s_company;
             // $s_phone = $value->s_phone;
         }
 
         $data = array(
-            'pr_idPlan' => $pr_idPlan,
-            "pr_comp" => $pr_comp,
-            "pr_supplier" => $pr_supplier,
-            "pr_itemPlan" => $pr_itemPlan,
-            "pr_qtyApp" => $pr_qtyApp,
-            "i_id" => $i_id,
-            "i_kelompok" => $i_kelompok,
-            "i_group" => $i_group,
-            "i_sub_group" => $i_sub_group,
-            "i_merk" => $i_merk,
-            "i_nama" => $i_nama,
+            'pr_idPlan'      => $pr_idPlan,
+            "pr_comp"        => $pr_comp,
+            "pr_supplier"    => $pr_supplier,
+            "pr_itemPlan"    => $pr_itemPlan,
+            "pr_qtyApp"      => $pr_qtyApp,
+            "i_id"           => $i_id,
+            "i_kelompok"     => $i_kelompok,
+            "i_group"        => $i_group,
+            "i_sub_group"    => $i_sub_group,
+            "i_merk"         => $i_merk,
+            "i_nama"         => $i_nama,
             "i_specificcode" => $i_specificcode,
-            "i_code" => $i_code,
-            "i_isactive" => $i_isactive,
-            "i_price" => $i_price,
-            "i_minstock" => $i_minstock,
-            "i_berat" => $i_berat,
-            "i_img" => $i_img,
-            "c_name" => $c_name,
-            "c_address" => $c_address,
-            "c_tlp" => $c_tlp
+            "i_code"         => $i_code,
+            "i_isactive"     => $i_isactive,
+            "i_price"        => $i_price,
+            "i_minstock"     => $i_minstock,
+            "i_berat"        => $i_berat,
+            "i_img"          => $i_img,
+            "c_name"         => $c_name,
+            "c_address"      => $c_address,
+            "c_tlp"          => $c_tlp
             // "s_id" => $s_id,
             // "s_company" => $s_company,
             // "s_phone" => $s_phone
         );
 
-        echo json_encode(array("data"=>$data));
-    
+        echo json_encode(array("data" => $data));
+
     }
 
     public function getSupplier()
-    { 
+    {
         $data = DB::table('d_supplier')
                 ->select('d_supplier.*')
                 ->get();
@@ -1649,32 +1653,32 @@ class PembelianController extends Controller
     public function confirmSetuju(Request $request)
     {
         $pr_idPlan		= $request->input('pr_idPlan');
-        $pr_supplier	= $request->input('pr_supplier');	
+        $pr_supplier	= $request->input('pr_supplier');
         $pr_item		= $request->input('pr_item');
         $pr_price		= $request->input('pr_price');
         $pr_qtyApp		= $request->input('pr_qtyApp');
         $pr_stsConf		= $request->input('pr_stsConf');
         $pr_comp		= $request->input('pr_comp');
-        $pr_dateApp     =  Carbon::now('Asia/Jakarta');
+        $pr_dateApp     = Carbon::now('Asia/Jakarta');
 
         $list = array([
-            'pr_idPlan'     =>$pr_idPlan,
-            'pr_supplier'   =>$pr_supplier,
-            'pr_item'       =>$pr_item,
-            'pr_price'      =>$pr_price,
-            'pr_qtyApp'     =>$pr_qtyApp,
-            'pr_stsConf'    =>$pr_stsConf,
-            'pr_dateApp'    =>$pr_dateApp,
-            'pr_comp'       =>$pr_comp
+            'pr_idPlan'     => $pr_idPlan,
+            'pr_supplier'   => $pr_supplier,
+            'pr_item'       => $pr_item,
+            'pr_price'      => $pr_price,
+            'pr_qtyApp'     => $pr_qtyApp,
+            'pr_stsConf'    => $pr_stsConf,
+            'pr_dateApp'    => $pr_dateApp,
+            'pr_comp'       => $pr_comp
             ]);
 
             $insert = DB::table('d_purchase_confirm')->insert($list);
             if (!$insert) {
-    
+
                 $data = "GAGAL";
                 echo json_encode(array("status" => $data));
             } else {
-                
+
                 $confOrder = DB::table('d_purchase_plan')
                     ->where('d_purchase_plan.pr_idPlan', $pr_idPlan)
                     ->update([
@@ -1688,20 +1692,20 @@ class PembelianController extends Controller
                     $data = "SUKSES";
                     echo json_encode(array("status" => $data));
                 }
-    
+
             }
     }
 
     public function confirmTolak(Request $request)
     {
         $pr_idPlan		= $request->input('pr_idPlan');
-        $pr_supplier	= $request->input('pr_supplier');	
+        $pr_supplier	= $request->input('pr_supplier');
         $pr_item		= $request->input('pr_item');
         $pr_price		= $request->input('pr_price');
         $pr_qtyApp		= $request->input('pr_qtyApp');
         $pr_stsConf		= $request->input('pr_stsConf');
         $pr_comp		= $request->input('pr_comp');
-        $pr_dateApp     =  Carbon::now('Asia/Jakarta');
+        $pr_dateApp     = Carbon::now('Asia/Jakarta');
 
         $confOrder = DB::table('d_purchase_plan')
                     ->where('d_purchase_plan.pr_idPlan', $pr_idPlan)
@@ -1766,21 +1770,21 @@ class PembelianController extends Controller
         ->get();
 
         $n = count($query2);
-       
+
 
                 $addAkses = [];
                 for ($i=0; $i < count($query); $i++) {
                     $temp = [
                         // 'pr_idConf' =>$query[$i]->pr_idConf,
-                        'pr_idPlan' =>$query[$i]->pr_idPlan,
-                        'pr_supplier'=>$query[$i]->pr_supplier,
-                        'pr_item' =>$query[$i]->pr_item,
-                        'pr_price' =>$query[$i]->pr_price,
-                        'pr_qtyApp' =>$query[$i]->pr_qtyApp,
-                        'pr_stsConf' =>$n++,
-                        'pr_dateApp' =>$query[$i]->pr_dateApp,
-                        'pr_comp' =>$query[$i]->pr_comp
-                    ];  
+                        'pr_idPlan'   => $query[$i]->pr_idPlan,
+                        'pr_supplier' => $query[$i]->pr_supplier,
+                        'pr_item'     => $query[$i]->pr_item,
+                        'pr_price'    => $query[$i]->pr_price,
+                        'pr_qtyApp'   => $query[$i]->pr_qtyApp,
+                        'pr_stsConf'  => $n++,
+                        'pr_dateApp'  => $query[$i]->pr_dateApp,
+                        'pr_comp'     => $query[$i]->pr_comp
+                    ];
                     array_push($addAkses, $temp);
                 }
         $insert = DB::table('d_purchase_confirm_copy')->insert($addAkses);
@@ -1820,8 +1824,8 @@ class PembelianController extends Controller
             })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
-        
-        
+
+
     }
 
     public function purchasing()
@@ -1898,7 +1902,7 @@ class PembelianController extends Controller
             ->rawColumns(['input', 'aksi'])
             ->make(true);
     }
-    
+
     public function get_idDetail(Request $request)
     {
         $idDetail = $request->input('idDetail');
@@ -1911,30 +1915,30 @@ class PembelianController extends Controller
 
     public function update_detailPurchase(Request $request)
     {
-        $ide = $request->input('ide');
-        $pd_qty = $request->input('pd_qty');
-        $pd_value = $request->input('pd_value');
-        $pd_disc_value = $request->input('pd_disc_value');
+        $ide            = $request->input('ide');
+        $pd_qty         = $request->input('pd_qty');
+        $pd_value       = $request->input('pd_value');
+        $pd_disc_value  = $request->input('pd_disc_value');
         $pd_disc_persen = $request->input('pd_disc_persen');
-        $pd_total_net = $request->input('pd_total_net');
+        $pd_total_net   = $request->input('pd_total_net');
 
         $update = DB::table('p_purchase_dt')
                     ->update([
-                        'pd_qty' => $request->methode_return,
-                        'pd_value' => date('Y-m-d'),
-                        'pd_disc_value' => $total_harga_return,
+                        'pd_qty'         => $request->methode_return,
+                        'pd_value'       => date('Y-m-d'),
+                        'pd_disc_value'  => $total_harga_return,
                         'pd_disc_persen' => $result_price,
-                        'pd_total_net' => $request->confirm_return
+                        'pd_total_net'   => $request->confirm_return
                     ]);
         if(!$update){
-            $data = array("data"=>"GAGAL");
+            $data = array("data" => "GAGAL");
             echo json_encode($data);
         }else{
-            $data = array("data"=>"SUKSES");
+            $data = array("data" => "SUKSES");
             echo json_encode($data);
         }
 
-        
+
     }
 
     public function view_tambahPo()
@@ -1945,7 +1949,7 @@ class PembelianController extends Controller
     public function add_purchaseOrder(Request $request)
         {
             $id = $request->input('id');
-            
+
             $masterPo = DB::table('d_purchase')
                     ->select('d_purchase.p_id')
                     ->get();
@@ -1960,24 +1964,24 @@ class PembelianController extends Controller
                 else
                 {
                     foreach ($masterPo as $row) {
-                        //$a = substr($row->ID,5); 
+                        //$a = substr($row->ID,5);
                         $counter=intval($barisPo); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
                         $new=intval($counter)+1;         //digit terahit ditambah 1
                     }
                     if (strlen($new)==1){ //jika counter yg didapat panjangnya 1 ex: 1
-                    $vcounter="0000". '' .$new;
+                        $vcounter="0000". '' .$new;
                     }
                     if (strlen($new)==2){  //jika counter yg didapat panjangnya 2 ex: 11
-                    $vcounter="000". '' .$new;
+                        $vcounter="000". '' .$new;
                     }
                     if (strlen($new)==3){  //jika counter yg didapat panjangnya 2 ex: 11
-                    $vcounter="00". '' .$new;
+                        $vcounter="00". '' .$new;
                     }
                     if (strlen($new)==4){  //jika counter yg didapat panjangnya 2 ex: 11
-                    $vcounter="0". '' .$new;
+                        $vcounter="0". '' .$new;
                     }
                     if (strlen($new)==5){  //jika counter yg didapat panjangnya 2 ex: 11
-                    $vcounter=$new;
+                        $vcounter=$new;
                     }
                     $cif = $vcounter;
                 }
@@ -1989,12 +1993,12 @@ class PembelianController extends Controller
                 else
                 {
                     foreach ($detailPo as $row1) {
-                        //$a = substr($row->ID,5); 
+                        //$a = substr($row->ID,5);
                         $counter1=intval($barisDetail); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
                         $new1=intval($counter1)+1;         //digit terahit ditambah 1
                     }
                     if (strlen($new1)==1){ //jika counter yg didapat panjangnya 1 ex: 1
-                    $vcounter1="0000". '' .$new1;
+                        $vcounter1="0000". '' .$new1;
                     }
                     if (strlen($new1)==2){  //jika counter yg didapat panjangnya 2 ex: 11
                     $vcounter1="000". '' .$new1;
@@ -2014,51 +2018,51 @@ class PembelianController extends Controller
             $tgl = date('d');
             $bln = date('m');
             $thn = date('Y');
-                
+
             $code = "PO-".$cif."/".$tgl."/".$bln."/".$thn;
-            
+
             $detailPurchase = DB::table('d_purchase_confirm')
                             ->select('d_purchase_confirm.*')
                             ->where('d_purchase_confrim.pr_supplier',$pr_supplier)
                             ->where('d_purchase_confrim.pr_stsConf','CONFIRM')
                             ->get();
 
-            $ide = count($detailPo);  
+            $ide = count($detailPo);
             $pd_purchase =count($masterPo);
 
-            
+
 
             $insertPo = [];
             for ($i=0; $i < count($detailPurchase); $i++) {
                 $temp = [
                     // 'pr_idConf' =>$query[$i]->pr_idConf,
-                    'ide'=>$ide++,
-                    'pd_purchase' =>$query[$i]->pr_idPlan,
-                    'pd_detailid'=>$query[$i]->pr_idPlan,
-                    'pd_item'=>$query[$i]->pr_idPlan,
-                    'pd_qty'=>$query[$i]->pr_idPlan,
-                    'pd_value'=>$query[$i]->pr_idPlan,
-                    'pd_disc_value'=>$query[$i]->pr_idPlan,
-                    'pd_disc_persen'=>$query[$i]->pr_idPlan,
-                    'pd_total_net'=>$query[$i]->pr_idPlan,
-                    'pd_receivedtime'=>$query[$i]->pr_idPlan,
-                    'pr_idPlan' =>$query[$i]->pr_idPlan,
-                    'pr_supplier'=>$query[$i]->pr_supplier,
-                    'pr_item' =>$query[$i]->pr_item,
-                    'pr_price' =>$query[$i]->pr_price,
-                    'pr_qtyApp' =>$query[$i]->pr_qtyApp,
-                    'pr_stsConf' =>$n++,
-                    'pr_dateApp' =>$query[$i]->pr_dateApp,
-                    'pr_comp' =>$query[$i]->pr_comp
-                ];  
+                    'ide'             => $ide++,
+                    'pd_purchase'     => $query[$i]->pr_idPlan,
+                    'pd_detailid'     => $query[$i]->pr_idPlan,
+                    'pd_item'         => $query[$i]->pr_idPlan,
+                    'pd_qty'          => $query[$i]->pr_idPlan,
+                    'pd_value'        => $query[$i]->pr_idPlan,
+                    'pd_disc_value'   => $query[$i]->pr_idPlan,
+                    'pd_disc_persen'  => $query[$i]->pr_idPlan,
+                    'pd_total_net'    => $query[$i]->pr_idPlan,
+                    'pd_receivedtime' => $query[$i]->pr_idPlan,
+                    'pr_idPlan'       => $query[$i]->pr_idPlan,
+                    'pr_supplier'     => $query[$i]->pr_supplier,
+                    'pr_item'         => $query[$i]->pr_item,
+                    'pr_price'        => $query[$i]->pr_price,
+                    'pr_qtyApp'       => $query[$i]->pr_qtyApp,
+                    'pr_stsConf'      => $n++,
+                    'pr_dateApp'      => $query[$i]->pr_dateApp,
+                    'pr_comp'         => $query[$i]->pr_comp
+                ];
                 array_push($insertPo, $temp);
             }
 
             $insert = DB::table('d_purchase_dt')->insert($insertPo);
 
-            
 
-                
+
+
 
             // $query = DB::table('d_purchase_confirm')
             // ->select('d_purchase_confirm.*')
@@ -2069,7 +2073,7 @@ class PembelianController extends Controller
             // ->get();
 
             // $n = count($query2);
-        
+
             // $addAkses = [];
             // for ($i=0; $i < count($query); $i++) {
             //     $temp = [
@@ -2082,7 +2086,7 @@ class PembelianController extends Controller
             //         'pr_stsConf' =>$n++,
             //         'pr_dateApp' =>$query[$i]->pr_dateApp,
             //         'pr_comp' =>$query[$i]->pr_comp
-            //     ];  
+            //     ];
             //     array_push($addAkses, $temp);
             // }
 
@@ -2122,15 +2126,15 @@ class PembelianController extends Controller
                 $data = array();
                 $i = 1;
                 foreach ($list as $hasil) {
-                   
+
                    $row = array();
-                    $row[] = $i++;
-                    $row[] = $hasil->i_nama;
-                    $row[] = '<div class="text-center">'.$hasil->pr_qtyApp.'</div>';
-                    $row[] = '<div class="text-right">'.number_format($hasil->pr_price).'</div>';
-                    $row[] = '<div class="text-right">'.number_format($hasil->total).'</div>';
+                    $row[]  = $i++;
+                    $row[]  = $hasil->i_nama;
+                    $row[]  = '<div class="text-center">'.$hasil->pr_qtyApp.'</div>';
+                    $row[]  = '<div class="text-right">'.number_format($hasil->pr_price).'</div>';
+                    $row[]  = '<div class="text-right">'.number_format($hasil->total).'</div>';
                     $data[] = $row;
-                  
+
                 }
                 echo json_encode(array("data"=>$data));
     }
@@ -2178,7 +2182,7 @@ class PembelianController extends Controller
                 else
                 {
                     foreach ($queryBaris as $row) {
-                        //$a = substr($row->ID,5); 
+                        //$a = substr($row->ID,5);
                         $counter=intval($barisPo); //hasil yang didaptkan dirubah jadi integer. Ex: 0001 mjd 1.
                         $new=intval($counter)+1;         //digit terahit ditambah 1
                     }
@@ -2212,32 +2216,32 @@ class PembelianController extends Controller
                 }else{
                     $n = $m+1;
                 }
-                    
+
                 $code = "PO-".$cif."/".$tgl."/".$bln."/".$thn;
 
                 $list = array([
-                    'p_id' =>$n,
-                    'p_nota'=>$code,
-                    'p_date'=>$date,
-                    'p_supplier'=>$id,
-                    'p_total_gross'=>'0',
-                    'p_disc_value'=>'0',
-                    'p_disc_persen'=>'0',
-                    'p_total_net'=>$harga,
-                    'po_status'=>'PURCHASING',
-                    'p_purchaseNumber'=>$code,
-                    'p_tgl'=>$tgl,
-                    'p_bln'=>$bln,
-                    'p_thn'=>$thn,
-                    'p_dueDate'=>$tanggal
-                    ]);
+                    'p_id'             => $n,
+                    'p_nota'           => $code,
+                    'p_date'           => $date,
+                    'p_supplier'       => $id,
+                    'p_total_gross'    => '0',
+                    'p_disc_value'     => '0',
+                    'p_disc_persen'    => '0',
+                    'p_total_net'      => $harga,
+                    'po_status'        => 'PURCHASING',
+                    'p_purchaseNumber' => $code,
+                    'p_tgl'            => $tgl,
+                    'p_bln'            => $bln,
+                    'p_thn'            => $thn,
+                    'p_dueDate'        => $tanggal
+                ]);
 
         $insertOne = DB::table('d_purchase')->insert($list);
 
         if(!$insertOne){
            echo "GAGAL";
         }else{
-            
+
             $query = DB::table('d_purchase_confirm')
             ->select('d_purchase_confirm.*')
             ->where('d_purchase_confirm.pr_stsConf','WAITING')
@@ -2248,7 +2252,7 @@ class PembelianController extends Controller
                 ->select('d_purchase_dt.*')
                 ->get();
 
-                
+
                 $number = count($queryx);
 
                 if($number ==''){
@@ -2262,23 +2266,23 @@ class PembelianController extends Controller
                 }else{
                     $nUrut1 = $number+1;
                 }
-            
+
 
                         $addAkses = [];
                         for ($i=0; $i < count($query); $i++) {
                             $temp = [
                                 // 'pr_idConf' =>$query[$i]->pr_idConf,
-                                'ide' =>$nUrut1++,
-                                'pd_purchase'=>$n,
-                                'pd_detailid' =>$nUrut++,
-                                'pd_item' =>$query[$i]->pr_item,
-                                'pd_qty' =>$query[$i]->pr_qtyApp,
-                                'pd_value' =>$query[$i]->pr_price,
-                                'pd_disc_value' =>$query[$i]->pr_dateApp,
-                                'pd_disc_persen' =>$query[$i]->pr_comp,
-                                'pd_total_net' =>$query[$i]->pr_comp,
-                                'pd_receivedtime'=>Carbon::Now('Asia/Jakarta')
-                            ];  
+                                'ide'             => $nUrut1++,
+                                'pd_purchase'     => $n,
+                                'pd_detailid'     => $nUrut++,
+                                'pd_item'         => $query[$i]->pr_item,
+                                'pd_qty'          => $query[$i]->pr_qtyApp,
+                                'pd_value'        => $query[$i]->pr_price,
+                                'pd_disc_value'   => $query[$i]->pr_dateApp,
+                                'pd_disc_persen'  => $query[$i]->pr_comp,
+                                'pd_total_net'    => $query[$i]->pr_comp,
+                                'pd_receivedtime' => Carbon::Now('Asia/Jakarta')
+                            ];
                             array_push($addAkses, $temp);
                         }
                 $insert = DB::table('d_purchase_dt')->insert($addAkses);
@@ -2294,14 +2298,14 @@ class PembelianController extends Controller
                     foreach ($def as $key => $value) {
                         $dat['coloum'] = $value;
                     }
-                       
+
                     $data = array();
                     foreach ($def as $key) {
-                       $row = array();
-                       $row[] = $key->pr_idConf;
+                       $row    = array();
+                       $row[]  = $key->pr_idConf;
                        $data[] = $row;
                     }
-                  
+
                    $update = DB::table('d_purchase_confirm')
                    ->whereIn('pr_idConf',$data)
                    ->update([
@@ -2312,7 +2316,7 @@ class PembelianController extends Controller
                 }
         }
 
-       
+
     }
     // end purchase order
 
@@ -2375,7 +2379,7 @@ class PembelianController extends Controller
 
     public function return_barang()
     {
-      
+
         return view('pembelian/return_barang/index');
     }
 
@@ -2385,12 +2389,12 @@ class PembelianController extends Controller
             // $data               = $request->all();
             // print_r($data); die;
 
-            $count = DB::table('d_purchase_return')->count();
-            $urutan = $count + 1;
+            $count   = DB::table('d_purchase_return')->count();
+            $urutan  = $count + 1;
             $pr_code = 'PR' . date('YmdHms') . $urutan;
 
-            $harga_satuan = $this->formatPrice($request->harga_satuan);
-            $total_bayar = $this->formatPrice($request->total_bayar);
+            $harga_satuan       = $this->formatPrice($request->harga_satuan);
+            $total_bayar        = $this->formatPrice($request->total_bayar);
             $total_harga_return = $this->formatPrice($request->total_harga_return);
             // print_r($total_harga_return); die;
 
@@ -2407,19 +2411,19 @@ class PembelianController extends Controller
             }
 
             $return_brg = DB::table('d_purchase_return')->insertGetId([
-                'pr_po_id' => $request->purchase_order,
-                'pr_code' => $pr_code,
+                'pr_po_id'          => $request->purchase_order,
+                'pr_code'           => $pr_code,
                 'pr_methode_return' => $request->methode_return,
-                'pr_total_price' => $total_harga_return,
-                'pr_result_price' => $result_price,
-                'pr_status_return' => 'WT'
+                'pr_total_price'    => $total_harga_return,
+                'pr_result_price'   => $result_price,
+                'pr_status_return'  => 'WT'
             ]);
 
             DB::table('d_purchase_return_dt')->insert([
-                'pr_id' => $return_brg,
+                'pr_id'           => $return_brg,
                 'prd_kode_barang' => $request->kode_barang,
-                'prd_qty' => $request->kuantitas_return,
-                'prd_unit_price' => $harga_satuan,
+                'prd_qty'         => $request->kuantitas_return,
+                'prd_unit_price'  => $harga_satuan,
                 'prd_total_price' => $total_harga_return
             ]);
 
@@ -2505,18 +2509,18 @@ class PembelianController extends Controller
             if ($request->confirm_return == 'CF') {
                 $data->update([
                     'pr_methode_return' => $request->methode_return,
-                    'pr_confirm_date' => date('Y-m-d'),
-                    'pr_total_price' => $total_harga_return,
-                    'pr_result_price' => $result_price,
-                    'pr_status_return' => $request->confirm_return
+                    'pr_confirm_date'   => date('Y-m-d'),
+                    'pr_total_price'    => $total_harga_return,
+                    'pr_result_price'   => $result_price,
+                    'pr_status_return'  => $request->confirm_return
                 ]);
 
                 DB::table('d_purchase_return_dt')
                     ->where('pr_id', $request->return_id)
                     ->update([
-                        'prd_qty' => $request->kuantitas_return,
+                        'prd_qty'         => $request->kuantitas_return,
                         'prd_total_price' => $total_harga_return,
-                        'prd_isconfirm' => 1
+                        'prd_isconfirm'   => 1
                     ]);
 
                 Session::flash('flash_message_success', 'Semua Data Yang Telah Anda Ubah Berhasil Tersimpan.');
@@ -2529,9 +2533,9 @@ class PembelianController extends Controller
             } else {
                 $data->update([
                     'pr_methode_return' => $request->methode_return,
-                    'pr_total_price' => $total_harga_return,
-                    'pr_result_price' => $result_price,
-                    'pr_status_return' => $request->confirm_return
+                    'pr_total_price'    => $total_harga_return,
+                    'pr_result_price'   => $result_price,
+                    'pr_status_return'  => $request->confirm_return
                 ]);
 
                 DB::table('d_purchase_return_dt')
@@ -2609,7 +2613,7 @@ class PembelianController extends Controller
         echo json_encode($data);
     }
 
-    
+
     public function purchase_order_add()
     {
         $data_request = DB::table('d_request_order_dt')
@@ -2681,8 +2685,8 @@ class PembelianController extends Controller
     public function add_purchase(Request $request)
     {
         // print_r($request->all()); die;
-        $total_harga = $this->formatPrice($request->total_harga);
-        $total_bayar = $this->formatPrice($request->total_bayar);
+        $total_harga  = $this->formatPrice($request->total_harga);
+        $total_bayar  = $this->formatPrice($request->total_bayar);
         $harga_satuan = $this->formatPrice($request->harga_satuan);
         // echo $harga_satuan; die;
         $po_no = $this->generate_code('d_purchase_order', 'po_no', 4, 'PO' . date('ymd'));
@@ -2697,22 +2701,22 @@ class PembelianController extends Controller
         }
 
         $insert_purchase_order = DB::table('d_purchase_order')->insert([
-            'po_no' => $po_no,
+            'po_no'               => $po_no,
             'po_request_order_no' => $request->request_dt_no,
-            'po_status' => $request->status,
-            'po_type_pembayaran' => $request->tipe_pembayaran,
-            'po_total_harga' => $total_harga,
-            'po_diskon' => $diskon,
-            'po_ppn' => $request->ppn,
-            'po_total_bayar' => $total_bayar
+            'po_status'           => $request->status,
+            'po_type_pembayaran'  => $request->tipe_pembayaran,
+            'po_total_harga'      => $total_harga,
+            'po_diskon'           => $diskon,
+            'po_ppn'              => $request->ppn,
+            'po_total_bayar'      => $total_bayar
         ]);
 
         $inser_purchase_order_dt = DB::table('d_purchase_order_dt')->insert([
-            'podt_purchase' => $po_no,
-            'podt_no' => $podt_no,
-            'podt_kode_barang' => $request->kode_barang,
+            'podt_purchase'     => $po_no,
+            'podt_no'           => $podt_no,
+            'podt_kode_barang'  => $request->kode_barang,
             'podt_kode_suplier' => $request->id_supplier,
-            'podt_kuantitas' => $request->kuantitas,
+            'podt_kuantitas'    => $request->kuantitas,
             'podt_harga_satuan' => $harga_satuan
         ]);
 
@@ -2765,7 +2769,7 @@ class PembelianController extends Controller
 
         if (!$data->first()) {
             $response = [
-                'status' => 'tidak ada',
+                'status'  => 'tidak ada',
                 'content' => 'null'
             ];
 
@@ -2777,12 +2781,12 @@ class PembelianController extends Controller
             DB::table('d_purchase_order')
                 ->where('po_no', $request->po_no)
                 ->update([
-                    'po_status' => $request->status,
+                    'po_status'          => $request->status,
                     'po_type_pembayaran' => $request->tipe_pembayaran,
-                    'po_total_harga' => $total_harga,
-                    'po_diskon' => $request->diskon,
-                    'po_ppn' => $request->ppn,
-                    'po_total_bayar' => $total_bayar
+                    'po_total_harga'     => $total_harga,
+                    'po_diskon'          => $request->diskon,
+                    'po_ppn'             => $request->ppn,
+                    'po_total_bayar'     => $total_bayar
                 ]);
 
             DB::table('d_request_order_dt')
@@ -2895,7 +2899,7 @@ class PembelianController extends Controller
             ->get();
         foreach ($data_purchase as $value) {
             # code...
-            $sub_total_bayar = $value->po_total_bayar;
+            $sub_total_bayar   = $value->po_total_bayar;
 
             $total_bayar_sub[] = $sub_total_bayar;
         }
@@ -2919,7 +2923,7 @@ class PembelianController extends Controller
 
         foreach ($data_purchase as $value) {
             # code...
-            $sub_total_bayar = $value->po_total_bayar;
+            $sub_total_bayar   = $value->po_total_bayar;
 
             $total_bayar_sub[] = $sub_total_bayar;
         }
@@ -2947,7 +2951,7 @@ class PembelianController extends Controller
 
         foreach ($data_purchase as $value) {
             # code...
-            $sub_total_bayar = $value->po_total_bayar;
+            $sub_total_bayar   = $value->po_total_bayar;
 
             $total_bayar_sub[] = $sub_total_bayar;
         }
@@ -2963,7 +2967,7 @@ class PembelianController extends Controller
     public function refund()
     {
         return view('pembelian/refund/refund');
-    } 
+    }
 
     // -------------request order-------------------
 
@@ -2988,8 +2992,8 @@ class PembelianController extends Controller
         $qty = $request->input('qty');
 
         $insert = DB::table('d_purchase_req_dumy')->insert([
-            'pr_item' => $item,
-            'pr_qty' => $qty,
+            'pr_item'   => $item,
+            'pr_qty'    => $qty,
             'pr_mem_id' => $$comp
 
         ]);
@@ -3006,39 +3010,34 @@ class PembelianController extends Controller
 
     public function ddRequest_dumy(Request $request)
     {
-        $comp = Auth::user()->m_comp;
+        $comp    = Auth::user()->m_comp;
         $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'DUMY';
-        $user = Auth::user()->m_id;
-            // $list = DB::table('d_purchase_req')
-            //     ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
-            //     ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            //     ->where('d_purchase_req.pr_compReq', $comp)
-            //     ->where('d_purchase_req.pr_stsReq', 'DUMY')
-            //     ->get();
+        $status  = 'D';
+        $user    = Auth::user()->m_id;
+
         if($comp == "PF00000001"){
-            $list = DB::table('d_purchase_req')
-                ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
-                ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-                ->where('d_purchase_req.pr_stsReq', 'DUMY')
+            $list = DB::table('d_requestorder')
+                ->select('d_requestorder.ro_id', 'd_item.i_nama', 'd_requestorder.ro_comp', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_date', 'd_requestorder.ro_state')
+                ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+                ->where('d_requestorder.ro_state', 'D')
                 ->get();
         }else{
             $user = Auth::user()->m_id;
-            $list = DB::table('d_purchase_req')
-                ->select('d_purchase_req.pr_id', 'd_purchase_req.pr_codeReq', 'd_item.i_nama', 'd_purchase_req.pr_compReq', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_dateReq', 'd_purchase_req.pr_stsReq')
-                ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-                ->where('d_purchase_req.pr_compReq', $comp)
-                ->where('d_purchase_req.pr_stsReq', 'DUMY')
+            $list = DB::table('d_requestorder')
+                ->select('d_requestorder.ro_id', 'd_item.i_nama', 'd_requestorder.ro_comp', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_date', 'd_requestorder.ro_state')
+                ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+                ->where('d_requestorder.ro_comp', $comp)
+                ->where('d_requestorder.ro_state', 'D')
                 ->get();
         }
-        
 
-        $data = array(); 
+
+        $data = array();
         foreach ($list as $hasil) {
             $row = array();
             $row[] = $hasil->i_nama;
-            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->pr_id . '" value="' . $hasil->pr_qtyReq . '"  style="text-transform: uppercase" onkeyup="editDumy(' . $hasil->pr_id . ')" /></div>';
-            $row[] = '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle"   title="Hapus Data" onclick="hapusData(' . $hasil->pr_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->ro_id . '" value="' . $hasil->ro_qty . '"  style="text-transform: uppercase" onkeyup="editDumy(' . $hasil->ro_id . ')" /></div>';
+            $row[] = '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle" title="Hapus Data" onclick="hapusData(' . $hasil->ro_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             $data[] = $row;
         }
         echo json_encode(array("data" => $data));
@@ -3046,45 +3045,46 @@ class PembelianController extends Controller
 
     public function addDumyReq(Request $request)
     {
-     
-        $comp = Auth::user()->m_comp;
-        $user = Auth::user()->m_id;
-        $item = $request->input('item');
-        $qty = $request->input('qty');
-        $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'DUMY';
 
-        $cek_item = DB::table('d_purchase_req')
-        ->select('d_purchase_req.pr_itemReq')
-        ->where('d_purchase_req.pr_itemReq','=',$item)
-        ->where('d_purchase_req.pr_userId','=',$user)
-        ->where('d_purchase_req.pr_stsReq','=','DUMY')
+        $comp    = Auth::user()->m_comp;
+        $user    = Auth::user()->m_id;
+        $item    = $request->input('item');
+        $qty     = $request->input('qty');
+        $dateReq = Carbon::now('Asia/Jakarta');
+        $status  = 'D';
+
+        $cek_item = DB::table('d_requestorder')
+        ->select('d_requestorder.ro_item')
+        ->where('d_requestorder.ro_item','=',$item)
+        // ->where('d_requestorder.ro_mem','=',$user)
+        ->where('d_requestorder.ro_state','=','D')
         ->get();
 
-        $kuantiti = DB::table('d_purchase_req')
-        ->select('d_purchase_req.pr_qtyReq')
-        ->where('d_purchase_req.pr_itemReq','=',$item)
-        ->where('d_purchase_req.pr_userId','=',$user)
-        ->where('d_purchase_req.pr_stsReq','=','DUMY')
+        $kuantiti = DB::table('d_requestorder')
+        ->select('d_requestorder.ro_qty')
+        ->where('d_requestorder.ro_item','=',$item)
+        // ->where('d_requestorder.ro_mem','=',$user)
+        ->where('d_requestorder.ro_state','=','D')
         ->get();
 
         $baris = count($cek_item);
+        $getId = DB::table('d_requestorder')->max('ro_id');
+        ++$getId;
 
         if($baris =='0' and $qty !=''){
-            $insert = DB::table('d_purchase_req')
+            $insert = DB::table('d_requestorder')
                 ->insert([
-    
-                    'pr_codeReq' => '',
-                    'pr_compReq' => $comp,
-                    'pr_itemReq' => $item,
-                    'pr_qtyReq' => $qty,
-                    'pr_qtyApp' => $qty,
-                    'pr_dateReq' => $dateReq,
-                    'pr_stsReq' => $status,
-                    'pr_userId' =>$user
-    
+
+                    'ro_id'        => $getId,
+                    'ro_comp'      => $comp,
+                    'ro_item'      => $item,
+                    'ro_qty'       => $qty,
+                    'ro_date'      => $dateReq,
+                    'ro_state'     => $status,
+                    'ro_mem'       => $user
+
                 ]);
-    
+
                 if ($insert) {
                     $sts = "SUKSES";
                     echo json_encode(array("data" => $sts));
@@ -3093,17 +3093,16 @@ class PembelianController extends Controller
                     echo json_encode(array("data" => $sts));
                 }
         }else if($baris =='0' and $qty ==''){
-            $insert = DB::table('d_purchase_req')
+            $insert = DB::table('d_requestorder')
             ->insert([
 
-                'pr_codeReq' => '',
-                'pr_compReq' => $comp,
-                'pr_itemReq' => $item,
-                'pr_qtyReq' => '1',
-                'pr_qtyApp' => '1',
-                'pr_dateReq' => $dateReq,
-                'pr_stsReq' => $status,
-                'pr_userId' =>$user
+                'ro_id'         => $getId,
+                'ro_comp'       => $comp,
+                'ro_item'       => $item,
+                'ro_qty'        => '1',
+                'ro_date'       => $dateReq,
+                'ro_state'      => $status,
+                'ro_mem'        => $user
 
             ]);
 
@@ -3115,23 +3114,22 @@ class PembelianController extends Controller
                 echo json_encode(array("data" => $sts));
             }
         }else if($baris !='0' and $qty ==''){
-            $kuantiti = DB::table('d_purchase_req')
-            ->select('d_purchase_req.pr_qtyReq')
-            ->where('d_purchase_req.pr_itemReq','=',$item)
-            ->where('d_purchase_req.pr_userId','=',$user)
-            ->where('d_purchase_req.pr_stsReq','=','DUMY')
+            $kuantiti = DB::table('d_requestorder')
+            ->select('d_requestorder.ro_qty')
+            ->where('d_requestorder.ro_item','=',$item)
+            ->where('d_requestorder.ro_mem','=',$user)
+            ->where('d_requestorder.ro_state','=','D')
             ->get();
 
             foreach ($kuantiti as $key) {
-                $k = $key->pr_qtyReq;
+                $k = $key->ro_qty;
             }
 
-            $update_qty = DB::table('d_purchase_req')
-            ->where('d_purchase_req.pr_userId','=',$user)
-            ->where('d_purchase_req.pr_itemReq','=',$item)
+            $update_qty = DB::table('d_requestorder')
+            ->where('d_requestorder.ro_mem','=',$user)
+            ->where('d_requestorder.ro_item','=',$item)
             ->update([
-                'pr_qtyReq' => $k+1,
-                'pr_qtyApp' => $k+1
+                'ro_qty' => $k+1
             ]);
 
             if ($update_qty) {
@@ -3143,23 +3141,22 @@ class PembelianController extends Controller
             }
         }else if($baris !='0' and $qty !=''){
 
-            $kuantiti = DB::table('d_purchase_req')
-            ->select('d_purchase_req.pr_qtyReq')
-            ->where('d_purchase_req.pr_itemReq','=',$item)
-            ->where('d_purchase_req.pr_userId','=',$user)
-            ->where('d_purchase_req.pr_stsReq','=','DUMY')
+            $kuantiti = DB::table('d_requestorder')
+            ->select('d_requestorder.ro_qty')
+            ->where('d_requestorder.ro_item','=',$item)
+            ->where('d_requestorder.ro_mem','=',$user)
+            ->where('d_requestorder.ro_state','=','D')
             ->get();
 
             foreach ($kuantiti as $key) {
-                $k = $key->pr_qtyReq;
+                $k = $key->ro_qty;
             }
 
-            $update_qty = DB::table('d_purchase_req')
-            ->where('d_purchase_req.pr_userId','=',$user)
-            ->where('d_purchase_req.pr_itemReq','=',$item)
+            $update_qty = DB::table('d_requestorder')
+            ->where('d_requestorder.ro_mem','=',$user)
+            ->where('d_requestorder.ro_item','=',$item)
             ->update([
-                'pr_qtyReq' => $k+$qty,
-                'pr_qtyApp' => $k+$qty
+                'ro_qty' => $k+$qty
             ]);
 
             if ($update_qty) {
@@ -3170,15 +3167,15 @@ class PembelianController extends Controller
                 echo json_encode(array("data" => $sts));
             }
         }
-        
+
     }
 
     public function getDumyReq()
     {
         $comp = Auth::user()->mem_id;
         $item = $request->input('item_id');
-        $qty = $request->input('qty');
-        $id = $request->input('id');
+        $qty  = $request->input('qty');
+        $id   = $request->input('id');
 
         $query = DB::table('d_purchase_req_dumy')
             ->select('d_purchase_req_dumy.pr_id', 'd_item.i_nama', 'd_purchase_req_dumy.pr_qty')
@@ -3187,7 +3184,7 @@ class PembelianController extends Controller
             ->get();
 
         $data = array(
-            'pr_id' => $query->pr_id,
+            'pr_id'  => $query->pr_id,
             'i_nama' => $query->i_nama,
             'pr_qty' => $query->pr_qty,
 
@@ -3270,55 +3267,59 @@ class PembelianController extends Controller
         $comp = Auth::user()->m_id;
         $id = $request->input('id');
 
-        $delete = DB::table('d_purchase_req')
-            ->where('d_purchase_req.pr_id', $id)
+        $delete = DB::table('d_requestorder')
+            ->where('d_requestorder.ro_id', $id)
             ->delete();
 
         if (!$delete) {
 
             $response = "gagal";
             echo json_encode(array("status" => $response));
-            
+
         } else {
             $response = "sukses";
             echo json_encode(array("status" => $response));
-            
+
         }
 
     }
 
 
-   
+
 
     public function menunggu()
     {
         $comp = Auth::user()->m_comp;
 
         if($comp == "PF00000001"){
-            $waiting = DB::table('d_purchase_req')
-            ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
-            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
+            $waiting = DB::table('d_requestorder')
+            ->select('d_requestorder.ro_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_state')
+            ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_requestorder.ro_mem', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_req.pr_stsReq', 'WAITING')
+            ->where('d_requestorder.ro_state', 'P')
             ->get();
         }else{
             $id = Auth::user()->m_id;
-            $waiting = DB::table('d_purchase_req')
-            ->select('d_purchase_req.pr_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_purchase_req.pr_itemReq', 'd_purchase_req.pr_qtyReq', 'd_purchase_req.pr_stsReq')
-            ->join('d_item', 'd_purchase_req.pr_itemReq', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_req.pr_userId', '=', 'd_mem.m_id')
+            $waiting = DB::table('d_requestorder')
+            ->select('d_requestorder.ro_id', 'm_company.c_name', 'd_item.i_nama', 'd_mem.m_name', 'd_requestorder.ro_item', 'd_requestorder.ro_qty', 'd_requestorder.ro_state')
+            ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+            ->join('d_mem', 'd_requestorder.ro_mem', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_req.pr_stsReq', 'WAITING')
-            ->where('d_purchase_req.pr_compReq',$comp)
+            ->where('d_requestorder.ro_state', 'P')
+            ->where('d_requestorder.pr_compReq',$comp)
             ->get();
         }
 
         return DataTables::of($waiting)
-            ->addColumn('pr_stsReq', function ($waiting) {
+            ->addColumn('ro_state', function ($waiting) {
 
-                return "<span class='label label-warning' style='padding:5%'>MENUNGGU...</span>";
+                return "<div class='text-center'><span class='label label-warning'>MENUNGGU</span></div>";
 
+            })
+
+            ->addColumn('aksi', function ($waiting){
+                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->ro_id . '\', \''.$waiting->i_nama.'\', \''.$waiting->ro_qty.'\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="hapusReq(\'' . $waiting->ro_id . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             })
 
             // ->addColumn('aksi', function ($waiting) {
@@ -3328,7 +3329,7 @@ class PembelianController extends Controller
             //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $waiting->pr_id . '\', \'' . $waiting->pr_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
             //     }
             // })
-            ->rawColumns(['pr_stsReq', 'aksi'])
+            ->rawColumns(['ro_state', 'aksi'])
             ->make(true);
     }
 
@@ -3376,13 +3377,13 @@ class PembelianController extends Controller
 
     public function all(Request $request)
     {
-        $tgl_awal = $request->input('tgl_awal');
+        $tgl_awal  = $request->input('tgl_awal');
         $tgl_akhir = $request->input('tgl_akhir');
-        $req_awal = str_replace('/', '-', $tgl_awal);
+        $req_awal  = str_replace('/', '-', $tgl_awal);
         $req_akhir = str_replace('/', '-', $tgl_akhir);
 
-        $awal = Carbon::parse($req_awal)->startOfDay(); 
-        $akhir = Carbon::parse($req_akhir)->endOfDay(); 
+        $awal  = Carbon::parse($req_awal)->startOfDay();
+        $akhir = Carbon::parse($req_akhir)->endOfDay();
 
         $comp = Auth::user()->m_comp;
 
@@ -3413,18 +3414,18 @@ class PembelianController extends Controller
         $data = array();
         $i = 1;
         foreach ($all as $key ) {
-            $row = array();
-            $row[] = $i++;
-            $row[] = $key->c_name;
-            $row[] = $key->i_nama;
-            $row[] = $key->pr_qtyReq;
-            $row[] = "<span class='label label-success' style='padding:5%'>PROSES PURCASHING...</span>";
+            $row    = array();
+            $row[]  = $i++;
+            $row[]  = $key->c_name;
+            $row[]  = $key->i_nama;
+            $row[]  = $key->pr_qtyReq;
+            $row[]  = "<span class='label label-success' style='padding:5%'>PROSES PURCASHING...</span>";
             $data[] = $row;
         }
 
         echo json_encode(array("data"=>$data));
 
-        
+
     }
 
 
@@ -3501,11 +3502,11 @@ class PembelianController extends Controller
 
     public function simpanRequest(Request $request)
     {
-        $comp = Auth::user()->m_comp;
-        $user = Auth::user()->m_id;
+        $comp    = Auth::user()->m_comp;
+        $user    = Auth::user()->m_id;
         $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'WAITING';
-        $dumy = DB::table('d_purchase_req_dumy')
+        $status  = 'WAITING';
+        $dumy    = DB::table('d_purchase_req_dumy')
             ->select('d_purcahse_req_dumy.*')
             ->where('d_purchase_req_dumy.pr_mem_id')
             ->get();
@@ -3513,10 +3514,10 @@ class PembelianController extends Controller
         $data = array(
             'pr_compReq' => $comp,
             'pr_itemReq' => $dumy->pr_item,
-            'pr_qtyReq' => $dumy->pr_qty,
-            'pr_qtyReq' => $dumy->pr_qtyApp,
+            'pr_qtyReq'  => $dumy->pr_qty,
+            'pr_qtyReq'  => $dumy->pr_qtyApp,
             'pr_dateReq' => $dateReq,
-            'pr_stsReq' => $status,
+            'pr_stsReq'  => $status,
         );
 
         $insert = DB::table('purchase_req')->insert($data);
@@ -3532,42 +3533,32 @@ class PembelianController extends Controller
 
     public function verifikasi_simpanRequest()
     {
-        $comp = Auth::user()->m_comp;
+        $comp    = Auth::user()->m_comp;
         $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'WAITING';
-        $user = Auth::user()->m_id;
-        $code = Carbon::now()->timestamp;
+        $status  = 'P';
+        $user    = Auth::user()->m_id;
+        $code    = Carbon::now()->timestamp;
 
-        $no_code = DB::table('d_purchase_req')
-        ->select('pr_codeReq')
-        ->groupBy('pr_codeReq')
-        ->get();
-
-
-
-
-
-        $query = DB::table('d_purchase_req')
-        ->select('d_purchase_req.*')
-        ->where('d_purchase_req.pr_compReq',$comp)
-        ->where('d_purchase_req.pr_userId',$user)
-        ->where('d_purchase_req.pr_stsReq', 'DUMY')
-        ->get();
+        $query = DB::table('d_requestorder')
+            ->select('d_requestorder.*')
+            ->where('d_requestorder.ro_comp',$comp)
+            ->where('d_requestorder.ro_mem',$user)
+            ->where('d_requestorder.ro_state', 'D')
+            ->get();
 
         $baris = count($query);
         if($baris == "0"){
             $response = "notFound";
             echo json_encode(array("status" => $response));
-        }else{
+        } else {
 
-                $update = DB::table('d_purchase_req')
-                ->where('d_purchase_req.pr_compReq', $comp)
-                ->where('d_purchase_req.pr_userId', $user)
-                ->where('d_purchase_req.pr_stsReq', 'DUMY')
-                ->update([
-                    'pr_codeReq' => $code,
-                    'pr_stsReq' => $status,
-                    'pr_dateReq' => $dateReq,
+                $update = DB::table('d_requestorder')
+                    ->where('d_requestorder.ro_comp', $comp)
+                    ->where('d_requestorder.ro_mem', $user)
+                    ->where('d_requestorder.ro_state', 'D')
+                    ->update([
+                        'ro_state'   => $status,
+                        'ro_date'    => $dateReq
                 ]);
 
             if (!$update) {
@@ -3580,7 +3571,6 @@ class PembelianController extends Controller
 
         }
 
-        
     }
 
     public function request_order_add(Request $request)
@@ -3589,7 +3579,7 @@ class PembelianController extends Controller
             $data = $request->all();
             $ro_no = $this->generate_code('d_request_order', 'ro_no', 4, 'RO' . date('ymd'));
             $sql = DB::table('d_request_order')->insert([
-                'ro_no' => $ro_no,
+                'ro_no'     => $ro_no,
                 'ro_cabang' => $data['ro_cabang']
             ]);
 
@@ -3599,13 +3589,13 @@ class PembelianController extends Controller
                 if (!empty($value)) {
 
                     $sql2 = DB::table('d_request_order_dt')->insert([
-                        'rdt_request' => $ro_no,
-                        'rdt_no' => $rdt_no,
-                        'rdt_kode_barang' => $data['kode_barang'][$key],
-                        'rdt_kuantitas' => $data['kuantitas'][$key],
+                        'rdt_request'          => $ro_no,
+                        'rdt_no'               => $rdt_no,
+                        'rdt_kode_barang'      => $data['kode_barang'][$key],
+                        'rdt_kuantitas'        => $data['kuantitas'][$key],
                         'rdt_kuantitas_approv' => '0',
-                        'rdt_status' => 'Pending',
-                        'rdt_supplier' => "0"
+                        'rdt_status'           => 'Pending',
+                        'rdt_supplier'         => "0"
                     ]);
                 }
                 $no++;
@@ -3660,7 +3650,7 @@ class PembelianController extends Controller
 
         if (!$data->first()) {
             $response = [
-                'status' => 'tidak ada',
+                'status'  => 'tidak ada',
                 'content' => 'null'
             ];
 
@@ -3668,12 +3658,12 @@ class PembelianController extends Controller
         } else {
             $data->update([
                 'rdt_kode_barang' => $request->kode_barang,
-                'rdt_kuantitas' => $request->kuantitas
+                'rdt_kuantitas'   => $request->kuantitas
             ]);
 
             Session::flash('flash_message_success', 'Semua Data Yang Telah Anda Ubah Berhasil Tersimpan.');
             $response = [
-                'status' => 'berhasil',
+                'status'  => 'berhasil',
                 'content' => null
             ];
 
@@ -3735,7 +3725,7 @@ class PembelianController extends Controller
             if ($sql) {
                 Session::flash('flash_message_success', 'Status untuk Request Detail "' . $data['rdt_no'] . '" berhasil diubah ke "Pending".');
                 $response = [
-                    'status' => 'pending',
+                    'status'  => 'pending',
                     'content' => null
                 ];
                 return json_encode($response);
@@ -3767,7 +3757,7 @@ class PembelianController extends Controller
             if ($sql) {
                 Session::flash('flash_message_success', 'Status untuk Request Detail "' . $data['rdt_no'] . '" berhasil diubah ke "Dibatalkan".');
                 $response = [
-                    'status' => 'dibatalkan',
+                    'status'  => 'dibatalkan',
                     'content' => null
                 ];
                 return json_encode($response);
@@ -3789,6 +3779,7 @@ class PembelianController extends Controller
                     ->where('no_rdt', $data['rdt_no'])
                     ->delete();
             }
+
             $sql = DB::table('d_request_order_dt')
                 ->where('rdt_request', $data['rdt_request'])
                 ->where('rdt_no', $data['rdt_no'])
@@ -3798,7 +3789,7 @@ class PembelianController extends Controller
             if ($sql) {
                 Session::flash('flash_message_success', 'Status untuk Request Detail "' . $data['rdt_no'] . '" berhasil diubah ke "Ditunda".');
                 $response = [
-                    'status' => 'ditunda',
+                    'status'  => 'ditunda',
                     'content' => null
                 ];
                 return json_encode($response);
@@ -3822,7 +3813,7 @@ class PembelianController extends Controller
             if ($sql1) {
                 Session::flash('flash_message_success', 'Status untuk Request Detail "' . $data['rdt_no'] . '" berhasil diubah ke "Rencana Pembelian".');
                 $response = [
-                    'status' => 'rencana pembelian',
+                    'status'  => 'rencana pembelian',
                     'content' => null
                 ];
                 return json_encode($response);
@@ -3940,7 +3931,7 @@ class PembelianController extends Controller
 
         if (!$data->first()) {
             $response = [
-                'status' => 'tidak ada',
+                'status'  => 'tidak ada',
                 'content' => 'null'
             ];
 
@@ -3953,7 +3944,7 @@ class PembelianController extends Controller
 
             Session::flash('flash_message_success', 'Semua Data Yang Telah Anda Ubah Berhasil Tersimpan.');
             $response = [
-                'status' => 'berhasil',
+                'status'  => 'berhasil',
                 'content' => null
             ];
 
@@ -3965,12 +3956,73 @@ class PembelianController extends Controller
     {
         $pdf = PDF::loadView('pembelian.coba_cetak');
         return $pdf->stream();
-       
+
     }
 
     public function new_print()
     {
         return view('pembelian.konfirmasi_pembelian.newprint');
+    }
+
+    public function updateReq(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            DB::table('d_requestorder')->where('ro_id', '=', $request->id)
+            ->update([
+                'ro_qty'   => $request->qty,
+                'ro_state' => 'P'
+            ]);
+            DB::commit();
+            return response()->json([
+                'status' => 'sukses'
+            ]);
+        } catch (\Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => 'gagal',
+                'data'   => $e
+            ]);
+        }
+    }
+
+    public function hapusReq(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            DB::table('d_requestorder')->where('ro_id', '=', $request->id)
+            ->delete();
+
+            DB::commit();
+            return response()->json([
+                'status' => 'sukses'
+            ]);
+
+        } catch (\Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => 'gagal',
+                'data'   => $e
+            ]);
+        }
+        // $comp = Auth::user()->m_id;
+        // $id = $request->input('ro_id');
+
+        // $delete = DB::table('d_requestorder')
+        //     ->where('d_requestorder.ro_id', $id)
+        //     ->delete();
+
+        // if (!$delete) {
+
+        //     $response = "gagal";
+        //     echo json_encode(array("status" => $response));
+
+        // } else {
+        //     $response = "sukses";
+        //     echo json_encode(array("status" => $response));
+
+        // }
+
     }
 
 }
