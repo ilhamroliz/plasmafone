@@ -387,7 +387,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						color : "#739E73",
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"
-					});
+                    });
+                    location.reload();
 				}else{
 					$('#overlay').fadeOut(200);
 					$.smallBox({

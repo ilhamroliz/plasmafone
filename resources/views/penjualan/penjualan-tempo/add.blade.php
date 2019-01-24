@@ -278,6 +278,7 @@
         var iCode = [];
         var arrCode = [];
         var arrIdStock = [];
+        var arrKodeGlobal = [];
         var hargaGlobal = null;
         var stockGlobal = null;
         var kodespesifikGlobal = null;
@@ -457,7 +458,7 @@
         $("#cari-stock").on('keyup',function(e) {
             if(e.which === 13) {
                 var specificcode = $(this).val();
-                if (cekIsiArrayItem(specificcode) == "sudah") {
+                if (arrKodeGlobal.includes(specificcode) == true) {
                     var harga = 0;
                     var kuantitas = $(".qty-"+specificcode).val();
                     var qty = parseInt(kuantitas) + 1;
@@ -655,7 +656,15 @@
                     });
                 }
             } else {
-                if (arrIdStock.length == 1) {
+                if (arrKodeGlobal.includes(kodeGlobal) == true) {
+                    $.smallBox({
+                        title : "Pesan!",
+                        content : "Item sudah ditambahkan",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                } else {
                     row = '<tr id="'+idGlobal+'" class="tr">' +
                         '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                         '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
@@ -675,14 +684,7 @@
                     $("#table-penjualan tbody").append(row);
                     $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                     $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
-                } else {
-                    $.smallBox({
-                        title : "Pesan!",
-                        content : "Item sudah ditambahkan",
-                        color : "#A90329",
-                        timeout: 5000,
-                        icon : "fa fa-times bounce animated"
-                    });
+                    setArrayId();
                 }
 
             }
@@ -726,6 +728,14 @@
                 $("#tambahketable").attr('disabled', false);
             }
             updateTotalTampil();
+        }
+
+        function setArrayId() {
+            var inputs = document.getElementsByClassName('kode'),
+                code  = [].map.call(inputs, function( input ) {
+                    return input.value.toString();
+                });
+            arrKodeGlobal = code;
         }
 
         function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
@@ -827,6 +837,7 @@
 
         function hapus(id) {
             $('#'+id).remove();
+            setArrayId();
             updateTotalTampil();
         }
 

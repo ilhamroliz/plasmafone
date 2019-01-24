@@ -343,6 +343,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/request-pembelian/hapusDumy', 'PembelianController@hapusDumy');
     Route::get('/pembelian/request-pembelian/cariItem', 'PembelianController@cariItem');
     Route::get('/pembelian/request-pembelian/testDesc', 'PembelianController@testDesc');
+    Route::get('/pembelian/request-pembelian/updateReq', 'PembelianController@updateReq');
+    Route::get('/pembelian/request-pembelian/hapusReq', 'PembelianController@hapusReq');
 
 
 
@@ -502,6 +504,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
     Route::get('pembelian/refund/tambah', 'RefundController@add');
     Route::get('pembelian/refund/get-data', 'RefundController@getDataItem');
+    Route::get('pembelian/refund/get-supplier', 'RefundController@getSupplier');
     //end Refund
 
 	// Pembelian end

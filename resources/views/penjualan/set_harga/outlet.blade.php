@@ -209,13 +209,7 @@
 				$('#shoItemId').val(data.item.id);
 				$('#shoShowId').val(data.item.id);
                 $('#shoItemNama').val(data.item.label);
-                $('#shoShowNama').html(data.item.label);
-                if(data.item.hpp == '0'){
-                    $('#shoHPP').html('Rp. 0,00');
-                }else{
-                    angka = accounting.formatMoney(data.item.hpp, "", 2, ".", ",");
-                    $('#shoHPP').html('Rp. '+angka);
-                }                
+                $('#shoShowNama').html(data.item.label);           
 			}
 		});
 
@@ -229,6 +223,8 @@
 		var table = $('#shoTable').DataTable();
 
 		axios.get(baseUrl+'/penjualan/set-harga/outlet/add?id='+id).then((response) => {
+			var angka = accounting.formatMoney(response.data.hpp.sm_hpp, "", 2, ".", ",");
+            $('#shoHPP').html('Rp. '+angka);
 
 			table.clear().draw();
 			for($i=0; $i < response.data.data.length; $i++){
@@ -242,35 +238,6 @@
 				$('.shoCompPrice').maskMoney({ thousands: '.', decimal: ','});
 			}
 		});
-
-        // $('#shoTable').DataTable({
-		// 	"processing": true,
-		// 	"serverSide": true,
-		// 	"searching" : false,
-		// 	"paging" : false,
-		// 	"info" : false,
-		// 	"ajax": "{{ url('/penjualan/set-harga/outlet/add?id=') }}"+id,
-		// 	"columns":[
-		// 		{"data": "compName"},
-		// 		{"data": "compPrice"},
-		// 	],
-		// 	"autoWidth" : true,
-		// 	"language" : dataTableLanguage,
-		// 	"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-		// 	"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-		// 	"preDrawCallback" : function() {
-		// 		// Initialize the responsive datatables helper once.
-		// 		if (!responsiveHelper_dt_basic) {
-		// 			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#shoTable'), breakpointDefinition);
-		// 		}
-		// 	},
-		// 	"rowCallback" : function(nRow) {
-		// 		responsiveHelper_dt_basic.createExpandIcon(nRow);
-		// 	},
-		// 	"drawCallback" : function(oSettings) {
-		// 		responsiveHelper_dt_basic.respond();
-		// 	}
-		// });
 		
 		$('#shoModal').modal('show');
     }

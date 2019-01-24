@@ -242,7 +242,11 @@ use Carbon\Carbon;
 		var apprTab, pendTab;
 
         $(document).ready(function(){
-			table = $('#drpTable').DataTable();
+			table = $('#drpTable').DataTable({
+				"pageLength": 5,
+				"lengthChange": false,
+				"language": dataTableLanguage
+			});
 
             $('#monthPick').MonthPicker({
                 Button: false
@@ -415,11 +419,19 @@ use Carbon\Carbon;
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
 
-			axios.get(baseUrl+'/man-penjualan/rencana-penjualan/detail'+'/'+id).then((response) => {
+			var state = '';
+			if($('#hr1').hasClass('active')){
+				state = 'appr';
+			}else if($('#hr2').hasClass('active')){
+				state = 'pend';
+			}
+
+			axios.get(baseUrl+'/man-penjualan/rencana-penjualan/detail'+'/'+id+'?state='+state).then((response) => {
 
 				$('#spNota').text(response.data.sp.sp_nota);
 				$('#spCabang').text(response.data.sp.c_name);
 
+				table.clear();
 				for(var i=0; i<response.data.data.length; i++){
 
 					table.row.add([

@@ -52,7 +52,7 @@ class PenjualanController extends Controller
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($nama as $query) {
-                $results[] = ['id' => $query->m_id, 'label' => $query->m_name];
+                $results[] = ['id' => $query->m_id, 'label' => strtoupper($query->m_name)];
             }
         }
         return Response::json($results);
@@ -75,7 +75,7 @@ class PenjualanController extends Controller
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
             foreach ($nama as $query) {
-                $results[] = ['id' => $query->m_id, 'label' => $query->m_name . ' ('.$query->m_telp.')'];
+                $results[] = ['id' => $query->m_id, 'label' => strtoupper($query->m_name) . ' ('.$query->m_telp.')'];
             }
         }
         return Response::json($results);
@@ -122,6 +122,8 @@ class PenjualanController extends Controller
     public function searchStock(Request $request)
     {
         $cari = $request->term;
+        $term = explode(" - ",$cari);
+        $cari = $term[0];
         $kode = [];
         if (isset($request->kode)){
             $kode = $request->kode;
@@ -139,84 +141,69 @@ class PenjualanController extends Controller
             $dataN = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
-                    $q->on('sm_stock', '=', 's_id');
-                    $q->where('sm_detail', '=', 'PENAMBAHAN');
-                    $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
+                    $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
-                    $a->on('sd_stock', '=', 's_id');
+                    $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
-                ->join('d_item', 'i_id', '=', 's_item')
-                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
-                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
-                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
-                ->where('i_specificcode', '=', 'N')
-                ->groupBy('sm_specificcode');
+                ->where('d_item.i_specificcode', '=', 'N')
+                ->groupBy('d_stock_mutation.sm_specificcode');
 
             $dataY = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
-                    $q->on('sm_stock', '=', 's_id');
-                    $q->where('sm_detail', '=', 'PENAMBAHAN');
-                    $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
-                    $q->whereNotIn('sm_specificcode', $kode);
+                    $q->on('d_stock_mutation.sm_stock', '=', 's_id');
+                    $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                    $q->whereNotIn('d_stock_mutation.sm_specificcode', $kode);
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
-                    $a->on('sd_stock', '=', 's_id');
-                    $a->on('sm_specificcode', '=', 'sd_specificcode');
-                    $a->whereNotIn('sd_specificcode', $kode);
+                    $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
+                    $a->on('d_stock_mutation.sm_specificcode', '=', 'd_stock_dt.sd_specificcode');
+                    $a->whereNotIn('d_stock_dt.sd_specificcode', $kode);
                 })
-                ->join('d_item', 'i_id', '=', 's_item')
-                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
-                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
-                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
-                ->where('i_specificcode', '=', 'Y')
-                ->groupBy('sm_specificcode');
+                ->where('d_item.i_specificcode', '=', 'Y')
+                ->groupBy('d_stock_mutation.sm_specificcode');
 
             $data = $dataN->union($dataY)->get();
         } else {
             $data = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q){
-                    $q->on('sm_stock', '=', 's_id');
-                    $q->where('sm_detail', '=', 'PENAMBAHAN');
-                    $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
+                    $q->on('d_stock_mutation.sm_stock', '=', 's_id');
+                    $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
                 ->leftJoin('d_stock_dt', function ($a) {
-                    $a->on('sd_stock', '=', 's_id');
-                    $a->on('sd_specificcode', '=', 'sm_specificcode');
+                    $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
+                    $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
                 })
-                ->join('d_item', 'i_id', '=', 's_item')
-                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
-                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
-                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
-                ->groupBy('sm_specificcode')
+                ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
-
-        /*$results = [];
-        if (count($data) < 1) {
-            $results[] = ['message' => 'Tidak ditemukan'];
-        } else {
-            // $results[] = $data;
-            // foreach ($data as $query) {
-            //     $results[] = ['message' => 'Ditemukan', 'data' => $query];
-            // }
-            $results = ['message' => 'Ditemukan', 'data' => $data];
-        }
-        return json_encode($results);*/
         $results = [];
         if (count($data) < 1) {
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
@@ -249,73 +236,70 @@ class PenjualanController extends Controller
             $dataN = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
-                    $q->on('sm_stock', '=', 's_id');
-                    $q->where('sm_detail', '=', 'PENAMBAHAN');
-                    $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
+                    $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
-                    $a->on('sd_stock', '=', 's_id');
+                    $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
-                ->join('d_item', 'i_id', '=', 's_item')
-                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
-                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
-                    $w->orWhere('i_nama', 'like', '%'.$cari.'%');
-                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
-                ->where('i_specificcode', '=', 'N')
-                ->groupBy('sm_specificcode');
+                ->where('d_item.i_specificcode', '=', 'N')
+                ->groupBy('d_stock_mutation.sm_specificcode');
 
             $dataY = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
-                    $q->on('sm_stock', '=', 's_id');
-                    $q->where('sm_detail', '=', 'PENAMBAHAN');
-                    $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
-                    $q->whereNotIn('sm_specificcode', $kode);
+                    $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                    $q->whereNotIn('d_stock_mutation.sm_specificcode', $kode);
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
-                    $a->on('sd_stock', '=', 's_id');
-                    $a->on('sm_specificcode', '=', 'sd_specificcode');
-                    $a->whereNotIn('sd_specificcode', $kode);
+                    $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
+                    $a->on('d_stock_mutation.sm_specificcode', '=', 'd_stock_dt.sd_specificcode');
+                    $a->whereNotIn('d_stock_dt.sd_specificcode', $kode);
                 })
-                ->join('d_item', 'i_id', '=', 's_item')
-                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
-                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
-                    $w->orWhere('i_nama', 'like', '%'.$cari.'%');
-                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
-                ->where('i_specificcode', '=', 'Y')
-                ->groupBy('sm_specificcode');
+                ->where('d_item.i_specificcode', '=', 'Y')
+                ->groupBy('d_stock_mutation.sm_specificcode');
 
             $data = $dataN->union($dataY)->get();
         } else {
             $data = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'gp_price', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q){
-                    $q->on('sm_stock', '=', 's_id');
-                    $q->where('sm_detail', '=', 'PENAMBAHAN');
-                    $q->where('sm_sisa', '>', '0');
-                    $q->where('sm_reff', '!=', 'Rusak');
+                    $q->on('d_stock_mutation.sm_stock', '=', 's_id');
+                    $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                    $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
                 ->leftJoin('d_stock_dt', function ($a) {
-                    $a->on('sd_stock', '=', 's_id');
-                    $a->on('sd_specificcode', '=', 'sm_specificcode');
+                    $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
+                    $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
                 })
-                ->join('d_item', 'i_id', '=', 's_item')
-                ->leftjoin('m_group_price', 'gp_item', '=', 's_item')
-                ->leftjoin('d_outlet_price', 'op_item', '=', 's_item')
+                ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
-                    $w->orWhere('i_nama', 'like', '%'.$cari.'%');
-                    $w->orWhere('i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
-                ->groupBy('sm_specificcode')
+                ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
 
@@ -520,7 +504,7 @@ class PenjualanController extends Controller
 
                 for ($i=0; $i < count($data['idStock']); $i++) { 
 
-                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_detail', 'PENAMBAHAN');
+                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_specificcode', $data['kode'][$i])->where('sm_detail', 'PENAMBAHAN');
 
                     $get_smiddetail = $count_smiddetail->get();
 
@@ -584,21 +568,21 @@ class PenjualanController extends Controller
                             DB::table('d_stock_mutation')->insert([
                                 'sm_stock'          => $data['idStock'][$i],
                                 'sm_detailid'       => $get_countiddetail,
-                                'sm_date'           => date('Y-m-d H:m:s'),
+                                'sm_date'           => Carbon::now('Asia/Jakarta'),
                                 'sm_detail'         => 'PENGURANGAN',
                                 'sm_specificcode'   => $specificcode,
                                 'sm_qty'            => $data['qtyTable'][$i],
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $sm_sell,
+                                'sm_sell'           => $data['harga'][$i],
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
                             ]);
 
                             // Update in table d_stock_mutation
-                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid, 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
                                 'sm_use' => $sm_use,
                                 'sm_sisa' => $sm_sisa
                             ]);
@@ -612,7 +596,7 @@ class PenjualanController extends Controller
                 $idsales = DB::table('d_sales')->insertGetId([
                     's_comp'                => $outlet_user,
                     's_member'              => $data['idMember'],
-                    's_date'                => date('Y-m-d H:m:s'),
+                    's_date'                => Carbon::now('Asia/Jakarta'),
                     's_jenis'               => $data['jenis_pembayaran'],
                     's_nota'                => $nota,
                     's_total_gross'         => $data['totalHarga'],
@@ -639,6 +623,7 @@ class PenjualanController extends Controller
                         'sd_detailid'       => $salesdetailid,
                         'sd_comp'           => $outlet_user,
                         'sd_item'           => $idItem->s_item,
+                        'sd_specificcode'   => $data['kode'][$i],
                         'sd_qty'            => $data['qtyTable'][$i],
                         'sd_value'          => $data['harga'][$i],
                         'sd_hpp'            => $arr_hpp[$i],
@@ -676,7 +661,7 @@ class PenjualanController extends Controller
                 return response()->json([
                     'status' => 'gagal',
                     'data' => 'server gagal menyimpan',
-                    'eror' => $e
+                    'erorr' => $e
                 ]);
             }
         }
@@ -847,14 +832,14 @@ class PenjualanController extends Controller
                             DB::table('d_stock_mutation')->insert([
                                 'sm_stock'          => $data['idStock'][$i],
                                 'sm_detailid'       => $get_countiddetail,
-                                'sm_date'           => date('Y-m-d H:m:s'),
+                                'sm_date'           => Carbon::now('Asia/Jakarta'),
                                 'sm_detail'         => 'PENGURANGAN',
                                 'sm_specificcode'   => $specificcode,
                                 'sm_qty'            => $data['qtyTable'][$i],
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $sm_sell,
+                                'sm_sell'           => $data['harga'][$i],
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
@@ -875,7 +860,7 @@ class PenjualanController extends Controller
                 $idsales = DB::table('d_sales')->insertGetId([
                     's_comp'                => $outlet_user,
                     's_member'              => $data['idMember'],
-                    's_date'                => date('Y-m-d H:m:s'),
+                    's_date'                => Carbon::now('Asia/Jakarta'),
                     's_jenis'               => $data['jenis_pembayaran'],
                     's_nota'                => $nota,
                     's_total_gross'         => $data['totalHarga'],
@@ -902,6 +887,7 @@ class PenjualanController extends Controller
                         'sd_detailid'       => $salesdetailid,
                         'sd_comp'           => $outlet_user,
                         'sd_item'           => $idItem->s_item,
+                        'sd_specificcode'   => $data['kode'][$i],
                         'sd_qty'            => $data['qtyTable'][$i],
                         'sd_value'          => $data['harga'][$i],
                         'sd_hpp'            => $arr_hpp[$i],
@@ -970,7 +956,9 @@ class PenjualanController extends Controller
                 ->join('d_stock_mutation', function($x){
                     $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                 })
-                ->groupBy('d_sales_dt.sd_item')
+                ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+                ->groupBy(['d_sales_dt.sd_detailid', 'd_stock_mutation.sm_specificcode'])
+                ->distinct('d_stock_mutation.sm_specificcode')
                 ->get();
 
         if ($datas == null) {
@@ -1033,6 +1021,7 @@ class PenjualanController extends Controller
 
                 $getMutasi = DB::table('d_stock_mutation')
                     ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                    ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                     ->where('sm_nota', $stockMutasi[$index]->sm_reff)
                     ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
 
@@ -1040,6 +1029,7 @@ class PenjualanController extends Controller
                     // update stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_nota', $stockMutasi[$index]->sm_reff)
                         ->where('sm_detail', 'PENAMBAHAN')
                         ->update([
@@ -1072,6 +1062,7 @@ class PenjualanController extends Controller
                     // delete stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
                         ->where('sm_detail', 'PENGURANGAN')->delete();
 
@@ -1082,6 +1073,7 @@ class PenjualanController extends Controller
                     // update stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_nota', $stockMutasi[$index]->sm_reff)
                         ->where('sm_detail', 'PENAMBAHAN')
                         ->update([
@@ -1099,6 +1091,7 @@ class PenjualanController extends Controller
                     // delete stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
                         ->where('sm_detail', 'PENGURANGAN')->delete();
 

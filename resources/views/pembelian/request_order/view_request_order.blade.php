@@ -10,12 +10,12 @@
     <!-- RIBBON -->
     <div id="ribbon">
 
-	<span class="ribbon-button-alignment"> 
+	<span class="ribbon-button-alignment">
 		<span id="refresh" class="btn btn-ribbon" data-title="refresh" rel="tooltip" data-placement="bottom"
               data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.."
               data-html="true" onclick="location.reload()">
 			<i class="fa fa-refresh"></i>
-		</span> 
+		</span>
 	</span>
 
         <!-- breadcrumb -->
@@ -88,7 +88,7 @@
         <!-- row -->
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                
+
                     <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false"
                          data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
@@ -108,29 +108,32 @@
                                                                          class="fa fa-lg fa-cross"></i> <span
                                             class="hidden-mobile hidden-tablet"> DiTolak </span></a>
                                 </li>
-                                
+
                             </ul>
                         </header>
                         <!-- widget div-->
-                        <div> 
-                        
+                        <div>
+
                             <!-- widget content -->
                             <div class="widget-body no-padding">
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
                                     <div class="tab-pane fade in active" id="hr1">
-                                        <table id="waitingReq_table" class="table table-striped table-bordered table-hover"
+                                        <table id="waitingReq_table" class="table table-sm table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th data-hide="phone,tablet" width="1%">No</th>
-                                                <th >Nama Outlet</th>
-                                                <th data-hide="phone,tablet" width="35%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" >Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
+                                                <th class="text-center" data-hide="phone,tablet" width="1%">No</th>
+                                                <th class="text-center">Nama Outlet</th>
+                                                <th class="text-center" data-hide="phone,tablet" width="35%">Nama Barang</th>
+                                                <th class="text-center" data-hide="phone,tablet" width="5%">Qty</th>
+                                                <th class="text-center" data-hide="phone,tablet" width="10%">Status</th>
+                                                <th class="text-center" data-hide="phone,tablet" width="15%">Aksi</th>
                                             </tr>
                                             </thead>
+
                                             <tbody>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -142,7 +145,7 @@
 												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
 												<span class="input-group-addon bg-custom text-white b-0">ke</span>
 												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
-                            
+
                                             </div>
 										</div>
                                         <div class="col-md-7 pull-right">
@@ -150,7 +153,7 @@
 												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()" >
 													<i class="fa fa-search"></i>
 												</button>
-											</div>											
+											</div>
 										</div>
                                     </div>
                                         <table id="dt_all" class="table table-striped table-bordered table-hover"
@@ -193,7 +196,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                                 <!-- end widget body text-->
 
@@ -219,6 +222,44 @@
 
     </div>
     <!-- END MAIN CONTENT -->
+
+    <!-- Modal Edit Qty -->
+    <div class="modal fade" id="editQty" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Request Order</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input type="hidden" id="ro_id">
+                                <label for="i_nama">Nama Barang</label>
+                                <input type="text" class="form-control" id="i_nama" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="ro_qty">Kuantitas</label>
+                                <input type="number" min="0" class="form-control" id="ro_qty"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="update()">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Update
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('extra_script')
@@ -229,22 +270,22 @@
 	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
-    
+
 
 	<script type="text/javascript">
 		var menunggu, diproses, semua,inaktif, table_proses;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
-		
+
 		var baseUrl = '{{ url('/') }}';
 
 
-     $(document).ready(function(){
+        $(document).ready(function(){
 
-        var tanggal = new Date().getDate();
-        var bulan = new Date().getMonth();
-        var tahun = new Date().getFullYear();
+        var tanggal  = new Date().getDate();
+        var bulan    = new Date().getMonth();
+        var tahun    = new Date().getFullYear();
         var arrbulan = ["01","02","03","04","05","06","07","08","09","10","11","12"];
         $('#tgl_awal').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
         $('#tgl_akhir').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
@@ -285,7 +326,7 @@
                 phone : 480
             };
 
-            
+
             setTimeout(function () {
 
             menunggu = $('#waitingReq_table').dataTable({
@@ -296,11 +337,12 @@
                     $('td', row).eq(0).html(index + 1);
                     },
                 "columns":[
-                    {"data": "pr_id"},
+                    {"data": "ro_id"},
                     {"data": "c_name"},
                     {"data": "i_nama"},
-                    {"data": "pr_qtyReq"},
-                    {"data": "pr_stsReq"}
+                    {"data": "ro_qty"},
+                    {"data": "ro_state"},
+                    {"data": "aksi"}
                 ],
                 "autoWidth" : true,
                 "language" : dataTableLanguage,
@@ -322,7 +364,7 @@
             $('#overlay').fadeOut(200);
             }, 500);
 
-            
+
             setTimeout(function () {
 
             tolak = $('#dt_tolak').dataTable({
@@ -362,10 +404,10 @@
             tampil_diproses();
 
 
-            
+
 
         })
-                
+
 		/* END BASIC */
 
 		function refresh_tab(){
@@ -378,7 +420,7 @@
                 table_proses= $('#dt_all').DataTable({
                     "ajax": {
                                 "url": '{{url('/pembelian/request-pembelian/a')}}',
-                                "type": 'post',  
+                                "type": 'post',
                                 "data": function ( data ) {
                                     data.tgl_akhir = $('#tgl_akhir').val();
                                     data.tgl_awal = $('#tgl_awal').val();
@@ -389,7 +431,7 @@
                         $('td', row).eq(0).html(index + 1);
                         },
                     } );
-               
+
             };
 
         function search(){
@@ -457,25 +499,124 @@
 							timeout: 4000,
 							icon : "fa fa-times bounce animated"
 						});
-						
+
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
 
 				}
-	
+
 			});
 
 		}
 
-		function edit(val){
+		function edit(ro_id,i_nama,ro_qty){
 
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Memproses...');
-
-			window.location = baseUrl+'/master/member/simpan-edit/'+val;
+			$('#editQty').modal('show');
+            $('#ro_id').val(ro_id);
+            $('#i_nama').val(i_nama);
+            $('#ro_qty').val(ro_qty);
 
 		}
+
+        function update(){
+
+            overlay();
+            var ro_id = $('#ro_id').val();
+            var ro_qty = $('#ro_qty').val();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: baseUrl + '/pembelian/request-pembelian/updateReq',
+                type: 'get',
+                data: {id: ro_id, qty: ro_qty},
+                dataType: "JSON",
+                success: function(data)
+                {
+                    if(data.status =='sukses'){
+                        $.smallBox({
+                            title  : "Berhasil",
+                            content: 'Data telah diupdate...!',
+                            color  : "#739E73",
+                            timeout: 4000,
+                            icon   : "fa fa-check bounce animated"
+                        });
+                        $('#waitingReq_table').DataTable().ajax.reload();
+                    } else {
+                        $.smallBox({
+                            title  : "GAGAL",
+                            content: 'Data telah GAGAL diupdate...!',
+                            color  : "#739E73",
+                            timeout: 4000,
+                            icon   : "fa fa-check bounce animated"
+                        });
+                        $('#waitingReq_table').DataTable().ajax.reload();
+                    }
+
+                    out();
+                    $('#editQty').modal('hide');
+                },
+            })
+        }
+
+        function hapusReq(id)
+        {
+            $.SmartMessageBox({
+                title   : "Konfirmasi...!",
+                content : "Apakah Anda Yakin Ingin Menghapus Data Ini ?",
+                buttons : '[Tidak][Ya]'
+            },
+            function(ButtonPressed) {
+                if (ButtonPressed === "Ya") {
+                    $.ajax({
+                        url : '{{url('/pembelian/request-pembelian/hapusReq')}}',
+                        type: "GET",
+                        data: { id : id },
+
+                        dataType: "JSON",
+                        success: function(data)
+                        {
+                            if(data.status == "sukses"){
+                                $.smallBox({
+                                    title   : "Berhasil",
+                                    content : 'Data telah Di hapus...!',
+                                    color   : "#739E73",
+                                    timeout : 4000,
+                                    icon    : "fa fa-check bounce animated"
+                                });
+                                $('#waitingReq_table').DataTable().ajax.reload();
+                            }else{
+                                $.smallBox({
+                                    title   : "Berhasil",
+                                    content : 'Data gagal Di hapus...!',
+                                    color   : "#739E73",
+                                    timeout : 4000,
+                                    icon    : "fa fa-check bounce animated"
+                                });
+                                $('#waitingReq_table').DataTable().ajax.reload();
+                            }
+
+                            out();
+
+                        }
+                    });
+                }
+                if (ButtonPressed === "Tidak") {
+                    $.smallBox({
+                        title    : "Peringatan...!!!",
+                        content  : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Penghapusan</i>",
+                        color    : "#C46A69",
+                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                        timeout  : 4000
+                    });
+                }
+            });
+            e.preventDefault();
+        }
 
 		function detail(id){
 			$('#overlay').fadeIn(200);
@@ -592,13 +733,13 @@
 							timeout: 4000,
 							icon : "fa fa-times bounce animated"
 						});
-						
+
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
 
 				}
-	
+
 			});
 		}
 
@@ -672,57 +813,57 @@
 							timeout: 4000,
 							icon : "fa fa-times bounce animated"
 						});
-						
+
 					}).then(function(){
 						$('#overlay').fadeOut(200);
 					})
 
 				}
-	
+
 			});
 		}
 
 	</script>
 
-    
+
     <!-- <script type="text/javascript">
 
         var  table_requestOrder;
-       
+
 
             $(document).ready(function () {
                 load_table_request_order();
-                
+
             });
 
             function load_table_request_order(){
                 table_requestOrder= $('#requestOrder_table').DataTable({
                     "ajax": {
                                 "url": '{{url('/pembelian/request-pembelian/tampilData')}}',
-                                "type": 'GET',  
+                                "type": 'GET',
                                 "data": function ( data ) {
                                 },
                             },
                     } );
-               
+
             };
 
             function reload_table_requestOrder(){
                 table_requestOrder.ajax.reload(null, false);
-                
+
             };
 
             function getKelompok_item(){
                 $.ajax({
                           url : '{{url('/pembelian/request-pembelian/getKelompok_item')}}',
                           type: "GET",
-                          data: { 
-                           
+                          data: {
+
                           },
                           dataType: "JSON",
                           success: function(data)
                           {
-                            $('#item_kelompok').empty(); 
+                            $('#item_kelompok').empty();
                             row = "<option selected='' value='0'>Pilih Kelompok</option>";
                             $(row).appendTo("#item_kelompok");
                             $.each(data, function(k, v) {
@@ -730,21 +871,21 @@
                               $(row).appendTo("#item_kelompok");
                             });
                           },
-                          
-                      });  
+
+                      });
             }
 
             function getItem(){
                 $.ajax({
                           url : '{{url('/pembelian/request-pembelian/getItem')}}',
                           type: "GET",
-                          data: { 
-                            "kelompok" : $('#item_kelompok').val() 
+                          data: {
+                            "kelompok" : $('#item_kelompok').val()
                           },
                           dataType: "JSON",
                           success: function(data)
                           {
-                            $('#item_id').empty(); 
+                            $('#item_id').empty();
                             row = "<option selected='' value='0'>Pilih Item</option>";
                             $(row).appendTo("#item_id");
                             $.each(data, function(k, v) {
@@ -752,26 +893,26 @@
                               $(row).appendTo("#item_id");
                             });
                           },
-                          
-                      });  
+
+                      });
             }
 
             function showItem(){
                 $.ajax({
                           url : '{{url('/pembelian/request-pembelian/showItem')}}',
                           type: "GET",
-                          data: { 
-                            "item_id" : $('#item_id').val() 
+                          data: {
+                            "item_id" : $('#item_id').val()
                           },
                           dataType: "JSON",
                           success: function(data)
                           {
 
-                            $('#item_id').val(data.MERK); 
-                           
+                            $('#item_id').val(data.MERK);
+
                           },
-                          
-                      });  
+
+                      });
             }
     </script> -->
 
