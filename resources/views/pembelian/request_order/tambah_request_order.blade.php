@@ -2,7 +2,7 @@
 
 @section('title', 'Request Order')
 
-<?php 
+<?php
 	use App\Http\Controllers\PlasmafoneController as Access;
 
 	function rupiah($angka){
@@ -43,7 +43,7 @@
 		<!-- breadcrumb -->
 		<ol class="breadcrumb">
 
-			<li>Home</li><li>Pembelian</li><li>Rencana Pembelian</li>
+			<li>Home</li><li>Pembelian</li><li>Request Order</li>
 
 		</ol>
 		<!-- end breadcrumb -->
@@ -58,14 +58,14 @@
 	<!-- MAIN CONTENT -->
 	<div id="content">
 
-    <div class="row">
+    	<div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-credit-card"></i>
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Rencana Pembelian
+						 Request Order
 					</span>
                 </h1>
             </div>
@@ -73,7 +73,7 @@
 
                 <div class="page-title">
 
-                    <a href="{{ url('pembelian/rencana-pembelian') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+                    <a href="{{ url('pembelian/request-pembelian') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 
                 </div>
 
@@ -90,7 +90,7 @@
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -108,39 +108,39 @@
 			<div class="row">
 
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					
+
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-                    <header role="heading">
-                        <div class="jarviswidget-ctrls" role="menu">
-							<!-- <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a>  -->
-							<!-- <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> -->
-                        </div>
-                        <h2><strong>Tambah Rencana Pembelian</strong></h2>
+	                    <header role="heading">
+	                        <div class="jarviswidget-ctrls" role="menu">
+								<!-- <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a>  -->
+								<!-- <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> -->
+	                        </div>
+	                        <h2><strong>Tambah Rencana Pembelian</strong></h2>
 
-                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
-					</header>
+	                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+						</header>
 
 						<!-- widget div-->
 						<div>
-							
+
 							<!-- widget content -->
 							<div class="row">
 								<div class="form-group col-md-8">
 									<label class="sr-only" for="namabarang">Nama Barang</label>
 									<input type="hidden" id="tpMemberId" name="tpMemberId">
-									<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%;text-transform :uppercase" placeholder="Masukkan Nama Item" >
-									<!-- <input type="text" class="form-control" id="namabarang" name="item" placeholder="Masukkan Nama/Kode Barang" style="width: 100%"> -->
+									<input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama" style="width: 100%;text-transform :uppercase" placeholder="Masukkan Nama Item">
+
 									<div id="list_barang">
-										
+
 									</div>
-									
+
 								</div>
 									<!-- {{csrf_field()}} -->
-                                   
+
                                     <div class="form-group col-md-2">
                                         <label class="sr-only" for="kuantitas">QTY</label>
-                                        <input type="number" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%" autocomplete="off">
+                                        <input type="number" min="0" class="form-control" id="qty" name="kuantitas" placeholder="QTY" style="width: 100%" autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-2">
                                         <button class="btn btn-primary" onclick="tambah()" id="okTambah">Tambah</button>
@@ -149,15 +149,15 @@
 							<div class="widget-body no-padding">
 
 								<!-- widget body text-->
-								
+
 								<div class="tab-content padding-10">
-								
+
 
 									<div class="tab-pane fade in active" id="hr1">
-										
+
 										<table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
 
-											<thead>			                
+											<thead>
 
 												<tr>
 													<th data-hide="phone,tablet" width="75%">Nama Barang</th>
@@ -169,11 +169,11 @@
 											</thead>
 
 											<tbody>
-												
+
 											</tbody>
 
 										</table>
-										
+
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -184,22 +184,22 @@
                                     </div>
 
 								</div>
-								
+
 								<!-- end widget body text-->
-								
+
 								<!-- widget footer -->
 								<div class="widget-footer text-right">
-								
-									
+
+
 								</div>
 								<!-- end widget footer -->
-								
+
 							</div>
 							<!-- end widget content -->
-							
+
 						</div>
 						<!-- end widget div -->
-							
+
 					</div>
 
 				</div>
@@ -243,7 +243,7 @@
 							<img id="dt_image" src="">
 
 						</div>
-		
+
 						<div class="row">
 
 							<!-- Widget ID (each widget will need unique ID)-->
@@ -262,9 +262,9 @@
 
 									<!-- widget content -->
 									<div class="widget-body no-padding">
-										
+
 										<div class="table-responsive">
-											
+
 											<table class="table">
 												<tbody>
 
@@ -349,7 +349,7 @@
 														<td><strong>:</strong></td>
 														<td >
 															<div class="form-group">
-																
+
 																<input type="text" class="form-control" id="dt_qtyApp"  placeholder="QTY" style="width: 100%" >
 															</div>
 								  						</td>
@@ -369,26 +369,25 @@
 												</tbody>
 
 											</table>
-											
+
 										</div>
-                                        
+
 									</div>
 									<!-- end widget content -->
 
 								</div>
 								<!-- end widget div -->
-                                
+
 							</div>
 							<!-- end widget -->
                             <div class="form-group col-md-12 text-right">
-                                            
-                                            <button class="btn btn-primary" onclick="batal()" id="btnBatal">Batal</button>
-                                            <button class="btn btn-primary" onclick="tambah()" id="btnTambah">Tambah</button>
-                                            <button class="btn btn-primary" onclick="tolak()" id="btnTolak">Tolak</button>
-                                        </div>
+                                <button class="btn btn-primary" onclick="batal()" id="btnBatal">Batal</button>
+                                <button class="btn btn-primary" onclick="tambah()" id="btnTambah">Tambah</button>
+                                <button class="btn btn-primary" onclick="tolak()" id="btnTolak">Tolak</button>
+                        	</div>
 						</div>
-                        
-		
+
+
 					</div>
 
 				</div><!-- /.modal-content -->
@@ -418,7 +417,7 @@
 				}
 			});
 
-			
+
 				$("#qty").on("keyup",function (event) {
 				$(this).val($(this).val().replace(/[^\d].+/, ""));
 				if ((event.which == 13)) {
@@ -433,28 +432,28 @@
                 });
 
 			reload_data();
-            
-        }); 
+
+        });
 
 		function tambah(){
 			$.ajax({
 				url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
 				type: "POST",
-				data: {  
-					'qty' : $('#qty').val(),
-					'item' : $('#tpMemberId').val(),
-					_token : '{{ csrf_token() }}'
+				data: {
+					'qty' 	: $('#qty').val(),
+					'item' 	: $('#tpMemberId').val(),
+					_token 	: '{{ csrf_token() }}'
 				},
-				dataType: "JSON", 
+				dataType: "JSON",
 				success: function(data)
 				{
 					if(data.data =='SUKSES'){
 						$.smallBox({
-							title : "Berhasil",
-							content : 'Data telah ditambahkan...!',
-							color : "#739E73",
+							title  : "Berhasil",
+							content: 'Data telah ditambahkan...!',
+							color  : "#739E73",
 							timeout: 4000,
-							icon : "fa fa-check bounce animated"
+							icon   : "fa fa-check bounce animated"
 							});
 							$('#tpMemberId').val("");
 							$('#tpMemberNama').val("");
@@ -463,11 +462,11 @@
 							$('#tpMemberNama').focus();
 					}else{
 						$.smallBox({
-							title : "GAGAL",
-							content : 'Data telah GAGAL ditambahkan...!',
-							color : "#739E73",
+							title  : "GAGAL",
+							content: 'Data telah GAGAL ditambahkan...!',
+							color  : "#739E73",
 							timeout: 4000,
-							icon : "fa fa-check bounce animated"
+							icon   : "fa fa-check bounce animated"
 							});
 							$('#tpMemberId').val("");
 							$('#tpMemberNama').val("");
@@ -475,18 +474,25 @@
 							$('#table-rencana').DataTable().ajax.reload();
 							$('#tpMemberNama').focus();
 					}
-					
+
 					// reload_table();
 				},
-				
-		}); 
+
+		});
 		}
 
 		function hapusData(id){
-			$.ajax({
+			$.SmartMessageBox({
+					title 	: "Konfirmasi...!",
+					content : "Apakah Anda Yakin Akan Menghapus Request Order ini ?",
+					buttons : '[Tidak][Ya]'
+				}, function(ButtonPressed) {
+					if (ButtonPressed === "Ya") {
+
+						$.ajax({
 							url : '{{url('/pembelian/request-pembelian/hapusDumy')}}',
 							type: "GET",
-							data: { 
+							data: {
 								id : id,
 							},
 							dataType: "JSON",
@@ -494,11 +500,11 @@
 							{
 								if(data.status == "sukses"){
 									$.smallBox({
-										title : "Berhasil",
+										title 	: "Berhasil",
 										content : 'Data telah Di hapus...!',
-										color : "#739E73",
-										timeout: 4000,
-										icon : "fa fa-check bounce animated"
+										color 	: "#739E73",
+										timeout : 4000,
+										icon 	: "fa fa-check bounce animated"
 										});
 										$('#tpMemberId').val("");
 										$('#tpMemberNama').val("");
@@ -506,23 +512,35 @@
 										$('#table-rencana').DataTable().ajax.reload();
 								}else{
 									$.smallBox({
-										title : "Berhasil",
+										title 	: "Berhasil",
 										content : 'Data gagal Di hapus...!',
-										color : "#739E73",
-										timeout: 4000,
-										icon : "fa fa-check bounce animated"
+										color 	: "#739E73",
+										timeout : 4000,
+										icon 	: "fa fa-check bounce animated"
 										});
 										$('#tpMemberId').val("");
 										$('#tpMemberNama').val("");
 										$('#qty').val("");
 										$('#table-rencana').DataTable().ajax.reload();
 								}
-								
+
 							},
-							
-						});  
-			
-			 
+
+						});
+					}
+					if (ButtonPressed === "Tidak") {
+						$.smallBox({
+							title 	 : "Peringatan...!!!",
+							content  : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Penghapusan</i>",
+							color 	 : "#C46A69",
+							iconSmall: "fa fa-times fa-2x fadeInRight animated",
+							timeout  : 4000
+						});
+					}
+
+				});
+				e.preventDefault();
+
 		}
 
 		function editDumy(id){
@@ -530,33 +548,33 @@
 			$.ajax({
 						url : '{{url('/pembelian/request-pembelian/editDumy')}}',
 						type: "GET",
-						data: { 
+						data: {
 							'id' : id,
-							'qty' : input,
- 
+							'qty': input,
+
 						},
 						dataType: "JSON",
 						success: function(data)
 						{
-							
+
 							Swal({
 									position: 'top-end',
-									type: 'danger',
-									title: 'Request Order Telah Di edit',
+									type 	: 'danger',
+									title 	: 'Request Order Telah Di edit',
 									showConfirmButton: false,
-									timer: 7500,
+									timer 	: 7500,
 								});
-							
+
 							$('#table-rencana').DataTable().ajax.reload();
-							
+
 						},
-						
-				}); 
+
+				});
 		}
 
 		function simpanRequest(){
 			$.SmartMessageBox({
-					title : "Konfirmasi...!",
+					title 	: "Konfirmasi...!",
 					content : "Apakah Anda Yakin Akan Mengajukan Request Order ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
@@ -564,21 +582,21 @@
 						$.ajax({
 							url : '{{url('/pembelian/request-pembelian/simpanRequest')}}',
 							type: "GET",
-							data: { 
+							data: {
 							},
 							dataType: "JSON",
 							success: function(data)
 							{
-								
-								
+
+
 								if(data.status == 'gagal')
 								{
 									$.smallBox({
-										title : "Gagal",
+										title 	: "Gagal",
 										content : 'Data gagal Di ajukan..!',
-										color : "#739E73",
-										timeout: 4000,
-										icon : "fa fa-check bounce animated"
+										color 	: "#739E73",
+										timeout : 4000,
+										icon 	: "fa fa-check bounce animated"
 										});
 										$('#tpMemberId').val("");
 										$('#tpMemberNama').val("");
@@ -587,11 +605,11 @@
 									// $('#table-rencana').DataTable().ajax.reload();
 								}else if(data.status == 'notFound'){
 									$.smallBox({
-										title : "Peringatan",
+										title 	: "Peringatan",
 										content : 'Data Not Found!',
-										color : "#739E73",
-										timeout: 4000,
-										icon : "fa fa-check bounce animated"
+										color 	: "#739E73",
+										timeout : 4000,
+										icon 	: "fa fa-check bounce animated"
 										});
 										$('#tpMemberId').val("");
 										$('#tpMemberNama').val("");
@@ -599,11 +617,11 @@
 										$('#table-rencana').DataTable().ajax.reload();
 								}else{
 									$.smallBox({
-										title : "Berhasil",
+										title 	: "Berhasil",
 										content : 'Anda Telah Berhasil Mengajukan Request Order...!',
-										color : "#739E73",
-										timeout: 4000,
-										icon : "fa fa-check bounce animated"
+										color 	: "#739E73",
+										timeout : 4000,
+										icon 	: "fa fa-check bounce animated"
 										});
 										$('#tpMemberId').val("");
 										$('#tpMemberNama').val("");
@@ -612,26 +630,26 @@
 										$('#tpMemberNama').focus();
 								}
 								// $('#table-rencana').DataTable().fnDestroy();
-								
+
 							},
-								
-						}); 
+
+						});
 					}
 					if (ButtonPressed === "Tidak") {
 						$.smallBox({
-							title : "Peringatan...!!!",
-							content : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Pengajuan</i>",
-							color : "#C46A69",
-							iconSmall : "fa fa-times fa-2x fadeInRight animated",
-							timeout : 4000
+							title 	 : "Peringatan...!!!",
+							content  : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Melakukan Pengajuan</i>",
+							color 	 : "#C46A69",
+							iconSmall: "fa fa-times fa-2x fadeInRight animated",
+							timeout  : 4000
 						});
 					}
-		
+
 				});
 				e.preventDefault();
-			
-			
-			
+
+
+
 		}
 
 
@@ -639,8 +657,8 @@
         table_registrasi= $('#table-rencana').DataTable({
 				"language" : dataTableLanguage,
 				"ajax": {
-						"url": '{{url('/pembelian/request-pembelian/ddRequest_dummy')}}',
-						"type": "POST",  
+						"url" : '{{url('/pembelian/request-pembelian/ddRequest_dummy')}}',
+						"type": "POST",
 						"data": function ( data ) {
 							data._token = '{{ csrf_token() }}';
 						},
