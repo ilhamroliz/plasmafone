@@ -460,7 +460,7 @@
     $("#cari-stock").on('keyup',function(e) {
         if(e.which === 13) {
             var specificcode = $(this).val();
-            if (cekIsiArrayItem(specificcode) == "sudah") {
+            if (arrKodeGlobal.includes(specificcode) == true) {
                 var harga = 0;
                 var kuantitas = $(".qty-"+specificcode).val();
                 var qty = parseInt(kuantitas) + 1;
