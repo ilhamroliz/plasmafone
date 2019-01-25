@@ -87,6 +87,7 @@
                                                             <div class="icon-addon addon-md">
                                                                 <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
                                                                 <input type="hidden" value="" class="idMember" id="idMember" name="idMember">
+                                                                <input type="text" name="id_group" id="id_group">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
@@ -310,13 +311,18 @@
             select: function(event, data) {
                 getData(data.item);
                 getDetailMember(data.item.id);
+
             }
         });
 
         $( "#cari-stock" ).autocomplete({
-            source: baseUrl+'/penjualan-reguler/cari-stock',
+            source: function(request, response) {
+                $.getJSON(baseUrl+'/penjualan-reguler/cari-stock', { jenis: $("#id_group").val(), term: $("#cari-stock").val() },
+                    response);
+            },
             minLength: 1,
             select: function(event, data) {
+                console.log(data);
                 setStock(data.item);
                 $("#stockid").val(data.item.id);
 				if ($("#stockid").val() == "") {
@@ -338,6 +344,7 @@
                 // handle success
                 // console.log(response.data.jenis);
                 $("#jenis_member").text(response.data.jenis);
+                $("#id_group").val(response.data.id_group);
                 $("#alamat").text(response.data.alamat);
             })
             .catch(function (error) {
@@ -349,6 +356,7 @@
                 $("#search_barang").show("slow");
                 $("#cari-stock").focus();
             });
+
         }
     })
 

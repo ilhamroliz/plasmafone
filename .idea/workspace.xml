@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f15388ce-63a7-4084-82b5-ae571942ff2a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,18 +24,19 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="279">
-              <caret line="441" column="50" selection-start-line="441" selection-start-column="50" selection-end-line="441" selection-end-column="50" />
+            <state relative-caret-position="-145">
+              <caret line="304" column="18" selection-start-line="304" selection-start-column="18" selection-end-line="304" selection-end-column="18" />
               <folding>
+                <element signature="e#393#486#0#PHP" />
+                <element signature="e#492#589#0#PHP" />
+                <element signature="e#595#686#0#PHP" />
+                <element signature="e#692#785#0#PHP" />
                 <element signature="e#791#1533#0#PHP" />
-                <element signature="e#1539#2309#0#PHP" />
                 <element signature="e#2315#3422#0#PHP" />
                 <element signature="e#3428#8820#0#PHP" />
-                <element signature="e#8826#14624#0#PHP" />
-                <element signature="e#14630#15045#0#PHP" />
                 <element signature="e#15051#16851#0#PHP" />
                 <element signature="e#249#255#1" expanded="true" />
                 <element signature="e#472#478#1" expanded="true" />
@@ -60,17 +60,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="361" column="9" lean-forward="true" selection-start-line="361" selection-start-column="9" selection-end-line="361" selection-end-column="9" />
+            <state relative-caret-position="227">
+              <caret line="324" column="34" selection-start-line="324" selection-start-column="34" selection-end-line="324" selection-end-column="34" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="849" column="74" selection-start-line="849" selection-start-column="74" selection-end-line="849" selection-end-column="74" />
+            <state relative-caret-position="280">
+              <caret line="299" column="13" lean-forward="true" selection-start-line="296" selection-start-column="12" selection-end-line="299" selection-end-column="13" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#1;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -160,8 +165,9 @@
         <option value="$PROJECT_DIR$/resources/views/pembelian/refund/add.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/RefundController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/setHargaController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
       </list>
     </option>
   </component>
@@ -322,6 +328,14 @@
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="penjualan" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="penjualan" type="462c0819:PsiDirectoryNode" />
+              <item name="pemesanan_barang" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
@@ -547,13 +561,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="738000" />
+    <option name="totallyTimeSpent" value="5426000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1368" height="741" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18484849" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.18484849" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -612,24 +626,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="383">
+          <caret line="793" column="53" selection-start-line="793" selection-start-column="32" selection-end-line="793" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="849" column="74" selection-start-line="849" selection-start-column="74" selection-end-line="849" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="299" column="13" lean-forward="true" selection-start-line="296" selection-start-column="12" selection-end-line="299" selection-end-column="13" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="361" column="9" lean-forward="true" selection-start-line="361" selection-start-column="9" selection-end-line="361" selection-end-column="9" />
+        <state relative-caret-position="227">
+          <caret line="324" column="34" selection-start-line="324" selection-start-column="34" selection-end-line="324" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="441" column="50" selection-start-line="441" selection-start-column="50" selection-end-line="441" selection-end-column="50" />
+        <state relative-caret-position="-145">
+          <caret line="304" column="18" selection-start-line="304" selection-start-column="18" selection-end-line="304" selection-end-column="18" />
           <folding>
+            <element signature="e#393#486#0#PHP" />
+            <element signature="e#492#589#0#PHP" />
+            <element signature="e#595#686#0#PHP" />
+            <element signature="e#692#785#0#PHP" />
             <element signature="e#791#1533#0#PHP" />
-            <element signature="e#1539#2309#0#PHP" />
             <element signature="e#2315#3422#0#PHP" />
             <element signature="e#3428#8820#0#PHP" />
-            <element signature="e#8826#14624#0#PHP" />
-            <element signature="e#14630#15045#0#PHP" />
             <element signature="e#15051#16851#0#PHP" />
             <element signature="e#249#255#1" expanded="true" />
             <element signature="e#472#478#1" expanded="true" />
@@ -646,20 +687,6 @@
             <element signature="e#48651#48800#0#PHP" />
             <element signature="e#50536#55529#0#PHP" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="793" column="53" selection-start-line="793" selection-start-column="32" selection-end-line="793" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="849" column="74" selection-start-line="849" selection-start-column="74" selection-end-line="849" selection-end-column="74" />
         </state>
       </provider>
     </entry>

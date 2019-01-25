@@ -69,8 +69,6 @@ class PenjualanController extends Controller
                 $q->orWhere('m_id', 'like', '%'.$cari.'%');
             })->get();
 
-        
-
         if (count($nama) < 1) {
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
@@ -149,7 +147,9 @@ class PenjualanController extends Controller
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', function($g){
+                    $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
+                })
                 ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
@@ -219,6 +219,7 @@ class PenjualanController extends Controller
     {
         
         $cari = $request->term;
+        $jenis = $request->jenis;
         $kode = [];
         if (isset($request->kode)){
             $kode = $request->kode;
@@ -244,7 +245,10 @@ class PenjualanController extends Controller
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', function ($g) use ($jenis){
+                    $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
+                    $g->where('m_group_price.gp_group', '=', $jenis);
+                })
                 ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
@@ -268,7 +272,10 @@ class PenjualanController extends Controller
                     $a->whereNotIn('d_stock_dt.sd_specificcode', $kode);
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', function ($g) use ($jenis){
+                    $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
+                    $g->where('m_group_price.gp_group', '=', $jenis);
+                })
                 ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
@@ -292,7 +299,10 @@ class PenjualanController extends Controller
                     $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', function ($g) use ($jenis){
+                    $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
+                    $g->where('m_group_price.gp_group', '=', $jenis);
+                })
                 ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
@@ -322,12 +332,12 @@ class PenjualanController extends Controller
     public function getDetailMember($id = null)
     {
         $query = DB::table('m_member')
-                    ->select('m_member.m_address', 'm_group.g_name')
+                    ->select('m_member.m_address', 'm_group.g_name', 'm_member.m_jenis')
                     ->join('m_group', 'm_member.m_jenis', '=', 'm_group.g_id')
                     ->where('m_member.m_id', $id)
                     ->first();
 
-        return Response::json(['jenis' => $query->g_name, 'alamat' => $query->m_address]);
+        return Response::json(['jenis' => $query->g_name, 'alamat' => $query->m_address, 'id_group' => $query->m_jenis]);
     }
 
     public function getPenjualanRegular()
