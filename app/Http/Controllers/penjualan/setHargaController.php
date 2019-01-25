@@ -115,6 +115,8 @@ class setHargaController extends Controller
             ->select('i_id', 'i_nama', 'i_code', 'pd_value')
             ->whereRaw('i_nama like "%' . $term . '%"')
             ->orWhereRaw('concat(coalesce(i_code, ""), " ", coalesce(i_nama, "")) like "%' . $term . '%"')
+            ->orderBy('pd_detailid', 'desc')
+            ->groupBy('i_id')
             ->take(50)->get();
 
         if ($select == null) {
@@ -169,12 +171,13 @@ class setHargaController extends Controller
                 } else {
                     DB::beginTransaction();
                     try {
+                        $ng = strtoupper($request->namaGroup);
                         DB::table('m_group')->insert([
-                            'g_name' => strtoupper($request->namaGroup)
+                            'g_name' => $ng
                         ]);
 
                         DB::commit();
-                        Plasma::logActivity('Menambahkan Group' . $request->namaGroup);
+                        Plasma::logActivity('Menambahkan Group ' . $ng);
                         return json_encode([
                             'status' => 'sukses'
                         ]);

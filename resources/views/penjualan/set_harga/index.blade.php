@@ -139,7 +139,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 						<div>
 							<div class="widget-body no-padding">
-								<div class="tab-content padding-10">
+								<div id="nonemptyG" class="tab-content padding-10"  style="display:none">
 
 									<div id="title_table" style="width: 100%; padding-bottom: 20px; padding-top: 10px">
 										
@@ -166,6 +166,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 										</table>
 									</div>
+								</div>
+
+								<div id="emptyG" class="col-md-12 text-center" style="margin-top: 20px">
+									<h1>SILAHKAN PILIH GROUP HARGA</h1>
 								</div>
 							</div>
 						</div>
@@ -195,7 +199,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             <label class="label col col-3">Nama Group</label>
                                             <div class="col col-9 has-feedback">
                                                 <label class="input">
-                                                    <input type="text" name="namaGroup" id="namaGroup" style="text-transform: uppercase" required>
+                                                    <input type="text" name="namaGroup" id="namaGroup" style="text-transform: uppercase" placeholder="Masukkan Nama Group" required>
                                                 </label>
                                             </div>
                                         </div>
@@ -428,6 +432,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					responsiveHelper_dt_basic.respond();
 				}
 			});
+
+			$('#emptyG').css('display', 'none');
+			$('#nonemptyG').css('display', 'block');
 			
 			axios.get(baseUrl+'/penjualan/set-harga/get-data-gp-non/'+id).then(response => {
 
@@ -458,6 +465,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		}
 
 		function tambah_group(){
+			$('#namaGroup').val('');
 			$('#tgModal').modal('show');
 		}
 
@@ -679,6 +687,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		function tgSubmit(){
 
+			if($('#namaGroup').val() == ''){
+				$.smallBox({
+					title : "GAGAL",
+					content : "Data NAMA GROUP harus diisi !",
+					color : "#C46A69",
+					iconSmall : "fa fa-times animated",
+					timeout : 3000
+				});
+				return false;
+			}
 			// --- AXIOS USE ----//
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Penyimpanan Data Group Sedang di Proses ...');

@@ -67,19 +67,7 @@ class RefundController extends Controller
     {
         $idItem = $request->id;
         $supplier = intval($request->supplier);
-//        $data = DB::table('d_stock')
-//            ->join('d_stock_dt', 'sd_stock', '=', 'd_stock.s_id')
-//            ->join('d_stock_mutation', 'sm_stock', '=', 'd_stock.s_id')
-//            ->join('m_company as pemilik', 'pemilik.c_id', '=', 's_comp')
-//            ->join('m_company as posisi', 'posisi.c_id', '=', 's_position')
-//            ->join('d_purchase', 'p_nota', '=', 'sm_nota')
-//            ->join('d_supplier', 'd_supplier.s_id', '=', 'p_supplier')
-//            ->select('sd_specificcode', 'sm_hpp', 'posisi.c_name as posisi', 'pemilik.c_name as pemilik', 'd_stock.s_id', 'd_supplier.s_name as supplier', 'd_supplier.s_id as id_supplier')
-//            ->where('s_item', '=', $idItem)
-//            ->where('p_supplier', '=', $supplier)
-//            ->groupBy('sd_specificcode')
-//            ->orderBy('sm_date', 'desc')
-//            ->get();
+    
         $data = DB::table('d_stock')
             ->join('d_stock_dt', 'sd_stock', '=', 'd_stock.s_id')
             ->join('d_stock_mutation', function ($q){
