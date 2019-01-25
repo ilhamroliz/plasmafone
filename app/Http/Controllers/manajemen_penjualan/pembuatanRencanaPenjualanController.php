@@ -144,19 +144,18 @@ class pembuatanRencanaPenjualanController extends Controller
             ->make(true);
     }
 
-    public function detail($id)
+    public function detail(Request $request, $id)
     {
+        // dd($request);
         $id = Crypt::decrypt($id);
-        $cek = DB::table('d_sales_plan')
-            ->join('d_sales_plan_dt_draft', 'spdd_sales_plan', '=', 'sp_id')
-            ->where('sp_id', $id)->count();
+        $state = $request->state;
         $data = '';
-        if ($cek == 0) {
+        if ($state == 'appr') {
             $data = DB::table('d_sales_plan_dt')
                 ->join('d_item', 'i_id', '=', 'spd_item')
                 ->select('i_nama', DB::raw('spd_qty as qty'))
                 ->where('spd_sales_plan', $id)->get();
-        } else {
+        } else if($state == 'pend'){
             $data = DB::table('d_sales_plan_dt_draft')
                 ->join('d_item', 'i_id', '=', 'spdd_item')
                 ->select('i_nama', DB::raw('spdd_qty as qty'))
@@ -364,7 +363,7 @@ class pembuatanRencanaPenjualanController extends Controller
                         ]);
                         array_push($spd_array, $aray);
                     }
-                    dd($spd_array);
+                    // dd($spd_array);
                     DB::table('d_sales_plan_dt')->insert($spd_array);
 
                     DB::commit();
@@ -385,6 +384,7 @@ class pembuatanRencanaPenjualanController extends Controller
             return view('manajemen_penjualan.rencana_penjualan.tambah')->with(compact('outlet'));
         }
     }
+
 
     function edit(Request $request, $id = null)
     {
@@ -407,14 +407,14 @@ class pembuatanRencanaPenjualanController extends Controller
                         'sp_update' => $sp_update
                     ]);
 
-                    $sp_id = DB::table('d_sales_plan')->select('sp_id')->max('sp_id');
+                    // $sp_id = DB::table('d_sales_plan')->select('sp_id')->max('sp_id');
                     $detil_array = array();
 
                     if (Auth::user()->m_level > 3) {
 
                         for ($i = 0; $i < count($idItem); $i++) {
                             $aray = ([
-                                'spdd_sales_plan' => $sp_id,
+                                'spdd_sales_plan' => $id,
                                 'spdd_detailid' => $i + 1,
                                 'spdd_item' => $idItem[$i],
                                 'spdd_qty' => $qty[$i]
@@ -429,11 +429,11 @@ class pembuatanRencanaPenjualanController extends Controller
                         DB::table('d_sales_plan_dt_draft')->insert($detil_array);
 
                     } else {
-
+                        // dd($sp_id);
                         for ($i = 0; $i < count($idItem); $i++) {
 
                             $aray = ([
-                                'spd_sales_plan' => $sp_id,
+                                'spd_sales_plan' => $id,
                                 'spd_detailid' => $i + 1,
                                 'spd_item' => $idItem[$i],
                                 'spd_qty' => $qty[$i]
@@ -502,13 +502,36 @@ class pembuatanRencanaPenjualanController extends Controller
             DB::beginTransaction();
             try {
 
-                $getSPDD = DB::table('d_sales_plan_dt_draft')->where('spdd_sales_plan', $id)->get();
+                $getSPDD = DB::table('d_sales_plan_dt_draft')
+                    ->where('spdd_sales_plan', $id)
+                    ->select('spdd_item', 'spdd_qty')->get();
 
-                dd($getSPDD);
+                // dd($getSPDD);
+                for($i = 0; $i < count($getSPDD); $i++){
+                    DB::table('d_sales_plan_dt')
+                        ->where('spd_sales_plan', $id)
+                        ->where('spd_detailid', $getSPDD[$i]->spdd_item)
+                        ->update([
+                            'spd_qty' => $getSPDD[$i]->spdd_qty
+                        ]);
+                }
 
+                DB::table('d_sales_plan_dt_draft')->where('spdd_sales_plan', $id)->delete();
+
+                $getNota = DB::table('d_sales')->where('s_id', $id)->select('s_nota')->first();
+
+                $log = 'Menyetujui Perubahan pada Rencana Penjualan dengan nota '. $getNota->s_nota;
                 DB::commit();
+                PlasmafoneController::logActivity($log);
+                return json_encode([
+                    'status' => 'arpSukses'
+                ]);
             } catch (\Exception $e) {
                 DB::rollback();
+                return json_encode([
+                    'status' => 'arpGagal',
+                    'msg' => $e
+                ]);
             }
 
         }

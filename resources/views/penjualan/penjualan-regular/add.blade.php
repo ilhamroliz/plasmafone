@@ -364,7 +364,7 @@
         stockGlobal = data.s_qty;
 
         iCode = data.i_code;
-
+        console.log(data.i_code);
         if(data.gp_price != null) {
             price = data.gp_price;
         } else if (data.op_price != null) {
@@ -378,43 +378,10 @@
         kodespesifikGlobal = data.sd_specificcode;
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
+        arrKodeGlobal.push(data.i_code);
         arrCode.push(data.i_code);
         arrIdStock.push(data.s_id);
-    }
-
-    function setStocks(info){
-        var data = info.data[0];
-        var price = 0;
-        var qtyItem = 0;
-        namaGlobal = data.i_code+" - "+data.i_nama;
-        stockGlobal = data.s_qty;
-
-        if(data.gp_price != null) {
-            price = data.gp_price;
-        } else if (data.gp_price != null) {
-            price = data.gp_price;
-        } else {
-            price = data.i_price;
-        }
-        hargaGlobal = parseInt(price);
-        idGlobal = data.s_id;
-        idItem = data.i_id;
-        kodespesifikGlobal = data.sd_specificcode;
-        spesifikGlobal = data.i_specificcode;
-        kodeGlobal = data.sm_specificcode;
-        
-        if (cekIsiArrayItem(data.i_id) == 'sudah') {
-            console.log(idGlobal);
-            console.log(cekIsiArrayItem(data.i_id));
-            // qtyItem = $("#qty-"+idGlobal).val();
-            // $("#qty-"+idGlobal).val(qtyItem + 1);
-            // console.log(qtyItem);
-        } else {
-            //arrItem.push(idItem);
-            $('#tambahketable').click();
-        }
-        //console.log(arrItem);
-        
+        setArrayId();
     }
 
     function cekIsiArrayItem(data){
@@ -457,11 +424,12 @@
         return false;
     })
 
-    $("#cari-stock").on('keyup',function(e) {
+    $("#cari-stock").on('keypress',function(e) {
+
         if(e.which === 13) {
             var specificcode = $(this).val();
-            if (cekIsiArrayItem(specificcode) == "sudah") {
-                var harga = 0;
+            var harga = 0;
+            if (arrCode.includes(specificcode) == true) {
                 var kuantitas = $(".qty-"+specificcode).val();
                 var qty = parseInt(kuantitas) + 1;
                 var hrg = $("."+specificcode).val();
@@ -495,11 +463,11 @@
                 } else if (discValue != 0) {
                     harga += qty * hrg - discValue;
                 }
-        
+
+                $('.totalItem-'+specificcode).val(harga);
                 $(".qty-"+specificcode).val(qty);
                 $(".harga-"+specificcode).text(convertToRupiah(parseInt(harga)));
-                $(".totalItem-"+specificcode).val(parseInt(harga));
-                
+
                 $(this).val("");
                 updateTotalTampil();
             } else {
@@ -627,8 +595,11 @@
                 }
                 $('.qty-'+idGlobal).val(qtyakhir);
                 var harga = qtyakhir * hargaGlobal;
+                $('.totalItem-'+idGlobal).val(harga);
                 harga = convertToRupiah(harga);
                 $('.harga-'+idGlobal).html(harga);
+
+                updateTotalTampil();
             } else {
                 row = '<tr id="'+idGlobal+'" class="tr">' +
                     '<td style="width: 32%;">'+namaGlobal+
@@ -637,7 +608,7 @@
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
                     '<input type="hidden" class="harga '+iCode+'" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                     '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
-                    '<input type="hidden" class="totalItem totalItem-'+iCode+'" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
+                    '<input type="hidden" class="totalItem totalItem-'+iCode+' totalItem-'+idGlobal+'" name="totalItem[]" id="totalItem-'+iCode+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '</td>' +
                     '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
@@ -657,6 +628,7 @@
                         event.preventDefault();
                     }
                 });
+                setArrayId();
             }
         } else {
             if (arrKodeGlobal.includes(kodeGlobal) == true) {

@@ -74,17 +74,17 @@ class PengaturanController extends Controller
             $data = DB::table('d_log_activity')
                 ->join('d_mem', 'm_id', '=', 'la_mem')
                 ->join('m_company', 'c_id', '=', 'la_comp')
-                ->select('d_log_activity.*', 'm_name', 'c_name')
+                ->select('la_activity', DB::raw('DATE_FORMAT(la_date, "%d/%m/%Y %H:%i:%s") as la_date'), 'm_name', 'c_name')
                 ->where('la_date', '>=', $start)
                 ->where('la_date', '<=', $end)
-                ->get();
+                ->orderBy('la_date', 'desc')->get();
         } elseif ($request->nama != "" && $request->tgl_awal == "" && $request->tgl_akhir == "") {
             $data = DB::table('d_log_activity')
                 ->join('d_mem', 'm_id', '=', 'la_mem')
                 ->join('m_company', 'c_id', '=', 'la_comp')
-                ->select('d_log_activity.*', 'm_name', 'c_name')
+                ->select('la_activity', DB::raw('DATE_FORMAT(la_date, "%d/%m/%Y %H:%i:%s") as la_date'),  'm_name', 'c_name')
                 ->where('la_mem', $request->nama)
-                ->get();
+                ->orderBy('la_date', 'desc')->get();
         } elseif ($request->nama != "" && $request->tgl_awal != "" && $request->tgl_akhir != "") {
             $request->tgl_awal = str_replace('/', '-', $request->tgl_awal);
             $request->tgl_akhir = str_replace('/', '-', $request->tgl_akhir);
@@ -95,15 +95,11 @@ class PengaturanController extends Controller
             $data = DB::table('d_log_activity')
                 ->join('d_mem', 'm_id', '=', 'la_mem')
                 ->join('m_company', 'c_id', '=', 'la_comp')
-                ->select('d_log_activity.*', 'm_name', 'c_name')
+                ->select('la_activity', DB::raw('DATE_FORMAT(la_date, "%d/%m/%Y %H:%i:%s") as la_date'), 'm_name', 'c_name')
                 ->where('la_date', '>=', $start)
                 ->where('la_date', '<=', $end)
                 ->where('la_mem', $request->nama)
-                ->get();
-        }
-
-        for ($i = 0; $i < count($data); $i++) {
-            $data[$i]->la_date = Carbon::parse($data[$i]->la_date)->format('d-m-Y G:i:s');
+                ->orderBy('la_date', 'desc')->get();
         }
 
         return Response::json($data);

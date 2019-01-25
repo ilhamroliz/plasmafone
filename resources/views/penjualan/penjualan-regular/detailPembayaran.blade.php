@@ -2,8 +2,8 @@
 <div class="form-group col-md-12" style="border-bottom: 1px solid #c90d18; padding-bottom: 15px;">
 	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4 style="font-weight:bold">Total Tagihan:</h4></label>
 	<div class="input-group col-md-5 row text-right">
-    	<h4><div style="float: left;">Rp. </div><div class="row text-right" style="float: right; font-weight:bold;"> {{ number_format($total, 0, '', '.').',00' }}</div></h4>
-    	<input type="hidden" class="totalnet" name="total" value="Rp. {{ number_format($total, 0, '', '.').',00' }}">
+    	<h4><div style="float: left;">Rp. </div><div class="row text-right" style="float: right; font-weight:bold;"> {{ number_format($total,0,',','.') }}</div></h4>
+    	<input type="hidden" class="totalnet" name="total" value="Rp. {{ number_format($total,0,',','.') }}">
     </div>
 </div>
 

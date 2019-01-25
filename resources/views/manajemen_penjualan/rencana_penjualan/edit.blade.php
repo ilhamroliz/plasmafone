@@ -186,15 +186,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 "info": false
             });
 
-            $( "#erpItemNama" ).autocomplete({
-				source: baseUrl+'/penjualan/set-harga/outlet/auto-CodeNItem',
-				minLength: 2,
-				select: function(event, data) {
-					$('#erpItemId').val(data.item.id);
-					$('#erpItemNama').val(data.item.label);
-				}
-			});
-
             var comp = $('#erpCompNama').val();
             var id = $('#sp_id').val();
             axios.get(baseUrl+'/man-penjualan/rencana-penjualan/edit-dt'+'/'+id).then((response) => {
@@ -202,17 +193,56 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 for(var i=0; i<response.data.data.length; i++){
                     table.row.add([
                         comp,
-                        response.data.data[i].i_nama+'<input type="hidden" name="idItem[]" value="'+response.data.data[i].itemId+'">',
-                        '<input type="text" class="form-control erpQty" style="width: 100%" name="qtyItem[]" value="'+response.data.data[i].qty+'">',
+                        response.data.data[i].i_nama+'<input type="hidden" name="idItem[]" class="idItem" value="'+response.data.data[i].itemId+'">',
+                        '<input type="number" class="form-control text-align-right erpQty" style="width: 100%" name="qtyItem[]" value="'+response.data.data[i].qty+'">',
                         '<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
                     ]).draw(false);
                     $('.erpQty').maskMoney({precision: 0, thousands: '.'});
+                
+                    var inputs = document.getElementsByClassName( 'idItem' ),
+                    names  = [].map.call(inputs, function( input ) {
+                        return input.value;
+                    });
+
+                    $( "#erpItemNama" ).autocomplete({
+                        source: function(request, response) {
+                            $.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#erpItemNama").val() }, 
+                                    response);
+                        },
+                        minLength: 2,
+                        select: function(event, data) {
+                            $('#erpItemId').val(data.item.id);
+                            $('#erpItemNama').val(data.item.label);
+                        }
+                    });
                 }
                 
-            })
+            });            
+
+            var input = document.getElementById("erpQty");
+			input.addEventListener("keyup", function(event) {
+				event.preventDefault();
+				if (event.keyCode === 13) {
+                    tambah_row();
+				}
+            });
+            
 		});
 
         function tambah_row(){
+            if($('#erpItemId').val() == ''){
+                $.smallBox({
+                    title : "Gagal",
+                    content : "Maaf, Data Item Harus Diisi untuk menambahkan Data ",
+                    color : "#A90329",
+                    timeout: 4000,
+                    icon : "fa fa-times bounce animated"
+                });
+                return false;
+            }
+            if($('#erpQty').val() == ''){
+                $($('#erpQty').val(1));
+            }
 			var compName = $('#erpCompNama').val();
 			var itemId =  $('#erpItemId').val();
 			var itemName = $('#erpItemNama').val();
@@ -221,17 +251,51 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			table.row.add([
 				compName,
 				itemName+'<input type="hidden" name="idItem[]" class="idItem" value="'+itemId+'">',
-				'<input type="text" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="'+qty+'">',
+				'<input type="number" min="1" class="form-control qtyItem" style="width: 100%; text-align: right;" name="qtyItem[]" value="'+qty+'">',
 				'<div class="text-center"><button type="button" class="btn btn-danger btn-circle btnhapus"><i class="fa fa-remove"></i></button></div>'		
-			]).draw(false);
+            ]).draw(false);
+            
+            var inputs = document.getElementsByClassName( 'idItem' ),
+			names  = [].map.call(inputs, function( input ) {
+				return input.value;
+			});
+
+			$( "#erpItemNama" ).autocomplete({
+				source: function(request, response) {
+					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#erpItemNama").val() }, 
+							response);
+				},
+				minLength: 2,
+				select: function(event, data) {
+					$('#erpItemId').val(data.item.id);
+					$('#erpItemNama').val(data.item.label);
+				}
+			});
 
             $('#erpItemId').val('');
 			$('#erpItemNama').val('');
-			$('#erpQty').val('');
+            $('#erpQty').val('');
+            $('#erpItemNama').focus();
 		}
 
         $('.erpTable tbody').on( 'click', 'button.btnhapus', function () {
             table.row( $(this).parents('tr') ).remove().draw();
+            var inputs = document.getElementsByClassName( 'idItem' ),
+			names  = [].map.call(inputs, function( input ) {
+				return input.value;
+			});
+
+			$( "#erpItemNama" ).autocomplete({
+				source: function(request, response) {
+					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#erpItemNama").val() }, 
+							response);
+				},
+				minLength: 3,
+				select: function(event, data) {
+					$('#erpItemId').val(data.item.id);
+					$('#erpItemNama').val(data.item.label);
+				}
+			});
         });
 
         function simpan_erp(){

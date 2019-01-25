@@ -86,9 +86,17 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 														<span class="input-group-addon" style="width: 40px"><i class="fa fa-building"></i></span>
 														<select class="select2" id="trpCompId" name="trpCompId">
 															<option value="">=== PILIH OUTLET ===</option>
+															@if(Auth::user()->m_comp == "PF00000001")
 															@foreach($outlet as $toko)
 																<option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
 															@endforeach
+															@else
+															@foreach($outlet as $toko)
+																@if($toko->c_id == Auth::user()->m_comp)
+																<option value="{{ $toko->c_id }}" selected>{{ $toko->c_name }}</option>
+																@endif
+															@endforeach
+															@endif
 														</select>
 													</div>												
 												</div>
@@ -220,6 +228,32 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		});
 
 		function tambah_row(){
+			if($('#trpCompId').val() == ''){
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Masukkan Data OUTLET Harus Diisi Dulu ",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				return false;
+			}
+
+			if($('#trpItemId').val() == ''){
+				$.smallBox({
+					title : "Gagal",
+					content : "Maaf, Masukkan Data BARANG Harus Diisi Dulu ",
+					color : "#A90329",
+					timeout: 4000,
+					icon : "fa fa-times bounce animated"
+				});
+				return false;
+			}
+
+			if($('#trpQty').val() == ''){
+				$('#trpQty').val(1);
+			}
+
 			var compId = $('#trpCompId').val();
 			var compName = $('#trpCompId option:selected').text();
 			var itemId =  $('#trpItemId').val();
@@ -243,7 +277,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#trpItemNama").val() }, 
 							response);
 				},
-				minLength: 3,
+				minLength: 2,
 				select: function(event, data) {
 					$('#trpItemId').val(data.item.id);
 					$('#trpItemNama').val(data.item.label);
@@ -253,6 +287,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			$('#trpItemNama').val('');
 			$('#trpQty').val('');
+			$('#trpItemNama').focus();
 		}
 
 		$('.trpTable tbody').on( 'click', 'button.btnhapus', function () {
@@ -267,7 +302,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#trpItemNama").val() }, 
 							response);
 				},
-				minLength: 3,
+				minLength: 2,
 				select: function(event, data) {
 					$('#trpItemId').val(data.item.id);
 					$('#trpItemNama').val(data.item.label);

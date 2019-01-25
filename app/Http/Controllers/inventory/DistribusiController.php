@@ -162,9 +162,24 @@ class DistribusiController extends Controller
     {
         $id = Crypt::decrypt($id);
 
+        $comp = Auth::user()->m_comp;
+
         $data = DB::table('d_distribusi')
-                ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_item as idItem', 'd_distribusi_dt.dd_comp', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi_dt.dd_status as status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                ->select('d_distribusi.d_id as id', 'd_distribusi_dt.dd_item as idItem', 'd_distribusi_dt.dd_comp', 'd_distribusi.d_nota as nota', 'from.c_name as from',
+                    'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received',
+                    'd_distribusi_dt.dd_status as status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by',
+                    DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'), 'd_stock_mutation.sm_specificcode')
                 ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('d_stock', function($y) use ($comp){
+                    $y->on('d_distribusi_dt.dd_item', '=', 'd_stock.s_item');
+                    $y->where('s_comp', '=', $comp);
+                    $y->where('s_position', '=', $comp);
+                })
+                ->join('d_stock_mutation', function($x){
+                    $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $x->where('d_distribusi.d_nota', '=', 'd_stock_mutation.sm_nota');
+                    $x->where('d_stock_mutation.sm_detail', 'PENGURANGAN');
+                })
                 ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                 ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
                 ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
@@ -181,7 +196,7 @@ class DistribusiController extends Controller
                     return '<div class="text-center"><button disabled="disabled" class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data"><i class="glyphicon glyphicon-edit"></i></button></div>';
                 }
 
-                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="ubah(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->idItem) . '\', \'' . Crypt::encrypt($data->dd_comp) .'\', \'' . $data->nama_item .'\', \'' . $data->qty .'\', \'' . $data->qty_received .'\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
+                return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="ubah(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->idItem) . '\', \'' . Crypt::encrypt($data->dd_comp) .'\', \'' . $data->nama_item .'\', \'' . $data->qty .'\', \'' . $data->qty_received .'\', \'' . $data->sm_specificcode .'\')"><i class="glyphicon glyphicon-edit"></i></button></div>';
 
             }
 
@@ -582,7 +597,14 @@ class DistribusiController extends Controller
                     Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
 
                     // insert d_stock
-                    $sid = DB::table('d_stock')->max('s_id')+1;
+                    $sid = DB::table('d_stock')->max('s_id');
+                    if ($sid == null){
+                        $sid = 1;
+                    } else {
+                        $sid = $sid + 1;
+                    }
+
+                    // insert d_stock
                     DB::table('d_stock')->insert([
                         's_id' => $sid,
                         's_comp' => $compitem->s_comp,
@@ -592,38 +614,36 @@ class DistribusiController extends Controller
                         's_status' => 'On Going'
                     ]);
                             
-                    $stockId = DB::table('d_stock')->select('s_id')->where([
-                                    's_id' => $sid,
-                                    's_comp' => $compitem->s_comp,
-                                    's_position' => $data['outlet'],
-                                    's_item' => $compitem->s_item,
-                                    's_qty' => $data['qtyTable'][$i],
-                                    's_status' => 'On Going'
-                                ])->first();
-                    $stockId = $stockId->s_id;
+//                    $stockId = DB::table('d_stock')->select('s_id')->where([
+//                                    's_id' => $sid,
+//                                    's_comp' => $compitem->s_comp,
+//                                    's_position' => $data['outlet'],
+//                                    's_item' => $compitem->s_item,
+//                                    's_qty' => $data['qtyTable'][$i],
+//                                    's_status' => 'On Going'
+//                                ])->first();
+//                    $stockId = $stockId->s_id;
 
                     if ($data['kode'][$i] != null) {
                         $specificcode = $data['kode'][$i];
 
-                        $cnt_stockid = DB::table('d_stock_dt')->where('sd_stock', $stockId)->count()+1;
-
                         // Delete specificcode
                         DB::table('d_stock_dt')->where('sd_stock', $data['idStock'][$i])->where('sd_specificcode', $specificcode)->delete();
 
+//                        $cnt_stockid = DB::table('d_stock_dt')->where('sd_stock', $stockId)->count()+1;
+
                         // Insert stock_dt
-                        DB::table('d_stock_dt')->insert([
-                            'sd_stock' => $stockId,
-                            'sd_detailid' => $cnt_stockid,
-                            'sd_specificcode' => $specificcode
-                        ]);
+//                        DB::table('d_stock_dt')->insert([
+//                            'sd_stock' => $stockId,
+//                            'sd_detailid' => $cnt_stockid,
+//                            'sd_specificcode' => $specificcode
+//                        ]);
                         
                     } else {
                         $specificcode = null;
                     }
 
-                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_detail', 'PENAMBAHAN');
-
-                    $get_smiddetail = $count_smiddetail->get();
+                    $get_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_detail', 'PENAMBAHAN')->get();
 
                     foreach ($get_smiddetail as $key => $value) {
 
@@ -638,15 +658,16 @@ class DistribusiController extends Controller
                         if ($get_smiddetail[$key]->sm_sisa != 0) {
 
                             $sm_hpp = $get_smiddetail[$key]->sm_hpp;
+                            $sm_sell = $get_smiddetail[$key]->sm_sell;
                             array_push($arr_hpp, $sm_hpp);
 
                             $sm_reff = $get_smiddetail[$key]->sm_nota;
                             
                             if ($get_smiddetail[$key]->sm_use != 0) {
-                                $sm_use = $data['qtyTable'][$i] + $get_smiddetail[$key]->sm_use;
+                                $sm_use = $get_smiddetail[$key]->sm_use + $data['qtyTable'][$i];
                                 $sm_sisa = $get_smiddetail[$key]->sm_qty - $get_smiddetail[$key]->sm_use - $data['qtyTable'][$i];
                             } else {
-                                $sm_use = $data['qtyTable'][$i] + $get_smiddetail[$key]->sm_use;
+                                $sm_use = $get_smiddetail[$key]->sm_use + $data['qtyTable'][$i];
                                 $sm_sisa = $get_smiddetail[$key]->sm_qty - $data['qtyTable'][$i];
                             }
 
@@ -661,7 +682,7 @@ class DistribusiController extends Controller
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $data['harga'][$i],
+                                'sm_sell'           => $sm_sell,
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
@@ -673,11 +694,11 @@ class DistribusiController extends Controller
                                 'sm_sisa' => $sm_sisa
                             ]);
 
-                            // Update d_stock
-                            DB::table('d_stock')
-                            ->where('s_id', $data['idStock'][$i])
-                            ->update([
-                                's_qty' => $sm_sisa,
+                            //                    update d_stock
+                            $stockQty = DB::table('d_stock')->where('s_id', $data['idStock'][$i])->first();
+
+                            DB::table('d_stock')->where('s_id', $data['idStock'][$i])->update([
+                                's_qty' => $stockQty->s_qty - $data['qtyTable'][$i]
                             ]);
                             break;
                         }
@@ -704,6 +725,7 @@ class DistribusiController extends Controller
         } catch (DecryptException $e) {
             return view('errors/404');
         }
+
         $datas = DB::table('d_distribusi')
                 ->select('d_distribusi.d_nota as nota', 'd_distribusi.d_date as tanggal', 'm_company.c_name as tujuan', 'd_item.i_nama as nama_barang', 'd_distribusi_dt.dd_qty as qty', 'd_mem.m_name as petugas')
                 ->where('d_distribusi.d_id', $id)
