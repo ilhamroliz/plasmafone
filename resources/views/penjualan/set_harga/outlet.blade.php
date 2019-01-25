@@ -163,8 +163,7 @@
                                                             <tbody>
                                                             </tbody>
 
-                                                        </table>
-                                                                            
+														</table>            
                                                     </div>
                                                     
                                                     <div class="col-md-12 margin-bottom-10">
@@ -213,11 +212,27 @@
 			}
 		});
 
-        $('#shoTable').DataTable();
+        $('#shoTable').DataTable({ 
+			"language": dataTableLanguage,
+			"pageLength": 4,
+			"bLengthChange": false
+		});
 
 	}); 
 
     function shoModal(){
+
+		if($('#shoItemId').val() == ''){
+			$.smallBox({
+				title : "GAGAL",
+				content : "Data NAMA BARANG harus diisi...",
+				color : "#A90329",
+				timeout: 4000,
+				icon : "fa fa-times bounce animated"
+			});
+			return false;
+		}
+
         var id = $('#shoItemId').val();
 		$('#shoTable').DataTable().destroy();
 		var table = $('#shoTable').DataTable();
@@ -233,7 +248,7 @@
 				var harga = pisah[0];
 				table.row.add([
 					response.data.data[$i].c_name+'<input type="hidden" name="shoCompId[]" value="'+response.data.data[$i].c_id+'">',
-					'<input type="text" class="form-control shoCompPrice" name="shoCompPrice[]" value="'+harga+'">'
+					'<input type="text" class="form-control shoCompPrice" name="shoCompPrice[]" value="'+accounting.formatMoney(harga, "", 0, ".", ",")+'">'
 				]).draw(false);
 				$('.shoCompPrice').maskMoney({ thousands: '.', decimal: ','});
 			}
@@ -258,6 +273,17 @@
 						color : "#739E73",
 						iconSmall : "fa fa-check animated",
 						timeout : 3000
+					});
+
+				}else{
+					$('#overlay').fadeOut(200);
+					$('#shoModal').modal('hide');
+					$.smallBox({
+						title : "GAGAL",
+						content : "Maaf, Data Setting Harga Outlet gagal ditambahkan",
+						color : "#A90329",
+						timeout: 4000,
+						icon : "fa fa-times bounce animated"
 					});
 				}
 				

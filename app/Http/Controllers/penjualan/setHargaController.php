@@ -169,12 +169,13 @@ class setHargaController extends Controller
                 } else {
                     DB::beginTransaction();
                     try {
+                        $ng = strtoupper($request->namaGroup);
                         DB::table('m_group')->insert([
-                            'g_name' => strtoupper($request->namaGroup)
+                            'g_name' => $ng
                         ]);
 
                         DB::commit();
-                        Plasma::logActivity('Menambahkan Group' . $request->namaGroup);
+                        Plasma::logActivity('Menambahkan Group ' . $ng);
                         return json_encode([
                             'status' => 'sukses'
                         ]);

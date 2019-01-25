@@ -277,7 +277,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#trpItemNama").val() }, 
 							response);
 				},
-				minLength: 3,
+				minLength: 2,
 				select: function(event, data) {
 					$('#trpItemId').val(data.item.id);
 					$('#trpItemNama').val(data.item.label);
@@ -302,7 +302,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$.getJSON(baseUrl+'/penjualan/pemesanan-barang/get-item', { idItem: names, term: $("#trpItemNama").val() }, 
 							response);
 				},
-				minLength: 3,
+				minLength: 2,
 				select: function(event, data) {
 					$('#trpItemId').val(data.item.id);
 					$('#trpItemNama').val(data.item.label);

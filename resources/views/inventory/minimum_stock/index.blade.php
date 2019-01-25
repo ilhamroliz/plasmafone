@@ -745,47 +745,48 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			$.SmartMessageBox({
 				title : "Pesan !",
 				content : "Silahkan Masukkan Minimum Stock untuk mengaktifkan Stock Item ini",
-				buttons : "[Aktifkan]",
+				buttons : "[Aktifkan][Batal]",
 				input : "text",
+				inputValue : "",
 				placeholder : "Masukkan Minimum Stock"
 			}, function(ButtonPress, Value) {
+				if(ButtonPress === "Aktifkan"){
 
-				$('#overlay').fadeIn(200);
-				$('#load-status-text').text('Sedang Menyimpan Perubahan Data...');
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menyimpan Perubahan Data...');
+	
+					axios.post(baseUrl+'/inventory/min-stock/active', { min: Value, id: id}).then((response) => {
+						
+						if(response.data.status == 'saSukses'){
+	
+							waTab.ajax.reload();
+							naTab.ajax.reload();
+							aTab.ajax.reload();
+	
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Stock Item Berhasil DiAktifkan !',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+	
+						}else{
+	
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Maaf, Aktivasi Stock Item Gagal",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+	
+						}
+					})
 
-				axios.post(baseUrl+'/inventory/min-stock/active', { min: Value, id: id}).then((response) => {
-					
-					if(response.data.status == 'saSukses'){
-
-						waTab.destroy();
-						get_warning();
-						naTab.destroy();
-						get_nonactive();
-						aTab.destroy();
-						get_active();
-
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "Berhasil",
-							content : 'Stock Item Berhasil DiAktifkan !',
-							color : "#739E73",
-							timeout: 4000,
-							icon : "fa fa-check bounce animated"
-						});
-
-					}else{
-
-						$('#overlay').fadeOut(200);
-						$.smallBox({
-							title : "Gagal",
-							content : "Maaf, Aktivasi Stock Item Gagal",
-							color : "#A90329",
-							timeout: 4000,
-							icon : "fa fa-times bounce animated"
-						});
-
-					}
-				})
+				}
 
 			});
         }
