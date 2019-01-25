@@ -378,21 +378,9 @@
         kodespesifikGlobal = data.sd_specificcode;
         spesifikGlobal = data.i_specificcode;
         kodeGlobal = data.sm_specificcode;
-        arrKodeGlobal.push(data.i_code);
         arrCode.push(data.i_code);
         arrIdStock.push(data.s_id);
         setArrayId();
-    }
-
-    function cekIsiArrayItem(data){
-        var hitung = arrCode.length;
-        var kirim;
-        for (var i = 0; i <= hitung; i++) {
-            if (arrCode[i] == data) {
-               return 'sudah';
-            }
-        }
-        return 'lanjut';
     }
 
     function setSearch(){
@@ -424,7 +412,7 @@
         return false;
     })
 
-    $("#cari-stock").on('keypress',function(e) {
+    $("#cari-stock").on('keyup',function(e) {
 
         if(e.which === 13) {
             var specificcode = $(this).val();
@@ -434,7 +422,6 @@
                 var qty = parseInt(kuantitas) + 1;
                 var hrg = $("."+specificcode).val();
                 hrg = parseInt(hrg);
-                var tothrg = qty * hrg;
                 var discPercent = $(".discp-"+specificcode).val();
                     discPercent = discPercent.replace("%", "");
                 var discValue = $(".discv-"+specificcode).val();
@@ -712,6 +699,11 @@
                 return input.value.toString();
             });
         arrKodeGlobal = code;
+        arrCode = code;
+    }
+
+    function setArrayCode() {
+
     }
 
     function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
@@ -764,7 +756,6 @@
     function ubahQty(stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {
         stock = parseInt(stock);
 
-        var total = 0;
         var harga = 0;
         var input = parseInt($('#'+inputQty).val());
         var discPercent = $("#"+discp).val().replace("%", "");
@@ -804,7 +795,6 @@
             harga += input * awalHarga - discValue;
         }
 
-        
         $('#'+grossItem).val(input * awalHarga);
         $('#'+totalItem).val(harga);
         $("#"+lbltotalItem).text(convertToRupiah(parseInt(harga)));
