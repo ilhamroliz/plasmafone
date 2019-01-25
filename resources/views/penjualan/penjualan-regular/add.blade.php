@@ -364,7 +364,7 @@
         stockGlobal = data.s_qty;
 
         iCode = data.i_code;
-        console.log(data.i_code);
+
         if(data.gp_price != null) {
             price = data.gp_price;
         } else if (data.op_price != null) {
@@ -700,10 +700,6 @@
             });
         arrKodeGlobal = code;
         arrCode = code;
-    }
-
-    function setArrayCode() {
-
     }
 
     function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
