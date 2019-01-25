@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="roliz">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +15,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="42" />
+          <entry key="project.closed" value="43" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.181" value="1" />
@@ -678,15 +676,21 @@
       <option name="project" value="LOCAL" />
       <updated>1548216136314</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="roliz">
+      <created>1548325603584</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1548325603584</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="219291000" />
+    <option name="totallyTimeSpent" value="219900000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1969697" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
