@@ -394,6 +394,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/pembelian/rencana-pembelian/editDumy', 'PembelianController@editDumy');
     Route::get('/pembelian/rencana-pembelian/getComp_plan', 'PembelianController@getComp_plan');
 
+    Route::get('/pembelian/rencana-pembelian/tambahrencana_view', 'PembelianController@tambahrencana_view');
+
 	// End Rencana Pembelian
 
 	// Konfirmasi Pembelian page

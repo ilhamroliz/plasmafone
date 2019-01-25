@@ -124,7 +124,6 @@
                                             <thead>
                                             <tr>
                                                 <th class="text-center" data-hide="phone,tablet" width="1%">No</th>
-                                                <th class="text-center">Nama Outlet</th>
                                                 <th class="text-center" data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                 <th class="text-center" data-hide="phone,tablet" width="5%">Qty</th>
                                                 <th class="text-center" data-hide="phone,tablet" width="10%">Status</th>
@@ -338,7 +337,6 @@
                     },
                 "columns":[
                     {"data": "ro_id"},
-                    {"data": "c_name"},
                     {"data": "i_nama"},
                     {"data": "ro_qty"},
                     {"data": "ro_state"},

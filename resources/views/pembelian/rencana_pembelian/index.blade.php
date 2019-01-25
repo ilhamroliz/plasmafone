@@ -10,12 +10,12 @@
     <!-- RIBBON -->
     <div id="ribbon">
 
-	<span class="ribbon-button-alignment"> 
+	<span class="ribbon-button-alignment">
 		<span id="refresh" class="btn btn-ribbon" data-title="refresh" rel="tooltip" data-placement="bottom"
               data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.."
               data-html="true" onclick="location.reload()">
 			<i class="fa fa-refresh"></i>
-		</span> 
+		</span>
 	</span>
 
         <!-- breadcrumb -->
@@ -102,7 +102,7 @@
                                                                          class="fa fa-lg fa-check"></i> <span
                                             class="hidden-mobile hidden-tablet"> Confirm </span></a>
                                 </li>
-                                
+
                             </ul>
                         </header>
                         <!-- widget div-->
@@ -115,15 +115,17 @@
                                         <table id="dt_menunggu" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
-                                            <tr>
-                                                
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
-                                            </tr>
+                                                <tr>
+
+                                                    <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                    <th width="30%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" width="15%">Qty</th>
+                                                    <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
+                                                </tr>
                                             </thead>
+
                                             <tbody>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -131,18 +133,20 @@
                                         <table id="dt_disetujui" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
-                                            <tr>
-                                                <th data-hide="phone,tablet" width="15%">Outlet</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
-                                            </tr>
+                                                <tr>
+                                                    <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                    <th width="30%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" width="15%">Qty</th>
+                                                    <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
+                                                </tr>
                                             </thead>
+
                                             <tbody>
+
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                                 <!-- end widget body text-->
 
@@ -195,8 +199,8 @@
                 // "fnCreatedRow": function (row, data, index) {
                 //     $('td', row).eq(0).html(index + 1);
                 //     },
-                "columns":[    
-                    
+                "columns":[
+
                     {"data": "c_name"},
                     {"data": "i_nama"},
                     {"data": "pr_qtyApp"}
@@ -230,8 +234,8 @@
                     // "fnCreatedRow": function (row, data, index) {
                     // $('th', row).eq(0).html(index + 1);
                     // },
-                    "columns":[  
-                        
+                    "columns":[
+
                         {"data": "c_name"},
                         {"data": "i_nama"},
                         {"data": "pr_qtyApp"},
@@ -267,8 +271,8 @@
                         // "fnCreatedRow": function (row, data, index) {
                         // $('td', row).eq(0).html(index + 1);
                         // },
-                        "columns":[     
-                            
+                        "columns":[
+
                             {"data": "c_name"},
                             {"data": "i_nama"},
                             {"data": "pr_qtyApp"},
@@ -303,8 +307,8 @@
                         // "fnCreatedRow": function (row, data, index) {
                         // $('td', row).eq(0).html(index + 1);
                         // },
-                        "columns":[     
-                            
+                        "columns":[
+
                             {"data": "c_name"},
                             {"data": "i_nama"},
                             {"data": "pr_qtyApp"},
