@@ -823,5 +823,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('keuangan/coa/kelompok', 'keuangan\keuangan@index_kelompok');
     Route::get('keuangan/coa/bukubesar', 'keuangan\keuangan@index_buku_besar');
     Route::get('keuangan/coa/sub_bukubesar', 'keuangan\keuangan@index_sub_buku_besar');
+    Route::POST('/keuangan/keuangan/viewCoa_sub_buku_besar', 'keuangan\keuangan@viewCoa_sub_buku_besar');
+    Route::POST('/keuangan/keuangan/get_coaJenis', 'keuangan\keuangan@get_coaJenis');
+    Route::POST('/keuangan/keuangan/get_coaKelompok', 'keuangan\keuangan@get_coaKelompok');
+    Route::POST('/keuangan/keuangan/get_coaBb', 'keuangan\keuangan@get_coaBb');
+    Route::POST('/keuangan/keuangan/get_detail_bb', 'keuangan\keuangan@get_detail_bb');
+    Route::POST('/keuangan/keuangan/add_sub_buku_besar', 'keuangan\keuangan@add_sub_buku_besar');
 
 });

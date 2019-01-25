@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="roliz">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/RefundController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/RefundController.php" afterDir="false" />
-    </list>
+    <list default="true" id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,7 +15,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="42" />
+          <entry key="project.closed" value="43" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.181" value="1" />
@@ -109,83 +106,32 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10563">
-              <caret line="505" column="70" selection-start-line="505" selection-start-column="70" selection-end-line="505" selection-end-column="70" />
+            <state relative-caret-position="107">
+              <caret line="367" lean-forward="true" selection-start-line="367" selection-end-line="367" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-<<<<<<< HEAD
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="466">
-              <caret line="958" column="60" selection-start-line="958" selection-start-column="60" selection-end-line="958" selection-end-column="60" />
-              <folding>
-                <element signature="e#393#486#0#PHP" />
-                <element signature="e#492#589#0#PHP" />
-                <element signature="e#595#686#0#PHP" />
-                <element signature="e#791#1521#0#PHP" />
-                <element signature="e#2291#3398#0#PHP" />
-                <element signature="e#14078#14493#0#PHP" />
-                <element signature="e#14499#16299#0#PHP" />
-                <element signature="e#249#255#1" expanded="true" />
-                <element signature="e#472#478#1" expanded="true" />
-                <element signature="e#16305#18099#0#PHP" />
-                <element signature="e#249#255#1" expanded="true" />
-                <element signature="e#472#478#1" expanded="true" />
-                <element signature="e#18105#18760#0#PHP" />
-                <element signature="e#18766#20806#0#PHP" />
-                <element signature="e#20812#22764#0#PHP" />
-                <element signature="e#45706#45852#0#PHP" />
-                <element signature="e#47462#47611#0#PHP" />
-                <element signature="e#47617#49170#0#PHP" />
-                <element signature="e#49176#53723#0#PHP" />
-=======
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RefundController.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="294">
-              <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
+              <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
               <folding>
                 <element signature="e#40#68#0#PHP" expanded="true" />
->>>>>>> d25a66162e7c8ee35d3edcd16671c0e906b9628b
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-<<<<<<< HEAD
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/struk.blade.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="222">
-              <caret line="691" column="13" lean-forward="true" selection-start-line="691" selection-start-column="13" selection-end-line="691" selection-end-column="13" />
-              <folding>
-                <element signature="e#23685#26171#0#HTML" />
-                <element signature="e#35184#35406#0#HTML" />
-                <element signature="e#35477#36427#0#HTML" />
-                <element signature="e#36498#37003#0#HTML" />
-                <element signature="e#37104#38521#0#HTML" />
-                <element signature="e#38546#38632#0#HTML" />
-                <element signature="e#38671#39689#0#HTML" />
-                <element signature="e#39722#41380#0#HTML" />
-                <element signature="e#41413#44361#0#HTML" />
-                <element signature="e#44428#44581#0#HTML" />
-              </folding>
-=======
         <entry file="file://$PROJECT_DIR$/resources/views/pembelian/refund/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="197">
               <caret line="98" column="76" lean-forward="true" selection-start-line="98" selection-start-column="76" selection-end-line="98" selection-end-column="76" />
->>>>>>> d25a66162e7c8ee35d3edcd16671c0e906b9628b
             </state>
           </provider>
         </entry>
@@ -224,14 +170,6 @@
       <find>try</find>
       <find>suks</find>
       <find>$supp</find>
-<<<<<<< HEAD
-      <find>arrCode</find>
-      <find>arrKodeGlobal</find>
-      <find>hapus</find>
-      <find>sd_stock_mutation.m_detail</find>
-      <find>setArrayId</find>
-=======
->>>>>>> d25a66162e7c8ee35d3edcd16671c0e906b9628b
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -414,7 +352,7 @@
       <path value="$PROJECT_DIR$/vendor/laravelcollective/html" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="10" />
     <option name="y" value="20" />
     <option name="width" value="1346" />
@@ -738,19 +676,21 @@
       <option name="project" value="LOCAL" />
       <updated>1548216136314</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="roliz">
+      <created>1548325603584</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1548325603584</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-<<<<<<< HEAD
-    <option name="totallyTimeSpent" value="226966000" />
-=======
-    <option name="totallyTimeSpent" value="218683000" />
->>>>>>> d25a66162e7c8ee35d3edcd16671c0e906b9628b
+    <option name="totallyTimeSpent" value="219900000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1366" height="732" extended-state="7" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1366" height="732" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1969697" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -787,10 +727,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="roliz" />
   </component>
   <component name="editorHistoryManager">
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/node_modules/jquery/src/effects.js" />
-    <entry file="file://$PROJECT_DIR$/node_modules/jquery/src/ajax.js" />
-=======
     <entry file="file://$PROJECT_DIR$/resources/views/dashboard.blade.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -857,7 +793,6 @@
         </state>
       </provider>
     </entry>
->>>>>>> d25a66162e7c8ee35d3edcd16671c0e906b9628b
     <entry file="file://$PROJECT_DIR$/resources/views/master/member/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
@@ -1119,44 +1054,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10563">
-          <caret line="505" column="70" selection-start-line="505" selection-start-column="70" selection-end-line="505" selection-end-column="70" />
+        <state relative-caret-position="107">
+          <caret line="367" lean-forward="true" selection-start-line="367" selection-end-line="367" />
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="508" column="17" selection-start-line="508" selection-start-column="17" selection-end-line="508" selection-end-column="17" />
-          <folding>
-            <element signature="e#24489#27213#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="691" column="13" lean-forward="true" selection-start-line="691" selection-start-column="13" selection-end-line="691" selection-end-column="13" />
-          <folding>
-            <element signature="e#23685#26171#0#HTML" />
-            <element signature="e#35184#35406#0#HTML" />
-            <element signature="e#35477#36427#0#HTML" />
-            <element signature="e#36498#37003#0#HTML" />
-            <element signature="e#37104#38521#0#HTML" />
-            <element signature="e#38546#38632#0#HTML" />
-            <element signature="e#38671#39689#0#HTML" />
-            <element signature="e#39722#41380#0#HTML" />
-            <element signature="e#41413#44361#0#HTML" />
-            <element signature="e#44428#44581#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/struk.blade.php">
-      <provider selected="true" editor-type-id="text-editor" />
-=======
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/manajemenPenggunaController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="302">
@@ -1170,39 +1072,13 @@
           <caret line="98" column="76" lean-forward="true" selection-start-line="98" selection-start-column="76" selection-end-line="98" selection-end-column="76" />
         </state>
       </provider>
->>>>>>> d25a66162e7c8ee35d3edcd16671c0e906b9628b
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/RefundController.php">
       <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-        <state relative-caret-position="466">
-          <caret line="958" column="60" selection-start-line="958" selection-start-column="60" selection-end-line="958" selection-end-column="60" />
-          <folding>
-            <element signature="e#393#486#0#PHP" />
-            <element signature="e#492#589#0#PHP" />
-            <element signature="e#595#686#0#PHP" />
-            <element signature="e#791#1521#0#PHP" />
-            <element signature="e#2291#3398#0#PHP" />
-            <element signature="e#14078#14493#0#PHP" />
-            <element signature="e#14499#16299#0#PHP" />
-            <element signature="e#249#255#1" expanded="true" />
-            <element signature="e#472#478#1" expanded="true" />
-            <element signature="e#16305#18099#0#PHP" />
-            <element signature="e#249#255#1" expanded="true" />
-            <element signature="e#472#478#1" expanded="true" />
-            <element signature="e#18105#18760#0#PHP" />
-            <element signature="e#18766#20806#0#PHP" />
-            <element signature="e#20812#22764#0#PHP" />
-            <element signature="e#45706#45852#0#PHP" />
-            <element signature="e#47462#47611#0#PHP" />
-            <element signature="e#47617#49170#0#PHP" />
-            <element signature="e#49176#53723#0#PHP" />
-=======
         <state relative-caret-position="294">
-          <caret line="23" column="27" selection-start-line="23" selection-start-column="27" selection-end-line="23" selection-end-column="27" />
+          <caret line="20" column="5" lean-forward="true" selection-start-line="20" selection-start-column="5" selection-end-line="20" selection-end-column="5" />
           <folding>
             <element signature="e#40#68#0#PHP" expanded="true" />
->>>>>>> d25a66162e7c8ee35d3edcd16671c0e906b9628b
           </folding>
         </state>
       </provider>
