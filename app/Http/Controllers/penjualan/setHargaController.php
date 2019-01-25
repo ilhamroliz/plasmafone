@@ -116,7 +116,7 @@ class setHargaController extends Controller
             ->whereRaw('i_nama like "%' . $term . '%"')
             ->orWhereRaw('concat(coalesce(i_code, ""), " ", coalesce(i_nama, "")) like "%' . $term . '%"')
             ->orderBy('pd_detailid', 'desc')
-            ->groupBy('pd_item')
+            ->groupBy('i_id')
             ->take(50)->get();
 
         if ($select == null) {
