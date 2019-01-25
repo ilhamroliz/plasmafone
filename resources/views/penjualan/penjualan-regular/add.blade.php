@@ -87,7 +87,7 @@
                                                             <div class="icon-addon addon-md">
                                                                 <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
                                                                 <input type="hidden" value="" class="idMember" id="idMember" name="idMember">
-                                                                <input type="text" name="id_group" id="id_group">
+                                                                <input type="hidden" name="id_group" id="id_group">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
