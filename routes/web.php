@@ -319,11 +319,10 @@ Route::group(['middleware' => 'auth'], function () {
 	// Request Order
 
     Route::get('/pembelian/request-pembelian/t', 'PembelianController@menunggu');
-
-    Route::post('/pembelian/request-pembelian/a', 'PembelianController@all');
+    Route::get('/pembelian/request-pembelian/proses', 'PembelianController@requestProses');
+    Route::post('/pembelian/request-pembelian/proses', 'PembelianController@requestProses');
     Route::get('/pembelian/request-pembelian/tolak', 'PembelianController@requestTolak');
-
-    Route::get('/pembelian/request-pembelian/a', 'PembelianController@all');
+    Route::post('/pembelian/request-pembelian/tolak', 'PembelianController@requestTolak');
 
 	// 1
     Route::get('/pembelian/request-pembelian', 'PembelianController@request_order');

@@ -119,7 +119,8 @@
 
                                                     <th data-hide="phone,tablet" width="15%">Outlet</th>
                                                     <th width="30%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="15%">Qty</th>
+                                                    <th data-hide="phone,tablet" width="10%">Qty</th>
+                                                    <th width="15%">Aksi</th>
                                                     <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
                                                 </tr>
                                             </thead>
@@ -203,7 +204,8 @@
 
                     {"data": "c_name"},
                     {"data": "i_nama"},
-                    {"data": "pr_qtyApp"}
+                    {"data": "pr_qtyApp"},
+                    {"data": "aksi"}
                 ],
                 "autoWidth" : true,
                 "language" : dataTableLanguage,
