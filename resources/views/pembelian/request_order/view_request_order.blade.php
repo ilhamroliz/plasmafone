@@ -104,8 +104,8 @@
                                             class="hidden-mobile hidden-tablet"> DiProses </span></a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#hr3"> <i style="color: #C79121;"
-                                                                         class="fa fa-lg fa-cross"></i> <span
+                                    <a data-toggle="tab" href="#hr3"> <i style="color: #b5201d;"
+                                                                         class="fa fa-lg fa-ban"></i> <span
                                             class="hidden-mobile hidden-tablet"> DiTolak </span></a>
                                 </li>
 
@@ -123,8 +123,8 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                <th class="text-center" data-hide="phone,tablet" width="1%">No</th>
-                                                <th class="text-center" data-hide="phone,tablet" width="35%">Nama Barang</th>
+                                                <th class="text-center" data-hide="phone,tablet" width="25%">Tanggal Request</th>
+                                                <th class="text-center" data-hide="phone,tablet" width="45%">Nama Barang</th>
                                                 <th class="text-center" data-hide="phone,tablet" width="5%">Qty</th>
                                                 <th class="text-center" data-hide="phone,tablet" width="10%">Status</th>
                                                 <th class="text-center" data-hide="phone,tablet" width="15%">Aksi</th>
@@ -138,60 +138,79 @@
                                     </div>
 
                                     <div class="tab-pane fade" id="hr2">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 text-right" style="margin-top:1%;margin-bottom:1%">
-                                        <div class="col-md-4 pull-right" >
-											<div class="input-group" id="date-range" style="">
-												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
-												<span class="input-group-addon bg-custom text-white b-0">ke</span>
-												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 text-left" style="margin-top:1%;margin-bottom:1%">
+                                            <div class="col-md-4 pull-left" style="padding-left: 0;">
+    											<div class="input-group input-daterange" id="date-range" style="">
+    												<input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+    												<span class="input-group-addon bg-custom text-white b-0">Sampai</span>
+    												<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 
-                                            </div>
-										</div>
-                                        <div class="col-md-7 pull-right">
-											<div class="form-group">
-												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()" >
-													<i class="fa fa-search"></i>
-												</button>
-											</div>
-										</div>
-                                    </div>
-                                        <table id="dt_all" class="table table-striped table-bordered table-hover"
+                                                </div>
+    										</div>
+                                            <div class="col-md-7 pull-left">
+    											<div class="form-group">
+    												<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()" >
+    													<i class="fa fa-search"></i>
+    												</button>
+    											</div>
+    										</div>
+                                        </div>
+                                        <table id="dt_proses" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
-                                            <tr>
-                                                <th data-hide="phone,tablet" width="1%">No</th>
-                                                <th >Nama Outlet</th>
-                                                <th data-hide="phone,tablet" width="35%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" >Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
-                                                <!-- <th data-hide="phone,tablet" >Jml</th>
+                                                <tr>
 
-                                                <th data-hide="phone,tablet" >Aksi</th> -->
+                                                    <th data-hide="phone,tablet" width="1%">No</th>
+                                                    <th >Nama Outlet</th>
+                                                    <th data-hide="phone,tablet" width="35%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" >Qty</th>
+                                                    <th data-hide="phone,tablet" width="15%">Status</th>
 
-                                            </tr>
+                                                </tr>
                                             </thead>
+
                                             <tbody>
+
                                             </tbody>
                                         </table>
                                     </div>
 
                                     <div class="tab-pane fade" id="hr3">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 text-left" style="margin-top:1%;margin-bottom:1%">
+                                            <div class="col-md-4 pull-left" style="padding-left: 0;">
+                                                <div class="input-group input-daterange" id="date-range" style="">
+                                                    <input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+                                                    <span class="input-group-addon bg-custom text-white b-0">Sampai</span>
+                                                    <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-7 pull-left">
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="search()" >
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <table id="dt_tolak" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
-                                            <tr>
-                                                <th data-hide="phone,tablet" width="1%" >No</th>
-                                                <th >Nama Outlet</th>
-                                                <th data-hide="phone,tablet" width="35%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" >Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
-                                                <!-- <th data-hide="phone,tablet" >Jml</th>
+                                                <tr>
+                                                    <th data-hide="phone,tablet" width="1%" >No</th>
+                                                    <th >Nama Outlet</th>
+                                                    <th data-hide="phone,tablet" width="35%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" >Qty</th>
+                                                    <th data-hide="phone,tablet" width="15%">Status</th>
+                                                    <!-- <th data-hide="phone,tablet" >Jml</th>
 
-                                                <th data-hide="phone,tablet" >Aksi</th> -->
+                                                    <th data-hide="phone,tablet" >Aksi</th> -->
 
-                                            </tr>
+                                                </tr>
                                             </thead>
+
                                             <tbody>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -272,7 +291,7 @@
 
 
 	<script type="text/javascript">
-		var menunggu, diproses, semua,inaktif, table_proses;
+		var menunggu, diproses, semua, inaktif, table_proses, table_tolak;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -294,8 +313,7 @@
 			format: 'dd/mm/yyyy',
 			prevText: '<i class="fa fa-chevron-left"></i>',
 			nextText: '<i class="fa fa-chevron-right"></i>',
-			autoclose: true,
-			todayHighlight: true
+            autoclose: true
 		});
 
 		$( "#tgl_akhir" ).datepicker({
@@ -303,9 +321,12 @@
 			format: 'dd/mm/yyyy',
 			prevText: '<i class="fa fa-chevron-left"></i>',
 			nextText: '<i class="fa fa-chevron-right"></i>',
-			autoclose: true,
-			todayHighlight: true
+            autoclose: true
 		});
+
+        $('#date-range').datepicker({
+            todayHighlight: true
+        });
 
             $('#overlay').fadeIn(200);
             $('#load-status-text').text('Sedang Menyiapkan...');
@@ -332,11 +353,11 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/request-pembelian/t') }}",
-                "fnCreatedRow": function (row, data, index) {
+              /*  "fnCreatedRow": function (row, data, index) {
                     $('td', row).eq(0).html(index + 1);
-                    },
+                    },*/
                 "columns":[
-                    {"data": "ro_id"},
+                    {"data": "ro_date"},
                     {"data": "i_nama"},
                     {"data": "ro_qty"},
                     {"data": "ro_state"},
@@ -362,44 +383,42 @@
             $('#overlay').fadeOut(200);
             }, 500);
 
+            // setTimeout(function () {
 
-            setTimeout(function () {
+            // tolak = $('#dt_tolak').dataTable({
+            //     "processing": true,
+            //     "serverSide": true,
+            //     "ajax": "{{ url('/pembelian/request-pembelian/tolak') }}",
 
-            tolak = $('#dt_tolak').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('/pembelian/request-pembelian/tolak') }}",
-                "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
-                    },
-                "columns":[
-                    {"data": "pr_id"},
-                    {"data": "c_name"},
-                    {"data": "i_nama"},
-                    {"data": "pr_qtyReq"},
-                    {"data": "pr_stsReq"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tolak'), breakpointDefinition);
-                    }
-                },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-            $('#overlay').fadeOut(200);
-            }, 500);
+            //     "columns":[
+            //         {"data": "ro_date"},
+            //         {"data": "c_name"},
+            //         {"data": "i_nama"},
+            //         {"data": "ro_qty"},
+            //         {"data": "status"}
+            //     ],
+            //     "autoWidth" : true,
+            //     "language" : dataTableLanguage,
+            //     "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+            //     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+            //     "preDrawCallback" : function() {
+
+            //         if (!responsiveHelper_dt_basic) {
+            //             responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tolak'), breakpointDefinition);
+            //         }
+            //     },
+            //     "rowCallback" : function(nRow) {
+            //         responsiveHelper_dt_basic.createExpandIcon(nRow);
+            //     },
+            //     "drawCallback" : function(oSettings) {
+            //         responsiveHelper_dt_basic.respond();
+            //     }
+            // });
+            // $('#overlay').fadeOut(200);
+            // }, 500);
 
             tampil_diproses();
+            tampil_ditolak();
 
 
 
@@ -415,25 +434,43 @@
 		}
 
         function tampil_diproses(){
-                table_proses= $('#dt_all').DataTable({
-                    "ajax": {
-                                "url": '{{url('/pembelian/request-pembelian/a')}}',
-                                "type": 'post',
-                                "data": function ( data ) {
-                                    data.tgl_akhir = $('#tgl_akhir').val();
-                                    data.tgl_awal = $('#tgl_awal').val();
-                                    data._token = '{{ csrf_token() }}';
-                                },
-                            },
-                    "fnCreatedRow": function (row, data, index) {
-                        $('td', row).eq(0).html(index + 1);
-                        },
-                    } );
+            table_proses= $('#dt_proses').DataTable({
+                "ajax": {
+                    "url": '{{url('/pembelian/request-pembelian/proses')}}',
+                    "type": 'post',
+                    "data": function ( data ) {
+                        data.tgl_akhir = $('#tgl_akhir').val();
+                        data.tgl_awal  = $('#tgl_awal').val();
+                        data._token    = '{{ csrf_token() }}';
+                    },
+                }
+                    // "fnCreatedRow": function (row, data, index) {
+                    //     $('td', row).eq(0).html(index + 1);
+                    //     },
+            });
 
-            };
+        };
+
+        function tampil_ditolak(){
+            table_tolak= $('#dt_tolak').DataTable({
+                "ajax": {
+                    "url": '{{url('/pembelian/request-pembelian/tolak')}}',
+                    "type": 'post',
+                    "data": function ( data ) {
+                        data.tgl_akhir = $('#tgl_akhir').val();
+                        data.tgl_awal  = $('#tgl_awal').val();
+                        data._token    = '{{ csrf_token() }}';
+                    },
+                }
+                    // "fnCreatedRow": function (row, data, index) {
+                    //     $('td', row).eq(0).html(index + 1);
+                    //     },
+            });
+        }
 
         function search(){
             table_proses.ajax.reload(null, false);
+            table_tolak.ajax.reload(null, false);
         }
 
 
@@ -743,7 +780,7 @@
 
 		function statusnonactive(id){
 			$.SmartMessageBox({
-				title : "Pesan!",
+				title   : "Pesan!",
 				content : 'Apakah Anda yakin akan menonaktifkan data member ini ? ',
 				buttons : '[Batal][Ya]'
 			}, function(ButtonPressed) {
@@ -821,97 +858,13 @@
 			});
 		}
 
-	</script>
-
-
-    <!-- <script type="text/javascript">
-
-        var  table_requestOrder;
-
-
-            $(document).ready(function () {
-                load_table_request_order();
-
+        $(document).ready(function () {
+            $('#date-range-p').datepicker({
+                autoclose: true,
+                todayHighlight: true
             });
+        })
 
-            function load_table_request_order(){
-                table_requestOrder= $('#requestOrder_table').DataTable({
-                    "ajax": {
-                                "url": '{{url('/pembelian/request-pembelian/tampilData')}}',
-                                "type": 'GET',
-                                "data": function ( data ) {
-                                },
-                            },
-                    } );
-
-            };
-
-            function reload_table_requestOrder(){
-                table_requestOrder.ajax.reload(null, false);
-
-            };
-
-            function getKelompok_item(){
-                $.ajax({
-                          url : '{{url('/pembelian/request-pembelian/getKelompok_item')}}',
-                          type: "GET",
-                          data: {
-
-                          },
-                          dataType: "JSON",
-                          success: function(data)
-                          {
-                            $('#item_kelompok').empty();
-                            row = "<option selected='' value='0'>Pilih Kelompok</option>";
-                            $(row).appendTo("#item_kelompok");
-                            $.each(data, function(k, v) {
-                              row = "<option value='"+v.ID_KAB+"'>"+v.NAMA_KABUPATEN+"</option>";
-                              $(row).appendTo("#item_kelompok");
-                            });
-                          },
-
-                      });
-            }
-
-            function getItem(){
-                $.ajax({
-                          url : '{{url('/pembelian/request-pembelian/getItem')}}',
-                          type: "GET",
-                          data: {
-                            "kelompok" : $('#item_kelompok').val()
-                          },
-                          dataType: "JSON",
-                          success: function(data)
-                          {
-                            $('#item_id').empty();
-                            row = "<option selected='' value='0'>Pilih Item</option>";
-                            $(row).appendTo("#item_id");
-                            $.each(data, function(k, v) {
-                              row = "<option value='"+v.ID_KAB+"'>"+v.NAMA_KABUPATEN+"</option>";
-                              $(row).appendTo("#item_id");
-                            });
-                          },
-
-                      });
-            }
-
-            function showItem(){
-                $.ajax({
-                          url : '{{url('/pembelian/request-pembelian/showItem')}}',
-                          type: "GET",
-                          data: {
-                            "item_id" : $('#item_id').val()
-                          },
-                          dataType: "JSON",
-                          success: function(data)
-                          {
-
-                            $('#item_id').val(data.MERK);
-
-                          },
-
-                      });
-            }
-    </script> -->
+	</script>
 
 @endsection
