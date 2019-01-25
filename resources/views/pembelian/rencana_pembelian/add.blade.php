@@ -2,7 +2,7 @@
 
 @section('title', 'Master Barang')
 
-<?php 
+<?php
 	use App\Http\Controllers\PlasmafoneController as Access;
 
 	function rupiah($angka){
@@ -90,7 +90,7 @@
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -108,55 +108,71 @@
 			<div class="row">
 
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					
+
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
                     <header role="heading">
-                        
+
                         <h2><strong>Tambah Rencana Pembelian</strong></h2>
 
                     <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
 						<!-- widget div-->
 						<div>
-							
+
 							<!-- widget content -->
-							
+
 							<div class="widget-body no-padding">
 
 								<!-- widget body text-->
-								
+
 								<div class="tab-content padding-10">
-								<div class="form-group col-md-6">
-                                            <select class="form-control col-md-12" name="" id="dt_supplier" style="padding-right:50%" onchange="reload_table()">
-                                                <option selected="" value="semua">----Pilih Semua Outlet----</option>
-                                            </select>
-                                        </div>
 
 									<div class="tab-pane fade in active" id="hr1">
-										
+
 										<table id="dt_tambah" class="table table-striped table-bordered table-hover" width="100%">
 
-											<thead>			                
-
+											<thead>
 												<tr>
-                                                    <th data-hide="phone,tablet">No</th>
-                                                    <th data-hide="phone,tablet">Nama Outlet</th>
-                                                    <th data-hide="phone,tablet">Nama Barang</th>
-                                                    <th data-hide="phone,tablet">Qty</th>
-													<th data-hide="phone,tablet">Qty App</th>
-                                                    <th data-hide="phone,tablet">Aksi</th>
-
+													<th>Tanggal Request</th>
+                                                    <th>Nama Outlet</th>
+                                                    <th>Nama Barang</th>
+                                                    <th>Qty</th>
+													<th class="text-center">Qty App</th>
+                                                    <th class="text-center">Aksi</th>
 												</tr>
-
 											</thead>
 
 											<tbody>
-												
+												@foreach($request as $req)
+												<tr>
+													<td>{{$req->ro_date}}</td>
+													<td>{{$req->c_name}}</td>
+													<td>{{$req->i_nama}}</td>
+													<td width="5%">{{$req->ro_qty}}</td>
+													<td width="5%">
+														<div class="text-center">
+															<input type="hidden" name="req_id[]" value="{{$req->ro_id}}">
+															<input type="hidden" name="item_id[]" value="{{$req->i_id}}">
+															<input type="number" min="1" class="form-control" name="qtyApp[]" id="qty-{{$req->ro_id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->ro_id}}')" value="{{$req->ro_qty}}"/>
+														</div>
+													</td>
+													<td width="10%">
+														<div class="text-center">
+															<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
+																<i class="glyphicon glyphicon-edit"></i>
+															</button>&nbsp;
+															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus">
+																<i class="glyphicon glyphicon-trash"></i>
+															</button>
+														</div>
+													</td>
+												</tr>
+												@endforeach
 											</tbody>
 
 										</table>
-										
+
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -167,22 +183,22 @@
                                     </div>
 
 								</div>
-								
+
 								<!-- end widget body text-->
-								
+
 								<!-- widget footer -->
 								<div class="widget-footer text-right">
-								
-									
+
+
 								</div>
 								<!-- end widget footer -->
-								
+
 							</div>
 							<!-- end widget content -->
-							
+
 						</div>
 						<!-- end widget div -->
-							
+
 					</div>
 
 				</div>
@@ -226,7 +242,7 @@
 							<img id="dt_image" src="">
 
 						</div>
-		
+
 						<div class="row">
 
 							<!-- Widget ID (each widget will need unique ID)-->
@@ -245,9 +261,9 @@
 
 									<!-- widget content -->
 									<div class="widget-body no-padding">
-										
+
 										<div class="table-responsive">
-											
+
 											<table class="table">
 												<tbody>
 
@@ -332,7 +348,7 @@
 														<td><strong>:</strong></td>
 														<td >
 															<div class="form-group">
-																
+
 																<input type="text" class="form-control" id="dt_qtyApp"  placeholder="QTY" style="width: 100%" >
 															</div>
 								  						</td>
@@ -352,26 +368,26 @@
 												</tbody>
 
 											</table>
-											
+
 										</div>
-                                        
+
 									</div>
 									<!-- end widget content -->
 
 								</div>
 								<!-- end widget div -->
-                                
+
 							</div>
 							<!-- end widget -->
                             <div class="form-group col-md-12 text-right">
-                                            
+
                                             <button class="btn btn-primary" onclick="batal()" id="btnBatal">Batal</button>
                                             <button class="btn btn-primary" onclick="tambah()" id="btnTambah">Tambah</button>
                                             <button class="btn btn-primary" onclick="tolak()" id="btnTolak">Tolak</button>
                                         </div>
 						</div>
-                        
-		
+
+
 					</div>
 
 				</div><!-- /.modal-content -->
@@ -407,17 +423,55 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-			load_table_registrasi_new();
+
+			semua = $('#dt_tambah').DataTable({
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tambah'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+             $('#dt_tambah').on( 'click', '.btn-hapus', function () {
+				    semua
+				        .row( $(this).parents('tr') )
+				        .remove()
+				        .draw(false);
+			} );
+
+
 			getMember();
-            
+
         });
+
+
+        function setQty(id)
+        {
+        	var qty = $('#'+id).val();
+        	if (qty == "" || qty == 0) {
+        		$('#'+id).val(1);
+        	}
+
+        }
+
+
 
 		function tambah2(){
 			$.ajax({
 				url : '{{url('/pembelian/request-pembelian/addDumyReq')}}',
 				type: "POST",
-				data: { 
-					'qty' : $('#qty').val(),
+				data: {
+					'qty'  : $('#qty').val(),
 					'item' : $('#tpMemberId').val(),
 					_token : '{{ csrf_token() }}'
 				},
@@ -427,15 +481,15 @@
 					$.smallBox({
 							title : "Berhasil",
 							content : 'Data telah ditambahkan...!',
-							color : "#739E73",
+							color : "#739e73",
 							timeout: 4000,
 							icon : "fa fa-check bounce animated"
 							});
 							$('#dt_tambah').DataTable().ajax.reload();
 					// reload_table();
 				},
-				
-		}); 
+
+		});
 		}
 
 		function simpanRencana()
@@ -446,60 +500,42 @@
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
 					if (ButtonPressed === "Ya") {
-						$.ajax({
-							url : '{{url('/pembelian/rencana-pembelian/getRequest_dumy')}}',
-							type: "GET",
-							data: { 
-								comp : $('#dt_supplier').val(),
-							},
-							dataType: "JSON",
-							success: function(data)
-							{
-								
-								
-								if(data.status == 'GAGAL')
-								{
+						var ar = $();
+					    for (var i = 0; i < semua.rows()[0].length; i++) {
+					        ar = ar.add(semua.row(i).node());
+					    }
+					    $.ajaxSetup({
+					    headers: {
+					            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					            }
+					    });
+					    $.ajax({
+					        url: baseUrl + '/pembelian/rencana-pembelian/tambahRencana',
+					        type: 'get',
+					        data: ar.find('input').serialize(),
+					        dataType: 'json',
+					        success: function (data) {
+
+					        	if(data.status =='sukses'){
 									$.smallBox({
-										title : "Gagal",
-										content : 'Data gagal Di ajukan..!',
-										color : "#739E73",
+										title  : "Berhasil",
+										content: 'Data telah ditambahkan...!',
+										color  : "#739e73",
 										timeout: 4000,
-										icon : "fa fa-check bounce animated"
-										});
-										reload_table();
-									// $('#table-rencana').DataTable().ajax.reload();
-								}else if(data.status == 'notFound'){
-									$.smallBox({
-										title : "Peringatan",
-										content : 'Data Yang Anda Ajukan Kosong / Tidak Ada...',
-										color : "#739E73",
-										timeout: 4000,
-										icon : "fa fa-check bounce animated"
-										});
-										reload_table();
+										icon   : "fa fa-check bounce animated"
+									});
+									window.location.href="{{url('pembelian/rencana-pembelian')}}";
 								}else{
 									$.smallBox({
-										title : "Berhasil",
-										content : 'Anda Telah Berhasil Mengajukan Rencana Pembelian...!',
-										color : "#739E73",
+										title  : "GAGAL",
+										content: 'Data telah GAGAL ditambahkan...!',
+										color  : "#c46a69",
 										timeout: 4000,
-										icon : "fa fa-check bounce animated"
-										});
-										reload_table();
+										icon   : "fa fa-check bounce animated"
+									});
 								}
-								// $('#table-rencana').DataTable().fnDestroy();
-								
-							},
-								
-						}); 
-		
-						// $.smallBox({
-						// 	title : "Callback function",
-						// 	content : "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
-						// 	color : "#659265",
-						// 	iconSmall : "fa fa-check fa-2x fadeInRight animated",
-						// 	timeout : 4000
-						// });
+					        }
+					    });
 					}
 					if (ButtonPressed === "Tidak") {
 						$.smallBox({
@@ -510,20 +546,20 @@
 							timeout : 4000
 						});
 					}
-		
+
 				});
 				e.preventDefault();
-			
+
 		}
 
-		
+
 
 		function apply(id){
 			var input = $('#i_nama'+id).val();
 			$.ajax({
 						url : '{{url('/pembelian/rencana-pembelian/editDumy')}}',
 						type: "GET",
-						data: { 
+						data: {
 							'id' : id,
 							'qty' : input,
 
@@ -532,11 +568,11 @@
 						success: function(data)
 						{
 							$('#dt_tambah').DataTable().ajax.reload();
-							
+
 						},
-						
-				}); 
-		
+
+				});
+
 		}
 
 		function editTable(id)
@@ -545,7 +581,7 @@
 			$.ajax({
 						url : '{{url('/pembelian/rencana-pembelian/editDumy')}}',
 						type: "POST",
-						data: { 
+						data: {
 							'id' : id,
 							'qty' : input,
 							_token : '{{ csrf_token() }}'
@@ -557,23 +593,23 @@
 							reload_table_dumy();
 							// $('#dt_tambah').DataTable().ajax.reload();
 						},
-						
-				}); 
+
+				});
 		}
 
 
         function edit(id){
-            
+
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/getRequest_id')}}',
                 type: "GET",
-                data: { 
+                data: {
 					id : id,
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
-					
+
 				// pr_idReq = data.data.pr_id;
 				// pr_itemPlan = data.data.i_id;
 				// pr_qtyReq = data.data.pr_qtyReq;
@@ -588,7 +624,7 @@
 							$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
 
 						}
-					
+
 
 					$('#dt_kelompok').text(data.data.i_kelompok);
 					$('#dt_group').text(data.data.i_group);
@@ -607,9 +643,9 @@
 					$('#pr_qt').val(data.data.pr_qtyReq);
 					$('#pr_dateRequest').val(data.data.pr_dateReq);
                     $('#dt_comp').val(data.data.pr_compReq);
-                    
 
-					
+
+
 
 					$('#myModalLabel').text('FORM RENCANA PEMBELIAN');
 					$('#myModal').modal('show');
@@ -617,25 +653,25 @@
                     $('#btnTolak').hide();
                     $('#btnBatal').show();
                 },
-                
-            }); 
+
+            });
 
 			suplier();
-            
+
         }
 
         function getTolak(id){
-            
+
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/getRequest_id')}}',
                 type: "GET",
-                data: { 
+                data: {
 					id : id,
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
-					
+
 				// pr_idReq = data.data.pr_id;
 				// pr_itemPlan = data.data.i_id;
 				// pr_qtyReq = data.data.pr_qtyReq;
@@ -650,7 +686,7 @@
 							$('img#dt_image').attr("src", "{{asset('img/items/')}}"+"/"+data.data.i_img);
 
 						}
-					
+
 
 					$('#dt_kelompok').text(data.data.i_kelompok);
 					$('#dt_group').text(data.data.i_group);
@@ -669,9 +705,9 @@
 					$('#pr_qt').val(data.data.pr_qtyReq);
 					$('#pr_dateRequest').val(data.data.pr_dateReq);
                     $('#dt_comp').val(data.data.pr_compReq);
-                    
 
-					
+
+
 
 					$('#myModalLabel').text('FORM RENCANA PEMBELIAN');
 					$('#myModal').modal('show');
@@ -681,24 +717,24 @@
                     $('#in_qty').hide();
                     $('#btnBatal').show();
                 },
-                
-            }); 
 
-			
-            
+            });
+
+
+
         }
 
 		// function suplier(){
 		// 	$.ajax({
         //         url : '{{url('/pembelian/rencana-pembelian/itemSuplier')}}',
         //         type: "GET",
-        //         data: { 
-                
+        //         data: {
+
         //         },
         //         dataType: "JSON",
         //         success: function(data)
         //         {
-        //             $('#dt_supplier').empty(); 
+        //             $('#dt_supplier').empty();
 		// 			row = "<option selected='' value='0'>Pilih Suplier</option>";
 		// 			$(row).appendTo("#dt_supplier");
 		// 			$.each(data, function(k, v) {
@@ -706,8 +742,8 @@
 		// 				$(row).appendTo("#dt_supplier");
 		// 			});
         //         },
-                
-        //     });  
+
+        //     });
 		// }
 
         function batal(){
@@ -716,11 +752,11 @@
 
 	function load_table_registrasi_new(){
       // table_registrasi.ajax.reload(null, false);
-	  tambahRencana= $('#dt_tambah').DataTable({
+	  tambahRencana = $('#dt_tambah').DataTable({
 
           "ajax": {
                     "url": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana') }}",
-                    "type": "POST",  
+                    "type": "POST",
                     "data": function ( data ) {
 						data.comp = $('#dt_supplier').val();
 						data._token = '{{ csrf_token() }}';
@@ -730,15 +766,15 @@
 					"emptyTable": "Data Sedang Di proses Oleh User Lain"
 					},
         } );
-	}
-	
+	 }
+
 	function load_table_registrasi_reload(){
       // table_registrasi.ajax.reload(null, false);
 	  tambahRencana_dumy= $('#dt_tambah').DataTable({
 
           "ajax": {
                     "url": "{{ url('/pembelian/rencana-pembelian/view_tambahRencana_dumy') }}",
-                    "type": "POST",  
+                    "type": "POST",
                     "data": function ( data ) {
 						data.comp = $('#dt_supplier').val();
 						data._token = '{{ csrf_token() }}';
@@ -752,12 +788,12 @@
 
 	function reload_table_dumy(){
 		tambahRencana_dumy.ajax.reload(null, false);
-	
+
 			}
-			
+
 	function reload_table(){
 			tambahRencana.ajax.reload(null, false);
-	
+
    		 }
 
 
@@ -815,16 +851,16 @@
         //     }, 1000);
 		// }
 
-		
+
 
         function tambah(){
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/tambahRencana')}}',
                 type: "GET",
-                data: { 
-					pr_idReq         :	$('#pr_idReq').val(),
-					pr_itemPlan      :	$('#pr_itemPlan').val(),
-					pr_qtyReq        :	$('#pr_qt').val(),
+                data: {
+					pr_idReq         : $('#pr_idReq').val(),
+					pr_itemPlan      : $('#pr_itemPlan').val(),
+					pr_qtyReq        : $('#pr_qt').val(),
 					pr_dateRequest   : $('#pr_dateRequest').val(),
                     qty              : $('#dt_qtyApp').val(),
                     supplier         : $('#dt_supplier').val(),
@@ -835,7 +871,7 @@
                 {
                     if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
-						
+
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. data Gagal di tambahkan",
@@ -865,24 +901,24 @@
 								});
 								$('#myModal').modal('hide');
 							}
-						
-						
+
+
 					}
                 },
-                
-            });  
+
+            });
         }
 
 		function getMember(){
 			$.ajax({
 				url : '{{url('/pembelian/rencana-pembelian/getComp_plan')}}',
 				type: "GET",
-				data: { 
+				data: {
 				},
 				dataType: "JSON",
 				success: function(data)
 				{
-				$('#dt_supplier').empty(); 
+				$('#dt_supplier').empty();
 				row = "<option selected='' value='semua'>----Pilih Semua Outlet----</option>";
 				$(row).appendTo("#dt_supplier");
 				$.each(data, function(k, v) {
@@ -890,16 +926,16 @@
 					$(row).appendTo("#dt_supplier");
 				});
 				},
-				
-			});  
+
+			});
 		}
 
         function tolak(id){
             $.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/tolakRequest')}}',
                 type: "GET",
-                data: { 
-                    
+                data: {
+
                     pr_idReq         :	$('#pr_idReq').val(),
                 },
                 dataType: "JSON",
@@ -938,10 +974,10 @@
 							}
 					}
                 },
-                
-            });  
+
+            });
 		}
-		
+
 		var app = new Vue({
 		el 		: '#content',
 		data 	: {
@@ -968,13 +1004,13 @@
 				i_berat: '',
 				i_specificcode: 'Y',
 				i_isactive: 'Y'
-				
+
 			}
 
 		},
-		
 
-		
+
+
 		methods: {
 
 			switch_kelompok: function(){
@@ -1005,7 +1041,7 @@
 				}
 			},
 
-		
+
 
 			i_kelompok_change: function(v){
 				this.form_data.i_kelompok = v;
@@ -1015,7 +1051,7 @@
 				this.form_data.i_group = v;
 			},
 
-			
+
 
 		}
 	});

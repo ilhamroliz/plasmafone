@@ -451,7 +451,7 @@
 						$.smallBox({
 							title  : "Berhasil",
 							content: 'Data telah ditambahkan...!',
-							color  : "#739E73",
+							color  : "#739e73",
 							timeout: 4000,
 							icon   : "fa fa-check bounce animated"
 							});
@@ -464,7 +464,7 @@
 						$.smallBox({
 							title  : "GAGAL",
 							content: 'Data telah GAGAL ditambahkan...!',
-							color  : "#739E73",
+							color  : "#c46a69",
 							timeout: 4000,
 							icon   : "fa fa-check bounce animated"
 							});
@@ -502,7 +502,7 @@
 									$.smallBox({
 										title 	: "Berhasil",
 										content : 'Data telah Di hapus...!',
-										color 	: "#739E73",
+										color 	: "#739e73",
 										timeout : 4000,
 										icon 	: "fa fa-check bounce animated"
 										});
@@ -512,9 +512,9 @@
 										$('#table-rencana').DataTable().ajax.reload();
 								}else{
 									$.smallBox({
-										title 	: "Berhasil",
+										title 	: "GAGAL",
 										content : 'Data gagal Di hapus...!',
-										color 	: "#739E73",
+										color 	: "#c46a69",
 										timeout : 4000,
 										icon 	: "fa fa-check bounce animated"
 										});
@@ -594,7 +594,7 @@
 									$.smallBox({
 										title 	: "Gagal",
 										content : 'Data gagal Di ajukan..!',
-										color 	: "#739E73",
+										color 	: "#C46A69",
 										timeout : 4000,
 										icon 	: "fa fa-check bounce animated"
 										});
@@ -607,7 +607,7 @@
 									$.smallBox({
 										title 	: "Peringatan",
 										content : 'Data Not Found!',
-										color 	: "#739E73",
+										color 	: "#c79121",
 										timeout : 4000,
 										icon 	: "fa fa-check bounce animated"
 										});
