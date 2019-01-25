@@ -847,7 +847,7 @@
                 });
             } else {
                 $.ajax({
-                    url: baseUrl + '/penjualan-tempo/detailPembayaran/'+total,
+                    url: baseUrl + '/penjualan-tempo/detailpembayarantempo/'+total,
                     timeout: 5000,
                     type: 'get',
                     success: function(response){

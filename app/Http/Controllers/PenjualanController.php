@@ -468,7 +468,10 @@ class PenjualanController extends Controller
                 $x->where('op_outlet', '=', 'd_stock_detail.sd_comp');
             })
             ->where('d_sales.s_id', $id)
-            ->groupBy('d_sales_dt.sd_item')->get();
+            ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+            ->groupBy('d_stock_mutation.sm_specificcode')
+            ->distinct('d_stock_mutation.sm_specificcode')
+            ->get();
 
         return view('penjualan.penjualan-tempo.edit')->with(compact('data'));
     }
