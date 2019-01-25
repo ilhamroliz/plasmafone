@@ -144,8 +144,8 @@
                                                     <div class="col-md-12">
                                                         <div class="pull-right">
                                                             <h1 class="font-400 total-tampil">Rp. {{ number_format($data[0]->s_total_net,0,',','.') }}</h1>
-                                                            <input type="hidden" name="totalGross" id="totalGross" value="{{ $data[0]->s_total_gross }}">
-                                                            <input type="hidden" name="totalHarga" id="totalHarga" value="{{ $data[0]->s_total_net }}">
+                                                            <input type="hidden" name="totalGross" id="totalGross" value="{{ number_format($data[0]->s_total_gross,0,',','.') }}">
+                                                            <input type="hidden" name="totalHarga" id="totalHarga" value="{{ number_format($data[0]->s_total_net,0,',','.') }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -881,7 +881,6 @@
 
     function detailPembayaran(){
         var total = $('#totalHarga').val();
-        total = total.replace(".00", "");
         total = convertToAngka(total);
         if (isNaN(total)) {
             $.smallBox({
@@ -959,6 +958,7 @@
                         icon : "fa fa-check bounce animated"
                     });
                     updateTotalTampil();
+                    console.log(response);
                     cetak(response.salesman, response.idSales, response.totHarga, response.dibayar, response.kembali);
                     $('#DetailPembayaran').modal('hide');
                     window.location = baseUrl + '/penjualan-reguler';

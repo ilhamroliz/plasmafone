@@ -431,7 +431,10 @@ class PenjualanController extends Controller
                     $x->where('op_outlet', '=', 'd_stock_detail.sd_comp');
                 })
                 ->where('d_sales.s_id', $id)
-                ->groupBy('d_sales_dt.sd_item')->get();
+                ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+                ->groupBy('d_stock_mutation.sm_specificcode')
+                ->distinct('d_stock_mutation.sm_specificcode')
+                ->get();
 
         return view('penjualan.penjualan-regular.edit')->with(compact('data'));
     }
@@ -642,8 +645,6 @@ class PenjualanController extends Controller
                 }
 
                 DB::commit();
-                // $url = url('/').'/penjualan-reguler/struk/'.$sales.'/'.$idsales;
-                // return $url;
                 return response()->json([
                     'status' => 'sukses',
                     'bayar' => $data['bayar'],
@@ -671,80 +672,17 @@ class PenjualanController extends Controller
     public function editPenjualan(Request $request)
     {
         $data = $request->all();
+        $totGross = implode("", explode(".", $data['totalGross']));
+        $totHarga = implode("", explode(".", $data['totalHarga']));
 
         if (!isset($data['idStock']) || $data['idMember'] == null || $data['salesman'] == null)
         {
             return "lengkapi data";
         } else {
+
             DB::beginTransaction();
             try{
-
-                $dataSales = DB::table('d_sales')
-                            ->select('d_sales.*', 'd_sales_dt.*', 'd_stock.s_id as idStock', 'd_stock.s_comp as stock_comp',
-                                'd_stock.s_position as stock_position', 'd_stock.s_item as stock_item', 'd_stock.s_qty as stock_qty', 'd_stock_mutation.*', 'd_item.i_nama as nama_item',
-                                'd_item.i_specificcode as specificcode', 'd_item.i_code', 'd_item.i_price',
-                                'm_group_price.gp_price', 'd_outlet_price.op_price')
-                            ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
-                            ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
-                            ->join('d_stock_mutation', function($x){
-                                $x->on('d_sales.s_nota', '=', 'd_stock_mutation.sm_nota');
-                                $x->where('d_stock_mutation.sm_detail', 'PENGURANGAN');
-                            })
-                            ->join('d_stock', function($y){
-                                $y->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
-                                $y->on('d_stock.s_item', '=', 'd_sales_dt.sd_item');
-                            })
-                            ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_sales_dt.sd_item')
-                            ->leftjoin('d_outlet_price', function($x){
-                                $x->on('d_outlet_price.op_item', '=', 'd_sales_dt.sd_item');
-                                $x->where('op_outlet', '=', 'd_stock_detail.sd_comp');
-                            })
-                            ->where('d_sales.s_id', $data['idSales'])
-                            ->groupBy('d_sales_dt.sd_item')
-                            ->get();
-
-                foreach ($dataSales as $index => $sales) {
-                    // update d_stock
-                    DB::table('d_stock')->where('s_id', $dataSales[$index]->idStock)->update([
-                        's_qty' => $dataSales[$index]->stock_qty + $dataSales[$index]->sd_qty
-                    ]);
-
-                    if ($dataSales[$index]->sm_specificcode != null){
-                        // insert d_stock_dt
-                        $iddetail = DB::table('d_stock_dt')->where('sd_stock', $dataSales[$index]->idStock)->max('sd_detailid');
-                        if ($iddetail == null){
-                            $iddetail = 1;
-                        } else {
-                            $iddetail = $iddetail + 1;
-                        }
-                        DB::table('d_stock_dt')->insert([
-                            'sd_stock' => $dataSales[$index]->idStock,
-                            'sd_detailid' => $iddetail,
-                            'sd_specificcode' => $dataSales[$index]->sm_specificcode
-                        ]);
-                    }
-
-                    //update d_stock_mutation
-                    $notaFromReff = DB::table('d_stock_mutation')->where('sm_nota', $data['nota'])->first();
-                    $stockMutasi = DB::table('d_stock_mutation')->where('sm_nota', $notaFromReff->sm_reff)->first();
-                    DB::table('d_stock_mutation')->where('sm_nota', $notaFromReff->sm_reff)->where('sm_detail', 'PENAMBAHAN')->update([
-                        'sm_use' => $stockMutasi->sm_use - $dataSales[$index]->sd_qty,
-                        'sm_sisa' => $stockMutasi->sm_sisa + $dataSales[$index]->sd_qty
-                    ]);
-
-                    // hapus stock mutasi == batal
-                    DB::table('d_stock_mutation')
-                        ->where('sm_stock', $dataSales[$index]->idStock)
-                        ->where('sm_detail', 'PENGURANGAN')
-                        ->where('sm_specificcode', $dataSales[$index]->sm_specificcode)
-                        ->where('sm_nota', $data['nota'])
-                        ->delete();
-                }
-
-                // hapus d_sales & d_sales_dt
-                DB::table('d_sales_dt')->where('sd_sales', $data['idSales'])->delete();
-                DB::table('d_sales')->where('s_id', $data['idSales'])->delete();
-
+                $this->delete(Crypt::encrypt($data['idSales']));
                 $sales = DB::table('d_mem')
                     ->select('m_id', 'm_name')
                     ->where('m_id', $data['salesman'])
@@ -768,7 +706,7 @@ class PenjualanController extends Controller
 
                 for ($i=0; $i < count($data['idStock']); $i++) {
 
-                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_detail', 'PENAMBAHAN');
+                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_specificcode', $data['kode'][$i])->where('sm_detail', 'PENAMBAHAN');
 
                     $get_smiddetail = $count_smiddetail->get();
 
@@ -786,7 +724,6 @@ class PenjualanController extends Controller
 
 //                    update d_stock
                     $stockQty = DB::table('d_stock')->where('s_id', $data['idStock'][$i])->first();
-
                     DB::table('d_stock')->where('s_id', $data['idStock'][$i])->update([
                         's_qty' => $stockQty->s_qty - $data['qtyTable'][$i]
                     ]);
@@ -824,6 +761,7 @@ class PenjualanController extends Controller
                                 $sm_sisa = $get_smiddetail[$key]->sm_qty - $data['qtyTable'][$i];
                             }
 
+
                             // $Htotal_disc_persen += ($data['grossItem'][$i] / $data['totalGross']) * ($discPercent/100);
                             // $Htotal_disc_value += ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
 
@@ -846,7 +784,7 @@ class PenjualanController extends Controller
                             ]);
 
                             // Update in table d_stock_mutation
-                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid, 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
                                 'sm_use' => $sm_use,
                                 'sm_sisa' => $sm_sisa
                             ]);
@@ -863,10 +801,10 @@ class PenjualanController extends Controller
                     's_date'                => Carbon::now('Asia/Jakarta'),
                     's_jenis'               => $data['jenis_pembayaran'],
                     's_nota'                => $nota,
-                    's_total_gross'         => $data['totalHarga'],
+                    's_total_gross'         => $totHarga,
                     's_total_disc_value'    => 0,
                     's_total_disc_persen'   => 0,
-                    's_total_net'           => $data['totalHarga'],
+                    's_total_net'           => $totHarga,
                     's_salesman'            => $sales->m_id
                 ]);
 
@@ -877,8 +815,8 @@ class PenjualanController extends Controller
                     $discPercent = implode("", explode("%", $data['discp'][$i]));
                     $discValue = implode("", explode(".", $data['discv'][$i]));
 
-                    $Dtotal_disc_persen = ($data['grossItem'][$i] / $data['totalGross']) * ($discPercent/100);
-                    $Dtotal_disc_value = ($data['grossItem'][$i] / $data['totalGross']) * $discValue;
+                    $Dtotal_disc_persen = ($data['grossItem'][$i] / $totGross) * ($discPercent/100);
+                    $Dtotal_disc_value = ($data['grossItem'][$i] / $totGross) * $discValue;
 
                     $idItem = DB::table('d_stock')->select('s_item')->where('s_id', $data['idStock'][$i])->first();
                     // Insert to table d_sales_dt
@@ -906,8 +844,6 @@ class PenjualanController extends Controller
                 }
 
                 DB::commit();
-                // $url = url('/').'/penjualan-reguler/struk/'.$sales.'/'.$idsales;
-                // return $url;
                 return response()->json([
                     'status' => 'sukses',
                     'bayar' => $data['bayar'],
@@ -915,18 +851,19 @@ class PenjualanController extends Controller
                     'idSales' => Crypt::encrypt($idsales),
                     'bri' => $data['bri'],
                     'bni' => $data['bni'],
-                    'totHarga' => $data['totalHarga'],
+                    'totHarga' => $totHarga,
                     'dibayar' => $data['total_pembayaran'],
                     'kembali' => $data['kembali']
                 ]);
 
             } catch (\Exception $e) {
                 DB::rollback();
-                return response()->json([
-                    'status' => 'gagal',
-                    'data' => 'server gagal menyimpan',
-                    'erorr' => $e
-                ]);
+                return 'error => '. $e;
+//                return response()->json([
+//                    'status' => 'gagal',
+//                    'data' => 'server gagal menyimpan',
+//                    'erorr' => $e
+//                ]);
             }
         }
 
@@ -992,7 +929,9 @@ class PenjualanController extends Controller
             ->join('d_stock_mutation', function($x){
                 $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
             })
-            ->groupBy('d_sales_dt.sd_item')
+            ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+            ->groupBy(['d_sales_dt.sd_detailid', 'd_stock_mutation.sm_specificcode'])
+            ->distinct('d_stock_mutation.sm_specificcode')
             ->get();
 
         if ($datas == null) {
