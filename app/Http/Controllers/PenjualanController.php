@@ -504,7 +504,7 @@ class PenjualanController extends Controller
 
                 for ($i=0; $i < count($data['idStock']); $i++) { 
 
-                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_detail', 'PENAMBAHAN');
+                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $data['idStock'][$i])->where('sm_specificcode', $data['kode'][$i])->where('sm_detail', 'PENAMBAHAN');
 
                     $get_smiddetail = $count_smiddetail->get();
 
@@ -568,21 +568,21 @@ class PenjualanController extends Controller
                             DB::table('d_stock_mutation')->insert([
                                 'sm_stock'          => $data['idStock'][$i],
                                 'sm_detailid'       => $get_countiddetail,
-                                'sm_date'           => date('Y-m-d H:m:s'),
+                                'sm_date'           => Carbon::now('Asia/Jakarta'),
                                 'sm_detail'         => 'PENGURANGAN',
                                 'sm_specificcode'   => $specificcode,
                                 'sm_qty'            => $data['qtyTable'][$i],
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $sm_sell,
+                                'sm_sell'           => $data['harga'][$i],
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
                             ]);
 
                             // Update in table d_stock_mutation
-                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid])->update([
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid, 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
                                 'sm_use' => $sm_use,
                                 'sm_sisa' => $sm_sisa
                             ]);
@@ -596,7 +596,7 @@ class PenjualanController extends Controller
                 $idsales = DB::table('d_sales')->insertGetId([
                     's_comp'                => $outlet_user,
                     's_member'              => $data['idMember'],
-                    's_date'                => date('Y-m-d H:m:s'),
+                    's_date'                => Carbon::now('Asia/Jakarta'),
                     's_jenis'               => $data['jenis_pembayaran'],
                     's_nota'                => $nota,
                     's_total_gross'         => $data['totalHarga'],
@@ -623,6 +623,7 @@ class PenjualanController extends Controller
                         'sd_detailid'       => $salesdetailid,
                         'sd_comp'           => $outlet_user,
                         'sd_item'           => $idItem->s_item,
+                        'sd_specificcode'   => $data['kode'][$i],
                         'sd_qty'            => $data['qtyTable'][$i],
                         'sd_value'          => $data['harga'][$i],
                         'sd_hpp'            => $arr_hpp[$i],
@@ -831,14 +832,14 @@ class PenjualanController extends Controller
                             DB::table('d_stock_mutation')->insert([
                                 'sm_stock'          => $data['idStock'][$i],
                                 'sm_detailid'       => $get_countiddetail,
-                                'sm_date'           => date('Y-m-d H:m:s'),
+                                'sm_date'           => Carbon::now('Asia/Jakarta'),
                                 'sm_detail'         => 'PENGURANGAN',
                                 'sm_specificcode'   => $specificcode,
                                 'sm_qty'            => $data['qtyTable'][$i],
                                 'sm_use'            => 0,
                                 'sm_sisa'           => 0,
                                 'sm_hpp'            => $sm_hpp,
-                                'sm_sell'           => $sm_sell,
+                                'sm_sell'           => $data['harga'][$i],
                                 'sm_nota'           => $nota,
                                 'sm_reff'           => $sm_reff,
                                 'sm_mem'            => $member
@@ -859,7 +860,7 @@ class PenjualanController extends Controller
                 $idsales = DB::table('d_sales')->insertGetId([
                     's_comp'                => $outlet_user,
                     's_member'              => $data['idMember'],
-                    's_date'                => date('Y-m-d H:m:s'),
+                    's_date'                => Carbon::now('Asia/Jakarta'),
                     's_jenis'               => $data['jenis_pembayaran'],
                     's_nota'                => $nota,
                     's_total_gross'         => $data['totalHarga'],
@@ -886,6 +887,7 @@ class PenjualanController extends Controller
                         'sd_detailid'       => $salesdetailid,
                         'sd_comp'           => $outlet_user,
                         'sd_item'           => $idItem->s_item,
+                        'sd_specificcode'   => $data['kode'][$i],
                         'sd_qty'            => $data['qtyTable'][$i],
                         'sd_value'          => $data['harga'][$i],
                         'sd_hpp'            => $arr_hpp[$i],
@@ -954,7 +956,9 @@ class PenjualanController extends Controller
                 ->join('d_stock_mutation', function($x){
                     $x->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                 })
-                ->groupBy('d_sales_dt.sd_item')
+                ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+                ->groupBy(['d_sales_dt.sd_detailid', 'd_stock_mutation.sm_specificcode'])
+                ->distinct('d_stock_mutation.sm_specificcode')
                 ->get();
 
         if ($datas == null) {
@@ -1017,6 +1021,7 @@ class PenjualanController extends Controller
 
                 $getMutasi = DB::table('d_stock_mutation')
                     ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                    ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                     ->where('sm_nota', $stockMutasi[$index]->sm_reff)
                     ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
 
@@ -1024,6 +1029,7 @@ class PenjualanController extends Controller
                     // update stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_nota', $stockMutasi[$index]->sm_reff)
                         ->where('sm_detail', 'PENAMBAHAN')
                         ->update([
@@ -1056,6 +1062,7 @@ class PenjualanController extends Controller
                     // delete stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
                         ->where('sm_detail', 'PENGURANGAN')->delete();
 
@@ -1066,6 +1073,7 @@ class PenjualanController extends Controller
                     // update stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_nota', $stockMutasi[$index]->sm_reff)
                         ->where('sm_detail', 'PENAMBAHAN')
                         ->update([
@@ -1083,6 +1091,7 @@ class PenjualanController extends Controller
                     // delete stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
                         ->where('sm_detail', 'PENGURANGAN')->delete();
 
