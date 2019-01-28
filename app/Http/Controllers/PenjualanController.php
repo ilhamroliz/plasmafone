@@ -46,8 +46,6 @@ class PenjualanController extends Controller
                 $q->where('m_comp', '=', Auth::user()->m_comp);
             })->get();
 
-        
-
         if (count($nama) < 1) {
             $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
         } else {
