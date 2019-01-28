@@ -190,8 +190,8 @@
     var idItem = [];
     var iCode = [];
     var arrCode = [];
+    var arrKodeGlobal = [];
     var arrIdStock = [];
-    var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
     var kodeGlobal = null;
@@ -240,13 +240,22 @@
 			$("#alamat").text(data.alamat);
 			$("#detail_outlet").show("slow");
 			$("#search_barang").show("slow");
+            $('#cari-stock').focus();
 			// $("#cari-stock").focus();
         }
     })
 
+    function setArrayId() {
+        var inputs = document.getElementsByClassName('kode'),
+            code  = [].map.call(inputs, function( input ) {
+                return input.value.toString();
+            });
+        arrKodeGlobal = code;
+        arrCode = code;
+    }
+
     function setStock(info){
         var data = info.data;
-        var price = 0;
         if (data.i_code == "") {
             namaGlobal = data.i_nama;
         } else {
@@ -254,15 +263,6 @@
         }
         
         stockGlobal = data.s_qty;
-
-        if(data.gp_price != null) {
-            price = data.gp_price;
-        } else if (data.gp_price != null) {
-            price = data.gp_price;
-        } else {
-            price = data.i_price;
-        }
-        hargaGlobal = parseInt(price);
 
         iCode = data.i_code;
         idGlobal = data.s_id;
@@ -272,26 +272,7 @@
         kodeGlobal = data.sm_specificcode;
         arrCode.push(data.i_code);
         arrIdStock.push(data.s_id);
-    }
-
-    function cekIsiArrayItem(data){
-        var hitung = arrCode.length;
-        for (var i = 0; i <= hitung; i++) {
-            if (arrCode[i] == data) {
-               return 'sudah';
-            }
-        }
-        return 'lanjut';
-    }
-
-    function cekIsiArrayStockN(data){
-        var hitung = arrIdStock.length;
-        for (var i = 0; i <= hitung; i++) {
-            if (arrIdStock[i] == data) {
-               return 'sudah';
-            }
-        }
-        return 'lanjut';
+        setArrayId();
     }
 
     function setSearch(){
@@ -319,7 +300,7 @@
     $("#cari-stock").on('keyup',function(e) {
         if(e.which === 13) {
             var specificcode = $(this).val();
-            if (cekIsiArrayItem(specificcode) == "sudah") {
+            if (arrCode.includes(specificcode) == true) {
                 var kuantitas = $(".qty-"+specificcode).val();
                 var qty = parseInt(kuantitas) + 1;
         
@@ -396,9 +377,8 @@
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
-                    '<input type="hidden" class="harga '+iCode+'" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                     '</td>' +
-                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
+                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'qty-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
 
@@ -410,21 +390,10 @@
                         event.preventDefault();
                     }
                 });
+                setArrayId();
             }
         } else {
-            if (arrIdStock.length == 1) {
-                row = '<tr id="'+idGlobal+'" class="tr">' +
-                '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
-                '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
-                '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
-                '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
-                '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
-                '</td>' +
-                '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
-                '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
-                '</tr>';
-                $("#table-distribusi tbody").append(row);
-            } else {
+            if (arrKodeGlobal.includes(kodeGlobal) == true) {
                 $.smallBox({
                     title : "Pesan!",
                     content : "Item sudah ditambahkan",
@@ -432,6 +401,18 @@
                     timeout: 5000,
                     icon : "fa fa-times bounce animated"
                 });
+            } else {
+                row = '<tr id="'+idGlobal+'" class="tr">' +
+                    '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
+                    '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
+                    '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
+                    '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
+                    '</td>' +
+                    '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
+                    '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
+                    '</tr>';
+                $("#table-distribusi tbody").append(row);
+                setArrayId();
             }
 
         }
@@ -496,10 +477,7 @@
 
     function hapus(id) {
         $('#'+id).remove();
-        var x = $("#table-distribusi tbody tr").length;
-        if (x == 0) {
-            $("#btn_simpan").attr('disabled', true);
-        }
+        setArrayId();
     }
 
     function simpan() {
@@ -591,30 +569,8 @@
         
     }
 
-	function updateTotalTampil() {
-        var inputs = document.getElementsByClassName( 'qtyTable' ),
-            arqty  = [].map.call(inputs, function( input ) {
-                return input.value;
-            });
-        
-    }
-
     function cetak(id){
         window.open(baseUrl + '/distribusi-barang/struk/'+id, '', "width=800,height=600");
-    }
-
-    function convertToRupiah(angka) {
-        var rupiah = '';
-        var angkarev = angka.toString().split('').reverse().join('');
-        for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-        var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
-        return hasil;
-
-    }
-
-    function convertToAngka(rupiah)
-    {
-        return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
     }
 </script>
 @endsection

@@ -322,7 +322,6 @@
             },
             minLength: 1,
             select: function(event, data) {
-                console.log(data);
                 setStock(data.item);
                 $("#stockid").val(data.item.id);
 				if ($("#stockid").val() == "") {
