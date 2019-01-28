@@ -687,6 +687,7 @@
                     url: '{{ url('penjualan-reguler/cari-stock') }}',
                     data: {
                         kode: kode,
+                        jenis: $("#id_group").val(),
                         term: searchGlobal
                     },
                     success: function( data ) {

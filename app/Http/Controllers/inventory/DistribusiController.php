@@ -66,7 +66,7 @@ class DistribusiController extends Controller
 
                 if ($proses->qty_received == 0) {
                     
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="hapus(\'' . Crypt::encrypt($proses->id) . '\', \'' . $proses->dd_detailid . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($proses->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                     
                 } else {
 
@@ -119,7 +119,7 @@ class DistribusiController extends Controller
         } else {
 
             $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', DB::raw('coalesce(concat(" (", dd_specificcode, ")"), "") as specificcode'), 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
@@ -144,7 +144,7 @@ class DistribusiController extends Controller
         } else {
 
             $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', DB::raw('coalesce(concat(" (", dd_specificcode, ")"), "") as specificcode'), 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
@@ -241,66 +241,79 @@ class DistribusiController extends Controller
         ->make(true);
     }
 
-    public function hapus(Request $request)
+    public function hapus($id = null)
     {
-        $data = $request->all();
-        
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return "Access denied";
+        }
         DB::beginTransaction();
         try {
-            $stock_mutasi = DB::table('d_stock_mutation')
-                            ->select('sm_stock', 'sm_detailid', 'sm_qty', 'sm_specificcode', 'sm_reff')
-                            ->where('sm_nota', $data['nota'])
-                            ->where('sm_detail', 'PENGURANGAN')
+            $getDistribusi = DB::table('d_distribusi')
+                            ->where('d_id', '=', $id)
                             ->first();
 
-            if ($stock_mutasi->sm_specificcode != null) {
-                
-                $check = DB::table('d_stock_dt')->where('sd_stock', $stock_mutasi->sm_stock)->where('sm_specificcode', $stock_mutasi->sm_specificcode)->count();
+            $stock_mutasi = DB::table('d_stock_mutation')
+                            ->where('sm_nota', $getDistribusi->d_nota)
+                            ->where('sm_detail', 'PENGURANGAN')
+                            ->get();
 
-                if ($check > 0) {
-                    DB::table('d_stock_dt')->where('sd_stock', $stock_mutasi->sm_stock)->where('sm_specificcode', $stock_mutasi->sm_specificcode)->delete();
+            foreach ($stock_mutasi as $key => $mutasi) {
+                //update stock mutasi
+                $getMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_stock', $stock_mutasi[$key]->sm_stock)
+                    ->where('sm_detail', 'PENAMBAHAN')
+                    ->where('sm_specificcode', $stock_mutasi[$key]->sm_specificcode)
+                    ->where('sm_nota', $stock_mutasi[$key]->sm_reff)
+                    ->first();
+
+                DB::table('d_stock_mutation')
+                    ->where('sm_stock', $stock_mutasi[$key]->sm_stock)
+                    ->where('sm_detail', 'PENAMBAHAN')
+                    ->where('sm_specificcode', $stock_mutasi[$key]->sm_specificcode)
+                    ->where('sm_nota', $stock_mutasi[$key]->sm_reff)
+                    ->update([
+                        'sm_sisa'   => $getMutasi->sm_sisa + $stock_mutasi[$key]->sm_qty,
+                        'sm_use'    => $getMutasi->use - $stock_mutasi[$key]->sm_qty
+                    ]);
+
+                if ($stock_mutasi[$key]->sm_specificcode != null) {
+                    // insert d_stock_dt
+                    $detailStockdt = DB::table('d_stock_dt')
+                                    ->where('sd_stock', $stock_mutasi[$key]->sm_stock)
+                                    ->max('sd_detailid');
+
+                    if ($detailStockdt == null) {
+                        $detailStockdt = 1;
+                    } else {
+                        $detailStockdt = $detailStockdt + 1;
+                    }
+
+                    DB::table('d_stock_dt')
+                        ->insert([
+                            'sd_stock' => $stock_mutasi[$key]->sm_stock,
+                            'sd_detailid' => $detailStockdt,
+                            'sd_specificcode' => $stock_mutasi[$key]->sm_specificcode
+                        ]);
                 }
 
-            }
+                //update d_stock
+                $getStock = DB::table('d_stock')
+                            ->where('s_id', $stock_mutasi[$key]->sm_stock)
+                            ->first();
 
-            DB::table('d_stock')
-            ->where('s_comp', $data['from'])
-            ->where('s_position', $data['destination'])
-            ->where('s_item', Crypt::decrypt($data['item']))
-            ->where('s_qty', $data['qtyDistribusi'])
-            ->where('s_status', 'On Going')
-            ->delete();
+                DB::table('d_stock')
+                    ->where('s_id', $stock_mutasi[$key]->sm_stock)
+                    ->update([
+                        's_qty' => $getStock->s_qty + $stock_mutasi[$key]->sm_qty
+                    ]);
 
-            $stock = DB::table('d_stock')->select('s_qty')->where('s_id', $stock_mutasi->sm_stock)->first();
-
-            DB::table('d_stock')->where('s_id', $stock_mutasi->sm_stock)
-            ->update([
-                's_qty' => $stock->s_qty + $stock_mutasi->sm_qty
-            ]);
-
-            $stock_m = DB::table('d_stock_mutation')->select('sm_sisa', 'sm_use')->where('sm_nota', $stock_mutasi->sm_reff)->first();
-
-            DB::table('d_stock_mutation')->where('sm_nota', $stock_mutasi->sm_reff)
-            ->update([
-                'sm_sisa' => $stock_m->sm_sisa + $stock_mutasi->sm_qty,
-                'sm_use' => $stock_m->sm_use - $stock_mutasi->sm_qty
-            ]);
-
-            DB::table('d_stock_mutation')->where('sm_nota', $data['nota'])->where('sm_detail', 'PENGURANGAN')->delete();
-
-            DB::table('d_distribusi_dt')
-            ->where('dd_distribusi', Crypt::decrypt($data['distribusi']))
-            ->where('dd_detailid', Crypt::decrypt($data['detail']))
-            ->where('dd_comp', $data['from'])
-            ->where('dd_item', Crypt::decrypt($data['item']))
-            ->where('dd_qty_received', 0)
-            ->where('dd_status', 'On Going')
-            ->delete();
-
-            $distribusidt = DB::table('d_distribusi_dt')->where('dd_distribusi', Crypt::decrypt($data['distribusi']))->count();
-
-            if ($distribusidt == 0) {
-                DB::table('d_distribusi')->where('d_id', Crypt::decrypt($data['distribusi']))->delete();
+                //delete stock mutasi
+//                DB::table('d_stock_mutation')
+//                    ->where('sm_stock')
+//                    ->where('sm_detailid')
+//                    ->where('sm_detail')
             }
 
             DB::commit();

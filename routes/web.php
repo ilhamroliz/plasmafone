@@ -811,7 +811,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('distribusi-barang/search-stock', 'inventory\DistribusiController@searchStock');
     Route::post('distribusi-barang/simpan', 'inventory\DistribusiController@simpan');
     Route::post('distribusi-barang/edit', 'inventory\DistribusiController@edit');
-    Route::post('distribusi-barang/hapus', 'inventory\DistribusiController@hapus');
+    Route::get('distribusi-barang/hapus/{id}', 'inventory\DistribusiController@hapus');
     Route::get('distribusi-barang/struk/{id}', 'inventory\DistribusiController@struck');
 	// =====End Distribusi barang=====
 

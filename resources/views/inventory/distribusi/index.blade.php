@@ -1154,7 +1154,7 @@
 			});
 		}
 
-		function remove(distribusi, dDistribusi, nota, item, from, destination, qtyDistribusi){
+		function remove(distribusi){
 			$.SmartMessageBox({
 				title : "Pesan!",
 				content : 'Apakah Anda yakin akan menghapus data ini?',
@@ -1172,8 +1172,7 @@
 					});
 					$.ajax({
 						url: baseUrl + '/distribusi-barang/hapus',
-						type: 'post',
-						data: {distribusi: distribusi, detail: dDistribusi, nota: nota, item: item, from: from, destination: destination, qtyDistribusi: qtyDistribusi},
+						type: 'get',
 						success: function(response){
 							if (response == "false") {
 								$.smallBox({
@@ -1322,7 +1321,7 @@
 					$('#dt_by').text(response.data.data[0].by);
 					response.data.data.forEach(function(element) {
 						console.log(element);
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+						row = '<tr class="tr"><td>'+element.nama_item+element.specificcode+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
 						$('#table_item tbody').append(row)
 					});
 					$('#overlay').fadeOut(200);
@@ -1363,7 +1362,7 @@
 					$('#dt_by').text(response.data.data[0].by);
 					response.data.data.forEach(function(element) {
 						console.log(element);
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+						row = '<tr class="tr"><td>'+element.nama_item+element.specificcode+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
 						$('#table_item tbody').append(row)
 					});
 					$('#overlay').fadeOut(200);
