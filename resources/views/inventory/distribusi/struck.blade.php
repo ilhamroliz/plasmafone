@@ -58,7 +58,7 @@
         <div class="header1" style="margin-top: 10px">
             <div class="tanggal">
                 <span style="float: left; width: 10%; margin-left: 10px;">{{ $data->qty }}</span>
-                <span style="width: 70%; margin-left: -10px">{{ $data->nama_barang }}</span>
+                <span style="width: 70%; margin-left: -10px">{{ $data->nama_barang }} {{ $data->specificcode }}</span>
             </div>
         </div>
     @endforeach

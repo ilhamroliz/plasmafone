@@ -87,6 +87,7 @@
                                                             <div class="icon-addon addon-md">
                                                                 <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
                                                                 <input type="hidden" value="" class="idMember" id="idMember" name="idMember">
+                                                                <input type="hidden" name="id_group" id="id_group">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
@@ -281,6 +282,7 @@
     var arrIdStock = [];
     var arrIdGlobal = [];
     var arrKodeGlobal = [];
+    var spkode = [];
     var hargaGlobal = null;
     var stockGlobal = null;
     var kodespesifikGlobal = null;
@@ -310,11 +312,15 @@
             select: function(event, data) {
                 getData(data.item);
                 getDetailMember(data.item.id);
+
             }
         });
 
         $( "#cari-stock" ).autocomplete({
-            source: baseUrl+'/penjualan-reguler/cari-stock',
+            source: function(request, response) {
+                $.getJSON(baseUrl+'/penjualan-reguler/cari-stock', { jenis: $("#id_group").val(), term: $("#cari-stock").val() },
+                    response);
+            },
             minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
@@ -338,6 +344,7 @@
                 // handle success
                 // console.log(response.data.jenis);
                 $("#jenis_member").text(response.data.jenis);
+                $("#id_group").val(response.data.id_group);
                 $("#alamat").text(response.data.alamat);
             })
             .catch(function (error) {
@@ -349,6 +356,7 @@
                 $("#search_barang").show("slow");
                 $("#cari-stock").focus();
             });
+
         }
     })
 
@@ -417,7 +425,18 @@
         if(e.which === 13) {
             var specificcode = $(this).val();
             var harga = 0;
+            if (spkode.includes(specificcode) == true) {
+                $.smallBox({
+                    title : "Pesan!",
+                    content : "Item sudah ditambahkan",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+                $(this).val("");
+            }
             if (arrCode.includes(specificcode) == true) {
+
                 var kuantitas = $(".qty-"+specificcode).val();
                 var qty = parseInt(kuantitas) + 1;
                 var hrg = $("."+specificcode).val();
@@ -467,6 +486,7 @@
         axios.get(baseUrl + '/penjualan-reguler/search-stock', {
             params: {
                 term : $('#cari-stock').val(),
+                jenis: $('#id_group').val(),
                 _token : $('meta[name="csrf-token"]').attr('content')
             }
         })
@@ -633,6 +653,7 @@
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
+                    '<input type="hidden" class="spesifikkode" name="spesifikkode[]" value="'+kodeGlobal+'" />'+
                     '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                     '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
                     '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
@@ -694,12 +715,41 @@
     }
 
     function setArrayId() {
+        var inputs = document.getElementsByClassName('spesifikkode'),
+            spesifikkode  = [].map.call(inputs, function( input ) {
+                return input.value.toString();
+            });
+        spkode = spesifikkode;
         var inputs = document.getElementsByClassName('kode'),
             code  = [].map.call(inputs, function( input ) {
                 return input.value.toString();
             });
         arrKodeGlobal = code;
         arrCode = code;
+        $( "#cari-stock" ).autocomplete({
+            source: function( request, response ) {
+                $.ajax({
+                    url: '{{ url('penjualan-reguler/cari-stock') }}',
+                    data: {
+                        kode: code,
+                        term: searchGlobal
+                    },
+                    success: function( data ) {
+                        response( data );
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, data) {
+                setStock(data.item);
+                $("#stockid").val(data.item.id);
+                if ($("#stockid").val() == "") {
+                    $("#tambahketable").attr('disabled', true);
+                } else {
+                    $("#tambahketable").attr('disabled', false);
+                }
+            }
+        });
     }
 
     function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
