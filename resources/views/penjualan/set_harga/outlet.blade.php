@@ -121,7 +121,7 @@
 							<div class="row">
 
 								<!-- Widget ID (each widget will need unique ID)-->
-								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+								<div class="jarviswidget jarviswidget-color-greenLight margin-bottom-0" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 									<header>
 										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
@@ -136,44 +136,43 @@
 											<div class="table-responsive">
                                                 <form id="shoForm" role="form">
 													{{csrf_field()}}
-														<input type="hidden" name="shoShowId" id="shoShowId">
+													<input type="hidden" name="shoShowId" id="shoShowId">
 
-                                                     	<div class="col-md-12 padding-top-10 margin-bottom-10">
-                                                            <div class="form-group">
-                                                                <label style="float:left; width: 20%"><strong>Nama Item</strong></label>
-                                                                <label style="width: 5%">:</label>
-                                                                <label style="width: 60%" id="shoShowNama"></label>
-                                                            </div>
-                                                            
-                                                            <div class="form-group">
-                                                                <label style="float:left; width: 20%"><strong>HPP</strong></label>
-                                                                <label style="width: 5%">:</label>
-                                                                <label style="width: 60%" id="shoHPP"></label>
-                                                            </div>	
-                                                        </div>
+													<div class="col-md-12 padding-top-10">
+														<div class="col-md-12">
+															<label style="float:left; width: 20%"><strong>Nama Item</strong></label>
+															<label style="width: 5%">:</label>
+															<label style="width: 60%" id="shoShowNama"></label>
+														</div>
+														
+														<div class="col-md-12">
+															<label style="float:left; width: 20%"><strong>HPP</strong></label>
+															<label style="width: 5%">:</label>
+															<label style="width: 60%" id="shoHPP"></label>
+														</div>	
+													</div>
 
-                                                        <table id="shoTable" class="table table-striped table-bordered table-hover margin-bottom-10">
-                                                            <thead>		
-                                                                <tr>
-                                                                    <th style="width: 60%"><i class="fa fa-building txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
-                                                                    <th style="width: 40%"><i class="fa fa-dollar txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Harga Satuan</th>
-                                                                </tr>
-                                                            </thead>
+													<table id="shoTable" class="table table-striped table-bordered table-hover margin-bottom-10">
+														<thead>		
+															<tr>
+																<th style="width: 60%"><i class="fa fa-building txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Nama Outlet</th>
+																<th style="width: 40%"><i class="fa fa-dollar txt-color-blue hidden-sm hidden-xs"></i>&nbsp;Harga Satuan</th>
+															</tr>
+														</thead>
 
-                                                            <tbody>
-                                                            </tbody>
+														<tbody>
+														</tbody>
 
-														</table>            
-                                                    </div>
-                                                    
-                                                    <div class="col-md-12 margin-bottom-10">
-                                                        <div style="width:100%" class="text-align-right">
-                                                            <a class="btn btn-primary" id="shoSubmit" onclick="shoSimpan()">
-                                                                <i class="fa fa-floppy-o"></i> 
-                                                                &nbsp;Simpan
-                                                            </a>
-                                                        </div>                                              
-                                                    </div>
+													</table>            
+												
+													<div class="col-md-12 margin-top-10 margin-bottom-10">
+														<div style="width:100%" class="text-align-right">
+															<a class="btn btn-primary" id="shoSubmit" onclick="shoSimpan()">
+																<i class="fa fa-floppy-o"></i> 
+																&nbsp;Simpan
+															</a>
+														</div>                                              
+													</div>
 
                                                 </form>
 										    </div>                                                  
@@ -212,11 +211,7 @@
 			}
 		});
 
-        $('#shoTable').DataTable({ 
-			"language": dataTableLanguage,
-			"pageLength": 4,
-			"bLengthChange": false
-		});
+        $('#shoTable').DataTable();
 
 	}); 
 
@@ -235,9 +230,18 @@
 
         var id = $('#shoItemId').val();
 		$('#shoTable').DataTable().destroy();
-		var table = $('#shoTable').DataTable();
+		var table = $('#shoTable').DataTable({ 
+			"language": dataTableLanguage,
+			"pageLength": 5,
+			"lengthChange": false,
+			"searching": false
+		});
 
 		axios.get(baseUrl+'/penjualan/set-harga/outlet/add?id='+id).then((response) => {
+
+			if(response.data.hpp == null){
+				response.data.hpp.sm_hpp = 0;
+			}
 			var angka = accounting.formatMoney(response.data.hpp.sm_hpp, "", 2, ".", ",");
             $('#shoHPP').html('Rp. '+angka);
 

@@ -115,7 +115,7 @@ class setHargaController extends Controller
             ->select('i_id', 'i_nama', 'i_code', 'pd_value')
             ->whereRaw('i_nama like "%' . $term . '%"')
             ->orWhereRaw('concat(coalesce(i_code, ""), " ", coalesce(i_nama, "")) like "%' . $term . '%"')
-            ->orderBy('pd_detailid', 'desc')
+            ->orderBy('i_nama')
             ->groupBy('i_id')
             ->take(50)->get();
 
@@ -278,8 +278,7 @@ class setHargaController extends Controller
                     DB::table('d_outlet_price')->insert($aray);
 
                     $item = DB::table('d_item')->select('i_nama')->where('i_id', $shoItemId)->first();
-                    $outlet = DB::table('m_company')->select('c_name')->where('c_id', $shoCompId)->first();
-                    $log = 'Meperbarui Harga Barang ' . $item->i_nama . ' pada Outlet ' . $outlet->c_name;
+                    $log = 'Meperbarui Harga Barang ' . $item->i_nama . ' pada Harga Outlet';
                     DB::commit();
                     Plasma::logActivity($log);
                     return json_encode([
@@ -305,7 +304,7 @@ class setHargaController extends Controller
             }else{
                 $outlet = DB::table('m_company')->where('c_id', Auth::user()->m_comp)->select('c_id')->get(); // id outlet 1, 2, ....
             }
-
+            /// Memasukkan Data Jika Belum Ada di Table D_OUTLET_PRICE
             for ($i = 0; $i < count($outlet); $i++) {
                 $cekin = DB::table('d_outlet_price')->where('op_outlet', $outlet[$i]->c_id)->where('op_item', $id)->count();
                 if ($cekin == 0) {
@@ -317,7 +316,7 @@ class setHargaController extends Controller
                 }
             }
             ////////////////////////////////////////////////////////
-
+            /// Ambil Data Harga Tiap Item untuk Tiap Outlet Join M_COMPANY & D_OUTLET_PRICE
             if(Auth::user()->m_comp == "PF00000001"){
                 $comp = DB::table('m_company')
                     ->leftjoin('d_outlet_price', 'op_outlet', '=', 'c_id')
@@ -330,14 +329,20 @@ class setHargaController extends Controller
                     ->where('c_id', Auth::user()->m_comp)
                     ->select('c_id', 'c_name', 'op_price')->get();
             }
-
+            /////////////////////////////////////////////////////////
+            /// Ambil Data HPP dari D_STOCK_MUTATION
             $getHPP = DB::table('d_stock')
                 ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
                 ->where('s_item', $id)
-                ->select('sm_hpp')
+                ->select(DB::raw('IFNULL(sm_hpp, 0)'))
                 ->orderBy('sm_detailid', 'desc')
                 ->first();
+            
+            if($getHPP == null){
+                $getHPP = array('sm_hpp' => 0);
+            }
 
+            // dd($getHPP);
             return json_encode([
                 'data' => $comp,
                 'hpp' => $getHPP

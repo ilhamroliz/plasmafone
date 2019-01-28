@@ -102,7 +102,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                 @if(Auth::user()->m_comp == "PF00000001")
                                                 <div class="col-md-12 no-padding">
                                                     <select class="select2" id="idComp" name="idComp">
-                                                        <option value="">Semua Outlet</option>
+                                                        <option value="">=== PILIH OUTLET ===</option>
                                                         @foreach($getCN as $toko)
                                                             <option value="{{ $toko->c_id }}">{{ $toko->c_name }}</option>
                                                         @endforeach
@@ -256,7 +256,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 }
             })
 
-            var input = document.getElementById("nameComp");
+            var input = document.getElementById("nameItem");
 			input.addEventListener("keyup", function(event) {
 				event.preventDefault();
 				if (event.keyCode === 13) {
@@ -288,10 +288,32 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('.codeTable tbody').on( 'click', 'a.btnhapus', function () {
 			codeTable.row( $(this).parents('tr') ).remove().draw();
             $('tbody#codeshowdata tr:last td:first input').focus();
-		});
+        });
+        
+        $('#idComp').on('change', function(e){
+            cariTambah();
+        });
 
+        {{-- $('#aksiSelect').on('change', function (e) {
+			if($('#aksiSelect').val() == '1'){
+                $('#divCodeTable').css("display", "none");
+			}else{
+				cariTambah();
+			}
+        }); --}}
 
 		function cariTambah(){
+
+            if($('#idComp').val() == '' || $('#idItem').val() == ''){
+                $.smallBox({
+                    title : "Gagal",
+                    content : "Maaf, Opname Barang Gagal Disimpan ",
+                    color : "#A90329",
+                    timeout: 4000,
+                    icon : "fa fa-times bounce animated"
+                });
+                return false;
+            }
 
 			idItem = $('#idItem').val();
 			idComp = $('#idComp').val();
