@@ -619,16 +619,15 @@ class opnameBarangController extends Controller
         $cekNota = $date;
 
         $cek = DB::table('d_opname')
-            ->select(DB::raw('select CAST(MID(o_reff, 4, 3) AS UNSIGNED)'))
-            ->whereRaw('o_reff like "%' . $cekNota . '%"')
-            ->max('o_id');
+            ->whereRaw('o_reff like "%'.$cekNota.'%"')
+            ->select(DB::raw('CAST(MID(o_reff, 4, 3) AS UNSIGNED) as o_reff'))
+            ->orderBy('o_id', 'desc')->first();
 
-        if ($cek == 0) {
+        if ($cek == null) {
             $temp = 1;
         } else {
-            $temp = ($cek + 1);
+            $temp = ($cek->o_reff + 1);
         }
-
         $kode = sprintf("%03s", $temp);
 
         $tempKode = 'OP-' . $kode . '/' . $cekNota;
@@ -722,7 +721,6 @@ class opnameBarangController extends Controller
                                 array_push($sd_array, $imeiR[$i]);
                             }
                             //////////////////////////////////////////////////////
-
                             $aray = ([
                                 'od_opname' => $o_id,
                                 'od_detailid' => $i + 1,
@@ -731,12 +729,10 @@ class opnameBarangController extends Controller
                                 'od_qty_system' => $cek,
                                 'od_specificcode' => strtoupper($imeiR[$i])
                             ]);
-                            // dd($aray);
                             array_push($od_array, $aray);
                         }
 
                         DB::table('d_opname_dt')->insert($od_array);
-
 
                         /////
                         ////////////////////////////////////////////
@@ -822,7 +818,6 @@ class opnameBarangController extends Controller
                             array_push($arayInsPNB, $arayT);
                         }
                         DB::table('d_stock_mutation')->insert($arayInsPNB);
-
 
                         if (!empty($arayDH)) {
                     /// Ambil SM_REFF untuk Specifik Code yang sama pada PENAMBAHAN
@@ -1183,7 +1178,6 @@ class opnameBarangController extends Controller
                         }
                         DB::table('d_stock_mutation')->insert($arayInsPNB);
 
-
                         if (!empty($arayDH)) {
                     /// Ambil SM_REFF untuk Specifik Code yang sama pada PENAMBAHAN
                             $getReff = DB::table('d_stock_mutation')->whereIn('sm_specificcode', $arayDH)->select('sm_reff')->get();
@@ -1338,7 +1332,8 @@ class opnameBarangController extends Controller
                     }
 
                     $getCNLog = DB::table('m_company')->where('c_id', $o_comp)->select('c_name')->first();
-                    $log = 'Menambahkan Opname Barang pada Outlet '.$getCNLog->cname.' dengan nota ' . $o_reff;
+                    $log = 'Menambahkan Opname Barang pada Outlet '.$getCNLog->c_name.' dengan nota ' . $o_reff;
+
                     DB::commit();
                     PlasmafoneController::logActivity($log);
                     return json_encode([
@@ -1373,19 +1368,21 @@ class opnameBarangController extends Controller
             ->join('d_item', 'i_id', '=', 'od_item')
             ->join('m_company', 'c_id', '=', 'o_comp')
             ->where('o_id', $id)
-            ->select('o_comp', 'c_name', 'od_item', 'i_nama', 'od_qty_real', 'od_qty_system', 'o_action', 'od_specificcode', 'i_specificcode')->get();
+            ->select('o_comp', 'c_name', 'od_item', 'i_nama', 'od_qty_real', 'o_action', 'od_specificcode', 'i_specificcode')->get();
 
         $getHppEdit = DB::table('d_stock')
             ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
             ->where('s_item', $getDataEdit[0]->od_item)
-            ->select('sm_hpp')
+            ->where('s_comp', $getDataEdit[0]->o_comp)
+            ->where('sm_detail', 'PENAMBAHAN')
+            ->select('sm_hpp', 's_qty')
             ->orderBy('sm_detailid', 'desc')
-            ->get();
+            ->first();
 
         // dd($getHppEdit);
         return json_encode([
             'edit' => $getDataEdit,
-            'hpp' => $getHppEdit[0]->sm_hpp
+            'hpp' => $getHppEdit
         ]);
     }
 
@@ -1396,11 +1393,9 @@ class opnameBarangController extends Controller
         } else {
             $id = Crypt::decrypt($request->id);
             if ($request->isMethod('post')) {
-                dd($request);
+                // dd($request);
                 DB::beginTransaction();
                 try {
-                    // DB::table('d_opname_dt')->where('od_opname', $id)->delete();
-                    // DB::table('d_opname')->where('o_id', $id)->update([]);
 
                     //// ============================================================
                     //// Ambil dari DELETE D_STOCK, D_STOCK_DT, dan D_STOCK_MUTATION
@@ -1444,7 +1439,7 @@ class opnameBarangController extends Controller
                             $aray = ([
                                 'sd_stock' => $idS,
                                 'sd_detailid' => $i + 11,
-                                'sd_specificcode' => $scSMUpdate[$i]->sm_specificcode
+                                'sd_specificcode' => strtoupper($scSMUpdate[$i]->sm_specificcode)
                             ]);
                             array_push($arayDelSD, $aray);
                         }
@@ -1458,7 +1453,6 @@ class opnameBarangController extends Controller
                         DB::table('d_stock_mutation')
                             ->where('sm_stock', $idS)
                             ->where('sm_nota', $getNota->o_reff)->delete();
-
                     } else {
                         //=========================
                         //== FOR Spesificcode = NO
@@ -1548,7 +1542,7 @@ class opnameBarangController extends Controller
                                 'od_item' => $idItem,
                                 'od_qty_real' => 1,
                                 'od_qty_system' => $cek,
-                                'od_specificcode' => $imeiR[$i]
+                                'od_specificcode' => strtoupper($imeiR[$i])
                             ]);
 
                             array_push($od_array, $aray);
@@ -1603,7 +1597,7 @@ class opnameBarangController extends Controller
                             $aray = ([
                                 'sd_stock' => $idS,
                                 'sd_detailid' => $getMax + ($dt + 1),
-                                'sd_specificcode' => $arayDT[$dt]
+                                'sd_specificcode' => strtoupper($arayDT[$dt])
                             ]);
                             array_push($arayInsert, $aray);
                         }
@@ -1628,7 +1622,7 @@ class opnameBarangController extends Controller
                                 'sm_detailid' => $getMaxSMT + ($dt + 1),
                                 'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
                                 'sm_detail' => 'PENAMBAHAN',
-                                'sm_specificcode' => $arayDT[$dt],
+                                'sm_specificcode' => strtoupper($arayDT[$dt]),
                                 'sm_expired' => '',
                                 'sm_qty' => 1,
                                 'sm_use' => 0,
@@ -1644,6 +1638,7 @@ class opnameBarangController extends Controller
                         DB::table('d_stock_mutation')->insert($arayInsPNB);
 
                         if (!empty($arayDH)) {
+
                         /// Ambil SM_REFF untuk Specifik Code yang sama pada PENAMBAHAN
                             $getReff = DB::table('d_stock_mutation')->whereIn('sm_specificcode', $arayDH)->select('sm_reff')->get();
 
@@ -1652,22 +1647,23 @@ class opnameBarangController extends Controller
                             $date = Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s');
                             $getMaxSMH = DB::table('d_stock_mutation')->where('sm_stock', $idS)->max('sm_detailid');
 
-                        /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
+                            /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
                             $arayInsPGR = array();
                             for ($dk = 0; $dk < count($arayDH); $dk++) {
                                 // dd($arayDH);
+                                $getHPPDH = DB::table('d_stock_mutation')->where('sm_specificcode', $arayDH[$dk])->select('sm_hpp')->first();
 
                                 $arayK = ([
                                     'sm_stock' => $idS,
                                     'sm_detailid' => $getMaxSMH + ($dk + 1),
                                     'sm_date' => $date,
                                     'sm_detail' => 'PENGURANGAN',
-                                    'sm_specificcode' => $arayDH[$dk],
+                                    'sm_specificcode' => strtoupper($arayDH[$dk]),
                                     'sm_expired' => '',
                                     'sm_qty' => 1,
                                     'sm_use' => 1,
                                     'sm_sisa' => 0,
-                                    'sm_hpp' => $request->hpp,
+                                    'sm_hpp' => $getHPPDH->sm_hpp,
                                     'sm_sell' => $getSell->i_price,
                                     'sm_nota' => $getNota->o_reff,
                                     'sm_reff' => $getReff[$dk]->sm_reff,
@@ -1679,7 +1675,6 @@ class opnameBarangController extends Controller
                         }
 
                         DB::table('d_stock')->where('s_id', $idS)->update(['s_qty' => count($imeiR)]);
-
 
                     } else {
 
@@ -1806,7 +1801,7 @@ class opnameBarangController extends Controller
                         }
                     }
 
-                    $log = 'Menambahkan Opname Barang pada PLASMAFONE PUSAT dengan nota ' . $o_reff;
+                    $log = 'Mengubah Data Opname Barang pada PLASMAFONE PUSAT dengan nota ' . $getNota->o_reff;
                     DB::commit();
                     PlasmafoneController::logActivity($log);
                     return json_encode([
@@ -1883,7 +1878,7 @@ class opnameBarangController extends Controller
                             $aray = ([
                                 'sd_stock' => $idS,
                                 'sd_detailid' => $i + 11,
-                                'sd_specificcode' => $scSMUpdate[$i]->sm_specificcode
+                                'sd_specificcode' => strtoupper($scSMUpdate[$i]->sm_specificcode)
                             ]);
                             array_push($arayDelSD, $aray);
                         }
@@ -1987,7 +1982,7 @@ class opnameBarangController extends Controller
                                 'od_item' => $idItem,
                                 'od_qty_real' => 1,
                                 'od_qty_system' => $cek,
-                                'od_specificcode' => $imeiR[$i]
+                                'od_specificcode' => strtoupper($imeiR[$i])
                             ]);
 
                             array_push($od_array, $aray);
@@ -2042,7 +2037,7 @@ class opnameBarangController extends Controller
                             $aray = ([
                                 'sd_stock' => $idS,
                                 'sd_detailid' => $getMax + ($dt + 1),
-                                'sd_specificcode' => $arayDT[$dt]
+                                'sd_specificcode' => strtoupper($arayDT[$dt])
                             ]);
                             array_push($arayInsert, $aray);
                         }
@@ -2067,7 +2062,7 @@ class opnameBarangController extends Controller
                                 'sm_detailid' => $getMaxSMT + ($dt + 1),
                                 'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
                                 'sm_detail' => 'PENAMBAHAN',
-                                'sm_specificcode' => $arayDT[$dt],
+                                'sm_specificcode' => strtoupper($arayDT[$dt]),
                                 'sm_expired' => '',
                                 'sm_qty' => 1,
                                 'sm_use' => 0,
@@ -2096,17 +2091,18 @@ class opnameBarangController extends Controller
                             for ($dk = 0; $dk < count($arayDH); $dk++) {
                                 // dd($arayDH);
 
+                                $getHPPDH = DB::table('d_stock_mutation')->where('sm_specificcode', $arayDH[$dk])->select('sm_hpp')->first();
                                 $arayK = ([
                                     'sm_stock' => $idS,
                                     'sm_detailid' => $getMaxSMH + ($dk + 1),
                                     'sm_date' => $date,
                                     'sm_detail' => 'PENGURANGAN',
-                                    'sm_specificcode' => $arayDH[$dk],
+                                    'sm_specificcode' => strtoupper($arayDH[$dk]),
                                     'sm_expired' => '',
                                     'sm_qty' => 1,
                                     'sm_use' => 1,
                                     'sm_sisa' => 0,
-                                    'sm_hpp' => $request->hpp,
+                                    'sm_hpp' => $getHPPDH->sm_hpp,
                                     'sm_sell' => $getSell->i_price,
                                     'sm_nota' => $getNota->o_reff,
                                     'sm_reff' => $getReff[$dk]->sm_reff,
@@ -2245,8 +2241,9 @@ class opnameBarangController extends Controller
                         }
                     }
 
-                    $getCNLog = DB::table('m_company')->where('c_id', $o_comp)->select('c_name')->first();
-                    $log = 'Mengubah Opname Barang pada Outlet '.$getCNLog->cname.' dengan nota ' . $o_reff;
+                    $getCNLog = DB::table('m_company')->where('c_id', $idPos)->select('c_name')->first();
+                    $log = 'Mengubah Data Opname Barang pada Outlet '.$getCNLog->c_name.' dengan nota ' . $getNota->o_reff;
+
                     DB::commit();
                     PlasmafoneController::logActivity($log);
                     return json_encode([

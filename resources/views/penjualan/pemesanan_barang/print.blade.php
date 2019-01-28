@@ -1,69 +1,81 @@
 <html>
     <head>
-        <style>
-            .mt-10{
-                margin-top: -10px
-            }
-            .pt20{
-                padding-top: 20px
-            }
-            table{
-                border-collapse: collapse
-            }
-            td{
-                padding: 5px
-            }
-            .trtb{
-                border-bottom: 1px solid black;
-                border-top: 1px solid black
-            }
-            .trbottom{
-                border-top: 1px solid black
-            }
-        </style>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link rel="shortcut icon" href="{{ asset('template_asset/img/favicon/favicon.ico') }}" type="image/x-icon">
+        <title>Cetak Pemesanan Barang</title>
     </head>
     <body>
+        <style type="text/css">
+            *{
+                margin: 1px;
+                font-family: "Courier New", Courier, monospace;
+                font-size: 12px;
+            }
+            .hasil {
+                margin-top: 3px;
+            }
+            .footer {
+                position: fixed; 
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 150px;
+            }
+        </style>
         @foreach ($data as $print)
-            <div style="text-align: center">
-                <p><h3><b>{{ strtoupper($print->c_name) }}</b></h3></p>
-                <p>Alamat : {{ $print->c_address }}</p>
-                <p style="margin-top: -10px">No.Telp : {{ $print->c_tlp }}</p>
-            </div>    
-            
-            <div style="padding-top: 20px; text-align: left; width:100%">
-                <p><span style="width: 30%">No. Nota </span><span>: {{ $print->i_nota }}</span></p>
-                <p class="mt-10"><span>Nama Customer </span><span>: {{ $print->m_name }}</span></p>
-                <p class="mt-10"><span>Id Member </span><span>: {{ $print->m_idmember }}</span></p>
-                <p class="mt-10"><span>No. Telp </span><span>: {{ $print->m_telp }}</span></p>
-            </div>
+        <div class="judulPerusahaan">
+            <p style="text-align: center;">************************************************************************************</p>
+            <p style="text-align: center;">{{ strtoupper($print->c_name) }}</p>
+            <p style="text-align: center;">Alamat : {{ $print->c_address }}</p>
+            <p style="text-align: center;">No.Telp : {{ $print->c_tlp }}</p>
+            <p style="text-align: center;">************************************************************************************</p>
+        </div>
 
-            <div class="pt20">
-                <table style="text-align: center; width: 100%">
-                    <tr class="trtb">
-                        <td style="width: 70%"><b>Nama Barang</b></td>
-                        <td style="width: 30%"><b>Jumlah Barang</b></td>
-                    </tr>
-                    @foreach ($dtData as $dtItem)
-                        <tr>
-                            <td style="text-align:left; padding-left: 5px;">{{ $dtItem->i_nama }}</td>
-                            <td>{{ $dtItem->id_qty }} Unit</td>
-                        </tr>
-                    @endforeach
-                    <tr class="trbottom">
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </div>
+
+        <div class="header1" style="margin-top: 15px">
+            <span>Customer</span>
+        </div>
+
+        <div class="header1" style="margin-top: 10px">
+            <span>No. Nota : {{ $print->i_nota }}</span>
+        </div>
+
+        <div class="header1" style="margin-top: 5px">
+            <span>Nama Customer : {{ $print->m_name }}</span>
+        </div>
+
+        <div class="header1" style="margin-top: 5px">
+            <span>Id Member : {{ $print->m_idmember }}</span>
+        </div>
+
+        <div class="header1" style="margin-top: 5px">
+            <span>No. Telp : {{ $print->m_telp }}</span>
+        </div>
         @endforeach
-
-
-        <script src="{{ asset('template_asset/js/libs/jquery-2.1.1.min.js') }}"></script>
-		<script src="{{ asset('template_asset/js/libs/jquery-ui-1.10.3.min.js') }}"></script>	
+        <div style="border: .6px dashed; margin-top: 15px">
+        </div>
+        <div class="header1">
+            <div class="tanggal">
+                <span style="float: left; width: 70%; margin-left: 10px;">Nama Barang</span>
+                <span style="width: 30%">Jumlah Barang</span>
+            </div>
+        </div>
+        <div style="border: .6px dashed;"></div>
+        @foreach($dtData as $dtItem) 
+        <div class="header1" style="margin-top: 10px">
+            <div class="tanggal">
+                <span style="float: left; width: 70%; margin-left: 10px;">{{ $dtItem->i_nama }}</span>
+                <span style="width: 30%">{{ $dtItem->id_qty }}</span>
+            </div>
+        </div>
+        @endforeach
+        <div style="border: .6px dashed;"></div>
+        <div class="footer" style="width: 100%;">
+            <p style="text-align:center">PLASMAFONE</p>
+        </div>   
+    
         <script type="text/javascript">
-            $(document).ready(function(){
-                window.print();
-            });
+            window.print();
         </script>
     </body>
 </html>

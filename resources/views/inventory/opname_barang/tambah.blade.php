@@ -277,8 +277,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		$('.codeTable tbody').on( 'click', 'a.btnhapus', function () {
 			codeTable.row( $(this).parents('tr') ).remove().draw();
             $('tbody#codeshowdata tr:last td:first input').focus();
-		});
-
+        });
+        
+        {{-- $('#aksiSelect').on('change', function (e) {
+			if($('#aksiSelect').val() == '1'){
+                $('#divCodeTable').css("display", "none");
+			}else{
+				cariTambah();
+			}
+        }); --}}
 
 		function cariTambah(){
 

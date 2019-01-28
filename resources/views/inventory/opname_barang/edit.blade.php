@@ -260,9 +260,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#idItem').val(response.data.edit[0].od_item);
 				$('#nameItem').val(response.data.edit[0].i_nama);
                 $('#idComp').val(response.data.edit[0].o_comp);
-                $('#osHpp').val(accounting.formatMoney(response.data.hpp, "", 0, ".", ","));
+                $('#osHpp').val(accounting.formatMoney(response.data.hpp.sm_hpp, "", 0, ".", ","));
                 $('#osHpp').maskMoney({precision: 0, thousands: '.'});
-                $('#osQtyS').val(response.data.edit[0].od_qty_system+' Unit');
+                $('#hppNote').val(accounting.formatMoney(response.data.hpp.sm_hpp, "", 0, ".", ","));
+                $('#osQtyS').val(response.data.hpp.s_qty+' Unit');
                 $('#osQtyR').maskMoney({precision: 0, thousands: '.', suffix: ' Unit'});
 
 				document.getElementById("nameItem").readOnly = true;
@@ -279,7 +280,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				}
 
                 if(response.data.edit[0].i_specificcode == 'Y'){
-                    $('.osQtyR').css("display", "none");
+                    $('.qtyR').css("display", "none");
 
                     codeTable.clear();
                     $('#codeTable').css("display", "block");
@@ -307,7 +308,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
                     $('#codeTable').css("display", "none");
                     $('#osQtyR').val(response.data.edit[0].od_qty_real+' Unit');
-                    $('.osQtyR').css("display", "block");
+                    $('.qtyR').css("display", "block");
                 }
 
                 $('#divQtyHpp').css("display", "block");
@@ -341,13 +342,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             $('tbody#codeshowdata tr:last td:first input').focus();
 		});
 
-		$('#aksiSelect').on('change', function (e) {
+		{{-- $('#aksiSelect').on('change', function (e) {
 			if($('#aksiSelect').val() == '1'){
 				$('#divCodeTable').css("display", "none");
 			}else{
 				cariTambah();
 			}
-		});
+        }); --}}
+        
 
 		function simpanEOB(){
 

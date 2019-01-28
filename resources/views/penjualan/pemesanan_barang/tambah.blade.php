@@ -127,7 +127,7 @@
                                                     <div class="input-group" style="width: 100%">
                                                         <span class="input-group-addon" style="width: 40px"><i class="fa fa-barcode"></i></span>                                                        
                                                         <input type="hidden" id="tpItemId" name="tpItemId">
-													    <input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang">
+													    <input type="text" class="form-control" id="tpItemNama" name="tpItemNama" placeholder="Masukkan Nama/Kode Barang" style="text-transform:uppercase">
                                                     </div>                                                    
                                                 </div>
 											</div>
@@ -272,9 +272,8 @@
 			source: baseUrl+'/penjualan/pemesanan-barang/get-item',
 			minLength: 2,
 			select: function(event, data) {
-				$('#tpItemId').val(data.item.id);
-				$('#tpItemNama').val(data.item.label);
-				dt_addBarang(data.item.id, data.item.label, data.item.harga);
+                $('#tpItemId').val(data.item.id);
+                dt_addBarang(data.item.id, data.item.label, data.item.harga);
 			}
 		});
 	});
@@ -301,12 +300,12 @@
             minLength: 3,
             select: function(event, data) {
                 $('#tpItemId').val(data.item.id);
-                $('#tpItemNama').val(data.item.label);
                 dt_addBarang(data.item.id, data.item.label, data.item.harga);
             }
         });
 
-		$('#tpItemNama').val('');
+        $('#tpItemNama').val('');
+        $('#tpItemId').val('');
         update_showHarga();
 	}
 
@@ -328,7 +327,6 @@
             minLength: 3,
             select: function(event, data) {
                 $('#tpItemId').val(data.item.id);
-                $('#tpItemNama').val(data.item.label);
                 dt_addBarang(data.item.id, data.item.label, data.item.harga);
             }
         });

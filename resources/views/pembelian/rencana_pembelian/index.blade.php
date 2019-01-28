@@ -240,8 +240,8 @@
 
                         {"data": "c_name"},
                         {"data": "i_nama"},
-                        {"data": "pr_qtyApp"},
-                        // {"data": "aksi"}
+                        {"data": "ro_qty"},
+                        {"data": "aksi"}
                     ],
                     "autoWidth" : true,
                     "language" : dataTableLanguage,
