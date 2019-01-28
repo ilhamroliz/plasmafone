@@ -178,10 +178,10 @@
                                     <div class="tab-pane fade" id="hr3">
                                         <div class="col-lg-12 col-md-12 col-sm-12 text-left" style="margin-top:1%;margin-bottom:1%">
                                             <div class="col-md-4 pull-left" style="padding-left: 0;">
-                                                <div class="input-group input-daterange" id="date-range" style="">
-                                                    <input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+                                                <div class="input-group input-daterange" id="date_range_tolak" style="">
+                                                    <input type="text" class="form-control" id="tgl_awal_tolak" name="tgl_awal_tolak" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
                                                     <span class="input-group-addon bg-custom text-white b-0">Sampai</span>
-                                                    <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+                                                    <input type="text" class="form-control" id="tgl_akhir_tolak" name="tgl_akhir_tolak" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
 
                                                 </div>
                                             </div>
@@ -197,14 +197,12 @@
                                                width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="1%" >No</th>
-                                                    <th >Nama Outlet</th>
+                                                    <th data-hide="phone,tablet" width="10%">No</th>
+                                                    <th data-hide="phone,tablet" width="25%">Nama Outlet</th>
                                                     <th data-hide="phone,tablet" width="35%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" >Qty</th>
-                                                    <th data-hide="phone,tablet" width="15%">Status</th>
-                                                    <!-- <th data-hide="phone,tablet" >Jml</th>
-
-                                                    <th data-hide="phone,tablet" >Aksi</th> -->
+                                                    <th data-hide="phone,tablet" width="5%">Qty</th>
+                                                    <th data-hide="phone,tablet" width="10%">Status</th>
+                                                    <th data-hide="phone,tablet" width="15%">Aksi</th>
 
                                                 </tr>
                                             </thead>
@@ -278,6 +276,44 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Edit Qty Ditolak -->
+    <div class="modal fade" id="editQtyTolak" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Request Order</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input type="hidden" id="ro_id">
+                                <label for="i_nama">Nama Barang</label>
+                                <input type="text" class="form-control" id="i_nama" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="ro_qty">Kuantitas</label>
+                                <input type="number" min="0" class="form-control" id="ro_qty"/>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="updateTolak()">
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Simpan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('extra_script')
@@ -308,6 +344,10 @@
         $('#tgl_awal').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
         $('#tgl_akhir').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
 
+        // Date Range Tolak
+        $('#tgl_awal_tolak').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+        $('#tgl_akhir_tolak').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+
         $( "#tgl_awal" ).datepicker({
 			language: "id",
 			format: 'dd/mm/yyyy',
@@ -325,6 +365,27 @@
 		});
 
         $('#date-range').datepicker({
+            todayHighlight: true
+        });
+
+        // Date Range Tolak
+        $( "#tgl_awal_tolak" ).datepicker({
+            language: "id",
+            format: 'dd/mm/yyyy',
+            prevText: '<i class="fa fa-chevron-left"></i>',
+            nextText: '<i class="fa fa-chevron-right"></i>',
+            autoclose: true
+        });
+
+        $( "#tgl_akhir_tolak" ).datepicker({
+            language: "id",
+            format: 'dd/mm/yyyy',
+            prevText: '<i class="fa fa-chevron-left"></i>',
+            nextText: '<i class="fa fa-chevron-right"></i>',
+            autoclose: true
+        });
+
+        $( "#date_range_tolak" ).datepicker({
             todayHighlight: true
         });
 
@@ -457,8 +518,8 @@
                     "url": '{{url('/pembelian/request-pembelian/tolak')}}',
                     "type": 'post',
                     "data": function ( data ) {
-                        data.tgl_akhir = $('#tgl_akhir').val();
-                        data.tgl_awal  = $('#tgl_awal').val();
+                        data.tgl_akhir_tolak = $('#tgl_akhir_tolak').val();
+                        data.tgl_awal_tolak  = $('#tgl_awal_tolak').val();
                         data._token    = '{{ csrf_token() }}';
                     },
                 }
@@ -554,6 +615,15 @@
 
 		}
 
+        function editQtyTolak(ro_id,i_nama,ro_qty){
+            console.log("oke");
+            $('#editQtyTolak').modal('show');
+            $('#ro_id').val(ro_id);
+            $('#i_nama').val(i_nama);
+            $('#ro_qty').val(ro_qty);
+
+        }
+
         function update(){
 
             overlay();
@@ -567,6 +637,50 @@
             });
             $.ajax({
                 url: baseUrl + '/pembelian/request-pembelian/updateReq',
+                type: 'get',
+                data: {id: ro_id, qty: ro_qty},
+                dataType: "JSON",
+                success: function(data)
+                {
+                    if(data.status =='sukses'){
+                        $.smallBox({
+                            title  : "Berhasil",
+                            content: 'Data telah diupdate...!',
+                            color  : "#739E73",
+                            timeout: 4000,
+                            icon   : "fa fa-check bounce animated"
+                        });
+                        $('#waitingReq_table').DataTable().ajax.reload();
+                    } else {
+                        $.smallBox({
+                            title  : "GAGAL",
+                            content: 'Data telah GAGAL diupdate...!',
+                            color  : "#739E73",
+                            timeout: 4000,
+                            icon   : "fa fa-check bounce animated"
+                        });
+                        $('#waitingReq_table').DataTable().ajax.reload();
+                    }
+
+                    out();
+                    $('#editQty').modal('hide');
+                },
+            })
+        }
+
+        function updateTolak(){
+
+            overlay();
+            var ro_id = $('#ro_id').val();
+            var ro_qty = $('#ro_qty').val();
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: baseUrl + '/pembelian/request-pembelian/updateTolak',
                 type: 'get',
                 data: {id: ro_id, qty: ro_qty},
                 dataType: "JSON",

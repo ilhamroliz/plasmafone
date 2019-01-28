@@ -162,7 +162,7 @@
 															<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
 																<i class="glyphicon glyphicon-edit"></i>
 															</button>&nbsp;
-															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus">
+															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest()">
 																<i class="glyphicon glyphicon-trash"></i>
 															</button>
 														</div>
@@ -442,12 +442,12 @@
                     responsiveHelper_dt_basic.respond();
                 }
             });
-             $('#dt_tambah').on( 'click', '.btn-hapus', function () {
-				    semua
-				        .row( $(this).parents('tr') )
-				        .remove()
-				        .draw(false);
-			} );
+   //           $('#dt_tambah').on( 'click', '.btn-hapus', function () {
+			// 	    semua
+			// 	        .row( $(this).parents('tr') )
+			// 	        .remove()
+			// 	        .draw(false);
+			// } );
 
 
 			getMember();
@@ -930,52 +930,62 @@
 			});
 		}
 
-        function tolak(id){
-            $.ajax({
-                url : '{{url('/pembelian/rencana-pembelian/tolakRequest')}}',
-                type: "GET",
-                data: {
+        function tolakRequest(id){
+            $.SmartMessageBox({
+					title : "Smart Alert!",
+					content : "Apakah Anda Yakin Akan Menolak Rencana Pembelian ?",
+					buttons : '[Tidak][Ya]'
+				}, function(ButtonPressed) {
+					if (ButtonPressed === "Ya") {
+						var ar = $();
+					    for (var i = 0; i < semua.rows()[0].length; i++) {
+					        ar = ar.add(semua.row(i).node());
+					    }
+					    $.ajaxSetup({
+					    headers: {
+					            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					            }
+					    });
+					    $.ajax({
+					        url: baseUrl + '/pembelian/rencana-pembelian/tolakRequest',
+					        type: 'get',
+					        data: ar.find('input').serialize(),
+					        dataType: 'json',
+					        success: function (data) {
 
-                    pr_idReq         :	$('#pr_idReq').val(),
-                },
-                dataType: "JSON",
-                success: function(data)
-                {
-                    if(data.status == 'GAGAL'){
-						$('#overlay').fadeOut(200);
-							$.smallBox({
-								title : "Gagal",
-								content : "Upsss. data Gagal di Update",
-								color : "#A90329",
-								timeout: 5000,
-								icon : "fa fa-times bounce animated"
-							});
-					}else{
-						var rel = $('#dt_tambah').DataTable().ajax.reload();
-							$('#dt_tambah').DataTable().ajax.reload();
-							if(!rel)
-							{
-								$.smallBox({
-								title : "Berhasil",
-								content : 'Data gagal direload...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-								});
-							}else{
-								$.smallBox({
-								title : "Berhasil",
-								content : 'Data telah ditambahkan...!',
-								color : "#739E73",
-								timeout: 4000,
-								icon : "fa fa-check bounce animated"
-								});
-								$('#myModal').modal('hide');
-							}
+					        	if(data.status =='sukses'){
+									$.smallBox({
+										title  : "Berhasil",
+										content: 'Penolakan request pembelian berhasil...!',
+										color  : "#739e73",
+										timeout: 4000,
+										icon   : "fa fa-check bounce animated"
+									});
+									window.location.href="{{url('pembelian/rencana-pembelian/tambah')}}";
+								}else{
+									$.smallBox({
+										title  : "GAGAL",
+										content: 'Data telah GAGAL ditambahkan...!',
+										color  : "#c46a69",
+										timeout: 4000,
+										icon   : "fa fa-check bounce animated"
+									});
+								}
+					        }
+					    });
 					}
-                },
+					if (ButtonPressed === "Tidak") {
+						$.smallBox({
+							title : "Peringatan...!!!",
+							content : "<i class='fa fa-clock-o'></i> <i>Anda Tidak Jadi Menolak Request Pembelian!</i>",
+							color : "#C46A69",
+							iconSmall : "fa fa-times fa-2x fadeInRight animated",
+							timeout : 4000
+						});
+					}
 
-            });
+				});
+				e.preventDefault();
 		}
 
 		var app = new Vue({

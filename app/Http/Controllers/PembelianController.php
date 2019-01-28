@@ -52,46 +52,40 @@ class PembelianController extends Controller
         $user = Auth::user()->m_id;
 
         if($prive == "PF00000001"){
-            $menunggu = DB::table('d_purchase_plan')
+            $menunggu = DB::table('d_requestorder')
             ->select(
-                'd_purchase_plan.pr_idPlan',
-                'd_purchase_plan.pr_idReq',
-                'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_qtyReq',
-                'd_purchase_plan.pr_qtyApp',
-                'd_purchase_plan.pr_stsPlan',
-                'd_purchase_plan.pr_dateRequest',
-                'd_purchase_plan.pr_dateApp',
-                'd_purchase_plan.pr_comp',
+                'd_requestorder.ro_id',
+                'd_requestorder.ro_comp',
+                'd_requestorder.ro_item',
+                'd_requestorder.ro_qty',
+                'd_requestorder.ro_state',
+                'd_requestorder.ro_date',
                 'd_item.i_nama',
                 'm_company.c_name'
             )
-            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
+            ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+            // ->join('d_mem', 'd_requestorder.pr_userId', '=', 'd_mem.m_id')
+            ->join('m_company', 'd_requestorder.ro_comp', '=', 'm_company.c_id')
+            ->where('d_requestorder.ro_state', 'Y')
             ->get();
 
         }else{
-            $menunggu = DB::table('d_purchase_plan')
+            $menunggu = DB::table('d_requestorder')
             ->select(
-                'd_purchase_plan.pr_idPlan',
-                'd_purchase_plan.pr_idReq',
-                'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_qtyReq',
-                'd_purchase_plan.pr_qtyApp',
-                'd_purchase_plan.pr_stsPlan',
-                'd_purchase_plan.pr_dateRequest',
-                'd_purchase_plan.pr_dateApp',
-                'd_purchase_plan.pr_comp',
+                'd_requestorder.ro_id',
+                'd_requestorder.ro_comp',
+                'd_requestorder.ro_item',
+                'd_requestorder.ro_qty',
+                'd_requestorder.ro_state',
+                'd_requestorder.ro_date',
                 'd_item.i_nama',
                 'm_company.c_name'
             )
-            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
+            ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+            // ->join('d_mem', 'd_requestorder.pr_userId', '=', 'd_mem.m_id')
             ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
-            ->where('d_purchase_plan.pr_comp', $prive)
+            ->where('d_requestorder.ro_state', 'Y')
+            ->where('d_requestorder.ro_comp', $prive)
             ->get();
         }
 
@@ -99,9 +93,9 @@ class PembelianController extends Controller
 
             ->addColumn('aksi', function ($menunggu) {
                 if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $menunggu->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $menunggu->ro_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $menunggu->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $menunggu->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $menunggu->pr_idPlan . '\', \'' . $menunggu->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $menunggu->ro_id . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $menunggu->ro_id . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $menunggu->ro_id . '\', \'' . $menunggu->ro_id . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['input', 'aksi'])
@@ -114,43 +108,34 @@ class PembelianController extends Controller
         if($prive == "PF00000001"){
             $setujui = DB::table('d_purchase_plan')
             ->select(
-                'd_purchase_plan.pr_idPlan',
-                'd_purchase_plan.pr_idReq',
-                'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_qtyReq',
-                'd_purchase_plan.pr_qtyApp',
-                'd_purchase_plan.pr_stsPlan',
-                'd_purchase_plan.pr_dateRequest',
-                'd_purchase_plan.pr_dateApp',
-                'd_purchase_plan.pr_comp',
-                'd_item.i_nama',
-                'm_company.c_name'
+                'd_purchase_plan.pp_id',
+                'd_purchase_plan.pp_item',
+                'd_purchase_plan.pp_qtyreq',
+                'd_purchase_plan.pp_qtyappr',
+                'd_purchase_plan.pp_status',
+                'd_purchase_plan.pp_date',
+                'd_purchase_plan.pp_insert',
+                'd_item.i_nama'
+                // 'm_company.c_name'
             )
-            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_plan.pr_stsPlan', 'CONFIRM')
+            ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
+            ->where('d_purchase_plan.pp_status', 'Y')
             ->get();
         }else{
             $setujui = DB::table('d_purchase_plan')
             ->select(
-                'd_purchase_plan.pr_idPlan',
-                'd_purchase_plan.pr_idReq',
-                'd_purchase_plan.pr_itemPlan',
-                'd_purchase_plan.pr_qtyReq',
-                'd_purchase_plan.pr_qtyApp',
-                'd_purchase_plan.pr_stsPlan',
-                'd_purchase_plan.pr_dateRequest',
-                'd_purchase_plan.pr_dateApp',
-                'd_purchase_plan.pr_comp',
-                'd_item.i_nama',
-                'm_company.c_name'
+                'd_purchase_plan.pp_id',
+                'd_purchase_plan.pp_item',
+                'd_purchase_plan.pp_qtyreq',
+                'd_purchase_plan.pp_qtyappr',
+                'd_purchase_plan.pp_status',
+                'd_purchase_plan.pp_date',
+                'd_purchase_plan.pp_insert',
+                'd_item.i_nama'
+                // 'm_company.c_name'
             )
-            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('d_mem', 'd_purchase_plan.pr_userId', '=', 'd_mem.m_id')
-            ->join('m_company', 'd_mem.m_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_plan.pr_stsPlan', 'CONFIRM')
-            ->where('d_purchase_plan.pr_comp', $prive)
+            ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
+            ->where('d_purchase_plan.pp_status', 'Y')
             ->get();
         }
 
@@ -947,18 +932,27 @@ class PembelianController extends Controller
 
     public function tolakRequest(Request $request)
     {
-        $pr_idReq = $request->input('pr_idReq');
-        $reqOrder = DB::table('d_purchase_req')
-            ->where('d_purchase_req.pr_id', $pr_idReq)
+        $req_id = $request->input('req_id');
+
+        DB::beginTransaction();
+        try {
+            DB::table('d_requestorder')
+            ->whereIn('ro_id', $req_id)
             ->update([
-                'pr_stsReq' => 'DITOLAK'
+                'ro_state' => 'N'
             ]);
-        if ($reqOrder) {
-            $data = "SUKSES";
-            echo json_encode(array("status" => $data));
-        } else {
-            $data = "GAGAL";
-            echo json_encode(array("status" => $data));
+
+            DB::commit();
+            return response()->json([
+                'status' => 'sukses'
+            ]);
+
+        } catch (\Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => 'gagal',
+                'data'   => $e
+            ]);
         }
     }
 
@@ -3150,13 +3144,13 @@ class PembelianController extends Controller
 
     public function requestTolak(Request $request)
     {
-        $tgl_awal  = $request->input('tgl_awal');
-        $tgl_akhir = $request->input('tgl_akhir');
-        $req_awal  = str_replace('/', '-', $tgl_awal);
-        $req_akhir = str_replace('/', '-', $tgl_akhir);
+        $tgl_awal_tolak  = $request->input('tgl_awal_tolak');
+        $tgl_akhir_tolak = $request->input('tgl_akhir_tolak');
+        $req_awal_tolak  = str_replace('/', '-', $tgl_awal_tolak);
+        $req_akhir_tolak = str_replace('/', '-', $tgl_akhir_tolak);
 
-        $awal  = Carbon::parse($req_awal)->startOfDay();
-        $akhir = Carbon::parse($req_akhir)->endOfDay();
+        $awal_tolak  = Carbon::parse($req_awal_tolak)->startOfDay();
+        $akhir_tolak = Carbon::parse($req_akhir_tolak)->endOfDay();
 
         $comp = Auth::user()->m_comp;
 
@@ -3166,6 +3160,8 @@ class PembelianController extends Controller
             ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
             ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
             ->where('d_requestorder.ro_state', 'N')
+            ->where('d_requestorder.ro_date','>=',$awal_tolak)
+            ->where('d_requestorder.ro_date','<=',$akhir_tolak)
             ->get();
         }else{
             $id = Auth::user()->m_id;
@@ -3174,6 +3170,8 @@ class PembelianController extends Controller
             ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
             ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
             ->where('d_requestorder.ro_state', 'N')
+            ->where('d_requestorder.ro_date','>=',$awal_tolak)
+            ->where('d_requestorder.ro_date','<=',$akhir_tolak)
             ->where('d_requestorder.ro_comp',$comp)
             ->get();
         }
@@ -3187,6 +3185,7 @@ class PembelianController extends Controller
             $row[]  = $key->i_nama;
             $row[]  = $key->ro_qty;
             $row[]  = "<div class='text-center'><span class='label label-danger'>DI TOLAK...</span></div>";
+            $row[]  = "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' title='Edit' onclick='editQtyTolak(".$key->ro_id.",".$key->i_nama.",".$key->ro_qty.")'><i class='fa fa-edit'></i></button>&nbsp <button class='btn btn-sm btn-danger btn-circle' title='Hapus'><i class='fa fa-trash'></i></button></div>";
             $data[] = $row;
         }
 
@@ -3810,6 +3809,28 @@ class PembelianController extends Controller
             ->update([
                 'ro_qty'   => $request->qty,
                 'ro_state' => 'P'
+            ]);
+            DB::commit();
+            return response()->json([
+                'status' => 'sukses'
+            ]);
+        } catch (\Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => 'gagal',
+                'data'   => $e
+            ]);
+        }
+    }
+
+    public function updateTolak(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            DB::table('d_requestorder')->where('ro_id', '=', $request->id)
+            ->update([
+                'ro_qty'   => $request->qty,
+                'ro_state' => 'Y'
             ]);
             DB::commit();
             return response()->json([

@@ -343,6 +343,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/request-pembelian/cariItem', 'PembelianController@cariItem');
     Route::get('/pembelian/request-pembelian/testDesc', 'PembelianController@testDesc');
     Route::get('/pembelian/request-pembelian/updateReq', 'PembelianController@updateReq');
+    Route::get('/pembelian/request-pembelian/updateReqTolak', 'PembelianController@updateReqTolak');
     Route::get('/pembelian/request-pembelian/hapusReq', 'PembelianController@hapusReq');
 
 
