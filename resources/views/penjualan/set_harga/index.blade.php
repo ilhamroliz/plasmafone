@@ -92,7 +92,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 							data-widget-sortable="false"> 
 						
 						<header>
-							<h2><strong>Group Member</strong></h2>											
+							<h2><strong>Group Harga</strong></h2>											
 						</header>
 
 						<!-- widget div-->
@@ -113,7 +113,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<thead>
 										<tr>
 											<th class="text-center" >No</th>
-											<th class="text-center" >Grup Member</th>
+											<th class="text-center" >Grup Harga</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -370,7 +370,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		};
 
 		$('#group_member').dataTable({
-			"processing": true,
+			"processing": false,
 			"serverSide": true,
 			"searching": true,
 			"ajax": "{{ route('penjualan.getdatagroup') }}",

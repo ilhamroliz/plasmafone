@@ -287,11 +287,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                     <!-- TABEL C-->
                                     <div class="col-md-12">
                                         <table id="dobCTable" class="table table-striped table-bordered table-hover margin-top-10"
-                                            style="display:none; margin-top: 20px;">
+                                            style="display:none; margin-top: 20px; width: 100%">
 
                                             <thead id="dobCHead">
-                                                <th>No.</th>
-                                                <th>Kode Spesifik</th>
+                                                <th width="20%">No.</th>
+                                                <th width="80%">Kode Spesifik</th>
                                             </thead>
 
                                             <tbody id="dobCBody">
@@ -341,9 +341,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         dobCTable = $('#dobCTable').DataTable({
             "order": [],
             "searching": false,
-            "autoWidth": true,
+            "autoWidth": false,
             "pageLength": 5,
-            "info": false,
+            "info": false
         });
 
         $('.osItemName').autocomplete({

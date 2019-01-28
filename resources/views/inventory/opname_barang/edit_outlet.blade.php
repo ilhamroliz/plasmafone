@@ -346,13 +346,15 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             $('tbody#codeshowdata tr:last td:first input').focus();
 		});
 
-		$('#aksiSelect').on('change', function (e) {
+		{{-- $('#aksiSelect').on('change', function (e) {
 			if($('#aksiSelect').val() == '1'){
 				$('#divCodeTable').css("display", "none");
 			}else{
 				cariTambah();
 			}
-		});
+        }); --}}
+        
+
 
 		function simpanEOB(){
 
