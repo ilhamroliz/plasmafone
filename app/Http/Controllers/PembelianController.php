@@ -933,6 +933,7 @@ class PembelianController extends Controller
     public function tolakRequest(Request $request)
     {
         $req_id = $request->input('req_id');
+        dd($request);
 
         DB::beginTransaction();
         try {
@@ -3185,7 +3186,7 @@ class PembelianController extends Controller
             $row[]  = $key->i_nama;
             $row[]  = $key->ro_qty;
             $row[]  = "<div class='text-center'><span class='label label-danger'>DI TOLAK...</span></div>";
-            $row[]  = "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' title='Edit' onclick='editQtyTolak(".$key->ro_id.",".$key->i_nama.",".$key->ro_qty.")'><i class='fa fa-edit'></i></button>&nbsp <button class='btn btn-sm btn-danger btn-circle' title='Hapus'><i class='fa fa-trash'></i></button></div>";
+            $row[]  = "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' title='Edit' onclick='editQtyTolak(\"".$key->i_nama."\",".$key->ro_id.",".$key->ro_qty.")'><i class='fa fa-edit'></i></button>&nbsp <button class='btn btn-sm btn-danger btn-circle' title='Hapus'><i class='fa fa-trash'></i></button></div>";
             $data[] = $row;
         }
 

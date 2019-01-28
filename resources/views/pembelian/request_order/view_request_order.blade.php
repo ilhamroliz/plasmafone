@@ -292,15 +292,15 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
-                                <input type="hidden" id="ro_id">
+                                <input type="hidden" id="ro_id1">
                                 <label for="i_nama">Nama Barang</label>
-                                <input type="text" class="form-control" id="i_nama" readonly />
+                                <input type="text" class="form-control" id="i_nama1" readonly />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="ro_qty">Kuantitas</label>
-                                <input type="number" min="0" class="form-control" id="ro_qty"/>
+                                <input type="number" min="0" class="form-control" id="ro_qty1"/>
                             </div>
                         </div>
                     </div>
@@ -615,12 +615,12 @@
 
 		}
 
-        function editQtyTolak(ro_id,i_nama,ro_qty){
-            console.log("oke");
+        function editQtyTolak(i_nama,ro_id,ro_qty){
+
+            $('#i_nama1').val(i_nama);
+            $('#ro_id1').val(ro_id);
+            $('#ro_qty1').val(ro_qty);
             $('#editQtyTolak').modal('show');
-            $('#ro_id').val(ro_id);
-            $('#i_nama').val(i_nama);
-            $('#ro_qty').val(ro_qty);
 
         }
 

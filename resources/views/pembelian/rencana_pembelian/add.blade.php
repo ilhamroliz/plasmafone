@@ -495,7 +495,7 @@
 		function simpanRencana()
 		{
 			$.SmartMessageBox({
-					title : "Smart Alert!",
+					title : "Pesan!",
 					content : "Apakah Anda Yakin Akan Mengajukan Rencana Pembelian ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
@@ -932,7 +932,7 @@
 
         function tolakRequest(id){
             $.SmartMessageBox({
-					title : "Smart Alert!",
+					title : "Pesan!",
 					content : "Apakah Anda Yakin Akan Menolak Rencana Pembelian ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
