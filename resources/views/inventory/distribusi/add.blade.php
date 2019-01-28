@@ -252,6 +252,30 @@
             });
         arrKodeGlobal = code;
         arrCode = code;
+        $( "#cari-stock" ).autocomplete({
+            source: function( request, response ) {
+                $.ajax({
+                    url: '{{ url('distribusi-barang/cari-stock') }}',
+                    data: {
+                        kode: code,
+                        term: searchGlobal
+                    },
+                    success: function( data ) {
+                        response( data );
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, data) {
+                setStock(data.item);
+                $("#stockid").val(data.item.id);
+                if ($("#stockid").val() == "") {
+                    $("#tambahketable").attr('disabled', true);
+                } else {
+                    $("#tambahketable").attr('disabled', false);
+                }
+            }
+        });
     }
 
     function setStock(info){
