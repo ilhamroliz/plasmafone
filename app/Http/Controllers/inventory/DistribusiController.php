@@ -568,8 +568,9 @@ class DistribusiController extends Controller
                     DB::table('d_distribusi_dt')->insert([
                         'dd_distribusi' => $distribusiId,
                         'dd_detailid' => $get_countiddetail,
-                        'dd_comp' => $compitem->s_comp,
+                        'dd_comp' => $compitem->s_position,
                         'dd_item' => $compitem->s_item,
+                        'dd_specificcode' => $data['kode'][$i],
                         'dd_qty' => $data['qtyTable'][$i],
                         'dd_qty_received' => 0,
                         'dd_qty_sisa' => $data['qtyTable'][$i],
@@ -594,31 +595,12 @@ class DistribusiController extends Controller
                         's_qty' => $data['qtyTable'][$i],
                         's_status' => 'On Going'
                     ]);
-                            
-//                    $stockId = DB::table('d_stock')->select('s_id')->where([
-//                                    's_id' => $sid,
-//                                    's_comp' => $compitem->s_comp,
-//                                    's_position' => $data['outlet'],
-//                                    's_item' => $compitem->s_item,
-//                                    's_qty' => $data['qtyTable'][$i],
-//                                    's_status' => 'On Going'
-//                                ])->first();
-//                    $stockId = $stockId->s_id;
 
                     if ($data['kode'][$i] != null) {
                         $specificcode = $data['kode'][$i];
 
                         // Delete specificcode
                         DB::table('d_stock_dt')->where('sd_stock', $data['idStock'][$i])->where('sd_specificcode', $specificcode)->delete();
-
-//                        $cnt_stockid = DB::table('d_stock_dt')->where('sd_stock', $stockId)->count()+1;
-
-                        // Insert stock_dt
-//                        DB::table('d_stock_dt')->insert([
-//                            'sd_stock' => $stockId,
-//                            'sd_detailid' => $cnt_stockid,
-//                            'sd_specificcode' => $specificcode
-//                        ]);
                         
                     } else {
                         $specificcode = null;
@@ -708,7 +690,7 @@ class DistribusiController extends Controller
         }
 
         $datas = DB::table('d_distribusi')
-                ->select('d_distribusi.d_nota as nota', 'd_distribusi.d_date as tanggal', 'm_company.c_name as tujuan', 'd_item.i_nama as nama_barang', 'd_distribusi_dt.dd_qty as qty', 'd_mem.m_name as petugas')
+                ->select('d_distribusi.d_nota as nota', 'd_distribusi.d_date as tanggal', 'm_company.c_name as tujuan', 'd_item.i_nama as nama_barang', DB::raw('coalesce(concat(" (", dd_specificcode, ")"), "") as specificcode'), 'd_distribusi_dt.dd_qty as qty', 'd_mem.m_name as petugas')
                 ->where('d_distribusi.d_id', $id)
                 ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                 ->join('m_company', 'm_company.c_id', '=', 'd_distribusi.d_destination')
