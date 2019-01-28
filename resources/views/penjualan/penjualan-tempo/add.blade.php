@@ -87,6 +87,7 @@
                                                             <div class="icon-addon addon-md">
                                                                 <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase">
                                                                 <input type="hidden" value="" class="idMember" id="idMember" name="idMember">
+                                                                <input type="hidden" name="id_group" id="id_group">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
@@ -314,7 +315,10 @@
             });
 
             $( "#cari-stock" ).autocomplete({
-                source: baseUrl+'/penjualan-tempo/cari-stock',
+                source: function(request, response) {
+                    $.getJSON(baseUrl+'/penjualan-tempo/cari-stock', { jenis: $("#id_group").val(), term: $("#cari-stock").val() },
+                        response);
+                },
                 minLength: 1,
                 select: function(event, data) {
                     setStock(data.item);
@@ -338,6 +342,7 @@
                         // handle success
                         // console.log(response.data.jenis);
                         $("#jenis_member").text(response.data.jenis);
+                        $("#id_group").val(response.data.id_group);
                         $("#alamat").text(response.data.alamat);
                     })
                     .catch(function (error) {
@@ -467,6 +472,7 @@
             axios.get(baseUrl + '/penjualan-tempo/search-stock', {
                 params: {
                     term : $('#cari-stock').val(),
+                    jenis: $('#id_group').val(),
                     _token : $('meta[name="csrf-token"]').attr('content')
                 }
             })
