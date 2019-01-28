@@ -671,8 +671,8 @@
         function updateTolak(){
 
             overlay();
-            var ro_id = $('#ro_id').val();
-            var ro_qty = $('#ro_qty').val();
+            var ro_id = $('#ro_id1').val();
+            var ro_qty = $('#ro_qty1').val();
 
             $.ajaxSetup({
                 headers: {
@@ -680,7 +680,7 @@
                 }
             });
             $.ajax({
-                url: baseUrl + '/pembelian/request-pembelian/updateTolak',
+                url: baseUrl + '/pembelian/request-pembelian/updateReqTolak',
                 type: 'get',
                 data: {id: ro_id, qty: ro_qty},
                 dataType: "JSON",
@@ -694,6 +694,7 @@
                             timeout: 4000,
                             icon   : "fa fa-check bounce animated"
                         });
+                        $('#dt_tolak').DataTable().ajax.reload();
                         $('#waitingReq_table').DataTable().ajax.reload();
                     } else {
                         $.smallBox({
@@ -703,11 +704,12 @@
                             timeout: 4000,
                             icon   : "fa fa-check bounce animated"
                         });
+                        $('#dt_tolak').DataTable().ajax.reload();
                         $('#waitingReq_table').DataTable().ajax.reload();
                     }
 
                     out();
-                    $('#editQty').modal('hide');
+                    $('#editQtyTolak').modal('hide');
                 },
             })
         }

@@ -117,7 +117,7 @@
                                             <thead>
                                                 <tr>
 
-                                                    <th data-hide="phone,tablet" width="15%">Outlet</th>
+                                                    <th data-hide="phone,tablet" width="15%">Tanggal</th>
                                                     <th width="30%">Nama Barang</th>
                                                     <th data-hide="phone,tablet" width="10%">Qty</th>
                                                     <th width="15%">Aksi</th>
@@ -197,14 +197,11 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaSemua') }}",
-                // "fnCreatedRow": function (row, data, index) {
-                //     $('td', row).eq(0).html(index + 1);
-                //     },
                 "columns":[
 
                     {"data": "c_name"},
                     {"data": "i_nama"},
-                    {"data": "pr_qtyApp"},
+                    {"data": "pp_qtyApp"},
                     {"data": "aksi"}
                 ],
                 "autoWidth" : true,
@@ -233,14 +230,11 @@
                     "processing": true,
                     "serverSide": true,
                     "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaMenunggu') }}",
-                    // "fnCreatedRow": function (row, data, index) {
-                    // $('th', row).eq(0).html(index + 1);
-                    // },
                     "columns":[
 
-                        {"data": "c_name"},
+                        {"data": "pp_date"},
                         {"data": "i_nama"},
-                        {"data": "ro_qty"},
+                        {"data": "pp_qtyreq"},
                         {"data": "aksi"}
                     ],
                     "autoWidth" : true,
@@ -306,15 +300,11 @@
                         "processing": true,
                         "serverSide": true,
                         "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaDisetujui') }}",
-                        // "fnCreatedRow": function (row, data, index) {
-                        // $('td', row).eq(0).html(index + 1);
-                        // },
                         "columns":[
 
                             {"data": "c_name"},
                             {"data": "i_nama"},
                             {"data": "pr_qtyApp"},
-                            // {"data": "aksi"}
                         ],
                         "autoWidth" : true,
                         "language" : dataTableLanguage,
