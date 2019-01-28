@@ -2,8 +2,107 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f15388ce-63a7-4084-82b5-ae571942ff2a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" afterDir="false" />
     </list>
+    <ignored path="$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf/" />
+    <ignored path="$PROJECT_DIR$/vendor/beyondcode/laravel-dump-server/" />
+    <ignored path="$PROJECT_DIR$/vendor/codedge/laravel-fpdf/" />
+    <ignored path="$PROJECT_DIR$/vendor/codedge/laravelFpdf/" />
+    <ignored path="$PROJECT_DIR$/vendor/composer/" />
+    <ignored path="$PROJECT_DIR$/vendor/dnoegel/php-xdg-base-dir/" />
+    <ignored path="$PROJECT_DIR$/vendor/doctrine/inflector/" />
+    <ignored path="$PROJECT_DIR$/vendor/doctrine/instantiator/" />
+    <ignored path="$PROJECT_DIR$/vendor/doctrine/lexer/" />
+    <ignored path="$PROJECT_DIR$/vendor/dompdf/dompdf/" />
+    <ignored path="$PROJECT_DIR$/vendor/dragonmantank/cron-expression/" />
+    <ignored path="$PROJECT_DIR$/vendor/egulias/email-validator/" />
+    <ignored path="$PROJECT_DIR$/vendor/erusev/parsedown/" />
+    <ignored path="$PROJECT_DIR$/vendor/fideloper/proxy/" />
+    <ignored path="$PROJECT_DIR$/vendor/filp/whoops/" />
+    <ignored path="$PROJECT_DIR$/vendor/fzaninotto/faker/" />
+    <ignored path="$PROJECT_DIR$/vendor/guzzlehttp/psr7/" />
+    <ignored path="$PROJECT_DIR$/vendor/hamcrest/hamcrest-php/" />
+    <ignored path="$PROJECT_DIR$/vendor/intervention/image/" />
+    <ignored path="$PROJECT_DIR$/vendor/jakub-onderka/php-console-color/" />
+    <ignored path="$PROJECT_DIR$/vendor/jakub-onderka/php-console-highlighter/" />
+    <ignored path="$PROJECT_DIR$/vendor/laravel/framework/" />
+    <ignored path="$PROJECT_DIR$/vendor/laravel/tinker/" />
+    <ignored path="$PROJECT_DIR$/vendor/laravelcollective/html/" />
+    <ignored path="$PROJECT_DIR$/vendor/league/flysystem/" />
+    <ignored path="$PROJECT_DIR$/vendor/league/fractal/" />
+    <ignored path="$PROJECT_DIR$/vendor/maatwebsite/excel/" />
+    <ignored path="$PROJECT_DIR$/vendor/markbaker/complex/" />
+    <ignored path="$PROJECT_DIR$/vendor/mockery/mockery/" />
+    <ignored path="$PROJECT_DIR$/vendor/monolog/monolog/" />
+    <ignored path="$PROJECT_DIR$/vendor/myclabs/deep-copy/" />
+    <ignored path="$PROJECT_DIR$/vendor/nesbot/carbon/" />
+    <ignored path="$PROJECT_DIR$/vendor/nikic/php-parser/" />
+    <ignored path="$PROJECT_DIR$/vendor/nunomaduro/collision/" />
+    <ignored path="$PROJECT_DIR$/vendor/opis/closure/" />
+    <ignored path="$PROJECT_DIR$/vendor/paragonie/random_compat/" />
+    <ignored path="$PROJECT_DIR$/vendor/phar-io/manifest/" />
+    <ignored path="$PROJECT_DIR$/vendor/phar-io/version/" />
+    <ignored path="$PROJECT_DIR$/vendor/phenx/php-font-lib/" />
+    <ignored path="$PROJECT_DIR$/vendor/phenx/php-svg-lib/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpdocumentor/reflection-common/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpdocumentor/type-resolver/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpoffice/phpspreadsheet/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpspec/prophecy/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpunit/php-code-coverage/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpunit/php-file-iterator/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpunit/php-text-template/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpunit/php-timer/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpunit/php-token-stream/" />
+    <ignored path="$PROJECT_DIR$/vendor/phpunit/phpunit/" />
+    <ignored path="$PROJECT_DIR$/vendor/psr/container/" />
+    <ignored path="$PROJECT_DIR$/vendor/psr/http-message/" />
+    <ignored path="$PROJECT_DIR$/vendor/psr/log/" />
+    <ignored path="$PROJECT_DIR$/vendor/psr/simple-cache/" />
+    <ignored path="$PROJECT_DIR$/vendor/psy/psysh/" />
+    <ignored path="$PROJECT_DIR$/vendor/ramsey/uuid/" />
+    <ignored path="$PROJECT_DIR$/vendor/sabberworm/php-css-parser/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/code-unit-reverse-lookup/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/comparator/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/diff/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/environment/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/exporter/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/global-state/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/object-enumerator/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/object-reflector/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/recursion-context/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/resource-operations/" />
+    <ignored path="$PROJECT_DIR$/vendor/sebastian/version/" />
+    <ignored path="$PROJECT_DIR$/vendor/spatie/image-optimizer/" />
+    <ignored path="$PROJECT_DIR$/vendor/spatie/laravel-image-optimizer/" />
+    <ignored path="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/console/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/css-selector/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/debug/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/event-dispatcher/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/finder/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/http-foundation/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/http-kernel/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/polyfill-ctype/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/polyfill-php72/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/process/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/routing/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/translation/" />
+    <ignored path="$PROJECT_DIR$/vendor/symfony/var-dumper/" />
+    <ignored path="$PROJECT_DIR$/vendor/theseer/tokenizer/" />
+    <ignored path="$PROJECT_DIR$/vendor/tijsverkoyen/css-to-inline-styles/" />
+    <ignored path="$PROJECT_DIR$/vendor/vlucas/phpdotenv/" />
+    <ignored path="$PROJECT_DIR$/vendor/webmozart/assert/" />
+    <ignored path="$PROJECT_DIR$/vendor/yajra/laravel-datatables/" />
+    <ignored path="$PROJECT_DIR$/vendor/yajra/laravel-datatables-buttons/" />
+    <ignored path="$PROJECT_DIR$/vendor/yajra/laravel-datatables-editor/" />
+    <ignored path="$PROJECT_DIR$/vendor/yajra/laravel-datatables-fractal/" />
+    <ignored path="$PROJECT_DIR$/vendor/yajra/laravel-datatables-html/" />
+    <ignored path="$PROJECT_DIR$/vendor/yajra/laravel-datatables-oracle/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,54 +112,54 @@
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="383">
+            <state relative-caret-position="18216">
               <caret line="792" column="53" selection-start-line="792" selection-start-column="32" selection-end-line="792" selection-end-column="53" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2201">
-              <caret line="304" column="18" selection-start-line="304" selection-start-column="18" selection-end-line="304" selection-end-column="18" />
+            <state relative-caret-position="368">
+              <caret line="226" column="59" selection-start-line="226" selection-start-column="59" selection-end-line="226" selection-end-column="59" />
               <folding>
                 <element signature="e#393#486#0#PHP" />
                 <element signature="e#492#589#0#PHP" />
                 <element signature="e#595#686#0#PHP" />
                 <element signature="e#692#785#0#PHP" />
                 <element signature="e#791#1533#0#PHP" />
-                <element signature="e#2315#3422#0#PHP" />
-                <element signature="e#3428#8820#0#PHP" />
-                <element signature="e#15051#16851#0#PHP" />
+                <element signature="e#15150#15616#0#PHP" />
+                <element signature="e#15622#17422#0#PHP" />
                 <element signature="e#249#255#1" expanded="true" />
                 <element signature="e#472#478#1" expanded="true" />
-                <element signature="e#16857#18651#0#PHP" />
+                <element signature="e#17428#19222#0#PHP" />
                 <element signature="e#249#255#1" expanded="true" />
                 <element signature="e#472#478#1" expanded="true" />
-                <element signature="e#18657#19312#0#PHP" />
-                <element signature="e#19318#21526#0#PHP" />
-                <element signature="e#21532#23484#0#PHP" />
-                <element signature="e#23490#33155#0#PHP" />
-                <element signature="e#33161#46710#0#PHP" />
-                <element signature="e#46716#46862#0#PHP" />
-                <element signature="e#46868#48645#0#PHP" />
-                <element signature="e#48651#48800#0#PHP" />
-                <element signature="e#50536#55529#0#PHP" />
+                <element signature="e#19228#19883#0#PHP" />
+                <element signature="e#19889#22097#0#PHP" />
+                <element signature="e#22103#24211#0#PHP" />
+                <element signature="e#24217#33766#0#PHP" />
+                <element signature="e#33772#43335#0#PHP" />
+                <element signature="e#43341#43487#0#PHP" />
+                <element signature="e#43493#45270#0#PHP" />
+                <element signature="e#45276#45425#0#PHP" />
+                <element signature="e#45431#47155#0#PHP" />
+                <element signature="e#47161#52154#0#PHP" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="61">
-              <caret line="89" column="83" selection-start-line="89" selection-start-column="83" selection-end-line="89" selection-end-column="83" />
+            <state relative-caret-position="273">
+              <caret line="477" column="35" selection-start-line="477" selection-start-column="35" selection-end-line="477" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -68,13 +167,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="299" column="13" lean-forward="true" selection-start-line="296" selection-start-column="12" selection-end-line="299" selection-end-column="13" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="6877">
+              <caret line="299" column="13" selection-start-line="296" selection-start-column="12" selection-end-line="299" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -165,8 +259,8 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/RefundController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/setHargaController.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
       </list>
     </option>
   </component>
@@ -363,6 +457,10 @@
       </pane>
     </panes>
   </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="editor.config.ad.shown" value="true" />
+  </component>
   <component name="RunDashboard">
     <option name="ruleStates">
       <list>
@@ -380,7 +478,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e51305a7-7ee0-47b3-a916-693ccaa8aea7" name="Default Changelist" comment="" />
+      <changelist id="f15388ce-63a7-4084-82b5-ae571942ff2a" name="Default Changelist" comment="" />
       <created>1542867412876</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -437,6 +535,7 @@
       <workItem from="1548112456339" duration="7864000" />
       <workItem from="1548208821640" duration="19737000" />
       <workItem from="1548296587519" duration="2407000" />
+      <workItem from="1548640904470" duration="951000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1546933778174</created>
@@ -560,7 +659,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5602000" />
+    <option name="totallyTimeSpent" value="6960000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1368" height="741" extended-state="6" />
@@ -625,13 +724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="792" column="53" selection-start-line="792" selection-start-column="32" selection-end-line="792" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -639,53 +731,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18216">
+          <caret line="792" column="53" selection-start-line="792" selection-start-column="32" selection-end-line="792" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/pemesanan_barang/tambah.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="299" column="13" lean-forward="true" selection-start-line="296" selection-start-column="12" selection-end-line="299" selection-end-column="13" />
-          <folding>
-            <element signature="n#style#0;n#span#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="6877">
+          <caret line="299" column="13" selection-start-line="296" selection-start-column="12" selection-end-line="299" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="477" column="35" selection-start-line="477" selection-start-column="35" selection-end-line="477" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2201">
-          <caret line="304" column="18" selection-start-line="304" selection-start-column="18" selection-end-line="304" selection-end-column="18" />
+        <state relative-caret-position="368">
+          <caret line="226" column="59" selection-start-line="226" selection-start-column="59" selection-end-line="226" selection-end-column="59" />
           <folding>
             <element signature="e#393#486#0#PHP" />
             <element signature="e#492#589#0#PHP" />
             <element signature="e#595#686#0#PHP" />
             <element signature="e#692#785#0#PHP" />
             <element signature="e#791#1533#0#PHP" />
-            <element signature="e#2315#3422#0#PHP" />
-            <element signature="e#3428#8820#0#PHP" />
-            <element signature="e#15051#16851#0#PHP" />
+            <element signature="e#15150#15616#0#PHP" />
+            <element signature="e#15622#17422#0#PHP" />
             <element signature="e#249#255#1" expanded="true" />
             <element signature="e#472#478#1" expanded="true" />
-            <element signature="e#16857#18651#0#PHP" />
+            <element signature="e#17428#19222#0#PHP" />
             <element signature="e#249#255#1" expanded="true" />
             <element signature="e#472#478#1" expanded="true" />
-            <element signature="e#18657#19312#0#PHP" />
-            <element signature="e#19318#21526#0#PHP" />
-            <element signature="e#21532#23484#0#PHP" />
-            <element signature="e#23490#33155#0#PHP" />
-            <element signature="e#33161#46710#0#PHP" />
-            <element signature="e#46716#46862#0#PHP" />
-            <element signature="e#46868#48645#0#PHP" />
-            <element signature="e#48651#48800#0#PHP" />
-            <element signature="e#50536#55529#0#PHP" />
+            <element signature="e#19228#19883#0#PHP" />
+            <element signature="e#19889#22097#0#PHP" />
+            <element signature="e#22103#24211#0#PHP" />
+            <element signature="e#24217#33766#0#PHP" />
+            <element signature="e#33772#43335#0#PHP" />
+            <element signature="e#43341#43487#0#PHP" />
+            <element signature="e#43493#45270#0#PHP" />
+            <element signature="e#45276#45425#0#PHP" />
+            <element signature="e#45431#47155#0#PHP" />
+            <element signature="e#47161#52154#0#PHP" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="61">
-          <caret line="89" column="83" selection-start-line="89" selection-start-column="83" selection-end-line="89" selection-end-column="83" />
         </state>
       </provider>
     </entry>

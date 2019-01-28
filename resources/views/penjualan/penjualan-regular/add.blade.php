@@ -475,6 +475,7 @@
         axios.get(baseUrl + '/penjualan-reguler/search-stock', {
             params: {
                 term : $('#cari-stock').val(),
+                jenis: $('#id_group').val(),
                 _token : $('meta[name="csrf-token"]').attr('content')
             }
         })

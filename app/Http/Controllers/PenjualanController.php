@@ -119,9 +119,11 @@ class PenjualanController extends Controller
 
     public function searchStock(Request $request)
     {
+        $outlet = Auth::user()->m_comp;
         $cari = $request->term;
         $term = explode(" - ",$cari);
         $cari = $term[0];
+        $jenis = $request->jenis;
         $kode = [];
         if (isset($request->kode)){
             $kode = $request->kode;
@@ -147,14 +149,20 @@ class PenjualanController extends Controller
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->leftjoin('m_group_price', function($g){
+                ->leftjoin('m_group_price', function ($g) use ($jenis){
                     $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
+                    $g->where('m_group_price.gp_group', '=', $jenis);
                 })
-                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -172,12 +180,20 @@ class PenjualanController extends Controller
                     $a->whereNotIn('d_stock_dt.sd_specificcode', $kode);
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
-                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', function ($g) use ($jenis){
+                    $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
+                    $g->where('m_group_price.gp_group', '=', $jenis);
+                })
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -195,12 +211,20 @@ class PenjualanController extends Controller
                     $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_stock.s_item')
-                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->leftjoin('m_group_price', function ($g) use ($jenis){
+                    $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
+                    $g->where('m_group_price.gp_group', '=', $jenis);
+                })
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -217,7 +241,7 @@ class PenjualanController extends Controller
 
     public function cariStock(Request $request)
     {
-        
+        $outlet = Auth::user()->m_comp;
         $cari = $request->term;
         $jenis = $request->jenis;
         $kode = [];
@@ -249,12 +273,16 @@ class PenjualanController extends Controller
                     $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
                     $g->where('m_group_price.gp_group', '=', $jenis);
                 })
-                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -276,12 +304,16 @@ class PenjualanController extends Controller
                     $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
                     $g->where('m_group_price.gp_group', '=', $jenis);
                 })
-                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -303,12 +335,16 @@ class PenjualanController extends Controller
                     $g->on('m_group_price.gp_item', '=', 'd_stock.s_item');
                     $g->where('m_group_price.gp_group', '=', $jenis);
                 })
-                ->leftjoin('d_outlet_price', 'd_outlet_price.op_item', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
