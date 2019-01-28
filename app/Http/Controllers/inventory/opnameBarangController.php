@@ -628,7 +628,6 @@ class opnameBarangController extends Controller
         } else {
             $temp = ($cek->o_reff + 1);
         }
-
         $kode = sprintf("%03s", $temp);
 
         $tempKode = 'OP-' . $kode . '/' . $cekNota;
@@ -641,7 +640,7 @@ class opnameBarangController extends Controller
             return view('errors.407');
         } else {
             if ($request->isMethod('post')) {
-            dd($request);
+            // dd($request);
                 DB::beginTransaction();
                 try {
             ///?? INISIALISASI Variabel
@@ -722,7 +721,6 @@ class opnameBarangController extends Controller
                                 array_push($sd_array, $imeiR[$i]);
                             }
                             //////////////////////////////////////////////////////
-
                             $aray = ([
                                 'od_opname' => $o_id,
                                 'od_detailid' => $i + 1,
@@ -731,12 +729,10 @@ class opnameBarangController extends Controller
                                 'od_qty_system' => $cek,
                                 'od_specificcode' => strtoupper($imeiR[$i])
                             ]);
-                            // dd($aray);
                             array_push($od_array, $aray);
                         }
 
                         DB::table('d_opname_dt')->insert($od_array);
-
 
                         /////
                         ////////////////////////////////////////////
@@ -822,7 +818,6 @@ class opnameBarangController extends Controller
                             array_push($arayInsPNB, $arayT);
                         }
                         DB::table('d_stock_mutation')->insert($arayInsPNB);
-
 
                         if (!empty($arayDH)) {
                     /// Ambil SM_REFF untuk Specifik Code yang sama pada PENAMBAHAN
@@ -1379,6 +1374,7 @@ class opnameBarangController extends Controller
             ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
             ->where('s_item', $getDataEdit[0]->od_item)
             ->where('s_comp', $getDataEdit[0]->o_comp)
+            ->where('sm_detail', 'PENAMBAHAN')
             ->select('sm_hpp', 's_qty')
             ->orderBy('sm_detailid', 'desc')
             ->first();
@@ -1400,8 +1396,6 @@ class opnameBarangController extends Controller
                 // dd($request);
                 DB::beginTransaction();
                 try {
-                    // DB::table('d_opname_dt')->where('od_opname', $id)->delete();
-                    // DB::table('d_opname')->where('o_id', $id)->update([]);
 
                     //// ============================================================
                     //// Ambil dari DELETE D_STOCK, D_STOCK_DT, dan D_STOCK_MUTATION
@@ -1653,10 +1647,11 @@ class opnameBarangController extends Controller
                             $date = Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s');
                             $getMaxSMH = DB::table('d_stock_mutation')->where('sm_stock', $idS)->max('sm_detailid');
 
-                        /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
+                            /// Masukkan Data Pengurangan ke Dalam STOCK MUTATION
                             $arayInsPGR = array();
                             for ($dk = 0; $dk < count($arayDH); $dk++) {
                                 // dd($arayDH);
+                                $getHPPDH = DB::table('d_stock_mutation')->where('sm_specificcode', $arayDH[$dk])->select('sm_hpp')->first();
 
                                 $arayK = ([
                                     'sm_stock' => $idS,
@@ -1668,7 +1663,7 @@ class opnameBarangController extends Controller
                                     'sm_qty' => 1,
                                     'sm_use' => 1,
                                     'sm_sisa' => 0,
-                                    'sm_hpp' => $request->hpp,
+                                    'sm_hpp' => $getHPPDH->sm_hpp,
                                     'sm_sell' => $getSell->i_price,
                                     'sm_nota' => $getNota->o_reff,
                                     'sm_reff' => $getReff[$dk]->sm_reff,
@@ -2096,6 +2091,7 @@ class opnameBarangController extends Controller
                             for ($dk = 0; $dk < count($arayDH); $dk++) {
                                 // dd($arayDH);
 
+                                $getHPPDH = DB::table('d_stock_mutation')->where('sm_specificcode', $arayDH[$dk])->select('sm_hpp')->first();
                                 $arayK = ([
                                     'sm_stock' => $idS,
                                     'sm_detailid' => $getMaxSMH + ($dk + 1),
@@ -2106,7 +2102,7 @@ class opnameBarangController extends Controller
                                     'sm_qty' => 1,
                                     'sm_use' => 1,
                                     'sm_sisa' => 0,
-                                    'sm_hpp' => $request->hpp,
+                                    'sm_hpp' => $getHPPDH->sm_hpp,
                                     'sm_sell' => $getSell->i_price,
                                     'sm_nota' => $getNota->o_reff,
                                     'sm_reff' => $getReff[$dk]->sm_reff,

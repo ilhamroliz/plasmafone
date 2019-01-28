@@ -265,9 +265,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#idItem').val(response.data.edit[0].od_item);
 				$('#nameItem').val(response.data.edit[0].i_nama);
                 $('#idComp').val(response.data.edit[0].o_comp);
-                $('#osHpp').val(accounting.formatMoney(response.data.hpp, "", 0, ".", ","));
+                $('#osHpp').val(accounting.formatMoney(response.data.hpp.sm_hpp, "", 0, ".", ","));
                 $('#osHpp').maskMoney({precision: 0, thousands: '.'});
-                $('#osQtyS').val(response.data.edit[0].od_qty_system+' Unit');
+                $('#hppNote').val(accounting.formatMoney(response.data.hpp.sm_hpp, "", 0, ".", ","));
+                $('#osQtyS').val(response.data.hpp.s_qty+' Unit');
                 $('#osQtyR').maskMoney({precision: 0, thousands: '.', suffix: ' Unit'});
 
 				document.getElementById("nameItem").readOnly = true;
