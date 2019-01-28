@@ -192,6 +192,7 @@
     var arrCode = [];
     var arrKodeGlobal = [];
     var arrIdStock = [];
+    var spkode = [];
     var stockGlobal = null;
     var kodespesifikGlobal = null;
     var kodeGlobal = null;
@@ -246,6 +247,11 @@
     })
 
     function setArrayId() {
+        var inputs = document.getElementsByClassName('spesifikkode'),
+            spesifikkode  = [].map.call(inputs, function( input ) {
+                return input.value.toString();
+            });
+        spkode = spesifikkode;
         var inputs = document.getElementsByClassName('kode'),
             code  = [].map.call(inputs, function( input ) {
                 return input.value.toString();
@@ -324,6 +330,16 @@
     $("#cari-stock").on('keyup',function(e) {
         if(e.which === 13) {
             var specificcode = $(this).val();
+            if (spkode.includes(specificcode) == true) {
+                $.smallBox({
+                    title : "Pesan!",
+                    content : "Item sudah ditambahkan",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+                $(this).val("");
+            }
             if (arrCode.includes(specificcode) == true) {
                 var kuantitas = $(".qty-"+specificcode).val();
                 var qty = parseInt(kuantitas) + 1;
@@ -431,6 +447,7 @@
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
+                    '<input type="hidden" class="spesifikkode" name="spesifikkode[]" value="'+kodeGlobal+'" />'+
                     '</td>' +
                     '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
                     '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +

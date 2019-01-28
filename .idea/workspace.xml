@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f15388ce-63a7-4084-82b5-ae571942ff2a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" afterDir="false" />
     </list>
@@ -170,26 +171,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="726" column="48" lean-forward="true" selection-start-line="726" selection-start-column="48" selection-end-line="726" selection-end-column="48" />
+            <state relative-caret-position="406">
+              <caret line="435" column="32" lean-forward="true" selection-start-line="435" selection-start-column="16" selection-end-line="435" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="713" column="38" selection-start-line="713" selection-start-column="38" selection-end-line="713" selection-end-column="38" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14">
-              <caret line="259" column="35" lean-forward="true" selection-start-line="259" selection-start-column="35" selection-end-line="259" selection-end-column="35" />
+            <state relative-caret-position="383">
+              <caret line="340" column="32" selection-start-line="340" selection-start-column="32" selection-end-line="340" selection-end-column="32" />
               <folding>
                 <element signature="n#style#0;n#td#0;n#tr#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
@@ -208,7 +200,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fore</find>
       <find>btn</find>
       <find>addDumm</find>
       <find>map</find>
@@ -238,6 +229,7 @@
       <find>d_stock.i_code</find>
       <find>arrCode</find>
       <find>arrKodeGlobal</find>
+      <find>spkode</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -291,9 +283,9 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/setHargaController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/inventory/DistribusiController.php" />
-        <option value="$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php" />
       </list>
     </option>
   </component>
@@ -583,7 +575,7 @@
       <workItem from="1548112456339" duration="7864000" />
       <workItem from="1548208821640" duration="19737000" />
       <workItem from="1548296587519" duration="2407000" />
-      <workItem from="1548640904470" duration="8522000" />
+      <workItem from="1548640904470" duration="11742000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1546933778174</created>
@@ -707,7 +699,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="14531000" />
+    <option name="totallyTimeSpent" value="17751000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1368" height="741" extended-state="6" />
@@ -828,10 +820,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="435" column="32" lean-forward="true" selection-start-line="435" selection-start-column="16" selection-end-line="435" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="433" column="36" selection-start-line="433" selection-start-column="36" selection-end-line="433" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="259" column="35" lean-forward="true" selection-start-line="259" selection-start-column="35" selection-end-line="259" selection-end-column="35" />
+        <state relative-caret-position="383">
+          <caret line="340" column="32" selection-start-line="340" selection-start-column="32" selection-end-line="340" selection-end-column="32" />
           <folding>
             <element signature="n#style#0;n#td#0;n#tr#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
@@ -842,20 +848,6 @@
             <element signature="n#style#0;n#input#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="726" column="48" lean-forward="true" selection-start-line="726" selection-start-column="48" selection-end-line="726" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="713" column="38" selection-start-line="713" selection-start-column="38" selection-end-line="713" selection-end-column="38" />
         </state>
       </provider>
     </entry>
