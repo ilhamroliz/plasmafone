@@ -669,6 +669,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					$('#nameComp').val('');
 					$('#minStock').val('');
 
+					warn_notif();
 				}else{
 
 					$('#overlay').fadeOut(200);
@@ -724,7 +725,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 						timeout: 4000,
 						icon : "fa fa-check bounce animated"
 					});
-
+					warn_notif();
 				}else{
 
 					$('#overlay').fadeOut(200);
@@ -771,6 +772,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
 							});
+							warn_notif();
 	
 						}else{
 	
@@ -821,6 +823,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								timeout: 4000,
 								icon : "fa fa-check bounce animated"
 							});
+							warn_notif();
 
 						}else{
 
