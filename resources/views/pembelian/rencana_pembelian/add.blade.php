@@ -162,7 +162,7 @@
 															<!-- <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
 																<i class="glyphicon glyphicon-edit"></i>
 															</button>&nbsp; -->
-															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest({{$req->id}})">
+															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest('{{$req->id}}')">
 																<i class="fa fa-ban"></i>
 															</button>
 														</div>
@@ -983,7 +983,6 @@
 					}
 
 				});
-				e.preventDefault();
 		}
 
 		var app = new Vue({

@@ -878,11 +878,23 @@ class PembelianController extends Controller
 
         DB::beginTransaction();
         try {
-            DB::table('d_requestorder')
-            ->whereIn('ro_id', $req_id)
-            ->update([
-                'ro_state' => 'Y'
-            ]);
+            if(\strpos($req_id, 'ro') !== false){
+                $pecah = explode('_', $req_id);
+                $id = $pecah[1];
+                DB::table('d_requestorder')
+                ->where('ro_id', $id)
+                ->update([
+                    'ro_state' => 'Y'
+                ]);
+            }else{
+                $pecah = explode('_', $req_id);
+                $id = $pecah[1];
+                DB::table('d_indent')
+                ->where('i_id', $id)
+                ->update([
+                    'i_status' => 'Y'
+                ]);
+            }
 
             for($i = 0; $i < count($item_id);$i++){
 
@@ -925,15 +937,26 @@ class PembelianController extends Controller
 
     public function tolakRequest(Request $request)
     {
-        dd($request);
         $req_id = $request->input('id');
         DB::beginTransaction();
         try {
-            DB::table('d_requestorder')
-            ->where('ro_id', $req_id)
-            ->update([
-                'ro_state' => 'N'
-            ]);
+            if(\strpos($req_id, 'ro') !== false){
+                $pecah = explode('_', $req_id);
+                $id = $pecah[1];
+                DB::table('d_requestorder')
+                ->where('ro_id', $id)
+                ->update([
+                    'ro_state' => 'N'
+                ]);
+            }else{
+                $pecah = explode('_', $req_id);
+                $id = $pecah[1];
+                DB::table('d_indent')
+                ->where('i_id', $id)
+                ->update([
+                    'i_status' => 'N'
+                ]);
+            }
 
             DB::commit();
             return response()->json([
@@ -3686,7 +3709,7 @@ class PembelianController extends Controller
             ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
             ->where('d_requestorder.ro_state', 'P')
             ->select(
-                DB::raw('CONCAT("ro-", d_requestorder.ro_id) as id'),
+                DB::raw('CONCAT("ro_", d_requestorder.ro_id) as id'),
                 DB::raw('d_requestorder.ro_comp as comp'),
                 DB::raw('d_requestorder.ro_item as item'),
                 DB::raw('d_requestorder.ro_qty as qty'),
@@ -3699,7 +3722,7 @@ class PembelianController extends Controller
             ->join('d_item', 'd_indent_dt.id_item', '=', 'd_item.i_id')
             ->where('d_indent.i_status', 'P')
             ->select(
-                DB::raw('CONCAT("pb-", d_indent.i_id) as id'),
+                DB::raw('CONCAT("pb_", d_indent.i_id) as id'),
                 DB::raw('d_indent.i_comp as comp'),
                 DB::raw('id_item as item'),
                 DB::raw('id_qty as qty'),

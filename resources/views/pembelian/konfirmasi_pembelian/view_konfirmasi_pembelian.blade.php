@@ -279,7 +279,7 @@
                     {"data": "pc_id"},
                     {"data": "pc_nota"},
                     {"data": "i_nama"},
-                    {"data": "pr_price"},
+                    {"data": "pcd_qty"},
                     {"data": "pcd_qty"},
                     {"data": "pc_status"}
                 ],
@@ -303,41 +303,6 @@
             $('#overlay').fadeOut(200);
             }, 500);
 
-            setTimeout(function () {
-
-                semua = $('#dt_all').dataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": "{{ url('/pembelian/konfirmasi-pembelian/view_confirmAll') }}",
-                    "fnCreatedRow": function (row, data, index) {
-                        $('td', row).eq(0).html(index + 1);
-                        },
-                    "columns":[
-                        {"data": "pr_idConf"},
-                        {"data": "s_company"},
-                        {"data": "i_nama"},
-                        {"data": "pr_qtyApp"},
-                        {"data": "pr_stsConf"},
-                    ],
-                    "autoWidth" : true,
-                    "language" : dataTableLanguage,
-                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                    "preDrawCallback" : function() {
-                        // Initialize the responsive datatables helper once.
-                        if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_all'), breakpointDefinition);
-                        }
-                    },
-                    "rowCallback" : function(nRow) {
-                        responsiveHelper_dt_basic.createExpandIcon(nRow);
-                    },
-                    "drawCallback" : function(oSettings) {
-                        responsiveHelper_dt_basic.respond();
-                    }
-                });
-                $('#overlay').fadeOut(200);
-                }, 500);
 
         })
     </script>
