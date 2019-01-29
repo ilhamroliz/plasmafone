@@ -90,7 +90,7 @@
             <div class="hasil">
                 <span style="width: 60%; float: left;"></span>
                 <span style="width: 20%; margin-left: 5px;">{{ $pm[$i] }}:</span>
-                <span style="width: 20%; float: right;">Rp. {{ number_format( $pay[$i], 0 , '' , '.' ) . ',-' }}</span>
+                <span style="width: 20%; float: right;">@if($pay[$i] != "")Rp. {{ number_format( $pay[$i], 0 , '' , '.' ) . ',-' }} @else Rp. {{ number_format(0, 0 , '' , '.' ) . ',-' }} @endif</span>
             </div>
         @endfor
         <div class="hasil">

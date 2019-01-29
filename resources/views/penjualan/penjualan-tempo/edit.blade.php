@@ -100,6 +100,7 @@
                                                             <div class="icon-addon addon-md">
                                                                 <input class="form-control" id="cari-member" placeholder="Masukkan Nama Pembeli" type="text"  style="text-transform: uppercase" value="{{$data[0]->m_name}}" readonly>
                                                                 <input type="hidden" class="idMember" id="idMember" name="idMember" value="{{ $data[0]->s_member }}">
+                                                                <input type="hidden" name="id_group" id="id_group" value="{{ $data[0]->m_jenis }}">
                                                                 <label for="cari-member" class="glyphicon glyphicon-search" rel="tooltip" title="Nama Pembeli"></label>
                                                             </div>
                                                         </div>
@@ -154,7 +155,7 @@
 
                                         </div>
 
-                                        <div id="search_barang" style="display: none">
+                                        <div id="search_barang">
 
                                             <div class="form-group">
                                                 <div class="col-md-8">
@@ -218,6 +219,7 @@
                                                                     <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
                                                                     <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
                                                                     <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
+                                                                    <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item->sm_specificcode }}" />
                                                                     <input type="hidden" class="harga" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ $item->sd_value }}" />
                                                                     <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item->idStock }}" value="{{ $item->sd_total_gross }}">
                                                                     <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ $item->sd_total_net }}">
@@ -330,6 +332,8 @@
         var iCode = [];
         var arrCode = [];
         var arrIdStock = [];
+        var arrKodeGlobal = [];
+        var spkode = [];
         var hargaGlobal = null;
         var stockGlobal = null;
         var kodespesifikGlobal = null;
@@ -364,7 +368,10 @@
             });
 
             $( "#cari-stock" ).autocomplete({
-                source: baseUrl+'/penjualan-reguler/cari-stock',
+                source: function(request, response) {
+                    $.getJSON(baseUrl+'/penjualan-tempo/cari-stock', { jenis: $("#id_group").val(), term: $("#cari-stock").val() },
+                        response);
+                },
                 minLength: 1,
                 select: function(event, data) {
                     setStock(data.item);
@@ -430,17 +437,7 @@
             kodeGlobal = data.sm_specificcode;
             arrCode.push(data.i_code);
             arrIdStock.push(data.s_id);
-        }
-
-        function cekIsiArrayItem(data){
-            var hitung = arrCode.length;
-            var kirim;
-            for (var i = 0; i <= hitung; i++) {
-                if (arrCode[i] == data) {
-                    return 'sudah';
-                }
-            }
-            return 'lanjut';
+            setArrayId();
         }
 
         function setSearch(){
@@ -475,13 +472,23 @@
         $("#cari-stock").on('keyup',function(e) {
             if(e.which === 13) {
                 var specificcode = $(this).val();
-                if (cekIsiArrayItem(specificcode) == "sudah") {
-                    var harga = 0;
+                var harga = 0;
+                if (spkode.includes(specificcode) == true) {
+                    $.smallBox({
+                        title : "Pesan!",
+                        content : "Item sudah ditambahkan",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    $(this).val("");
+                    return;
+                }
+                if (arrCode.includes(specificcode) == true) {
                     var kuantitas = $(".qty-"+specificcode).val();
                     var qty = parseInt(kuantitas) + 1;
                     var hrg = $("."+specificcode).val();
                     hrg = parseInt(hrg);
-                    var tothrg = qty * hrg;
                     var discPercent = $(".discp-"+specificcode).val();
                     discPercent = discPercent.replace("%", "");
                     var discValue = $(".discv-"+specificcode).val();
@@ -524,9 +531,10 @@
         });
 
         function searchStock() {
-            axios.get(baseUrl + '/penjualan-reguler/search-stock', {
+            axios.get(baseUrl + '/penjualan-tempo/search-stock', {
                 params: {
                     term : $('#cari-stock').val(),
+                    jenis: $('#id_group').val(),
                     _token : $('meta[name="csrf-token"]').attr('content')
                 }
             })
@@ -644,6 +652,7 @@
                     var harga = qtyakhir * hargaGlobal;
                     harga = convertToRupiah(harga);
                     $('.harga-'+idGlobal).html(harga);
+                    updateTotalTampil();
                 } else {
                     row = '<tr id="'+idGlobal+'" class="tr">' +
                         '<td style="width: 32%;">'+namaGlobal+
@@ -652,7 +661,7 @@
                         '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
                         '<input type="hidden" class="harga '+iCode+'" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                         '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
-                        '<input type="hidden" class="totalItem totalItem-'+iCode+'" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
+                        '<input type="hidden" class="totalItem totalItem-'+iCode+' totalItem-'+idGlobal+'" name="totalItem[]" id="totalItem-'+iCode+'" value="'+qtyGlobal * hargaGlobal+'">'+
                         '</td>' +
                         '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                         '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
@@ -672,14 +681,25 @@
                             event.preventDefault();
                         }
                     });
+                    setArrayId();
                 }
             } else {
-                if (arrIdStock.length == 1) {
+                if (arrKodeGlobal.includes(kodeGlobal) == true) {
+                    $.smallBox({
+                        title : "Pesan!",
+                        content : "Item sudah ditambahkan",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+
+                } else {
                     row = '<tr id="'+idGlobal+'" class="tr">' +
                         '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                         '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                         '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
                         '<input type="hidden" class="kode" name="kode[]" value="'+kodeGlobal+'" />'+
+                        '<input type="hidden" class="spesifikkode" name="spesifikkode[]" value="'+kodeGlobal+'" />'+
                         '<input type="hidden" class="harga" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                         '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
                         '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
@@ -694,16 +714,8 @@
                     $("#table-penjualan tbody").append(row);
                     $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                     $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
-                } else {
-                    $.smallBox({
-                        title : "Pesan!",
-                        content : "Item sudah ditambahkan",
-                        color : "#A90329",
-                        timeout: 5000,
-                        icon : "fa fa-times bounce animated"
-                    });
+                    setArrayId();
                 }
-
             }
             $('#cari-stock').val('');
             $('#qty').val('');
@@ -720,6 +732,7 @@
                         url: '{{ url('penjualan-reguler/cari-stock') }}',
                         data: {
                             kode: kode,
+                            jenis: $("#id_group").val(),
                             term: searchGlobal
                         },
                         success: function( data ) {
@@ -745,6 +758,45 @@
                 $("#tambahketable").attr('disabled', false);
             }
             updateTotalTampil();
+        }
+
+        function setArrayId() {
+            var inputs = document.getElementsByClassName('spesifikkode'),
+                spesifikkode  = [].map.call(inputs, function( input ) {
+                    return input.value.toString();
+                });
+            spkode = spesifikkode;
+            var inputs = document.getElementsByClassName('kode'),
+                code  = [].map.call(inputs, function( input ) {
+                    return input.value.toString();
+                });
+            arrKodeGlobal = code;
+            arrCode = code;
+            $( "#cari-stock" ).autocomplete({
+                source: function( request, response ) {
+                    $.ajax({
+                        url: '{{ url('penjualan-tempo/cari-stock') }}',
+                        data: {
+                            kode: code,
+                            jenis: $("#id_group").val(),
+                            term: searchGlobal
+                        },
+                        success: function( data ) {
+                            response( data );
+                        }
+                    });
+                },
+                minLength: 2,
+                select: function(event, data) {
+                    setStock(data.item);
+                    $("#stockid").val(data.item.id);
+                    if ($("#stockid").val() == "") {
+                        $("#tambahketable").attr('disabled', true);
+                    } else {
+                        $("#tambahketable").attr('disabled', false);
+                    }
+                }
+            });
         }
 
         function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
@@ -846,6 +898,7 @@
 
         function hapus(id) {
             $('#'+id).remove();
+            setArrayId();
             updateTotalTampil();
         }
 
@@ -894,7 +947,7 @@
                 });
             } else {
                 $.ajax({
-                    url: baseUrl + '/penjualan-reguler/detailPembayaran/'+total,
+                    url: baseUrl + '/penjualan-tempo/detailpembayarantempo/'+total,
                     timeout: 5000,
                     type: 'get',
                     success: function(response){
@@ -960,8 +1013,7 @@
                             icon : "fa fa-check bounce animated"
                         });
                         updateTotalTampil();
-                        console.log(response);
-                        cetak(response.salesman, response.idSales, response.totHarga, response.dibayar, response.kembali);
+                        cetak(response.salesman, response.idSales, response.totHarga, response.payment_method, response.payment, response.dibayar, response.kembali);
                         $('#DetailPembayaran').modal('hide');
                         window.location = baseUrl + '/penjualan-tempo';
                     }
@@ -983,22 +1035,9 @@
             })
         }
 
-        function cetak(salesman, idSales, totHarga, dibayar, kembali){
-            window.open(baseUrl + '/penjualan-tempo/struktempo/'+salesman+'/'+idSales+'/'+totHarga+'/'+dibayar+'/'+kembali, '', "width=800,height=600");
+        function cetak(salesman, idSales, totHarga, payment_method, payment, dibayar, kembali){
+            window.open(baseUrl + '/penjualan-tempo/struktempo/'+salesman+'/'+idSales+'/'+totHarga+'/'+payment_method+'/'+payment+'/'+dibayar+'/'+kembali, '', "width=800,height=600");
         }
 
-        function convertToRupiah(angka) {
-            var rupiah = '';
-            var angkarev = angka.toString().split('').reverse().join('');
-            for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
-            var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
-            return hasil;
-
-        }
-
-        function convertToAngka(rupiah)
-        {
-            return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
-        }
     </script>
 @endsection

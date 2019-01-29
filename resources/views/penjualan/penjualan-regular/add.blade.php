@@ -280,7 +280,6 @@
     var iCode = [];
     var arrCode = [];
     var arrIdStock = [];
-    var arrIdGlobal = [];
     var arrKodeGlobal = [];
     var spkode = [];
     var hargaGlobal = null;
@@ -434,6 +433,7 @@
                     icon : "fa fa-times bounce animated"
                 });
                 $(this).val("");
+                return;
             }
             if (arrCode.includes(specificcode) == true) {
 
@@ -733,6 +733,7 @@
                     url: '{{ url('penjualan-reguler/cari-stock') }}',
                     data: {
                         kode: code,
+                        jenis: $("#id_group").val(),
                         term: searchGlobal
                     },
                     success: function( data ) {
