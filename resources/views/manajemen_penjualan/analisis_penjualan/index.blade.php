@@ -83,20 +83,15 @@
                                                             <option value="8">Sales</option>
                                                         </select>
                                                     </div>
-                                                    <div class="col-md-3">
-                                                        <select name="forSelect" id="forSelect" class="form-control">
-                                                            <option value="">== Pilih Rentang Waktu ==</option>
-                                                        </select>
-                                                    </div>
-                                                    <label class="col-md-3 no-padding">* Pilih untuk menampilkan BAR CHART</label>
+
                                                 </div>
                                                 
 
                                                 <div id="spes1" style="display: none" class="col-md-2 no-padding spesifik">
                                                     <label>Pencarian Spesifik</label>
                                                 </div>
-                                                <div id="spes2" style="display: none" class="col-md-5 no-padding spesifik">
-                                                    <div class="input-group" id="date-range" style="">
+                                                <div id="spes2" style="display: none" class="col-md-4 no-padding spesifik">
+                                                    <div class="input-group input-daterange" id="date-range" style="">
                                                         <input type="text" class="form-control" id="tglAwal" name="tglAwal" value="" placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
                                                         <span class="input-group-addon bg-custom text-white b-0">to</span>
                                                         <input type="text" class="form-control" id="tglAkhir" name="tglAkhir" value="" placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
@@ -111,7 +106,11 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12 padding-bottom-10" style="padding-right: 0px">
+                                <div class="col-md-12">
+                                    <div id="chartContainer" class="text-center" style="height: 300px; width: 100%;"></div>
+                                </div>
+
+                                <div class="col-md-12 padding-bottom-10" id="divTabChart" style="padding-right: 0px; display: none">
                                     <div class="tab-content padding-10">
 
                                         <div class="col-md-4 no-padding">
@@ -163,6 +162,42 @@
     <script src="{{ asset('template_asset/js/plugin/easy-pie-chart/jquery.easy-pie-chart.min.js') }}"></script>
     <script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
 
+    <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+
+    {{-- <script>
+        window.onload = function () {
+        
+        var options = {
+            title: {
+                text: "Analisis Penjualan Bulan Ini"
+            },
+            animationEnabled: true,
+            data: [{
+                type: "pie",
+                startAngle: 40,
+                toolTipContent: "<b>{label}</b>: {y}%",
+                showInLegend: "true",
+                legendText: "{label}",
+                indexLabelFontSize: 16,
+                indexLabel: "{label} - {y}%",
+                dataPoints: [
+                    { y: 20.36, label: "Windows 7" },
+                    { y: 10.85, label: "Windows 10" },
+                    { y: 1.49, label: "Windows 8" },
+                    { y: 6.98, label: "Windows XP" },
+                    { y: 6.53, label: "Windows 8.1" },
+                    { y: 2.45, label: "Linux" },
+                    { y: 3.32, label: "Mac OS X 10.12" },
+                    { y: 4.03, label: "Others" }
+                ]
+            }]
+        };
+        $("#chartContainer").CanvasJSChart(options);
+        
+        }
+    </script> --}}
+
     <script type="text/javascript">
         var $chrt_border_color = "#efefef";
         var $chrt_grid_color = "#DDD"
@@ -196,16 +231,7 @@
     		$('#showdata').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 
 
-            $( "#tglAwal" ).datepicker({
-                language: "id",
-                format: 'dd/mm/yyyy',
-                prevText: '<i class="fa fa-chevron-left"></i>',
-                nextText: '<i class="fa fa-chevron-right"></i>',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-            $( "#tglAkhir" ).datepicker({
+            $( "#date-range" ).datepicker({
                 language: "id",
                 format: 'dd/mm/yyyy',
                 prevText: '<i class="fa fa-chevron-left"></i>',
@@ -229,6 +255,12 @@
 
             axios.post(baseUrl+'/man-penjualan/analisis-penjualan/analyze', {nilai:valueSelected}).then((response) => {
                 $('#analisisTable').DataTable().clear();
+
+                if(response.data.data.length > 0){
+                    $('#divTabChart').css("display","block");
+                }else{
+
+                }
 
                 for(var i = 0; i < response.data.data.length; i++){
                     $('#analisisTable').DataTable().row.add([
