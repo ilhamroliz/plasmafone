@@ -145,8 +145,8 @@
                                                     <div class="col-md-12">
                                                         <div class="pull-right">
                                                             <h1 class="font-400 total-tampil">Rp. {{ number_format($data[0]->s_total_net,0,',','.') }}</h1>
-                                                            <input type="hidden" name="totalGross" id="totalGross" value="{{ $data[0]->s_total_gross }}">
-                                                            <input type="hidden" name="totalHarga" id="totalHarga" value="{{ $data[0]->s_total_net }}">
+                                                            <input type="hidden" name="totalGross" id="totalGross" value="{{ number_format($data[0]->s_total_gross,0,',','.') }}">
+                                                            <input type="hidden" name="totalHarga" id="totalHarga" value="{{ number_format($data[0]->s_total_net,0,',','') }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -202,9 +202,9 @@
                                                                     <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
                                                                     <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
                                                                     <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
-                                                                    <input type="hidden" class="harga" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ $item->sd_value }}" />
+                                                                    <input type="hidden" class="harga {{ $item->i_code }}" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ number_format($item->sd_value,0,',','') }}" />
                                                                     <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item->idStock }}" value="{{ $item->sd_total_gross }}">
-                                                                    <input type="hidden" class="totalItem totalItem-{{ $item->i_code }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ $item->sd_total_net }}">
+                                                                    <input type="hidden" class="totalItem totalItem-{{ $item->i_code }} totalItem-{{ $item->idStock }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
                                                                 </td>
                                                                 <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item->sd_qty }}', '{{ $item->stock_qty }}', 'harga-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}', 'grossItem-{{ $item->idStock }}')" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->sd_qty }}" /></td>
                                                                 <td style="width: 15%;">Rp. @if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</td>
@@ -220,9 +220,9 @@
                                                                     <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
                                                                     <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
                                                                     <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item->sm_specificcode }}" />
-                                                                    <input type="hidden" class="harga" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ $item->sd_value }}" />
+                                                                    <input type="hidden" class="harga" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ number_format($item->sd_value,0,',','') }}" />
                                                                     <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item->idStock }}" value="{{ $item->sd_total_gross }}">
-                                                                    <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ $item->sd_total_net }}">
+                                                                    <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
                                                                 </td>
                                                                 <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="1" />1</td>
                                                                 <td style="width: 15%;">Rp. @if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</td>
@@ -350,7 +350,7 @@
             }
 
             $( "#cari-salesman" ).autocomplete({
-                source: baseUrl+'/penjualan-reguler/cari-sales',
+                source: baseUrl+'/penjualan-tempo/cari-sales',
                 minLength: 1,
                 select: function(event, data) {
                     $("#salesman").val(data.item.id);
@@ -359,7 +359,7 @@
             });
 
             $( "#cari-member" ).autocomplete({
-                source: baseUrl+'/penjualan-reguler/cari-member',
+                source: baseUrl+'/penjualan-tempo/cari-member',
                 minLength: 1,
                 select: function(event, data) {
                     getData(data.item);
@@ -390,7 +390,7 @@
                 $("#search_barang").hide("slow");
                 $("#cari-stock").val("");
                 $("#qty").val("");
-                axios.get(baseUrl+'/penjualan-reguler/getdetailmember/'+id)
+                axios.get(baseUrl+'/penjualan-tempo/getdetailmember/'+id)
                     .then(function (response) {
                         // handle success
                         // console.log(response.data.jenis);
@@ -572,7 +572,7 @@
                 }
             });
             $.ajax({
-                url: baseUrl + '/penjualan-reguler/simpan-member',
+                url: baseUrl + '/penjualan-tempo/simpan-member',
                 type: 'get',
                 data: {nama: nama, nomor: nomor},
                 dataType: 'json',
@@ -650,6 +650,7 @@
                     }
                     $('.qty-'+idGlobal).val(qtyakhir);
                     var harga = qtyakhir * hargaGlobal;
+                    $('.totalItem-'+idGlobal).val(harga);
                     harga = convertToRupiah(harga);
                     $('.harga-'+idGlobal).html(harga);
                     updateTotalTampil();
@@ -729,7 +730,7 @@
             $( "#cari-stock" ).autocomplete({
                 source: function( request, response ) {
                     $.ajax({
-                        url: '{{ url('penjualan-reguler/cari-stock') }}',
+                        url: '{{ url('penjualan-tempo/cari-stock') }}',
                         data: {
                             kode: kode,
                             jenis: $("#id_group").val(),
@@ -848,7 +849,6 @@
 
         function ubahQty(qtyTerbeli, stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {
             stock = parseInt(stock) + parseInt(qtyTerbeli);
-
             var total = 0;
             var harga = 0;
             var input = parseInt($('#'+inputQty).val());
@@ -926,7 +926,7 @@
             for (var i = 0; i < artotalItem.length; i++){
                 totalHarga += parseInt(artotalItem[i]);
             }
-
+            console.log(totalHarga);
             $("#totalGross").val(totalGross);
             $('.total-tampil').html(convertToRupiah(totalHarga));
             $("#totalHarga").val(totalHarga);
@@ -935,7 +935,6 @@
 
         function detailPembayaran(){
             var total = $('#totalHarga').val();
-            total = total.replace(".00", "");
             total = convertToAngka(total);
             if (isNaN(total)) {
                 $.smallBox({
@@ -1038,6 +1037,5 @@
         function cetak(salesman, idSales, totHarga, payment_method, payment, dibayar, kembali){
             window.open(baseUrl + '/penjualan-tempo/struktempo/'+salesman+'/'+idSales+'/'+totHarga+'/'+payment_method+'/'+payment+'/'+dibayar+'/'+kembali, '', "width=800,height=600");
         }
-
     </script>
 @endsection
