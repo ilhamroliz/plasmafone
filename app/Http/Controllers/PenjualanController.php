@@ -918,7 +918,17 @@ class PenjualanController extends Controller
 
     public function detailpembayaran($total = null)
     {
-        return view('penjualan.penjualan-regular.detailPembayaran', compact('total'));
+        $outlet = Auth::user()->m_comp;
+        $outlet_payment = DB::table('d_outlet_payment')
+                            ->join('m_pembayaran', 'd_outlet_payment.op_pembayaran', '=', 'm_pembayaran.p_id')
+                            ->where('d_outlet_payment.op_outlet', $outlet)
+                            ->get();
+        $payment_method = [];
+        foreach ($outlet_payment as $key => $payment) {
+            $payment_method[] = implode("_", explode(" ", $payment->p_detail));
+        }
+//        dd($payment_method);
+        return view('penjualan.penjualan-regular.detailPembayaran', compact('total', 'payment_method'));
     }
 
     public function struck($salesman = null, $id = null, $totHarga = null, $dibayar = null, $kembali = null)
