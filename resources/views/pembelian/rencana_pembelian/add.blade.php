@@ -162,7 +162,7 @@
 															<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
 																<i class="glyphicon glyphicon-edit"></i>
 															</button>&nbsp;
-															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest()">
+															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest({{$req->ro_id}})">
 																<i class="glyphicon glyphicon-trash"></i>
 															</button>
 														</div>
@@ -495,7 +495,7 @@
 		function simpanRencana()
 		{
 			$.SmartMessageBox({
-					title : "Smart Alert!",
+					title : "Pesan!",
 					content : "Apakah Anda Yakin Akan Mengajukan Rencana Pembelian ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
@@ -930,17 +930,13 @@
 			});
 		}
 
-        function tolakRequest(id){
+        function tolakRequest(req_id){
             $.SmartMessageBox({
-					title : "Smart Alert!",
+					title : "Pesan!",
 					content : "Apakah Anda Yakin Akan Menolak Rencana Pembelian ?",
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
 					if (ButtonPressed === "Ya") {
-						var ar = $();
-					    for (var i = 0; i < semua.rows()[0].length; i++) {
-					        ar = ar.add(semua.row(i).node());
-					    }
 					    $.ajaxSetup({
 					    headers: {
 					            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -949,7 +945,9 @@
 					    $.ajax({
 					        url: baseUrl + '/pembelian/rencana-pembelian/tolakRequest',
 					        type: 'get',
-					        data: ar.find('input').serialize(),
+					        data: {
+								id : req_id,
+							},
 					        dataType: 'json',
 					        success: function (data) {
 
