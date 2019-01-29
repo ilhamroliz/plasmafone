@@ -691,14 +691,26 @@ class PenjualanController extends Controller
                     Access::logActivity('Membuat penjualan regular ' . $nota);
                 }
 
+                $outlet = Auth::user()->m_comp;
+                $outlet_payment = DB::table('d_outlet_payment')
+                    ->join('m_pembayaran', 'd_outlet_payment.op_pembayaran', '=', 'm_pembayaran.p_id')
+                    ->where('d_outlet_payment.op_outlet', $outlet)
+                    ->get();
+                $payment_method = [];
+                $bayar = [];
+                foreach ($outlet_payment as $key => $payment) {
+                    $payment_method[] = $payment->p_detail;
+                    $val = implode("", explode(".", implode("", explode("Rp", implode("", explode(" ",$data[implode("_", explode(" ", $payment->p_detail))]))))));
+                    $bayar[] = $val;
+                }
+
                 DB::commit();
                 return response()->json([
                     'status' => 'sukses',
-                    'bayar' => $data['bayar'],
+                    'payment_method' => $payment_method,
+                    'payment' => $bayar,
                     'salesman' => $sales->m_name,
                     'idSales' => Crypt::encrypt($idsales),
-                    'bri' => $data['bri'],
-                    'bni' => $data['bni'],
                     'totHarga' => $data['totalHarga'],
                     'dibayar' => $data['total_pembayaran'],
                     'kembali' => $data['kembali']
@@ -931,7 +943,7 @@ class PenjualanController extends Controller
         return view('penjualan.penjualan-regular.detailPembayaran', compact('total', 'payment_method'));
     }
 
-    public function struck($salesman = null, $id = null, $totHarga = null, $dibayar = null, $kembali = null)
+    public function struck($salesman = null, $id = null, $totHarga = null, $payment_method = array(), $payment = array(), $dibayar = null, $kembali = null)
     {
         try {
             $id = Crypt::decrypt($id);
@@ -959,7 +971,7 @@ class PenjualanController extends Controller
             return view('errors/404');
         }
 
-        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'totHarga', 'dibayar', 'kembali'));
+        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'totHarga', 'payment_method', 'payment', 'dibayar', 'kembali'));
     }
 
     public function detailpembayaranTempo($total = null)

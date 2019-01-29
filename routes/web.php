@@ -772,7 +772,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
     Route::post('penjualan-reguler/edit', 'PenjualanController@editPenjualan');
     Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
-    Route::get('penjualan-reguler/struk/{salesman}/{id}/{totHarga}/{dibayar}/{kembali}', 'PenjualanController@struck');
+    Route::get('penjualan-reguler/struk/{salesman}/{id}/{totHarga}/{payment_method}/{payment}/{dibayar}/{kembali}', 'PenjualanController@struck');
     Route::get('penjualan-reguler/detailPembayaran/{total}', 'PenjualanController@detailpembayaran');
 	//==============
 

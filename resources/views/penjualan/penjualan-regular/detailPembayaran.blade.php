@@ -62,7 +62,7 @@
 </div>
 <script type="text/javascript">
 
-	var totalTagihan = {{ $total }};
+	var totalTagihan = '{{ $total }}';
 
 	/*$('.maskmoney').inputmask("numeric", {
 	    radixPoint: ",",
@@ -95,7 +95,7 @@
             }
             totaltemp += bayar[i];
         }
-        
+
 		var total = konversiRupiahV2(totaltemp);
 		$('.TotalPembayaran').text(total);
 		$('#total_pembayaran').val(totaltemp);
