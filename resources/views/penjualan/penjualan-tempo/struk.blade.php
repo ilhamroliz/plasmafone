@@ -75,14 +75,26 @@
     </div>
 @endforeach
 <div style="border: .6px dashed;"></div>
-<div class="hasil">
+<div class="hasil"  style="margin-bottom: 18px">
     <span style="width: 60%; float: left;"></span>
-    <span style="width: 20%; margin-left: 5px;">Total Harga:</span>
+    <span style="width: 20%; margin-left: 5px;">Sub Total Harga:</span>
     <span style="width: 20%; float: right;">Rp. {{ number_format( $totHarga, 0 , '' , '.' ) . ',-' }}</span>
 </div>
+<?php
+$pm = explode(",", $payment_method);
+$pay = explode(",", $payment);
+?>
+
+@for ($i = 0; $i < count($pm); $i++)
+    <div class="hasil">
+        <span style="width: 60%; float: left;"></span>
+        <span style="width: 20%; margin-left: 5px;">{{ $pm[$i] }}:</span>
+        <span style="width: 20%; float: right;">Rp. {{ number_format( $pay[$i], 0 , '' , '.' ) . ',-' }}</span>
+    </div>
+@endfor
 <div class="hasil">
     <span style="width: 60%; float: left;"></span>
-    <span style="width: 20%; margin-left: 5px;">Dibayar:</span>
+    <span style="width: 20%; margin-left: 5px;">Total Dibayar:</span>
     <span style="width: 20%; float: right;">Rp. {{ number_format( $dibayar, 0 , '' , '.' ) . ',-' }}</span>
 </div>
 <div class="hasil">

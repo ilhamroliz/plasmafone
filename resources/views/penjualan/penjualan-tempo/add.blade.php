@@ -968,7 +968,7 @@
                         $("#search_barang").hide("slow");
                         $("#cari-salesman").focus();
                         updateTotalTampil();
-                        cetak(response.salesman, response.idSales, response.totHarga, response.dibayar, response.kembali);
+                        cetak(response.salesman, response.idSales, response.totHarga, response.payment_method, response.payment, response.dibayar, response.kembali);
                         $('#DetailPembayaran').modal('hide');
 
                     }
@@ -990,8 +990,8 @@
             })
         }
 
-        function cetak(salesman, idSales, totHarga, dibayar, kembali){
-            window.open(baseUrl + '/penjualan-tempo/struktempo/'+salesman+'/'+idSales+'/'+totHarga+'/'+dibayar+'/'+kembali, '', "width=800,height=600");
+        function cetak(salesman, idSales, totHarga, payment_method, payment, dibayar, kembali){
+            window.open(baseUrl + '/penjualan-tempo/struktempo/'+salesman+'/'+idSales+'/'+totHarga+'/'+payment_method+'/'+payment+'/'+dibayar+'/'+kembali, '', "width=800,height=600");
         }
 
 

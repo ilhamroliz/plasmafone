@@ -17,18 +17,6 @@
         </div>
     </div>
     @endforeach
-    {{--<div class="form-group col-md-12" style="float: right;">--}}
-        {{--<label for="bca" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">BCA:</h4></label>--}}
-        {{--<div class="input-group col-md-5" style="float:right; margin-right:20px;">--}}
-            {{--<input type="text" value="" name="bca" class="bca row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">--}}
-        {{--</div>--}}
-    {{--</div>--}}
-    {{--<div class="form-group col-md-12" style="float: right; border-bottom: 1px solid #c90d18; padding-bottom: 15px;">--}}
-        {{--<label for="permata" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">BRI:</h4></label>--}}
-        {{--<div class="input-group col-md-5" style="float:right; margin-right:20px;">--}}
-            {{--<input type="text" value="" name="bri" class="permata row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">--}}
-        {{--</div>--}}
-    {{--</div>--}}
 
 
 <div class="form-group col-md-12" style="float: right;">

@@ -956,7 +956,6 @@
                     $('#DetailPembayaran').modal('hide');
                     
                 } else {
-                    console.log(response);
                     $.smallBox({
                         title : "Berhasil",
                         content : 'Transaksi Anda berhasil...!',

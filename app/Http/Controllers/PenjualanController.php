@@ -939,7 +939,7 @@ class PenjualanController extends Controller
         foreach ($outlet_payment as $key => $payment) {
             $payment_method[] = implode("_", explode(" ", $payment->p_detail));
         }
-//        dd($payment_method);
+
         return view('penjualan.penjualan-regular.detailPembayaran', compact('total', 'payment_method'));
     }
 
@@ -976,10 +976,20 @@ class PenjualanController extends Controller
 
     public function detailpembayaranTempo($total = null)
     {
-        return view('penjualan.penjualan-tempo.detailPembayaran', compact('total'));
+        $outlet = Auth::user()->m_comp;
+        $outlet_payment = DB::table('d_outlet_payment')
+            ->join('m_pembayaran', 'd_outlet_payment.op_pembayaran', '=', 'm_pembayaran.p_id')
+            ->where('d_outlet_payment.op_outlet', $outlet)
+            ->get();
+        $payment_method = [];
+        foreach ($outlet_payment as $key => $payment) {
+            $payment_method[] = implode("_", explode(" ", $payment->p_detail));
+        }
+
+        return view('penjualan.penjualan-tempo.detailPembayaran', compact('total', 'payment_method'));
     }
 
-    public function struckTempo($salesman = null, $id = null, $totHarga = null, $dibayar = null, $kembali = null)
+    public function struckTempo($salesman = null, $id = null, $totHarga = null, $payment_method = array(), $payment = array(), $dibayar = null, $kembali = null)
     {
         try {
             $id = Crypt::decrypt($id);
@@ -1007,7 +1017,7 @@ class PenjualanController extends Controller
             return view('errors/404');
         }
 
-        return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'totHarga', 'dibayar', 'kembali'));
+        return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'totHarga', 'payment_method', 'payment', 'dibayar', 'kembali'));
     }
 
     public function delete($id = null)

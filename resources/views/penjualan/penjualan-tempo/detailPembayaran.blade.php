@@ -9,25 +9,14 @@
 
 {{-- ===================================================================================================== --}}
 <form id="formDetailPembayaran">
-<div class="form-group col-md-12" style="float: right;">
-	<label for="bayar" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">Cash:</h4></label>
-	<div class="input-group col-md-5" style="float:right; margin-right:20px;">
-		<input type="text" value="" name="bayar" class="bayar row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">
-    </div>
-</div>
-
-<div class="form-group col-md-12" style="float: right;">
-	<label for="bca" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">BRI:</h4></label>
-	<div class="input-group col-md-5" style="float:right; margin-right:20px;">
-		<input type="text" value="" name="bri" class="bca row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">
-    </div>
-</div>
-<div class="form-group col-md-12" style="float: right; border-bottom: 1px solid #c90d18; padding-bottom: 15px;">
-	<label for="permata" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">BNI:</h4></label>
-	<div class="input-group col-md-5" style="float:right; margin-right:20px;">
-		<input type="text" value="" name="bni" class="permata row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">
-    </div>
-</div>
+    @foreach($payment_method as $key => $payment)
+        <div class="form-group col-md-12" style="float: right;">
+            <label for="{{ $payment_method[$key] }}" class="row text-left col-md-6 control-label" style="text-align: left; font-weight:bold;"><h4 style="font-weight:bold">{{ implode(" ", explode("_", $payment_method[$key])) }}:</h4></label>
+            <div class="input-group col-md-5" style="float:right; margin-right:20px;">
+                <input type="text" value="" name="{{ $payment_method[$key] }}" id="{{ $payment_method[$key] }}" class="{{ $payment_method[$key] }} bayar row text-right form-control" style="text-align: right; float: right;" onkeyup="hitung()">
+            </div>
+        </div>
+    @endforeach
 
 <div class="form-group col-md-12" style="float: right;">
 	<label class="row text-left col-md-7 control-label" style="text-align: left;"><h4 style="font-weight:bold">Total Pembayaran:</h4></label>
@@ -72,20 +61,6 @@
 	    oncleared: function () { self.Value(''); }
 	});*/
 
-	$('.bca').maskMoney({
-        prefix: 'Rp. ',
-        thousands: '.',
-        decimal: ',',
-        affixesStay: true
-    });
-
-    $('.permata').maskMoney({
-        prefix: 'Rp. ',
-        thousands: '.',
-        decimal: ',',
-        affixesStay: true
-    });
-
     $('.bayar').maskMoney({
         prefix: 'Rp. ',
         thousands: '.',
@@ -94,44 +69,39 @@
     });
 
 	function hitung(){
-		var bayartemp = $('.bayar').val();
-		var bcatemp = $('.bca').val();
-		var permatatemp = $('.permata').val();
+        var inputs = document.getElementsByClassName('bayar'),
+            bayar  = [].map.call(inputs, function( input ) {
+                var inp = input.value.toString();
+                return konversiAngka(inp);
+            });
+        var totaltemp = 0;
+        for (var i=0; i<bayar.length; i++){
+            if (isNaN(bayar[i])){
+                bayar[i] = 0;
+            }
+            totaltemp += bayar[i];
+        }
 
-		var bayar = konversiAngka(bayartemp);
-		if (isNaN(bayar)) {
-			bayar = 0;
-		}
-		var bca = konversiAngka(bcatemp);
-		if (isNaN(bca)) {
-			bca = 0;
-		}
-		var permata = konversiAngka(permatatemp);
-		if (isNaN(permata)) {
-			permata = 0;
-		}
+        var total = konversiRupiahV2(totaltemp);
+        $('.TotalPembayaran').text(total);
+        $('#total_pembayaran').val(totaltemp);
+        //
+        var tagihantemp = $('.totalnet').val();
+        var tagihan = konversiAngka(tagihantemp);
+        //
+        var kembalitemp = totaltemp - tagihan;
+        if (isNaN(kembalitemp)) {
+            kembalitemp = 0;
+        }
+        var kembali = konversiRupiahV2(kembalitemp);
+        $('.kembali').text(kembali);
+        $('#kembali').val(kembalitemp);
 
-		var totaltemp = bayar + bca + permata;
-		var total = konversiRupiahV2(totaltemp);
-		$('.TotalPembayaran').text(total);
-		$('#total_pembayaran').val(totaltemp);
-
-		var tagihantemp = $('.totalnet').val();
-		var tagihan = konversiAngka(tagihantemp);
-
-		var kembalitemp = totaltemp - tagihan;
-		if (isNaN(kembalitemp)) {
-			kembalitemp = 0;
-		}
-		var kembali = konversiRupiahV2(kembalitemp);
-		$('.kembali').text(kembali);
-		$('#kembali').val(kembalitemp);
-
-		if (totalTagihan <= totaltemp) {
-			$('#buttonCetak').css('display', 'block');
-		} else {
-			$('#buttonCetak').css('display', 'none');
-		}
+        if (totalTagihan <= totaltemp) {
+            $('#buttonCetak').css('display', 'block');
+        } else {
+            $('#buttonCetak').css('display', 'none');
+        }
 	}
 
 	function konversiRupiah(angka) {
