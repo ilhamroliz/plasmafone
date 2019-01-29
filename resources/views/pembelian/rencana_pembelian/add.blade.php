@@ -146,15 +146,15 @@
 											<tbody>
 												@foreach($request as $req)
 												<tr>
-													<td>{{$req->ro_date}}</td>
+													<td>{{$req->date}}</td>
 													<td>{{$req->c_name}}</td>
 													<td>{{$req->i_nama}}</td>
-													<td width="5%">{{$req->ro_qty}}</td>
+													<td width="5%">{{$req->qty}}</td>
 													<td width="5%">
 														<div class="text-center">
-															<input type="hidden" name="req_id[]" value="{{$req->ro_id}}">
-															<input type="hidden" name="item_id[]" value="{{$req->i_id}}">
-															<input type="number" min="1" class="form-control" name="qtyApp[]" id="qty-{{$req->ro_id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->ro_id}}')" value="{{$req->ro_qty}}"/>
+															<input type="hidden" name="req_id[]" value="{{$req->id}}">
+															<input type="hidden" name="item_id[]" value="{{$req->item}}">
+															<input type="number" min="1" class="form-control" name="qtyApp[]" id="qty-{{$req->id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->id}}')" value="{{$req->qty}}"/>
 														</div>
 													</td>
 													<td width="10%">
@@ -162,7 +162,7 @@
 															<!-- <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
 																<i class="glyphicon glyphicon-edit"></i>
 															</button>&nbsp; -->
-															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest({{$req->ro_id}})">
+															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest({{$req->id}})">
 																<i class="fa fa-ban"></i>
 															</button>
 														</div>

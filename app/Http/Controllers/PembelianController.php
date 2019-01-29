@@ -925,6 +925,7 @@ class PembelianController extends Controller
 
     public function tolakRequest(Request $request)
     {
+        dd($request);
         $req_id = $request->input('id');
         DB::beginTransaction();
         try {
@@ -1118,11 +1119,12 @@ class PembelianController extends Controller
                 'd_purchase_confirm.pc_supplier',
                 'd_purchase_confirm.pc_insert',
                 'd_purchase_confirm.pc_status',
-                // 'd_item.i_nama',
-                'd_supplier.s_company')
+                'd_item.i_nama')
+                // 'd_supplier.s_company')
             // ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
-            // ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
-            ->join('d_supplier', 'd_purchase_confirm.pc_supplier', '=', 'd_supplier.s_id')
+            ->join('d_purchase_confirmdt','pcd_purchaseconfirm', '=', 'pc_id')
+            ->join('d_item', 'd_purchase_confirmdt.pcd_item', '=', 'd_item.i_id')
+            // ->join('d_supplier', 'd_purchase_confirm.pc_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_confirm.pc_status', 'P')
             ->get();
         return DataTables::of($confirmOrder)
@@ -1152,35 +1154,36 @@ class PembelianController extends Controller
                 'd_purchase_confirm.pc_supplier',
                 'd_purchase_confirm.pc_insert',
                 'd_purchase_confirm.pc_status',
-                // 'd_item.i_nama',
-                'd_supplier.s_company'
-            )
+                'd_item.i_nama',
+                'pcd_qty')
+                // 'd_supplier.s_company')
             // ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
-            // ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
-            ->join('d_supplier', 'd_purchase_confirm.pc_supplier', '=', 'd_supplier.s_id')
+            ->join('d_purchase_confirmdt','pcd_purchaseconfirm', '=', 'pc_id')
+            ->join('d_item', 'd_purchase_confirmdt.pcd_item', '=', 'd_item.i_id')
+            // ->join('d_supplier', 'd_purchase_confirm.pc_supplier', '=', 'd_supplier.s_id')
             ->where('d_purchase_confirm.pc_status', 'Y')
             ->get();
 
         return DataTables::of($confirmOrder)
-            ->addColumn('input', function ($confirmOrder) {
+            // ->addColumn('input', function ($confirmOrder) {
 
-                return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
+            //     return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTY"  style="text-transform: uppercase" /></div>';
 
-            })
+            // })
 
-            ->addColumn('pr_price', function ($confirmOrder) {
+            // ->addColumn('pr_price', function ($confirmOrder) {
 
-                return ''.number_format($confirmOrder->pr_price, 0).'';
+            //     return ''.number_format($confirmOrder->pr_price, 0).'';
 
 
-            })
-            ->addColumn('aksi', function ($confirmOrder) {
-                if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                }
-            })
+            // })
+            // ->addColumn('aksi', function ($confirmOrder) {
+            //     if (Plasma::checkAkses(47, 'update') == false) {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+            //     } else {
+            //         return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+            //     }
+            // })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
     }
@@ -1299,14 +1302,14 @@ class PembelianController extends Controller
                 'd_purchase_plan.*',
                 'd_item.*',
                 'm_company.*',
-                DB::raw('sum(d_purchase_plan.pr_qtyReq) as TotalQty_req'),
-                DB::raw('sum(d_purchase_plan.pr_qtyApp) as TotalQty_app')
+                DB::raw('sum(d_purchase_plan.pp_qtyreq) as TotalQty_req'),
+                DB::raw('sum(d_purchase_plan.pp_qtyappr) as TotalQty_appr')
             )
-            ->join('d_item', 'd_purchase_plan.pr_itemPlan', '=', 'd_item.i_id')
-            ->join('m_company', 'd_purchase_plan.pr_comp', '=', 'm_company.c_id')
-            ->where('d_purchase_plan.pr_stsPlan', 'WAITING')
-            ->where('d_purchase_plan.pr_userId',$userCreate)
-            ->groupBy('d_purchase_plan.pr_itemPlan')
+            ->join('d_item', 'd_purchase_plan.item', '=', 'd_item.i_id')
+            // ->join('m_company', 'd_purchase_plan.pp_comp', '=', 'm_company.c_id')
+            ->where('d_purchase_plan.pp_status', 'P')
+            // ->where('d_purchase_plan.pp_userId',$userCreate)
+            ->groupBy('d_purchase_plan.pp_item')
             ->get();
 
             $addAkses = [];
@@ -3678,12 +3681,32 @@ class PembelianController extends Controller
 
     public function addRencana()
     {
-        $request = DB::table('d_requestorder')
-            ->select('d_requestorder.ro_id','d_requestorder.ro_comp','d_requestorder.ro_item','d_requestorder.ro_qty', DB::raw('date_format(ro_date, "%d/%m/%Y") as ro_date'), 'c_name','i_nama', 'd_item.i_id')
+        $request1 = DB::table('d_requestorder')
             ->join('m_company', 'd_requestorder.ro_comp', '=', 'm_company.c_id')
             ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
             ->where('d_requestorder.ro_state', 'P')
-            ->get();
+            ->select(
+                DB::raw('CONCAT("ro-", d_requestorder.ro_id) as id'),
+                DB::raw('d_requestorder.ro_comp as comp'),
+                DB::raw('d_requestorder.ro_item as item'),
+                DB::raw('d_requestorder.ro_qty as qty'),
+                DB::raw('date_format(ro_date, "%d/%m/%Y") as date'),
+                'c_name','i_nama');
+
+        $request2 = DB::table('d_indent')
+            ->join('m_company', 'd_indent.i_comp', '=', 'm_company.c_id')
+            ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+            ->join('d_item', 'd_indent_dt.id_item', '=', 'd_item.i_id')
+            ->where('d_indent.i_status', 'P')
+            ->select(
+                DB::raw('CONCAT("pb-", d_indent.i_id) as id'),
+                DB::raw('d_indent.i_comp as comp'),
+                DB::raw('id_item as item'),
+                DB::raw('id_qty as qty'),
+                DB::raw('d_indent.i_nota as date'),
+                'c_name','i_nama');
+
+        $request = $request1->union($request2)->get();
 
         return view('pembelian/rencana_pembelian/add', compact('request'));
     }
