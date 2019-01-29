@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use foo\bar;
 use Illuminate\Http\Request;
 use App\Model\pembelian\order as order;
 use App\Http\Controllers\PlasmafoneController as Plasma;
@@ -2845,7 +2846,7 @@ class PembelianController extends Controller
         foreach ($list as $hasil) {
             $row = array();
             $row[] = $hasil->i_nama;
-            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->ro_id . '" value="' . $hasil->ro_qty . '"  style="text-transform: uppercase" onkeyup="editDumy(' . $hasil->ro_id . ')" /></div>';
+            $row[] = '<div class="text-center">'.$hasil->ro_qty.'</div>';
             $row[] = '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle" title="Hapus Data" onclick="hapusData(' . $hasil->ro_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             $data[] = $row;
         }
@@ -3355,7 +3356,7 @@ class PembelianController extends Controller
         echo json_encode($status);
     }
 
-    public function verifikasi_simpanRequest()
+    public function     verifikasi_simpanRequest()
     {
         $comp    = Auth::user()->m_comp;
         $dateReq = Carbon::now('Asia/Jakarta');
@@ -3374,20 +3375,45 @@ class PembelianController extends Controller
             $response = "notFound";
             echo json_encode(array("status" => $response));
         } else {
+            DB::beginTransaction();
+            try {
+                for ($i = 0; $i < $baris; $i++){
+                    $getP = DB::table('d_requestorder')
+                        ->where('ro_comp', '=', $comp)
+                        ->where('ro_state', '=', 'P')
+                        ->where('ro_item', '=', $query[$i]->ro_item)
+                        ->get();
 
-                $update = DB::table('d_requestorder')
-                    ->where('d_requestorder.ro_comp', $comp)
-                    ->where('d_requestorder.ro_state', 'D')
-                    ->update([
-                        'ro_state'   => $status,
-                        'ro_date'    => $dateReq
-                ]);
-
-            if (!$update) {
-                $response = "gagal";
-                echo json_encode(array("status" => $response));
-            } else {
+                    if (count($getP) > 0) {
+                        for ($j = 0; $j < count($getP); $j++) {
+                            if ($query[$i]->ro_comp == $getP[$j]->ro_comp && $query[$i]->ro_item == $getP[$j]->ro_item) {
+                                $qtyAkhir = $getP[$j]->ro_qty + $query[$i]->ro_qty;
+                                DB::table('d_requestorder')
+                                    ->where('ro_id', '=', $getP[$j]->ro_id)
+                                    ->update([
+                                        'ro_date' => $query[$i]->ro_date,
+                                        'ro_qty' => $qtyAkhir
+                                    ]);
+                                DB::table('d_requestorder')
+                                    ->where('ro_id', '=', $query[$j]->ro_id)
+                                    ->delete();
+                            }
+                        }
+                    } else {
+                        DB::table('d_requestorder')
+                            ->where('d_requestorder.ro_id', '=', $query[$i]->ro_id)
+                            ->update([
+                                'ro_state'   => $status,
+                                'ro_date'    => $dateReq
+                            ]);
+                    }
+                }
+                DB::commit();
                 $response = "sukses";
+                echo json_encode(array("status" => $response));
+            } catch (\Exception $e) {
+                DB::rollBack();
+                $response = "gagal";
                 echo json_encode(array("status" => $response));
             }
 
