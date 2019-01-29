@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use foo\bar;
 use Illuminate\Http\Request;
 use App\Model\pembelian\order as order;
 use App\Http\Controllers\PlasmafoneController as Plasma;
@@ -1113,21 +1112,18 @@ class PembelianController extends Controller
     {
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
-                'd_purchase_confirm.pr_idConf',
-                'd_purchase_confirm.pr_idPlan',
-                'd_purchase_confirm.pr_supplier',
-                'd_purchase_confirm.pr_confirmNumber',
-                'd_purchase_confirm.pr_item',
-                'd_purchase_confirm.pr_price',
-                'd_purchase_confirm.pr_qtyApp',
-                'd_purchase_confirm.pr_stsConf',
-                'd_purchase_confirm.pr_dateApp',
-                'd_item.i_nama',
-                'd_supplier.s_company'
-            )->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
-            ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
-            ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
-            ->where('d_purchase_confirm.pr_stsConf', 'WAITING')
+                'd_purchase_confirm.pc_id',
+                'd_purchase_confirm.pc_date',
+                'd_purchase_confirm.pc_nota',
+                'd_purchase_confirm.pc_supplier',
+                'd_purchase_confirm.pc_insert',
+                'd_purchase_confirm.pc_status',
+                // 'd_item.i_nama',
+                'd_supplier.s_company')
+            // ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
+            // ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
+            ->join('d_supplier', 'd_purchase_confirm.pc_supplier', '=', 'd_supplier.s_id')
+            ->where('d_purchase_confirm.pc_status', 'P')
             ->get();
         return DataTables::of($confirmOrder)
             ->addColumn('input', function ($confirmOrder) {
@@ -1137,9 +1133,9 @@ class PembelianController extends Controller
             })
             ->addColumn('aksi', function ($confirmOrder) {
                 if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['input', 'aksi'])
@@ -1150,22 +1146,19 @@ class PembelianController extends Controller
     {
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
-                'd_purchase_confirm.pr_idConf',
-                'd_purchase_confirm.pr_idPlan',
-                'd_purchase_confirm.pr_confirmNumber',
-                'd_purchase_confirm.pr_supplier',
-                'd_purchase_confirm.pr_item',
-                'd_purchase_confirm.pr_price',
-                'd_purchase_confirm.pr_qtyApp',
-                'd_purchase_confirm.pr_stsConf',
-                'd_purchase_confirm.pr_dateApp',
-                'd_item.i_nama',
+                'd_purchase_confirm.pc_id',
+                'd_purchase_confirm.pc_date',
+                'd_purchase_confirm.pc_nota',
+                'd_purchase_confirm.pc_supplier',
+                'd_purchase_confirm.pc_insert',
+                'd_purchase_confirm.pc_status',
+                // 'd_item.i_nama',
                 'd_supplier.s_company'
             )
-            ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
-            ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
-            ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
-            ->where('d_purchase_confirm.pr_stsConf', 'PURCHASING')
+            // ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
+            // ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
+            ->join('d_supplier', 'd_purchase_confirm.pc_supplier', '=', 'd_supplier.s_id')
+            ->where('d_purchase_confirm.pc_status', 'Y')
             ->get();
 
         return DataTables::of($confirmOrder)
@@ -1183,9 +1176,9 @@ class PembelianController extends Controller
             })
             ->addColumn('aksi', function ($confirmOrder) {
                 if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['input', 'aksi'])
@@ -1221,20 +1214,18 @@ class PembelianController extends Controller
     {
         $confirmOrder = DB::table('d_purchase_confirm')
             ->select(
-                'd_purchase_confirm.pr_idConf',
-                'd_purchase_confirm.pr_idPlan',
-                'd_purchase_confirm.pr_supplier',
-                'd_purchase_confirm.pr_item',
-                'd_purchase_confirm.pr_price',
-                'd_purchase_confirm.pr_qtyApp',
-                'd_purchase_confirm.pr_stsConf',
-                'd_purchase_confirm.pr_dateApp',
-                'd_item.i_nama',
+                'd_purchase_confirm.pc_id',
+                'd_purchase_confirm.pc_date',
+                'd_purchase_confirm.pc_nota',
+                'd_purchase_confirm.pc_supplier',
+                'd_purchase_confirm.pc_insert',
+                'd_purchase_confirm.pc_status',
+                // 'd_item.i_nama',
                 'd_supplier.s_company'
             )
-            ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
-            ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
-            ->join('d_supplier', 'd_purchase_confirm.pr_supplier', '=', 'd_supplier.s_id')
+            // ->join('m_company', 'd_purchase_confirm.pr_comp', '=', 'm_company.c_id')
+            // ->join('d_item', 'd_purchase_confirm.pr_item', '=', 'd_item.i_id')
+            ->join('d_supplier', 'd_purchase_confirm.pc_supplier', '=', 'd_supplier.s_id')
 
             ->get();
 
@@ -1246,9 +1237,9 @@ class PembelianController extends Controller
             })
             ->addColumn('aksi', function ($confirmOrder) {
                 if (Plasma::checkAkses(47, 'update') == false) {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="tambahRencana(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pr_idConf . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
                 }
             })
             ->rawColumns(['input', 'aksi'])
@@ -1263,8 +1254,8 @@ class PembelianController extends Controller
                     'd_item.i_nama',
                     'm_company.c_name'
                 )
-                ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
-                ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
+                // ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+                // ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
                 ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
                 ->get();
                 $data = array();
@@ -2846,7 +2837,7 @@ class PembelianController extends Controller
         foreach ($list as $hasil) {
             $row = array();
             $row[] = $hasil->i_nama;
-            $row[] = '<div class="text-center">'.$hasil->ro_qty.'</div>';
+            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->ro_id . '" value="' . $hasil->ro_qty . '"  style="text-transform: uppercase" onkeyup="editDumy(' . $hasil->ro_id . ')" /></div>';
             $row[] = '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle" title="Hapus Data" onclick="hapusData(' . $hasil->ro_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             $data[] = $row;
         }
@@ -3356,7 +3347,7 @@ class PembelianController extends Controller
         echo json_encode($status);
     }
 
-    public function     verifikasi_simpanRequest()
+    public function verifikasi_simpanRequest()
     {
         $comp    = Auth::user()->m_comp;
         $dateReq = Carbon::now('Asia/Jakarta');
@@ -3375,45 +3366,20 @@ class PembelianController extends Controller
             $response = "notFound";
             echo json_encode(array("status" => $response));
         } else {
-            DB::beginTransaction();
-            try {
-                for ($i = 0; $i < $baris; $i++){
-                    $getP = DB::table('d_requestorder')
-                        ->where('ro_comp', '=', $comp)
-                        ->where('ro_state', '=', 'P')
-                        ->where('ro_item', '=', $query[$i]->ro_item)
-                        ->get();
 
-                    if (count($getP) > 0) {
-                        for ($j = 0; $j < count($getP); $j++) {
-                            if ($query[$i]->ro_comp == $getP[$j]->ro_comp && $query[$i]->ro_item == $getP[$j]->ro_item) {
-                                $qtyAkhir = $getP[$j]->ro_qty + $query[$i]->ro_qty;
-                                DB::table('d_requestorder')
-                                    ->where('ro_id', '=', $getP[$j]->ro_id)
-                                    ->update([
-                                        'ro_date' => $query[$i]->ro_date,
-                                        'ro_qty' => $qtyAkhir
-                                    ]);
-                                DB::table('d_requestorder')
-                                    ->where('ro_id', '=', $query[$j]->ro_id)
-                                    ->delete();
-                            }
-                        }
-                    } else {
-                        DB::table('d_requestorder')
-                            ->where('d_requestorder.ro_id', '=', $query[$i]->ro_id)
-                            ->update([
-                                'ro_state'   => $status,
-                                'ro_date'    => $dateReq
-                            ]);
-                    }
-                }
-                DB::commit();
-                $response = "sukses";
-                echo json_encode(array("status" => $response));
-            } catch (\Exception $e) {
-                DB::rollBack();
+                $update = DB::table('d_requestorder')
+                    ->where('d_requestorder.ro_comp', $comp)
+                    ->where('d_requestorder.ro_state', 'D')
+                    ->update([
+                        'ro_state'   => $status,
+                        'ro_date'    => $dateReq
+                ]);
+
+            if (!$update) {
                 $response = "gagal";
+                echo json_encode(array("status" => $response));
+            } else {
+                $response = "sukses";
                 echo json_encode(array("status" => $response));
             }
 
