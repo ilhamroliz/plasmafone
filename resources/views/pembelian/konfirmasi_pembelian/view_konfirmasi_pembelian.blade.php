@@ -10,12 +10,12 @@
     <!-- RIBBON -->
     <div id="ribbon">
 
-	<span class="ribbon-button-alignment"> 
+	<span class="ribbon-button-alignment">
 		<span id="refresh" class="btn btn-ribbon" data-title="refresh" rel="tooltip" data-placement="bottom"
               data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.."
               data-html="true" onclick="location.reload()">
 			<i class="fa fa-refresh"></i>
-		</span> 
+		</span>
 	</span>
 
         <!-- breadcrumb -->
@@ -102,8 +102,8 @@
                                                                          class="fa fa-lg fa-check"></i> <span
                                             class="hidden-mobile hidden-tablet">Purchasing</span></a>
                                 </li>
-                                
-                                
+
+
                             </ul>
                         </header>
                         <!-- widget div-->
@@ -116,15 +116,19 @@
                                         <table id="dt_co" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
-                                            <tr>
-                                                <th data-hide="phone,tablet" width="15%">No</th>
-                                                <th data-hide="phone,tablet" width="15%">No Confirm</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
-                                            </tr>
+
+                                                <tr>
+                                                    <th data-hide="phone,tablet" width="15%">No</th>
+                                                    <th data-hide="phone,tablet" width="15%">No Confirm</th>
+                                                    <th width="30%">Nama Barang</th>
+                                                    <th data-hide="phone,tablet" width="15%">Qty</th>
+                                                    <th data-hide="phone,tablet" width="15%">Status</th>
+                                                </tr>
+
                                             </thead>
+
                                             <tbody>
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -133,7 +137,7 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                
+
                                                 <th data-hide="phone,tablet" width="1%">No</th>
                                                 <th data-hide="phone,tablet" width="15%">No Confirm</th>
                                                 <th width="30%">Nama Barang</th>
@@ -151,7 +155,7 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-                                                
+
                                                 <th data-hide="phone,tablet" width="1%">No</th>
                                                 <th data-hide="phone,tablet" width="15%">No Confirm</th>
                                                 <th width="30%">Nama Barang</th>
@@ -163,7 +167,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    
+
                                 </div>
                                 <!-- end widget body text-->
 

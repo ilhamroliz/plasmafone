@@ -159,11 +159,11 @@
 													</td>
 													<td width="10%">
 														<div class="text-center">
-															<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
+															<!-- <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
 																<i class="glyphicon glyphicon-edit"></i>
-															</button>&nbsp;
+															</button>&nbsp; -->
 															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest({{$req->ro_id}})">
-																<i class="glyphicon glyphicon-trash"></i>
+																<i class="fa fa-ban"></i>
 															</button>
 														</div>
 													</td>

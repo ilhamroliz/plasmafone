@@ -117,11 +117,18 @@
                                             <thead>
                                                 <tr>
 
-                                                    <th data-hide="phone,tablet" width="15%">Tanggal</th>
-                                                    <th width="30%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="10%">Qty</th>
-                                                    <th width="15%">Aksi</th>
-                                                    <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
+                                                    <th data-hide="phone,tablet" width="15%">
+                                                        <i class="fa fa-calendar text-primary"></i> Tanggal
+                                                    </th>
+                                                    <th>
+                                                        <i class="fa fa-barcode text-primary"></i> Nama Barang
+                                                    </th>
+                                                    <th data-hide="phone,tablet" width="8%">
+                                                        <i class="fa fa-shopping-cart text-primary"></i> Qty
+                                                    </th>
+                                                    <!-- <th width="10%">
+                                                        <i class="fa fa-cogs text-primary"></i> Aksi
+                                                    </th> -->
                                                 </tr>
                                             </thead>
 
@@ -135,9 +142,9 @@
                                                width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="15%">Outlet</th>
-                                                    <th width="30%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="15%">Qty</th>
+                                                    <th data-hide="phone,tablet" width="15%"><i class="fas fa-store text-primary"></i> Outlet</th>
+                                                    <th width="30%"><i class="fa fa-barcode text-primary"></i> Nama Barang</th>
+                                                    <th data-hide="phone,tablet" width="15%"><i class="fa fa-shopping-cart text-primary"></i> Qty</th>
                                                     <!-- <th data-hide="phone,tablet" width="15%">Aksi</th> -->
                                                 </tr>
                                             </thead>
@@ -202,7 +209,7 @@
                     {"data": "c_name"},
                     {"data": "i_nama"},
                     {"data": "pp_qtyApp"},
-                    {"data": "aksi"}
+                    // {"data": "aksi"}
                 ],
                 "autoWidth" : true,
                 "language" : dataTableLanguage,
@@ -235,7 +242,7 @@
                         {"data": "pp_date"},
                         {"data": "i_nama"},
                         {"data": "pp_qtyreq"},
-                        {"data": "aksi"}
+                        // {"data": "aksi"}
                     ],
                     "autoWidth" : true,
                     "language" : dataTableLanguage,
@@ -302,9 +309,9 @@
                         "ajax": "{{ url('/pembelian/rencana-pembelian/rencanaDisetujui') }}",
                         "columns":[
 
-                            {"data": "c_name"},
+                            {"data": "pp_date"},
                             {"data": "i_nama"},
-                            {"data": "pr_qtyApp"},
+                            {"data": "pp_qtyappr"},
                         ],
                         "autoWidth" : true,
                         "language" : dataTableLanguage,
