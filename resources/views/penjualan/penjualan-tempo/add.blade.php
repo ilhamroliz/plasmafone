@@ -600,8 +600,8 @@
                     $('.qty-'+idGlobal).val(qtyakhir);
                     var harga = qtyakhir * hargaGlobal;
                     $('.totalItem-'+idGlobal).val(harga);
-                    harga = convertToRupiah(harga);
-                    $('.harga-'+idGlobal).html(harga);
+                    harga = toRupiah(harga);
+                    $('.harga-'+idGlobal).html('Rp.<p style="float: right">'+harga+'</p>');
 
                     updateTotalTampil();
                 } else {
@@ -615,10 +615,10 @@
                         '<input type="hidden" class="totalItem totalItem-'+iCode+' totalItem-'+idGlobal+'" name="totalItem[]" id="totalItem-'+iCode+'" value="'+qtyGlobal * hargaGlobal+'">'+
                         '</td>' +
                         '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
-                        '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
+                        '<td style="width: 15%;">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
                         '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
                         '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+' harga-'+iCode+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
+                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+' harga-'+iCode+'">Rp.<p style="float: right">'+toRupiah(qtyGlobal * hargaGlobal)+'</p></td>' +
                         '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                         '</tr>';
 
@@ -656,10 +656,10 @@
                         '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
                         '</td>' +
                         '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
-                        '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
+                        '<td style="width: 15%;">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
                         '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
                         '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">'+convertToRupiah(hargaGlobal)+'</td>' +
+                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
                         '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
                         '</tr>';
                     $("#table-penjualan tbody").append(row);
