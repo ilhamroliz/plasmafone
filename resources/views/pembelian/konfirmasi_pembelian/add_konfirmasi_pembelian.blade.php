@@ -2,7 +2,7 @@
 
 @section('title', 'Master Barang')
 
-<?php 
+<?php
 	use App\Http\Controllers\PlasmafoneController as Access;
 
 	function rupiah($angka){
@@ -90,7 +90,7 @@
 					<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -106,12 +106,12 @@
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="widget-body">
-						
+
 						<form class="form-horizontal">
 						{{csrf_field()}}
-							<fieldset>
+							<!-- <fieldset>
 								<div class="form-group">
-										
+
 										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>Pilih Supplier</label></label>
 										<div class="col-md-3">
 											<div class="icon-addon addon-sm">
@@ -121,7 +121,7 @@
 												<label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="email"></label>
 											</div>
 										</div>
-										
+
 									</div>
 									<div class="form-group">
 										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>PIC</label></label>
@@ -157,8 +157,8 @@
 											</div>
 										</div>
 									</div>
-									
-							</fieldset>
+
+							</fieldset> -->
 						</form>
 					</div>
 				</div>
@@ -168,36 +168,36 @@
 			<div class="row">
 
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					
+
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
                     <header role="heading">
-                        
+
                         <h2><strong>Tambah Rencana Pembelian</strong></h2>
 
                     <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
 						<!-- widget div-->
 						<div>
-							
+
 							<!-- widget content -->
-							
+
 							<div class="widget-body no-padding">
 
 								<!-- widget body text-->
-								
+
 								<div class="tab-content padding-10 ">
-								
-								
+
+
 									<div class="tab-pane fade in active" id="hr1">
-										
+
 										<table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
 
-											<thead class="table-responsive">			                
+											<thead class="table-responsive">
 
 												<tr>
-													
-                                                   
+
+
                                                     <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
                                                     <th data-hide="phone,tablet " class="text-center">Qty</th>
 													<th data-hide="phone,tablet " class="text-center">Harga Satuan</th>
@@ -207,11 +207,11 @@
 											</thead>
 
 											<tbody>
-												
+
 											</tbody>
 
 										</table>
-									
+
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -222,22 +222,22 @@
                                     </div>
 
 								</div>
-								
+
 								<!-- end widget body text-->
-								
+
 								<!-- widget footer -->
 								<div class="widget-footer text-right">
-								
-									
+
+
 								</div>
 								<!-- end widget footer -->
-								
+
 							</div>
 							<!-- end widget content -->
-							
+
 						</div>
 						<!-- end widget div -->
-							
+
 					</div>
 
 				</div>
@@ -268,24 +268,24 @@
 							</div>
 							<div class="modal-body">
                                 <div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
-				
+
                                     <header>
-                                    
+
                                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                                        <h2 id="myModalLabel"> </h2>				
-                                        
+                                        <h2 id="myModalLabel"> </h2>
+
                                     </header>
 
                                     <!-- widget div-->
                                     <div>
-                                        
+
                                         <!-- widget edit box -->
                                         <div class="jarviswidget-editbox">
                                             <!-- This area used as dropdown edit box -->
-                                            
+
                                         </div>
                                         <!-- end widget edit box -->
-                                        
+
                                         <!-- widget content -->
                                         <div class="widget-body no-padding">
 										<div id="id_plan">
@@ -302,7 +302,7 @@
                                                             <img id="dt_image" src="">
                                                         </div>
                                                     </section>
-													
+
                                                     <section>
                                                         <label class="label">Nama Item</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
@@ -331,7 +331,7 @@
                                                         <section class="col col-6">
                                                         <label class="label">Harga Satuan</label>
                                                             <label class="input">
-                                                                <input type="text" name="firstBox" placeholder="Harga Satuan" value="" onkeyup="calc(1)"  id="dt_harga" >	
+                                                                <input type="text" name="firstBox" placeholder="Harga Satuan" value="" onkeyup="calc(1)"  id="dt_harga" >
                                                             </label>
                                                         </section>
                                                         <section class="col col-6">
@@ -341,16 +341,16 @@
                                                             </label>
                                                         </section>
                                                     </div>
-													
+
                                                     <section>
                                                         <label class="label">Sub Total</label>
                                                         <label class="input"> <i class="icon-append fa fa-user"></i>
                                                             <input type="text" name="thirdBox" placeholder="Sub Total" value="" onkeyup="calc(3)" disabled="disabled" id="dt_subTotal">
-															
+
                                                             <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
                                                     </section>
-                                                    
-                                                    
+
+
                                                 </fieldset>
 
                                                 <header>
@@ -373,17 +373,17 @@
                                                             </label>
                                                         </section> -->
                                                     </div>
-                                                    
+
                                                 </fieldset>
-                                                
-                                            </form>						
-                                            
+
+                                            </form>
+
                                         </div>
                                         <!-- end widget content -->
-                                        
+
                                     </div>
                                     <!-- end widget div -->
-                                    
+
                                 </div>
                                 <!-- end widget -->
 								<footer>
@@ -397,7 +397,7 @@
                                                         Tutup
                                                     </button>
                                                 </footer>
-				
+
 							</div>
 							<!-- <div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -410,11 +410,11 @@
 						</div><!-- /.modal-content -->
 					</div><!-- /.modal-dialog -->
 				</div><!-- /.modal -->
-		
+
 	</div>
 	<!-- END MAIN CONTENT -->
 
-	
+
 @endsection
 
 @section('extra_script')
@@ -425,7 +425,7 @@
 		var tambahKonfirmasi;
 		var input = $('#dt_harga2').val();
 		var input2 = $('#dt_angka').val();
-		var tambahRencana; 
+		var tambahRencana;
         $(document).ready(function () {
 			getSupplier();
 			$( "#tpMemberNama" ).autocomplete({
@@ -454,27 +454,27 @@
 				$(this).find("input[class~='editor']").fadeIn().focus();
 				// alert();
 			});
-            
+
         });
 
 		function editFor(id)
 		{
 			$('#span'+id).hide();
 			$('#i_nama'+id).show();
-		
+
 		}
 
 		$(document).on("keydown",".editor",function(e){
 			if(e.keyCode==13){
 
-			var target=$(e.target); 
+			var target=$(e.target);
 			var harga=target.val();
 			var id=target.attr("data-id");
 
 			$.ajax({
 						url : '{{url('/pembelian/konfirmasi-pembelian/editDumy')}}',
 						type: "POST",
-						data: { 
+						data: {
 							'id' : id,
 							'harga' : harga,
 							_token : '{{ csrf_token() }}'
@@ -483,10 +483,10 @@
 						dataType: "JSON",
 						success: function(data)
 						{
-							reload_table();	
+							reload_table();
 						},
-						
-				}); 
+
+				});
 			}
 
 			});
@@ -498,12 +498,12 @@
 				sisa     = split[0].length % 3,
 				rupiah     = split[0].substr(0, sisa),
 				ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
-				
+
 			if (ribuan) {
 				separator = sisa ? '.' : '';
 				rupiah += separator + ribuan.join('.');
 			}
-			
+
 			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
 			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
 		}
@@ -517,12 +517,12 @@
 			$.ajax({
 				url : '{{url('/pembelian/konfirmasi-pembelian/getTelp')}}',
 				type: "GET",
-				data: { 
+				data: {
 					"s_id" : $('dt_supplier2').val(),
 				},
 				dataType: "JSON",
 				success: function(data)
-					{	
+					{
 						$('#dt_telepon').val("");
 						$('#dt_telepon').val(data.data.s_phone);
 					},
@@ -535,11 +535,11 @@
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/getPlan_id')}}',
                 type: "GET",
-                data: { 
+                data: {
 					id : id,
                 },
                 dataType: "JSON",
-                success: function(data) 
+                success: function(data)
                 {
 					pr_idPlan = data.data.pr_idPlan;
 					i_item = data.data.i_id;
@@ -567,12 +567,12 @@
 					$.ajax({
 						url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
 						type: "GET",
-						data: { 
+						data: {
 						},
 						dataType: "JSON",
 						success: function(data)
                           {
-                            $('#dt_supplier2').empty(); 
+                            $('#dt_supplier2').empty();
                             row = "<option value='0'>Pilih Supplier</option>";
                             $(row).appendTo("#dt_supplier2");
                             $.each(data, function(k, v) {
@@ -585,7 +585,7 @@
                             });
                           },
 					});
-					
+
 					$('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
 					$('#detailModal').modal('show');
                     $('#btn_disetujui').show();
@@ -593,24 +593,24 @@
 					$('#btn_ditolak').hide();
 					$('#id_plan').hide();
                 },
-                
-            }); 
 
-			
-            
+            });
+
+
+
         }
 		function getSupplier()
 		{
-			
+
 			$.ajax({
 				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
 				type: "GET",
-				data: { 
+				data: {
 				},
 				dataType: "JSON",
 				success: function(data)
 				{
-				$('#dt_supplier').empty(); 
+				$('#dt_supplier').empty();
 				row = "<option selected='' value='00'>Pilih Supplier</option>";
 				$(row).appendTo("#dt_supplier");
 				$.each(data, function(k, v) {
@@ -618,20 +618,20 @@
 					$(row).appendTo("#dt_supplier");
 				});
 				},
-				
-			});  
+
+			});
 		}
 
         function getTolak(id){
-           
+
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/getPlan_id')}}',
                 type: "GET",
-                data: { 
+                data: {
 					id : id,
                 },
                 dataType: "JSON",
-                success: function(data) 
+                success: function(data)
                 {
 					pr_idPlan = data.data.pr_idPlan;
 					i_item = data.data.i_id;
@@ -658,12 +658,12 @@
 					$.ajax({
 						url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
 						type: "GET",
-						data: { 
+						data: {
 						},
 						dataType: "JSON",
 						success: function(data)
                           {
-                            $('#dt_supplier2').empty(); 
+                            $('#dt_supplier2').empty();
                             row = "<option value='0'>Pilih Supplier</option>";
                             $(row).appendTo("#dt_supplier2");
                             $.each(data, function(k, v) {
@@ -676,30 +676,30 @@
                             });
                           },
 					});
-					
+
 					$('#myModalLabel').text('FORM DETAIL KONFIRMASI PEMBELIAN');
 					$('#detailModal').modal('show');
                     $('#btn_disetujui').hide();
                     $('#btn_ditutup').show();
                     $('#btn_ditolak').show();
                 },
-                
-            }); 
 
-            
+            });
+
+
         }
 
 		function suplier(){
 			$.ajax({
                 url : '{{url('/pembelian/rencana-pembelian/itemSuplier')}}',
                 type: "GET",
-                data: { 
-                
+                data: {
+
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
-                    $('#dt_supplier').empty(); 
+                    $('#dt_supplier').empty();
 					row = "<option selected='' value='0'>Pilih Suplier</option>";
 					$(row).appendTo("#dt_supplier");
 					$.each(data, function(k, v) {
@@ -707,15 +707,15 @@
 						$(row).appendTo("#dt_supplier");
 					});
                 },
-                
-            });  
+
+            });
 		}
 
 		function setuju(){
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/confirmSetuju')}}',
                 type: "POST",
-                data: { 
+                data: {
 					pr_idPlan 		: $('#pr_idPlan').val(),
 					pr_item 		: i_item,
 					pr_comp 		: pr_comp,
@@ -730,7 +730,7 @@
                 {
                     if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
-						
+
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. data Gagal di tambahkan",
@@ -739,7 +739,7 @@
 								icon : "fa fa-times bounce animated"
 							});
 					}else{
-						
+
 							// var rule = 	$('#detailModal').modal('hide');
 							$('#detailModal').modal('hide');
 							$.smallBox({
@@ -750,21 +750,21 @@
 								icon : "fa fa-check bounce animated"
 								});
 								$('#table-rencana').DataTable().ajax.reload();
-								
-						
+
+
 					}
                 },
-                
-            });  
+
+            });
         }
-        
-        
+
+
 
         function tolak(){
             $.ajax({
                 url : '{{url('/pembelian/konfirmasi-pembelian/confirmTolak')}}',
                 type: "POST",
-                data: { 
+                data: {
 					pr_idPlan 		: $('#pr_idPlan').val(),
 					pr_item 		: i_item,
 					pr_comp 		: pr_comp,
@@ -773,14 +773,14 @@
 					pr_qtyApp		: $('#dt_qty').val(),
 					pr_stsConf		: "CONFIRM",
 					_token : '{{ csrf_token() }}'
-					
+
                 },
                 dataType: "JSON",
                 success: function(data)
                 {
 					if(data.status == 'GAGAL'){
 						$('#overlay').fadeOut(200);
-						
+
 							$.smallBox({
 								title : "Gagal",
 								content : "Upsss. data Gagal di tambahkan",
@@ -789,7 +789,7 @@
 								icon : "fa fa-times bounce animated"
 							});
 					}else{
-						
+
 							// var rule = 	$('#detailModal').modal('hide');
 							$('#detailModal').modal('hide');
 							$.smallBox({
@@ -800,20 +800,20 @@
 								icon : "fa fa-check bounce animated"
 								});
 								$('#table-rencana').DataTable().ajax.reload();
-								
-						
+
+
 					}
                 },
-                
-            });  
+
+            });
 		}
-		
-	
+
+
 
 	function calc(box){
 		one = document.autoSumForm.firstBox.value;
-		two = document.autoSumForm.secondBox.value; 
-		// third = document.autoSumForm.thirdBox.value; 
+		two = document.autoSumForm.secondBox.value;
+		// third = document.autoSumForm.thirdBox.value;
 
 		if(box == 1){
 			if(one == "" || two == ""){
@@ -824,7 +824,7 @@
 
 				document.autoSumForm.thirdBox.value = parseInt(one) * parseInt(two);
 			}
-			
+
 		}else if(box == 2){
 			if(one == "" || two == ""){
 				document.autoSumForm.thirdBox.value = "0";
@@ -834,7 +834,7 @@
 
 				document.autoSumForm.thirdBox.value = parseInt(one) * parseInt(two);
 			}
-			
+
 		}
 
 	}
@@ -859,7 +859,7 @@
 	}
 
 
-		
+
 
 		function simpanConfirm(){
 			if($('#dt_supplier').val() == "00" ){
@@ -880,15 +880,15 @@
 						$.ajax({
 							url : '{{url('/pembelian/konfirmasi-pembelian/simpanConfirm')}}',
 							type: "POST",
-							data: { 
+							data: {
 								'supplier' : $('#dt_supplier').val(),
 								_token : '{{ csrf_token() }}'
 							},
 							dataType: "JSON",
 							success: function(data)
 							{
-								
-								
+
+
 								if(data.status == 'gagal')
 								{
 									$.smallBox({
@@ -904,8 +904,8 @@
 										$('#table-rencana').DataTable().ajax.reload();
 									// $('#table-rencana').DataTable().ajax.reload();
 								}else{
-									
-									
+
+
 									$.smallBox({
 										title : "Berhasil",
 										content : 'Anda Telah Berhasil Mengajukan Request Order...!',
@@ -919,11 +919,11 @@
 										$('#table-rencana').DataTable().ajax.reload();
 								}
 								// $('#table-rencana').DataTable().fnDestroy();
-								
+
 							},
-								
-						}); 
-		
+
+						});
+
 						// $.smallBox({
 						// 	title : "Callback function",
 						// 	content : "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
@@ -941,24 +941,24 @@
 							timeout : 4000
 						});
 					}
-		
+
 				});
 				e.preventDefault();
 			}
 
-			
-			
-			
-			
+
+
+
+
 		}
- 
+
 
 		function reload_data(){
         // table_registrasi= $('#table-rencana').DataTable({
 		// 		"language" : dataTableLanguage,
 		// 		"ajax": {
 		// 				"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd')}}',
-		// 				"type": "POST",  
+		// 				"type": "POST",
 		// 				"data": function ( data ) {
 		// 					data._token = '{{ csrf_token() }}';
 		// 				},
@@ -976,7 +976,7 @@
 						success: function(data)
 						{
 							if(data.data == 'SUKSES'){
-								reload_data_trans();	
+								reload_data_trans();
 							}else{
 								$.smallBox({
 									title : "Peringatan...!!!",
@@ -987,10 +987,10 @@
 								});
 
 							}
-							
+
 						},
-						
-				}); 
+
+				});
 		}
 
 		function reload_data_trans(){
@@ -998,16 +998,16 @@
 				"language" : dataTableLanguage,
 				"ajax": {
 						"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans')}}',
-						"type": "POST",  
+						"type": "POST",
 						"data": function ( data ) {
 							data._token = '{{ csrf_token() }}';
 						},
 					},
 			} );
 		}
- 
+
 		function reload_table(){
-			
+
 			table_registrasi_trans.ajax.reload(null, false);
 
 		}
@@ -1019,7 +1019,7 @@
 			$.ajax({
 						url : '{{url('/pembelian/konfirmasi-pembelian/editDumy')}}',
 						type: "POST",
-						data: { 
+						data: {
 							'id' : id,
 							'harga' : input,
 							_token : '{{ csrf_token() }}'
@@ -1028,10 +1028,10 @@
 						dataType: "JSON",
 						success: function(data)
 						{
-							reload_table();	
+							reload_table();
 						},
-						
-				}); 
+
+				});
 		}
 
 	</script>
