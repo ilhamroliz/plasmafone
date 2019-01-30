@@ -207,10 +207,10 @@
                                                                     <input type="hidden" class="totalItem totalItem-{{ $item->i_code }} totalItem-{{ $item->idStock }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
                                                                 </td>
                                                                 <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item->sd_qty }}', '{{ $item->stock_qty }}', 'harga-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}', 'grossItem-{{ $item->idStock }}')" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->sd_qty }}" /></td>
-                                                                <td style="width: 15%;">Rp. @if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</td>
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
-                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}" class="harga-{{ $item->idStock }} harga-{{ $item->i_code }}">Rp. {{ number_format($item->sd_total_gross,0,',','.') }}</td>
+                                                                <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
+                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}" class="harga-{{ $item->idStock }} harga-{{ $item->i_code }}">Rp.<p style="float: right">{{ number_format($item->sd_total_gross,0,',','.') }}</p></td>
                                                                 <td style="width: 10%;" class="text-center"><button type="button" onclick="hapus({{ $item->idStock }})" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
                                                             </tr>
                                                         @else
@@ -225,10 +225,10 @@
                                                                     <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
                                                                 </td>
                                                                 <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="1" />1</td>
-                                                                <td style="width: 15%;">Rp. @if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</td>
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
-                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}">Rp. {{ number_format($item->sd_total_gross,0,',','.') }}</td>
+                                                                <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
+                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}">Rp.<p style="float: right">{{ number_format($item->sd_total_gross,0,',','.') }}</p></td>
                                                                 <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus({{ $item->idStock }})"><i class="fa fa-minus"></i></button></td>
                                                             </tr>
                                                         @endif
@@ -651,8 +651,8 @@
                     $('.qty-'+idGlobal).val(qtyakhir);
                     var harga = qtyakhir * hargaGlobal;
                     $('.totalItem-'+idGlobal).val(harga);
-                    harga = convertToRupiah(harga);
-                    $('.harga-'+idGlobal).html(harga);
+                    harga = toRupiah(harga);
+                    $('.harga-'+idGlobal).html('Rp.<p style="float: right">'+harga+'</p>');
                     updateTotalTampil();
                 } else {
                     row = '<tr id="'+idGlobal+'" class="tr">' +
@@ -665,10 +665,10 @@
                         '<input type="hidden" class="totalItem totalItem-'+iCode+' totalItem-'+idGlobal+'" name="totalItem[]" id="totalItem-'+iCode+'" value="'+qtyGlobal * hargaGlobal+'">'+
                         '</td>' +
                         '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
-                        '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
-                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+' harga-'+iCode+'">'+convertToRupiah(qtyGlobal * hargaGlobal)+'</td>' +
+                        '<td style="width: 15%;">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
+                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
+                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
+                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+' harga-'+iCode+'">Rp.<p style="float: right">'+toRupiah(qtyGlobal * hargaGlobal)+'</p></td>' +
                         '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                         '</tr>';
 
@@ -706,10 +706,10 @@
                         '<input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+hargaGlobal+'">'+
                         '</td>' +
                         '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
-                        '<td style="width: 15%;">'+convertToRupiah(hargaGlobal)+'</td>' +
-                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%;" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
-                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%;" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
-                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">'+convertToRupiah(hargaGlobal)+'</td>' +
+                        '<td style="width: 15%;">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
+                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
+                        '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
+                        '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
                         '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
                         '</tr>';
                     $("#table-penjualan tbody").append(row);
@@ -815,12 +815,12 @@
                 $("#"+discp).val("0%");
             } else if($("#"+discp).val().replace("%", "") == 0 && a == 0){
                 total += price * quantity;
-                $("#"+lbltotItem).text(convertToRupiah(total));
+                $("#"+lbltotItem).html('Rp.<p style="float: right">'+toRupiah(total)+'</p>');
                 $("#"+totItem).val(parseInt(total));
                 // $(".total-tampil").text(convertToRupiah(total));
             } else {
                 total += ((100 - disc)/100) * (price * quantity);
-                $("#"+lbltotItem).text(convertToRupiah(total));
+                $("#"+lbltotItem).html('Rp.<p style="float: right">'+toRupiah(total)+'</p>');
                 $("#"+totItem).val(parseInt(total));
                 // $(".total-tampil").text(convertToRupiah(total));
             }
@@ -840,7 +840,7 @@
                 $("#"+discv).val("0");
             } else {
                 total += quantity * price - disc;
-                $("#"+lbltotItem).text(convertToRupiah(total));
+                $("#"+lbltotItem).html('Rp.<p style="float: right">'+toRupiah(total)+'</p>');
                 $("#"+totItem).val(total);
             }
             updateTotalTampil();
@@ -892,7 +892,7 @@
 
             $('#'+grossItem).val(input * awalHarga);
             $('#'+totalItem).val(harga);
-            $("#"+lbltotalItem).text(convertToRupiah(parseInt(harga)));
+            $("#"+lbltotalItem).html('Rp.<p style="float: right">'+toRupiah(parseInt(harga))+'</p>');
             updateTotalTampil();
         }
 
