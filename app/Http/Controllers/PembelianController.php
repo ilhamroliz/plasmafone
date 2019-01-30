@@ -870,14 +870,17 @@ class PembelianController extends Controller
 
     public function tambahRencana(Request $request)
     {
-        $comp     = Auth::user()->m_id;
-        $req_id   = $request->input('req_id');
-        $item_id  = $request->input('item_id');
-        $qtyApp   = $request->input('qtyApp');
-        $req_date = Carbon::now('Asia/Jakarta');
+        $comp      = Auth::user()->m_id;
+        $req_id    = $request->input('req_id');
+        $ind_id    = $request->input('indent_id');
+        $item_id   = $request->input('item_id');
+        $qtyAppInd = $request->input('qtyAppInd');
+        $qtyAppReq = $request->input('qtyAppReq');
+        $req_date  = Carbon::now('Asia/Jakarta');
 
         DB::beginTransaction();
         try {
+
             if(\strpos($req_id, 'ro') !== false){
                 $pecah = explode('_', $req_id);
                 $id = $pecah[1];
@@ -887,37 +890,40 @@ class PembelianController extends Controller
                     'ro_state' => 'Y'
                 ]);
             }else{
-                $pecah = explode('_', $req_id);
+                $pecah = explode('_', $ind_id);
                 $id = $pecah[1];
-                DB::table('d_indent')
-                ->where('i_id', $id)
+                DB::table('d_indent_dt')
+                ->where('id_indent', $id)
                 ->update([
-                    'i_status' => 'Y'
+                    'id_status' => 'Y'
                 ]);
             }
 
-            for($i = 0; $i < count($item_id);$i++){
+            if (isset($req_id)) {
 
-                $chek = DB::table('d_purchase_plan')
-                    ->where('pp_item', '=', $item_id[$i])
-                    ->where('pp_status', '=', 'P')
-                    ->get();
+                for($i = 0; $i < count($item_id);$i++){
 
-                if (count($chek) > 0){
-                    $qtyAkhir = $qtyApp[$i] + $chek[0]->pp_qtyreq;
-                    DB::table('d_purchase_plan')
-                    ->where('pp_item', '=', $item_id[$i])
-                    ->update([
-                        'pp_qtyreq' => $qtyAkhir
-                    ]);
+                    $chek = DB::table('d_purchase_plan')
+                        ->where('pp_item', '=', $item_id[$i])
+                        ->where('pp_status', '=', 'P')
+                        ->get();
 
-                } else {
-                    DB::table('d_purchase_plan')->insert([
-                        'pp_date'   => $req_date,
-                        'pp_item'   => $item_id[$i],
-                        'pp_qtyreq' => $qtyApp[$i],
-                        'pp_status' => 'P'
-                    ]);
+                    if (count($chek) > 0){
+                        $qtyAkhir = $qtyApp[$i] + $chek[0]->pp_qtyAppReq;
+                        DB::table('d_purchase_plan')
+                        ->where('pp_item', '=', $item_id[$i])
+                        ->update([
+                            'pp_qtyreq' => $qtyAkhir
+                        ]);
+
+                    } else {
+                        DB::table('d_purchase_plan')->insert([
+                            'pp_date'   => $req_date,
+                            'pp_item'   => $item_id[$i],
+                            'pp_qtyreq' => $qtyApp[$i],
+                            'pp_status' => 'P'
+                        ]);
+                    }
                 }
             }
 
@@ -951,10 +957,11 @@ class PembelianController extends Controller
             }else{
                 $pecah = explode('_', $req_id);
                 $id = $pecah[1];
-                DB::table('d_indent')
-                ->where('i_id', $id)
+                DB::table('d_indent_dt')
+                ->where('id_item', $id)
+                ->where('id_status', 'P')
                 ->update([
-                    'i_status' => 'N'
+                    'id_status' => 'N'
                 ]);
             }
 
@@ -1274,23 +1281,26 @@ class PembelianController extends Controller
 
     public function view_confirmAdd_trans()
     {
-        $menunggu = DB::table('d_purchase_plan_dd')
+        $menunggu = DB::table('d_purchase_plan')
                 ->select(
-                    'd_purchase_plan_dd.*',
-                    'd_item.i_nama',
-                    'm_company.c_name'
+                    'd_purchase_plan.pp_id',
+                    'd_purchase_plan.pp_item',
+                    'd_purchase_plan.pp_qtyreq',
+                    'd_item.i_nama'
+                    // 'm_company.c_name'
                 )
-                // ->join('d_item', 'd_purchase_plan_dd.pr_itemPlan', '=', 'd_item.i_id')
+                ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
                 // ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
-                ->where('d_purchase_plan_dd.pr_stsPlan', 'WAITING')
+                ->where('d_purchase_plan.pp_status', 'P')
                 ->get();
                 $data = array();
                 $i = 1;
                 foreach ($menunggu as $key) {
                 $row = array();
                 $row[] = $key->i_nama;
-                $row[] = $key->pr_qtyApp;
-                $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . number_format($key->pr_harga_satuan) . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' .  number_format($key->pr_harga_satuan,0,',','') . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
+                $row[] = '<div class="text-center">'.$key->pp_qtyreq.'</div>';
+                $row[] = '<div class="text-center"><span id="span'.$key->pp_id.'" class="caption" onclick="editFor(' . $key->pp_id . ')"</span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pp_id . '" data-id="' . $key->pp_id . '"  style="text-transform: uppercase;"  /></div>';
+                $row[] = '<div class="text-center"><select class="form-control get_supp"><option selected>--Choose Supplier--</option></select></div>';
                 // $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . $key->pr_harga_satuan . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' . $key->pr_harga_satuan . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
                 // $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.number_format($key->pr_harga_satuan) .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
                 // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
@@ -3714,20 +3724,21 @@ class PembelianController extends Controller
                 DB::raw('d_requestorder.ro_item as item'),
                 DB::raw('d_requestorder.ro_qty as qty'),
                 DB::raw('date_format(ro_date, "%d/%m/%Y") as date'),
-                'c_name','i_nama');
+                'c_name','i_nama', DB::raw('"request" as nama'), 'ro_id as id_table');
 
         $request2 = DB::table('d_indent')
             ->join('m_company', 'd_indent.i_comp', '=', 'm_company.c_id')
             ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
             ->join('d_item', 'd_indent_dt.id_item', '=', 'd_item.i_id')
-            ->where('d_indent.i_status', 'P')
+            ->where('id_status', 'P')
             ->select(
-                DB::raw('CONCAT("pb_", d_indent.i_id) as id'),
+                DB::raw('CONCAT("pb_", d_indent_dt.id_item) as id'),
                 DB::raw('d_indent.i_comp as comp'),
                 DB::raw('id_item as item'),
-                DB::raw('id_qty as qty'),
-                DB::raw('d_indent.i_nota as date'),
-                'c_name','i_nama');
+                DB::raw('sum(id_qty) as qty'),
+                DB::raw('date_format(d_indent.i_date, "%d/%m/%Y") as date'),
+                'c_name','i_nama', DB::raw('"indent" as nama'), 'd_indent.i_id as id_table')
+            ->groupBy('id_item');
 
         $request = $request1->union($request2)->get();
 

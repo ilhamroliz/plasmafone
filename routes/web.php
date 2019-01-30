@@ -479,23 +479,24 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Return Barang
 
-    Route::get('/pembelian/purchase-return', 'PembelianController@return_barang');
+    Route::get('/pembelian/purchase-return', 'ReturnPembelianController@return_barang');
 
-    Route::match(['get', 'post'], '/pembelian/purchase-return/add', 'PembelianController@return_barang_add');
+    Route::get('/pembelian/purchase-return/add', 'ReturnPembelianController@return_barang_add');
+    Route::post('/pembelian/purchase-return/add', 'ReturnPembelianController@return_barang_add');
 
-    Route::get('/pembelian/show-purchase/{id}', 'PembelianController@show_purchase');
+    Route::get('/pembelian/show-purchase/{id}', 'ReturnPembelianController@show_purchase');
 
-    Route::get('/pembelian/get-current-return/{id}', 'PembelianController@get_current_return');
+    Route::get('/pembelian/get-current-return/{id}', 'ReturnPembelianController@get_current_return');
 
-    Route::get('/pembelian/purchase-return/edit', 'PembelianController@edit_purchase_return');
+    Route::get('/pembelian/purchase-return/edit', 'ReturnPembelianController@edit_purchase_return');
 
-    Route::match(['get', 'post'], '/pembelian/purchase-return/update', 'PembelianController@update_purchase_return');
+    Route::get('/pembelian/purchase-return/update', 'ReturnPembelianController@update_purchase_return');
 
-    Route::match(['get', 'post'], '/pembelian/purchase-return/edit-multiple', 'PembelianController@multiple_edit_purchase_return');
+    Route::get('/pembelian/purchase-return/edit-multiple', 'ReturnPembelianController@multiple_edit_purchase_return');
 
-    Route::get('/pembelian/purchase-return/get-current-return/{id}', 'PembelianController@get_edit_return');
+    Route::get('/pembelian/purchase-return/get-current-return/{id}', 'ReturnPembelianController@get_edit_return');
 
-    Route::match(['get', 'post'], '/pembelian/purchase-return/multiple-delete', 'PembelianController@multiple_delete_purchase_return');
+    Route::get('/pembelian/purchase-return/multiple-delete', 'ReturnPembelianController@multiple_delete_purchase_return');
 
 	// Route::get('/newprint', 'PembelianController@new_print');
 
