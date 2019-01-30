@@ -132,7 +132,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 												</div>
 												<div class="col-md-3">
 													<div class="form-group">
-														<input type="text" id="search" class="form-control" name="search" placeholder="Masukkan No.Nota" style="width: 100%; float: left">
+														<input type="text" id="nota" class="form-control" name="nota" placeholder="Masukkan No.Nota" style="width: 100%; float: left">
 													</div>
 												</div>
 												<div class="col-md-5">
@@ -308,6 +308,37 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			phone : 480
 		};
 
+		$(document).ready(function () {
+			history = $('#dt_history').DataTable();
+
+			$( "#date-range" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+			});
+			
+			$( "#nota" ).autocomplete({
+				source: baseUrl+'/penjualan/pemesanan-barang/auto-nota',
+				minLength: 1,
+				select: function(event, data) {
+					$('#idInd').val(data.item.id);
+					$('#nota').val(data.item.label);
+				}
+			});
+
+			$( "#namaMember" ).autocomplete({
+				source: baseUrl+'/penjualan/pemesanan-barang/auto-member',
+				minLength: 1,
+				select: function(event, data) {
+					$('#idMember').val(data.item.id);
+					$('#namaMember').val(data.item.label);
+				}
+			});
+		});
+
 		setTimeout(function () {
 
 			proses = $('#dt_proses').DataTable({
@@ -336,44 +367,35 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					responsiveHelper_dt_basic.respond();
 				}
 			});
+			$('#overlay').fadeOut(200);
 
 		}, 500);
 
-		setTimeout(function () {
+		function cariHistory(){
 
-			history = $('#dt_history').DataTable({
-				"processing": true,
-				"serverSide": true,
-				"ajax": "{{ url('/penjualan/pemesanan-barang/gethistory') }}",
-				"columns":[
-					{"data": "i_nota"},
-					{"data": "c_name"},
-					{"data": "m_name"},
-					{"data": "sales"},
-					{"data": "aksi"}
-				],
-				"autoWidth" : true,
-				"language" : dataTableLanguage,
-				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-				"preDrawCallback" : function() {
-					// Initialize the responsive datatables helper once.
-					if (!responsiveHelper_dt_basic) {
-						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_done'), breakpointDefinition);
-					}
-				},
-				"rowCallback" : function(nRow) {
-					responsiveHelper_dt_basic.createExpandIcon(nRow);
-				},
-				"drawCallback" : function(oSettings) {
-					responsiveHelper_dt_basic.respond();
+			var tglAwal = $('#tgl_awal').val();
+			var tglAkhir = $('#tgl_akhir').val();
+			var nota = $('#nota').val();
+			var idMember = $('#idMember').val();
+
+			axios.post(baseUrl+'/penjualan/pemesanan-barang/getHistory', {tglAwal: tglAwal, tglAkhir: tglAkhir, nota: nota, idMember: idMember}).then((response) => {
+
+				history.clear();
+				for(var i = 0; i < response.data.data.length; i++){
+					history.row.add([
+						response.data.data[i].i_nota,
+						response.data.data[i].c_name,
+						response.data.data[i].m_name,
+						response.data.data[i].sales,
+						'<div class="text-center">'+
+						'<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp'+
+						'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
+					]).draw();
 				}
+
 			});
 
-			$('#overlay').fadeOut(200);
-
-		}, 1000);
-
+		}
 		/* END BASIC */
 
 		function refresh_tab(){
