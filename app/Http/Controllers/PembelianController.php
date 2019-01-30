@@ -870,61 +870,93 @@ class PembelianController extends Controller
 
     public function tambahRencana(Request $request)
     {
-        $comp      = Auth::user()->m_id;
-        $req_id    = $request->input('req_id');
-        $ind_id    = $request->input('indent_id');
-        $item_id   = $request->input('item_id');
-        $qtyAppInd = $request->input('qtyAppInd');
-        $qtyAppReq = $request->input('qtyAppReq');
-        $req_date  = Carbon::now('Asia/Jakarta');
+        // dd($request);
+        $comp       = Auth::user()->m_id;
+        $req_id     = $request->input('req_id');
+        $ind_id     = $request->input('ind_id');
+        $item_id    = $request->input('item_id');
+        $item_idReq = $request->input('item_idReq');
+        $qtyAppInd  = $request->input('qtyAppInd');
+        $qtyAppReq  = $request->input('qtyAppReq');
+        $req_date   = Carbon::now('Asia/Jakarta');
 
         DB::beginTransaction();
         try {
 
-            if(\strpos($req_id, 'ro') !== false){
-                $pecah = explode('_', $req_id);
-                $id = $pecah[1];
-                DB::table('d_requestorder')
-                ->where('ro_id', $id)
-                ->update([
-                    'ro_state' => 'Y'
-                ]);
-            }else{
-                $pecah = explode('_', $ind_id);
-                $id = $pecah[1];
+            if (isset($ind_id)) {
                 DB::table('d_indent_dt')
-                ->where('id_indent', $id)
+                ->whereIn('id_item', $ind_id)
+                ->where('id_status', '=', 'P')
                 ->update([
                     'id_status' => 'Y'
                 ]);
+
+                for ($i=0; $i < count($ind_id) ; $i++) {
+                    $check = DB::table('d_purchase_plan')
+                        ->where('pp_item', $ind_id[$i])
+                        ->where('pp_status', '=', 'P')
+                        ->get();
+                    if (count($check) > 0) {
+                        $qtyAkhir = $check[0]->pp_qtyreq + $qtyAppInd[$i];
+                        DB::table('d_purchase_plan')
+                        ->update([
+                            'pp_qtyreq' => $qtyAkhir,
+                            'pp_date'   => $req_date
+                        ]);
+                    } else {
+                        DB::table('d_purchase_plan')
+                        ->insert([
+
+                            'pp_date'   => $req_date,
+                            'pp_item'   => $ind_id[$i],
+                            'pp_qtyreq' => $qtyAppInd[$i],
+                            'pp_status' => 'P'
+
+                        ]);
+                    }
+
+                }
+
             }
 
             if (isset($req_id)) {
 
-                for($i = 0; $i < count($item_id);$i++){
+                DB::table('d_requestorder')
+                ->whereIn('ro_id', $req_id)
+                ->where('ro_state', '=', 'P')
+                ->update([
+                    'ro_state' => 'Y'
+                ]);
 
-                    $chek = DB::table('d_purchase_plan')
-                        ->where('pp_item', '=', $item_id[$i])
+
+                for ($j=0; $j < count($req_id) ; $j++) {
+
+                    $check = DB::table('d_purchase_plan')
+                        ->where('pp_item', '=', $item_idReq[$j])
                         ->where('pp_status', '=', 'P')
                         ->get();
 
-                    if (count($chek) > 0){
-                        $qtyAkhir = $qtyApp[$i] + $chek[0]->pp_qtyAppReq;
+                    if (count($check) > 0) {
+                        $qtyAkhir = $check[0]->pp_qtyreq + $qtyAppReq[$j];
                         DB::table('d_purchase_plan')
-                        ->where('pp_item', '=', $item_id[$i])
                         ->update([
-                            'pp_qtyreq' => $qtyAkhir
+                            'pp_qtyreq' => $qtyAkhir,
+                            'pp_date'   => $req_date
                         ]);
-
                     } else {
-                        DB::table('d_purchase_plan')->insert([
+                        DB::table('d_purchase_plan')
+                        ->insert([
+
                             'pp_date'   => $req_date,
-                            'pp_item'   => $item_id[$i],
-                            'pp_qtyreq' => $qtyApp[$i],
+                            'pp_item'   => $item_idReq[$j],
+                            'pp_qtyreq' => $qtyAppReq[$j],
                             'pp_status' => 'P'
+
                         ]);
                     }
+
                 }
+
             }
 
             DB::commit();

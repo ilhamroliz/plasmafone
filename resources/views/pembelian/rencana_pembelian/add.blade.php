@@ -151,20 +151,20 @@
 													<td>{{$req->c_name}}</td>
 													<td>{{$req->i_nama}}</td>
 													@if($req->nama == 'indent')
-														<td><strong>Indent</strong></td>
+														<td>Indent</td>
 													@else
-														<td><strong>Request</strong></td>
+														<td>Request</td>
 													@endif
 													<td>{{$req->qty}}</td>
 													<td>
 														<div class="text-center">
 															@if($req->nama == 'indent')
-																<input type="hidden" name="ind_id[]" value="{{$req->id_table}}">
+																<input type="hidden" name="ind_id[]" value="{{$req->item}}">
 																<input type="hidden" name="item_id[]" value="{{$req->item}}">
 																<input type="number" min="1" class="form-control" name="qtyAppInd[]" id="qty-{{$req->id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->id}}')" value="{{$req->qty}}"/>
 															@else
 																<input type="hidden" name="req_id[]" value="{{$req->id_table}}">
-																<input type="hidden" name="item_id[]" value="{{$req->item}}">
+																<input type="hidden" name="item_idReq[]" value="{{$req->item}}">
 																<input type="number" min="1" class="form-control" name="qtyAppReq[]" id="qty-{{$req->id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->id}}')" value="{{$req->qty}}"/>
 															@endif
 														</div>
