@@ -1176,7 +1176,11 @@
 					$('#dt_total').text(response.data[0].s_total_net);
 					$('#dt_salesman').text(response.data[0].salesman);
 					response.data.forEach(function(element) {
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.sd_qty+'</td><td>'+element.sd_total_net+'</td></tr>'
+					    if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td>'+element.total_net+'</td></tr>'
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td>'+element.total_net+'</td></tr>'
+                        }
 						$('#table_item tbody').append(row)
 					});
 					$('#overlay').fadeOut(200);
