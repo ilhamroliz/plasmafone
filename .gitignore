@@ -13,13 +13,13 @@ storage/*.key
 .env.*.php
 .env.php
 .env
+_ide_helper.php
+.idea
+.idea/*
+.idea/workspace.xml
 Homestead.yaml
 Homestead.json
 
 # Rocketeer PHP task runner and deployment package. https://github.com/rocketeers/rocketeer
 .rocketeer/
-_ide_helper.php
-.idea
-idea
-.idea/workspace.xml
 
