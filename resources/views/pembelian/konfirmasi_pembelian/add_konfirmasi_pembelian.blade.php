@@ -107,9 +107,9 @@
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="widget-body">
 
-						<form class="form-horizontal">
+						<!-- <form class="form-horizontal">
 						{{csrf_field()}}
-							<!-- <fieldset>
+							<fieldset>
 								<div class="form-group">
 
 										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>Pilih Supplier</label></label>
@@ -158,8 +158,8 @@
 										</div>
 									</div>
 
-							</fieldset> -->
-						</form>
+							</fieldset>
+						</form> -->
 					</div>
 				</div>
 			</div>
@@ -201,6 +201,7 @@
                                                     <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
                                                     <th data-hide="phone,tablet " class="text-center">Qty</th>
 													<th data-hide="phone,tablet " class="text-center">Harga Satuan</th>
+													<th data-hide="phone,tablet " class="text-center">Supplayer</th>
 
 												</tr>
 
@@ -359,21 +360,14 @@
 
                                                 <fieldset>
                                                     <div class="row">
-                                                    <section class="col col-6">
+                                                    	<section class="col col-6">
                                                             <label class="label">Supplier</label>
                                                             <label class="select">
                                                                 <select id="dt_supplier2" onchange="getTelp()">
                                                                     <option value="0" disabled="">Pilih Supplier</option>
                                                                 </select> <i></i> </label>
                                                         </section>
-                                                        <!-- <section class="col col-6">
-                                                            <label class="label">No Telepon</label>
-                                                            <label class="input">
-                                                                <input type="text" name="telepon" placeholder="" id="dt_telepon" disabled="">
-                                                            </label>
-                                                        </section> -->
                                                     </div>
-
                                                 </fieldset>
 
                                             </form>
@@ -443,7 +437,7 @@
                     }
                 });
 
-			reload_data();
+			reload_data_trans();
 
 			$("input[type='text']").on("click", function () {
 				$(this).select();

@@ -134,12 +134,13 @@
 
 											<thead>
 												<tr>
-													<th>Tanggal Request</th>
+													<th style="width: 15%;">Tanggal Request</th>
                                                     <th>Nama Outlet</th>
                                                     <th>Nama Barang</th>
-                                                    <th>Qty</th>
-													<th class="text-center">Qty App</th>
-                                                    <th class="text-center">Aksi</th>
+                                                    <th>Keterangan</th>
+                                                    <th class="text-center" style="width: 5%;">Qty</th>
+													<th class="text-center" style="width: 5%;">Qty App</th>
+                                                    <th class="text-center" style="width: 10%;">Aksi</th>
 												</tr>
 											</thead>
 
@@ -149,21 +150,29 @@
 													<td>{{$req->date}}</td>
 													<td>{{$req->c_name}}</td>
 													<td>{{$req->i_nama}}</td>
-													<td width="5%">{{$req->qty}}</td>
-													<td width="5%">
+													@if($req->nama == 'indent')
+														<td>Indent</td>
+													@else
+														<td>Request</td>
+													@endif
+													<td>{{$req->qty}}</td>
+													<td>
 														<div class="text-center">
-															<input type="hidden" name="req_id[]" value="{{$req->id}}">
-															<input type="hidden" name="item_id[]" value="{{$req->item}}">
-															<input type="number" min="1" class="form-control" name="qtyApp[]" id="qty-{{$req->id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->id}}')" value="{{$req->qty}}"/>
+															@if($req->nama == 'indent')
+																<input type="hidden" name="ind_id[]" value="{{$req->id_table}}">
+																<input type="hidden" name="item_id[]" value="{{$req->item}}">
+																<input type="number" min="1" class="form-control" name="qtyAppInd[]" id="qty-{{$req->id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->id}}')" value="{{$req->qty}}"/>
+															@else
+																<input type="hidden" name="req_id[]" value="{{$req->id_table}}">
+																<input type="hidden" name="item_id[]" value="{{$req->item}}">
+																<input type="number" min="1" class="form-control" name="qtyAppReq[]" id="qty-{{$req->id}}" placeholder="QTY"  style="text-transform: uppercase; width: 80px;" onblur="setQty('qty-{{$req->id}}')" value="{{$req->qty}}"/>
+															@endif
 														</div>
 													</td>
-													<td width="10%">
+													<td>
 														<div class="text-center">
-															<!-- <button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" >
-																<i class="glyphicon glyphicon-edit"></i>
-															</button>&nbsp; -->
 															<button class="btn btn-xs btn-hapus btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Tolak Request" onclick="tolakRequest('{{$req->id}}')">
-																<i class="fa fa-ban"></i>
+																<i class="fa fa-times"></i>
 															</button>
 														</div>
 													</td>
@@ -177,7 +186,7 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-md-12">
-                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRencana()">Tambah Semua Rencana</button>
+                                       	 		<button class="btn-lg btn-block btn-primary text-center" onclick="simpanRencana()">Setujui Semua Rencana</button>
 											</div>
 										</div>
                                     </div>
