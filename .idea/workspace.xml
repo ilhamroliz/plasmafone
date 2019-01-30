@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f15388ce-63a7-4084-82b5-ae571942ff2a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php" afterDir="false" />
     </list>
@@ -163,14 +161,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-400">
-              <caret line="661" column="45" selection-start-line="661" selection-start-column="45" selection-end-line="661" selection-end-column="72" />
+            <state relative-caret-position="333">
+              <caret line="847" column="97" lean-forward="true" selection-start-line="847" selection-start-column="28" selection-end-line="847" selection-end-column="97" />
               <folding>
+                <element signature="e#19799#22017#0#HTML" />
+                <element signature="e#22048#23033#0#HTML" />
+                <element signature="e#23063#25549#0#HTML" />
                 <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                 <element signature="e#34870#36270#0#HTML" />
                 <element signature="e#36341#37291#0#HTML" />
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                 <element signature="e#37362#37867#0#HTML" />
-                <element signature="e#37968#39353#0#HTML" />
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                 <element signature="e#39378#39464#0#HTML" />
                 <element signature="e#39503#40521#0#HTML" />
                 <element signature="e#40554#42212#0#HTML" />
@@ -184,9 +188,15 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="602" column="44" selection-start-line="602" selection-start-column="44" selection-end-line="602" selection-end-column="44" />
+            <state relative-caret-position="352">
+              <caret line="843" column="101" selection-start-line="843" selection-start-column="101" selection-end-line="843" selection-end-column="101" />
               <folding>
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+                <element signature="e#36692#38181#0#HTML" />
+                <element signature="e#38256#39274#0#HTML" />
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+                <element signature="e#39349#39910#0#HTML" />
                 <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
               </folding>
             </state>
@@ -197,7 +207,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>get-data</find>
       <find>pembelian/refund/get-data</find>
       <find>sm</find>
       <find>try</find>
@@ -226,6 +235,7 @@
       <find>detail</find>
       <find>#qty</find>
       <find>convertToRupiah</find>
+      <find>tamba</find>
       <find>tambah</find>
     </findStrings>
   </component>
@@ -676,7 +686,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27121000" />
+    <option name="totallyTimeSpent" value="28042000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1368" height="741" extended-state="6" />
@@ -837,13 +847,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/edit.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="460" column="23" selection-start-line="460" selection-start-column="18" selection-end-line="460" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-78">
@@ -896,16 +899,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6140">
+          <caret line="463" column="21" selection-start-line="463" selection-start-column="16" selection-end-line="463" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-400">
-          <caret line="661" column="45" selection-start-line="661" selection-start-column="45" selection-end-line="661" selection-end-column="72" />
+        <state relative-caret-position="333">
+          <caret line="847" column="97" lean-forward="true" selection-start-line="847" selection-start-column="28" selection-end-line="847" selection-end-column="97" />
           <folding>
+            <element signature="e#19799#22017#0#HTML" />
+            <element signature="e#22048#23033#0#HTML" />
+            <element signature="e#23063#25549#0#HTML" />
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
             <element signature="e#34870#36270#0#HTML" />
             <element signature="e#36341#37291#0#HTML" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
             <element signature="e#37362#37867#0#HTML" />
-            <element signature="e#37968#39353#0#HTML" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
             <element signature="e#39378#39464#0#HTML" />
             <element signature="e#39503#40521#0#HTML" />
             <element signature="e#40554#42212#0#HTML" />
@@ -917,9 +933,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="602" column="44" selection-start-line="602" selection-start-column="44" selection-end-line="602" selection-end-column="44" />
+        <state relative-caret-position="352">
+          <caret line="843" column="101" selection-start-line="843" selection-start-column="101" selection-end-line="843" selection-end-column="101" />
           <folding>
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="e#36692#38181#0#HTML" />
+            <element signature="e#38256#39274#0#HTML" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="e#39349#39910#0#HTML" />
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
           </folding>
         </state>
