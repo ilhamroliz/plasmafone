@@ -90,11 +90,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								</li>
 
 								<li>
-									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> Selesai </span></a>
-								</li>
-
-								<li>
-									<a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-minus-square"></i> <span class="hidden-mobile hidden-tablet"> Batal </span></a>
+									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> History </span></a>
 								</li>
 
 							</ul>
@@ -108,11 +104,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th width="20%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Cabang</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
-													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="55%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Barang</th>
+													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Barang</th>
+													<th width="20%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 												</tr>
 											</thead>
 
@@ -123,26 +117,38 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									</div>
 
 									<div class="tab-pane fade" id="hr2">
-										<table id="dt_selesai" class="table table-striped table-bordered table-hover" width="100%">
+										<div class="row form-group">
+											<div class="col-lg-12 col-md-12 col-sm-12">
+												<div class="col-md-4">
+		
+													<div>
+														<div class="input-group input-daterange" id="date-range">
+															<input type="text" class="form-control" id="tgl_awal" name="tgl_awal"  placeholder="Tanggal Awal" data-dateformat="dd/mm/yy">
+															<span class="input-group-addon bg-custom text-white b-0">to</span>
+															<input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir"  placeholder="Tanggal Akhir" data-dateformat="dd/mm/yy">
+														</div>
+													</div>
+		
+												</div>
+												<div class="col-md-3">
+													<div class="form-group">
+														<input type="text" id="search" class="form-control" name="search" placeholder="Masukkan No.Nota" style="width: 100%; float: left">
+													</div>
+												</div>
+												<div class="col-md-5">
+													<div class="form-group">
+														<input type="hidden" name="idMember" id="idMember">
+														<input type="text" id="namaMember" class="form-control" name="namaMember" placeholder="Masukkan Nama User" style="width: 80%; float: left">
+		
+														<button type="button" class="btn btn-primary btn-sm icon-btn ml-2" onclick="cariHistory()" style="width: 10%; margin-left: 5%">
+															<i class="fa fa-search"></i>
+														</button>
+													</div>
+												</div>
+											</div>
+										</div>
 
-											<thead>		
-												<tr>
-													<th width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th width="20%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Cabang</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
-													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-												</tr>
-											</thead>
-
-											<tbody>
-											</tbody>
-
-										</table>
-									</div>
-
-									<div class="tab-pane fade" id="hr3">
-										<table id="dt_batal" class="table table-striped table-bordered table-hover" width="100%">
+										<table id="dt_history" class="table table-striped table-bordered table-hover" width="100%">
 
 											<thead>		
 												<tr>
@@ -196,7 +202,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 									<div>
 
 										<!-- widget content -->
-										<div class="widget-body no-padding">											
+										<div class="widget-body no-padding">
 											<div class="table-responsive">
 
 												{{-- <div class="row no-padding"> --}}
@@ -284,7 +290,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 <script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
 
 <script type="text/javascript">
-		var done, proses, cancel;
+		var proses, history;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -309,10 +315,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"serverSide": true,
 				"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
 				"columns":[
-					{"data": "i_nota"},
-					{"data": "c_name"},
-					{"data": "m_name"},
-					{"data": "sales"},
+					{"data": "i_nama"},
+					{"data": "qty"},
 					{"data": "aksi"}
 				],
 				"autoWidth" : true,
@@ -337,10 +341,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		setTimeout(function () {
 
-			done = $('#dt_selesai').DataTable({
+			history = $('#dt_history').DataTable({
 				"processing": true,
 				"serverSide": true,
-				"ajax": "{{ url('/penjualan/pemesanan-barang/getdatadone') }}",
+				"ajax": "{{ url('/penjualan/pemesanan-barang/gethistory') }}",
 				"columns":[
 					{"data": "i_nota"},
 					{"data": "c_name"},
@@ -366,42 +370,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				}
 			});
 
-		}, 1000);
-
-		setTimeout(function () {
-
-			cancel = $('#dt_batal').DataTable({
-				"processing": true,
-				"serverSide": true,
-				"ajax": "{{ url('/penjualan/pemesanan-barang/getdatacancel') }}",
-				"columns":[
-					{"data": "i_nota"},
-					{"data": "c_name"},
-					{"data": "m_name"},
-					{"data": "sales"},
-					{"data": "aksi"}
-				],
-				"autoWidth" : true,
-				"language" : dataTableLanguage,
-				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-				"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-				"preDrawCallback" : function() {
-					// Initialize the responsive datatables helper once.
-					if (!responsiveHelper_dt_basic) {
-						responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_cancel'), breakpointDefinition);
-					}
-				},
-				"rowCallback" : function(nRow) {
-					responsiveHelper_dt_basic.createExpandIcon(nRow);
-				},
-				"drawCallback" : function(oSettings) {
-					responsiveHelper_dt_basic.respond();
-				}
-			});
-
 			$('#overlay').fadeOut(200);
 
-		}, 1500);
+		}, 1000);
 
 		/* END BASIC */
 
