@@ -664,6 +664,8 @@ Route::group(['middleware' => 'auth'], function () {
         'uses' => 'penjualan\pemesananBarangController@get_data_cancel',
     ])->name('penjualan.getdatacancel');
 
+    Route::post('/penjualan/pemesanan-barang/getHistory', 'penjualan\pemesananBarangController@get_history');
+    Route::post('/penjualan/pemesanan-barang/aksiHistory', 'penjualan\pemesananBarangController@aksi_history');
     Route::get('/penjualan/pemesanan-barang/get-member', 'penjualan\pemesananBarangController@cari_member');
     Route::get('/penjualan/pemesanan-barang/get-item', 'penjualan\pemesananBarangController@cari_item');
     Route::get('/penjualan/pemesanan-barang/get-group', 'penjualan\pemesananBarangController@get_group');
