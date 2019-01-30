@@ -475,7 +475,7 @@
 													<tr class="text-center">
 														<td>Item</td>
 														<td>Qty</td>
-														<td>Total</td>
+														<td>Total (Rp)</td>
 													</tr>
 												</thead>
 												<tbody>
@@ -1177,9 +1177,9 @@
 					$('#dt_salesman').text(response.data[0].salesman);
 					response.data.forEach(function(element) {
 					    if (element.i_code != ""){
-                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td>'+element.total_net+'</td></tr>'
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
                         } else {
-                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td>'+element.total_net+'</td></tr>'
+                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
                         }
 						$('#table_item tbody').append(row)
 					});
