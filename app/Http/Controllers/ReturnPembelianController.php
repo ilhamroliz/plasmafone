@@ -62,7 +62,7 @@ class ReturnPembelianController extends Controller
 
 
         }
-        $purchase = DB::table('d_purchase_order_dt')->get();
+        $purchase = DB::table('d_purchase')->get();
         return view('pembelian.return_barang.add')->with(compact('purchase'));
     }
 
