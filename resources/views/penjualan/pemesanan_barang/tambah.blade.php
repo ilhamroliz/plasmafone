@@ -261,7 +261,7 @@
 
 		$( "#tpMemberNama" ).autocomplete({
 			source: baseUrl+'/penjualan/pemesanan-barang/get-member',
-			minLength: 2,
+			minLength: 1,
 			select: function(event, data) {
 				$('#tpMemberId').val(data.item.id);
 				$('#tpMemberNama').val(data.item.label);

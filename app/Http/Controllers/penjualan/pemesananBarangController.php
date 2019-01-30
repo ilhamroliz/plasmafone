@@ -62,11 +62,9 @@ class pemesananBarangController extends Controller
         return DataTables::of($proses)
             ->addColumn('aksi', function ($proses) {
                 if (Plasma::checkAkses(18, 'delete') == false) {
-                    return '<div class="text-center">
-                            <button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($proses->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"></div>';
                 } else {
                     return '<div class="text-center">
-                            <button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($proses->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;
                             <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($proses->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
                 }
             })
@@ -105,7 +103,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -118,7 +117,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -132,7 +132,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -144,7 +145,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '<=', $tglAkhir)
                         ->where('d_indent.i_date', '>=', $tglAwal)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }else{
@@ -158,7 +160,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -170,7 +173,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -183,7 +187,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -194,7 +199,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '<=', $tglAkhir)
                         ->where('d_indent.i_date', '>=', $tglAwal)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }
@@ -211,7 +217,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_comp', $company)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -222,7 +229,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_comp', $company)
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -234,7 +242,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -244,7 +253,8 @@ class pemesananBarangController extends Controller
                         
                         ->where('d_indent.i_comp', $company)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }else{
@@ -256,7 +266,8 @@ class pemesananBarangController extends Controller
                         
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -266,7 +277,8 @@ class pemesananBarangController extends Controller
                         
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
                     $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
@@ -277,7 +289,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
                     $history = DB::table('d_indent')
@@ -286,7 +299,8 @@ class pemesananBarangController extends Controller
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->select('d_indent.i_status', 'd_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->groupBy('d_indent.i_nota')
                         ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }
@@ -556,7 +570,8 @@ class pemesananBarangController extends Controller
                         'i_sales' => $i_sales,
                         'i_member' => $i_member,
                         'i_nota' => $i_nota,
-                        'i_status' => $i_status
+                        'i_status' => $i_status,
+                        'i_date' => Carbon::now()->format('Y-m-d')
                     ]);
 
                     $arayIndent = array();
@@ -568,7 +583,8 @@ class pemesananBarangController extends Controller
                             'id_indent' => $i_id,
                             'id_detailid' => $i + 1,
                             'id_item' => $idItem[$i],
-                            'id_qty' => $qtyItem[$i]
+                            'id_qty' => $qtyItem[$i],
+                            'id_status' => 'P'
                         );
 
                         array_push($arayIndent, $arayI);
@@ -606,7 +622,7 @@ class pemesananBarangController extends Controller
             DB::beginTransaction();
             try {
 
-                $id = Crypt::decrypt($id);
+                // $id = Crypt::decrypt($id);
                 $nota = DB::table('d_indent')->select('i_nota')->where('i_id', $id)->first();
                 $log = 'Menghapus Pemesanan Barang dengan nota '.$nota->i_nota;
                 DB::table('d_indent')->where('i_id', $id)->delete();
@@ -616,7 +632,7 @@ class pemesananBarangController extends Controller
                 DB::commit();
                 Plasma::logActivity($log);
                 return json_encode([
-                    'status' => 'hpBerhasil',
+                    'status' => 'hpSukses',
                     'name' => $nota->i_nota
                 ]);
             } catch (\Exception $e) {
@@ -627,6 +643,38 @@ class pemesananBarangController extends Controller
                 ]);
             }
         }
+    }
+
+    public function simpan_status(Request $request){
+        $id = $request->id;
+        $status = $request->status;
+        if($status == "2"){
+            $status = "DONE";
+        }else if($status == "3"){
+            $status = "CANCEL";
+        }
+
+        DB::beginTransaction();
+        try {
+            DB::table('d_indent')->where('i_id', $id)->update([
+                'i_status' => $status
+            ]);
+
+            $getNota = DB::table('d_indent')->where('i_id', $id)->select('i_nota')->first();
+            $log = 'Mengganti Status Pemesanan Barang dengan Nota '.$getNota->i_nota.' menjadi '.$status;
+
+            DB::commit();
+            Plasma::logActivity($log);
+            return json_encode([
+                'status' => 'ssSukses'
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return json_encode([
+                'status' => 'ssGagal',
+                'msg' => $e
+            ]);
+        }        
     }
 
     public function print(Request $request)

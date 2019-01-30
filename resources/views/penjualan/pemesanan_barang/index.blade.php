@@ -90,7 +90,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								</li>
 
 								<li>
-									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> History </span></a>
+									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-history"></i> <span class="hidden-mobile hidden-tablet"> History </span></a>
 								</li>
 
 							</ul>
@@ -152,11 +152,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th width="20%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Cabang</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
-													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="15%">No. Nota</th>
+													<th width="20%">Cabang</th>
+													<th width="20%">Nama Member</th>
+													<th width="20%">Nama Sales</th>
+													<th width="15%">Status</th>
+													<th width="10%" class="text-center" >Aksi</th>
 												</tr>
 											</thead>
 
@@ -388,6 +389,19 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		}, 500);
 
+		$('#aksiEdit').on('change', function(){
+			if($('#aksiEdit').val() == 1){
+				$('#aksiEdit').css("background-color", "#C79121");
+				$('#aksiEdit').css("color", "white");
+			}else if($('#aksiEdit').val() == 2){
+				$('#aksiEdit').css("background-color", "#739E73");
+				$('#aksiEdit').css("color", "white");
+			}else if($('#aksiEdit').val() == 3){
+				$('#aksiEdit').css("background-color", "#A90329");
+				$('#aksiEdit').css("color", "white");
+			}
+		});
+
 		function cariHistory(){
 
 			var tglAwal = $('#tgl_awal').val();
@@ -405,15 +419,34 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 				$('#dt_history').DataTable().clear();
 				for(var i = 0; i < response.data.data.length; i++){
-					$('#dt_history').DataTable().row.add([
-						response.data.data[i].i_nota,
-						response.data.data[i].c_name,
-						response.data.data[i].m_name,
-						response.data.data[i].sales,
-						'<div class="text-center">'+
-						'<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Edit Status" onclick="detail('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp'+
-						'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
-					]).draw();
+					if(response.data.data[i].i_status == "PROSES"){
+						$('#dt_history').DataTable().row.add([
+							response.data.data[i].i_nota,
+							response.data.data[i].c_name,
+							response.data.data[i].m_name,
+							response.data.data[i].sales,
+							'<span class="label label-warning">PROSES</span>',
+							'<div class="text-center">'+
+							'<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Edit Status" onclick="detail('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp'+
+							'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
+						]).draw();
+					}else{
+						$status = '';
+						if(response.data.data[i].i_status == "DONE"){
+							$status = '<span class="label label-success">DONE</span>';
+						}else{
+							$status = '<span class="label label-danger">CANCEL</span>';
+						}
+						$('#dt_history').DataTable().row.add([
+							response.data.data[i].i_nota,
+							response.data.data[i].c_name,
+							response.data.data[i].m_name,
+							response.data.data[i].sales,
+							$status,
+							'<div class="text-center">'+
+							'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
+						]).draw();
+					}
 				}
 
 			});
@@ -423,10 +456,14 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		function simpanStatus(){
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Menghapus...');
-			
+
 			var id = $('#dmId').val();
-			axios.post(baseUrl+'/penjualan/pemesanan-barang/simpanStatus', {id: id}).then((response) => {
+			var status = $('#aksiEdit').val();
+			axios.post(baseUrl+'/penjualan/pemesanan-barang/simpan-status', {id: id, status: status}).then((response) => {
 				if(response.data.status == "ssSukses"){
+					$('#detilModal').modal('hide');
+					cariHistory();
+
 					$('#overlay').fadeOut(200);
 					$.smallBox({
 						title : "Berhasil",
@@ -486,37 +523,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 					axios.get(baseUrl+'/penjualan/pemesanan-barang/hapus/'+val).then((response) => {
 
-						if (response.data.status == 'hpBerhasil') {
+						if (response.data.status == 'hpSukses') {
 
-							$('#dt_proses').DataTable().destroy();
-							$('#dt_proses').DataTable({
-								"processing": true,
-								"serverSide": true,
-								"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
-								"columns":[
-									{"data": "i_nota"},
-									{"data": "c_name"},
-									{"data": "m_name"},
-									{"data": "sales"},
-									{"data": "aksi"}
-								],
-								"autoWidth" : true,
-								"language" : dataTableLanguage,
-								"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-								"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-								"preDrawCallback" : function() {
-									// Initialize the responsive datatables helper once.
-									if (!responsiveHelper_dt_basic) {
-										responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_proses'), breakpointDefinition);
-									}
-								},
-								"rowCallback" : function(nRow) {
-									responsiveHelper_dt_basic.createExpandIcon(nRow);
-								},
-								"drawCallback" : function(oSettings) {
-									responsiveHelper_dt_basic.respond();
-								}
-							});
+							cariHistory();
 
 							$('#overlay').fadeOut(200);
 							$.smallBox({
@@ -576,6 +585,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 			var tagihan;
 			var pembayaran;
+
+			$('#aksiEdit').css("background-color", "#C79121");
+			$('#aksiEdit').css("color", "white");
 
 			axios.get(baseUrl+'/penjualan/pemesanan-barang/detail/'+id).then(response => {
 
