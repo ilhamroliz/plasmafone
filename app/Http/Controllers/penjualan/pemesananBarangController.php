@@ -34,21 +34,29 @@ class pemesananBarangController extends Controller
         $company = Auth::user()->m_comp;
         $proses = '';
         if ($company != "PF00000001") {
-            $proses = pemesanan::where('i_status', 'PROSES')
-                ->join('m_member', 'm_member.m_id', '=', 'i_member')
-                ->join('m_company', 'c_id', '=', 'i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->where('i_comp', $company)
-                ->orderBy('i_nota', 'desc');
+            $proses = pemesanan::where('d_indent.i_status', 'PROSES')
+                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                ->join('d_item', 'd_item.i_id', '=', 'id_item')
+                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'd_item.i_nama', 'm_member.m_name', DB::raw('d_mem.m_name as sales'), DB::raw('SUM(id_qty) as qty'))
+                ->where('d_indent.i_comp', $company)
+                ->where('id_status', 'P')
+                ->groupBy('id_item')
+                ->orderBy('i_nama', 'asc');
 
         } else {
-            $proses = pemesanan::where('i_status', 'PROSES')
-                ->join('m_member', 'm_member.m_id', '=', 'i_member')
-                ->join('m_company', 'c_id', '=', 'i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->orderBy('i_nota', 'desc');
+            $proses = pemesanan::where('d_indent.i_status', 'PROSES')
+                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                ->join('d_item', 'd_item.i_id', '=', 'id_item')
+                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'd_item.i_nama', 'm_member.m_name', DB::raw('d_mem.m_name as sales'), DB::raw('SUM(id_qty) as qty'))
+                ->where('id_status', 'P')
+                ->groupBy('id_item')
+                ->orderBy('i_nama', 'asc');
         }
 
         return DataTables::of($proses)
@@ -71,21 +79,23 @@ class pemesananBarangController extends Controller
         $company = Auth::user()->m_comp;
         $done = '';
         if ($company != "PF00000001") {
-            $done = pemesanan::where('i_status', 'DONE')
-                ->join('m_member', 'm_member.m_id', '=', 'i_member')
-                ->join('m_company', 'c_id', '=', 'i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->where('i_comp', $company)
-                ->orderBy('i_nota', 'desc');
+            $done = pemesanan::where('d_indent.i_status', 'DONE')
+                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->where('d_indent.i_comp', $company)
+                ->orderBy('d_indent.i_nota', 'desc');
 
         } else {
-            $done = pemesanan::where('i_status', 'DONE')
-                ->join('m_member', 'm_member.m_id', '=', 'i_member')
-                ->join('m_company', 'c_id', '=', 'i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->orderBy('i_nota', 'desc');
+            $done = pemesanan::where('d_indent.i_status', 'DONE')
+                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->orderBy('d_indent.i_nota', 'desc');
         }
 
         return DataTables::of($done)
@@ -108,21 +118,23 @@ class pemesananBarangController extends Controller
         $company = Auth::user()->m_comp;
         $done = '';
         if ($company != "PF00000001") {
-            $cancel = pemesanan::where('i_status', 'CANCEL')
-                ->join('m_member', 'm_member.m_id', '=', 'i_member')
-                ->join('m_company', 'c_id', '=', 'i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->where('i_comp', $company)
-                ->orderBy('i_nota', 'desc');
+            $cancel = pemesanan::where('d_indent.i_status', 'CANCEL')
+                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->where('d_indent.i_comp', $company)
+                ->orderBy('d_indent.i_nota', 'desc');
 
         } else {
-            $cancel = pemesanan::where('i_status', 'CANCEL')
-                ->join('m_member', 'm_member.m_id', '=', 'i_member')
-                ->join('m_company', 'c_id', '=', 'i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
-                ->select('i_id', 'i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->orderBy('i_nota', 'desc');
+            $cancel = pemesanan::where('d_indent.i_status', 'CANCEL')
+                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                ->orderBy('d_indent.i_nota', 'desc');
 
         }
 

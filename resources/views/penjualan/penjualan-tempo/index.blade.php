@@ -475,7 +475,7 @@ function rupiah($angka){
                                                 <tr class="text-center">
                                                     <td>Item</td>
                                                     <td>Qty</td>
-                                                    <td>Total</td>
+                                                    <td>Total (Rp)</td>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -1170,13 +1170,17 @@ function rupiah($angka){
                 } else {
                     var row = '';
                     $('.tr').remove();
-                    $('#title_detail').html('<strong>Detail Penjualan Regular</strong>');
+                    $('#title_detail').html('<strong>Detail Penjualan Tempo</strong>');
                     $('#dt_tanggal').text(response.data[0].tanggal);
                     $('#dt_nota').text(response.data[0].s_nota);
                     $('#dt_total').text(response.data[0].s_total_net);
                     $('#dt_salesman').text(response.data[0].salesman);
                     response.data.forEach(function(element) {
-                        row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.sd_qty+'</td><td>'+element.sd_total_net+'</td></tr>'
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
+                        }
                         $('#table_item tbody').append(row)
                     });
                     $('#overlay').fadeOut(200);

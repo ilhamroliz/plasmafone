@@ -438,7 +438,7 @@ class PenjualanController extends Controller
     {
         $id = Crypt::decrypt($id);
         $regular = DB::table('d_sales')
-                    ->select('d_sales.*', 'd_sales_dt.*', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item')
+                    ->select('d_sales.*', 'd_sales_dt.*', DB::raw('FORMAT(d_sales_dt.sd_total_net, 0, "de_DE") as total_net'), DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item', 'd_item.i_code')
                     ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
                     ->join('d_mem', 'd_sales.s_salesman', '=', 'd_mem.m_id')
                     ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
