@@ -870,11 +870,13 @@ class PembelianController extends Controller
 
     public function tambahRencana(Request $request)
     {
-        $comp     = Auth::user()->m_id;
-        $req_id   = $request->input('req_id');
-        $item_id  = $request->input('item_id');
-        $qtyApp   = $request->input('qtyApp');
-        $req_date = Carbon::now('Asia/Jakarta');
+        $comp      = Auth::user()->m_id;
+        $req_id    = $request->input('req_id');
+        $ind_id    = $request->input('indent_id');
+        $item_id   = $request->input('item_id');
+        $qtyAppInd = $request->input('qtyAppInd');
+        $qtyAppReq = $request->input('qtyAppReq');
+        $req_date  = Carbon::now('Asia/Jakarta');
 
         DB::beginTransaction();
         try {
@@ -888,7 +890,7 @@ class PembelianController extends Controller
                     'ro_state' => 'Y'
                 ]);
             }else{
-                $pecah = explode('_', $req_id);
+                $pecah = explode('_', $ind_id);
                 $id = $pecah[1];
                 DB::table('d_indent_dt')
                 ->where('id_indent', $id)
@@ -907,7 +909,7 @@ class PembelianController extends Controller
                         ->get();
 
                     if (count($chek) > 0){
-                        $qtyAkhir = $qtyApp[$i] + $chek[0]->pp_qtyreq;
+                        $qtyAkhir = $qtyApp[$i] + $chek[0]->pp_qtyAppReq;
                         DB::table('d_purchase_plan')
                         ->where('pp_item', '=', $item_id[$i])
                         ->update([

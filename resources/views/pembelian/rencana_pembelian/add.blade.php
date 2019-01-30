@@ -151,9 +151,9 @@
 													<td>{{$req->c_name}}</td>
 													<td>{{$req->i_nama}}</td>
 													@if($req->nama == 'indent')
-														<td>Indent</td>
+														<td><strong>Indent</strong></td>
 													@else
-														<td>Request</td>
+														<td><strong>Request</strong></td>
 													@endif
 													<td>{{$req->qty}}</td>
 													<td>
@@ -537,7 +537,7 @@
 								}else{
 									$.smallBox({
 										title  : "GAGAL",
-										content: 'Data telah GAGAL ditambahkan...!',
+										content: 'Data GAGAL ditambahkan...!',
 										color  : "#c46a69",
 										timeout: 4000,
 										icon   : "fa fa-check bounce animated"
