@@ -198,7 +198,7 @@
                                                         @foreach ($data as $index => $item)
                                                             @if ($data[$index]->specificcode == 'N')
                                                                 <tr id="{{ $item->idStock }}" class="tr">
-                                                                    <td style="width: 32%;">{{ $item->nama_item }}
+                                                                    <td style="width: 32%;">{{ $item->i_code }} - {{ $item->nama_item }}
                                                                         <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
                                                                         <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
                                                                         <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
