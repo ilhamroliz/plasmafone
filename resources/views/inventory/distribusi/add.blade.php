@@ -590,7 +590,6 @@
 								$("#cari-outlet").val("");
 								$("#cari-outlet").focus();
 								$('#overlay').fadeOut(200);
-                                console.log(response);
 								cetak(response.id);
 								
 							}

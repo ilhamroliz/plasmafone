@@ -601,9 +601,7 @@ class DistribusiController extends Controller
                         $get_countiddetail = $get_countiddetail + 1;
                     }
 
-                    $compitem = DB::table('d_stock')->select('s_comp', 's_position', 's_item')->where('s_id', $data['idStock'][$i])->first();
-
-                    $namaItem = DB::table('d_stock')->select('s_comp', 's_item', 'i_nama')->where('s_id', $data['idStock'][$i])->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')->first();
+                    $compitem = DB::table('d_stock')->select('s_comp', 's_position', 's_item', 'i_nama')->where('s_id', $data['idStock'][$i])->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')->first();
                     
                     // insert distribusi_dt
                     DB::table('d_distribusi_dt')->insert([
@@ -617,7 +615,7 @@ class DistribusiController extends Controller
                         'dd_qty_sisa' => $data['qtyTable'][$i],
                         'dd_status' => 'On Going'
                     ]);
-                    Access::logActivity('Membuat distribusi barang ' . $namaItem->i_nama);
+                    Access::logActivity('Membuat distribusi barang ' . $compitem->i_nama);
 
                     // insert d_stock
                     $sid = DB::table('d_stock')->max('s_id');
@@ -679,7 +677,7 @@ class DistribusiController extends Controller
                             DB::table('d_stock_mutation')->insert([
                                 'sm_stock'          => $data['idStock'][$i],
                                 'sm_detailid'       => $get_countiddetail,
-                                'sm_date'           => date('Y-m-d H:m:s'),
+                                'sm_date'           => Carbon::now('Asia/Jakarta'),
                                 'sm_detail'         => 'PENGURANGAN',
                                 'sm_specificcode'   => $specificcode,
                                 'sm_qty'            => $data['qtyTable'][$i],
@@ -731,7 +729,7 @@ class DistribusiController extends Controller
         }
 
         $datas = DB::table('d_distribusi')
-                ->select('d_distribusi.d_nota as nota', 'd_distribusi.d_date as tanggal', 'm_company.c_name as tujuan', 'd_item.i_nama as nama_barang', DB::raw('coalesce(concat(" (", dd_specificcode, ")"), "") as specificcode'), 'd_distribusi_dt.dd_qty as qty', 'd_mem.m_name as petugas')
+                ->select('d_distribusi.d_nota as nota', 'd_distribusi.d_date as tanggal', 'm_company.c_name as tujuan', 'd_item.i_code', 'd_item.i_nama as nama_barang', DB::raw('coalesce(concat(" (", dd_specificcode, ")"), "") as specificcode'), 'd_distribusi_dt.dd_qty as qty', 'd_mem.m_name as petugas')
                 ->where('d_distribusi.d_id', $id)
                 ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                 ->join('m_company', 'm_company.c_id', '=', 'd_distribusi.d_destination')
