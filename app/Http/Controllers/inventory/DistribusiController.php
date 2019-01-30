@@ -348,7 +348,7 @@ class DistribusiController extends Controller
 
     public function cariStock(Request $request)
     {
-        
+        $outlet = Auth::user()->m_comp;
         $cari = $request->term;
         $kode = [];
         if (isset($request->kode)){
@@ -365,27 +365,31 @@ class DistribusiController extends Controller
         if (count($kode) > 0){
 
             $dataN = DB::table('d_stock')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
-                ->join('d_stock_mutation', function ($q){
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->join('d_stock_mutation', function ($q) use ($kode){
                     $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
-                ->leftJoin('d_stock_dt', function ($a){
+                ->leftJoin('d_stock_dt', function ($a) use ($kode){
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'N')
-                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
             $dataY = DB::table('d_stock')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
                     $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
@@ -398,21 +402,25 @@ class DistribusiController extends Controller
                     $a->whereNotIn('d_stock_dt.sd_specificcode', $kode);
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'Y')
-                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
             $data = $dataN->union($dataY)->get();
         } else {
             $data = DB::table('d_stock')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q){
-                    $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $q->on('d_stock_mutation.sm_stock', '=', 's_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
@@ -421,12 +429,16 @@ class DistribusiController extends Controller
                     $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
                     $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
-                ->where('d_stock.s_position', Auth::user()->m_comp)
+                ->where('d_stock.s_position', '=', $outlet)
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -449,6 +461,7 @@ class DistribusiController extends Controller
 
     public function searchStock(Request $request)
     {
+        $outlet = Auth::user()->m_comp;
         $cari = $request->term;
         $kode = [];
         if (isset($request->kode)){
@@ -465,28 +478,33 @@ class DistribusiController extends Controller
         if (count($kode) > 0){
 
             $dataN = DB::table('d_stock')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
-                ->join('d_stock_mutation', function ($q){
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->join('d_stock_mutation', function ($q) use ($kode){
                     $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
-                ->leftJoin('d_stock_dt', function ($a){
+                ->leftJoin('d_stock_dt', function ($a) use ($kode){
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'N')
-                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
             $dataY = DB::table('d_stock')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q) use ($kode){
-                    $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $q->on('d_stock_mutation.sm_stock', '=', 's_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
                     $q->whereNotIn('d_stock_mutation.sm_specificcode', $kode);
@@ -497,20 +515,25 @@ class DistribusiController extends Controller
                     $a->whereNotIn('d_stock_dt.sd_specificcode', $kode);
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
+                })
                 ->where(function ($w) use ($cari){
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->where('d_item.i_specificcode', '=', 'Y')
-                ->where('d_stock.s_position', Auth::user()->m_comp)
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
             $data = $dataN->union($dataY)->get();
         } else {
             $data = DB::table('d_stock')
-                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+                ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
                 ->join('d_stock_mutation', function ($q){
-                    $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                    $q->on('d_stock_mutation.sm_stock', '=', 's_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
@@ -519,11 +542,16 @@ class DistribusiController extends Controller
                     $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
-                ->where(function ($w) use ($cari){
-                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
-                    $w->orWhere('sd_specificcode', 'like', '%'.$cari.'%');
+                ->leftjoin('d_outlet_price', function($o) use ($outlet){
+                    $o->on('d_outlet_price.op_item', '=', 'd_stock.s_item');
+                    $o->where('d_outlet_price.op_outlet', '=', $outlet);
                 })
-                ->where('d_stock.s_position', Auth::user()->m_comp)
+                ->where(function ($w) use ($cari){
+                    $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                    $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
+                })
+                ->where('d_stock.s_position', '=', $outlet)
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }

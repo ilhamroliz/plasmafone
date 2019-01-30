@@ -314,12 +314,20 @@
         if ((event.which < 48 || event.which > 57)) {
             event.preventDefault();
         }
-    });
-
-    $("#qty").on("keyup",function (event) {
-        $(this).val($(this).val().replace(/[^\d].+/, ""));
         if ((event.which == 13)) {
-            $('#tambahketable').click();
+            if($("#stockid").val() == "" || $("#stockid").val() == null) {
+                $.smallBox({
+                    title : "Pesan!",
+                    content : "Masukkan item!",
+                    color : "#A90329",
+                    timeout: 5000,
+                    icon : "fa fa-times bounce animated"
+                });
+                $("#cari-stock").focus();
+                return;
+            }else {
+                $('#tambahketable').click();
+            }
         }
     });
 
@@ -339,6 +347,7 @@
                     icon : "fa fa-times bounce animated"
                 });
                 $(this).val("");
+                return;
             }
             if (arrCode.includes(specificcode) == true) {
                 var kuantitas = $(".qty-"+specificcode).val();
@@ -519,6 +528,10 @@
     function hapus(id) {
         $('#'+id).remove();
         setArrayId();
+        var inputs = document.getElementsByClassName('kode');
+        if (inputs.length == 0){
+            $("#btn_simpan").attr('disabled', true);
+        }
     }
 
     function simpan() {
