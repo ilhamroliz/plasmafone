@@ -76,7 +76,7 @@ class pemesananBarangController extends Controller
 
     public function get_history(Request $request)
     {
-        dd($request);
+        // dd($request);
         $company = Auth::user()->m_comp;
         $history = '';
 
@@ -91,9 +91,11 @@ class pemesananBarangController extends Controller
             $tak = explode('/', $tglAkh);
             $tglAkhir = $tak[2].'-'.$tak[1].'-'.$tak[0];
 
+            // dd($tglAwal);
+
             if($company != "PF00000001"){
                 if($nota != null && $idMember == null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -103,10 +105,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -116,10 +118,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -130,10 +132,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -142,12 +144,12 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '<=', $tglAkhir)
                         ->where('d_indent.i_date', '>=', $tglAwal)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }else{
                 if($nota != null && $idMember == null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -156,10 +158,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -168,10 +170,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '>=', $tglAwal)
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -181,10 +183,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -192,8 +194,8 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_date', '<=', $tglAkhir)
                         ->where('d_indent.i_date', '>=', $tglAwal)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }
         
@@ -201,7 +203,7 @@ class pemesananBarangController extends Controller
 
             if($company != "PF00000001"){
                 if($nota != null && $idMember == null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -209,10 +211,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_comp', $company)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -220,10 +222,10 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_comp', $company)
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -232,42 +234,42 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
                         
                         ->where('d_indent.i_comp', $company)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }else{
                 if($nota != null && $idMember == null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
                         
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota == null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
                         
                         ->where('d_indent.i_member', $idMember)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else if($nota != null && $idMember != null){
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
@@ -275,21 +277,23 @@ class pemesananBarangController extends Controller
                         ->where('d_indent.i_member', $idMember)
                         ->where('d_indent.i_nota', $nota)
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }else{
-                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                    $history = DB::table('d_indent')
+                        ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
                         ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
                         ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
                         ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
 
-                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                        ->orderBy('d_indent.i_nota', 'desc');
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'd_indent.i_status', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_id', 'desc')->get();
                 }
             }
             
         }
 
+        // dd($history);
         return json_encode([
             'data' => $history
         ]);
@@ -297,7 +301,6 @@ class pemesananBarangController extends Controller
 
     public function detail_dt($id)
     {
-        $id = Crypt::decrypt($id);
         $proses = DB::table('d_indent_dt')->where('id_indent', $id)
             ->join('d_item', 'd_item.i_id', '=', 'id_item')
             ->select('i_nama', 'id_qty')->get();
@@ -313,12 +316,11 @@ class pemesananBarangController extends Controller
 
     public function detail($id)
     {
-        $id = Crypt::decrypt($id);
         $data = pemesanan::where('i_id', $id)
             ->join('m_member', 'm_member.m_id', '=', 'i_member')
             ->join('d_mem', 'd_mem.m_id', '=', 'i_sales')
             ->join('m_company', 'c_id', '=', 'i_comp')
-            ->select('i_nota', 'c_name', 'm_member.m_name', 'm_member.m_idmember', 'm_member.m_telp', DB::raw('d_mem.m_name as sales'))
+            ->select('i_id','i_nota', 'c_name', 'm_member.m_name', 'm_member.m_idmember', 'm_member.m_telp', DB::raw('d_mem.m_name as sales'))
             ->first();
 
         return json_encode([
@@ -365,7 +367,7 @@ class pemesananBarangController extends Controller
             }
         }
 
-        return Response::json($hasilmember);
+        return Response::json($hasilnota);
     }
 
     public function cari_member(Request $request)

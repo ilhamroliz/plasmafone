@@ -677,6 +677,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/pemesanan-barang/auto-member', 'penjualan\pemesananBarangController@auto_member');
     Route::get('/penjualan/pemesanan-barang/auto-nota', 'penjualan\pemesananBarangController@auto_nota');
 
+    Route::post('/penjualan/pemesanan-barang/simpan-status', 'penjualan\pemesananBarangController@simpan_status');
+
     Route::match(['get', 'post'], '/penjualan/pemesanan-barang/ft-pemesanan', 'penjualan\pemesananBarangController@ft_pemesanan');
     Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-member', 'penjualan\pemesananBarangController@tambah_member');
     Route::match(['get', 'post'], '/penjualan/pemesanan-barang/tambah-pemesanan', 'penjualan\pemesananBarangController@tambah_pemesanan');
