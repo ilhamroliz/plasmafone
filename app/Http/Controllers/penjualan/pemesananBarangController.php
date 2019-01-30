@@ -74,83 +74,225 @@ class pemesananBarangController extends Controller
             ->make(true);
     }
 
-    public function get_data_done()
+    public function get_history(Request $request)
     {
+        dd($request);
         $company = Auth::user()->m_comp;
-        $done = '';
-        if ($company != "PF00000001") {
-            $done = pemesanan::where('d_indent.i_status', 'DONE')
-                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
-                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
-                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
-                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->where('d_indent.i_comp', $company)
-                ->orderBy('d_indent.i_nota', 'desc');
+        $history = '';
 
-        } else {
-            $done = pemesanan::where('d_indent.i_status', 'DONE')
-                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
-                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
-                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
-                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->orderBy('d_indent.i_nota', 'desc');
+        $tglAw = $request->tglAwal;
+        $tglAkh = $request->tglAkhir;
+        $nota = $request->nota;
+        $idMember = $request->idMember;
+
+        if($tglAw != null && $tglAkh != null){
+            $taw = explode('/', $tglAw);
+            $tglAwal = $taw[2].'-'.$taw[1].'-'.$taw[0];
+            $tak = explode('/', $tglAkh);
+            $tglAkhir = $tak[2].'-'.$tak[1].'-'.$tak[0];
+
+            if($company != "PF00000001"){
+                if($nota != null && $idMember == null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota == null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+                        ->where('d_indent.i_member', $idMember)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota != null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+                        ->where('d_indent.i_member', $idMember)
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else{
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }
+            }else{
+                if($nota != null && $idMember == null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota == null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+                        ->where('d_indent.i_member', $idMember)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota != null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+                        ->where('d_indent.i_member', $idMember)
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else{
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_date', '<=', $tglAkhir)
+                        ->where('d_indent.i_date', '>=', $tglAwal)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }
+            }
+        
+        }else{
+
+            if($company != "PF00000001"){
+                if($nota != null && $idMember == null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota == null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+                        ->where('d_indent.i_member', $idMember)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota != null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+                        ->where('d_indent.i_member', $idMember)
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else{
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_comp', $company)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }
+            }else{
+                if($nota != null && $idMember == null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota == null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_member', $idMember)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else if($nota != null && $idMember != null){
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+                        
+                        ->where('d_indent.i_member', $idMember)
+                        ->where('d_indent.i_nota', $nota)
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }else{
+                    $history = pemesanan::join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
+                        ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
+                        ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
+                        ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
+
+                        ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
+                        ->orderBy('d_indent.i_nota', 'desc');
+                }
+            }
+            
         }
 
-        return DataTables::of($done)
-            ->addColumn('aksi', function ($done) {
-                if (Plasma::checkAkses(18, 'delete') == false) {
-                    return '<div class="text-center">
-                            <button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($done->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center">
-                            <button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($done->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;
-                            <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($done->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
-                }
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
-    }
-
-    public function get_data_cancel()
-    {
-        $company = Auth::user()->m_comp;
-        $done = '';
-        if ($company != "PF00000001") {
-            $cancel = pemesanan::where('d_indent.i_status', 'CANCEL')
-                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
-                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
-                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
-                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->where('d_indent.i_comp', $company)
-                ->orderBy('d_indent.i_nota', 'desc');
-
-        } else {
-            $cancel = pemesanan::where('d_indent.i_status', 'CANCEL')
-                ->join('d_indent_dt', 'id_indent', '=', 'd_indent.i_id')
-                ->join('m_member', 'm_member.m_id', '=', 'd_indent.i_member')
-                ->join('m_company', 'c_id', '=', 'd_indent.i_comp')
-                ->join('d_mem', 'd_mem.m_id', '=', 'd_indent.i_sales')
-                ->select('d_indent.i_id', 'd_indent.i_nota', 'c_name', 'm_member.m_name', DB::raw('d_mem.m_name as sales'))
-                ->orderBy('d_indent.i_nota', 'desc');
-
-        }
-
-        return DataTables::of($cancel)
-            ->addColumn('aksi', function ($cancel) {
-                if (Plasma::checkAkses(18, 'delete') == false) {
-                    return '<div class="text-center">
-                            <button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($cancel->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                } else {
-                    return '<div class="text-center">
-                            <button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($cancel->i_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;
-                            <button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($cancel->i_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button></div>';
-                }
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
+        return json_encode([
+            'data' => $history
+        ]);
     }
 
     public function detail_dt($id)
@@ -179,10 +321,51 @@ class pemesananBarangController extends Controller
             ->select('i_nota', 'c_name', 'm_member.m_name', 'm_member.m_idmember', 'm_member.m_telp', DB::raw('d_mem.m_name as sales'))
             ->first();
 
-        // dd($data);
         return json_encode([
             'data' => $data
         ]);
+    }
+
+    public function auto_member(Request $request)
+    {
+        $cari = $request->term;
+        $member = DB::table('m_member')
+            ->whereRaw('m_name like "%'.$cari.'%"')
+            ->select('m_id', 'm_name', 'm_telp')->get();
+
+        if ($member == null) {
+            $hasilmember[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($member as $query) {
+                $hasilmember[] = [
+                    'id' => $query->m_id,
+                    'label' => $query->m_name.' ('.$query->m_telp.')',
+                ];
+            }
+        }
+
+        return Response::json($hasilmember);
+    }
+
+    public function auto_nota(Request $request)
+    {
+        $cari = $request->term;
+        $nota = DB::table('d_indent')
+            ->whereRaw('i_nota like "%'.$cari.'%"')
+            ->select('i_id', 'i_nota')->get();
+
+        if ($nota == null) {
+            $hasilnota[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nota as $query) {
+                $hasilnota[] = [
+                    'id' => $query->i_id,
+                    'label' => $query->i_nota
+                ];
+            }
+        }
+
+        return Response::json($hasilmember);
     }
 
     public function cari_member(Request $request)
