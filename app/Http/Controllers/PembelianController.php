@@ -1315,36 +1315,41 @@ class PembelianController extends Controller
     {
         $data = DB::table('d_supplier')
             ->select(
-                's_id', 's_name'
+                's_id as id', 's_name as text'
             )
             ->where('s_isactive', '=', 'Y')
             ->get();
-        echo json_encode($data);
+        return json_encode($data);
     }
 
     public function view_confirmAdd_trans()
     {
         $confirm = DB::table('d_purchase_plan')
-                ->select(
-                    'd_purchase_plan.pp_id',
-                    'd_purchase_plan.pp_date',
-                    'd_purchase_plan.pp_item',
-                    'd_purchase_plan.pp_qtyreq',
-                    'd_item.i_nama'
-                )
-                ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
-                ->where('d_purchase_plan.pp_status', 'P');
+            ->select(
+                'd_purchase_plan.pp_id',
+                DB::raw('date_format(d_purchase_plan.pp_date, "%d/%m/%Y") as pp_date'),
+                'd_purchase_plan.pp_item',
+                'd_purchase_plan.pp_qtyreq',
+                'd_item.i_nama'
+            )
+            ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
+            ->where('d_purchase_plan.pp_status', 'P');
 
         return DataTables::of($confirm)
+            ->addColumn('Qtyreq', function ($confirm) {
+
+                return '<div class="text-center">'.$confirm->pp_qtyreq.'</div>';
+
+            })
             ->addColumn('inputQty', function ($confirm) {
 
-                return '<div class="text-center"><input type="number" min="1" class="form-control" name="QtyApp" id="QtyApp" placeholder="QTYApp"  style="text-transform: uppercase" /></div>';
+                return '<div class="text-center"><input type="number" min="1" class="form-control" name="QtyApp" id="QtyApp" placeholder="QTYApp"  style="text-transform: uppercase; width:100%;" value="'.$confirm->pp_qtyreq.'"></div>';
 
             })
             ->addColumn('inputSupp', function ($confirm) {
-                return '<div class="text-center"><strong>Supplier</strong></div>';
+                return '<div class="text-center"><div class="form-group"><select class="select2"><option selected>Pilih Supplier</option></select></div></div>';
             })
-            ->rawColumns(['inputQty', 'inputSupp'])
+            ->rawColumns(['Qtyreq','inputQty', 'inputSupp'])
             ->make(true);
 
     }

@@ -137,11 +137,11 @@
 
 												<tr>
 
-                                                    <th data-hide="phone,tablet" class="text-center">Tanggal</th>
-                                                    <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
-                                                    <th data-hide="phone,tablet " class="text-center">Qty</th>
-													<th data-hide="phone,tablet " class="text-center">Qty App</th>
-													<th data-hide="phone,tablet " class="text-center">Supplayer</th>
+                                                    <th class="text-center" width="15%">Tanggal</th>
+                                                    <th class="text-center" width="50%">Nama Barang</th>
+                                                    <th class="text-center" width="10%" >Qty</th>
+													<th class="text-center" width="10%">Qty App</th>
+													<th class="text-center" width="15%">Supplayer</th>
 
 												</tr>
 
@@ -208,13 +208,14 @@
 
 
 	<script type="text/javascript">
-	var table_registrasi_trans, confirm;
+		var table_registrasi_trans;
+		var confirm;
 		var tambahKonfirmasi;
 		var input = $('#dt_harga2').val();
 		var input2 = $('#dt_angka').val();
 		var tambahRencana;
         $(document).ready(function () {
-			getSupplier();
+
 			$( "#tpMemberNama" ).autocomplete({
 				source: baseUrl+'/pembelian/request-pembelian/cariItem',
 				minLength: 2,
@@ -237,7 +238,6 @@
 			$(document).on("click","span",function(){
 				$(this).find("span[class~='caption']").hide();
 				$(this).find("input[class~='editor']").fadeIn().focus();
-				// alert();
 			});
 
         	setTimeout(function () {
@@ -250,12 +250,12 @@
                     "columns":[
                         {"data": "pp_date"},
                         {"data": "i_nama"},
-                        {"data": "pp_qtyreq"},
+                        {"data": "Qtyreq"},
                         {"data": "inputQty"},
                         {"data": "inputSupp"}
                     ],
 
-                    "autoWidth" : true,
+                    "autoWidth" : false,
                     "language" : dataTableLanguage,
                     "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
@@ -272,10 +272,32 @@
                         responsiveHelper_dt_basic.respond();
                     }
                 });
-                $('#overlay').fadeOut(200);
+            	getSupplier();
+                out();
             }, 500);
 
+
         });
+
+        function getSupplier()
+		{
+			$.ajax({
+				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
+				type: "GET",
+				data: {},
+				dataType: "JSON",
+				success: function(data)
+				{
+					// for (var i = 0; i < data.length ; i++) {
+					// 	$('select').append("<option value='"+data[i].s_id+"'>"+data[i].s_company+"</option>");
+					// }
+					$('.select2').select2({
+						data: data
+					});
+				},
+
+			});
+		}
 
 		function editFor(id)
 		{
@@ -655,33 +677,6 @@
 
 		});
 	}
-
-		function getSupplier()
-		{
-
-			$.ajax({
-				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
-				type: "GET",
-				data: {
-
-				},
-				dataType: "JSON",
-				success: function(data)
-				{
-					$('#dt_supplier').empty();
-					row = "<option selected='' value='00'>Pilih Supplier</option>";
-					$(row).appendTo("#dt_supplier");
-					$.each(data, function(k, v) {
-						row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
-						$(row).appendTo("#dt_supplier");
-					});
-				},
-
-			});
-		}
-
-
-
 
 		function simpanConfirm(){
 			if($('#dt_supplier').val() == "00" ){
