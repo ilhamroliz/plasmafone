@@ -10,28 +10,16 @@
 <!-- RIBBON -->
 <div id="ribbon">
 
-	<span class="ribbon-button-alignment"> 
+	<span class="ribbon-button-alignment">
 		<span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.." data-html="true" onclick="location.reload()">
 			<i class="fa fa-refresh"></i>
-		</span> 
+		</span>
 	</span>
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
 		<li>Home</li><li>Pembelian</li><li>Rencana Pembelian</li>
 	</ol>
-	<!-- end breadcrumb -->
-
-		<!-- You can also add more buttons to the
-		ribbon for further usability
-
-		Example below:
-
-		<span class="ribbon-button-alignment pull-right">
-		<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-		<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-		<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-	</span> -->
 
 </div>
 <!-- END RIBBON -->
@@ -90,7 +78,7 @@
 				<div class="alert alert-success alert-block">
 					<a class="close" data-dismiss="alert" href="#">×</a>
 					<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-					{{ Session::get('flash_message_success') }} 
+					{{ Session::get('flash_message_success') }}
 				</div>
 			</div>
 			@elseif(Session::has('flash_message_error'))
@@ -110,7 +98,7 @@
 					<form id="table-form" method="post" action="{{ url('/master/suplier/suplier/edit-multiple') }}">
 						{!! csrf_field() !!}
 						<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-							<thead>			                
+							<thead>
 								<tr>
 									<th class="text-center" data-hide="phone" width="4%">*</th>
 									<th class="text-center" width="5%" style="vertical-align: middle;">

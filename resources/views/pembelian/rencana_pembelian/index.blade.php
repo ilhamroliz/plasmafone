@@ -117,13 +117,13 @@
                                             <thead>
                                                 <tr>
 
-                                                    <th data-hide="phone,tablet" width="15%">
+                                                    <th data-hide="phone,tablet" width="25%">
                                                         <i class="fa fa-calendar text-primary"></i> Tanggal
                                                     </th>
-                                                    <th>
+                                                    <th data-hide="phone,tablet">
                                                         <i class="fa fa-barcode text-primary"></i> Nama Barang
                                                     </th>
-                                                    <th data-hide="phone,tablet" width="8%">
+                                                    <th data-hide="phone,tablet" width="15%">
                                                         <i class="fa fa-shopping-cart text-primary"></i> Qty
                                                     </th>
                                                     <!-- <th width="10%">
@@ -244,7 +244,7 @@
                         {"data": "pp_qtyreq"},
                         // {"data": "aksi"}
                     ],
-                    "autoWidth" : true,
+                    "autoWidth" : false,
                     "language" : dataTableLanguage,
                     "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",

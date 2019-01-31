@@ -90,7 +90,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 								</li>
 
 								<li>
-									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check-square"></i> <span class="hidden-mobile hidden-tablet"> History </span></a>
+									<a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-history"></i> <span class="hidden-mobile hidden-tablet"> History </span></a>
 								</li>
 
 							</ul>
@@ -105,8 +105,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 											<thead>		
 												<tr>
 													<th width="55%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Barang</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Barang</th>
-													<th width="20%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="25%"><i class="fa fa-fw fa-shopping-cart txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Barang</th>
+													{{--  <th width="20%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>  --}}
 												</tr>
 											</thead>
 
@@ -152,15 +152,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 											<thead>		
 												<tr>
-													<th width="15%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
-													<th width="20%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Cabang</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Member</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Sales</th>
-													<th width="15%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="15%">No. Nota</th>
+													<th width="20%">Cabang</th>
+													<th width="20%">Nama Member</th>
+													<th width="20%">Nama Sales</th>
+													<th width="15%">Status</th>
+													<th width="10%" class="text-center" >Aksi</th>
 												</tr>
 											</thead>
 
-											<tbody>
+											<tbody id="historyBody">
 											</tbody>
 
 										</table>
@@ -205,72 +206,87 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 										<div class="widget-body no-padding">
 											<div class="table-responsive">
 
-												{{-- <div class="row no-padding"> --}}
-													<div class="col-md-12 padding-top-10 ">
-														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
-															<label class="col-md-1">:</label>
-															<label class="col-md-8" id="dmNoNota"></label>
-														</div>
-
-														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>Nama Member</strong></label>
-															<label class="col-md-1">:</label>
-															<div class="col-md-8">
-																<label id="dmNamaMember"></label>
-															</div>
-														</div>
-
-														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>ID. Member</strong></label>
-															<label class="col-md-1">:</label>
-															<label class="col-md-8" id="dmIdMember"></label>
-														</div>
-
-														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>Telp Member</strong></label>
-															<label class="col-md-1">:</label>
-															<label class="col-md-8" id="dmTelpMember"></label>
-														</div>
-
-														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>Cabang</strong></label>
-															<label class="col-md-1">:</label>
-															<label class="col-md-8" id="dmCabang"></label>
-														</div>
-
-														<div class="form-group">
-															<label class="col-md-3" style="float:left"><strong>Nama Sales</strong></label>
-															<label class="col-md-1">:</label>
-															<label class="col-md-8" id="dmNamaSales"></label>
-														</div>
-														
+												<div class="col-md-12 padding-top-10 ">
+													<input type="hidden" id="dmId">
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmNoNota"></label>
 													</div>
 
-													<table id="dt_detail" class="table table-striped table-bordered table-hover">
-														<thead>		
-															<tr>
-																<th width="10%">&nbsp;No.</th>
-																<th width="60%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
-																<th width="30%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
-															</tr>
-														</thead>
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Nama Member</strong></label>
+														<label class="col-md-1">:</label>
+														<div class="col-md-8">
+															<label id="dmNamaMember"></label>
+														</div>
+													</div>
 
-														<tbody>
-														</tbody>
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>ID. Member</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmIdMember"></label>
+													</div>
 
-													</table>
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Telp Member</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmTelpMember"></label>
+													</div>
 
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Cabang</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmCabang"></label>
+													</div>
 
-												{{-- </div> --}}
-																	
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Nama Sales</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmNamaSales"></label>
+													</div>
+													
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Status</strong></label>
+														<label class="col-md-1">:</label>
+														<div class="col-md-4">
+															<select name="aksiEdit" id="aksiEdit" class="form-control" style="width:100%">
+																<option value="1">PROSES</option>
+																<option value="2">DONE</option>
+																<option value="3">CANCEL</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<table id="dt_detail" class="table table-striped table-bordered table-hover">
+													<thead>		
+														<tr>
+															<th width="10%">&nbsp;No.</th>
+															<th width="60%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+															<th width="30%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
+														</tr>
+													</thead>
+
+													<tbody>
+													</tbody>
+
+												</table>
 											</div>
 										</div>
 										<!-- end widget content -->
+
 									</div>
 									<!-- end widget div -->
+
 								</div>
 								<!-- end widget -->
+
+								<div class="row">
+									<div class="col-md-12 text-align-right" style="margin-right: 20px;">
+										<button class="btn btn-primary" onclick="simpanStatus()"><i class="fa fa-floppy-o"></i>&nbsp;Simpan</button>
+									</div>
+								</div>
 							</div>			
 						</div>
 					</div><!-- /.modal-content -->
@@ -309,7 +325,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 		};
 
 		$(document).ready(function () {
-			history = $('#dt_history').DataTable();
+			history = $('#dt_history').DataTable({
+				"order": [],
+			});
 
 			$( "#date-range" ).datepicker({
                 language: "id",
@@ -348,7 +366,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"columns":[
 					{"data": "i_nama"},
 					{"data": "qty"},
-					{"data": "aksi"}
+					{{--  {"data": "aksi"}  --}}
 				],
 				"autoWidth" : true,
 				"language" : dataTableLanguage,
@@ -371,6 +389,19 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 		}, 500);
 
+		$('#aksiEdit').on('change', function(){
+			if($('#aksiEdit').val() == 1){
+				$('#aksiEdit').css("background-color", "#C79121");
+				$('#aksiEdit').css("color", "white");
+			}else if($('#aksiEdit').val() == 2){
+				$('#aksiEdit').css("background-color", "#739E73");
+				$('#aksiEdit').css("color", "white");
+			}else if($('#aksiEdit').val() == 3){
+				$('#aksiEdit').css("background-color", "#A90329");
+				$('#aksiEdit').css("color", "white");
+			}
+		});
+
 		function cariHistory(){
 
 			var tglAwal = $('#tgl_awal').val();
@@ -378,23 +409,80 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			var nota = $('#nota').val();
 			var idMember = $('#idMember').val();
 
+			if($('#namaMember').val() == ''){
+				idMember = null;
+			}
+
 			axios.post(baseUrl+'/penjualan/pemesanan-barang/getHistory', {tglAwal: tglAwal, tglAkhir: tglAkhir, nota: nota, idMember: idMember}).then((response) => {
 
-				history.clear();
+				$('#historyBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+				$('#dt_history').DataTable().clear();
 				for(var i = 0; i < response.data.data.length; i++){
-					history.row.add([
-						response.data.data[i].i_nota,
-						response.data.data[i].c_name,
-						response.data.data[i].m_name,
-						response.data.data[i].sales,
-						'<div class="text-center">'+
-						'<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp'+
-						'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
-					]).draw();
+					if(response.data.data[i].i_status == "PROSES"){
+						$('#dt_history').DataTable().row.add([
+							response.data.data[i].i_nota,
+							response.data.data[i].c_name,
+							response.data.data[i].m_name,
+							response.data.data[i].sales,
+							'<span class="label label-warning">PROSES</span>',
+							'<div class="text-center">'+
+							'<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Edit Status" onclick="detail('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp'+
+							'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
+						]).draw();
+					}else{
+						$status = '';
+						if(response.data.data[i].i_status == "DONE"){
+							$status = '<span class="label label-success">DONE</span>';
+						}else{
+							$status = '<span class="label label-danger">CANCEL</span>';
+						}
+						$('#dt_history').DataTable().row.add([
+							response.data.data[i].i_nota,
+							response.data.data[i].c_name,
+							response.data.data[i].m_name,
+							response.data.data[i].sales,
+							$status,
+							'<div class="text-center">'+
+							'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
+						]).draw();
+					}
 				}
 
 			});
 
+		}
+
+		function simpanStatus(){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Menghapus...');
+
+			var id = $('#dmId').val();
+			var status = $('#aksiEdit').val();
+			axios.post(baseUrl+'/penjualan/pemesanan-barang/simpan-status', {id: id, status: status}).then((response) => {
+				if(response.data.status == "ssSukses"){
+					$('#detilModal').modal('hide');
+					cariHistory();
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Berhasil",
+						content : 'Data pemesanan <i>"'+response.data.name+'"</i> berhasil dihapus...!',
+						color : "#739E73",
+						timeout: 4000,
+						icon : "fa fa-check bounce animated"
+					});
+				}else{
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Maaf, tidak dapat menambahkan pemesanan jika member belum terdaftar!",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+				}
+			});
 		}
 		/* END BASIC */
 
@@ -435,37 +523,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 					axios.get(baseUrl+'/penjualan/pemesanan-barang/hapus/'+val).then((response) => {
 
-						if (response.data.status == 'hpBerhasil') {
+						if (response.data.status == 'hpSukses') {
 
-							$('#dt_proses').DataTable().destroy();
-							$('#dt_proses').DataTable({
-								"processing": true,
-								"serverSide": true,
-								"ajax": "{{ url('/penjualan/pemesanan-barang/getdataproses') }}",
-								"columns":[
-									{"data": "i_nota"},
-									{"data": "c_name"},
-									{"data": "m_name"},
-									{"data": "sales"},
-									{"data": "aksi"}
-								],
-								"autoWidth" : true,
-								"language" : dataTableLanguage,
-								"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-								"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-								"preDrawCallback" : function() {
-									// Initialize the responsive datatables helper once.
-									if (!responsiveHelper_dt_basic) {
-										responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_proses'), breakpointDefinition);
-									}
-								},
-								"rowCallback" : function(nRow) {
-									responsiveHelper_dt_basic.createExpandIcon(nRow);
-								},
-								"drawCallback" : function(oSettings) {
-									responsiveHelper_dt_basic.respond();
-								}
-							});
+							cariHistory();
 
 							$('#overlay').fadeOut(200);
 							$.smallBox({
@@ -526,6 +586,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			var tagihan;
 			var pembayaran;
 
+			$('#aksiEdit').css("background-color", "#C79121");
+			$('#aksiEdit').css("color", "white");
+
 			axios.get(baseUrl+'/penjualan/pemesanan-barang/detail/'+id).then(response => {
 
                 $('#title_detail').html('<strong>Detail Pemesanan Barang</strong>');
@@ -536,6 +599,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				$('#dmTelpMember').text(response.data.data.m_telp);
 				$('#dmCabang').text(response.data.data.c_name);
 				$('#dmNamaSales').text(response.data.data.sales);				
+				$('#dmId').val(response.data.data.i_id);
 
 			});
 
@@ -550,8 +614,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 					{"data": "qty"}
 				],
 				"searching" : false,
-				"paging" : false,
-				"info" : false,
+				"pageLength": 3,
+				"lengthChange": false,
+				"paging" : true,
+				"info" : true,
 				"autoWidth" : true,
 				"language" : dataTableLanguage,
 				"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+

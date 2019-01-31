@@ -197,11 +197,10 @@
                                                width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="10%">No</th>
+                                                    <th data-hide="phone,tablet" width="5%">Tanggal</th>
                                                     <th data-hide="phone,tablet" width="25%">Nama Outlet</th>
                                                     <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                     <th data-hide="phone,tablet" width="5%">Qty</th>
-                                                    <th data-hide="phone,tablet" width="10%">Status</th>
                                                     <th data-hide="phone,tablet" width="15%">Aksi</th>
 
                                                 </tr>
@@ -292,6 +291,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group">
+                                <input type="hidden" id="jenis">
                                 <input type="hidden" id="ro_id1">
                                 <label for="i_nama">Nama Barang</label>
                                 <input type="text" class="form-control" id="i_nama1" readonly />
@@ -308,7 +308,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" onclick="updateTolak()">
-                        <span class="glyphicon glyphicon-floppy-disk"></span> Simpan
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Update
                     </button>
                 </div>
             </div>
@@ -337,57 +337,57 @@
 
         $(document).ready(function(){
 
-        var tanggal  = new Date().getDate();
-        var bulan    = new Date().getMonth();
-        var tahun    = new Date().getFullYear();
-        var arrbulan = ["01","02","03","04","05","06","07","08","09","10","11","12"];
-        $('#tgl_awal').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
-        $('#tgl_akhir').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+            var tanggal  = new Date().getDate();
+            var bulan    = new Date().getMonth();
+            var tahun    = new Date().getFullYear();
+            var arrbulan = ["01","02","03","04","05","06","07","08","09","10","11","12"];
+            $('#tgl_awal').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+            $('#tgl_akhir').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
 
-        // Date Range Tolak
-        $('#tgl_awal_tolak').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
-        $('#tgl_akhir_tolak').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+            // Date Range Tolak
+            $('#tgl_awal_tolak').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
+            $('#tgl_akhir_tolak').val(tanggal+"/"+arrbulan[bulan]+"/"+tahun);
 
-        $( "#tgl_awal" ).datepicker({
-			language: "id",
-			format: 'dd/mm/yyyy',
-			prevText: '<i class="fa fa-chevron-left"></i>',
-			nextText: '<i class="fa fa-chevron-right"></i>',
-            autoclose: true
-		});
+            $( "#tgl_awal" ).datepicker({
+    			language: "id",
+    			format: 'dd/mm/yyyy',
+    			prevText: '<i class="fa fa-chevron-left"></i>',
+    			nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true
+    		});
 
-		$( "#tgl_akhir" ).datepicker({
-			language: "id",
-			format: 'dd/mm/yyyy',
-			prevText: '<i class="fa fa-chevron-left"></i>',
-			nextText: '<i class="fa fa-chevron-right"></i>',
-            autoclose: true
-		});
+    		$( "#tgl_akhir" ).datepicker({
+    			language: "id",
+    			format: 'dd/mm/yyyy',
+    			prevText: '<i class="fa fa-chevron-left"></i>',
+    			nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true
+    		});
 
-        $('#date-range').datepicker({
-            todayHighlight: true
-        });
+            $('#date-range').datepicker({
+                todayHighlight: true
+            });
 
-        // Date Range Tolak
-        $( "#tgl_awal_tolak" ).datepicker({
-            language: "id",
-            format: 'dd/mm/yyyy',
-            prevText: '<i class="fa fa-chevron-left"></i>',
-            nextText: '<i class="fa fa-chevron-right"></i>',
-            autoclose: true
-        });
+            // Date Range Tolak
+            $( "#tgl_awal_tolak" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true
+            });
 
-        $( "#tgl_akhir_tolak" ).datepicker({
-            language: "id",
-            format: 'dd/mm/yyyy',
-            prevText: '<i class="fa fa-chevron-left"></i>',
-            nextText: '<i class="fa fa-chevron-right"></i>',
-            autoclose: true
-        });
+            $( "#tgl_akhir_tolak" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true
+            });
 
-        $( "#date_range_tolak" ).datepicker({
-            todayHighlight: true
-        });
+            $( "#date_range_tolak" ).datepicker({
+                todayHighlight: true
+            });
 
             $('#overlay').fadeIn(200);
             $('#load-status-text').text('Sedang Menyiapkan...');
@@ -410,81 +410,43 @@
 
             setTimeout(function () {
 
-            menunggu = $('#waitingReq_table').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('/pembelian/request-pembelian/t') }}",
-              /*  "fnCreatedRow": function (row, data, index) {
-                    $('td', row).eq(0).html(index + 1);
-                    },*/
-                "columns":[
-                    {"data": "ro_date"},
-                    {"data": "i_nama"},
-                    {"data": "ro_qty"},
-                    {"data": "ro_state"},
-                    {"data": "aksi"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#waitingReq_table'), breakpointDefinition);
+                menunggu = $('#waitingReq_table').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "{{ url('/pembelian/request-pembelian/t') }}",
+                  /*  "fnCreatedRow": function (row, data, index) {
+                        $('td', row).eq(0).html(index + 1);
+                        },*/
+                    "columns":[
+                        {"data": "ro_date"},
+                        {"data": "i_nama"},
+                        {"data": "ro_qty"},
+                        {"data": "ro_state"},
+                        {"data": "aksi"}
+                    ],
+                    "autoWidth" : true,
+                    "language" : dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                    "preDrawCallback" : function() {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#waitingReq_table'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback" : function(nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback" : function(oSettings) {
+                        responsiveHelper_dt_basic.respond();
                     }
-                },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-            $('#overlay').fadeOut(200);
+                });
+                $('#overlay').fadeOut(200);
             }, 500);
-
-            // setTimeout(function () {
-
-            // tolak = $('#dt_tolak').dataTable({
-            //     "processing": true,
-            //     "serverSide": true,
-            //     "ajax": "{{ url('/pembelian/request-pembelian/tolak') }}",
-
-            //     "columns":[
-            //         {"data": "ro_date"},
-            //         {"data": "c_name"},
-            //         {"data": "i_nama"},
-            //         {"data": "ro_qty"},
-            //         {"data": "status"}
-            //     ],
-            //     "autoWidth" : true,
-            //     "language" : dataTableLanguage,
-            //     "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-            //     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-            //     "preDrawCallback" : function() {
-
-            //         if (!responsiveHelper_dt_basic) {
-            //             responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tolak'), breakpointDefinition);
-            //         }
-            //     },
-            //     "rowCallback" : function(nRow) {
-            //         responsiveHelper_dt_basic.createExpandIcon(nRow);
-            //     },
-            //     "drawCallback" : function(oSettings) {
-            //         responsiveHelper_dt_basic.respond();
-            //     }
-            // });
-            // $('#overlay').fadeOut(200);
-            // }, 500);
 
             tampil_diproses();
             tampil_ditolak();
-
-
-
-
-        })
+        });
 
 		/* END BASIC */
 
@@ -505,11 +467,7 @@
                         data._token    = '{{ csrf_token() }}';
                     },
                 }
-                    // "fnCreatedRow": function (row, data, index) {
-                    //     $('td', row).eq(0).html(index + 1);
-                    //     },
             });
-
         };
 
         function tampil_ditolak(){
@@ -523,9 +481,6 @@
                         data._token    = '{{ csrf_token() }}';
                     },
                 }
-                    // "fnCreatedRow": function (row, data, index) {
-                    //     $('td', row).eq(0).html(index + 1);
-                    //     },
             });
         }
 
@@ -615,11 +570,11 @@
 
 		}
 
-        function editQtyTolak(i_nama,ro_id,ro_qty){
+        function editQtyTolak(i_nama,id,qty){
 
             $('#i_nama1').val(i_nama);
-            $('#ro_id1').val(ro_id);
-            $('#ro_qty1').val(ro_qty);
+            $('#ro_id1').val(id);
+            $('#ro_qty1').val(qty);
             $('#editQtyTolak').modal('show');
 
         }
@@ -627,8 +582,8 @@
         function update(){
 
             overlay();
-            var ro_id = $('#ro_id').val();
-            var ro_qty = $('#ro_qty').val();
+            var id = $('#ro_id').val();
+            var qty = $('#ro_qty').val();
 
             $.ajaxSetup({
                 headers: {
@@ -638,7 +593,7 @@
             $.ajax({
                 url: baseUrl + '/pembelian/request-pembelian/updateReq',
                 type: 'get',
-                data: {id: ro_id, qty: ro_qty},
+                data: {id: id, qty: qty},
                 dataType: "JSON",
                 success: function(data)
                 {
@@ -671,8 +626,8 @@
         function updateTolak(){
 
             overlay();
-            var ro_id = $('#ro_id1').val();
-            var ro_qty = $('#ro_qty1').val();
+            var id = $('#ro_id1').val();
+            var qty = $('#ro_qty1').val();
 
             $.ajaxSetup({
                 headers: {
@@ -682,7 +637,7 @@
             $.ajax({
                 url: baseUrl + '/pembelian/request-pembelian/updateReqTolak',
                 type: 'get',
-                data: {id: ro_id, qty: ro_qty},
+                data: {id: id, qty: qty},
                 dataType: "JSON",
                 success: function(data)
                 {
