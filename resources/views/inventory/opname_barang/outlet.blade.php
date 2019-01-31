@@ -455,7 +455,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 
     function detail(id) {
-        axios.post(baseUrl + '/inventory/opname-barang/detail?id=' + id +'&dt=no').then((response) => {
+        axios.post(baseUrl + '/inventory/opname-barang/detail?id=' + id).then((response) => {
 
             $('#obNota').html(response.data.data[0].o_reff);
             $('#obCabang').html(response.data.data[0].c_name);
@@ -494,10 +494,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     "processing": true,
                     "serverSide": true,
                     "order": [],
-                    "ajax": {
-                        "url":"{{ url('/inventory/opname-barang/detail?id=') }}"+id+"&dt=yes",
-                        "type": "POST"
-                    },
+                    "ajax": "{{ url('/inventory/opname-barang/detail?id=') }}"+id+"&dt=yes",
                     "columns": [
                         { "data": "DT_RowIndex" },
                         { "data": "od_specificcode" }

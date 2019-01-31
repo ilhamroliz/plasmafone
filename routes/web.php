@@ -560,7 +560,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	///DataTable Inputan form Tambah Opname
     Route::post('/inventory/opname-barang/get-stock-code', 'inventory\opnameBarangController@get_stock_code');
-    Route::post('/inventory/opname-barang/detail', 'inventory\opnameBarangController@detail');
+    Route::match(['get', 'post'],'/inventory/opname-barang/detail', 'inventory\opnameBarangController@detail');
 
     Route::get('/inventory/opname-barang/pencarian', 'inventory\opnameBarangController@pencarian');
 
