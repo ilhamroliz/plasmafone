@@ -240,7 +240,25 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                });
+
+            });
+            semua = $('#table-rencana').DataTable({
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-rencana'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
 
 			$("input[type='text']").on("click", function () {
 				$(this).select();
@@ -707,18 +725,17 @@
 					buttons : '[Tidak][Ya]'
 				}, function(ButtonPressed) {
 					if (ButtonPressed === "Ya") {
+						var ar = $();
+					    for (var i = 0; i < semua.rows()[0].length; i++) {
+					        ar = ar.add(semua.row(i).node());
+					    }
 						$.ajax({
 							url : '{{url('/pembelian/konfirmasi-pembelian/simpanConfirm')}}',
 							type: "POST",
-							data: {
-								'supplier' : $('#dt_supplier').val(),
-								_token : '{{ csrf_token() }}'
-							},
+					        data: ar.find('input', 'select').serialize(),
 							dataType: "JSON",
 							success: function(data)
 							{
-
-
 								if(data.status == 'gagal')
 								{
 									$.smallBox({
@@ -728,14 +745,7 @@
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
 										});
-										$('#tpMemberId').val("");
-										$('#tpMemberNama').val("");
-										$('#qty').val("");
-										$('#table-rencana').DataTable().ajax.reload();
-									// $('#table-rencana').DataTable().ajax.reload();
 								}else{
-
-
 									$.smallBox({
 										title : "Berhasil",
 										content : 'Anda Telah Berhasil Mengajukan Request Order...!',
@@ -743,12 +753,8 @@
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
 										});
-										$('#tpMemberId').val("");
-										$('#tpMemberNama').val("");
-										$('#qty').val("");
 										$('#table-rencana').DataTable().ajax.reload();
 								}
-								// $('#table-rencana').DataTable().fnDestroy();
 
 							},
 
