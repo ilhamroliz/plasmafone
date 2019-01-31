@@ -60,28 +60,33 @@
                         <div role="content">
                             <div class="widget-body no-padding form-horizontal">
                                 <div class="tab-content padding-10">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 text-left form-group" style="margin-top:1%;margin-bottom:1%">
+                                    <form id="form-pencarian" class="col-lg-12 col-md-12 col-sm-12 text-left form-group" style="margin-top:1%;margin-bottom:1%">
                                         <div class="col-md-4 pull-left">
                                             <div class="input-group input-daterange" id="date-range" style="">
-                                                <input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
+                                                <input type="text" class="form-control" onblur="setDate()" onchange="setDate()" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
                                                 <span class="input-group-addon bg-custom text-white b-0">Sampai</span>
-                                                <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
+                                                <input type="text" class="form-control" onblur="setDate()" onchange="setDate()" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
 
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" name="carinota" id="carinota" placeholder="Cari Nota Pembelian/DO">
+                                            <input type="text" class="form-control" onblur="setNota()" onkeyup="setNota()" name="carinota" id="carinota" placeholder="Cari Nota Pembelian/DO">
                                         </div>
                                         <div class="col-md-3">
-                                            <input type="text" class="form-control" name="carisupplier" id="carinota" placeholder="Cari Supplier">
+                                            <select class="select2" id="carisupplier" name="carisupplier">
+                                                <option value="kosong">Pilih Supplier</option>
+                                                @foreach($supplier as $supp)
+                                                    <option value="{{ $supp->s_id }}">{{ $supp->s_name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="col-md-1 pull-right" style="text-align: right">
                                             <button type="button" class="btn btn-block btn-primary btn-sm icon-btn ml-2" onclick="search()">
                                                 <i class="fa fa-search"></i>
                                             </button>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
+                                    </form>
+                                    <div class="padding-10 form-group">
                                         <div class="col-md-12 pull-left">
                                             <table class="table table-bordered table-striped table-hover" id="table-nota">
                                                 <thead>
@@ -112,16 +117,104 @@
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 
 <script type="text/javascript">
+    var table;
+    var notaGlobal = null;
     $(document).ready(function () {
         $('#date-range').datepicker({
             todayHighlight: true,
             autoclose: true
         });
 
-        $('#table-nota').DataTable({
-
+        table = $('#table-nota').DataTable({
+            "autoWidth" : true,
+            "language" : dataTableLanguage,
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+            "preDrawCallback" : function() {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic) {
+                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-nota'), breakpointDefinition);
+                }
+            },
+            "rowCallback" : function(nRow) {
+                responsiveHelper_dt_basic.createExpandIcon(nRow);
+            },
+            "drawCallback" : function(oSettings) {
+                responsiveHelper_dt_basic.respond();
+            }
         });
     })
+
+    function setDate() {
+        var awal = $('#tgl_awal').val();
+        var akhir = $('#tgl_akhir').val();
+
+        if ((awal == '' || awal == null) && (akhir == '' || akhir == null)){
+            $('#carinota').removeAttr('readonly');
+        } else {
+            $('#carinota').attr('readonly', 'true');
+        }
+    }
+
+    function setNota() {
+        var nota = $('#carinota').val();
+        if (nota == null || nota == ''){
+            $('#tgl_awal').removeAttr('readonly');
+            $('#tgl_akhir').removeAttr('readonly');
+            $("#carisupplier").select2("readonly", false);
+        } else {
+            $('#tgl_awal').val('');
+            $('#tgl_akhir').val('');
+            $('#tgl_awal').attr('readonly', 'true');
+            $('#tgl_akhir').attr('readonly', 'true');
+            $("#carisupplier").val("kosong").trigger("change");
+            $("#carisupplier").select2("readonly", true);
+        }
+    }
+    
+    function search() {
+        var awal = $('#tgl_awal').val();
+        var akhir = $('#tgl_akhir').val();
+        var nota = notaGlobal;
+        var supplier = $('#carisupplier').val();
+        $("#table-nota").dataTable().fnDestroy();
+        table = $('#table-nota').dataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": baseUrl + '/pembelian/purchase-return/getData',
+                "type": "get",
+                "data": {
+                    'awal': awal,
+                    'akhir': akhir,
+                    'nota': nota,
+                    'supplier': supplier
+                }
+            },
+            "columns":[
+                {"data": "i_merk"},
+                {"data": "i_nama"},
+                {"data": "i_code"},
+                {"data": "harga"}
+            ],
+            "autoWidth" : true,
+            "language" : dataTableLanguage,
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            "preDrawCallback" : function() {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic) {
+                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-nota'), breakpointDefinition);
+                }
+            },
+            "rowCallback" : function(nRow) {
+                responsiveHelper_dt_basic.createExpandIcon(nRow);
+            },
+            "drawCallback" : function(oSettings) {
+                responsiveHelper_dt_basic.respond();
+            }
+        });
+    }
 </script>
 
 @endsection

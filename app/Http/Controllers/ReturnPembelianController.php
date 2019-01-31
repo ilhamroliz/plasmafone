@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class ReturnPembelianController extends Controller
 {
@@ -62,8 +64,12 @@ class ReturnPembelianController extends Controller
 
 
         }
-        $purchase = DB::table('d_purchase')->get();
-        return view('pembelian.return_barang.add')->with(compact('purchase'));
+        $supplier = DB::table('d_purchase')
+            ->join('d_supplier', 's_id', '=', 'p_supplier')
+            ->select('s_name', 's_id')
+            ->groupBy('s_id')
+            ->get();
+        return view('pembelian.return_barang.add')->with(compact('supplier'));
     }
 
     public function show_purchase($id = null)
@@ -241,4 +247,44 @@ class ReturnPembelianController extends Controller
             'status' => 'berhasil'
         ]);
     }
+
+    public function getData(Request $request)
+    {
+        $nota = $request->nota;
+        $awal = $request->awal;
+        $akhir = $request->akhir;
+        $supplier = $request->supplier;
+
+        if ($akhir != null){
+            $akhir = Carbon::createFromFormat('d/m/Y', $akhir)->format('Y-m-d');
+        }
+        if ($awal != null){
+            $awal = Carbon::createFromFormat('d/m/Y', $awal)->format('Y-m-d');
+        }
+        $data = null;
+        if ($nota != null){
+            $data = DB::table('d_purchase')
+                ->join('d_supplier', 'p_supplier', '=', 's_id')
+                ->select(DB::raw('date_format(p_date, "%d/%m/%Y") as p_date'), 's_name', 'p_id', 'p_nota')
+                ->where('p_nota', '=', $nota);
+        } else {
+            if ($supplier != null){
+                $data = DB::table('d_purchase')
+                    ->join('d_supplier', 'p_supplier', '=', 's_id')
+                    ->select(DB::raw('date_format(p_date, "%d/%m/%Y") as p_date'), 's_name', 'p_id', 'p_nota')
+                    ->whereDate('p_date', '>=', $awal)
+                    ->whereDate('p_date', '<=', $akhir)
+                    ->where('p_supplier', '=', $supplier);
+            } else {
+                $data = DB::table('d_purchase')
+                    ->join('d_supplier', 'p_supplier', '=', 's_id')
+                    ->select(DB::raw('date_format(p_date, "%d/%m/%Y") as p_date'), 's_name', 'p_id', 'p_nota')
+                    ->whereDate('p_date', '>=', $awal)
+                    ->whereDate('p_date', '<=', $akhir);
+            }
+        }
+        return DataTables::of($data)
+            ->make(true);
+    }
+
 }
