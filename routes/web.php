@@ -333,7 +333,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/request-pembelian/getBarang', 'PembelianController@getBarang');
     Route::get('/pembelian/request-pembelian/getMerk', 'PembelianController@getMerk');
     Route::get('/pembelian/request-pembelian/getOutlet', 'PembelianController@getOutlet');
-    Route::get('/pembelian/request-pembelian/simpanRequest', 'PembelianController@verifikasi_simpanRequest');
+    Route::post('/pembelian/request-pembelian/simpanRequest', 'PembelianController@verifikasi_simpanRequest');
     Route::get('/pembelian/request-pembelian/addData', 'PembelianController@addData');
     Route::POST('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
     Route::get('/pembelian/request-pembelian/editDumy', 'PembelianController@editDumyReq');

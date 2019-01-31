@@ -596,7 +596,7 @@ function rupiah($angka)
                 if (ButtonPressed === "Ya") {
                     $.ajax({
                         url: '{{url('/pembelian/request-pembelian/simpanRequest')}}',
-                        type: "GET",
+                        type: "post",
                         data: {},
                         dataType: "JSON",
                         success: function (data) {
