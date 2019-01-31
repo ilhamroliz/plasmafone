@@ -1250,31 +1250,6 @@ class PembelianController extends Controller
             ->make(true);
     }
 
-    public function tampilSupplier(Request $request)
-    {
-        $supplier = $request->input('supplier');
-        $query = DB::table('d_supplier')
-        ->select('d_supplier.*')
-        ->where('d_supplier.s_id','=',$supplier)
-        ->get();
-
-        foreach ($query as $key){
-            $s_name    = $key->s_name;
-            $s_phone   = $key->s_phone;
-            $s_fax     = $key->s_fax;
-            $s_address = $key->s_address;
-          }
-
-          $data = array(
-              's_name'    => $s_name,
-              's_phone'   => $s_phone,
-              's_fax'     => $s_fax,
-              's_address' => $s_address
-          );
-
-          echo json_encode($data);
-    }
-
     public function view_confirmAll()
     {
         $confirmOrder = DB::table('d_purchase_confirm')
@@ -1311,35 +1286,80 @@ class PembelianController extends Controller
             ->make(true);
     }
 
+    public function tampilSupplier(Request $request)
+    {
+        // $supplier = $request->input('supplier');
+        $query = DB::table('d_supplier')
+        ->select('d_supplier.*')
+        // ->where('d_supplier.s_id','=',$supplier)
+        ->get();
+
+        foreach ($query as $key){
+            $s_name    = $key->s_name;
+            $s_phone   = $key->s_phone;
+            $s_fax     = $key->s_fax;
+            $s_address = $key->s_address;
+          }
+
+          $data = array(
+              's_name'    => $s_name,
+              's_phone'   => $s_phone,
+              's_fax'     => $s_fax,
+              's_address' => $s_address
+          );
+
+          echo json_encode($data);
+    }
+
+    public function getSupplier()
+    {
+        $data = DB::table('d_supplier')
+            ->select(
+                's_id', 's_name'
+            )
+            ->where('s_isactive', '=', 'Y')
+            ->get();
+        echo json_encode($data);
+    }
+
     public function view_confirmAdd_trans()
     {
-        $menunggu = DB::table('d_purchase_plan')
+        $confirm = DB::table('d_purchase_plan')
                 ->select(
                     'd_purchase_plan.pp_id',
+                    'd_purchase_plan.pp_date',
                     'd_purchase_plan.pp_item',
                     'd_purchase_plan.pp_qtyreq',
                     'd_item.i_nama'
-                    // 'm_company.c_name'
                 )
                 ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
-                // ->join('m_company', 'd_purchase_plan_dd.pr_comp', '=', 'm_company.c_id')
                 ->where('d_purchase_plan.pp_status', 'P')
                 ->get();
-                $data = array();
-                $i = 1;
-                foreach ($menunggu as $key) {
-                $row = array();
-                $row[] = $key->i_nama;
-                $row[] = '<div class="text-center">'.$key->pp_qtyreq.'</div>';
-                $row[] = '<div class="text-center"><span id="span'.$key->pp_id.'" class="caption" onclick="editFor(' . $key->pp_id . ')"</span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pp_id . '" data-id="' . $key->pp_id . '"  style="text-transform: uppercase;"  /></div>';
-                $row[] = '<div class="text-center"><select class="form-control get_supp"><option selected>--Choose Supplier--</option></select></div>';
-                // $row[] = '<div class="text-center"><span id="span'.$key->pr_idPlan.'" class="caption" onclick="editFor(' . $key->pr_idPlan . ')" >' . $key->pr_harga_satuan . ' </span><input type="text" class="form-control editor" name="i_nama" id="i_nama' . $key->pr_idPlan . '" value="' . $key->pr_harga_satuan . '" data-id="' . $key->pr_idPlan . '"  style="text-transform: uppercase;display:none;"  /></div>';
-                // $row[] = '<div class="text-center"><input type="text" class="form-control editor" name="i_nama" id="i_nama' .$key->pr_idPlan . '" value="'.number_format($key->pr_harga_satuan) .'"  style="text-transform: uppercase" onkeyup="editTable(' .$key->pr_idPlan. ')"/></div>';
-                // $row[] = '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="getPlan_id(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Di Tolak" onclick="getTolak(' . $key->pr_idPlan . ')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-                $data[] = $row;
-                }
+dd($confirm);
+        return DataTables::of($confirm)
+            ->addColumn('inputQty', function ($confirm) {
 
-                echo json_encode(array("data"=>$data));
+                return '<div class="text-center"><input type="number" min="1" class="form-control" name="QtyApp" id="QtyApp" placeholder="QTYApp"  style="text-transform: uppercase" /></div>';
+
+            })
+            ->addColumn('inputSupp', function ($confirm) {
+                return '<div class="text-center"><strong>Supplier</strong></div>';
+            })
+            ->rawColumns(['inputQty', 'inputSupp'])
+            ->make(true);
+
+                // $data = array();
+                // $i = 1;
+                // foreach ($menunggu as $key) {
+                //     $row = array();
+                //     $row[] = $key->i_nama;
+                //     $row[] = '<div class="text-center">'.$key->pp_qtyreq.'</div>';
+                //     $row[] = '<div class="text-center"><span id="span'.$key->pp_id.'" class="caption" onclick="editFor(' . $key->pp_id . ')"</span><input type="number" min="1" class="form-control editor" name="i_nama" id="i_nama' . $key->pp_id . '" data-id="' . $key->pp_id . '"  style="text-transform: uppercase;"  /></div>';
+                //     $row[] = '<div class="text-center"><select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="getSupplier()"><option selected="" value="00"></option></select></div>';
+                //     $data[] = $row;
+                // }
+
+                // echo json_encode(array("data"=>$data));
     }
 
     public function view_confirmAdd()
@@ -1506,14 +1526,6 @@ class PembelianController extends Controller
 
         echo json_encode(array("data" => $data));
 
-    }
-
-    public function getSupplier()
-    {
-        $data = DB::table('d_supplier')
-                ->select('d_supplier.*')
-                ->get();
-        echo json_encode($data);
     }
 
     public function getTelp(Request $request)
