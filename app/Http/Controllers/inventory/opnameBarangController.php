@@ -588,6 +588,14 @@ class opnameBarangController extends Controller
     public function detail(Request $request)
     {
         $id = Crypt::decrypt($request->id);
+        // if($request->isMethod('get')){
+        //     $dtDetil = DB::table('d_opname_dt')->where('od_opname', $id)->select('od_specificcode')->get();
+
+        //     return DataTables::of($dtDetil)
+        //         ->addIndexColumn()
+        //         ->make(true);
+        // }
+
         $detil = DB::table('d_opname_dt')
             ->leftjoin('d_opname', 'o_id', '=', 'od_opname')
             ->join('m_company', 'c_id', '=', 'o_comp')

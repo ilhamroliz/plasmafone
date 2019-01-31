@@ -94,21 +94,23 @@
                         <header>
                             <ul id="widget-tab-1" class="nav nav-tabs pull-left">
                                 <li class="active">
-                                    <a data-toggle="tab" href="#hr1"> <i style="color: #739E73;"
-                                                                         class="fa fa-lg fa-rotate-right fa-spin"></i> <span
-                                            class="hidden-mobile hidden-tablet"> Menunggu </span> </a>
+                                    <a data-toggle="tab" href="#hr1">
+                                        <i style="color: #739E73;" class="fa fa-lg fa-rotate-right fa-spin"></i>
+                                        <span class="hidden-mobile hidden-tablet"> Menunggu </span>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
-                                                                         class="fa fa-lg fa-check"></i> <span
-                                            class="hidden-mobile hidden-tablet"> DiProses </span></a>
+                                    <a data-toggle="tab" href="#hr2">
+                                        <i style="color: #C79121;" class="fa fa-lg fa-check"></i>
+                                        <span class="hidden-mobile hidden-tablet"> DiProses </span>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#hr3"> <i style="color: #b5201d;"
-                                                                         class="fa fa-lg fa-ban"></i> <span
-                                            class="hidden-mobile hidden-tablet"> DiTolak </span></a>
+                                    <a data-toggle="tab" href="#hr3">
+                                        <i style="color: #b5201d;" class="fa fa-lg fa-ban"></i>
+                                        <span class="hidden-mobile hidden-tablet"> DiTolak </span>
+                                    </a>
                                 </li>
-
                             </ul>
                         </header>
                         <!-- widget div-->
@@ -447,7 +449,6 @@
             tampil_diproses();
             tampil_ditolak();
         });
-
 		/* END BASIC */
 
 		function refresh_tab(){
@@ -538,7 +539,6 @@
 								timeout: 4000,
 								icon : "fa fa-times bounce animated"
 							});
-
 						}
 
 					}).catch((err) => {
@@ -553,8 +553,7 @@
 
 					}).then(function(){
 						$('#overlay').fadeOut(200);
-					})
-
+					});
 				}
 
 			});

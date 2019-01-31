@@ -408,7 +408,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/konfirmasi-pembelian/view_confirmPurchase', 'PembelianController@view_confirmPurchase');
     Route::get('/pembelian/konfirmasi-pembelian/view_confirmAll', 'PembelianController@view_confirmAll');
     Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd', 'PembelianController@view_confirmAdd');
-    Route::post('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans', 'PembelianController@view_confirmAdd_trans');
+    Route::get('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans', 'PembelianController@view_confirmAdd_trans');
     Route::post('/pembelian/konfirmasi-pembelian/tampilSupplier', 'PembelianController@tampilSupplier');
 
 
@@ -560,7 +560,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	///DataTable Inputan form Tambah Opname
     Route::post('/inventory/opname-barang/get-stock-code', 'inventory\opnameBarangController@get_stock_code');
-    Route::post('/inventory/opname-barang/detail', 'inventory\opnameBarangController@detail');
+    Route::match(['get', 'post'],'/inventory/opname-barang/detail', 'inventory\opnameBarangController@detail');
 
     Route::get('/inventory/opname-barang/pencarian', 'inventory\opnameBarangController@pencarian');
 

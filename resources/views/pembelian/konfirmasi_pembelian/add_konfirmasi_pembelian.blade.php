@@ -103,66 +103,6 @@
 					</div>
 				</div>
 			@endif
-			<div class="row">
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					<div class="widget-body">
-
-						<!-- <form class="form-horizontal">
-						{{csrf_field()}}
-							<fieldset>
-								<div class="form-group">
-
-										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>Pilih Supplier</label></label>
-										<div class="col-md-3">
-											<div class="icon-addon addon-sm">
-											<select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="tampilSupplier()">
-												<option selected="" value="00">----pilih semua Supplier----</option>
-											</select>
-												<label for="email" class="glyphicon glyphicon-search" rel="tooltip" title="" data-original-title="email"></label>
-											</div>
-										</div>
-
-									</div>
-									<div class="form-group">
-										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>PIC</label></label>
-										<div class="col-md-3">
-											<div class="icon-addon addon-sm">
-											<input class="form-control col-md-10" name="" id="pic" style="padding-right:50%" readonly>
-												<label for="email" class="glyphicon glyphicon-user" rel="tooltip" title="" ></label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>No Telepon</label></label>
-										<div class="col-md-3">
-											<div class="icon-addon addon-sm">
-											<input class="form-control col-md-3" name="" id="telepon" style="padding-right:50%" readonly>
-												<label for="email" class="glyphicon glyphicon-phone-alt" rel="tooltip" title="" ></label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:7%"> <label>No FAx</label></label>
-										<div class="col-md-3">
-											<div class="icon-addon addon-sm">
-											<input class="form-control col-md-10" name="" id="fax" style="padding-right:50%" readonly>
-												<label for="email" class="glyphicon glyphicon-print" rel="tooltip" title="" ></label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-md-2" for="prepend" style="margin-right:-7%;padding-right:10%"> <label>Alamat</label></label>
-										<div class="col-md-3">
-											<textarea class="form-control" name="" id="alamat" style="padding-right:50%" readonly></textarea>
-											</div>
-										</div>
-									</div>
-
-							</fieldset>
-						</form> -->
-					</div>
-				</div>
-			</div>
 
 			<!-- row -->
 			<div class="row">
@@ -197,10 +137,10 @@
 
 												<tr>
 
-
+                                                    <th data-hide="phone,tablet" class="text-center">Tanggal</th>
                                                     <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
                                                     <th data-hide="phone,tablet " class="text-center">Qty</th>
-													<th data-hide="phone,tablet " class="text-center">Harga Satuan</th>
+													<th data-hide="phone,tablet " class="text-center">Qty App</th>
 													<th data-hide="phone,tablet " class="text-center">Supplayer</th>
 
 												</tr>
@@ -257,153 +197,6 @@
 
 		</section>
 		<!-- end widget grid -->
-		<!-- Modal -->
-	<div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									&times;
-								</button>
-								<!-- <h4 class="modal-title" id="myModalLabel">Article Post</h4> -->
-							</div>
-							<div class="modal-body">
-                                <div class="jarviswidget" id="wid-id-4" data-widget-editbutton="false" data-widget-custombutton="false">
-
-                                    <header>
-
-                                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                                        <h2 id="myModalLabel"> </h2>
-
-                                    </header>
-
-                                    <!-- widget div-->
-                                    <div>
-
-                                        <!-- widget edit box -->
-                                        <div class="jarviswidget-editbox">
-                                            <!-- This area used as dropdown edit box -->
-
-                                        </div>
-                                        <!-- end widget edit box -->
-
-                                        <!-- widget content -->
-                                        <div class="widget-body no-padding">
-										<div id="id_plan">
-											<input type="hidden" id="pr_idPlan">
-										</div>
-                                            <form id="smart-form-register" class="smart-form" name="autoSumForm">
-                                                <header>
-                                                    Detail Item
-                                                </header>
-
-                                                <fieldset>
-                                                    <section>
-                                                        <div style="margin-bottom: 15px;" class="preview thumbnail">
-                                                            <img id="dt_image" src="">
-                                                        </div>
-                                                    </section>
-
-                                                    <section>
-                                                        <label class="label">Nama Item</label>
-                                                        <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" id="dt_item" placeholder="" disabled="">
-                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
-                                                    </section>
-                                                    <section>
-                                                        <label class="label">Kelompok</label>
-                                                        <label class="input"> <i class="icon-append fa fa-envelope-o"></i>
-                                                            <input type="text" id="dt_kelompok" placeholder="" disabled="">
-                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
-                                                    </section>
-                                                    <section>
-                                                        <label class="label">Merk</label>
-                                                        <label class="input"> <i class="icon-append fa fa-lock"></i>
-                                                            <input type="text" id="dt_merk" placeholder="" disabled="">
-                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
-                                                    </section>
-                                                    <section>
-                                                        <label class="label">Spesifik Kode</label>
-                                                        <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" id="dt_code" placeholder="" disabled="">
-                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
-                                                    </section>
-                                                    <div class="row">
-                                                        <section class="col col-6">
-                                                        <label class="label">Harga Satuan</label>
-                                                            <label class="input">
-                                                                <input type="text" name="firstBox" placeholder="Harga Satuan" value="" onkeyup="calc(1)"  id="dt_harga" >
-                                                            </label>
-                                                        </section>
-                                                        <section class="col col-6">
-                                                            <label class="label">Qty</label>
-                                                            <label class="input">
-                                                                <input type="text" name="secondBox" placeholder="Qty" value="" onkeyup="calc(2)" id="dt_qty">
-                                                            </label>
-                                                        </section>
-                                                    </div>
-
-                                                    <section>
-                                                        <label class="label">Sub Total</label>
-                                                        <label class="input"> <i class="icon-append fa fa-user"></i>
-                                                            <input type="text" name="thirdBox" placeholder="Sub Total" value="" onkeyup="calc(3)" disabled="disabled" id="dt_subTotal">
-
-                                                            <b class="tooltip tooltip-bottom-right">Needed to enter the website</b> </label>
-                                                    </section>
-
-
-                                                </fieldset>
-
-                                                <header>
-                                                    Detail Supplier
-                                                </header>
-
-                                                <fieldset>
-                                                    <div class="row">
-                                                    	<section class="col col-6">
-                                                            <label class="label">Supplier</label>
-                                                            <label class="select">
-                                                                <select id="dt_supplier2" onchange="getTelp()">
-                                                                    <option value="0" disabled="">Pilih Supplier</option>
-                                                                </select> <i></i> </label>
-                                                        </section>
-                                                    </div>
-                                                </fieldset>
-
-                                            </form>
-
-                                        </div>
-                                        <!-- end widget content -->
-
-                                    </div>
-                                    <!-- end widget div -->
-
-                                </div>
-                                <!-- end widget -->
-								<footer>
-                                                    <button  class="btn btn-danger" id="btn_ditolak" onclick="tolak()">
-                                                        Rencana Di Tolak
-                                                    </button>
-                                                    <button  class="btn btn-primary" id="btn_disetujui" onclick="setuju()">
-                                                        Rencana Di Setujui
-                                                    </button>
-                                                    <button  class="btn btn-warning" id="btn_tutup" onclick="tutup()">
-                                                        Tutup
-                                                    </button>
-                                                </footer>
-
-							</div>
-							<!-- <div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">
-									Cancel
-								</button>
-								<button type="button" class="btn btn-primary">
-									Post Article
-								</button>
-							</div> -->
-						</div><!-- /.modal-content -->
-					</div><!-- /.modal-dialog -->
-				</div><!-- /.modal -->
 
 	</div>
 	<!-- END MAIN CONTENT -->
@@ -415,7 +208,7 @@
 
 
 	<script type="text/javascript">
-	var table_registrasi_trans;
+	var table_registrasi_trans, confirm;
 		var tambahKonfirmasi;
 		var input = $('#dt_harga2').val();
 		var input2 = $('#dt_angka').val();
@@ -437,8 +230,6 @@
                     }
                 });
 
-			reload_data_trans();
-
 			$("input[type='text']").on("click", function () {
 				$(this).select();
 				});
@@ -448,6 +239,41 @@
 				$(this).find("input[class~='editor']").fadeIn().focus();
 				// alert();
 			});
+
+        	setTimeout(function () {
+
+                confirm = $('#table-rencana').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "{{ url('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans') }}",
+
+                    "columns":[
+                        {"data": "pp_date"},
+                        {"data": "i_nama"},
+                        {"data": "pp_qtyreq"},
+                        {"data": "inputQty"},
+                        {"data": "inputSupp"}
+                    ],
+
+                    "autoWidth" : true,
+                    "language" : dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                    "preDrawCallback" : function() {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-rencana'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback" : function(nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback" : function(oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+                $('#overlay').fadeOut(200);
+            }, 500);
 
         });
 
@@ -593,28 +419,6 @@
 
 
         }
-		function getSupplier()
-		{
-
-			$.ajax({
-				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
-				type: "GET",
-				data: {
-				},
-				dataType: "JSON",
-				success: function(data)
-				{
-				$('#dt_supplier').empty();
-				row = "<option selected='' value='00'>Pilih Supplier</option>";
-				$(row).appendTo("#dt_supplier");
-				$.each(data, function(k, v) {
-					row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
-					$(row).appendTo("#dt_supplier");
-				});
-				},
-
-			});
-		}
 
         function getTolak(id){
 
@@ -852,6 +656,30 @@
 		});
 	}
 
+		function getSupplier()
+		{
+
+			$.ajax({
+				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
+				type: "GET",
+				data: {
+
+				},
+				dataType: "JSON",
+				success: function(data)
+				{
+					$('#dt_supplier').empty();
+					row = "<option selected='' value='00'>Pilih Supplier</option>";
+					$(row).appendTo("#dt_supplier");
+					$.each(data, function(k, v) {
+						row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
+						$(row).appendTo("#dt_supplier");
+					});
+				},
+
+			});
+		}
+
 
 
 
@@ -987,22 +815,22 @@
 				});
 		}
 
-		function reload_data_trans(){
-        table_registrasi_trans= $('#table-rencana').DataTable({
-				"language" : dataTableLanguage,
-				"ajax": {
-						"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans')}}',
-						"type": "POST",
-						"data": function ( data ) {
-							data._token = '{{ csrf_token() }}';
-						},
-					},
-			} );
-		}
+		// function reload_data_trans(){
+  		// table_registrasi_trans= $('#table-rencana').DataTable({
+		// 		"language" : dataTableLanguage,
+		// 		"ajax": {
+		// 				"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans')}}',
+		// 				"type": "POST",
+		// 				"data": function ( data ) {
+		// 					data._token = '{{ csrf_token() }}';
+		// 				},
+		// 			},
+		// 	} );
+		// }
 
 		function reload_table(){
 
-			table_registrasi_trans.ajax.reload(null, false);
+			confirm.ajax.reload(null, false);
 
 		}
 
