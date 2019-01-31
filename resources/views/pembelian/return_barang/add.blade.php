@@ -18,20 +18,9 @@
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
-		<li>Home</li><li>Pembelian</li><li>Purchase Return</li><li>Tambah</li>
+		<li>Home</li><li>Pembelian</li><li>Return Pembelian</li><li>Tambah</li>
 	</ol>
-	<!-- end breadcrumb -->
 
-		<!-- You can also add more buttons to the
-		ribbon for further usability
-
-		Example below:
-
-		<span class="ribbon-button-alignment pull-right">
-		<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-		<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-		<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-	</span> -->
 
 </div>
 <!-- END RIBBON -->
@@ -39,201 +28,82 @@
 
 
 @section('main_content')
+    <div id="content">
 
-<!-- MAIN CONTENT -->
-<div id="content">
+        <div class="row">
 
-	@if(Session::has('flash_message_success'))
-	<?php $mt = '0px'; ?>
-	<div class="col-md-8" style="margin-top: 20px;">
-		<div class="alert alert-success alert-block">
-			<a class="close" data-dismiss="alert" href="#">×</a>
-			<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-			{{ Session::get('flash_message_success') }} 
-		</div>
-	</div>
-	@elseif(Session::has('flash_message_error'))
-	<?php $mt = '0px'; ?>
-	<div class="col-md-8" style="margin-top: 20px;">
-		<div class="alert alert-danger alert-block">
-			<a class="close" data-dismiss="alert" href="#">×</a>
-			<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
-			{{ Session::get('flash_message_error') }}
-		</div>
-	</div>
-	@endif
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <h1 class="page-title txt-color-blueDark">
+                    <i class="fa-fw fa fa-credit-card"></i>
+                    Pembelian <span><i class="fa fa-angle-double-right"></i> Return Pembelian </span>
+                </h1>
+            </div>
 
-	<!-- widget grid -->
-	<section id="widget-grid" class="" style="margin-bottom: 20px; min-height: 500px;">
+        </div>
 
-		<!-- row -->
-		<div class="row">
+        <section id="widget-grid" class="">
 
-			<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-md-offset-1" style="padding: 10px 20px; margin-top: 20px; background: #fff;">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="jarviswidget" id="wid-id-0"
+                         data-widget-colorbutton="false"
+                         data-widget-editbutton="false"
+                         data-widget-togglebutton="false"
+                         data-widget-deletebutton="false"
+                         data-widget-fullscreenbutton="false"
+                         data-widget-custombutton="false"
+                         data-widget-sortable="false">
+                        <header role="heading"><div class="jarviswidget-ctrls" role="menu"><a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> </div>
+                            <h2><strong>Tambah Return Pembelian</strong></h2>
+                        </header>
+                        <div role="content">
+                            <div class="widget-body no-padding form-horizontal">
+                                <div class="tab-content padding-10">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 text-left form-group" style="margin-top:1%;margin-bottom:1%">
+                                        <div class="col-md-4 pull-left">
+                                            <div class="input-group input-daterange" id="date-range" style="">
+                                                <input type="text" class="form-control" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
+                                                <span class="input-group-addon bg-custom text-white b-0">Sampai</span>
+                                                <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
 
-
-				{{-- FormTemplate .. --}}
-
-				<form id="purchase-form" class="form-horizontal" action="{{ url('/pembelian/purchase-return/add') }}" method="post">
-					{{ csrf_field() }}
-					<fieldset>
-						<legend>
-							Form Tambah Purchase Return
-							<span class="pull-right" style="font-size: 0.6em; font-weight: 600">
-								<a href="{{ url('/pembelian/purchase-return') }}">
-									<i class="fa fa-arrow-left"></i> &nbsp;Kembali Ke Halaman Data Table
-								</a>
-							</span>
-						</legend>
-
-						<div class="row" style="margin-top: 15px" >
-
-							<div class="col-md-6">
-								<div class="form-group">
-									<label class="col-xs-4 col-lg-4 control-label text-left">No. Purchase Order</label>
-									<div class="col-xs-8 col-lg-8 inputGroupContainer">
-										<input type="text" list="list_purchase" class="form-control" name="purchase_order" id="purchase_order" placeholder="Masukkan nomor purchase order...." autocomplete="off" autofocus="" onchange="showPurchase()">
-										<datalist id="list_purchase">
-											@foreach($purchase as $purchase)
-											<option value="{{ $purchase->p_nota }}">{{ $purchase->p_nota }}</option>
-											@endforeach
-										</datalist>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<hr>
-						<div class="field_wrapper">
-							<div class="row" style="margin-top:15px;">
-
-								<div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Kode Barang</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<input type="text" class="form-control" name="kode_barang" id="kode_barang" placeholder="Masukkan kode barang" readonly />
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Kuantitas</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<input type="text" class="form-control" name="kuantitas" id="kuantitas" placeholder="Masukkan kuantitas barang" readonly />
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Harga Satuan</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<input type="text" class="form-control" name="harga_satuan" id="harga_satuan" placeholder="Masukkan harga satuan barang" readonly />
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Total Bayar</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<input type="text" class="form-control" name="total_bayar" id="total_bayar" placeholder="Masukkan total bayar" readonly />
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Supplier</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<input type="hidden" name="id_supplier" id="id_supplier">
-												<input type="text" class="form-control" name="supplier" id="supplier" placeholder="Masukkan supplier barang" readonly />
-											</div>
-										</div>
-									</div>
-								</div>								
-
-							</div>
-						</div>
-
-						<hr>
-						<div class="field_wrapper" id="main_return">
-							<div class="row" style="margin-top:15px;">
-
-								<div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Methode Return</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<select class="form-control" name="methode_return" id="methode_return" required>
-													<option value="">---Pilih methode return---</option>
-													<option value="GB">Ganti Barang Baru</option>
-													<option value="PT">Potong Tagihan</option>
-													<option value="GU">Ganti Uang</option>
-													<option value="PN">Potong Nota</option>
-												</select>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Kuantitas Return</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<input type="text" class="form-control" name="kuantitas_return" id="kuantitas_return" placeholder="Masukkan kuantitas return" required />
-											</div>
-										</div>
-									</div>
-
-									<div class="col-md-6">
-										<div class="form-group">
-											<label class="col-xs-3 col-lg-3 control-label text-left">Total Harga Return</label>
-											<div class="col-xs-8 col-lg-8 inputGroupContainer">
-												<input type="text" class="form-control" name="total_harga_return" id="total_harga_return" placeholder="Masukkan total harga return" readonly />
-											</div>
-										</div>
-									</div>
-								</div>								
-
-							</div>
-						</div>
-
-					</fieldset>
-
-					<div class="form-actions">
-						<div class="row">
-							<div class="col-md-12">
-								<button class="btn btn-default" type="submit">
-									<i class="fa fa-floppy-o"></i>
-									&nbsp;Submit
-								</button>
-							</div>
-						</div>
-					</div>
-				</form>
-
-				{{-- FormTemplate End .. --}}
-
-			</div>
-		</div>
-
-		<!-- end row -->
-
-		<!-- row -->
-
-		<div class="row">
-
-		</div>
-
-		<!-- end row -->
-
-	</section>
-	<!-- end widget grid -->
-
-</div>
-<!-- END MAIN CONTENT -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" name="carinota" id="carinota" placeholder="Cari Nota Pembelian/DO">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="text" class="form-control" name="carisupplier" id="carinota" placeholder="Cari Supplier">
+                                        </div>
+                                        <div class="col-md-1 pull-right" style="text-align: right">
+                                            <button type="button" class="btn btn-block btn-primary btn-sm icon-btn ml-2" onclick="search()">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-12 pull-left">
+                                            <table class="table table-bordered table-striped table-hover" id="table-nota">
+                                                <thead>
+                                                <tr>
+                                                    <th>Tanggal</th>
+                                                    <th>Nota</th>
+                                                    <th>Supplier</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </section>
+    </div>
 @endsection
 
 @section('extra_script')
@@ -242,130 +112,16 @@
 <script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 
 <script type="text/javascript">
+    $(document).ready(function () {
+        $('#date-range').datepicker({
+            todayHighlight: true,
+            autoclose: true
+        });
 
-	var i_purchase_order = document.getElementById('purchase_order');
-	var i_kuantitas_return = document.getElementById('kuantitas_return');
-	var i_kuantitas = document.getElementById('kuantitas');
-	var i_total_harga_return = document.getElementById('total_harga_return');
-	var i_harga_satuan = document.getElementById('harga_satuan');
-	i_kuantitas_return.addEventListener('keyup', function(e)
-	{
-		if (i_kuantitas_return.value > i_kuantitas.value) {
-			alert('Jumlah kuantitas return tidak boleh melebihi jumlah kuantitas yang diterima!');
-			i_kuantitas_return.value = '';
-		}else{
-			var n_hs = i_harga_satuan.value;
-			var replace_rp = n_hs.toString().replace('Rp', '').replace(/\./g,'');
-			var n_th = parseInt(i_kuantitas_return.value) * parseInt(replace_rp);
-			i_total_harga_return.value = formatRupiah(n_th, 'Rp');
-		}
-	});
+        $('#table-nota').DataTable({
 
-	function formatRupiah(angka, prefix)
-	{
-		var number_string = angka.toString(),
-		split	= number_string.split(','),
-		sisa 	= split[0].length % 3,
-		rupiah 	= split[0].substr(0, sisa),
-		ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
-
-		if (ribuan) {
-			separator = sisa ? '.' : '';
-			rupiah += separator + ribuan.join('.');
-		}
-
-		rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-		return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
-	}
-
-	function showPurchase() 
-	{
-		if (i_purchase_order.value == '') {
-			$('#main_return').hide();
-		}
-		this.reset();
-		var parameter = $("#purchase_order").val();
-		axios.get(baseUrl+'/pembelian/show-purchase/'+parameter)
-		.then((response) => {
-			if(response.data == null){
-				$.toast({
-					text: 'Ups . Data Yang Anda pilih belum diterima atau sudah dihapus!',
-					showHideTransition: 'fade',
-					icon: 'error'
-				})
-				$('#form-load-section-status').fadeOut(200);
-			}else{
-				initiate(response.data);
-				$('#main_return').show();
-				$('#form-load-section-status').fadeOut(200);
-			}
-		})
-		.catch((err) => {
-			console.log(err);
-		})
-	}
-
-	function initiate(data)
-	{
-		$('#kode_barang').val(data.podt_kode_barang);
-		$('#kuantitas').val(data.podt_kuantitas);
-		$('#harga_satuan').val(formatRupiah(data.podt_harga_satuan, 'Rp'));
-		$('#total_bayar').val(formatRupiah(data.po_total_bayar, 'Rp'));
-		$('#supplier').val(data.s_company);
-		$('#id_supplier').val(data.s_id);
-	}
-
-	function reset()
-	{
-		$('#kode_barang').val('');
-		$('#kuantitas').val('');
-		$('#harga_satuan').val('');
-		$('#total_bayar').val('');
-		$('#supplier').val('');
-		$('#id_supplier').val('');
-	}
-
-	$(document).ready(function(){
-
-		if ($('#purchase_order').val() == '') {
-			$('#main_return').hide();
-		}else{
-			$('#main_return').show();
-		}
-
-		// product form
-		$('#purchase-form').bootstrapValidator({
-			feedbackIcons : {
-				valid : 'glyphicon glyphicon-ok',
-				invalid : 'glyphicon glyphicon-remove',
-				validating : 'glyphicon glyphicon-refresh'
-			},
-			fields : {
-				purchase_order : {
-					validators : {
-						notEmpty : {
-							message : 'Masukkan nomor purchase order'
-						}
-					}
-				},
-				methode_return : {
-					validators : {
-						notEmpty : {
-							message : 'Pilih methode return barang'
-						}
-					}
-				},
-				kuantitas_return : {
-					validators : {
-						notEmpty : {
-							message : 'Masukkan kuantitas return barang'
-						}
-					}
-				}
-			}
-		});
-		// end product form
-	})
+        });
+    })
 </script>
 
 @endsection
