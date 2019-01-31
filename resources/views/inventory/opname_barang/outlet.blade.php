@@ -200,7 +200,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                         &times;
                     </button>
 
-                    <h4 class="modal-title" id="myModalLabel">Detail Opname Barang Pusat</h4>
+                    <h4 class="modal-title" id="myModalLabel">Detail Opname Barang Outlet</h4>
 
                 </div>
 
@@ -229,9 +229,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                 <label class="col-md-1">:</label>
                                                 <label class="col-md-8" id="obNota"></label>
                                             </div>
-                                        </div>
-
-                                        <div class="col-md-12">
+                                        
                                             <div class="form-group">
                                                 <label class="col-md-3" style="float:left"><strong>Lokasi Barang</strong></label>
                                                 <label class="col-md-1">:</label>
@@ -239,9 +237,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <label id="obCabang"></label>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-md-12">
+                                       
                                             <div class="form-group">
                                                 <label class="col-md-3" style="float:left"><strong>Nama Barang</strong></label>
                                                 <label class="col-md-1">:</label>
@@ -249,9 +245,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <label id="obBarang"></label>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-md-12">
+                                        
                                             <div class="form-group">
                                                 <label class="col-md-3" style="float:left"><strong>Qty Sistem</strong></label>
                                                 <label class="col-md-1">:</label>
@@ -259,9 +253,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <label id="obQtyS"></label>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-md-12">
+                                        
                                             <div class="form-group">
                                                 <label class="col-md-3" style="float:left"><strong>Qty Real</strong></label>
                                                 <label class="col-md-1">:</label>
@@ -269,9 +261,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                                     <label id="obQtyR"></label>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <div class="col-md-12">
+                                        
                                             <div class="form-group">
                                                 <label class="col-md-3" style="float:left"><strong>AKSI</strong></label>
                                                 <label class="col-md-1">:</label>
@@ -281,25 +271,32 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </div>
                                         </div>
 
-                                    </div>
-
-                                    <!-- Tabel untuk detil opname barang-->
-                                    <!-- TABEL C-->
-                                    <div class="col-md-12">
-                                        <table id="dobCTable" class="table table-striped table-bordered table-hover margin-top-10"
-                                            style="display:none; margin-top: 20px; width: 100%">
-
-                                            <thead id="dobCHead">
-                                                <th width="20%">No.</th>
-                                                <th width="80%">Kode Spesifik</th>
+                                        <table id="dobCTable" class="table table-striped table-bordered table-hover" style="width: 100%">
+                                            <thead>		
+                                                <tr>
+                                                    <th width="20%">No.</th>
+                                                    <th width="80%">Kode Spesifik</th>
+                                                </tr>
                                             </thead>
-
-                                            <tbody id="dobCBody">
+    
+                                            <tbody>
                                             </tbody>
-
+    
                                         </table>
                                     </div>
 
+                                    {{--  <table id="dobCTable" class="table table-striped table-bordered table-hover"
+                                        style="display:none; margin-top: 20px">
+
+                                        <thead>
+                                            <th>No.</th>
+                                            <th>Kode Spesifik</th>
+                                        </thead>
+
+                                        <tbody id="dobCBody">
+                                        </tbody>
+
+                                    </table>  --}}
                                 </div>
                                 <!-- end widget content -->
                             </div>
@@ -323,7 +320,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 <script type="text/javascript">
     var appr, pend;
-    var expTable, codeTable, codeExpTable;
+    var expTable, codeTable, codeExpTable, dobCTable;
     var apprTab, pendTab;
     var speccode, expired;
     var idItem, idComp;
@@ -339,11 +336,11 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         });
 
         dobCTable = $('#dobCTable').DataTable({
-            "order": [],
             "searching": false,
             "autoWidth": false,
             "pageLength": 5,
-            "info": false
+            "lengthChange": false,
+            "language": dataTableLanguage
         });
 
         $('.osItemName').autocomplete({
@@ -458,7 +455,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 
     function detail(id) {
-        axios.post(baseUrl + '/inventory/opname-barang/detail?id=' + id).then((response) => {
+        axios.post(baseUrl + '/inventory/opname-barang/detail?id=' + id +'&dt=no').then((response) => {
 
             $('#obNota').html(response.data.data[0].o_reff);
             $('#obCabang').html(response.data.data[0].c_name);
@@ -469,32 +466,68 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 $('#obAksi').html('Menyesuaikan Qty System')
             }
 
-            $qtyR = 0;
-            $qtyS = 0;
+            var qtyR = 0;
+            var qtyS = 0;
+            var sc = response.data.data[0].i_specificcode;
 
-            dobCTable.clear();
+            for (var ob = 0; ob < response.data.data.length; ob++) {
+                qtyR = qtyR + parseInt(response.data.data[ob].od_qty_real);
+                qtyS = qtyS + parseInt(response.data.data[ob].od_qty_system);
 
-            for ($ob = 0; $ob < response.data.data.length; $ob++) {
-                $qtyR = $qtyR + parseInt(response.data.data[$ob].od_qty_real);
-                $qtyS = $qtyS + parseInt(response.data.data[$ob].od_qty_system);
-
-                $sc = response.data.data[$ob].i_specificcode;
-                $ex = response.data.data[$ob].i_expired;
-
-                if ($sc == 'Y' && $ex == 'N') {
-
+                {{--  if (sc == 'Y' && ex == 'N') {
+                    var a = ob + 1;
                     dobCTable.row.add([
-                        ($ob + 1),
-                        response.data.data[$ob].od_specificcode
+                        a,
+                        response.data.data[ob].od_specificcode
                     ]).draw(false);
 
-                }
+                }  --}}
 
             }
+
+            if(sc == 'Y'){
+                $('#dobCTable').DataTable().destroy();
+                $('#dobCTable').DataTable({
+                    "searching": false,
+                    "pageLength": 5,
+                    "lengthChange": false,
+                    "processing": true,
+                    "serverSide": true,
+                    "order": [],
+                    "ajax": {
+                        "url":"{{ url('/inventory/opname-barang/detail?id=') }}"+id+"&dt=yes",
+                        "type": "POST"
+                    },
+                    "columns": [
+                        { "data": "DT_RowIndex" },
+                        { "data": "od_specificcode" }
+                    ],
+                    "autoWidth": true,
+                    "language": dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                        "t" +
+                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                    "preDrawCallback": function () {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($(
+                                '#dobCTable'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback": function (nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback": function (oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+
+            }
+
             $('#dobCTable').css("display", "block");
 
-            $('#obQtyS').html($qtyS + ' Unit');
-            $('#obQtyR').html($qtyR + ' Unit');
+            $('#obQtyS').html(qtyS + ' Unit');
+            $('#obQtyR').html(qtyR + ' Unit');
 
         })
 

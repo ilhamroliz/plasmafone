@@ -1333,9 +1333,8 @@ class PembelianController extends Controller
                     'd_item.i_nama'
                 )
                 ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
-                ->where('d_purchase_plan.pp_status', 'P')
-                ->get();
-dd($confirm);
+                ->where('d_purchase_plan.pp_status', 'P');
+
         return DataTables::of($confirm)
             ->addColumn('inputQty', function ($confirm) {
 
@@ -1348,18 +1347,6 @@ dd($confirm);
             ->rawColumns(['inputQty', 'inputSupp'])
             ->make(true);
 
-                // $data = array();
-                // $i = 1;
-                // foreach ($menunggu as $key) {
-                //     $row = array();
-                //     $row[] = $key->i_nama;
-                //     $row[] = '<div class="text-center">'.$key->pp_qtyreq.'</div>';
-                //     $row[] = '<div class="text-center"><span id="span'.$key->pp_id.'" class="caption" onclick="editFor(' . $key->pp_id . ')"</span><input type="number" min="1" class="form-control editor" name="i_nama" id="i_nama' . $key->pp_id . '" data-id="' . $key->pp_id . '"  style="text-transform: uppercase;"  /></div>';
-                //     $row[] = '<div class="text-center"><select class="form-control col-md-10" name="" id="dt_supplier" style="padding-right:50%" onchange="getSupplier()"><option selected="" value="00"></option></select></div>';
-                //     $data[] = $row;
-                // }
-
-                // echo json_encode(array("data"=>$data));
     }
 
     public function view_confirmAdd()

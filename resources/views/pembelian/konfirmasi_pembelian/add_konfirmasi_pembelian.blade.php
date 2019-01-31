@@ -230,8 +230,6 @@
                     }
                 });
 
-			reload_data_trans();
-
 			$("input[type='text']").on("click", function () {
 				$(this).select();
 				});
@@ -247,7 +245,7 @@
                 confirm = $('#table-rencana').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ajax": "{{ url('/pembelian/request-pembelian/view_confirmAdd_trans') }}",
+                    "ajax": "{{ url('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans') }}",
 
                     "columns":[
                         {"data": "pp_date"},
@@ -817,8 +815,8 @@
 				});
 		}
 
-		function reload_data_trans(){
-  //       table_registrasi_trans= $('#table-rencana').DataTable({
+		// function reload_data_trans(){
+  		// table_registrasi_trans= $('#table-rencana').DataTable({
 		// 		"language" : dataTableLanguage,
 		// 		"ajax": {
 		// 				"url": '{{url('/pembelian/konfirmasi-pembelian/view_confirmAdd_trans')}}',
