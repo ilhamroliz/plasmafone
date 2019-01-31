@@ -64,15 +64,26 @@
             </div>
         </div>
         <div style="border: .6px dashed;"></div>
-    @foreach($datas as $index=>$data) 
-        <div class="header1" style="margin-top: 10px">
-            <div class="tanggal">
-                <span style="float: left; width: 10%; margin-left: 10px;">{{ $data->qty }}</span>
-                <span style="width: 60%; margin-left: -10px">{{ $data->nama_item }} {{ $data->specificcode }} @Rp.{{ number_format($data->total_item,2,',','.') }}</span>
-                {{--<span style="margin-left: 90px;">Rp. {{ number_format($data->total_item,2,',','.') }}</span>--}}
-                <span style="width: 20%; margin-left: 5px; float: right;">Rp. {{ number_format($data->total,2,',','.') }}</span>
+    @foreach($datas as $index=>$data)
+        @if ($data->i_code != null)
+            <div class="header1" style="margin-top: 10px">
+                <div class="tanggal">
+                    <span style="float: left; width: 10%; margin-left: 10px;">{{ $data->qty }}</span>
+                    <span style="width: 60%; margin-left: -10px">{{ $data->i_code }} - {{ $data->nama_item }} @Rp.{{ number_format($data->total_item,2,',','.') }}</span>
+                    {{--<span style="margin-left: 90px;">Rp. {{ number_format($data->total_item,2,',','.') }}</span>--}}
+                    <span style="width: 20%; margin-left: 5px; float: right;">Rp. {{ number_format($data->total,2,',','.') }}</span>
+                </div>
             </div>
-        </div>
+        @else
+            <div class="header1" style="margin-top: 10px">
+                <div class="tanggal">
+                    <span style="float: left; width: 10%; margin-left: 10px;">{{ $data->qty }}</span>
+                    <span style="width: 60%; margin-left: -10px">{{ $data->nama_item }} {{ $data->specificcode }} @Rp.{{ number_format($data->total_item,2,',','.') }}</span>
+                    {{--<span style="margin-left: 90px;">Rp. {{ number_format($data->total_item,2,',','.') }}</span>--}}
+                    <span style="width: 20%; margin-left: 5px; float: right;">Rp. {{ number_format($data->total,2,',','.') }}</span>
+                </div>
+            </div>
+        @endif
     @endforeach
         <div style="border: .6px dashed;"></div>
         <div class="hasil" style="margin-bottom: 18px">

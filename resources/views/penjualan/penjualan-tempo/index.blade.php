@@ -448,19 +448,19 @@ function rupiah($angka){
 
                                                 <tbody>
 
-                                                <tr class="success">
+                                                <tr>
                                                     <td><strong>Tanggal</strong></td>
                                                     <td><strong>:</strong></td>
                                                     <td id="dt_tanggal"></td>
                                                 </tr>
 
-                                                <tr class="danger">
+                                                <tr>
                                                     <td><strong>Nota</strong></td>
                                                     <td><strong>:</strong></td>
                                                     <td id="dt_nota"></td>
                                                 </tr>
 
-                                                <tr class="warning">
+                                                <tr>
                                                     <td><strong>Salesman</strong></td>
                                                     <td><strong>:</strong></td>
                                                     <td id="dt_salesman"></td>
@@ -481,289 +481,6 @@ function rupiah($angka){
                                                 <tbody>
 
                                                 </tbody>
-                                            </table>
-
-                                        </div>
-
-                                    </div>
-                                    <!-- end widget content -->
-
-                                </div>
-                                <!-- end widget div -->
-
-                            </div>
-                            <!-- end widget -->
-                        </div>
-
-                    </div>
-
-                </div><!-- /.modal-content -->
-
-            </div><!-- /.modal-dialog -->
-
-        </div>
-
-        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-            <div class="modal-dialog">
-
-                <div class="modal-content">
-
-                    <div class="modal-header">
-
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                            &times;
-                        </button>
-
-                        <h4 class="modal-title" id="myModalLabel">Edit Distribusi</h4>
-
-                    </div>
-
-                    <div class="modal-body">
-
-                        <div class="row">
-
-                            <!-- Widget ID (each widget will need unique ID)-->
-                            <div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-
-                                <header>
-
-                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-
-                                    <h2 id="title_detail2"></h2>
-
-                                </header>
-
-                                <!-- widget div-->
-                                <div>
-
-                                    <!-- widget content -->
-                                    <div class="widget-body">
-
-                                        <div class="table-responsive">
-
-                                            <table class="table">
-
-                                                <tbody>
-
-                                                <tr class="success">
-                                                    <td><strong>Nota</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_nota2"></td>
-                                                </tr>
-
-                                                <tr class="danger">
-                                                    <td><strong>Dari Outlet</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_from2"></td>
-                                                </tr>
-
-                                                <tr class="warning">
-                                                    <td><strong>Tujuan Outlet</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_destination2"></td>
-                                                </tr>
-
-                                                <tr class="info">
-                                                    <td><strong>Tanggal Distribusi</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_tgl2"></td>
-                                                </tr>
-
-                                                <tr class="success">
-                                                    <td><strong>Petugas</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_by2"></td>
-                                                </tr>
-
-                                                <tr class="danger" id="namaItem_dt" style="display:none">
-                                                    <td><strong>Nama Item</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_namaItems"></td>
-                                                </tr>
-
-                                                </tbody>
-
-                                            </table>
-
-                                            <table id="table_edit" class="table table-striped table-bordered table-hover" width="100%">
-
-                                                <thead>
-
-                                                <tr>
-
-                                                    <th><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nama Barang</th>
-
-                                                    <th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Qty Distribusi</th>
-
-                                                    <th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Qty Diterima</th>
-
-                                                    <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
-                                                </tr>
-
-                                                </thead>
-
-                                                <tbody>
-
-                                                </tbody>
-
-                                            </table>
-
-                                            <form id="form_editDistribusi" method="post">
-                                                <div class="row" id="form_edit" style="display:none">
-                                                    <input type="hidden" name="distribusi" id="distribusi">
-                                                    <input type="hidden" name="comp" id="comp">
-                                                    <input type="hidden" name="item" id="item">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="tags"> Qty Distribusi</label>
-                                                            <input type="text" class="form-control" name="qty_distribusi" id="qty_distribusi" onkeyup="qtyChange()" placeholder="Qty Distribusi" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="tags"> Qty Diterima</label>
-                                                            <input type="text" readonly class="form-control" name="qty_diterima" id="qty_diterima" placeholder="Qty Diterima" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-
-                                        </div>
-
-                                    </div>
-                                    <!-- end widget content -->
-
-                                </div>
-                                <!-- end widget div -->
-
-                            </div>
-                            <!-- end widget -->
-                        </div>
-
-                    </div>
-
-                    <div class="modal-footer" id="footer_edit" style="display:none">
-                        <button type="button" class="btn btn-default" id="btn_cancel">
-                            Kembali
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="simpan()">
-                            Simpan
-                        </button>
-                    </div>
-
-                </div><!-- /.modal-content -->
-
-            </div><!-- /.modal-dialog -->
-
-        </div>
-
-        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-            <div class="modal-dialog">
-
-                <div class="modal-content">
-
-                    <div class="modal-header">
-
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                            &times;
-                        </button>
-
-                        <h4 class="modal-title" id="myModalLabel">Hapus Distribusi</h4>
-
-                    </div>
-
-                    <div class="modal-body">
-
-                        <div class="row">
-
-                            <!-- Widget ID (each widget will need unique ID)-->
-                            <div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-
-                                <header>
-
-                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-
-                                    <h2 id="title_detail3"></h2>
-
-                                </header>
-
-                                <!-- widget div-->
-                                <div>
-
-                                    <!-- widget content -->
-                                    <div class="widget-body">
-
-                                        <div class="table-responsive">
-
-                                            <table class="table">
-
-                                                <tbody>
-
-                                                <tr class="success">
-                                                    <td><strong>Nota</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_nota3"></td>
-                                                </tr>
-
-                                                <tr class="danger">
-                                                    <td><strong>Dari Outlet</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_from3"></td>
-                                                </tr>
-
-                                                <tr class="warning">
-                                                    <td><strong>Tujuan Outlet</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_destination3"></td>
-                                                </tr>
-
-                                                <tr class="info">
-                                                    <td><strong>Tanggal Distribusi</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_tgl3"></td>
-                                                </tr>
-
-                                                <tr class="success">
-                                                    <td><strong>Petugas</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_by3"></td>
-                                                </tr>
-
-                                                <tr class="danger" id="namaItem_dt3" style="display:none">
-                                                    <td><strong>Nama Item</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_namaItems3"></td>
-                                                </tr>
-
-                                                </tbody>
-
-                                            </table>
-
-                                            <table id="table_delete" class="table table-striped table-bordered table-hover" width="100%">
-
-                                                <thead>
-
-                                                <tr>
-
-                                                    <th><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nama Barang</th>
-
-                                                    <th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Qty Distribusi</th>
-
-                                                    <th><i class="fa fa-fw fa-map-marker txt-color-blue"></i>&nbsp;Qty Diterima</th>
-
-                                                    <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-
-                                                </tr>
-
-                                                </thead>
-
-                                                <tbody>
-
-                                                </tbody>
-
                                             </table>
 
                                         </div>
@@ -951,118 +668,6 @@ function rupiah($angka){
             aktif.api().ajax.reload();
         }
 
-        function qtyChange(){
-            var qtyDistribusi = parseInt($('#qty_distribusi').val());
-            var qtyDiterima = parseInt($('#qty_diterima').val());
-
-            if (qtyDistribusi < qtyDiterima) {
-                $('#qty_distribusi').val(qtyDiterima);
-            }
-        }
-
-        function simpan(){
-            axios.post(baseUrl+'/distribusi-barang/edit', $('#form_editDistribusi').serialize()).then(response => {
-
-                if (response.data.status == 'Access denied') {
-
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title : "Gagal",
-                        content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-                        color : "#A90329",
-                        timeout: 5000,
-                        icon : "fa fa-times bounce animated"
-                    });
-
-                } else {
-
-
-                }
-
-            })
-        }
-
-        function ubah(distribusi, item, comp, namaItem, qtyDistribusi, qtyReceived){
-            $('#table_edit').DataTable().destroy();
-            $('#table_edit').hide();
-            $('#dt_namaItems').text(namaItem);
-            $('#distribusi').val(distribusi);
-            $('#comp').val(comp);
-            $('#item').val(item);
-            $('#qty_distribusi').val(qtyDistribusi);
-            $('#qty_diterima').val(qtyReceived);
-            $('#namaItem_dt').show('slow');
-            $('#btn_cancel').attr('onclick', 'edit("'+distribusi+'")');
-            $('#form_edit').show('slow');
-            $('#footer_edit').show('slow');
-
-        }
-
-        function hapus(id){
-            var table_delete = '';
-            $('#form_edit').hide();
-            $('#table_delete').DataTable().destroy();
-            $('#overlay').fadeIn(200);
-            $('#load-status-text').text('Sedang Memproses...');
-            $('#namaItem_dt').hide();
-            $('#table_delete').show();
-            $('#footer_edit').hide();
-
-            table_delete = $('#table_delete').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{{ url('distribusi-barang/detail-delete/') }}"+"/"+id,
-                "columns":[
-                    {"data": "nama_item"},
-                    {"data": "qty"},
-                    {"data": "qty_received"},
-                    {"data": "aksi"}
-                ],
-                "autoWidth" : true,
-                "language" : dataTableLanguage,
-                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                "preDrawCallback" : function() {
-                    // Initialize the responsive datatables helper once.
-                    if (!responsiveHelper_dt_basic) {
-                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-                    }
-                },
-                "rowCallback" : function(nRow) {
-                    responsiveHelper_dt_basic.createExpandIcon(nRow);
-                },
-                "drawCallback" : function(oSettings) {
-                    responsiveHelper_dt_basic.respond();
-                }
-            });
-
-            axios.get(baseUrl+'/distribusi-barang/detail/'+id).then(response => {
-
-                if (response.data.status == 'Access denied') {
-
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title : "Gagal",
-                        content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-                        color : "#A90329",
-                        timeout: 5000,
-                        icon : "fa fa-times bounce animated"
-                    });
-
-                } else {
-                    $('#title_detail3').html('<strong>Hapus Distribusi Barang</strong>');
-                    $('#dt_nota3').text(response.data.data[0].nota);
-                    $('#dt_from3').text(response.data.data[0].from);
-                    $('#dt_destination3').text(response.data.data[0].destination);
-                    $('#dt_tgl3').text(response.data.data[0].date);
-                    $('#dt_by3').text(response.data.data[0].by);
-                    $('#overlay').fadeOut(200);
-                    $('#deleteModal').modal('show');
-                }
-
-            });
-        }
-
         function remove(id){
             $.SmartMessageBox({
                 title : "Pesan!",
@@ -1080,7 +685,7 @@ function rupiah($angka){
                         }
                     });
                     $.ajax({
-                        url: baseUrl + '/penjualan-reguler/delete/'+id,
+                        url: baseUrl + '/penjualan-tempo/delete/'+id,
                         type: 'get',
                         success: function(response){
                             if (response == "Not Found") {
@@ -1154,7 +759,7 @@ function rupiah($angka){
 
             var status;
 
-            axios.get(baseUrl+'/penjualan-reguler/get-detail/'+id).then(response => {
+            axios.get(baseUrl+'/penjualan-tempo/get-detail/'+id).then(response => {
 
                 if (response.data.status == 'Access denied') {
 
@@ -1181,47 +786,6 @@ function rupiah($angka){
                         } else {
                             row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
                         }
-                        $('#table_item tbody').append(row)
-                    });
-                    $('#overlay').fadeOut(200);
-                    $('#myModal').modal('show');
-
-                }
-
-            })
-        }
-
-        function detailTerima(id){
-            $('#overlay').fadeIn(200);
-            $('#load-status-text').text('Sedang Mengambil data...');
-
-            var status;
-
-            axios.get(baseUrl+'/distribusi-barang/detail-terima/'+id).then(response => {
-
-                if (response.data.status == 'Access denied') {
-
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title : "Gagal",
-                        content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-                        color : "#A90329",
-                        timeout: 5000,
-                        icon : "fa fa-times bounce animated"
-                    });
-
-                } else {
-                    var row = '';
-                    $('.tr').remove();
-                    $('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
-                    $('#dt_nota').text(response.data.data[0].nota);
-                    $('#dt_from').text(response.data.data[0].from);
-                    $('#dt_destination').text(response.data.data[0].destination);
-                    $('#dt_tgl').text(response.data.data[0].date);
-                    $('#dt_by').text(response.data.data[0].by);
-                    response.data.data.forEach(function(element) {
-                        console.log(element);
-                        row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
                         $('#table_item tbody').append(row)
                     });
                     $('#overlay').fadeOut(200);

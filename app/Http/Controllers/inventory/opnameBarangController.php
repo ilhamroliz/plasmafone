@@ -700,7 +700,7 @@ class opnameBarangController extends Controller
                     if ($cekStockExist == 0) {
                         $getMaxStock = DB::table('d_stock')->max('s_id');
                         DB::table('d_stock')->insert([
-                            's_id' => $getMaxStock + 1, 's_comp' => "PF00000001", 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
+                            's_id' => $getMaxStock + 1, 's_comp' => $o_comp, 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
                         ]);
                     }
 
@@ -1058,7 +1058,7 @@ class opnameBarangController extends Controller
                     if ($cekStockExist == 0) {
                         $getMaxStock = DB::table('d_stock')->max('s_id');
                         DB::table('d_stock')->insert([
-                            's_id' => $getMaxStock + 1, 's_comp' => "PF00000001", 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
+                            's_id' => $getMaxStock + 1, 's_comp' => $o_comp, 's_position' => $o_comp, 's_item' => $idItem, 's_qty' => 0
                         ]);
                     }
 

@@ -182,17 +182,17 @@
                                             <div class="col-md-12">
                                                 <table class="table table-responsive table-striped table-bordered" id="table-penjualan">
                                                     <thead>
-                                                    <tr>
-                                                        <th style="width: 32%;">Nama Barang</th>
-                                                        <th style="width: 8%;">Qty</th>
-                                                        <th style="width: 15%;">Harga @</th>
-                                                        @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)
-                                                        <th style="width: 8%;">Diskon %</th>
-                                                        <th style="width: 12%;">Diskon Rp</th>
-                                                        @endif
-                                                        <th style="width: 15%;">Total</th>
-                                                        <th style="width: 10%;">Aksi</th>
-                                                    </tr>
+                                                        <tr>
+                                                            <th style="width: 32%;">Nama Barang</th>
+                                                            <th style="width: 8%;">Qty</th>
+                                                            <th style="width: 15%;">Harga @</th>
+                                                            @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)
+                                                            <th style="width: 8%;">Diskon %</th>
+                                                            <th style="width: 12%;">Diskon Rp</th>
+                                                            @endif
+                                                            <th style="width: 15%;">Total</th>
+                                                            <th style="width: 10%;">Aksi</th>
+                                                        </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($data as $index => $item)
@@ -207,11 +207,11 @@
                                                                         <input type="hidden" class="totalItem totalItem-{{ $item->i_code }} totalItem-{{ $item->idStock }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
                                                                     </td>
                                                                     <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item->sd_qty }}', '{{ $item->stock_qty }}', 'harga-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}', 'grossItem-{{ $item->idStock }}')" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->sd_qty }}" /></td>
-                                                                    <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
+                                                                    <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price != null) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
                                                                     @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
                                                                     @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
                                                                     <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}" class="harga-{{ $item->idStock }} harga-{{ $item->i_code }}">Rp.<p style="float: right">{{ number_format($item->sd_total_gross,0,',','.') }}</p></td>
-                                                                    <td style="width: 10%;" class="text-center"><button type="button" onclick="hapus({{ $item->idStock }})" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
+                                                                    <td style="width: 10%;" class="text-center"><button type="button" onclick="hapusItem('{{ $item->idStock }}', '{{ $item->sd_sales }}', '{{ $item->sd_item }}', null)" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                                 @else
                                                                 <tr id="{{ $item->idStock }}" class="tr">
@@ -225,11 +225,11 @@
                                                                         <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
                                                                     </td>
                                                                     <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="1" />1</td>
-                                                                    <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
+                                                                    <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price != null) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
                                                                     @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right;" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
                                                                     @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right;" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
                                                                     <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}">Rp.<p style="float: right">{{ number_format($item->sd_total_gross,0,',','.') }}</p></td>
-                                                                    <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus({{ $item->idStock }})"><i class="fa fa-minus"></i></button></td>
+                                                                    <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}', '{{ $item->sd_sales }}', '{{ $item->sd_item }}', '{{ $item->sm_specificcode }}')"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                             @endif
                                                         @endforeach
@@ -367,9 +367,14 @@
             }
         });
 
+        var inputs = document.getElementsByClassName( 'kode' ),
+            kode  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+
         $( "#cari-stock" ).autocomplete({
             source: function(request, response) {
-                $.getJSON(baseUrl+'/penjualan-reguler/cari-stock', { jenis: $("#id_group").val(), term: $("#cari-stock").val() },
+                $.getJSON(baseUrl+'/penjualan-reguler/cari-stock', { kode: kode, jenis: $("#id_group").val(), term: $("#cari-stock").val() },
                     response);
             },
             minLength: 1,
@@ -741,7 +746,7 @@
                     }
                 });
             },
-            minLength: 2,
+            minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
                 $("#stockid").val(data.item.id);
@@ -787,7 +792,7 @@
                     }
                 });
             },
-            minLength: 2,
+            minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
                 $("#stockid").val(data.item.id);
@@ -896,6 +901,82 @@
         updateTotalTampil();
     }
 
+    function hapusItem(id, sales, item, code) {
+
+        $.SmartMessageBox({
+            title : "Pesan!",
+            content : 'Apakah Anda yakin akan membatalkan item ini?',
+            buttons : '[Batal][Ya]'
+        }, function(ButtonPressed) {
+            if (ButtonPressed === "Ya") {
+
+                $('#overlay').fadeIn(200);
+                $('#load-status-text').text('Sedang Memproses...');
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: baseUrl + '/penjualan-reguler/delete-item/'+sales+'/'+item+'/'+code,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(response){
+                        if (response.result == "false") {
+                            $.smallBox({
+                                title : "Gagal",
+                                content : "Upsss. Terjadi kesalahan",
+                                color : "#A90329",
+                                timeout: 5000,
+                                icon : "fa fa-times bounce animated"
+                            });
+                            $('#overlay').fadeOut(200);
+
+                        } else {
+                            $.smallBox({
+                                title : "Berhasil",
+                                content : 'Item berhasil dibatalkan...!',
+                                color : "#739E73",
+                                timeout: 5000,
+                                icon : "fa fa-check bounce animated"
+                            });
+                            $('#'+id).remove();
+                            setArrayId();
+                            updateTotalTampil();
+                            $('#overlay').fadeOut(200);
+                            if (response.msg == "null") {
+                                window.location = baseUrl + '/penjualan-reguler';
+                            }
+                        }
+                    }, error:function(x, e) {
+                        if (x.status == 0) {
+                            alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                            $('#overlay').fadeOut(200);
+                        } else if (x.status == 404) {
+                            alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                            $('#overlay').fadeOut(200);
+                        } else if (x.status == 500) {
+                            alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                            $('#overlay').fadeOut(200);
+                        } else if (e == 'parsererror') {
+                            alert('Error.\nParsing JSON Request failed.');
+                            $('#overlay').fadeOut(200);
+                        } else if (e == 'timeout'){
+                            alert('Request Time out. Harap coba lagi nanti');
+                            $('#overlay').fadeOut(200);
+                        } else {
+                            alert('Unknow Error.\n' + x.responseText);
+                            $('#overlay').fadeOut(200);
+                        }
+                    }
+                })
+
+            }
+
+        });
+    }
+
     function hapus(id) {
         $('#'+id).remove();
         setArrayId();
@@ -926,7 +1007,7 @@
         for (var i = 0; i < artotalItem.length; i++){
             totalHarga += parseInt(artotalItem[i]);
         }
-        console.log(totalHarga);
+
         $("#totalGross").val(totalGross);
         $('.total-tampil').html(convertToRupiah(totalHarga));
         $("#totalHarga").val(totalHarga);

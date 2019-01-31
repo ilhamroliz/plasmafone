@@ -769,6 +769,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('penjualan-reguler/get', 'PenjualanController@getPenjualanRegular')->name('penjualan.regular');
     Route::get('penjualan-reguler/get-detail/{id}', 'PenjualanController@getPenjualanRegularDetail');
     Route::get('penjualan-reguler/delete/{id}', 'PenjualanController@delete');
+    Route::get('penjualan-reguler/delete-item/{sales}/{item}/{code}', 'PenjualanController@deleteItem');
     Route::get('penjualan-reguler/edit/{id}', 'PenjualanController@editPenjualanRegular');
     Route::get('penjualan-reguler/tambah', 'PenjualanController@add_regular');
     Route::get('penjualan-reguler/simpan-member', 'PenjualanController@saveMember');
@@ -787,6 +788,9 @@ Route::group(['middleware' => 'auth'], function () {
 	// =====Penjualan Tempo=====
     Route::get('penjualan-tempo', 'PenjualanController@tempo');
     Route::get('penjualan-tempo/get', 'PenjualanController@getPenjualanTempo')->name('penjualan.tempo');
+    Route::get('penjualan-tempo/get-detail/{id}', 'PenjualanController@getPenjualanRegularDetail');
+    Route::get('penjualan-tempo/delete/{id}', 'PenjualanController@delete');
+    Route::get('penjualan-tempo/delete-item/{sales}/{item}/{code}', 'PenjualanController@deleteItem');
     Route::get('penjualan-tempo/tambah', 'PenjualanController@add_tempo');
     Route::get('penjualan-tempo/edit/{id}', 'PenjualanController@editPenjualanTempo');
     Route::post('penjualan-tempo/edit', 'PenjualanController@editPenjualan');
