@@ -201,7 +201,6 @@
                                                     <th data-hide="phone,tablet" width="25%">Nama Outlet</th>
                                                     <th data-hide="phone,tablet" width="35%">Nama Barang</th>
                                                     <th data-hide="phone,tablet" width="5%">Qty</th>
-                                                    <th data-hide="phone,tablet" width="10%">Status</th>
                                                     <th data-hide="phone,tablet" width="15%">Aksi</th>
 
                                                 </tr>
@@ -309,7 +308,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" onclick="updateTolak()">
-                        <span class="glyphicon glyphicon-floppy-disk"></span> Simpan
+                        <span class="glyphicon glyphicon-floppy-disk"></span> Update
                     </button>
                 </div>
             </div>
@@ -445,45 +444,8 @@
                 $('#overlay').fadeOut(200);
             }, 500);
 
-            setTimeout(function () {
-
-                tolak = $('#dt_tolak').dataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": "{{ url('/pembelian/request-pembelian/tolak') }}",
-                  /*  "fnCreatedRow": function (row, data, index) {
-                        $('td', row).eq(0).html(index + 1);
-                        },*/
-                    "columns":[
-                        {"data": "date"},
-                        {"data": "c_name"},
-                        {"data": "i_nama"},
-                        {"data": "qty"},
-                        {"data": "status"},
-                        {"data": "aksi"}
-                    ],
-                    "autoWidth" : false,
-                    "language" : dataTableLanguage,
-                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                    "preDrawCallback" : function() {
-                        // Initialize the responsive datatables helper once.
-                        if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tolak'), breakpointDefinition);
-                        }
-                    },
-                    "rowCallback" : function(nRow) {
-                        responsiveHelper_dt_basic.createExpandIcon(nRow);
-                    },
-                    "drawCallback" : function(oSettings) {
-                        responsiveHelper_dt_basic.respond();
-                    }
-                });
-                $('#overlay').fadeOut(200);
-            }, 500);
-
             tampil_diproses();
-            // tampil_ditolak();
+            tampil_ditolak();
         });
 
 		/* END BASIC */
@@ -491,7 +453,6 @@
 		function refresh_tab(){
 		    menunggu.api().ajax.reload();
 		    diproses.api().ajax.reload();
-            tolak.api().ajax.reload();
 		    semua.api().ajax.reload();
 		}
 
@@ -609,9 +570,8 @@
 
 		}
 
-        function editQtyTolak(jenis,i_nama,id,qty){
+        function editQtyTolak(i_nama,id,qty){
 
-            $('#jenis').val(jenis);
             $('#i_nama1').val(i_nama);
             $('#ro_id1').val(id);
             $('#ro_qty1').val(qty);

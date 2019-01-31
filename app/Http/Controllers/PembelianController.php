@@ -3206,75 +3206,59 @@ class PembelianController extends Controller
 
         $comp = Auth::user()->m_comp;
 
-        //if($comp == "PF00000001"){
-            $tolak1 = DB::table('d_requestorder')
-                ->select(
-                    DB::raw('d_requestorder.ro_id as id'),
-                    DB::raw('d_requestorder.ro_comp as comp'),
-                    DB::raw('date_format(ro_date, "%d/%m/%Y") as date'),
-                    DB::raw('d_requestorder.ro_item as item'),
-                    DB::raw('d_requestorder.ro_qty as qty'),
-                    'c_name',
-                    'i_nama'
-                    // DB::raw('"request" as nama')
+        if($comp == "PF00000001"){
+            $proses = DB::table('d_requestorder')
+            ->select(
+                'd_requestorder.ro_id',
+                DB::raw('date_format(ro_date, "%d/%m/%Y") as ro_date'),
+                'm_company.c_name',
+                'd_item.i_nama',
+                'd_requestorder.ro_item',
+                'd_requestorder.ro_qty',
+                'd_requestorder.ro_state'
+            )
+            ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+            ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
+            ->where('d_requestorder.ro_state', 'N')
+            ->where('d_requestorder.ro_date','>=',$awal_tolak)
+            ->where('d_requestorder.ro_date','<=',$akhir_tolak)
+            ->get();
 
-                )
-                ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
-                ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
-                ->where('d_requestorder.ro_state', '=', 'N')
-                ->where('d_requestorder.ro_date','>=', $awal_tolak)
-                ->where('d_requestorder.ro_date','<=', $akhir_tolak)
-                ->get();
+        }else{
+            $id = Auth::user()->m_comp;
+            $proses = DB::table('d_requestorder')
+            ->select(
+                'd_requestorder.ro_id',
+                DB::raw('date_format(ro_date, "%d/%m/%Y") as ro_date'),
+                'm_company.c_name',
+                'd_item.i_nama',
+                'd_requestorder.ro_item',
+                'd_requestorder.ro_qty',
+                'd_requestorder.ro_state'
+            )
+            ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
+            ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
+            ->where('d_requestorder.ro_state', 'N')
+            ->where('d_requestorder.ro_comp',$comp)
+            ->where('d_requestorder.ro_date','>=',$awal_tolak)
+            ->where('d_requestorder.ro_date','<=',$akhir_tolak)
+            ->get();
+        }
 
-            // $tolak2 = DB::table('d_indent')
-            //     ->select(
-            //         DB::raw('d_indent_dt.id_item as id'),
-            //         DB::raw('d_indent.i_comp as comp'),
-            //         DB::raw('date_format(d_indent.i_date, "%d/%m/%Y") as date'),
-            //         DB::raw('d_indent_dt.id_item as item'),
-            //         DB::raw('sum(d_indent_dt.id_qty) as qty'),
-            //         'c_name',
-            //         'i_nama',
-            //         DB::raw('"indent" as nama')
-                    // 'd_indent.i_id as id_table'
-                // )
-                // ->join('m_company', 'd_indent.i_comp', '=', 'm_company.c_id')
-                // ->join('d_indent_dt', 'd_indent.i_id', '=', 'd_indent_dt.id_indent')
-                // ->join('d_item', 'd_indent_dt.id_item', '=', 'd_item.i_id')
-                // ->where('d_indent_dt.id_status', '=', 'N')
-                // ->where('d_indent.i_date','>=', $awal_tolak)
-                // ->where('d_indent.i_date','<=', $akhir_tolak)
-                // ->groupBy('id_item');
+        $data = array();
+        // $i = 1;
+        foreach ($proses as $key ) {
+            $row    = array();
+            $row[]  = $key->ro_date;
+            $row[]  = $key->c_name;
+            $row[]  = $key->i_nama;
+            $row[]  = $key->ro_qty;
+            $row[]  = "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' onclick='editQtyTolak(\"".$key->i_nama."\", ".$key->ro_id.",".$key->ro_qty.")'><i class='fa fa-edit'></i></button></div>";
+            $data[] = $row;
+        }
 
+        echo json_encode(array("data"=>$data));
 
-        // $tolak = $tolak1->union($tolak2);
-
-
-       return DataTables::of($tolak1)
-        // ->addColumn('keterangan', function($tolak1){
-        //     if ($tolak1->nama == 'indent') {
-        //         return "Indent";
-        //     } else {
-        //         return "Request";
-        //     }
-        // })
-
-        ->addColumn('status', function($tolak1){
-            return '<div class="text-center"><span class="label label-danger">DI TOLAK...</span></div>';
-        })
-
-        ->addColumn('aksi', function($tolak1){
-            if ($tolak1->nama == 'indent') {
-                return "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' onclick='editQtyTolak(\"".$tolak1->i_nama."\", ".$tolak1->id.",".$tolak1->qty.")'><i class='fa fa-edit'></i></button>";
-            } else {
-                return "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' onclick='editQtyTolak(\"".$tolak1->i_nama."\",".$tolak1->id.",".$tolak1->qty.")'><i class='fa fa-edit'></i></button>";
-            }
-
-            return "<div class='text-center'><button class='btn btn-sm btn-danger btn-circle' onclick='hapus(".$tolak1->id.")'><i class='fa fa-trash'></i></button>";
-
-        })
-        ->rawColumns(['status', 'aksi'])
-        ->make(true);
     }
 
     public function requestProses(Request $request)
