@@ -269,6 +269,7 @@ class PembelianController extends Controller
 
     public function simpanConfirm(Request $request)
     {
+        dd($request);
         $supplier = $request->input('supplier');
         $qtyApp   = $request->input('QtyApp');
 

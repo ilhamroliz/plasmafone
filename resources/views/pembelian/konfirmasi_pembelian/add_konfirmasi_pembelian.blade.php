@@ -722,7 +722,7 @@
 					    }
 						$.ajax({
 							url : '{{url('/pembelian/konfirmasi-pembelian/simpanConfirm')}}',
-							type: "POST",
+							type: "GET",
 					        data: ar.find('input', 'select').serialize(),
 							dataType: "JSON",
 							success: function(data)
