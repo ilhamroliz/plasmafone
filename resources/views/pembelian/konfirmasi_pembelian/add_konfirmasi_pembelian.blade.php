@@ -710,15 +710,6 @@
 	}
 
 		function simpanConfirm(){
-			if($('#dt_supplier').val() == "00" ){
-				$.smallBox({
-					title : "Gagal",
-					content : 'Supplier Belum Di Pilih..!',
-					color : "#A90329",
-					timeout: 4000,
-					icon : "fa fa-check bounce animated"
-					});
-			}else{
 				$.SmartMessageBox({
 					title : "Konfirmasi Pembelian",
 					content : "Apakah Anda Yakin Akan Mengajukan Confirm Order ?",
@@ -753,21 +744,14 @@
 										timeout: 4000,
 										icon : "fa fa-check bounce animated"
 										});
-										$('#table-rencana').DataTable().ajax.reload();
+									$('#table-rencana').DataTable().ajax.reload();
 								}
 
 							},
 
 						});
-
-						// $.smallBox({
-						// 	title : "Callback function",
-						// 	content : "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
-						// 	color : "#659265",
-						// 	iconSmall : "fa fa-check fa-2x fadeInRight animated",
-						// 	timeout : 4000
-						// });
 					}
+
 					if (ButtonPressed === "Tidak") {
 						$.smallBox({
 							title : "Peringatan...!!!",
@@ -780,11 +764,6 @@
 
 				});
 				e.preventDefault();
-			}
-
-
-
-
 
 		}
 
