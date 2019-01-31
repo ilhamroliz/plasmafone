@@ -788,6 +788,8 @@ Route::group(['middleware' => 'auth'], function () {
 	// =====Penjualan Tempo=====
     Route::get('penjualan-tempo', 'PenjualanController@tempo');
     Route::get('penjualan-tempo/get', 'PenjualanController@getPenjualanTempo')->name('penjualan.tempo');
+    Route::get('penjualan-tempo/get-detail/{id}', 'PenjualanController@getPenjualanRegularDetail');
+    Route::get('penjualan-tempo/delete/{id}', 'PenjualanController@delete');
     Route::get('penjualan-tempo/tambah', 'PenjualanController@add_tempo');
     Route::get('penjualan-tempo/edit/{id}', 'PenjualanController@editPenjualanTempo');
     Route::post('penjualan-tempo/edit', 'PenjualanController@editPenjualan');
