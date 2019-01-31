@@ -2905,7 +2905,7 @@ class PembelianController extends Controller
         foreach ($list as $hasil) {
             $row = array();
             $row[] = $hasil->i_nama;
-            $row[] = '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama' . $hasil->ro_id . '" value="' . $hasil->ro_qty . '"  style="text-transform: uppercase" onkeyup="editDumy(' . $hasil->ro_id . ')" /></div>';
+            $row[] = '<div class="text-center">'.$hasil->ro_qty.'</div>';
             $row[] = '<div class="text-center"><button class="btn btn-xs btn-danger btn-circle" title="Hapus Data" onclick="hapusData(' . $hasil->ro_id . ')"><i class="glyphicon glyphicon-trash"></i></button></div>';
             $data[] = $row;
         }
