@@ -567,7 +567,6 @@
 		var baseUrl = '{{ url('/') }}';
 
 		$(document).ready(function(){
-			$(".harga-outlet").maskMoney({thousands:'.', precision: 0});
 
 			// $('#tabs').tabs();
 
@@ -786,6 +785,10 @@
 
 			})
 		}
+
+		function edit(id) {
+            window.location = baseUrl + '/distribusi-barang/edit-distribusi/'+id;
+        }
 
 		function ubah(distribusi, item, comp, namaItem, qtyDistribusi, qtyReceived){
 			$('#table_edit').DataTable().destroy();

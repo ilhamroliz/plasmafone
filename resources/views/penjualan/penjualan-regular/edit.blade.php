@@ -669,7 +669,7 @@
                     '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '<input type="hidden" class="totalItem totalItem-'+iCode+' totalItem-'+idGlobal+'" name="totalItem[]" id="totalItem-'+iCode+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '</td>' +
-                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
+                    '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="qtyUbah(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
@@ -850,6 +850,54 @@
         }
         updateTotalTampil();
 
+    }
+
+    function qtyUbah(stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {
+        stock = parseInt(stock);
+
+        var harga = 0;
+        var input = parseInt($('#'+inputQty).val());
+        var discPercent = $("#"+discp).val().replace("%", "");
+        var discValue = $("#"+discv).val().replace(".", "");
+        var awalHarga = $("#"+hargaAwal).val();
+        awalHarga = parseInt(awalHarga);
+
+        if (discPercent == "") {
+            discPercent = 0;
+        } else if (discPercent == 0) {
+            discPercent = 0;
+        } else {
+            discPercent = parseInt(discPercent);
+        }
+
+        if (discValue == "") {
+            discValue = 0;
+        } else if (discValue == 0) {
+            discValue = 0;
+        } else {
+            discValue = parseInt(discValue);
+        }
+
+        if (isNaN(input)){
+            input = 0;
+        }
+        if (input > stock){
+            input = stock;
+            $('#'+inputQty).val(input);
+        }
+
+        if (discPercent == 0 && discValue == 0) {
+            harga += input * awalHarga;
+        } else if (discPercent != 0) {
+            harga += ((100 - discPercent)/100) * (awalHarga * input);
+        } else if (discValue != 0) {
+            harga += input * awalHarga - discValue;
+        }
+
+        $('#'+grossItem).val(input * awalHarga);
+        $('#'+totalItem).val(harga);
+        $("#"+lbltotalItem).html('Rp.<p style="float: right">'+toRupiah(parseInt(harga))+'</p>');
+        updateTotalTampil();
     }
 
     function ubahQty(qtyTerbeli, stock, hargaAwal, inputQty, discp, discv, lbltotalItem, totalItem, grossItem) {

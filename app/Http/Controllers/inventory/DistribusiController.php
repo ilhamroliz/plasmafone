@@ -36,10 +36,31 @@ class DistribusiController extends Controller
         return view('inventory.distribusi.add');
     }
 
-    public function edit(Request $request)
+    public function editDistribusi($id = null)
     {
-        $data = $request->all();
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
+
+        $data = DB::table('d_distribusi')
+            ->select('d_distribusi.*', 'd_distribusi_dt.*', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y") as tanggal'), 'd_stock.s_id as idStock', 'd_item.i_nama as nama_item', 'd_stock.s_qty as stock_qty', 'd_item.i_specificcode as specificcode', 'd_item.i_code')
+            ->join('d_distribusi_dt', 'd_distribusi.d_id', '=', 'd_distribusi_dt.dd_distribusi')
+            ->join('m_company', 'd_distribusi.d_destination', '=', 'm_company.c_id')
+            ->join('d_item', 'd_distribusi_dt.dd_item', '=', 'd_item.i_id')
+            ->join('d_stock_mutation', 'd_distribusi.d_nota', '=', 'd_stock_mutation.sm_nota')
+            ->join('d_stock', function($y){
+                $y->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                $y->on('d_stock.s_item', '=', 'd_distribusi_dt.dd_item');
+            })
+            ->where('d_distribusi.d_id', $id)
+            ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+            ->distinct('d_stock_mutation.sm_specificcode')
+            ->get();
+
         dd($data);
+        return view('inventory.distribusi.edit')->with(compact('data'));
     }
 
     public function getProses()

@@ -823,7 +823,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('distribusi-barang/cari-stock', 'inventory\DistribusiController@cariStock');
     Route::get('distribusi-barang/search-stock', 'inventory\DistribusiController@searchStock');
     Route::post('distribusi-barang/simpan', 'inventory\DistribusiController@simpan');
-    Route::post('distribusi-barang/edit', 'inventory\DistribusiController@edit');
+    Route::get('distribusi-barang/edit-distribusi/{id}', 'inventory\DistribusiController@editDistribusi');
     Route::get('distribusi-barang/hapus/{id}', 'inventory\DistribusiController@hapus');
     Route::get('distribusi-barang/struk/{id}', 'inventory\DistribusiController@struck');
 	// =====End Distribusi barang=====
