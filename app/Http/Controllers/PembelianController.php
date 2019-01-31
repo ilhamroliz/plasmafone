@@ -1167,8 +1167,21 @@ class PembelianController extends Controller
 
     public function view_addKonfirmasi()
     {
+        $data = DB::table('d_purchase_plan')
+            ->select(
+                'd_purchase_plan.pp_id',
+                DB::raw('date_format(d_purchase_plan.pp_date, "%d/%m/%Y") as pp_date'),
+                'd_purchase_plan.pp_item',
+                'd_purchase_plan.pp_qtyreq',
+                'd_item.i_nama'
+            )
+            ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
+            ->where('d_purchase_plan.pp_status', 'P')
+            ->get();
 
-        return view('pembelian/konfirmasi_pembelian/add_konfirmasi_pembelian');
+        $supplier = $this->getSupplier();
+
+        return view('pembelian/konfirmasi_pembelian/add_konfirmasi_pembelian', compact('data', 'supplier'));
     }
 
     public function view_confirmApp()
@@ -1319,7 +1332,7 @@ class PembelianController extends Controller
             )
             ->where('s_isactive', '=', 'Y')
             ->get();
-        return json_encode($data);
+        return $data;
     }
 
     public function view_confirmAdd_trans()
@@ -1347,7 +1360,7 @@ class PembelianController extends Controller
 
             })
             ->addColumn('inputSupp', function ($confirm) {
-                return '<div class="text-center"><div class="form-group"><select class="select2"><option selected>Pilih Supplier</option></select></div></div>';
+                return '<div class="text-center"><div class="form-group"><select name="supplier[]" class="pilihsupplier select2"><option selected>Pilih Supplier</option></select></div></div>';
             })
             ->rawColumns(['Qtyreq','inputQty', 'inputSupp'])
             ->make(true);

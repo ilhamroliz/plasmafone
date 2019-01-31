@@ -127,32 +127,39 @@
 								<!-- widget body text-->
 
 								<div class="tab-content padding-10 ">
-
-
 									<div class="tab-pane fade in active" id="hr1">
-
 										<table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
-
 											<thead class="table-responsive">
-
 												<tr>
-
                                                     <th class="text-center" width="15%">Tanggal</th>
                                                     <th class="text-center" width="50%">Nama Barang</th>
                                                     <th class="text-center" width="10%" >Qty</th>
 													<th class="text-center" width="10%">Qty App</th>
 													<th class="text-center" width="15%">Supplayer</th>
-
 												</tr>
-
 											</thead>
 
 											<tbody>
-
+                                                @foreach($data as $row)
+                                                    <tr>
+                                                        <td>{{ $row->pp_date }}</td>
+                                                        <td>{{ $row->i_nama }}</td>
+                                                        <td>{{ $row->pp_qtyreq }}</td>
+                                                        <td><div class="text-center"><input type="number" min="1" class="form-control" name="QtyApp" id="QtyApp" value="{{ $row->pp_qtyreq }}"></div></td>
+                                                        <td>
+                                                            <div class="text-center">
+                                                                <select name="supplier[]" class="pilihsupplier select2">
+                                                                    <option selected>Pilih Supplier</option>
+                                                                    @foreach ($supplier as $supp)
+                                                                        <option value="{{ $supp->id }}">{{ $supp->text }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
 											</tbody>
-
 										</table>
-
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -239,6 +246,7 @@
 				$(this).find("span[class~='caption']").hide();
 				$(this).find("input[class~='editor']").fadeIn().focus();
 			});
+/*
 
         	setTimeout(function () {
 
@@ -276,6 +284,7 @@
                 out();
             }, 500);
 
+*/
 
         });
 
@@ -291,7 +300,7 @@
 					// for (var i = 0; i < data.length ; i++) {
 					// 	$('select').append("<option value='"+data[i].s_id+"'>"+data[i].s_company+"</option>");
 					// }
-					$('.select2').select2({
+					$('.pilihsupplier').select2({
 						data: data
 					});
 				},
