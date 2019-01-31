@@ -105,8 +105,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 											<thead>		
 												<tr>
 													<th width="55%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Barang</th>
-													<th width="25%"><i class="fa fa-fw fa-user txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Barang</th>
-													<th width="20%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+													<th width="25%"><i class="fa fa-fw fa-shopping-cart txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Jumlah Barang</th>
+													{{--  <th width="20%" class="text-center" ><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>  --}}
 												</tr>
 											</thead>
 
@@ -366,7 +366,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"columns":[
 					{"data": "i_nama"},
 					{"data": "qty"},
-					{"data": "aksi"}
+					{{--  {"data": "aksi"}  --}}
 				],
 				"autoWidth" : true,
 				"language" : dataTableLanguage,
