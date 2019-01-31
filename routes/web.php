@@ -386,7 +386,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/rencana-pembelian/updateRencana', 'PembelianController@updateRencana');
     Route::get('/pembelian/rencana-pembelian/deleteRencana', 'PembelianController@deleteRencana');
 
-    Route::get('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
+    Route::post('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
     Route::get('/pembelian/rencana-pembelian/tolakRequest', 'PembelianController@tolakRequest');
     Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 

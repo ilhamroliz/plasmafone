@@ -520,7 +520,7 @@
 					    });
 					    $.ajax({
 					        url: baseUrl + '/pembelian/rencana-pembelian/tambahRencana',
-					        type: 'get',
+					        type: 'post',
 					        data: ar.find('input').serialize(),
 					        dataType: 'json',
 					        success: function (data) {
