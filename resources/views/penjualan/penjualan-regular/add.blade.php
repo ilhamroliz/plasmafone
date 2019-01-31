@@ -695,7 +695,7 @@
                     }
                 });
             },
-            minLength: 2,
+            minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
                 $("#stockid").val(data.item.id);

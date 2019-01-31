@@ -454,6 +454,11 @@ class PenjualanController extends Controller
             return view('errors/404');
         }
 
+        $jenis = DB::table('d_sales')
+            ->where('d_sales.s_id', $id)
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+            ->first();
+
         $data = DB::table('d_sales')
                 ->select('d_sales.*', 'd_sales_dt.*', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_stock.s_id as idStock', 'd_stock.s_comp as stock_comp',
                     'd_stock.s_position as stock_position', 'd_stock.s_item as stock_item', 'd_stock.s_qty as stock_qty', 'd_stock_mutation.*', 'm_member.*',
@@ -469,7 +474,10 @@ class PenjualanController extends Controller
                     $y->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $y->on('d_stock.s_item', '=', 'd_sales_dt.sd_item');
                 })
-                ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_sales_dt.sd_item')
+                ->leftjoin('m_group_price', function ($g) use ($jenis){
+                    $g->on('m_group_price.gp_item', '=', 'd_sales_dt.sd_item');
+                    $g->where('m_group_price.gp_group', '=', $jenis->m_jenis);
+                })
                 ->leftjoin('d_outlet_price', function($x){
                     $x->on('d_outlet_price.op_item', '=', 'd_sales_dt.sd_item');
                     $x->where('op_outlet', '=', 'd_stock_detail.sd_comp');
@@ -963,7 +971,7 @@ class PenjualanController extends Controller
         }
 
         $datas = DB::table('d_sales')
-                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_value as total_item', 'd_sales_dt.sd_total_net as total', DB::raw('coalesce(concat(" (", sm_specificcode, ")"), "") as specificcode'))
+                ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_code', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_value as total_item', 'd_sales_dt.sd_total_net as total', DB::raw('coalesce(concat(" (", sm_specificcode, ")"), "") as specificcode'))
                 ->where('d_sales.s_id', $id)
                 ->join('d_sales_dt', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
                 ->join('m_company', 'm_company.c_id', '=', 'd_sales.s_comp')
@@ -1009,7 +1017,7 @@ class PenjualanController extends Controller
         }
 
         $datas = DB::table('d_sales')
-            ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_value as total_item', 'd_sales_dt.sd_total_net as total', DB::raw('coalesce(concat(" (", sm_specificcode, ")"), "") as specificcode'))
+            ->select('m_company.c_name as nama_outlet', 'm_company.c_address as alamat_outlet', 'd_sales.s_nota as nota', 'm_member.m_name as nama_member', 'm_member.m_telp as telp_member', 'd_sales.s_date as tanggal', 'd_sales_dt.sd_qty as qty', 'd_item.i_code', 'd_item.i_nama as nama_item', 'd_sales_dt.sd_value as total_item', 'd_sales_dt.sd_total_net as total', DB::raw('coalesce(concat(" (", sm_specificcode, ")"), "") as specificcode'))
             ->where('d_sales.s_id', $id)
             ->join('d_sales_dt', 'd_sales_dt.sd_sales', '=', 'd_sales.s_id')
             ->join('m_company', 'm_company.c_id', '=', 'd_sales.s_comp')
@@ -1029,6 +1037,154 @@ class PenjualanController extends Controller
         }
 
         return view('penjualan.penjualan-tempo.struk')->with(compact('datas', 'salesman', 'totHarga', 'payment_method', 'payment', 'dibayar', 'kembali'));
+    }
+
+    public function deleteItem($sales = null, $item = null, $code)
+    {
+        DB::beginTransaction();
+        try{
+            $getSales = DB::table('d_sales')->where('s_id', $sales)->first();
+
+            if ($code == "null") {
+                $stockMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_nota', $getSales->s_nota)
+                    ->where('sm_specificcode', null)
+                    ->where('sm_detail', 'PENGURANGAN')->get();
+            } else {
+                $stockMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_nota', $getSales->s_nota)
+                    ->where('sm_specificcode', $code)
+                    ->where('sm_detail', 'PENGURANGAN')->get();
+            }
+
+            foreach ($stockMutasi as $index => $sm){
+
+                $getMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                    ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                    ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                    ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
+
+                if ($stockMutasi[$index]->sm_specificcode != null){
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $stockMutasi[$index]->sm_stock)->max('sd_detailid');
+
+                    if ($maxStockdt == null){
+                        $maxStockdt = 1;
+                    } else {
+                        $maxStockdt = $maxStockdt + 1;
+                    }
+
+                    // insert stock_dt
+                    DB::table('d_stock_dt')->insert([
+                        'sd_stock' => $stockMutasi[$index]->sm_stock,
+                        'sd_detailid' => $maxStockdt,
+                        'sd_specificcode' => $stockMutasi[$index]->sm_specificcode
+                    ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+
+                    // delete d_sales_dt & d_sales
+                    DB::table('d_sales_dt')
+                        ->where('sd_sales', $sales)
+                        ->where('sd_item', $item)
+                        ->where('sd_specificcode', $code)
+                        ->delete();
+
+                    $check_sales = DB::table('d_sales_dt')
+                        ->where('sd_sales', $sales)
+                        ->count();
+
+                    if ($check_sales == 0) {
+                        DB::table('d_sales')
+                            ->where('s_id', $sales)
+                            ->delete();
+
+                        $msg = "null";
+                    } else {
+                        $msg = "available";
+                    }
+                } else {
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getSales->s_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+
+                    // delete d_sales_dt & d_sales
+                    DB::table('d_sales_dt')
+                        ->where('sd_sales', $sales)
+                        ->where('sd_item', $item)
+                        ->where('sd_specificcode', null)
+                        ->delete();
+
+                    $check_sales = DB::table('d_sales_dt')
+                        ->where('sd_sales', $sales)
+                        ->count();
+
+                    if ($check_sales == 0) {
+                        DB::table('d_sales')
+                            ->where('s_id', $sales)
+                            ->delete();
+
+                        $msg = "null";
+                    } else {
+                        $msg = "available";
+                    }
+                }
+            }
+            DB::commit();
+            return json_encode([
+                'result'    => "ok",
+                'msg'       => $msg
+            ]);
+        }catch (\Exception $e){
+            DB::rollback();
+            return json_encode([
+                'result'    => "false"
+            ]);
+        }
     }
 
     public function delete($id = null)

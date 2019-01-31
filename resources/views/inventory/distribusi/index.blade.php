@@ -488,31 +488,31 @@
 
 												<tbody>
 
-													<tr class="success">
+													<tr>
 														<td><strong>Nota</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_nota"></td>
 													</tr>
 
-													<tr class="danger">
+													<tr>
 														<td><strong>Dari Outlet</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_from"></td>
 													</tr>
 
-													<tr class="warning">
+													<tr>
 														<td><strong>Tujuan Outlet</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_destination"></td>
 													</tr>
 
-													<tr class="info">
+													<tr>
 														<td><strong>Tanggal Distribusi</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_tgl"></td>
 													</tr>
 
-													<tr class="success">
+													<tr>
 														<td><strong>Petugas</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_by"></td>
@@ -1163,7 +1163,7 @@
 				if (ButtonPressed === "Ya") {
 
 					$('#overlay').fadeIn(200);
-					$('#load-status-text').text('Sedang Menghapus...');
+					$('#load-status-text').text('Membatalkan distribusi...');
 
 					$.ajaxSetup({
 						headers: {
@@ -1171,10 +1171,28 @@
 						}
 					});
 					$.ajax({
-						url: baseUrl + '/distribusi-barang/hapus',
+						url: baseUrl + '/distribusi-barang/hapus/'+distribusi,
 						type: 'get',
 						success: function(response){
-							if (response == "false") {
+						    if (response == "Not Found") {
+                                $.smallBox({
+                                    title : "Gagal",
+                                    content : "Nota tidak ditemukan!",
+                                    color : "#A90329",
+                                    timeout: 5000,
+                                    icon : "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+                            } else if (response == "Access Denied") {
+                                $.smallBox({
+                                    title : "Pesan",
+                                    content : "Anda tidak diizinkan untuk menghapus!",
+                                    color : "#A90329",
+                                    timeout: 5000,
+                                    icon : "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+                            } else if (response == "false") {
 								$.smallBox({
 									title : "Gagal",
 									content : "Upsss. Terjadi kesalahan",
@@ -1187,7 +1205,7 @@
 							} else {
 								$.smallBox({
 									title : "Berhasil",
-									content : 'Transaksi Anda berhasil...!',
+									content : 'Distribusi berhasil dibatalkan',
 									color : "#739E73",
 									timeout: 5000,
 									icon : "fa fa-check bounce animated"
@@ -1319,9 +1337,14 @@
 					$('#dt_destination').text(response.data.data[0].destination);
 					$('#dt_tgl').text(response.data.data[0].date);
 					$('#dt_by').text(response.data.data[0].by);
+					console.log(response);
 					response.data.data.forEach(function(element) {
-						console.log(element);
-						row = '<tr class="tr"><td>'+element.nama_item+element.specificcode+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+					    if (element.i_code != "") {
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>'
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+element.specificcode+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>'
+                        }
+
 						$('#table_item tbody').append(row)
 					});
 					$('#overlay').fadeOut(200);

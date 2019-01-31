@@ -448,19 +448,19 @@ function rupiah($angka){
 
                                                 <tbody>
 
-                                                <tr class="success">
+                                                <tr>
                                                     <td><strong>Tanggal</strong></td>
                                                     <td><strong>:</strong></td>
                                                     <td id="dt_tanggal"></td>
                                                 </tr>
 
-                                                <tr class="danger">
+                                                <tr>
                                                     <td><strong>Nota</strong></td>
                                                     <td><strong>:</strong></td>
                                                     <td id="dt_nota"></td>
                                                 </tr>
 
-                                                <tr class="warning">
+                                                <tr>
                                                     <td><strong>Salesman</strong></td>
                                                     <td><strong>:</strong></td>
                                                     <td id="dt_salesman"></td>
