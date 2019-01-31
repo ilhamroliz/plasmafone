@@ -127,32 +127,39 @@
 								<!-- widget body text-->
 
 								<div class="tab-content padding-10 ">
-
-
 									<div class="tab-pane fade in active" id="hr1">
-
 										<table id="table-rencana" class="table table-striped table-bordered table-hover" width="100%">
-
 											<thead class="table-responsive">
-
 												<tr>
-
-                                                    <th data-hide="phone,tablet" class="text-center">Tanggal</th>
-                                                    <th data-hide="phone,tablet" class="text-center">Nama Barang</th>
-                                                    <th data-hide="phone,tablet " class="text-center">Qty</th>
-													<th data-hide="phone,tablet " class="text-center">Qty App</th>
-													<th data-hide="phone,tablet " class="text-center">Supplayer</th>
-
+                                                    <th class="text-center" width="15%">Tanggal</th>
+                                                    <th class="text-center" width="50%">Nama Barang</th>
+                                                    <th class="text-center" width="10%" >Qty</th>
+													<th class="text-center" width="10%">Qty App</th>
+													<th class="text-center" width="15%">Supplayer</th>
 												</tr>
-
 											</thead>
 
 											<tbody>
-
+                                                @foreach($data as $row)
+                                                    <tr>
+                                                        <td>{{ $row->pp_date }}</td>
+                                                        <td>{{ $row->i_nama }}</td>
+                                                        <td>{{ $row->pp_qtyreq }}</td>
+                                                        <td><div class="text-center"><input type="number" min="1" class="form-control" name="QtyApp" id="QtyApp" value="{{ $row->pp_qtyreq }}"></div></td>
+                                                        <td>
+                                                            <div class="text-center">
+                                                                <select name="supplier[]" class="pilihsupplier select2">
+                                                                    <option selected>Pilih Supplier</option>
+                                                                    @foreach ($supplier as $supp)
+                                                                        <option value="{{ $supp->id }}">{{ $supp->text }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
 											</tbody>
-
 										</table>
-
 									</div>
 									<div class="form-group">
 										<div class="row">
@@ -208,13 +215,14 @@
 
 
 	<script type="text/javascript">
-	var table_registrasi_trans, confirm;
+		var table_registrasi_trans;
+		var confirm;
 		var tambahKonfirmasi;
 		var input = $('#dt_harga2').val();
 		var input2 = $('#dt_angka').val();
 		var tambahRencana;
         $(document).ready(function () {
-			getSupplier();
+
 			$( "#tpMemberNama" ).autocomplete({
 				source: baseUrl+'/pembelian/request-pembelian/cariItem',
 				minLength: 2,
@@ -237,8 +245,8 @@
 			$(document).on("click","span",function(){
 				$(this).find("span[class~='caption']").hide();
 				$(this).find("input[class~='editor']").fadeIn().focus();
-				// alert();
 			});
+/*
 
         	setTimeout(function () {
 
@@ -250,12 +258,12 @@
                     "columns":[
                         {"data": "pp_date"},
                         {"data": "i_nama"},
-                        {"data": "pp_qtyreq"},
+                        {"data": "Qtyreq"},
                         {"data": "inputQty"},
                         {"data": "inputSupp"}
                     ],
 
-                    "autoWidth" : true,
+                    "autoWidth" : false,
                     "language" : dataTableLanguage,
                     "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
@@ -272,10 +280,33 @@
                         responsiveHelper_dt_basic.respond();
                     }
                 });
-                $('#overlay').fadeOut(200);
+            	getSupplier();
+                out();
             }, 500);
 
+*/
+
         });
+
+        function getSupplier()
+		{
+			$.ajax({
+				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
+				type: "GET",
+				data: {},
+				dataType: "JSON",
+				success: function(data)
+				{
+					// for (var i = 0; i < data.length ; i++) {
+					// 	$('select').append("<option value='"+data[i].s_id+"'>"+data[i].s_company+"</option>");
+					// }
+					$('.pilihsupplier').select2({
+						data: data
+					});
+				},
+
+			});
+		}
 
 		function editFor(id)
 		{
@@ -655,33 +686,6 @@
 
 		});
 	}
-
-		function getSupplier()
-		{
-
-			$.ajax({
-				url : '{{url('/pembelian/konfirmasi-pembelian/getSupplier')}}',
-				type: "GET",
-				data: {
-
-				},
-				dataType: "JSON",
-				success: function(data)
-				{
-					$('#dt_supplier').empty();
-					row = "<option selected='' value='00'>Pilih Supplier</option>";
-					$(row).appendTo("#dt_supplier");
-					$.each(data, function(k, v) {
-						row = "<option value='"+v.s_id+"'>"+v.s_company+"</option>";
-						$(row).appendTo("#dt_supplier");
-					});
-				},
-
-			});
-		}
-
-
-
 
 		function simpanConfirm(){
 			if($('#dt_supplier').val() == "00" ){

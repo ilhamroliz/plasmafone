@@ -443,7 +443,7 @@
                         responsiveHelper_dt_basic.respond();
                     }
                 });
-                $('#overlay').fadeOut(200);
+               overlay();
             }, 500);
 
             tampil_diproses();

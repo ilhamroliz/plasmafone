@@ -480,7 +480,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Return Barang
 
     Route::get('/pembelian/purchase-return', 'ReturnPembelianController@return_barang');
-
+    Route::get('/pembelian/purchase-return/getData', 'ReturnPembelianController@getData');
     Route::get('/pembelian/purchase-return/add', 'ReturnPembelianController@return_barang_add');
     Route::post('/pembelian/purchase-return/add', 'ReturnPembelianController@return_barang_add');
 
