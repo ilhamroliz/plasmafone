@@ -3215,64 +3215,65 @@ class PembelianController extends Controller
                     DB::raw('d_requestorder.ro_item as item'),
                     DB::raw('d_requestorder.ro_qty as qty'),
                     'c_name',
-                    'i_nama',
-                    DB::raw('"request" as nama')
+                    'i_nama'
+                    // DB::raw('"request" as nama')
 
                 )
                 ->join('m_company', 'ro_comp', '=', 'm_company.c_id')
                 ->join('d_item', 'd_requestorder.ro_item', '=', 'd_item.i_id')
                 ->where('d_requestorder.ro_state', '=', 'N')
                 ->where('d_requestorder.ro_date','>=', $awal_tolak)
-                ->where('d_requestorder.ro_date','<=', $akhir_tolak);
+                ->where('d_requestorder.ro_date','<=', $akhir_tolak)
+                ->get();
 
-            $tolak2 = DB::table('d_indent')
-                ->select(
-                    DB::raw('d_indent_dt.id_item as id'),
-                    DB::raw('d_indent.i_comp as comp'),
-                    DB::raw('date_format(d_indent.i_date, "%d/%m/%Y") as date'),
-                    DB::raw('d_indent_dt.id_item as item'),
-                    DB::raw('sum(d_indent_dt.id_qty) as qty'),
-                    'c_name',
-                    'i_nama',
-                    DB::raw('"indent" as nama')
+            // $tolak2 = DB::table('d_indent')
+            //     ->select(
+            //         DB::raw('d_indent_dt.id_item as id'),
+            //         DB::raw('d_indent.i_comp as comp'),
+            //         DB::raw('date_format(d_indent.i_date, "%d/%m/%Y") as date'),
+            //         DB::raw('d_indent_dt.id_item as item'),
+            //         DB::raw('sum(d_indent_dt.id_qty) as qty'),
+            //         'c_name',
+            //         'i_nama',
+            //         DB::raw('"indent" as nama')
                     // 'd_indent.i_id as id_table'
-                )
-                ->join('m_company', 'd_indent.i_comp', '=', 'm_company.c_id')
-                ->join('d_indent_dt', 'd_indent.i_id', '=', 'd_indent_dt.id_indent')
-                ->join('d_item', 'd_indent_dt.id_item', '=', 'd_item.i_id')
-                ->where('d_indent_dt.id_status', '=', 'N')
-                ->where('d_indent.i_date','>=', $awal_tolak)
-                ->where('d_indent.i_date','<=', $akhir_tolak)
-                ->groupBy('id_item');
+                // )
+                // ->join('m_company', 'd_indent.i_comp', '=', 'm_company.c_id')
+                // ->join('d_indent_dt', 'd_indent.i_id', '=', 'd_indent_dt.id_indent')
+                // ->join('d_item', 'd_indent_dt.id_item', '=', 'd_item.i_id')
+                // ->where('d_indent_dt.id_status', '=', 'N')
+                // ->where('d_indent.i_date','>=', $awal_tolak)
+                // ->where('d_indent.i_date','<=', $akhir_tolak)
+                // ->groupBy('id_item');
 
 
-        $tolak = $tolak1->union($tolak2);
+        // $tolak = $tolak1->union($tolak2);
 
 
-       return DataTables::of($tolak)
-        ->addColumn('keterangan', function($tolak){
-            if ($tolak->nama == 'indent') {
-                return "Indent";
-            } else {
-                return "Request";
-            }
-        })
+       return DataTables::of($tolak1)
+        // ->addColumn('keterangan', function($tolak1){
+        //     if ($tolak1->nama == 'indent') {
+        //         return "Indent";
+        //     } else {
+        //         return "Request";
+        //     }
+        // })
 
-        ->addColumn('status', function($tolak){
+        ->addColumn('status', function($tolak1){
             return '<div class="text-center"><span class="label label-danger">DI TOLAK...</span></div>';
         })
 
-        ->addColumn('aksi', function($tolak){
-            if ($tolak->nama == 'indent') {
-                return "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' onclick='editQtyTolak(\"".$tolak->nama."\",\"".$tolak->i_nama."\", ".$tolak->id.",".$tolak->qty.")'><i class='fa fa-edit'></i></button>";
+        ->addColumn('aksi', function($tolak1){
+            if ($tolak1->nama == 'indent') {
+                return "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' onclick='editQtyTolak(\"".$tolak1->i_nama."\", ".$tolak1->id.",".$tolak1->qty.")'><i class='fa fa-edit'></i></button>";
             } else {
-                return "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' onclick='editQtyTolak(\"".$tolak->nama."\",\"".$tolak->i_nama."\",".$tolak->id.",".$tolak->qty.")'><i class='fa fa-edit'></i></button>";
+                return "<div class='text-center'><button class='btn btn-sm btn-warning btn-circle' onclick='editQtyTolak(\"".$tolak1->i_nama."\",".$tolak1->id.",".$tolak1->qty.")'><i class='fa fa-edit'></i></button>";
             }
 
-            return "<div class='text-center'><button class='btn btn-sm btn-danger btn-circle' onclick='hapus(\"".$tolak->nama."\", ".$tolak->id.")'><i class='fa fa-trash'></i></button>";
+            return "<div class='text-center'><button class='btn btn-sm btn-danger btn-circle' onclick='hapus(".$tolak1->id.")'><i class='fa fa-trash'></i></button>";
 
         })
-        ->rawColumns(['keternagan','status', 'aksi'])
+        ->rawColumns(['status', 'aksi'])
         ->make(true);
     }
 

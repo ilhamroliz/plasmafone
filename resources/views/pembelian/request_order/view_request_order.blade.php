@@ -200,7 +200,6 @@
                                                     <th data-hide="phone,tablet" width="5%">Tanggal</th>
                                                     <th data-hide="phone,tablet" width="25%">Nama Outlet</th>
                                                     <th data-hide="phone,tablet" width="35%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="10%">Keterangan</th>
                                                     <th data-hide="phone,tablet" width="5%">Qty</th>
                                                     <th data-hide="phone,tablet" width="10%">Status</th>
                                                     <th data-hide="phone,tablet" width="15%">Aksi</th>
@@ -459,7 +458,6 @@
                         {"data": "date"},
                         {"data": "c_name"},
                         {"data": "i_nama"},
-                        {"data": "keterangan"},
                         {"data": "qty"},
                         {"data": "status"},
                         {"data": "aksi"}
