@@ -126,9 +126,7 @@
                                                     <th data-hide="phone,tablet" width="15%">
                                                         <i class="fa fa-shopping-cart text-primary"></i> Qty
                                                     </th>
-                                                    <!-- <th width="10%">
-                                                        <i class="fa fa-cogs text-primary"></i> Aksi
-                                                    </th> -->
+
                                                 </tr>
                                             </thead>
 
