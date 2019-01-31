@@ -746,7 +746,7 @@
                     }
                 });
             },
-            minLength: 2,
+            minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
                 $("#stockid").val(data.item.id);
@@ -792,7 +792,7 @@
                     }
                 });
             },
-            minLength: 2,
+            minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
                 $("#stockid").val(data.item.id);
@@ -1007,7 +1007,7 @@
         for (var i = 0; i < artotalItem.length; i++){
             totalHarga += parseInt(artotalItem[i]);
         }
-        console.log(totalHarga);
+
         $("#totalGross").val(totalGross);
         $('.total-tampil').html(convertToRupiah(totalHarga));
         $("#totalHarga").val(totalHarga);

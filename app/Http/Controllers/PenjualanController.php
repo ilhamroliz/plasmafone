@@ -499,6 +499,11 @@ class PenjualanController extends Controller
             return view('errors/404');
         }
 
+        $jenis = DB::table('d_sales')
+            ->where('d_sales.s_id', $id)
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+            ->first();
+
         $data = DB::table('d_sales')
             ->select('d_sales.*', 'd_sales_dt.*', DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_stock.s_id as idStock', 'd_stock.s_comp as stock_comp',
                 'd_stock.s_position as stock_position', 'd_stock.s_item as stock_item', 'd_stock.s_qty as stock_qty', 'd_stock_mutation.*', 'm_member.*',
@@ -514,7 +519,10 @@ class PenjualanController extends Controller
                 $y->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                 $y->on('d_stock.s_item', '=', 'd_sales_dt.sd_item');
             })
-            ->leftjoin('m_group_price', 'm_group_price.gp_item', '=', 'd_sales_dt.sd_item')
+            ->leftjoin('m_group_price', function ($g) use ($jenis){
+                $g->on('m_group_price.gp_item', '=', 'd_sales_dt.sd_item');
+                $g->where('m_group_price.gp_group', '=', $jenis->m_jenis);
+            })
             ->leftjoin('d_outlet_price', function($x){
                 $x->on('d_outlet_price.op_item', '=', 'd_sales_dt.sd_item');
                 $x->where('op_outlet', '=', 'd_stock_detail.sd_comp');
