@@ -189,8 +189,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
     </section>
 
 
-
-    <!-- Modal untuk Detil Opname Barang -->
+    {{--  <!-- Modal untuk Detil Opname Barang -->
     <div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -308,9 +307,120 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal -->  --}}
 
 
+    <!-- Modal untuk Detil Pemesanan -->
+			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel">Detail Pemesanan Barang</h4>
+
+						</div>
+
+						<div class="modal-body">			
+							<div class="row">
+
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+									<header>
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<h2 id="title_detail"></h2>
+									</header>
+
+									<!-- widget div-->
+									<div>
+
+										<!-- widget content -->
+										<div class="widget-body no-padding">
+											<div class="table-responsive">
+
+												<div class="col-md-12 padding-top-10 ">
+                                                    <div class="form-group">
+                                                        <label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
+                                                        <label class="col-md-1">:</label>
+                                                        <label class="col-md-8" id="obNota"></label>
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label class="col-md-3" style="float:left"><strong>Lokasi Barang</strong></label>
+                                                        <label class="col-md-1">:</label>
+                                                        <div class="col-md-8">
+                                                            <label id="obCabang"></label>
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label class="col-md-3" style="float:left"><strong>Nama Barang</strong></label>
+                                                        <label class="col-md-1">:</label>
+                                                        <div class="col-md-8">
+                                                            <label id="obBarang"></label>
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label class="col-md-3" style="float:left"><strong>Qty Sistem</strong></label>
+                                                        <label class="col-md-1">:</label>
+                                                        <div class="col-md-8">
+                                                            <label id="obQtyS"></label>
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label class="col-md-3" style="float:left"><strong>Qty Real</strong></label>
+                                                        <label class="col-md-1">:</label>
+                                                        <div class="col-md-8">
+                                                            <label id="obQtyR"></label>
+                                                        </div>
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label class="col-md-3" style="float:left"><strong>AKSI</strong></label>
+                                                        <label class="col-md-1">:</label>
+                                                        <div class="col-md-8">
+                                                            <label id="obAksi"></label>
+                                                        </div>
+                                                    </div>
+												</div>
+
+                                                <div id="divTab" style="display:none">
+                                                    <table id="dobCTable" class="table table-striped table-bordered table-hover">
+                                                        <thead>		
+                                                            <tr>
+                                                                <th width="20%">No.</th>
+                                                                <th width="80%">Kode Spesifik</th>
+                                                            </tr>
+                                                        </thead>
+    
+                                                        <tbody>
+                                                        </tbody>
+    
+                                                    </table>
+                                                </div>
+												
+											</div>
+										</div>
+										<!-- end widget content -->
+
+									</div>
+									<!-- end widget div -->
+
+								</div>
+								<!-- end widget -->
+
+							</div>			
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
 </div>
 @endsection
 
@@ -335,9 +445,9 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             todayHighlight: true
         });
 
-        dobCTable = $('#dobCTable').DataTable({
+        $('#dobCTable').DataTable({
+            "order": [],
             "searching": false,
-            "autoWidth": false,
             "pageLength": 5,
             "lengthChange": false,
             "language": dataTableLanguage
@@ -457,6 +567,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
     function detail(id) {
         axios.post(baseUrl + '/inventory/opname-barang/detail?id=' + id).then((response) => {
 
+            $('#title_detail').html('Detail Pemesanan Barang <strong>'+response.data.data[0].o_reff+'</strong>');
             $('#obNota').html(response.data.data[0].o_reff);
             $('#obCabang').html(response.data.data[0].c_name);
             $('#obBarang').html(response.data.data[0].i_nama);
@@ -470,58 +581,27 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             var qtyS = 0;
             var sc = response.data.data[0].i_specificcode;
 
+            $('#dobCTable').DataTable().clear();
+
             for (var ob = 0; ob < response.data.data.length; ob++) {
                 qtyR = qtyR + parseInt(response.data.data[ob].od_qty_real);
                 qtyS = qtyS + parseInt(response.data.data[ob].od_qty_system);
 
-                {{--  if (sc == 'Y' && ex == 'N') {
+                if (sc == 'Y') {
                     var a = ob + 1;
-                    dobCTable.row.add([
+                    $('#dobCTable').DataTable().row.add([
                         a,
                         response.data.data[ob].od_specificcode
                     ]).draw(false);
 
-                }  --}}
-
+                }
             }
 
-            if(sc == 'Y'){
-                $('#dobCTable').DataTable().destroy();
-                $('#dobCTable').DataTable({
-                    "searching": false,
-                    "pageLength": 5,
-                    "lengthChange": false,
-                    "processing": true,
-                    "serverSide": true,
-                    "order": [],
-                    "ajax": "{{ url('/inventory/opname-barang/detail?id=') }}"+id+"&dt=yes",
-                    "columns": [
-                        { "data": "DT_RowIndex" },
-                        { "data": "od_specificcode" }
-                    ],
-                    "autoWidth": true,
-                    "language": dataTableLanguage,
-                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-                        "t" +
-                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                    "preDrawCallback": function () {
-                        // Initialize the responsive datatables helper once.
-                        if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($(
-                                '#dobCTable'), breakpointDefinition);
-                        }
-                    },
-                    "rowCallback": function (nRow) {
-                        responsiveHelper_dt_basic.createExpandIcon(nRow);
-                    },
-                    "drawCallback": function (oSettings) {
-                        responsiveHelper_dt_basic.respond();
-                    }
-                });
-
+            if (sc == 'Y') {
+                $('#divTab').css("display", "block");
+            }else{
+                $('#divTab').css("display", "none");
             }
-
-            $('#dobCTable').css("display", "block");
 
             $('#obQtyS').html(qtyS + ' Unit');
             $('#obQtyR').html(qtyR + ' Unit');

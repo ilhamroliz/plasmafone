@@ -275,16 +275,8 @@ class PembelianController extends Controller
         $checkPcId = DB::table('d_purchase_confirm')->count();
 
         $dateReq  = Carbon::now('Asia/Jakarta');
-        $time     = Carbon::now('Asia/Jakarta')->format('d/m/Y');
+        $time = Carbon::now('Asia/Jakarta')->format('d/m/Y');
         $user = Auth::user()->m_id;
-
-        // $cekNota = DB::table('d_purchase_confirm')
-        //         ->whereRaw('pc_nota like "%'.$time.'%"')
-        //         ->select(DB::raw('CAST(MID(pc_nota, 4, 3) AS UNSIGNED) as pc_nota)'))
-        //         ->orderBy('pc_id', 'DESC')->first();
-
-        $getId = 1;
-        $nota = "CO-".$time;
 
         DB::beginTransaction();
         try {
@@ -301,20 +293,44 @@ class PembelianController extends Controller
                     ]);
             }
 
-            // $supp = array_unique($supplier);
-            // dd($supp);
+            $supp = array_unique($supplier);
+            $supp1 = array_values($supp);
 
-            // $not = 1;
-            for ($j=0; $j < count($qtyApp); $j++) {
-                DB::table('d_purchase_confirm')
-                    ->insert([
-                        'pc_id'       => $getId++,
-                        'pc_date'     => $dateReq,
-                        'pc_nota'     => $nota,
-                        'pc_supplier' => $supplier[$j],
-                        'pc_status'   => 'P'
-                    ]);
+            $cekNota = DB::table('d_purchase_confirm')
+                ->whereRaw('pc_nota like "%'.$time.'%"')
+                ->select(DB::raw('CAST(MID(pc_nota, 4, 3) AS UNSIGNED) as pc_nota'))
+                ->orderBy('pc_id', 'desc')->first();
+            $countPC = DB::table('d_purchase_confirm')->count();
+            $getId = 1;
+            if($countPC > 0){
+                $getId = DB::table('d_purchase_confirm')->max('pc_id');
             }
+            
+            $temp = 1;
+            if ($cekNota != null) {
+                $temp = ($cekNota->pc_nota + 1);
+            }
+            $pcAray = array();
+            for ($j=0; $j < count($supp1); $j++) {
+
+                $counter = $temp + $j;
+                $kode = sprintf("%03s", $counter);
+                $nota = 'CO-' . $kode . '/' . $time;
+
+                $aray = ([
+                    'pc_id' => $getId++,
+                    'pc_date' => $dateReq,
+                    'pc_nota' => $nota,
+                    'pc_supplier' => $supplier[$j],
+                    'pc_status' => 'P'
+                ]);
+                array_push($pcAray, $aray);
+
+            }
+
+            DB::table('d_purchase_confirm')->insert($pcAray);
+
+            //// Insert ke D_PURCHASE_CONFIRM
 
             DB::commit();
             return response()->json([
