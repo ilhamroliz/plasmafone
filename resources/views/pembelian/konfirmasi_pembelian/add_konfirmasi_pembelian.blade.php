@@ -158,6 +158,8 @@ function rupiah($angka)
                                                     <td>{{ $row->pp_qtyreq }}</td>
                                                     <td>
                                                         <div class="text-center">
+                                                        	<input type="hidden" name="pp_id[]" value="{{ $row->pp_id }}">
+                                                        	<input type="hidden" name="pp_item[]" value="{{$row->pp_item}}">
                                                             <input type="number" min="1" class="form-control QtyApp" name="QtyApp[]" value="{{ $row->pp_qtyreq }}">
                                                         </div>
                                                     </td>
@@ -683,18 +685,18 @@ function rupiah($angka)
                         data: ar.find('input').serialize() +'&'+ ar.find('select').serialize(),
                         dataType: "JSON",
                         success: function (data) {
-                            if (data.status == 'gagal') {
+                            if (data.status == 'sukses') {
                                 $.smallBox({
-                                    title: "Gagal",
-                                    content: 'Data gagal Di ajukan..!',
+                                	title: "Berhasil",
+                                    content: 'Anda Telah Berhasil Mengajukan Request Order...!',
                                     color: "#739E73",
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });
                             } else {
                                 $.smallBox({
-                                    title: "Berhasil",
-                                    content: 'Anda Telah Berhasil Mengajukan Request Order...!',
+                                    title: "Gagal",
+                                    content: 'Data gagal Di ajukan..!',
                                     color: "#739E73",
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"

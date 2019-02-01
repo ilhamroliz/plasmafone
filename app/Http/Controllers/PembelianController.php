@@ -269,32 +269,50 @@ class PembelianController extends Controller
 
     public function simpanConfirm(Request $request)
     {
-        dd($request);
         $supplier = $request->input('supplier');
         $qtyApp   = $request->input('QtyApp');
+        $pp_id    = $request->input('pp_id');
+        $checkPcId = DB::table('d_purchase_confirm')->count();
 
-        $dateReq    = Carbon::now('Asia/Jakarta');
-        $numberPlan = "CONF-".$code;
-        $user       = Auth::user()->m_id;
+        $dateReq  = Carbon::now('Asia/Jakarta');
+        $time     = Carbon::now('Asia/Jakarta')->format('d/m/Y');
+        $user = Auth::user()->m_id;
+
+        // $cekNota = DB::table('d_purchase_confirm')
+        //         ->whereRaw('pc_nota like "%'.$time.'%"')
+        //         ->select(DB::raw('CAST(MID(pc_nota, 4, 3) AS UNSIGNED) as pc_nota)'))
+        //         ->orderBy('pc_id', 'DESC')->first();
+
+        $getId = 1;
+        $nota = "CO-".$time;
 
         DB::beginTransaction();
         try {
-            $query = DB::table('d_purchase_plan')
-                ->select('d_purchase_plan.*')
-                ->where('d_purchase_plan.pp_status', '=', 'P')
-                ->get();
 
-            if (count($query) == 0) {
-                $data = "notFound";
-                echo json_encode(array("status" => $data));
-            } elseif ($qtyApp[0] < $query->pp_qtyappr) {
-                $qtyNew = $query->pp_qtyappr - $qtyApp[0];
+            for ($i=0; $i < count($qtyApp); $i++) {
                 DB::table('d_purchase_plan')
-                    ->where('pp_item', '=', $query->pp_item)
+                    ->where('pp_id', '=', $pp_id[$i])
+                    ->where('pp_status', '=', 'P')
                     ->update([
-                        'pp_qtyappr' => $qtyNew,
+                        'pp_qtyreq'  => $qtyApp[$i],
+                        'pp_qtyappr' => $qtyApp[$i],
                         'pp_status'  => 'Y',
                         'pp_date'    => $dateReq
+                    ]);
+            }
+
+            // $supp = array_unique($supplier);
+            // dd($supp);
+
+            // $not = 1;
+            for ($j=0; $j < count($qtyApp); $j++) {
+                DB::table('d_purchase_confirm')
+                    ->insert([
+                        'pc_id'       => $getId++,
+                        'pc_date'     => $dateReq,
+                        'pc_nota'     => $nota,
+                        'pc_supplier' => $supplier[$j],
+                        'pc_status'   => 'P'
                     ]);
             }
 
@@ -309,61 +327,6 @@ class PembelianController extends Controller
                 'data'   => $e
             ]);
         }
-
-
-
-
-        $baris = count($query);
-
-        if($baris =="0"){
-            $data = "notFound";
-            echo json_encode(array("status" => $data));
-        }else{
-            $pr_dateApp = Carbon::now('Asia/Jakarta');
-            $pr_stsPlan = "WAITING";
-
-                 $addAkses = [];
-                    for ($i=0; $i < count($query); $i++) {
-                        $temp = [
-
-                            // 'pr_idPlan' =>$query[$i]->pr_idPlan,
-                            'pr_supplier'      => $pr_supplier,
-                            'pr_item'          => $query[$i]->pr_itemPlan,
-                            'pr_price'         => $query[$i]->pr_harga_satuan,
-                            'pr_qtyApp'        => $query[$i]->pr_qtyApp,
-                            'pr_stsConf'       => $pr_stsPlan,
-                            'pr_dateApp'       => $dateReq,
-                            'pr_comp'          => Auth::user()->m_comp,
-                            'pr_confirmNumber' => $numberPlan,
-                            'total'            => $query[$i]->pr_harga_satuan * $query[$i]->pr_qtyApp
-                        ];
-                        array_push($addAkses, $temp);
-                    }
-
-            $insert = DB::table('d_purchase_confirm')->insert($addAkses);
-            if (!$insert) {
-
-                $data = "GAGAL";
-                echo json_encode(array("status" => $data));
-            } else {
-                $reqOrder = DB::table('d_purchase_plan')
-                        ->where('d_purchase_plan.pr_stsPlan','WAITING')
-                        ->where('d_purchase_plan.pr_userId',$user)
-                        ->update([
-                            'pr_stsPlan' => 'CONFIRM',
-                            'pr_codeConf'=> $numberPlan
-                        ]);
-                        if (!$reqOrder) {
-                            $data = "GAGAL";
-                            echo json_encode(array("status" => $data));
-                        } else {
-                            $data = "SUKSES";
-                            echo json_encode(array("status" => $data));
-                        }
-
-            }
-        }
-
 
     }
 
