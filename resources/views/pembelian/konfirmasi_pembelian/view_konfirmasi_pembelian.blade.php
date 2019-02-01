@@ -118,12 +118,12 @@
                                             <thead>
 
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="5%">No.</th>
-                                                    <th data-hide="phone,tablet" width="15%">No. Confirm</th>
-                                                    <th width="20%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                    <th data-hide="phone,tablet" width="15%">Status</th>
-                                                    <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                    <th class="text-center" width="5%">No.</th>
+                                                    <th class="text-center" width="15%">No. Confirm</th>
+                                                    <th class="text-center" width="20%">Nama Barang</th>
+                                                    <th class="text-center" width="15%">Qty</th>
+                                                    <th class="text-center" width="15%">Status</th>
+                                                    <th class="text-center" width="15%">Aksi</th>
                                                 </tr>
 
                                             </thead>
@@ -139,12 +139,12 @@
                                             <thead>
                                             <tr>
 
-                                                <th data-hide="phone,tablet" width="5%">No.</th>
-                                                <th data-hide="phone,tablet" width="15%">No. Confirm</th>
-                                                <th width="35%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Harga</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
+                                                <th class="text-center" width="5%">No.</th>
+                                                <th class="text-center" width="15%">No. Confirm</th>
+                                                <th class="text-center" width="35%">Nama Barang</th>
+                                                <th class="text-center" width="15%">Harga</th>
+                                                <th class="text-center" width="15%">Qty</th>
+                                                <th class="text-center" width="15%">Status</th>
 
                                             </tr>
                                             </thead>

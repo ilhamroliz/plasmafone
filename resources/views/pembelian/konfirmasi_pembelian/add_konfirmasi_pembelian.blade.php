@@ -693,12 +693,16 @@ function rupiah($angka)
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });
-                                $('#table-rencana').DataTable().ajax.reload();
+                                for(var i = 0; i < response.pcId.length; i++){
+                                    window.open("{{url('/pembelian/konfirmasi-pembelian/print/')}}") + response.pcId[i];
+                                }
+                                location.reload();
+
                             } else {
                                 $.smallBox({
                                     title: "Gagal",
                                     content: 'Data gagal Di ajukan..!',
-                                    color: "#739E73",
+                                    color: "#C46A69",
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });

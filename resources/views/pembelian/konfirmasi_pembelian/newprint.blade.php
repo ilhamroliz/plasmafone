@@ -80,7 +80,7 @@
 		margin-left: 40px;
 	}
 
-	#navigation ul li i{ 
+	#navigation ul li i{
 		font-size: 15pt;
 		margin-top: 10px;
 	}
@@ -145,7 +145,7 @@
 .page-break { display: block; page-break-before: always; }
 </style>
 </head>
-<?php 
+<?php
 function tgl_indo($tanggal){
 	$bulan = array (
 		1 =>   'Januari',
@@ -162,11 +162,11 @@ function tgl_indo($tanggal){
 		'Desember'
 	);
 	$pecahkan = explode('-', $tanggal);
-	
+
 	// variabel pecahkan 0 = tanggal
 	// variabel pecahkan 1 = bulan
 	// variabel pecahkan 2 = tahun
- 
+
 	return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
 }
 ?>
@@ -221,32 +221,20 @@ function tgl_indo($tanggal){
 					<th>Request Nomor</th>
 					<th>Cabang</th>
 					<th>Kode Barang</th>
-					<th>Kuantitas</th>
-					<th>Kuantitas Approval</th>
-					<th>Status</th>
-					<th>Supplier</th>
 				</tr>
 			</thead>
 			<tbody>
-				
-				@foreach($data_order as $order)
+
+				@foreach($printPDF as $print)
 				<tr>
-					<td>{{ $order->rdt_request }}</td>
-					<td>{{ $order->rdt_no }}</td>
-					<td>{{ $order->c_nama }}</td>
-					<td>{{ $order->rdt_kode_barang }}</td>
-					<td class="center">{{ $order->rdt_kuantitas }}</td>
-					<td class="center">{{ $order->rdt_kuantitas_approv }}</td>
-					<td>{{ $order->rdt_status }}</td>
-					<td>{{ $order->s_company }}</td>
+					<td>{{ $print->pcd_purchaseconfirm }}</td>
+					<td>{{ $print->pcd_detailid }}</td>
+					<td>{{ $print->pcd_item }}</td>
+					<td>{{ $print->pcd_qty }}</td>
 				</tr>
 				@endforeach
 
 				<tr>
-					<td style="background: #f1f1f1;">&nbsp;</td>
-					<td style="background: #f1f1f1;">&nbsp;</td>
-					<td style="background: #f1f1f1;">&nbsp;</td>
-					<td style="background: #f1f1f1;">&nbsp;</td>
 					<td style="background: #f1f1f1;">&nbsp;</td>
 					<td style="background: #f1f1f1;">&nbsp;</td>
 					<td class="currency total "></td>

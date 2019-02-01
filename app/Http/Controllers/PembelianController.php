@@ -294,7 +294,7 @@ class PembelianController extends Controller
                         'pp_date'    => $dateReq
                     ]);
                 }
-                
+
             }
 
             $supp = array_unique($supplier);
@@ -342,8 +342,8 @@ class PembelianController extends Controller
 
             //// Insert ke D_PURCHASE_CONFIRM
             // $pcdAray = array();
-            // for ($i=0; $i < count($qtyApp); $i++) {
-                
+            // for ($k=0; $k < count($qtyApp); $k++) {
+
             //     if($supplier[$i] != null){
             //         $supp = $supplier[$i];
             //         $check_di = DB::table('d_purchase_confirmdt')
@@ -362,7 +362,8 @@ class PembelianController extends Controller
 
             DB::commit();
             return response()->json([
-                'status' => 'sukses'
+                'status' => 'sukses',
+                'pcId' => array_values($idPCAray)
             ]);
         } catch (\Exception $e){
             DB::rollback();
@@ -2287,13 +2288,11 @@ class PembelianController extends Controller
 
     public function print($id)
     {
-        $data_order = DB::table('d_request_order_dt')
-            ->select('d_request_order_dt.*', 'd_request_order.*', 'd_supplier.*', 'd_cabang.*')
-            ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
-            ->join('d_supplier', 'd_request_order_dt.rdt_supplier', '=', 'd_supplier.s_id', 'left')
-            ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
-            ->where('d_request_order_dt.rdt_supplier', $id)->get();
-        return view('pembelian/konfirmasi_pembelian/newprint', compact('data_order'));
+        $printPDF = DB::table('d_purchase_confirmdt')
+            ->select('d_purchase_confirmdt.*')
+            ->where('d_purchase_confirmdt.pcd_purchaseconfirm', $id)
+            ->get();
+        return view('pembelian/konfirmasi_pembelian/newprint', compact('printPDF'));
     }
 
     public function downloadpdf($id)
