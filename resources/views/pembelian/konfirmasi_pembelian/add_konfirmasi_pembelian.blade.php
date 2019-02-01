@@ -693,6 +693,7 @@ function rupiah($angka)
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });
+                                $('#table-rencana').DataTable().ajax.reload();
                             } else {
                                 $.smallBox({
                                     title: "Gagal",
@@ -701,7 +702,6 @@ function rupiah($angka)
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });
-                                $('#table-rencana').DataTable().ajax.reload();
                             }
 
                         },

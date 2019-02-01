@@ -272,6 +272,7 @@ class PembelianController extends Controller
         $supplier = $request->input('supplier');
         $qtyApp   = $request->input('QtyApp');
         $pp_id    = $request->input('pp_id');
+        $pp_item    = $request->input('pp_item');
         $checkPcId = DB::table('d_purchase_confirm')->count();
 
         $dateReq  = Carbon::now('Asia/Jakarta');
@@ -305,20 +306,22 @@ class PembelianController extends Controller
             if($countPC > 0){
                 $getId = DB::table('d_purchase_confirm')->max('pc_id');
             }
-            
+
             $temp = 1;
             if ($cekNota != null) {
                 $temp = ($cekNota->pc_nota + 1);
             }
             $pcAray = array();
+            $idPCAray = array();
             for ($j=0; $j < count($supp1); $j++) {
 
                 $counter = $temp + $j;
                 $kode = sprintf("%03s", $counter);
                 $nota = 'CO-' . $kode . '/' . $time;
+                $idPC = $getId + ($j + 1);
 
                 $aray = ([
-                    'pc_id' => $getId++,
+                    'pc_id' => $idPC,
                     'pc_date' => $dateReq,
                     'pc_nota' => $nota,
                     'pc_supplier' => $supplier[$j],
@@ -326,11 +329,28 @@ class PembelianController extends Controller
                 ]);
                 array_push($pcAray, $aray);
 
+                $aray2 = ([ $supplier[$j] => $idPC]);
+                array_push($idPCAray, $array2);
             }
 
             DB::table('d_purchase_confirm')->insert($pcAray);
 
             //// Insert ke D_PURCHASE_CONFIRM
+
+            $pcdAray = array();
+            for ($i=0; $i < count($qtyApp); $i++) {
+                $supp = $supplier[$i];
+                $check_di = DB::table('d_purchase_confirmdt')
+                    ->where('pcd_purchaseconfirm', $idPCAray[$supp])->count();
+                DB::table('d_purchase_confirmdt')
+                ->insert([
+                    'pcd_purchaseconfirm' => $idPCAray[$supp],
+                    'pcd_detailid' => $check_di + 1,
+                    'pcd_item' => $pp_item[$i],
+                    'pcd_qty' => $qtyApp[$i]
+                ]);
+
+            }
 
             DB::commit();
             return response()->json([
