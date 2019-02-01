@@ -333,7 +333,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/request-pembelian/getBarang', 'PembelianController@getBarang');
     Route::get('/pembelian/request-pembelian/getMerk', 'PembelianController@getMerk');
     Route::get('/pembelian/request-pembelian/getOutlet', 'PembelianController@getOutlet');
-    Route::get('/pembelian/request-pembelian/simpanRequest', 'PembelianController@verifikasi_simpanRequest');
+    Route::post('/pembelian/request-pembelian/simpanRequest', 'PembelianController@verifikasi_simpanRequest');
     Route::get('/pembelian/request-pembelian/addData', 'PembelianController@addData');
     Route::POST('/pembelian/request-pembelian/ddRequest_dummy', 'PembelianController@ddRequest_dumy');
     Route::get('/pembelian/request-pembelian/editDumy', 'PembelianController@editDumyReq');
@@ -386,7 +386,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/rencana-pembelian/updateRencana', 'PembelianController@updateRencana');
     Route::get('/pembelian/rencana-pembelian/deleteRencana', 'PembelianController@deleteRencana');
 
-    Route::get('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
+    Route::post('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
     Route::get('/pembelian/rencana-pembelian/tolakRequest', 'PembelianController@tolakRequest');
     Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 
@@ -420,7 +420,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
     Route::post('/pembelian/konfirmasi-pembelian/editDumy', 'PembelianController@editConfirm_dummy');
 
-    Route::POST('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
+    Route::get('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
 
     Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 

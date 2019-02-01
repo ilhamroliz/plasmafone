@@ -269,19 +269,48 @@ class PembelianController extends Controller
 
     public function simpanConfirm(Request $request)
     {
-        $pr_supplier = $request->input('supplier');
+        dd($request);
+        $supplier = $request->input('supplier');
+        $qtyApp   = $request->input('QtyApp');
 
         $dateReq    = Carbon::now('Asia/Jakarta');
-        $status     = 'WAITING';
-        $code       = Carbon::now()->timestamp;
         $numberPlan = "CONF-".$code;
         $user       = Auth::user()->m_id;
 
-        $query = DB::table('d_purchase_plan_dd')
-            ->select('d_purchase_plan_dd.*')
-            ->where('d_purchase_plan_dd.pr_stsPlan', $status)
-            ->where('d_purchase_plan_dd.pr_userId',$user)
-            ->get();
+        DB::beginTransaction();
+        try {
+            $query = DB::table('d_purchase_plan')
+                ->select('d_purchase_plan.*')
+                ->where('d_purchase_plan.pp_status', '=', 'P')
+                ->get();
+
+            if (count($query) == 0) {
+                $data = "notFound";
+                echo json_encode(array("status" => $data));
+            } elseif ($qtyApp[0] < $query->pp_qtyappr) {
+                $qtyNew = $query->pp_qtyappr - $qtyApp[0];
+                DB::table('d_purchase_plan')
+                    ->where('pp_item', '=', $query->pp_item)
+                    ->update([
+                        'pp_qtyappr' => $qtyNew,
+                        'pp_status'  => 'Y',
+                        'pp_date'    => $dateReq
+                    ]);
+            }
+
+            DB::commit();
+            return response()->json([
+                'status' => 'sukses'
+            ]);
+        } catch (\Exception $e){
+            DB::rollback();
+            return response()->json([
+                'status' => 'gagal',
+                'data'   => $e
+            ]);
+        }
+
+
 
 
         $baris = count($query);
