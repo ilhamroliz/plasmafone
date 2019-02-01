@@ -281,9 +281,10 @@ class PembelianController extends Controller
 
         DB::beginTransaction();
         try {
-
             for ($i=0; $i < count($qtyApp); $i++) {
-                DB::table('d_purchase_plan')
+
+                if($supplier[$i] != null || $supplier[$i] != ""){
+                    DB::table('d_purchase_plan')
                     ->where('pp_id', '=', $pp_id[$i])
                     ->where('pp_status', '=', 'P')
                     ->update([
@@ -292,6 +293,8 @@ class PembelianController extends Controller
                         'pp_status'  => 'Y',
                         'pp_date'    => $dateReq
                     ]);
+                }
+                
             }
 
             $supp = array_unique($supplier);
@@ -311,44 +314,51 @@ class PembelianController extends Controller
             if ($cekNota != null) {
                 $temp = ($cekNota->pc_nota + 1);
             }
+
             $pcAray = array();
             $idPCAray = array();
             for ($j=0; $j < count($supp1); $j++) {
 
-                $counter = $temp + $j;
-                $kode = sprintf("%03s", $counter);
-                $nota = 'CO-' . $kode . '/' . $time;
-                $idPC = $getId + ($j + 1);
+                if($supp1[$j] != null || $supplier[$j] != ""){
+                    $counter = $temp++;
+                    $kode = sprintf("%03s", $counter);
+                    $nota = 'CO-' . $kode . '/' . $time;
+                    $idPC = $getId++;
 
-                $aray = ([
-                    'pc_id' => $idPC,
-                    'pc_date' => $dateReq,
-                    'pc_nota' => $nota,
-                    'pc_supplier' => $supplier[$j],
-                    'pc_status' => 'P'
-                ]);
-                array_push($pcAray, $aray);
+                    $aray = ([
+                        'pc_id' => $idPC,
+                        'pc_date' => $dateReq,
+                        'pc_nota' => $nota,
+                        'pc_supplier' => $supplier[$j],
+                        'pc_status' => 'P'
+                    ]);
+                    array_push($pcAray, $aray);
 
-                $aray2 = ([ $supplier[$j] => $idPC]);
-                array_push($idPCAray, $array2);
+                    $aray2 = ([ $supplier[$j] => $idPC ]);
+                    array_push($idPCAray, $aray2);
+                }
+                
             }
-
             DB::table('d_purchase_confirm')->insert($pcAray);
-
+            dd($idPCAray);
             //// Insert ke D_PURCHASE_CONFIRM
-
             $pcdAray = array();
             for ($i=0; $i < count($qtyApp); $i++) {
-                $supp = $supplier[$i];
-                $check_di = DB::table('d_purchase_confirmdt')
-                    ->where('pcd_purchaseconfirm', $idPCAray[$supp])->count();
-                DB::table('d_purchase_confirmdt')
-                ->insert([
-                    'pcd_purchaseconfirm' => $idPCAray[$supp],
-                    'pcd_detailid' => $check_di + 1,
-                    'pcd_item' => $pp_item[$i],
-                    'pcd_qty' => $qtyApp[$i]
-                ]);
+                
+                if($supplier[$i] != null){
+                    $supp = $supplier[$i];
+                    dd($idPCAray[$supp]);
+                    $check_di = DB::table('d_purchase_confirmdt')
+                        ->where('pcd_purchaseconfirm', $idPCAray[$supp])->count();
+                    
+                    DB::table('d_purchase_confirmdt')
+                    ->insert([
+                        'pcd_purchaseconfirm' => $idPCAray[$supp],
+                        'pcd_detailid' => $check_di + 1,
+                        'pcd_item' => $pp_item[$i],
+                        'pcd_qty' => $qtyApp[$i]
+                    ]);
+                }
 
             }
 
