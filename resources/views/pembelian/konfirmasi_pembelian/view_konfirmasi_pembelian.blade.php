@@ -41,7 +41,7 @@
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Konfirm Pembelian
+						 Konfirmasi Pembelian
 					</span>
                 </h1>
             </div>
@@ -118,8 +118,8 @@
                                             <thead>
 
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="5%">No</th>
-                                                    <th data-hide="phone,tablet" width="15%">No Confirm</th>
+                                                    <th data-hide="phone,tablet" width="5%">No.</th>
+                                                    <th data-hide="phone,tablet" width="15%">No. Confirm</th>
                                                     <th width="20%">Nama Barang</th>
                                                     <th data-hide="phone,tablet" width="15%">Qty</th>
                                                     <th data-hide="phone,tablet" width="15%">Status</th>
@@ -139,8 +139,8 @@
                                             <thead>
                                             <tr>
 
-                                                <th data-hide="phone,tablet" width="5%">No</th>
-                                                <th data-hide="phone,tablet" width="15%">No Confirm</th>
+                                                <th data-hide="phone,tablet" width="5%">No.</th>
+                                                <th data-hide="phone,tablet" width="15%">No. Confirm</th>
                                                 <th width="35%">Nama Barang</th>
                                                 <th data-hide="phone,tablet" width="15%">Harga</th>
                                                 <th data-hide="phone,tablet" width="15%">Qty</th>
