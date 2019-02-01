@@ -272,6 +272,7 @@ class PembelianController extends Controller
         $supplier = $request->input('supplier');
         $qtyApp   = $request->input('QtyApp');
         $pp_id    = $request->input('pp_id');
+        $pp_item    = $request->input('pp_item');
         $checkPcId = DB::table('d_purchase_confirm')->count();
 
         $dateReq  = Carbon::now('Asia/Jakarta');
@@ -280,9 +281,10 @@ class PembelianController extends Controller
 
         DB::beginTransaction();
         try {
-
             for ($i=0; $i < count($qtyApp); $i++) {
-                DB::table('d_purchase_plan')
+
+                if($supplier[$i] != null){
+                    DB::table('d_purchase_plan')
                     ->where('pp_id', '=', $pp_id[$i])
                     ->where('pp_status', '=', 'P')
                     ->update([
@@ -291,6 +293,8 @@ class PembelianController extends Controller
                         'pp_status'  => 'Y',
                         'pp_date'    => $dateReq
                     ]);
+                }
+
             }
 
             $supp = array_unique($supplier);
@@ -305,36 +309,61 @@ class PembelianController extends Controller
             if($countPC > 0){
                 $getId = DB::table('d_purchase_confirm')->max('pc_id');
             }
-            
+
             $temp = 1;
             if ($cekNota != null) {
                 $temp = ($cekNota->pc_nota + 1);
             }
+
             $pcAray = array();
+            $idPCAray = array();
             for ($j=0; $j < count($supp1); $j++) {
 
-                $counter = $temp + $j;
-                $kode = sprintf("%03s", $counter);
-                $nota = 'CO-' . $kode . '/' . $time;
+                if($supp1[$j] != null){
+                    $counter = $temp++;
+                    $kode = sprintf("%03s", $counter);
+                    $nota = 'CO-' . $kode . '/' . $time;
+                    $idPC = $getId++;
 
-                $aray = ([
-                    'pc_id' => $getId++,
-                    'pc_date' => $dateReq,
-                    'pc_nota' => $nota,
-                    'pc_supplier' => $supplier[$j],
-                    'pc_status' => 'P'
-                ]);
-                array_push($pcAray, $aray);
+                    $aray = ([
+                        'pc_id' => $idPC,
+                        'pc_date' => $dateReq,
+                        'pc_nota' => $nota,
+                        'pc_supplier' => $supp1[$j],
+                        'pc_status' => 'P'
+                    ]);
+                    array_push($pcAray, $aray);
 
+                    $aray2 = ([ $supp1[$j] => $idPC ]);
+                    array_push($idPCAray, $aray2);
+                }
             }
-
             DB::table('d_purchase_confirm')->insert($pcAray);
 
             //// Insert ke D_PURCHASE_CONFIRM
+            // $pcdAray = array();
+            // for ($k=0; $k < count($qtyApp); $k++) {
+
+            //     if($supplier[$i] != null){
+            //         $supp = $supplier[$i];
+            //         $check_di = DB::table('d_purchase_confirmdt')
+            //             ->where('pcd_purchaseconfirm', $idPCAray[$supp])->count();
+
+            //         DB::table('d_purchase_confirmdt')
+            //             ->insert([
+            //                 'pcd_purchaseconfirm' => $idPCAray[$supp],
+            //                 'pcd_detailid' => $check_di + 1,
+            //                 'pcd_item' => $pp_item[$i],
+            //                 'pcd_qty' => $qtyApp[$i]
+            //             ]);
+            //     }
+
+            // }
 
             DB::commit();
             return response()->json([
-                'status' => 'sukses'
+                'status' => 'sukses',
+                'pcId' => array_values($idPCAray)
             ]);
         } catch (\Exception $e){
             DB::rollback();
@@ -2259,13 +2288,11 @@ class PembelianController extends Controller
 
     public function print($id)
     {
-        $data_order = DB::table('d_request_order_dt')
-            ->select('d_request_order_dt.*', 'd_request_order.*', 'd_supplier.*', 'd_cabang.*')
-            ->join('d_request_order', 'd_request_order_dt.rdt_request', '=', 'd_request_order.ro_no')
-            ->join('d_supplier', 'd_request_order_dt.rdt_supplier', '=', 'd_supplier.s_id', 'left')
-            ->join('d_cabang', 'd_request_order.ro_cabang', '=', 'd_cabang.c_id')
-            ->where('d_request_order_dt.rdt_supplier', $id)->get();
-        return view('pembelian/konfirmasi_pembelian/newprint', compact('data_order'));
+        $printPDF = DB::table('d_purchase_confirmdt')
+            ->select('d_purchase_confirmdt.*')
+            ->where('d_purchase_confirmdt.pcd_purchaseconfirm', $id)
+            ->get();
+        return view('pembelian/konfirmasi_pembelian/newprint', compact('printPDF'));
     }
 
     public function downloadpdf($id)

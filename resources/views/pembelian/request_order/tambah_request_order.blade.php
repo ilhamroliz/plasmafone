@@ -72,7 +72,7 @@ function rupiah($angka)
                     Pembelian
                     <span>
 						<i class="fa fa-angle-double-right"></i>
-						 Request Order
+						 Tambah Request Order
 					</span>
                 </h1>
             </div>
@@ -126,7 +126,7 @@ function rupiah($angka)
                                 <!-- <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a>  -->
                                 <!-- <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> -->
                             </div>
-                            <h2><strong>Tambah Rencana Pembelian</strong></h2>
+                            <h2><strong>Tambah Request Order</strong></h2>
 
                             <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
                         </header>
@@ -142,7 +142,6 @@ function rupiah($angka)
                                     <input type="text" class="form-control" id="tpMemberNama" name="tpMemberNama"
                                            style="width: 100%;text-transform :uppercase"
                                            placeholder="Masukkan Nama Item">
-
                                     <div id="list_barang">
 
                                     </div>
@@ -156,7 +155,7 @@ function rupiah($angka)
                                            placeholder="QTY" style="width: 100%" autocomplete="off">
                                 </div>
                                 <div class="form-group col-md-2">
-                                    <button class="btn btn-primary" onclick="tambah()" id="okTambah">Tambah</button>
+                                    <button class="btn btn-primary" onclick="tambah()" id="okTambah" style="width: 100%;">Tambah</button>
                                 </div>
                             </div>
                             <div class="widget-body no-padding">
@@ -174,9 +173,9 @@ function rupiah($angka)
                                             <thead>
 
                                             <tr>
-                                                <th data-hide="phone,tablet" width="75%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="10%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                <th>Nama Barang</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-center">Aksi</th>
 
                                             </tr>
 
@@ -193,7 +192,7 @@ function rupiah($angka)
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <button class="btn-lg btn-block btn-primary text-center"
-                                                        onclick="simpanRequest()">Tambah Semua Rencana
+                                                        onclick="simpanRequest()">Tambahkan Semua Request
                                                 </button>
                                             </div>
                                         </div>

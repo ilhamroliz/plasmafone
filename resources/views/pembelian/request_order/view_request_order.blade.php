@@ -162,11 +162,11 @@
                                             <thead>
                                                 <tr>
 
-                                                    <th data-hide="phone,tablet" width="1%">No</th>
-                                                    <th >Nama Outlet</th>
-                                                    <th data-hide="phone,tablet" width="35%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" >Qty</th>
-                                                    <th data-hide="phone,tablet" width="15%">Status</th>
+                                                    <th class="text-center" width="1%">No</th>
+                                                    <th class="text-center" >Nama Outlet</th>
+                                                    <th class="text-center" width="35%">Nama Barang</th>
+                                                    <th class="text-center" >Qty</th>
+                                                    <th class="text-center" width="15%">Status</th>
 
                                                 </tr>
                                             </thead>
@@ -199,11 +199,11 @@
                                                width="100%">
                                             <thead>
                                                 <tr>
-                                                    <th data-hide="phone,tablet" width="5%">Tanggal</th>
-                                                    <th data-hide="phone,tablet" width="25%">Nama Outlet</th>
-                                                    <th data-hide="phone,tablet" width="35%">Nama Barang</th>
-                                                    <th data-hide="phone,tablet" width="5%">Qty</th>
-                                                    <th data-hide="phone,tablet" width="15%">Aksi</th>
+                                                    <th class="text-center" width="5%">Tanggal</th>
+                                                    <th class="text-center" width="25%">Nama Outlet</th>
+                                                    <th class="text-center" width="35%">Nama Barang</th>
+                                                    <th class="text-center" width="5%">Qty</th>
+                                                    <th class="text-center" width="15%">Aksi</th>
 
                                                 </tr>
                                             </thead>

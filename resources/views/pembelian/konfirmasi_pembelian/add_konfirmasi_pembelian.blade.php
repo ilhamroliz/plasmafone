@@ -80,7 +80,7 @@ function rupiah($angka)
 
                 <div class="page-title">
 
-                    <a href="{{ url('pembelian/rencana-pembelian') }}" class="btn btn-default"><i
+                    <a href="{{ url('pembelian/konfirmasi-pembelian') }}" class="btn btn-default"><i
                             class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 
                 </div>
@@ -123,7 +123,7 @@ function rupiah($angka)
 
                         <header role="heading">
 
-                            <h2><strong>Tambah Rencana Pembelian</strong></h2>
+                            <h2><strong>Tambah Konfirmasi Pembelian</strong></h2>
 
                             <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
@@ -146,7 +146,7 @@ function rupiah($angka)
                                                 <th class="text-center" width="40%">Nama Barang</th>
                                                 <th class="text-center" width="10%">Qty</th>
                                                 <th class="text-center" width="10%">Qty App</th>
-                                                <th class="text-center" width="20%">Supplayer</th>
+                                                <th class="text-center" width="20%">Supplier</th>
                                             </tr>
                                             </thead>
 
@@ -160,7 +160,7 @@ function rupiah($angka)
                                                         <div class="text-center">
                                                         	<input type="hidden" name="pp_id[]" value="{{ $row->pp_id }}">
                                                         	<input type="hidden" name="pp_item[]" value="{{$row->pp_item}}">
-                                                            <input type="number" min="1" class="form-control QtyApp" name="QtyApp[]" value="{{ $row->pp_qtyreq }}">
+                                                            <input type="number" min="1" class="form-control QtyApp" name="QtyApp[]" value="{{ $row->pp_qtyreq }}" style="width: 100%;">
                                                         </div>
                                                     </td>
                                                     <td>
@@ -693,15 +693,19 @@ function rupiah($angka)
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });
+                                for(var i = 0; i < response.pcId.length; i++){
+                                    window.open("{{url('/pembelian/konfirmasi-pembelian/print/')}}") + response.pcId[i];
+                                }
+                                location.reload();
+
                             } else {
                                 $.smallBox({
                                     title: "Gagal",
                                     content: 'Data gagal Di ajukan..!',
-                                    color: "#739E73",
+                                    color: "#C46A69",
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });
-                                $('#table-rencana').DataTable().ajax.reload();
                             }
 
                         },
