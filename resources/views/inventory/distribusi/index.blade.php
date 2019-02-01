@@ -826,7 +826,7 @@
 						}
 					});
 					$.ajax({
-						url: baseUrl + '/distribusi-barang/hapus/'+distribusi,
+						url: baseUrl + '/distribusi-barang/delete/'+distribusi,
 						type: 'get',
 						success: function(response){
 						    if (response == "Not Found") {

@@ -601,7 +601,7 @@ class PenjualanController extends Controller
                             $get_countiddetail = $get_countiddetail + 1;
                         }
                         
-                        if ($get_smiddetail[$key]->sm_sisa != 0) {
+                        if ($get_smiddetail[$key]->sm_specificcode == $specificcode && $get_smiddetail[$key]->sm_sisa != 0) {
 
                             // if ($discPercent == 0 && $discValue == 0) {
                             //     $sm_hpp = 1 * $data['harga'][$i];
@@ -648,7 +648,7 @@ class PenjualanController extends Controller
                             ]);
 
                             // Update in table d_stock_mutation
-                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid, 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' => $get_smiddetail[$key]->sm_detailid, 'sm_detail' =>  'PENAMBAHAN', 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
                                 'sm_use' => $sm_use,
                                 'sm_sisa' => $sm_sisa
                             ]);
@@ -757,7 +757,7 @@ class PenjualanController extends Controller
 
             DB::beginTransaction();
             try{
-                $this->delete(Crypt::encrypt($data['idSales']));
+                $this->delete($data['idSales']);
                 $sales = DB::table('d_mem')
                     ->select('m_id', 'm_name')
                     ->where('m_id', $data['salesman'])
@@ -859,7 +859,7 @@ class PenjualanController extends Controller
                             ]);
 
                             // Update in table d_stock_mutation
-                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' =>  $get_smiddetail[$key]->sm_detailid, 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' => $get_smiddetail[$key]->sm_detailid, 'sm_detail' =>  'PENAMBAHAN', 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
                                 'sm_use' => $sm_use,
                                 'sm_sisa' => $sm_sisa
                             ]);

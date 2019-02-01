@@ -78,6 +78,7 @@
                                                         {{--</div>--}}
                                                     {{--</div>--}}
                                                 {{--</div>--}}
+                                                <input type="hidden" name="idDistribusi" value="{{ Crypt::encrypt($data[0]->d_id) }}">
                                                 <input type="hidden" name="outlet" id="outlet" value="{{ $data[0]->c_id }}">
 
                                                 <div id="detail_outlet">
@@ -168,7 +169,7 @@
                                                                     <td style="width: 10%;" class="text-center"><button type="button" onclick="hapusItem('{{ $item->idStock }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', null)" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                             @else
-                                                                <tr id="{{ $item->idStock }}" class="tr">
+                                                                <tr id="{{ $item->idStock }}{{ $item->sm_specificcode }}" class="tr">
                                                                     <td style="width: 32%;">{{ $item->nama_item }} ({{ $item->sm_specificcode }})
                                                                         <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
                                                                         <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
@@ -176,7 +177,7 @@
                                                                         <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item->sm_specificcode }}" />
                                                                     </td>
                                                                     <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>
-                                                                    <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', '{{ $item->sm_specificcode }}')"><i class="fa fa-minus"></i></button></td>
+                                                                    <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}{{ $item->sm_specificcode }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', '{{ $item->sm_specificcode }}')"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                             @endif
                                                         @endforeach
@@ -485,7 +486,8 @@
                         icon : "fa fa-times bounce animated"
                     });
                 } else {
-                    row = '<tr id="'+idGlobal+'" class="tr">' +
+                    var id = idGlobal+kodeGlobal;
+                    row = '<tr id="'+id+'" class="tr">' +
                         '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                         '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                         '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
@@ -493,7 +495,7 @@
                         '<input type="hidden" class="spesifikkode" name="spesifikkode[]" value="'+kodeGlobal+'" />'+
                         '</td>' +
                         '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
-                        '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
+                        '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus('+id+')"><i class="fa fa-minus"></i></button></td>' +
                         '</tr>';
                     $("#table-distribusi tbody").append(row);
                     setArrayId();
@@ -674,7 +676,7 @@
                         }
                     });
                     $.ajax({
-                        url: baseUrl + '/distribusi-barang/simpan',
+                        url: baseUrl + '/distribusi-barang/edit',
                         type: 'post',
                         data: $('#form-distribusi').serialize(),
                         success: function(response){
@@ -700,7 +702,7 @@
                             } else {
                                 $.smallBox({
                                     title : "Berhasil",
-                                    content : 'Transaksi Anda berhasil...!',
+                                    content : 'Distribusi barang berhasil dibuat...!',
                                     color : "#739E73",
                                     timeout: 5000,
                                     icon : "fa fa-check bounce animated"

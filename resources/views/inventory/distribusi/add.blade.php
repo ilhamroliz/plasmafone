@@ -451,7 +451,8 @@
                     icon : "fa fa-times bounce animated"
                 });
             } else {
-                row = '<tr id="'+idGlobal+'" class="tr">' +
+                var id = idGlobal+kodeGlobal;
+                row = '<tr id="'+id+'" class="tr">' +
                     '<td style="width: 32%;">'+namaGlobal+' '+kodespesifikGlobal+''+
                     '<input type="hidden" class="idStock" name="idStock[]" value="'+idGlobal+'" />'+
                     '<input type="hidden" class="qtystock" name="qtystock[]" value="'+stockGlobal+'" />'+
@@ -459,7 +460,7 @@
                     '<input type="hidden" class="spesifikkode" name="spesifikkode[]" value="'+kodeGlobal+'" />'+
                     '</td>' +
                     '<td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>' +
-                    '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+idGlobal+'\')"><i class="fa fa-minus"></i></button></td>' +
+                    '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus('+id+')"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
                 $("#table-distribusi tbody").append(row);
                 setArrayId();
@@ -577,7 +578,7 @@
 							} else {
 								$.smallBox({
 									title : "Berhasil",
-									content : 'Transaksi Anda berhasil...!',
+									content : 'Distribusi barang berhasil dibuat...!',
 									color : "#739E73",
 									timeout: 5000,
 									icon : "fa fa-check bounce animated"
