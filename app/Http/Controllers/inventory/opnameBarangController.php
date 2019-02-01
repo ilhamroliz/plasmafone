@@ -104,7 +104,7 @@ class opnameBarangController extends Controller
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_date', '>=', $awal)
-                        ->where('o_date', '<=', $akhir);
+                        ->where('o_date', '<=', $akhir)->orderBy('o_id', 'asc');
 
                 } else if ($idItem != '' && $idComp == '') {
                     $pcr = DB::table('d_opname')
@@ -115,7 +115,7 @@ class opnameBarangController extends Controller
                         ->where('o_status', 'DONE')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
                 } else if ($idItem == '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
                         ->leftjoin('d_opname_dt', 'od_opname', '=', 'o_id')
@@ -125,7 +125,7 @@ class opnameBarangController extends Controller
                         ->where('o_status', 'DONE')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
-                        ->where('o_comp', $idComp);
+                        ->where('o_comp', $idComp)->orderBy('o_id', 'asc');
 
                 } else if ($idItem != '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
@@ -137,7 +137,7 @@ class opnameBarangController extends Controller
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
                         ->where('o_comp', $idComp)
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
                 }
 
             } else {
@@ -148,7 +148,7 @@ class opnameBarangController extends Controller
                         ->join('d_item', 'i_id', '=', 'od_item')
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
 
                 } else if ($idItem == '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
@@ -157,7 +157,7 @@ class opnameBarangController extends Controller
                         ->join('d_item', 'i_id', '=', 'od_item')
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
-                        ->where('o_comp', $idComp);
+                        ->where('o_comp', $idComp)->orderBy('o_id', 'asc');
 
                 } else if ($idItem != '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
@@ -167,7 +167,7 @@ class opnameBarangController extends Controller
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'DONE')
                         ->where('o_comp', $idComp)
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
 
                 } else {
                     $pcr = DB::table('d_opname')
@@ -175,7 +175,7 @@ class opnameBarangController extends Controller
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
-                        ->where('o_status', 'DONE');
+                        ->where('o_status', 'DONE')->orderBy('o_id', 'asc');
                 }
             }
 
@@ -235,7 +235,7 @@ class opnameBarangController extends Controller
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_date', '>=', $awal)
-                        ->where('o_date', '<=', $akhir);
+                        ->where('o_date', '<=', $akhir)->orderBy('o_id', 'asc');
 
                 } else if ($idItem != '' && $idComp == '') {
                     $pcr = DB::table('d_opname')
@@ -246,7 +246,7 @@ class opnameBarangController extends Controller
                         ->where('o_status', 'PENDING')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
 
                 } else if ($idItem == '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
@@ -257,7 +257,7 @@ class opnameBarangController extends Controller
                         ->where('o_status', 'PENDING')
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
-                        ->where('o_comp', $idComp);
+                        ->where('o_comp', $idComp)->orderBy('o_id', 'asc');
 
                 } else if ($idItem != '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
@@ -269,7 +269,7 @@ class opnameBarangController extends Controller
                         ->where('o_date', '>=', $awal)
                         ->where('o_date', '<=', $akhir)
                         ->where('o_comp', $idComp)
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
                 }
 
             } else {
@@ -280,7 +280,7 @@ class opnameBarangController extends Controller
                         ->join('d_item', 'i_id', '=', 'od_item')
                         ->select('od_item', 'o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
 
                 } else if ($idItem == '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
@@ -289,7 +289,7 @@ class opnameBarangController extends Controller
                         ->join('d_item', 'i_id', '=', 'od_item')
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
-                        ->where('o_comp', $idComp);
+                        ->where('o_comp', $idComp)->orderBy('o_id', 'asc');
 
                 } else if ($idItem != '' && $idComp != '') {
                     $pcr = DB::table('d_opname')
@@ -299,7 +299,7 @@ class opnameBarangController extends Controller
                         ->select('od_item', 'o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
                         ->where('o_status', 'PENDING')
                         ->where('o_comp', $idComp)
-                        ->where('od_item', $idItem);
+                        ->where('od_item', $idItem)->orderBy('o_id', 'asc');
 
                 } else {
                     $pcr = DB::table('d_opname')
@@ -307,7 +307,7 @@ class opnameBarangController extends Controller
                         ->join('m_company', 'c_id', '=', 'o_comp')
                         ->join('d_item', 'i_id', '=', 'od_item')
                         ->select('o_id', 'o_reff', DB::raw('DATE_FORMAT(o_date, "%d/%m/%Y") as o_date'), 'c_name', 'i_nama')->distinct('o_reff')
-                        ->where('o_status', 'PENDING');
+                        ->where('o_status', 'PENDING')->orderBy('o_id', 'asc');
                 }
             }
 

@@ -253,13 +253,10 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 										</div>
 
-										<!-- Tabel untuk detil opname barang-->
-										<!-- TABEL C-->
-										<div class="col-md-12">
+										<div class="col-md-12" id="divTab" style="display:none; margin-top: 10px; width: 100%">
 											<table
 												id="dobCTable"
-												class="table table-striped table-bordered table-hover margin-top-10"
-												style="display:none; margin-top: 20px; width: 100%">
+												class="table table-striped table-bordered table-hover margin-top-10">
 
 												<thead id="dobCHead">
 													<th>No.</th>
@@ -314,7 +311,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				"searching": false,
 				"autoWidth" : false,
 				"pageLength" : 5,
-				"info" : false,
+				"lengthChange": false,
+				"language": dataTableLanguage
 			});
 
 			$('.osItemName').autocomplete({
@@ -418,16 +416,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 				$qtyR = 0;
 				$qtyS = 0;
+				
+				$sc = response.data.data[0].i_specificcode;
+				$ex = response.data.data[0].i_expired;
 
 				dobCTable.clear();
-                $('#dobCTable').css("display", "block");
 
 				for($ob = 0; $ob < response.data.data.length; $ob++){
 					$qtyR = $qtyR + parseInt(response.data.data[$ob].od_qty_real);
 					$qtyS = $qtyS + parseInt(response.data.data[$ob].od_qty_system);
 
-					$sc = response.data.data[$ob].i_specificcode;
-					$ex = response.data.data[$ob].i_expired;
 
 					if($sc == 'Y' && $ex == 'N'){
 
@@ -438,6 +436,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 
 					}
 
+				}
+
+				if($sc == 'Y'){
+					$('#divTab').css('display', 'block');
+				}else{
+					$('#divTab').css('display', 'none');
 				}
 
 				$('#obQtyS').html($qtyS+' Unit');

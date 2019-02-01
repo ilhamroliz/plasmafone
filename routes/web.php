@@ -420,7 +420,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/konfirmasi-pembelian/getTelp', 'PembelianController@getTelp');
     Route::post('/pembelian/konfirmasi-pembelian/editDumy', 'PembelianController@editConfirm_dummy');
 
-    Route::get('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
+    Route::GET('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
 
     Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
