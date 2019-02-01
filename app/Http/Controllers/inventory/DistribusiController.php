@@ -45,7 +45,7 @@ class DistribusiController extends Controller
         }
 
         $data = DB::table('d_distribusi')
-            ->select('d_distribusi.*', 'd_distribusi_dt.*', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y") as tanggal'), 'd_stock.s_id as idStock', 'd_item.i_nama as nama_item', 'd_stock.s_qty as stock_qty', 'd_item.i_specificcode as specificcode', 'd_item.i_code')
+            ->select('m_company.*', 'd_distribusi.*', 'd_distribusi_dt.*', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y") as tanggal'), 'd_stock.s_id as idStock', 'd_stock_mutation.sm_specificcode', 'd_item.i_nama as nama_item', 'd_stock.s_qty as stock_qty', 'd_item.i_specificcode as specificcode', 'd_item.i_code')
             ->join('d_distribusi_dt', 'd_distribusi.d_id', '=', 'd_distribusi_dt.dd_distribusi')
             ->join('m_company', 'd_distribusi.d_destination', '=', 'm_company.c_id')
             ->join('d_item', 'd_distribusi_dt.dd_item', '=', 'd_item.i_id')
@@ -56,10 +56,10 @@ class DistribusiController extends Controller
             })
             ->where('d_distribusi.d_id', $id)
             ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+            ->groupBy('d_stock_mutation.sm_specificcode')
             ->distinct('d_stock_mutation.sm_specificcode')
             ->get();
 
-        dd($data);
         return view('inventory.distribusi.edit')->with(compact('data'));
     }
 
@@ -260,6 +260,244 @@ class DistribusiController extends Controller
         ->rawColumns(['aksi'])
 
         ->make(true);
+    }
+
+    public function deleteItem($distribusi = null, $item = null, $code = null)
+    {
+        try {
+            $distribusi = Crypt::decrypt($distribusi);
+        } catch (DecryptException $e) {
+            return json_encode([
+                'result'    => "false"
+            ]);
+        }
+
+        try {
+            $item = Crypt::decrypt($item);
+        } catch (DecryptException $e) {
+            return json_encode([
+                'result'    => "false"
+            ]);
+        }
+
+        DB::beginTransaction();
+        try{
+            $getDistribusi = DB::table('d_distribusi')->where('d_id', $distribusi)->first();
+
+            if ($code == "null") {
+                $stockMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_nota', $getDistribusi->d_nota)
+                    ->where('sm_specificcode', null)
+                    ->where('sm_detail', 'PENGURANGAN')->get();
+            } else {
+                $stockMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_nota', $getDistribusi->d_nota)
+                    ->where('sm_specificcode', $code)
+                    ->where('sm_detail', 'PENGURANGAN')->get();
+            }
+
+            foreach ($stockMutasi as $index => $sm){
+
+                $getMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                    ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                    ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                    ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
+
+                if ($stockMutasi[$index]->sm_specificcode != null){
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $stockMutasi[$index]->sm_stock)->max('sd_detailid');
+
+                    if ($maxStockdt == null){
+                        $maxStockdt = 1;
+                    } else {
+                        $maxStockdt = $maxStockdt + 1;
+                    }
+
+                    // insert stock_dt
+                    DB::table('d_stock_dt')->insert([
+                        'sd_stock' => $stockMutasi[$index]->sm_stock,
+                        'sd_detailid' => $maxStockdt,
+                        'sd_specificcode' => $stockMutasi[$index]->sm_specificcode
+                    ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getDistribusi->d_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+
+                    //update/delete stock on going
+                    $stock = DB::table('d_stock')
+                        ->where('s_id', $stockMutasi[$index]->sm_stock)
+                        ->first();
+
+                    $stock_going = DB::table('d_stock')
+                        ->where('s_comp', $getDistribusi->d_from)
+                        ->where('s_position', $getDistribusi->d_destination)
+                        ->where('s_item', $stock->s_item)
+                        ->where('s_status', 'On Going')
+                        ->first();
+
+                    DB::table('d_stock')
+                        ->where('s_comp', $getDistribusi->d_from)
+                        ->where('s_position', $getDistribusi->d_destination)
+                        ->where('s_item', $stock->s_item)
+                        ->where('s_status', 'On Going')
+                        ->update([
+                            's_qty' => $stock_going->s_qty - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    $check_going = DB::table('d_stock')
+                        ->where('s_comp', $getDistribusi->d_from)
+                        ->where('s_position', $getDistribusi->d_destination)
+                        ->where('s_item', $stock->s_item)
+                        ->where('s_status', 'On Going')
+                        ->first();
+
+                    if ($check_going->s_qty == 0) {
+                        DB::table('d_stock')
+                            ->where('s_comp', $getDistribusi->d_from)
+                            ->where('s_position', $getDistribusi->d_destination)
+                            ->where('s_item', $stock->s_item)
+                            ->where('s_status', 'On Going')
+                            ->delete();
+                    }
+
+                    // delete d_distribusi_dt & d_distribusi
+                    DB::table('d_distribusi_dt')
+                        ->where('dd_distribusi', $distribusi)
+                        ->where('dd_item', $item)
+                        ->where('dd_specificcode', $code)
+                        ->delete();
+
+                    $check_distribusi = DB::table('d_distribusi_dt')
+                        ->where('dd_distribusi', $distribusi)
+                        ->count();
+
+                    if ($check_distribusi == 0) {
+                        DB::table('d_distribusi')
+                            ->where('d_id', $distribusi)
+                            ->delete();
+
+                        $msg = "null";
+                    } else {
+                        $msg = "available";
+                    }
+                } else {
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getDistribusi->d_nota)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+
+                    //update/delete stock on going
+                    $stock = DB::table('d_stock')
+                        ->where('s_id', $stockMutasi[$index]->sm_stock)
+                        ->first();
+
+                    $stock_going = DB::table('d_stock')
+                        ->where('s_comp', $getDistribusi->d_from)
+                        ->where('s_position', $getDistribusi->d_destination)
+                        ->where('s_item', $stock->s_item)
+                        ->where('s_status', 'On Going')
+                        ->first();
+
+                    DB::table('d_stock')
+                        ->where('s_comp', $getDistribusi->d_from)
+                        ->where('s_position', $getDistribusi->d_destination)
+                        ->where('s_item', $stock->s_item)
+                        ->where('s_status', 'On Going')
+                        ->update([
+                            's_qty' => $stock_going->s_qty - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    $check_going = DB::table('d_stock')
+                        ->where('s_comp', $getDistribusi->d_from)
+                        ->where('s_position', $getDistribusi->d_destination)
+                        ->where('s_item', $stock->s_item)
+                        ->where('s_status', 'On Going')
+                        ->first();
+
+                    if ($check_going->s_qty == 0) {
+                        DB::table('d_stock')
+                            ->where('s_comp', $getDistribusi->d_from)
+                            ->where('s_position', $getDistribusi->d_destination)
+                            ->where('s_item', $stock->s_item)
+                            ->where('s_status', 'On Going')
+                            ->delete();
+                    }
+
+                    // delete d_distribusi_dt & d_distribusi
+                    DB::table('d_distribusi_dt')
+                        ->where('dd_distribusi', $distribusi)
+                        ->where('dd_item', $item)
+                        ->where('dd_specificcode', null)
+                        ->delete();
+
+                    $check_distribusi = DB::table('d_distribusi_dt')
+                        ->where('dd_distribusi', $distribusi)
+                        ->count();
+
+                    if ($check_distribusi == 0) {
+                        DB::table('d_distribusi')
+                            ->where('d_id', $distribusi)
+                            ->delete();
+
+                        $msg = "null";
+                    } else {
+                        $msg = "available";
+                    }
+                }
+            }
+            DB::commit();
+            return json_encode([
+                'result'    => "ok",
+                'msg'       => $msg
+            ]);
+        }catch (\Exception $e){
+            DB::rollback();
+            return json_encode([
+                'result'    => "false"
+            ]);
+        }
     }
 
     public function hapus($id = null)

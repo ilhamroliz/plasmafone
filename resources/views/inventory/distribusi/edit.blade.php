@@ -66,18 +66,19 @@
 
                                             <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 
-                                                <div class="form-group">
-                                                    <div class="col-md-10">
-                                                        <div class="input-group input-group-md">
-                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>
-                                                            <div class="icon-addon addon-md">
-                                                                <input class="form-control" id="cari-outlet" placeholder="Masukkan Nama Outlet Tujuan" type="text"  style="text-transform: uppercase" value="{{ $data[0]->c_name }}" readonly>
-                                                                <input type="hidden" name="outlet" id="outlet" value="{{ $data[0]->PF00000002 }}">
-                                                                <label for="cari-outlet" class="glyphicon glyphicon-search" rel="tooltip" title="Cari Outlet"></label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                {{--<div class="form-group">--}}
+                                                    {{--<div class="col-md-10">--}}
+                                                        {{--<div class="input-group input-group-md">--}}
+                                                            {{--<span class="input-group-addon"><i class="glyphicon glyphicon-send"></i></span>--}}
+                                                            {{--<div class="icon-addon addon-md">--}}
+                                                                {{--<input class="form-control" id="cari-outlet" placeholder="Masukkan Nama Outlet Tujuan" type="text"  style="text-transform: uppercase" value="{{ $data[0]->c_name }}" readonly>--}}
+                                                                {{--<input type="hidden" name="outlet" id="outlet" value="{{ $data[0]->c_id }}">--}}
+                                                                {{--<label for="cari-outlet" class="glyphicon glyphicon-search" rel="tooltip" title="Cari Outlet"></label>--}}
+                                                            {{--</div>--}}
+                                                        {{--</div>--}}
+                                                    {{--</div>--}}
+                                                {{--</div>--}}
+                                                <input type="hidden" name="outlet" id="outlet" value="{{ $data[0]->c_id }}">
 
                                                 <div id="detail_outlet">
                                                     <div class="form-group">
@@ -121,7 +122,7 @@
 
                                         </div>
 
-                                        <div id="search_barang" style="display: none">
+                                        <div id="search_barang" style="display: block">
 
                                             <div class="form-group">
                                                 <div class="col-md-8">
@@ -164,7 +165,7 @@
                                                                         <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
                                                                     </td>
                                                                     <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item->dd_qty }}', '{{ $item->stock_qty }}', 'qty-{{ $item->idStock }}')" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->dd_qty }}" /></td>
-                                                                    <td style="width: 10%;" class="text-center"><button type="button" onclick="hapusItem('{{ $item->idStock }}', '{{ $item->dd_distribusi }}', '{{ $item->dd_item }}', null)" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
+                                                                    <td style="width: 10%;" class="text-center"><button type="button" onclick="hapusItem('{{ $item->idStock }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', null)" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                             @else
                                                                 <tr id="{{ $item->idStock }}" class="tr">
@@ -175,7 +176,7 @@
                                                                         <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item->sm_specificcode }}" />
                                                                     </td>
                                                                     <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>
-                                                                    <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}', '{{ $item->dd_distribusi }}', '{{ $item->dd_item }}', '{{ $item->sm_specificcode }}')"><i class="fa fa-minus"></i></button></td>
+                                                                    <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', '{{ $item->sm_specificcode }}')"><i class="fa fa-minus"></i></button></td>
                                                                 </tr>
                                                             @endif
                                                         @endforeach
@@ -187,7 +188,7 @@
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-primary" disabled type="button" onclick="simpan()" id="btn_simpan">
+                                                <button class="btn btn-primary" type="button" onclick="simpan()" id="btn_simpan">
                                                     <i class="fa fa-send"></i>
                                                     Distribusikan
                                                 </button>
@@ -304,7 +305,7 @@
                         }
                     });
                 },
-                minLength: 2,
+                minLength: 1,
                 select: function(event, data) {
                     setStock(data.item);
                     $("#stockid").val(data.item.id);
@@ -614,7 +615,6 @@
                                 });
                                 $('#'+id).remove();
                                 setArrayId();
-                                updateTotalTampil();
                                 $('#overlay').fadeOut(200);
                                 if (response.msg == "null") {
                                     window.location = baseUrl + '/distribusi-barang';

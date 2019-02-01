@@ -1049,6 +1049,22 @@ class PenjualanController extends Controller
 
     public function deleteItem($sales = null, $item = null, $code)
     {
+        try {
+            $sales = Crypt::decrypt($sales);
+        } catch (DecryptException $e) {
+            return json_encode([
+                'result'    => "false"
+            ]);
+        }
+
+        try {
+            $item = Crypt::decrypt($item);
+        } catch (DecryptException $e) {
+            return json_encode([
+                'result'    => "false"
+            ]);
+        }
+
         DB::beginTransaction();
         try{
             $getSales = DB::table('d_sales')->where('s_id', $sales)->first();
