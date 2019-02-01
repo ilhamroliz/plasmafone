@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\inventory;
 
+use function foo\func;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -909,33 +910,49 @@ class ReceptionController extends Controller
     public function getItem($id = null)
     {
         $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_stock_mutation.sm_specificcode', 'd_item.i_specificcode as specificcode', 'd_item.i_code', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
                     ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_stock_mutation', 'd_distribusi.d_nota', '=', 'd_stock_mutation.sm_nota')
+                    ->join('d_stock', function($y){
+                        $y->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
+                        $y->on('d_stock.s_item', '=', 'd_distribusi_dt.dd_item');
+                    })
                     ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
-                    ->where('d_distribusi.d_id', Crypt::decrypt($id));
+                    ->where('d_distribusi.d_id', Crypt::decrypt($id))
+                    ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
+                    ->groupBy('d_stock_mutation.sm_specificcode')
+                    ->distinct('d_stock_mutation.sm_specificcode');
 
         return DataTables::of($data)
 
-        ->addColumn('aksi', function ($data) {
-
-            if (Access::checkAkses(10, 'update') == true) {
-
-                if ($data->qty == $data->qty_received) {
-                    return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
+            ->addColumn('item', function ($data) {
+                if ($data->specificcode == "N") {
+                    return $data->i_code . ' - ' . $data->nama_item;
                 } else {
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Terima</button></div>';
+                    return $data->nama_item . ' (' . $data->sm_specificcode . ')';
+                }
+            })
+
+            ->addColumn('aksi', function ($data) {
+
+                if (Access::checkAkses(10, 'update') == true) {
+
+                    if ($data->qty == $data->qty_received) {
+                        return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
+                    } else {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Terima</button></div>';
+                    }
+
                 }
 
-            }
+            })
 
-        })
+            ->rawColumns(['aksi'])
 
-        ->rawColumns(['aksi'])
-
-        ->make(true);
+            ->make(true);
     }
 
     public function itemReceiveAdd(Request $request)

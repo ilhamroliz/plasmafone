@@ -328,8 +328,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"orderable": false,
 					"order": [],
 					"ajax": "{{ url('/inventory/penerimaan/distribusi/get-item/'.$id) }}",
+                    "columnDefs": [
+                        { className: 'text-center', targets: [1, 2] }
+                    ],
 					"columns":[
-						{"data": "nama_item"},
+						{"data": "item"},
 						{"data": "qty"},
 						{"data": "qty_received"},
 						{"data": "aksi"}

@@ -226,31 +226,31 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 												<tbody>
 
-													<tr class="success">
+													<tr>
 														<td><strong>Nota</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_nota"></td>
 													</tr>
 
-													<tr class="danger">
+													<tr>
 														<td><strong>Dari Outlet</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_from"></td>
 													</tr>
 
-													<tr class="warning">
+													<tr>
 														<td><strong>Tujuan Outlet</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_destination"></td>
 													</tr>
 
-													<tr class="info">
+													<tr>
 														<td><strong>Tanggal Distribusi</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_tgl"></td>
 													</tr>
 
-													<tr class="success">
+													<tr>
 														<td><strong>Petugas</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_by"></td>
@@ -487,8 +487,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					$('#dt_tgl').text(response.data.data[0].tanggal);
 					$('#dt_by').text(response.data.data[0].by);
 					response.data.data.forEach(function(element) {
-						console.log(element);
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+						row = '<tr class="tr"><td>'+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>'
 						$('#table_item tbody').append(row)
 					});
 					$('#overlay').fadeOut(200);

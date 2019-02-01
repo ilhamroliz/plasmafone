@@ -494,10 +494,9 @@ class DistribusiController extends Controller
             ]);
         }catch (\Exception $e){
             DB::rollback();
-            return $e;
-//            return json_encode([
-//                'result'    => "false"
-//            ]);
+            return json_encode([
+                'result'    => "false"
+            ]);
         }
     }
 
