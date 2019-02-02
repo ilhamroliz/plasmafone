@@ -19,7 +19,7 @@ Route::get('/helper', function () {
 
 Route::get("/", function () {
     if (Auth::check()) {
-        return redirect()->route("dashboard");
+        return redirect()->route("home");
     } else {
         return redirect()->route("login");
     }
@@ -433,7 +433,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Purchase Order
 
     Route::get('/pembelian/purchase-order', 'PurchaseOrderController@purchase_order');
-    Route::get('/pembelian/purchase-order/view_tambahPo', 'PurchaseOrderController@view_tambahPo');
+    Route::get('/pembelian/purchase-order/tambah-purchase-prder', 'PurchaseOrderController@view_tambahPo');
     Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
     Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
     Route::get('/pembelian/purchase-order/purchaseComplete', 'PurchaseOrderController@purchaseComplete');
