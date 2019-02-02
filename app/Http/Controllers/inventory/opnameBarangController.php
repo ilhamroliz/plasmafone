@@ -697,7 +697,6 @@ class opnameBarangController extends Controller
                     //////////////////////
                     // HANYA dilakukan jika Spec Code == Y
                     // SEMUA data Tabel MASUK SEMUA ke tabel D_OPNAME_DT
-
                     $idItem = $request->idItem;
                     $idCompM = Auth::user()->m_comp;
                     $imeiR = $request->imeiR;
@@ -720,24 +719,28 @@ class opnameBarangController extends Controller
                         $od_array = array();
 
                         for ($i = 0; $i < count($imeiR); $i++) {
-                            $cek = DB::table('d_stock')
+
+                            if($imeiR[$i] != null){
+                                $cek = DB::table('d_stock')
                                 ->join('d_stock_dt', 'sd_stock', '=', 's_id')
                                 ->where('sd_specificcode', $imeiR[$i])->count();
 
-                            //// Jika Data Item tersebut tidak ada di dalam sistem
-                            if ($cek == 0) {
-                                array_push($sd_array, $imeiR[$i]);
+                                //// Jika Data Item tersebut tidak ada di dalam sistem
+                                if ($cek == 0) {
+                                    array_push($sd_array, $imeiR[$i]);
+                                }
+                                //////////////////////////////////////////////////////
+                                $aray = ([
+                                    'od_opname' => $o_id,
+                                    'od_detailid' => $i + 1,
+                                    'od_item' => $idItem,
+                                    'od_qty_real' => 1,
+                                    'od_qty_system' => $cek,
+                                    'od_specificcode' => strtoupper($imeiR[$i])
+                                ]);
+                                array_push($od_array, $aray);
                             }
-                            //////////////////////////////////////////////////////
-                            $aray = ([
-                                'od_opname' => $o_id,
-                                'od_detailid' => $i + 1,
-                                'od_item' => $idItem,
-                                'od_qty_real' => 1,
-                                'od_qty_system' => $cek,
-                                'od_specificcode' => strtoupper($imeiR[$i])
-                            ]);
-                            array_push($od_array, $aray);
+                            
                         }
 
                         DB::table('d_opname_dt')->insert($od_array);
@@ -785,12 +788,16 @@ class opnameBarangController extends Controller
 
                         $arayInsert = array();
                         for ($dt = 0; $dt < count($arayDT); $dt++) {
-                            $aray = ([
-                                'sd_stock' => $getIdS->s_id,
-                                'sd_detailid' => $getMax + ($dt + 1),
-                                'sd_specificcode' => strtoupper($arayDT[$dt])
-                            ]);
-                            array_push($arayInsert, $aray);
+                            
+                            if($arayDT[$dt] != null){
+                                $aray = ([
+                                    'sd_stock' => $getIdS->s_id,
+                                    'sd_detailid' => $getMax + ($dt + 1),
+                                    'sd_specificcode' => strtoupper($arayDT[$dt])
+                                ]);
+                                array_push($arayInsert, $aray);
+                            }
+                            
                         }
                         DB::table('d_stock_dt')->insert($arayInsert);
 
@@ -808,22 +815,26 @@ class opnameBarangController extends Controller
 
                         $arayInsPNB = array();
                         for ($dt = 0; $dt < count($arayDT); $dt++) {
-                            $arayT = ([
-                                'sm_stock' => $getIdS->s_id,
-                                'sm_detailid' => $getMaxSMT + ($dt + 1),
-                                'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
-                                'sm_detail' => 'PENAMBAHAN',
-                                'sm_specificcode' => strtoupper($arayDT[$dt]),
-                                'sm_qty' => 1,
-                                'sm_use' => 0,
-                                'sm_sisa' => 1,
-                                'sm_hpp' => implode(explode('.', $request->hpp)),
-                                'sm_sell' => $getSell->i_price,
-                                'sm_nota' => $o_reff,
-                                'sm_reff' => $o_reff,
-                                'sm_mem' => Auth::user()->m_id
-                            ]);
-                            array_push($arayInsPNB, $arayT);
+
+                            if($arayDT[$dt] != null){
+                                $arayT = ([
+                                    'sm_stock' => $getIdS->s_id,
+                                    'sm_detailid' => $getMaxSMT + ($dt + 1),
+                                    'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
+                                    'sm_detail' => 'PENAMBAHAN',
+                                    'sm_specificcode' => strtoupper($arayDT[$dt]),
+                                    'sm_qty' => 1,
+                                    'sm_use' => 0,
+                                    'sm_sisa' => 1,
+                                    'sm_hpp' => implode(explode('.', $request->hpp)),
+                                    'sm_sell' => $getSell->i_price,
+                                    'sm_nota' => $o_reff,
+                                    'sm_reff' => $o_reff,
+                                    'sm_mem' => Auth::user()->m_id
+                                ]);
+                                array_push($arayInsPNB, $arayT);
+                            }
+                            
                         }
                         DB::table('d_stock_mutation')->insert($arayInsPNB);
 
@@ -1078,27 +1089,30 @@ class opnameBarangController extends Controller
                         $od_array = array();
 
                         for ($i = 0; $i < count($imeiR); $i++) {
-                            $cek = DB::table('d_stock')
+
+                            if($imeiR[$i] != null){
+                                $cek = DB::table('d_stock')
                                 ->join('d_stock_dt', 'sd_stock', '=', 's_id')
                                 ->where('sd_specificcode', $imeiR[$i])->count();
 
-                            //// Jika Data Item tersebut tidak ada di dalam sistem
-                            if ($cek == 0) {
-                                array_push($sd_array, $imeiR[$i]);
+                                //// Jika Data Item tersebut tidak ada di dalam sistem
+                                if ($cek == 0) {
+                                    array_push($sd_array, $imeiR[$i]);
+                                }
+                                //////////////////////////////////////////////////////
+
+                                $aray = ([
+                                    'od_opname' => $o_id,
+                                    'od_detailid' => $i + 1,
+                                    'od_item' => $idItem,
+                                    'od_qty_real' => 1,
+                                    'od_qty_system' => $cek,
+                                    'od_specificcode' => strtoupper($imeiR[$i])
+                                ]);
+                                array_push($od_array, $aray);
                             }
-                            //////////////////////////////////////////////////////
-
-                            $aray = ([
-                                'od_opname' => $o_id,
-                                'od_detailid' => $i + 1,
-                                'od_item' => $idItem,
-                                'od_qty_real' => 1,
-                                'od_qty_system' => $cek,
-                                'od_specificcode' => strtoupper($imeiR[$i])
-                            ]);
-                            array_push($od_array, $aray);
+                           
                         }
-
                         DB::table('d_opname_dt')->insert($od_array);
 
                         /////
@@ -1144,12 +1158,16 @@ class opnameBarangController extends Controller
 
                         $arayInsert = array();
                         for ($dt = 0; $dt < count($arayDT); $dt++) {
-                            $aray = ([
-                                'sd_stock' => $getIdS->s_id,
-                                'sd_detailid' => $getMax + ($dt + 1),
-                                'sd_specificcode' => strtoupper($arayDT[$dt])
-                            ]);
-                            array_push($arayInsert, $aray);
+
+                            if($arayDT[$dt] != null){
+                                $aray = ([
+                                    'sd_stock' => $getIdS->s_id,
+                                    'sd_detailid' => $getMax + ($dt + 1),
+                                    'sd_specificcode' => strtoupper($arayDT[$dt])
+                                ]);
+                                array_push($arayInsert, $aray);
+                            }
+                            
                         }
                         DB::table('d_stock_dt')->insert($arayInsert);
 
@@ -1167,22 +1185,26 @@ class opnameBarangController extends Controller
 
                         $arayInsPNB = array();
                         for ($dt = 0; $dt < count($arayDT); $dt++) {
-                            $arayT = ([
-                                'sm_stock' => $getIdS->s_id,
-                                'sm_detailid' => $getMaxSMT + ($dt + 1),
-                                'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
-                                'sm_detail' => 'PENAMBAHAN',
-                                'sm_specificcode' => strtoupper($arayDT[$dt]),
-                                'sm_qty' => 1,
-                                'sm_use' => 0,
-                                'sm_sisa' => 1,
-                                'sm_hpp' => implode(explode('.', $request->hpp)),
-                                'sm_sell' => $getSell->i_price,
-                                'sm_nota' => $o_reff,
-                                'sm_reff' => $o_reff,
-                                'sm_mem' => Auth::user()->m_id
-                            ]);
-                            array_push($arayInsPNB, $arayT);
+
+                            if($arayDT[$dt] != null){
+                                $arayT = ([
+                                    'sm_stock' => $getIdS->s_id,
+                                    'sm_detailid' => $getMaxSMT + ($dt + 1),
+                                    'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'),
+                                    'sm_detail' => 'PENAMBAHAN',
+                                    'sm_specificcode' => strtoupper($arayDT[$dt]),
+                                    'sm_qty' => 1,
+                                    'sm_use' => 0,
+                                    'sm_sisa' => 1,
+                                    'sm_hpp' => implode(explode('.', $request->hpp)),
+                                    'sm_sell' => $getSell->i_price,
+                                    'sm_nota' => $o_reff,
+                                    'sm_reff' => $o_reff,
+                                    'sm_mem' => Auth::user()->m_id
+                                ]);
+                                array_push($arayInsPNB, $arayT);
+                            }
+                            
                         }
                         DB::table('d_stock_mutation')->insert($arayInsPNB);
 
