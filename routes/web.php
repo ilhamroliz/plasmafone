@@ -432,15 +432,15 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Purchase Order
 
-    Route::get('/PurchaseOrderController', 'PembelianController@purchase_order');
-    Route::get('/PurchaseOrderController/view_tambahPo', 'PembelianController@view_tambahPo');
-    Route::get('/PurchaseOrderController/view_purchaseAll', 'PembelianController@view_purchaseAll');
-    Route::get('/PurchaseOrderController/purchasing', 'PembelianController@purchasing');
-    Route::get('/PurchaseOrderController/purchaseComplete', 'PembelianController@purchaseComplete');
-    Route::get('/PurchaseOrderController/getDetail_purchase', 'PembelianController@getDetail_purchase');
-    Route::get('/PurchaseOrderController/get_idDetail', 'PembelianController@get_idDetail');
-    Route::get('/PurchaseOrderController/PurchaseTambah', 'PembelianController@purchaseTambah');
-    Route::get('/PurchaseOrderController/add_purchaseOrder', 'PembelianController@add_purchaseOrder');
+    Route::get('/pembelian/purchase-order', 'PurchaseOrderController@purchase_order');
+    Route::get('/pembelian/purchase-order/view_tambahPo', 'PurchaseOrderController@view_tambahPo');
+    Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
+    Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
+    Route::get('/pembelian/purchase-order/purchaseComplete', 'PurchaseOrderController@purchaseComplete');
+    Route::get('/pembelian/purchase-order/getDetail_purchase', 'PurchaseOrderController@getDetail_purchase');
+    Route::get('/pembelian/purchase-order/get_idDetail', 'PurchaseOrderController@get_idDetail');
+    Route::get('/pembelian/purchase-order/PurchaseTambah', 'PurchaseOrderController@purchaseTambah');
+    Route::get('/pembelian/purchase-order/add_purchaseOrder', 'PurchaseOrderController@add_purchaseOrder');
 
 	// aksi purchase
     Route::get('/pembelian/purchase-order/getSupplier_po', 'PurchaseOrderController@getSupplier_po');
