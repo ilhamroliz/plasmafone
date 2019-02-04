@@ -317,7 +317,8 @@ class PembelianController extends Controller
             $countPC = DB::table('d_purchase_confirm')->count();
             $getId = 1;
             if($countPC > 0){
-                $getId = DB::table('d_purchase_confirm')->max('pc_id');
+                $getIdMax = DB::table('d_purchase_confirm')->max('pc_id');
+                $getId = $getIdMax + 1;
             }
 
             $temp = 1;
@@ -377,7 +378,7 @@ class PembelianController extends Controller
             DB::commit();
             return response()->json([
                 'status' => 'sukses',
-                'pcId' => array_values($idPCAray)
+                'pcId' => $idPCAray
             ]);
         } catch (\Exception $e){
             DB::rollback();
@@ -942,11 +943,13 @@ class PembelianController extends Controller
                     'id_status' => 'Y'
                 ]);
 
+                $indInsert = array();
                 for ($i=0; $i < count($ind_id) ; $i++) {
                     $check = DB::table('d_purchase_plan')
                         ->where('pp_item', $ind_id[$i])
                         ->where('pp_status', '=', 'P')
                         ->get();
+
                     if (count($check) > 0) {
                         $qtyAkhir = $check[0]->pp_qtyreq + $qtyAppInd[$i];
                         DB::table('d_purchase_plan')
@@ -955,18 +958,18 @@ class PembelianController extends Controller
                             'pp_date'   => $req_date
                         ]);
                     } else {
-                        DB::table('d_purchase_plan')
-                        ->insert([
 
+                        $indAray = ([
                             'pp_date'   => $req_date,
                             'pp_item'   => $ind_id[$i],
                             'pp_qtyreq' => $qtyAppInd[$i],
                             'pp_status' => 'P'
-
                         ]);
-                    }
+                        array_push($indInsert, $indAray);
 
+                    }
                 }
+                DB::table('d_purhase_plan')->insert($indInsert);
 
             }
 
@@ -979,7 +982,7 @@ class PembelianController extends Controller
                     'ro_state' => 'Y'
                 ]);
 
-
+                $reqInsert = array(); 
                 for ($j=0; $j < count($req_id) ; $j++) {
 
                     $check = DB::table('d_purchase_plan')
@@ -995,18 +998,18 @@ class PembelianController extends Controller
                             'pp_date'   => $req_date
                         ]);
                     } else {
-                        DB::table('d_purchase_plan')
-                        ->insert([
 
+                        $reqAray = ([
                             'pp_date'   => $req_date,
                             'pp_item'   => $item_idReq[$j],
                             'pp_qtyreq' => $qtyAppReq[$j],
                             'pp_status' => 'P'
-
                         ]);
-                    }
+                        array_push($reqInsert, $reqAray);
 
+                    }
                 }
+                DB::table('d_purchase_plan')->insert($reqInsert);
 
             }
 
@@ -1708,11 +1711,16 @@ class PembelianController extends Controller
 
     public function print($id)
     {
-        $printPDF = DB::table('d_purchase_confirmdt')
-            ->select('d_purchase_confirmdt.*')
-            ->where('d_purchase_confirmdt.pcd_purchaseconfirm', $id)
+        $confirm = DB::table('d_purchase_confirm')
+            ->join('d_supplier', 's_id', '=', 'pc_supplier')
+            ->where('pc_id', $id)
+            ->select('pc_nota', DB::raw('date_format(pc_date, "%d/%m/%Y") as pc_date'), 's_company', 's_address', 's_phone')->get();
+        $confirmDT = DB::table('d_purchase_confirmdt')
+            ->join('d_item', 'i_id', '=', 'pcd_item')
+            ->where('pcd_purchaseconfirm', $id)
+            ->select('i_nama', 'pcd_qty')
             ->get();
-        return view('pembelian/konfirmasi_pembelian/newprint', compact('printPDF'));
+        return view('pembelian/konfirmasi_pembelian/newprint', compact('confirm', 'confirmDT'));
     }
 
     public function downloadpdf($id)

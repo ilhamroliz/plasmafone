@@ -432,7 +432,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Purchase Order
 
-    Route::get('/pembelian/purchase-order', 'PurchaseOrderController@purchase_order');
+    Route::get('/pembelian/purchase-order', 'PurchaseOrderController@index');
     Route::get('/pembelian/purchase-order/tambah-purchase-prder', 'PurchaseOrderController@view_tambahPo');
     Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
     Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
@@ -502,24 +502,24 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Inventory
 	// Penerimaan barang dari supplier
-    Route::get('/inventory/penerimaan/supplier', 'inventory\ReceptionController@index_supplier');
-    Route::post('/inventory/penerimaan/supplier/detailPo', 'inventory\ReceptionController@detailPo');
-    Route::post('/inventory/penerimaan/supplier/getPo', 'inventory\ReceptionController@getPo');
-    Route::post('/inventory/penerimaan/supplier/getEntitas_po', 'inventory\ReceptionController@getEntitas_po');
-    Route::post('/inventory/penerimaan/supplier/load_bbm', 'inventory\ReceptionController@load_bbm');
-    Route::post('/inventory/penerimaan/supplier/updateQty', 'inventory\ReceptionController@updateQty');
-    Route::post('/inventory/penerimaan/supplier/updateTgl', 'inventory\ReceptionController@updateTgl');
-    Route::post('/inventory/penerimaan/supplier/updateGudang', 'inventory\ReceptionController@updateGudang');
-    Route::post('/inventory/penerimaan/supplier/terimaBarang', 'inventory\ReceptionController@terimaBarang');
-    Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\ReceptionController@cariGudang');
-    Route::get('/inventory/penerimaan/supplier/view_bbm_dt', 'inventory\ReceptionController@view_bbm_dt');
-    Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\ReceptionController@index_addSupplier');
-    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/add', 'inventory\ReceptionController@add_items_from_supplier');
-    Route::get('/inventory/penerimaan/supplier/get-current-receipt/{id}', 'inventory\ReceptionController@get_current_receipt');
-    Route::get('/inventory/penerimaan/supplier/edit', 'inventory\ReceptionController@edit');
-    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/edit-multiple', 'inventory\ReceptionController@multiple_edit_penerimaan_barang');
-    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/update', 'inventory\ReceptionController@update_penerimaan_barang');
-    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/multiple-delete', 'inventory\ReceptionController@multiple_delete_penerimaan');
+    Route::get('/inventory/penerimaan/supplier', 'inventory\SupplierReceptionController@index');
+    Route::post('/inventory/penerimaan/supplier/detailPo', 'inventory\SupplierReceptionController@detailPo');
+    Route::post('/inventory/penerimaan/supplier/getPo', 'inventory\SupplierReceptionController@getPo');
+    Route::post('/inventory/penerimaan/supplier/getEntitas_po', 'inventory\SupplierReceptionController@getEntitas_po');
+    Route::post('/inventory/penerimaan/supplier/load_bbm', 'inventory\SupplierReceptionController@load_bbm');
+    Route::post('/inventory/penerimaan/supplier/updateQty', 'inventory\SupplierReceptionController@updateQty');
+    Route::post('/inventory/penerimaan/supplier/updateTgl', 'inventory\SupplierReceptionController@updateTgl');
+    Route::post('/inventory/penerimaan/supplier/updateGudang', 'inventory\SupplierReceptionController@updateGudang');
+    Route::post('/inventory/penerimaan/supplier/terimaBarang', 'inventory\SupplierReceptionController@terimaBarang');
+    Route::get('/inventory/penerimaan/supplier/cariGudang', 'inventory\SupplierReceptionController@cariGudang');
+    Route::get('/inventory/penerimaan/supplier/view_bbm_dt', 'inventory\SupplierReceptionController@view_bbm_dt');
+    Route::get('/inventory/penerimaan/supplier/formAdd', 'inventory\SupplierReceptionController@index_addSupplier');
+    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/add', 'inventory\SupplierReceptionController@add_items_from_supplier');
+    Route::get('/inventory/penerimaan/supplier/get-current-receipt/{id}', 'inventory\SupplierReceptionController@get_current_receipt');
+    Route::get('/inventory/penerimaan/supplier/edit', 'inventory\SupplierReceptionController@edit');
+    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/edit-multiple', 'inventory\SupplierReceptionController@multiple_edit_penerimaan_barang');
+    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/update', 'inventory\SupplierReceptionController@update_penerimaan_barang');
+    Route::match(['get', 'post'], '/inventory/penerimaan/supplier/multiple-delete', 'inventory\SupplierReceptionController@multiple_delete_penerimaan');
 	// End penerimaan barang dari supplier
 
 	// Penerimaan barang distribusi
