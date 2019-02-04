@@ -628,6 +628,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Return Penjualan
 	// ####################################
     Route::get('/penjualan/return-penjualan', 'penjualan\ReturnPenjualanController@index')->name('return-penjualan');
+    Route::get('penjualan/return-penjualan/tambah', 'penjualan\ReturnPenjualanController@add');
 	// ####################################
 	// End Return Penjualan
 	// ####################################
