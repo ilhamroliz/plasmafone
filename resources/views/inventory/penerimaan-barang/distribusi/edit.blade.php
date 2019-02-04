@@ -272,7 +272,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
 								Batal
 							</button>
-							<button type="button" class="btn btn-primary" onclick="simpan()">
+							<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>
 								Simpan
 							</button>
 						</div>
@@ -364,15 +364,17 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		    aktif.api().ajax.reload();
 		}
 
-		function terima(id, item){
-            var qty = 0, qtyReceived = 0, sts = null;
+		function terima(id, item, code){
+            var qty = 0, qtyReceived = 0;
 			hapus();
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
 			var row = '';
-
-			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item).then(response => {
-
+            if (code == ""){
+                code = null;
+            }
+			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item+'/'+code).then(response => {
+                // console.log(response);
 				if (response.data.status == 'Access denied') {
 
 					$('#overlay').fadeOut(200);
@@ -411,7 +413,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="form-group ">' +
+                                    '<div id="error" class="form-group ">' +
                                         '<label class="col-md-4 control-label">Kode Spesifik</label>' +
                                         '<div class="col-md-8">' +
                                             '<div class="input-group">' +
@@ -423,15 +425,58 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                 '<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
                                                 '<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
                                                 '<input type="text" id="kode" name="kode" class="kode form-control">' +
-                                                '<span class="input-group-addon"><i class="fa fa-barcode"></i></span>' +
+                                                '<span class="input-group-addon"><i class="fa fa-barcode" id="icon"></i></span>' +
                                             '</div>' +
-                                            '<span class="help-block"></span>' +
+                                            '<span id="message" class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
                                 '</fieldset>'+
                             '</div>';
                         $(".terima").append(row);
                         $("#kode").focus();
+                        $("#kode").on("input", function (evt) {
+                            evt.preventDefault();
+                            if ($(this).val() != code) {
+                                $("#error").removeClass("has-success");
+                                $("#error").addClass("has-error");
+                                $("#icon").removeClass("fa fa-barcode");
+                                $("#icon").removeClass("fa fa-check");
+                                $("#icon").addClass("glyphicon glyphicon-remove-circle");
+                                $("#message").html("Kode tidak valid");
+                                $("#simpan").attr("disabled", true);
+                            } else {
+                                axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/check/'+response.data.itemId+'/'+$("#kode").val()+'/'+response.data.dari+'/'+response.data.tujuan).then(resp => {
+                                    // console.log(resp.data);
+                                    if (resp.data == 0) {
+                                        $("#error").removeClass("has-success");
+                                        $("#error").addClass("has-error");
+                                        $("#icon").removeClass("fa fa-barcode");
+                                        $("#icon").removeClass("fa fa-check");
+                                        $("#icon").addClass("glyphicon glyphicon-remove-circle");
+                                        $("#message").html("Kode tidak ditemukan");
+                                        $("#simpan").attr("disabled", true);
+                                    } else if (resp.data == 1) {
+                                        $("#error").removeClass("has-error");
+                                        $("#error").addClass("has-success");
+                                        $("#icon").removeClass("fa fa-barcode");
+                                        $("#icon").removeClass("glyphicon glyphicon-remove-circle");
+                                        $("#icon").addClass("fa fa-check");
+                                        $("#message").html("Kode ditemukan");
+                                        $("#simpan").attr("disabled", false);
+                                    }
+                                }).catch(error => {
+                                        if (error.response.status == 404) {
+                                            $("#error").removeClass("has-success");
+                                            $("#error").addClass("has-error");
+                                            $("#icon").removeClass("fa fa-barcode");
+                                            $("#icon").removeClass("fa fa-check");
+                                            $("#icon").addClass("glyphicon glyphicon-remove-circle");
+                                            $("#message").html("Kode tidak ditemukan");
+                                            $("#simpan").attr("disabled", true);
+                                        }
+                                    });
+                            }
+                        })
 
 					} else {
 						row = '<div id="form_qty">'+
@@ -474,7 +519,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             if ((event.which < 48 || event.which > 57)) {
                                 event.preventDefault();
                             }
-
+                            if ($(this).val() != null || $(this).val() != ""){
+                                $('#simpan').attr("disabled", false);
+                            } else {
+                                $('#simpan').attr("disabled", true);
+                            }
 
                         });
                         $('.qty').on("keyup", function (evt){
@@ -486,6 +535,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             }
                             if (input > parseInt(response.data.qtySisa)){
                                 $(this).val(response.data.qtySisa);
+                            }
+                            if ($(this).val() != null || $(this).val() != ""){
+                                $('#simpan').attr("disabled", false);
+                            } else {
+                                $('#simpan').attr("disabled", true);
                             }
                         })
 					}
