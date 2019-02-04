@@ -821,6 +821,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //== Layanan Perbaikan
     Route::get('layanan-perbaikan', 'PerbaikanController@index');
+    Route::get('layanan-perbaikan/tambah', 'PerbaikanController@tambah');
 
 
 	// keuangan
