@@ -95,12 +95,12 @@
                                 <li class="active">
                                     <a data-toggle="tab" href="#hr1"> <i style="color: #739E73;"
                                                                          class="fa fa-lg fa-rotate-right fa-spin"></i> <span
-                                            class="hidden-mobile hidden-tablet">Confirm Order </span> </a>
+                                            class="hidden-mobile hidden-tablet">Menunggu </span> </a>
                                 </li>
                                 <li>
                                     <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
-                                                                         class="fa fa-lg fa-check"></i> <span
-                                            class="hidden-mobile hidden-tablet">Purchasing</span></a>
+                                                                         class="fa fa-lg fa-history"></i> <span
+                                            class="hidden-mobile hidden-tablet">History</span></a>
                                 </li>
 
 
@@ -116,20 +116,14 @@
                                         <table id="dt_co" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
-
                                                 <tr>
-                                                    <th class="text-center" width="5%">No.</th>
-                                                    <th class="text-center" width="15%">No. Confirm</th>
-                                                    <th class="text-center" width="20%">Nama Barang</th>
-                                                    <th class="text-center" width="15%">Qty</th>
-                                                    <th class="text-center" width="15%">Status</th>
+                                                    <th class="text-center" width="10%">No.</th>
+                                                    <th class="text-center" width="75%">No. Confirm</th>
                                                     <th class="text-center" width="15%">Aksi</th>
                                                 </tr>
-
                                             </thead>
 
                                             <tbody>
-
                                             </tbody>
                                         </table>
                                     </div>
@@ -138,33 +132,12 @@
                                                width="100%">
                                             <thead>
                                             <tr>
-
                                                 <th class="text-center" width="5%">No.</th>
                                                 <th class="text-center" width="15%">No. Confirm</th>
-                                                <th class="text-center" width="35%">Nama Barang</th>
-                                                <th class="text-center" width="15%">Harga</th>
-                                                <th class="text-center" width="15%">Qty</th>
                                                 <th class="text-center" width="15%">Status</th>
-
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane fade" id="hr3">
-                                        <table id="dt_all" class="table table-striped table-bordered table-hover"
-                                               width="100%">
-                                            <thead>
-                                            <tr>
 
-                                                <th data-hide="phone,tablet" width="1%">No</th>
-                                                <th data-hide="phone,tablet" width="15%">No Confirm</th>
-                                                <th width="30%">Nama Barang</th>
-                                                <th data-hide="phone,tablet" width="15%">Qty</th>
-                                                <th data-hide="phone,tablet" width="15%">Status</th>
-                                            </tr>
-                                            </thead>
                                             <tbody>
                                             </tbody>
                                         </table>
@@ -186,10 +159,104 @@
             </div>
             <!-- end row -->
 
-            <!-- row -->
-            <div class="row">
-            </div>
-            <!-- end row -->
+            <!-- Modal untuk Detil & Edit Konfirmasi Pembelian -->
+			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel">Detail Konfirmasi Pembelian</h4>
+
+						</div>
+
+						<div class="modal-body">			
+							<div class="row">
+
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+									<header>
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<h2 id="title_detail"></h2>
+									</header>
+
+									<!-- widget div-->
+									<div>
+
+										<!-- widget content -->
+										<div class="widget-body no-padding">
+											<div class="table-responsive">
+
+												<div class="col-md-12 padding-top-10 ">
+													<input type="hidden" id="dmId">
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmNoNota"></label>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Nama Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<div class="col-md-8">
+															<label id="dmNamaSupp"></label>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Alamat Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmAddrSupp"></label>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Telp Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmTelpSupp"></label>
+                                                    </div>                                                
+												</div>
+
+                                                <div>
+                                                    <table id="dt_detail" class="table table-striped table-bordered table-hover">
+                                                        <thead>		
+                                                            <tr>
+                                                                <th width="10%">&nbsp;No.</th>
+                                                                <th width="60%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                                <th width="30%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
+                                                            </tr>
+                                                        </thead>
+    
+                                                        <tbody>
+                                                        </tbody>
+    
+                                                    </table>
+                                                </div>												
+											</div>
+										</div>
+										<!-- end widget content -->
+
+									</div>
+									<!-- end widget div -->
+
+								</div>
+								<!-- end widget -->
+
+								<div class="row">
+									<div class="col-md-12 text-align-right" style="margin-right: 20px;">
+										<button class="btn btn-primary" onclick="simpanStatus()"><i class="fa fa-floppy-o"></i>&nbsp;Simpan</button>
+									</div>
+								</div>
+							</div>			
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
+            <!-- /.modal -->
+            
         </section>
         <!-- end widget grid -->
 
@@ -240,9 +307,6 @@
                 "columns":[
                     {"data": "pc_id"},
                     {"data": "pc_nota"},
-                    {"data": "i_nama"},
-                    {"data": "input"},
-                    {"data": "pc_status"},
                     {"data": "aksi"}
                 ],
                 "autoWidth" : false,
@@ -278,9 +342,6 @@
                 "columns":[
                     {"data": "pc_id"},
                     {"data": "pc_nota"},
-                    {"data": "i_nama"},
-                    {"data": "pcd_qty"},
-                    {"data": "pcd_qty"},
                     {"data": "pc_status"}
                 ],
                 "autoWidth" : false,
@@ -305,6 +366,36 @@
 
 
         })
+
+
+        function detil(id){
+
+        }
+
+        function edit(id){
+
+            axios.get(baseUrl+'/pembelian/konfirmasi-pembelian/editConfirm?id='+id).then((response) => {
+
+                $('#dmNoNota').val(response.data.data.pc_nota);
+                $('#dmNamaSupp').val(response.data.data.s_company);
+                $('#dmAddrSupp').val(response.data.data.s_address);
+                $('#dmTelpSupp').val(response.data.data.s_phone);
+
+                for(var i = 0; i < response.data.dataDT.length; i++){
+
+                    
+
+                }
+
+            });
+
+            $('#detilModal').modal('show');
+        }
+
+        function hapus(id){
+
+        }
+
     </script>
 
 @endsection
