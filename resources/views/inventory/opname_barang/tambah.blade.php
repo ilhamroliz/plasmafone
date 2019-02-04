@@ -361,7 +361,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 			var note = '';
 
 			var ar = $();
-			var data = '';
 			if(speccode == 'Y' && expired == 'N'){
 				for (var i = 0; i < codeTable.rows()[0].length; i++) {
 					ar = ar.add(codeTable.row(i).node())

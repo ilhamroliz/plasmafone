@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Barang')
+@section('title', 'Konfirmasi Pembelian')
 
 <?php
 use App\Http\Controllers\PlasmafoneController as Access;

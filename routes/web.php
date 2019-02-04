@@ -422,6 +422,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::GET('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
     Route::match(['get', 'post'],'/pembelian/konfirmasi-pembelian/edit', 'PembelianController@editConfirm');
+    Route::post('/pembelian/konfirmasi-pembelian/getHistory', 'PembelianController@getHistory');
 
     Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
