@@ -468,7 +468,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                         $(".terima").append(row);
                         $("#qty").focus();
-                        
+
                         $(".qty").on("keypress keyup blur",function (event) {
                             $(this).val($(this).val().replace(/[^\d].+/, ""));
                             if ((event.which < 48 || event.which > 57)) {
