@@ -165,7 +165,8 @@
                                             <thead>
                                             <tr>
                                                 <th class="text-center" width="10%">No.</th>
-                                                <th class="text-center" width="70%">No. Confirm</th>
+                                                <th class="text-center" width="30%">No. Confirm</th>
+                                                <th class="text-center" width="40%">Nama Supplier</th>
                                                 <th class="text-center" width="20%">Status</th>
                                             </tr>
                                             </thead>
@@ -332,6 +333,23 @@
                 "searching": false,
                 "autoWidth": false
             });
+
+            $( "#nota" ).autocomplete({
+				source: baseUrl+'/pembelian/konfirmasi-pembelian/auto-nota',
+				minLength: 1,
+				select: function(event, data) {
+					$('#nota').val(data.item.label);
+				}
+			});
+
+			$( "#namaSupp" ).autocomplete({
+				source: baseUrl+'/pembelian/konfirmasi-pembelian/auto-supp',
+				minLength: 1,
+				select: function(event, data) {
+					$('#idSupp').val(data.item.id);
+					$('#namaSupp').val(data.item.label);
+				}
+			});
 
             let selected = [];
 
@@ -500,34 +518,20 @@
 
 				$('#dt_history').DataTable().clear();
 				for(var i = 0; i < response.data.data.length; i++){
-					if(response.data.data[i].i_status == "PROSES"){
-						$('#dt_history').DataTable().row.add([
-							response.data.data[i].i_nota,
-							response.data.data[i].c_name,
-							response.data.data[i].m_name,
-							response.data.data[i].sales,
-							'<span class="label label-warning">PROSES</span>',
-							'<div class="text-center">'+
-							'<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Edit Status" onclick="detail('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp'+
-							'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
-						]).draw();
-					}else{
-						$status = '';
-						if(response.data.data[i].i_status == "DONE"){
-							$status = '<span class="label label-success">DONE</span>';
-						}else{
-							$status = '<span class="label label-danger">CANCEL</span>';
-						}
-						$('#dt_history').DataTable().row.add([
-							response.data.data[i].i_nota,
-							response.data.data[i].c_name,
-							response.data.data[i].m_name,
-							response.data.data[i].sales,
-							$status,
-							'<div class="text-center">'+
-							'<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus('+response.data.data[i].i_id+')"><i class="glyphicon glyphicon-trash"></i></button></div>'
-						]).draw();
-					}
+                    $status = '';
+                    if(response.data.data[i].i_status == "Y"){
+                        $status = '<span class="label label-success">PURCHASING</span>';
+                    }else if(response.data.data[i].i_status == "N"){
+                        $status = '<span class="label label-danger">DITOLAK</span>';
+                    }else{
+                        $status = '<span class="label label-warning">MENUNGGU</span>';
+                    }
+                    $('#dt_history').DataTable().row.add([
+                        i + 1,
+                        response.data.data[i].pc_nota,
+                        response.data.data[i].s_company,
+                        $status
+                    ]).draw();
 				}
 
 			});

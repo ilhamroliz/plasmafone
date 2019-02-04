@@ -1185,6 +1185,148 @@ class PembelianController extends Controller
         return view('pembelian/konfirmasi_pembelian/view_konfirmasi_pembelian');
     }
 
+    public function auto_supp(Request $request)
+    {
+        $cari = $request->term;
+        $supp = DB::table('d_supplier')
+            ->whereRaw('s_company like "%'.$cari.'%"')
+            ->select('s_id', 's_company')->get();
+
+        if ($supp == null) {
+            $hasilsupp[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($supp as $query) {
+                $hasilsupp[] = [
+                    'id' => $query->s_id,
+                    'label' => $query->s_company
+                ];
+            }
+        }
+
+        return Response::json($hasilsupp);
+    }
+
+    public function auto_nota(Request $request)
+    {
+        $cari = $request->term;
+        $nota = DB::table('d_purchase_confirm')
+            ->whereRaw('pc_nota like "%'.$cari.'%"')
+            ->select('pc_id', 'pc_nota')->get();
+
+        if ($nota == null) {
+            $hasilnota[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nota as $query) {
+                $hasilnota[] = [
+                    'id' => $query->pc_id,
+                    'label' => $query->pc_nota
+                ];
+            }
+        }
+
+        return Response::json($hasilnota);
+    }
+
+    public function getHistory(Request $request)
+    {
+        // dd($request);
+        $history = '';
+
+        $tglAw = $request->tglAwal;
+        $tglAkh = $request->tglAkhir;
+        $nota = $request->nota;
+        $idSupp = $request->idSupp;
+
+        if($tglAw != null && $tglAkh != null){
+            $taw = explode('/', $tglAw);
+            $tglAwal = $taw[2].'-'.$taw[1].'-'.$taw[0];
+            $tak = explode('/', $tglAkh);
+            $tglAkhir = $tak[2].'-'.$tak[1].'-'.$tak[0];
+
+            if($nota != null && $idSupp == null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota == null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_supplier', $idSupp)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota != null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_supplier', $idSupp)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else{
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }
+        }else{
+
+            if($nota != null && $idSupp == null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota == null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_supplier', $idSupp)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota != null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_supplier', $idSupp)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else{
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }
+            
+        }
+
+        // dd($history);
+        return json_encode([
+            'data' => $history
+        ]);
+    }
+
     public function view_addKonfirmasi()
     {
         $data = DB::table('d_purchase_plan')
