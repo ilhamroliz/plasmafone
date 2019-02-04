@@ -225,6 +225,9 @@ class PurchaseOrderController extends Controller
 
     public function view_tambahPo()
     {
+        if (!PlasmafoneController::checkAkses('4', 'read')){
+            return redirect()->route('login');
+        }
         return view('pembelian/purchase_order/add_po');
     }
 
