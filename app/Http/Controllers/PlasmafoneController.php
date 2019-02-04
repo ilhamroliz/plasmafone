@@ -65,6 +65,9 @@ class PlasmafoneController extends Controller
 
     public static function checkAkses($a_id, $aksi)
     {
+        if (!Auth::check()){
+            return false;
+        }
         $m_id = Auth::user()->m_id;
         if ($m_id == null){
             return redirect()->route('login');
