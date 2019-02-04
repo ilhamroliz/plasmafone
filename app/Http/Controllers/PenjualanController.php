@@ -142,6 +142,7 @@ class PenjualanController extends Controller
                     $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                    $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
@@ -171,6 +172,7 @@ class PenjualanController extends Controller
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
                     $q->whereNotIn('d_stock_mutation.sm_specificcode', $kode);
+                    $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
@@ -203,6 +205,7 @@ class PenjualanController extends Controller
                     $q->on('d_stock_mutation.sm_stock', '=', 's_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                    $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
                 })
                 ->leftJoin('d_stock_dt', function ($a) {
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
@@ -262,6 +265,7 @@ class PenjualanController extends Controller
                     $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                    $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
@@ -290,6 +294,7 @@ class PenjualanController extends Controller
                     $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                    $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
                     $q->whereNotIn('d_stock_mutation.sm_specificcode', $kode);
                 })
                 ->leftJoin('d_stock_dt', function ($a) use ($kode){
@@ -323,6 +328,7 @@ class PenjualanController extends Controller
                     $q->on('d_stock_mutation.sm_stock', '=', 's_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                    $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
                 })
                 ->leftJoin('d_stock_dt', function ($a) {
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');

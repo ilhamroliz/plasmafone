@@ -399,53 +399,76 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					}
 
 					if (response.data.specificcode == 'Y') {
-						sts = "kode";
-						row = '<div class="col-md-12" id="form_qty">'+
-									'<div class="form-group">'+
-										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
-										'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row form-control">'+
-									'</div>'+
-									// '<div class="form-group">'+
-										// '<label for="qty" class="row text-left col-md-6 control-label">Kuantitas:</label>'+
-										
-										// '<input type="text" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row">'+
-									// '</div>'+
-									'<div class="form-group">'+
-										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
-										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-										'<input type="hidden" value="'+response.data.dari+'" name="comp">'+
-										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
-										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
-										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
-										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-										'<label for="kode" class="row text-left col-md-6 control-label">Specific Code:</label>'+
-										'<input type="text" id="kode" name="kode" class="kode row form-control">'+
-									'</div>'+
-								'</div>';
+						row = '<div id="form_qty">' +
+                                '<fieldset>' +
+                                    '<div class="form-group">' +
+                                        '<label class="col-md-4 control-label">Kuantitas yang sudah diterima</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty form-control">'+
+                                                '<span class="input-group-addon"><i class="fa fa-check"></i></span>' +
+                                            '</div>' +
+                                            '<span class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="form-group ">' +
+                                        '<label class="col-md-4 control-label">Kode Spesifik</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
+                                                '<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
+                                                '<input type="hidden" value="'+response.data.dari+'" name="comp">'+
+                                                '<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
+                                                '<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
+                                                '<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
+                                                '<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+                                                '<input type="text" id="kode" name="kode" class="kode form-control">' +
+                                                '<span class="input-group-addon"><i class="fa fa-barcode"></i></span>' +
+                                            '</div>' +
+                                            '<span class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</fieldset>'+
+                            '</div>';
                         $(".terima").append(row);
                         $("#kode").focus();
 
 					} else {
-                        sts = "qty";
-						row = '<div class="col-md-12" id="form_qty">'+
-									'<div class="form-group">'+
-										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
-										'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row form-control">'+
-									'</div>'+
-									'<div class="form-group">'+
-										'<label for="qty" class="row text-left col-md-6 control-label">Kuantitas:</label>'+
-										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
-										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-										'<input type="hidden" value="'+response.data.dari+'" name="comp">'+
-										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
-										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
-										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
-										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-										'<input type="text" id="qty" name="qty" class="qty row form-control">'+
-									'</div>'+
+						row = '<div id="form_qty">'+
+                                '<fieldset>' +
+                                    '<div class="form-group">' +
+                                        '<label class="col-md-4 control-label">Kuantitas yang sudah diterima</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty form-control">'+
+                                                '<span class="input-group-addon"><i class="fa fa-database"></i></span>' +
+                                            '</div>' +
+                                            '<span class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>'+
+                                    '<div class="form-group">' +
+                                        '<label class="col-md-4 control-label">Kuantitas</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
+                                                '<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
+                                                '<input type="hidden" value="'+response.data.dari+'" name="comp">'+
+                                                '<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
+                                                '<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
+                                                '<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
+                                                '<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+                                                '<input type="text" id="qty" name="qty" class="qty form-control">'+
+                                                '<span class="input-group-addon"><i class="fa fa-cubes"></i></span>' +
+                                            '</div>' +
+                                            '<span class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</fieldset>' +
 								'</div>';
+
                         $(".terima").append(row);
                         $("#qty").focus();
+
                         $(".qty").on("keypress keyup blur",function (event) {
                             $(this).val($(this).val().replace(/[^\d].+/, ""));
                             if ((event.which < 48 || event.which > 57)) {
