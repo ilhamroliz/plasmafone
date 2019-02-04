@@ -13,6 +13,7 @@ use DB;
 use Session;
 use PDF;
 use Response;
+use Crypt;
 
 class PembelianController extends Controller
 {
@@ -1175,48 +1176,155 @@ class PembelianController extends Controller
             echo $output;
         }
 
-        // $term = $request->input('term');
-
-        // $results = array();
-
-        // $queries = DB::table('d_item')
-        //     ->where('i_id', 'LIKE', '%'.$term.'%')
-        //     ->orWhere('i_nama', 'LIKE', '%'.$term.'%')
-        //     ->take(5)->get();
-
-        // foreach ($queries as $query)
-        // {
-        //     $results[] = [ 'i_id' => $query->i_id, 'value' => $query->i_id.' '.$query->i_nama ];
-        // }
-        // return Response::json($results);
-
-        // $input = $request->input('data');
-        // $list  = DB::table('d_item')
-        // ->select('d_item.*')
-        // ->where('d_item.i_id','LIKE',"%{$input}%")
-        // ->orWhere('d_item.i_nama','LIKE',"%{$input}%")
-        // ->take(5)
-        // ->get();
-
-
-        // if ($list == null)
-        // {
-        //     $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
-        // } else {
-        //     foreach ($list as $query) {
-        //         $results[] = ['id' => $query->i_id, 'label' => $query->i_nama];
-        //     }
-        // }
-
-        // echo json_encode($results);
     }
 
     // start konfirm order-----------------------------------------------------------------------------------------------------------
 
     public function konfirmasi_pembelian()
     {
-
         return view('pembelian/konfirmasi_pembelian/view_konfirmasi_pembelian');
+    }
+
+    public function auto_supp(Request $request)
+    {
+        $cari = $request->term;
+        $supp = DB::table('d_supplier')
+            ->whereRaw('s_company like "%'.$cari.'%"')
+            ->select('s_id', 's_company')->get();
+
+        if ($supp == null) {
+            $hasilsupp[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($supp as $query) {
+                $hasilsupp[] = [
+                    'id' => $query->s_id,
+                    'label' => $query->s_company
+                ];
+            }
+        }
+
+        return Response::json($hasilsupp);
+    }
+
+    public function auto_nota(Request $request)
+    {
+        $cari = $request->term;
+        $nota = DB::table('d_purchase_confirm')
+            ->whereRaw('pc_nota like "%'.$cari.'%"')
+            ->select('pc_id', 'pc_nota')->get();
+
+        if ($nota == null) {
+            $hasilnota[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($nota as $query) {
+                $hasilnota[] = [
+                    'id' => $query->pc_id,
+                    'label' => $query->pc_nota
+                ];
+            }
+        }
+
+        return Response::json($hasilnota);
+    }
+
+    public function getHistory(Request $request)
+    {
+        // dd($request);
+        $history = '';
+
+        $tglAw = $request->tglAwal;
+        $tglAkh = $request->tglAkhir;
+        $nota = $request->nota;
+        $idSupp = $request->idSupp;
+
+        if($tglAw != null && $tglAkh != null){
+            $taw = explode('/', $tglAw);
+            $tglAwal = $taw[2].'-'.$taw[1].'-'.$taw[0];
+            $tak = explode('/', $tglAkh);
+            $tglAkhir = $tak[2].'-'.$tak[1].'-'.$tak[0];
+
+            if($nota != null && $idSupp == null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota == null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_supplier', $idSupp)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota != null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_supplier', $idSupp)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else{
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }
+        }else{
+
+            if($nota != null && $idSupp == null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota == null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_supplier', $idSupp)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota != null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_supplier', $idSupp)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else{
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }
+            
+        }
+
+        // dd($history);
+        return json_encode([
+            'data' => $history
+        ]);
     }
 
     public function view_addKonfirmasi()
@@ -1246,14 +1354,14 @@ class PembelianController extends Controller
             ->get();
         return DataTables::of($confirmOrder)
             ->addColumn('aksi', function ($confirmOrder) {
-                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detil(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-edit"></i></button>';
-                $hapus = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(' . $confirmOrder->pc_id . ')"><i class="glyphicon glyphicon-trash"></i></button>';
-                if (Plasma::checkAkses(3, 'update') == false || Plasma::checkAkses(3, 'delete') == false) {
+                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detil(\'' . Crypt::encrypt($confirmOrder->pc_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' .  Crypt::encrypt($confirmOrder->pc_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
+                $hapus = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' .  Crypt::encrypt($confirmOrder->pc_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                if (Plasma::checkAkses(3, 'update') == false && Plasma::checkAkses(3, 'delete') == false) {
                     return '<div class="text-center">'.$detil.'</div>';
-                } else if(Plasma::checkAkses(3, 'update') == true || Plasma::checkAkses(3, 'delete') == false){
+                } else if(Plasma::checkAkses(3, 'update') == true && Plasma::checkAkses(3, 'delete') == false){
                     return '<div class="text-center">'.$edit.'</div>';
-                }else if(Plasma::checkAkses(3, 'update') == false || Plasma::checkAkses(3, 'delete') == true){
+                }else if(Plasma::checkAkses(3, 'update') == false && Plasma::checkAkses(3, 'delete') == true){
                     return '<div class="text-center">'.$detil.'&nbsp;'.$hapus.'</div>';
                 }else{
                     return '<div class="text-center">'.$edit.'&nbsp;'.$hapus.'</div>';
@@ -1261,6 +1369,64 @@ class PembelianController extends Controller
             })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
+    }
+
+    public function editConfirm(Request $request){
+
+        if(Plasma::checkAkses(3, 'update') == false){
+            return view('errors.407');
+        }else{
+
+            $id = Crypt::decrypt($request->id);
+            if($request->isMethod('post')){
+                // dd($request);
+                $qtyDT = $request->qtyDT;
+                DB::beginTransaction();
+                try {
+
+                    for($i = 0; $i < count($qtyDT); $i++){
+                        $a = $i + 1;
+                        DB::table('d_purchase_confirmdt')
+                            ->where('pcd_purchaseconfirm', $id)
+                            ->where('pcd_detailid',$a)
+                            ->update([ 'pcd_qty' => $qtyDT[$i] ]);
+                    }
+
+                    DB::commit();
+                    return json_encode([
+                        'status' => 'ecSukses'
+                    ]);
+
+                } catch (\Exception $e) {
+                    
+                    DB::rollback();
+                    return json_encode([
+                        'status' => 'ecGagal',
+                        'msg' => $e
+                    ]);
+                }
+
+            }
+
+            $getData = DB::table('d_purchase_confirm')
+                ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                ->where('pc_id', $id)
+                ->select('pc_nota','s_company', 's_address', 's_phone')->first();
+
+            $getDataDT = DB::table('d_purchase_confirmdt')
+                ->join('d_item', 'i_id', '=', 'pcd_item')
+                ->where('pcd_purchaseconfirm', $id)
+                ->select('i_nama', 'pcd_qty')->get();
+
+            $ide = Crypt::encrypt($id);
+
+            return json_encode([
+                'data' => $getData,
+                'dataDT' => $getDataDT,
+                'id' => $ide
+            ]);
+        }
+
     }
 
     public function view_confirmPurchase()

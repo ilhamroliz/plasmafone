@@ -422,6 +422,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::GET('/pembelian/konfirmasi-pembelian/simpanConfirm', 'PembelianController@simpanConfirm');
     Route::match(['get', 'post'],'/pembelian/konfirmasi-pembelian/edit', 'PembelianController@editConfirm');
+    Route::post('/pembelian/konfirmasi-pembelian/getHistory', 'PembelianController@getHistory');
+    Route::get('/pembelian/konfirmasi-pembelian/auto-nota', 'PembelianController@auto_nota');
+    Route::get('/pembelian/konfirmasi-pembelian/auto-supp', 'PembelianController@auto_supp');
 
     Route::get('/pembelian/konfirmasi-pembelian/get-data-order/{id}', 'PembelianController@get_data_order');
 
@@ -822,6 +825,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     //== Layanan Perbaikan
     Route::get('layanan-perbaikan', 'PerbaikanController@index');
+    Route::get('layanan-perbaikan/tambah', 'PerbaikanController@tambah');
 
 
 	// keuangan
