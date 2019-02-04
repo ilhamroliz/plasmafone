@@ -365,6 +365,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		}
 
 		function terima(id, item){
+            var qty = 0, qtyReceived = 0, sts = null;
 			hapus();
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
@@ -385,8 +386,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 				} else {
 
-					console.log(response.data.qtySisa);
-					var qty = 0, qtyReceived = 0;
 					if (response.data.qtySisa == null) {
 						qty = 0;
 					} else {
@@ -400,7 +399,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					}
 
 					if (response.data.specificcode == 'Y') {
-						
+						sts = "kode";
 						row = '<div class="col-md-12" id="form_qty">'+
 									'<div class="form-group">'+
 										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
@@ -414,7 +413,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 									'<div class="form-group">'+
 										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
 										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-										'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
+										'<input type="hidden" value="'+response.data.dari+'" name="comp">'+
 										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
 										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
 										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
@@ -423,9 +422,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 										'<input type="text" id="kode" name="kode" class="kode row form-control">'+
 									'</div>'+
 								'</div>';
+                        $(".terima").append(row);
+                        $("#kode").focus();
 
 					} else {
-
+                        sts = "qty";
 						row = '<div class="col-md-12" id="form_qty">'+
 									'<div class="form-group">'+
 										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
@@ -435,38 +436,38 @@ use App\Http\Controllers\PlasmafoneController as Access;
 										'<label for="qty" class="row text-left col-md-6 control-label">Kuantitas:</label>'+
 										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
 										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-										'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
+										'<input type="hidden" value="'+response.data.dari+'" name="comp">'+
 										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
 										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
 										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
 										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-										'<input type="text" autofocus id="qty" name="qty" class="qty row form-control">'+
+										'<input type="text" id="qty" name="qty" class="qty row form-control">'+
 									'</div>'+
 								'</div>';
+                        $(".terima").append(row);
+                        $("#qty").focus();
+                        $(".qty").on("keypress keyup blur",function (event) {
+                            $(this).val($(this).val().replace(/[^\d].+/, ""));
+                            if ((event.which < 48 || event.which > 57)) {
+                                event.preventDefault();
+                            }
 
+
+                        });
+                        $('.qty').on("keyup", function (evt){
+                            evt.preventDefault();
+                            var input = parseInt($(this).val());
+
+                            if (isNaN(input)){
+                                input = 0;
+                            }
+                            if (input > parseInt(response.data.qtySisa)){
+                                $(this).val(response.data.qtySisa);
+                            }
+                        })
 					}
 
 					$('#nama_item').html(response.data.nama_item);
-					$(".terima").append(row);
-					$(".qty").on("keypress keyup blur",function (event) {
-						$(this).val($(this).val().replace(/[^\d].+/, ""));
-						if ((event.which < 48 || event.which > 57)) {
-							event.preventDefault();
-						}
-						
-						
-					});
-					$('.qty').on("keyup", function (evt){
-						evt.preventDefault();
-						var input = parseInt($(this).val());
-						
-						if (isNaN(input)){
-							input = 0;
-						}
-						if (input > parseInt(response.data.qtySisa)){
-							$(this).val(response.data.qtySisa);
-						}
-					})
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 

@@ -270,6 +270,7 @@ class barang_controller extends Controller
                     $barang->i_berat = strtoupper($data['i_berat']);
                     $barang->i_price = $harga;
                     $barang->i_expired = $data['i_expired'];
+                    $barang->i_note = strtoupper($data['i_note']);;
 
                     if ($request->hasFile('i_img')) {
 
@@ -437,7 +438,8 @@ class barang_controller extends Controller
                             'i_berat' => strtoupper($data['i_berat']),
                             'i_price' => $this->formatPrice($data['i_harga']),
                             'i_img' => $image,
-                            'i_expired' => $data['i_expired']
+                            'i_expired' => $data['i_expired'],
+                            'i_note' => strtoupper($data['i_note'])
                         ]);
 
                         DB::commit();

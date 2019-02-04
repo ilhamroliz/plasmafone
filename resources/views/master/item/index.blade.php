@@ -634,6 +634,12 @@
 														<td id="dt_created"></td>
 													</tr>
 
+                                                    <tr>
+                                                        <td><strong>Deskripsi Barang</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_note"></td>
+                                                    </tr>
+
 												</tbody>
 
 											</table>
@@ -1387,6 +1393,7 @@
 
 					$('#dt_price').text(formatRupiah2(i, "Rp", dec[1]));
 					$('#dt_created').text(response.data.data.dibuat);
+                    $('#dt_note').text(response.data.data.i_note);
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 

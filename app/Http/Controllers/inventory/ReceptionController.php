@@ -893,7 +893,7 @@ class ReceptionController extends Controller
 
         } else {
             $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_distribusi.d_destination as tujuan', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_detailid as iddetail', 'd_distribusi_dt.dd_comp as comp', 'd_distribusi_dt.dd_qty_received as qtyReceived', 'd_distribusi_dt.dd_qty_sisa as qtySisa', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', 'd_item.i_specificcode as specificcode', 'd_item.i_nama as nama_item')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_distribusi.d_from as dari', 'd_distribusi.d_destination as tujuan', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_detailid as iddetail', 'd_distribusi_dt.dd_comp as comp', 'd_distribusi_dt.dd_qty_received as qtyReceived', 'd_distribusi_dt.dd_qty_sisa as qtySisa', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', 'd_item.i_specificcode as specificcode', 'd_item.i_nama as nama_item')
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
@@ -957,7 +957,7 @@ class ReceptionController extends Controller
 
     public function itemReceiveAdd(Request $request)
     {
-        $data = $request->all();
+        $data = $request->all(); dd($data);
 
         if (!isset($data['qty'])) {
 
@@ -1290,7 +1290,7 @@ class ReceptionController extends Controller
                 return 'true';
             } catch (\Exception $e) {
                 DB::rollback();
-                return 'false';
+                return 'false => '.$e;
             }
 
         }

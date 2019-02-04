@@ -259,6 +259,32 @@
 
 												</div>
 
+                                                <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 15px;">
+
+                                                    <div style="margin-bottom: 0;" class="preview thumbnail">
+
+                                                        <input type="hidden" name="current_img" id="current_img" value="{{ $item->i_img }}">
+
+                                                        @if($item->i_img == "")
+
+                                                            <img src="{{ asset('img/image-not-found.png') }}">
+
+                                                        @else
+
+                                                            <img src="{{ asset('img/items/'.$item->i_img) }}">
+
+                                                        @endif
+
+                                                    </div>
+
+                                                    <div style="top: 0; display: none;" id="deleteimg_preview">
+
+                                                        <a onclick="delete_img('{{ Crypt::encrypt($item->i_id) }}')" style="width: 100%;" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Hapus</a>
+
+                                                    </div>
+
+                                                </div>
+
 												<div class="form-group">
 
 													<label class="col-xs-4 col-lg-4 control-label text-left">Gambar</label>
@@ -388,31 +414,17 @@
 
 												</div>
 
-												<div class="col-xs-12 col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 15px;">
+                                                <div class="form-group">
 
-													<div style="margin-bottom: 0;" class="preview thumbnail">
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Deskripsi Barang</label>
 
-														<input type="hidden" name="current_img" id="current_img" value="{{ $item->i_img }}">
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
 
-														@if($item->i_img == "")
+                                                        <textarea class="form-control" name="i_note" rows="10">{{ $item->i_note }}</textarea>
 
-															<img src="{{ asset('img/image-not-found.png') }}">
+                                                    </div>
 
-														@else
-
-															<img src="{{ asset('img/items/'.$item->i_img) }}">
-
-														@endif
-
-													</div>
-
-													<div style="top: 0; display: none;" id="deleteimg_preview">
-
-														<a onclick="delete_img('{{ Crypt::encrypt($item->i_id) }}')" style="width: 100%;" class="btn btn-md btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;Hapus</a>
-
-													</div>
-
-												</div>
+                                                </div>
 
 											</article>
 
