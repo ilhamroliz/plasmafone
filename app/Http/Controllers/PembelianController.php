@@ -267,6 +267,16 @@ class PembelianController extends Controller
 
     }
 
+    // Function untuk pencarian Index pada nested Array 2 Step
+    public function nestedAray($aray, $field, $value){
+        foreach($aray as $key => $aray)
+        {
+           if ( $aray[$field] === $value )
+              return $key;
+        }
+        return false;
+    }
+
     public function simpanConfirm(Request $request)
     {
         $supplier = $request->input('supplier');
@@ -334,31 +344,35 @@ class PembelianController extends Controller
                     ]);
                     array_push($pcAray, $aray);
 
-                    $aray2 = ([ $supp1[$j] => $idPC ]);
+                    $aray2 = ([ 'supp' => $supp1[$j], 'idpc' => $idPC ]);
+                    // $aray2 = ([ $supp1[$j] => $idPC ]);
                     array_push($idPCAray, $aray2);
                 }
             }
             DB::table('d_purchase_confirm')->insert($pcAray);
 
+
             //// Insert ke D_PURCHASE_CONFIRM
-            // $pcdAray = array();
-            // for ($k=0; $k < count($qtyApp); $k++) {
+            for ($i=0; $i < count($qtyApp); $i++) {
 
-            //     if($supplier[$i] != null){
-            //         $supp = $supplier[$i];
-            //         $check_di = DB::table('d_purchase_confirmdt')
-            //             ->where('pcd_purchaseconfirm', $idPCAray[$supp])->count();
+                if($supplier[$i] != null){
+                    $supp = $supplier[$i];
+                    $a = $this->nestedAray($idPCAray, 'supp', $supp);
 
-            //         DB::table('d_purchase_confirmdt')
-            //             ->insert([
-            //                 'pcd_purchaseconfirm' => $idPCAray[$supp],
-            //                 'pcd_detailid' => $check_di + 1,
-            //                 'pcd_item' => $pp_item[$i],
-            //                 'pcd_qty' => $qtyApp[$i]
-            //             ]);
-            //     }
+                    $idpc = $idPCAray[$a]['idpc'];
+                    $check_di = DB::table('d_purchase_confirmdt')
+                        ->where('pcd_purchaseconfirm', $idpc)->count();
 
-            // }
+                    DB::table('d_purchase_confirmdt')
+                        ->insert([
+                            'pcd_purchaseconfirm' => $idpc,
+                            'pcd_detailid' => $check_di + 1,
+                            'pcd_item' => $pp_item[$i],
+                            'pcd_qty' => $qtyApp[$i]
+                        ]);
+                }
+
+            }
 
             DB::commit();
             return response()->json([
