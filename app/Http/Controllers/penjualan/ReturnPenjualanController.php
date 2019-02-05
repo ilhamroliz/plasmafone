@@ -11,4 +11,9 @@ class ReturnPenjualanController extends Controller
     {
         return view('penjualan.return-penjualan.index');
     }
+
+    public function add()
+    {
+        return view('penjualan.return-penjualan.add');
+    }
 }

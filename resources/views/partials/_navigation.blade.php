@@ -214,14 +214,14 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					@endif
 
 					@if($sidebar['Return Penjualan'] == 'Y')
-					<li>
-						<a href="flot.html">Return Penjualan</a>
+					<li class="{{ (Request::is('penjualan/return-penjualan/*') || Request::is('penjualan/return-penjualan')) ? 'active' : '' }}">
+						<a href="{{ url('penjualan/return-penjualan') }}">Return Penjualan</a>
 					</li>
 					@endif
 
 					@if($sidebar['Service Barang'] == 'Y')
 					<li>
-						<a href="flot.html">Service Barang</a>
+						<a href="">Service Barang</a>
 					</li>
 					@endif
 
