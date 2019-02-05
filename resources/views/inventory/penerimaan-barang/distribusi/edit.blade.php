@@ -272,7 +272,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
 								Batal
 							</button>
-							<button type="button" class="btn btn-primary" onclick="simpan()">
+							<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>
 								Simpan
 							</button>
 						</div>
@@ -364,14 +364,17 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		    aktif.api().ajax.reload();
 		}
 
-		function terima(id, item){
+		function terima(id, item, code){
+            var qty = 0, qtyReceived = 0;
 			hapus();
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
 			var row = '';
-
-			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item).then(response => {
-
+            if (code == ""){
+                code = null;
+            }
+			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item+'/'+code).then(response => {
+                // console.log(response);
 				if (response.data.status == 'Access denied') {
 
 					$('#overlay').fadeOut(200);
@@ -385,8 +388,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 				} else {
 
-					console.log(response.data.qtySisa);
-					var qty = 0, qtyReceived = 0;
 					if (response.data.qtySisa == null) {
 						qty = 0;
 					} else {
@@ -400,73 +401,150 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					}
 
 					if (response.data.specificcode == 'Y') {
-						
-						row = '<div class="col-md-12" id="form_qty">'+
-									'<div class="form-group">'+
-										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
-										'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row form-control">'+
-									'</div>'+
-									// '<div class="form-group">'+
-										// '<label for="qty" class="row text-left col-md-6 control-label">Kuantitas:</label>'+
-										
-										// '<input type="text" autofocus onkeyup="qtyTerima(\''+response.data.qtySisa+'\')" id="qty" name="qty" class="qty row">'+
-									// '</div>'+
-									'<div class="form-group">'+
-										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
-										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-										'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
-										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
-										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
-										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
-										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-										'<label for="kode" class="row text-left col-md-6 control-label">Specific Code:</label>'+
-										'<input type="text" id="kode" name="kode" class="kode row form-control">'+
-									'</div>'+
-								'</div>';
+						row = '<div id="form_qty">' +
+                                '<fieldset>' +
+                                    '<div class="form-group">' +
+                                        '<label class="col-md-4 control-label">Kuantitas yang sudah diterima</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty form-control">'+
+                                                '<span class="input-group-addon"><i class="fa fa-check"></i></span>' +
+                                            '</div>' +
+                                            '<span class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div id="error" class="form-group ">' +
+                                        '<label class="col-md-4 control-label">Kode Spesifik</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
+                                                '<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
+                                                '<input type="hidden" value="'+response.data.dari+'" name="comp">'+
+                                                '<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
+                                                '<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
+                                                '<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
+                                                '<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+                                                '<input type="text" id="kode" name="kode" class="kode form-control">' +
+                                                '<span class="input-group-addon"><i class="fa fa-barcode" id="icon"></i></span>' +
+                                            '</div>' +
+                                            '<span id="message" class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</fieldset>'+
+                            '</div>';
+                        $(".terima").append(row);
+                        $("#kode").focus();
+                        $("#kode").on("input", function (evt) {
+                            evt.preventDefault();
+                            if ($(this).val() != code) {
+                                $("#error").removeClass("has-success");
+                                $("#error").addClass("has-error");
+                                $("#icon").removeClass("fa fa-barcode");
+                                $("#icon").removeClass("fa fa-check");
+                                $("#icon").addClass("glyphicon glyphicon-remove-circle");
+                                $("#message").html("Kode tidak valid");
+                                $("#simpan").attr("disabled", true);
+                            } else {
+                                axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/check/'+response.data.itemId+'/'+$("#kode").val()+'/'+response.data.dari+'/'+response.data.tujuan).then(resp => {
+                                    // console.log(resp.data);
+                                    if (resp.data == 0) {
+                                        $("#error").removeClass("has-success");
+                                        $("#error").addClass("has-error");
+                                        $("#icon").removeClass("fa fa-barcode");
+                                        $("#icon").removeClass("fa fa-check");
+                                        $("#icon").addClass("glyphicon glyphicon-remove-circle");
+                                        $("#message").html("Kode tidak ditemukan");
+                                        $("#simpan").attr("disabled", true);
+                                    } else if (resp.data == 1) {
+                                        $("#error").removeClass("has-error");
+                                        $("#error").addClass("has-success");
+                                        $("#icon").removeClass("fa fa-barcode");
+                                        $("#icon").removeClass("glyphicon glyphicon-remove-circle");
+                                        $("#icon").addClass("fa fa-check");
+                                        $("#message").html("Kode ditemukan");
+                                        $("#simpan").attr("disabled", false);
+                                    }
+                                }).catch(error => {
+                                        if (error.response.status == 404) {
+                                            $("#error").removeClass("has-success");
+                                            $("#error").addClass("has-error");
+                                            $("#icon").removeClass("fa fa-barcode");
+                                            $("#icon").removeClass("fa fa-check");
+                                            $("#icon").addClass("glyphicon glyphicon-remove-circle");
+                                            $("#message").html("Kode tidak ditemukan");
+                                            $("#simpan").attr("disabled", true);
+                                        }
+                                    });
+                            }
+                        })
 
 					} else {
-
-						row = '<div class="col-md-12" id="form_qty">'+
-									'<div class="form-group">'+
-										'<label for="bayar" class="row text-left col-md-6 control-label">Kuantitas yang sudah diterima:</label>'+
-										'<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty row form-control">'+
-									'</div>'+
-									'<div class="form-group">'+
-										'<label for="qty" class="row text-left col-md-6 control-label">Kuantitas:</label>'+
-										'<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
-										'<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-										'<input type="hidden" value="'+response.data.comp+'" name="comp">'+
-										'<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
-										'<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
-										'<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
-										'<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-										'<input type="text" autofocus id="qty" name="qty" class="qty row form-control">'+
-									'</div>'+
+						row = '<div id="form_qty">'+
+                                '<fieldset>' +
+                                    '<div class="form-group">' +
+                                        '<label class="col-md-4 control-label">Kuantitas yang sudah diterima</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" class="qty form-control">'+
+                                                '<span class="input-group-addon"><i class="fa fa-database"></i></span>' +
+                                            '</div>' +
+                                            '<span class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>'+
+                                    '<div class="form-group">' +
+                                        '<label class="col-md-4 control-label">Kuantitas</label>' +
+                                        '<div class="col-md-8">' +
+                                            '<div class="input-group">' +
+                                                '<input type="hidden" value="'+response.data.id+'" name="idditribusi">'+
+                                                '<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
+                                                '<input type="hidden" value="'+response.data.dari+'" name="comp">'+
+                                                '<input type="hidden" value="'+response.data.tujuan+'" name="destination">'+
+                                                '<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
+                                                '<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
+                                                '<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
+                                                '<input type="text" id="qty" name="qty" class="qty form-control">'+
+                                                '<span class="input-group-addon"><i class="fa fa-cubes"></i></span>' +
+                                            '</div>' +
+                                            '<span class="help-block"></span>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</fieldset>' +
 								'</div>';
 
+                        $(".terima").append(row);
+                        $("#qty").focus();
+
+                        $(".qty").on("keypress keyup blur",function (event) {
+                            $(this).val($(this).val().replace(/[^\d].+/, ""));
+                            if ((event.which < 48 || event.which > 57)) {
+                                event.preventDefault();
+                            }
+                            if ($(this).val() != null || $(this).val() != ""){
+                                $('#simpan').attr("disabled", false);
+                            } else {
+                                $('#simpan').attr("disabled", true);
+                            }
+
+                        });
+                        $('.qty').on("keyup", function (evt){
+                            evt.preventDefault();
+                            var input = parseInt($(this).val());
+
+                            if (isNaN(input)){
+                                input = 0;
+                            }
+                            if (input > parseInt(response.data.qtySisa)){
+                                $(this).val(response.data.qtySisa);
+                            }
+                            if ($(this).val() != null || $(this).val() != ""){
+                                $('#simpan').attr("disabled", false);
+                            } else {
+                                $('#simpan').attr("disabled", true);
+                            }
+                        })
 					}
 
 					$('#nama_item').html(response.data.nama_item);
-					$(".terima").append(row);
-					$(".qty").on("keypress keyup blur",function (event) {
-						$(this).val($(this).val().replace(/[^\d].+/, ""));
-						if ((event.which < 48 || event.which > 57)) {
-							event.preventDefault();
-						}
-						
-						
-					});
-					$('.qty').on("keyup", function (evt){
-						evt.preventDefault();
-						var input = parseInt($(this).val());
-						
-						if (isNaN(input)){
-							input = 0;
-						}
-						if (input > parseInt(response.data.qtySisa)){
-							$(this).val(response.data.qtySisa);
-						}
-					})
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 

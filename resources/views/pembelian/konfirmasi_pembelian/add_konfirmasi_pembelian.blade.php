@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Master Barang')
+@section('title', 'Konfirmasi Pembelian')
 
 <?php
 use App\Http\Controllers\PlasmafoneController as Access;
@@ -693,10 +693,10 @@ function rupiah($angka)
                                     timeout: 4000,
                                     icon: "fa fa-check bounce animated"
                                 });
-                                for(var i = 0; i < response.pcId.length; i++){
-                                    window.open("{{url('/pembelian/konfirmasi-pembelian/print/')}}") + response.pcId[i];
+                                for(var i = 0; i < data.pcId.length; i++){
+                                    window.open("{{url('/pembelian/konfirmasi-pembelian/print')}}"+"/"+data.pcId[i].idpc);
                                 }
-                                location.reload();
+                                {{--  location.reload();  --}}
 
                             } else {
                                 $.smallBox({

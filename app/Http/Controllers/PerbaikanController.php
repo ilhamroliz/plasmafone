@@ -15,4 +15,9 @@ class PerbaikanController extends Controller
         }
         return view('perbaikan.index');
     }
+
+    public function tambah()
+    {
+        return view('perbaikan.add');
+    }
 }

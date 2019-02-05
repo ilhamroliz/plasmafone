@@ -370,6 +370,18 @@
 
 												</div>
 
+                                                <div class="form-group">
+
+                                                    <label class="col-xs-4 col-lg-4 control-label text-left">Deskripsi Barang</label>
+
+                                                    <div class="col-xs-8 col-lg-8 inputGroupContainer">
+
+                                                        <textarea class="form-control" name="i_note" rows="8"></textarea>
+
+                                                    </div>
+
+                                                </div>
+
 											</article>
 
 										</div>

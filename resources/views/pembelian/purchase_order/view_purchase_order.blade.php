@@ -45,12 +45,12 @@
 					</span>
                 </h1>
             </div>
-            @if(Access::checkAkses(2, 'insert') == true)
+            @if(Access::checkAkses(4, 'insert') == true)
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 
                     <div class="page-title">
 
-                        <a href="{{ url('purchase-order/tambah-purchase-prder') }}" class="btn btn-success"><i
+                        <a href="{{ url('pembelian/purchase-order/tambah-purchase-prder') }}" class="btn btn-success"><i
                                 class="fa fa-plus"></i>&nbsp;Tambah
                             Data</a>
 

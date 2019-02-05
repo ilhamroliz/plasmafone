@@ -262,7 +262,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 				if (event.keyCode === 13) {
 					cariTambah();
 				}
-			});
+			}); 
 
 		});
 
@@ -294,23 +294,17 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             cariTambah();
         });
 
-        {{-- $('#aksiSelect').on('change', function (e) {
-			if($('#aksiSelect').val() == '1'){
-                $('#divCodeTable').css("display", "none");
-			}else{
-				cariTambah();
-			}
-        }); --}}
+
 
 		function cariTambah(){
 
-            if($('#idComp').val() == '' || $('#idItem').val() == ''){
+            if($('#idComp').val() == ''){
                 $.smallBox({
-                    title : "Gagal",
-                    content : "Maaf, Opname Barang Gagal Disimpan ",
-                    color : "#A90329",
+                    title : "PESAN",
+                    content : "Silahkan Pilih NAMA OUTLET Terlebih Dahulu ...",
+                    color : "#C79121",
                     timeout: 4000,
-                    icon : "fa fa-times bounce animated"
+                    icon : "fa fa-times animated"
                 });
                 return false;
             }

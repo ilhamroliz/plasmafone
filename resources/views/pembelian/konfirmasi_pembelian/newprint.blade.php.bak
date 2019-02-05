@@ -80,7 +80,7 @@
 		margin-left: 40px;
 	}
 
-	#navigation ul li i{ 
+	#navigation ul li i{
 		font-size: 15pt;
 		margin-top: 10px;
 	}
@@ -97,13 +97,6 @@
 		height: 30px;
 		width: 90%;
 		font-size: 8pt;
-	}
-
-	.dl{
-		width: 35px;
-	}
-	.dl:hover{
-		background-color: #555;
 	}
 
 	.pr{
@@ -152,7 +145,7 @@
 .page-break { display: block; page-break-before: always; }
 </style>
 </head>
-<?php 
+<?php
 function tgl_indo($tanggal){
 	$bulan = array (
 		1 =>   'Januari',
@@ -169,11 +162,11 @@ function tgl_indo($tanggal){
 		'Desember'
 	);
 	$pecahkan = explode('-', $tanggal);
-	
+
 	// variabel pecahkan 0 = tanggal
 	// variabel pecahkan 1 = bulan
 	// variabel pecahkan 2 = tahun
- 
+
 	return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
 }
 ?>
@@ -186,88 +179,94 @@ function tgl_indo($tanggal){
 			</div>
 			<div class="col-md-5" style="background: none; padding: 10px 15px 5px 15px">
 				<ul>
-					<li class="dl"><a href="{{ url('/pembelian/konfirmasi-pembelian/generate-pdf/'.$id) }}" target="self" style="color: #FFF;"><i class="fa fa-download" style="cursor: pointer; padding-bottom: 7px; padding-left: 7px; padding-right: 7px;" id="download" data-toggle="tooltip" data-placement="center" title="Download Laporan"></i></a></li>
-					<!-- <li class="pr"><i class="fa fa-print" style="cursor: pointer; padding-bottom: 7px; padding-left: 7px; padding-right: 7px;" id="print" data-toggle="tooltip" data-placement="center" title="Print Laporan"></i></li> -->
+					<li class="pr"><i class="fa fa-print" style="cursor: pointer; padding-bottom: 7px; padding-left: 7px; padding-right: 7px;" id="print" data-toggle="tooltip" data-placement="center" title="Print Laporan"></i></li>
 				</ul>
 			</div>
 		</div>
 	</div>
 
-	<div id="pdfrender">
-		<div class="col-md-10 col-md-offset-1" style="background: white; padding: 10px 15px; margin-top: 80px;">
+	<div class="col-md-10 col-md-offset-1" style="background: white; padding: 10px 15px; margin-top: 80px;">
 
-			<table width="100%" border="0" style="border-bottom: 1px solid #333;" id="contentnya">
-				<thead>
-					<tr>
-						<th style="text-align: left; font-size: 14pt; font-weight: 600">Konfirmasi Pembelian </th>
-					</tr>
+		<table width="100%" border="0" style="border-bottom: 1px solid #333;" id="contentnya">
+			<thead>
+				<tr>
+					<th style="text-align: left; font-size: 14pt; font-weight: 600">Konfirmasi Pembelian </th>
+				</tr>
 
-					<tr>
-						<th style="text-align: left; font-size: 12pt; font-weight: 500">PlasmaPhone</th>
-					</tr>
+				<tr>
+					<th style="text-align: left; font-size: 12pt; font-weight: 500">PlasmaPhone</th>
+				</tr>
 
-					<tr>
-						<th style="text-align: left; font-size: 8pt; font-weight: 500; padding-bottom: 10px;">Telp: 0987654321</th>
-					</tr>
-				</thead>
-			</table>
+				<tr>
+					<th style="text-align: left; font-size: 8pt; font-weight: 500; padding-bottom: 10px;">Telp: 0987654321</th>
+				</tr>
+			</thead>
+		</table>
 
-			<table width="100%" border="0" style="font-size: 8pt;">
-				<thead>
-					<tr>
-						<td style="text-align: left; padding-top: 5px;">
-							Surabaya, <?php echo tgl_indo(date('Y-m-d')); ?>
-						</td>
+		<table width="100%" border="0" style="font-size: 8pt;">
+			<thead>
+				<tr>
+					<td style="text-align: left; padding-top: 5px;">
+						Surabaya, <?php echo tgl_indo(date('Y-m-d')); ?>
+					</td>
 
-					</tr>
-				</thead>
-			</table>
+				</tr>
+			</thead>
+		</table>
 
-			<table id="table-data" width="100%" border="0">
-				<thead>
-					<tr>
-						<th>Request Order</th>
-						<th>Request Nomor</th>
-						<th>Cabang</th>
-						<th>Kode Barang</th>
-						<th>Kuantitas</th>
-						<th>Kuantitas Approval</th>
-						<th>Status</th>
-						<th>Supplier</th>
-					</tr>
-				</thead>
-				<tbody>
-					
-					@foreach($data_order as $order)
-					<tr>
-						<td>{{ $order->rdt_request }}</td>
-						<td>{{ $order->rdt_no }}</td>
-						<td>{{ $order->c_nama }}</td>
-						<td>{{ $order->rdt_kode_barang }}</td>
-						<td class="center">{{ $order->rdt_kuantitas }}</td>
-						<td class="center">{{ $order->rdt_kuantitas_approv }}</td>
-						<td>{{ $order->rdt_status }}</td>
-						<td>{{ $order->s_company }}</td>
-					</tr>
-					@endforeach
+		<table id="table-data" width="100%" border="0">
+			<thead>
+				<tr>
+					<th>Request Order</th>
+					<th>Request Nomor</th>
+					<th>Cabang</th>
+					<th>Kode Barang</th>
+				</tr>
+			</thead>
+			<tbody>
 
-					<tr>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-						<td style="background: #f1f1f1;">&nbsp;</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="ttd">
-				<p>Surabaya, <?php echo tgl_indo(date('Y-m-d')); ?></p>
-				<p>Mengetahui,</p>
-				<p class="name">Ka. Bagian Keuangan</p>
-			</div>
+				@foreach($printPDF as $print)
+				<tr>
+					<td>{{ $print->pcd_purchaseconfirm }}</td>
+					<td>{{ $print->pcd_detailid }}</td>
+					<td>{{ $print->pcd_item }}</td>
+					<td>{{ $print->pcd_qty }}</td>
+				</tr>
+				@endforeach
+
+				<tr>
+					<td style="background: #f1f1f1;">&nbsp;</td>
+					<td style="background: #f1f1f1;">&nbsp;</td>
+					<td class="currency total "></td>
+					<td class="currency total no-border "></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table id="table" width="100%" border="0" style="font-size: 8pt; margin-top: 4px;">
+			<thead>
+				<tr>
+					<th width="8%"></th>
+					<th width="12%"></th>
+					<th width="8%"></th>
+					<th></th>
+					<th width="11%" style="text-align: right; padding: 7px 5px; border-bottom: 1px solid #999;"></th>
+					<th width="11%" style="text-align: right; padding: 7px 5px; border-bottom: 1px solid #999;"></th>
+				</tr>
+			</thead>
+		</table>
+
+		<table id="table" width="100%" border="0" style="font-size: 8pt; margin-top: 4px;">
+			<thead>
+				<tr>
+
+				</tr>
+			</thead>
+		</table>
+		<div class="ttd">
+			<p>Surabaya, <?php echo tgl_indo(date('Y-m-d')); ?></p>
+			<p>Mengetahui,</p>
+			<p class="name">Ka. Bagian Keuangan</p>
 		</div>
 	</div>
 
@@ -275,3 +274,15 @@ function tgl_indo($tanggal){
 </html>
 <script src="{{ asset('template_asset/js/libs/jquery-2.1.1.min.js') }}"></script>
 <script src="{{ asset('template_asset/js/libs/jquery-ui-1.10.3.min.js') }}"></script>
+
+<script type="text/javascript">
+	// modal_jurnal
+
+  // modal_jurnal end
+
+  $('#print').click(function(evt){
+  	evt.preventDefault();
+
+  	window.print();
+  })
+</script>
