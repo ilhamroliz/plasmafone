@@ -898,7 +898,7 @@ class ReceptionController extends Controller
         return json_encode($data);
     }
 
-    public function itemReceive($id = null, $item = null, $code = null)
+    public function itemReceive($id = null, $item = null)
     {
         if (Access::checkAkses(10, 'read') == false) {
 
@@ -907,35 +907,53 @@ class ReceptionController extends Controller
             ]);
 
         } else {
-            if ($code == "null"){
-                $code = null;
-            }
             $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_from as dari', 'd_distribusi.d_destination as tujuan', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_detailid as iddetail', 'd_distribusi_dt.dd_qty_received as qtyReceived', 'd_distribusi_dt.dd_qty_sisa as qtySisa', 'd_distribusi_dt.dd_qty as qty', 'd_item.i_specificcode as specificcode', 'd_item.i_nama as nama_item')
-                    ->join('d_distribusi_dt', function($x) use ($item, $code){
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_from as dari', 'd_distribusi.d_destination as tujuan', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_detailid as iddetail', 'd_distribusi_dt.dd_qty_received as qtyReceived', DB::raw('sum(dd_qty_received) as sum_qtyReceived'), 'd_distribusi_dt.dd_qty_sisa as qtySisa', 'd_distribusi_dt.dd_qty as qty', 'd_item.i_specificcode as specificcode', 'd_item.i_nama as nama_item')
+                    ->join('d_distribusi_dt', function($x) use ($item){
                         $x->on('d_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id');
                         $x->where('d_distribusi_dt.dd_item', Crypt::decrypt($item));
-                        $x->where('d_distribusi_dt.dd_specificcode', $code);
                     })
                     ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
                     ->where('d_distribusi.d_id', Crypt::decrypt($id))
+                    ->groupBy('d_distribusi_dt.dd_item')
                     ->first();
             return json_encode($data);
         }
         
     }
 
+    public function getItemReceived($id = null)
+    {
+        $data = DB::table('d_distribusi_dt')
+            ->select('dd_specificcode', 'dd_status')
+            ->where('dd_distribusi', Crypt::decrypt($id))
+            ->where('dd_specificcode', '!=', null)
+            ->where('dd_status', 'Received');
+
+        return DataTables::of($data)
+
+            ->addColumn('status', function ($data) {
+
+                return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
+
+            })
+
+            ->rawColumns(['status'])
+
+            ->make(true);
+    }
+
     public function getItem($id = null)
     {
         $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_distribusi_dt.dd_specificcode', 'd_item.i_specificcode as specificcode', 'd_item.i_code', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi_dt.dd_status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_distribusi_dt.dd_specificcode', 'd_item.i_specificcode as specificcode', 'd_item.i_code', 'd_item.i_nama as nama_item', 'd_distribusi_dt.dd_item as itemId', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', DB::raw('sum(dd_qty) as sum_qty'), DB::raw('sum(dd_qty_received) as sum_qty_received'), 'd_distribusi_dt.dd_status', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by')
                     ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
                     ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
                     ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
                     ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
                     ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
                     ->where('d_distribusi.d_id', Crypt::decrypt($id))
-                    ->groupBy('d_distribusi_dt.dd_specificcode');
+                    ->groupBy('d_distribusi_dt.dd_item');
 
         return DataTables::of($data)
 
@@ -943,7 +961,7 @@ class ReceptionController extends Controller
                 if ($data->specificcode == "N") {
                     return $data->i_code . ' - ' . $data->nama_item;
                 } else {
-                    return $data->nama_item . ' (' . $data->dd_specificcode . ')';
+                    return $data->nama_item;
                 }
             })
 
@@ -951,7 +969,7 @@ class ReceptionController extends Controller
 
                 if (Access::checkAkses(10, 'update') == true) {
 
-                    if ($data->dd_status == "Received") {
+                    if ($data->sum_qty == $data->sum_qty_received) {
                         return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
                     } else {
                         return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\', \'' . $data->dd_specificcode . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Terima</button></div>';
@@ -974,6 +992,17 @@ class ReceptionController extends Controller
 
             DB::beginTransaction();
             try{
+                //check kode
+                $check_code = DB::table('d_distribusi_dt')
+                    ->where('dd_distribusi', $data['idditribusi'])
+                    ->where('dd_item', $data['iditem'])
+                    ->where('dd_specificcode', $data['kode'])
+                    ->count();
+
+                if ($check_code == 0) {
+                    return 'Code not found';
+                }
+
                 // check stock
                 $dst = DB::table('d_distribusi')->select('d_from', 'd_destination')->where('d_id', $data['idditribusi'])->first();
 
@@ -1071,16 +1100,18 @@ class ReceptionController extends Controller
                     // update distribusi
                     $get_received = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])->first();
 
                     DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->update([
                             'dd_qty_received' => $get_received->dd_qty_received + 1,
@@ -1090,18 +1121,20 @@ class ReceptionController extends Controller
 
                     $check_sisa = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->first();
 
                     if ($check_sisa->dd_qty_sisa == 0) {
                         DB::table('d_distribusi_dt')
                             ->where('dd_distribusi', $data['idditribusi'])
-                            ->where('dd_detailid', $data['iddetail'])
                             ->where('dd_comp', $data['destination'])
                             ->where('dd_item', $data['iditem'])
+                            ->where('dd_specificcode', $data['kode'])
+                            ->where('dd_status', 'On Going')
                             ->where('dd_qty', $data['qtydistribusi'])
                             ->update([
                                 'dd_status' => 'Received'
@@ -1216,16 +1249,18 @@ class ReceptionController extends Controller
                     // update distribusi
                     $get_received = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])->first();
 
                     DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->update([
                             'dd_qty_received' => $get_received->dd_qty_received + 1,
@@ -1235,18 +1270,20 @@ class ReceptionController extends Controller
 
                     $check_sisa = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->first();
 
                     if ($check_sisa->dd_qty_sisa == 0) {
                         DB::table('d_distribusi_dt')
                             ->where('dd_distribusi', $data['idditribusi'])
-                            ->where('dd_detailid', $data['iddetail'])
                             ->where('dd_comp', $data['destination'])
                             ->where('dd_item', $data['iditem'])
+                            ->where('dd_specificcode', $data['kode'])
+                            ->where('dd_status', 'On Going')
                             ->where('dd_qty', $data['qtydistribusi'])
                             ->update([
                                 'dd_status' => 'Received'
@@ -1382,16 +1419,18 @@ class ReceptionController extends Controller
                     // update distribusi
                     $get_received = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', null)
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])->first();
 
                     DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', null)
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->update([
                             'dd_qty_received' => $get_received->dd_qty_received + $data['qty'],
@@ -1401,18 +1440,20 @@ class ReceptionController extends Controller
 
                     $check_sisa = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', null)
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->first();
 
                     if ($check_sisa->dd_qty_sisa == 0) {
                         DB::table('d_distribusi_dt')
                             ->where('dd_distribusi', $data['idditribusi'])
-                            ->where('dd_detailid', $data['iddetail'])
                             ->where('dd_comp', $data['destination'])
                             ->where('dd_item', $data['iditem'])
+                            ->where('dd_specificcode', null)
+                            ->where('dd_status', 'On Going')
                             ->where('dd_qty', $data['qtydistribusi'])
                             ->update([
                                 'dd_status' => 'Received'
@@ -1505,16 +1546,18 @@ class ReceptionController extends Controller
                     // update distribusi
                     $get_received = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', null)
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])->first();
 
                     DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', null)
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->update([
                             'dd_qty_received' => $get_received->dd_qty_received + $data['qty'],
@@ -1524,18 +1567,20 @@ class ReceptionController extends Controller
 
                     $check_sisa = DB::table('d_distribusi_dt')
                         ->where('dd_distribusi', $data['idditribusi'])
-                        ->where('dd_detailid', $data['iddetail'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
+                        ->where('dd_specificcode', null)
+                        ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->first();
 
                     if ($check_sisa->dd_qty_sisa == 0) {
                         DB::table('d_distribusi_dt')
                             ->where('dd_distribusi', $data['idditribusi'])
-                            ->where('dd_detailid', $data['iddetail'])
                             ->where('dd_comp', $data['destination'])
                             ->where('dd_item', $data['iditem'])
+                            ->where('dd_specificcode', null)
+                            ->where('dd_status', 'On Going')
                             ->where('dd_qty', $data['qtydistribusi'])
                             ->update([
                                 'dd_status' => 'Received'
