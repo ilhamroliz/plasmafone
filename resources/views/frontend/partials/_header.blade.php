@@ -44,15 +44,20 @@
 
                         <li>
                             <a href="product.html">Handphone</a>
-                            <ul class="sub-menu">
-                                <li><a href="index.html">Handphone 1</a></li>
-                                <li><a href="home-02.html">Handphone 2</a></li>
-                                <li><a href="home-03.html">Handphone 3</a></li>
+                            <ul class="sub-menu" style="width: 500px;">
+                                @foreach($menu_hp as $hp)
+                                    <li style="display: inline-block;"><a href="index.html">{{$hp->i_merk}}</a></li>
+                                @endforeach
                             </ul>
                         </li>
 
                         <li>
                             <a href="shoping-cart.html">Aksesoris</a>
+                            <ul class="sub-menu" style="width: 500px !important;">
+                                @foreach($menu_acces as $acces)
+                                    <li><a href="index.html">{{$acces->i_merk}}</a></li>
+                                @endforeach
+                            </ul>
                         </li>
 
                         <li>
@@ -155,9 +160,9 @@
             <li>
                 <a href="product.html">Handphone</a>
                 <ul class="sub-menu-m">
-                    <li><a href="index.html">Handphone 1</a></li>
-                    <li><a href="home-02.html">Handphone 2</a></li>
-                    <li><a href="home-03.html">Handphone 3</a></li>
+                    @foreach($menu_hp as $hp)
+                    <li><a href="index.html">{{$hp->i_merk}}</a></li>
+                    @endforeach
                 </ul>
                 <span class="arrow-main-menu-m">
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -166,6 +171,14 @@
 
             <li>
                 <a href="shoping-cart.html">Aksesoris</a>
+                <ul class="sub-menu-m">
+                    @foreach($menu_acces as $acces)
+                    <li><a href="index.html">{{$acces->i_merk}}</a></li>
+                    @endforeach
+                </ul>
+                <span class="arrow-main-menu-m">
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </span>
             </li>
 
             <li>

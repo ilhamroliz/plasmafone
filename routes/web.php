@@ -846,3 +846,4 @@ Route::group(['middleware' => 'auth'], function () {
     // Frontend ============================================================== //
     Route::get('/frontend', 'frontend_controller@index')->name('frontend');
     Route::get('/frontend/product-detail', 'frontend_controller@product_detail')->name('product_detail');
+    Route::get('/frontend/product-all', 'frontend_controller@product_all')->name('product_all');
