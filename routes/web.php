@@ -436,8 +436,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 	// Purchase Order
 
-    Route::get('/pembelian/purchase-order', 'PurchaseOrderController@index');
-    Route::get('/pembelian/purchase-order/tambah-purchase-prder', 'PurchaseOrderController@view_tambahPo');
+    Route::get('/pembelian/purchase-order', 'pembelian\PurchaseOrderController@index');
+    Route::match(['get', 'post'],'/pembelian/purchase-order/tambah', 'pembelian\PurchaseOrderController@tambah');
+    Route::post('/pembelian/purchase-order/getCO', 'pembelian\PurchaseOrderController@getCO');
+
     Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
     Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
     Route::get('/pembelian/purchase-order/purchaseComplete', 'PurchaseOrderController@purchaseComplete');
@@ -533,8 +535,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
     Route::get('/inventory/penerimaan/distribusi/detail-terima/{id}', 'inventory\ReceptionController@detailTerima');
     Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
+    Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}', 'inventory\ReceptionController@getItemReceived');
     Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
-    Route::get('/inventory/penerimaan/distribusi/item-receive/{id}/{item}/{code}', 'inventory\ReceptionController@itemReceive');
+    Route::get('/inventory/penerimaan/distribusi/item-receive/{id}/{item}', 'inventory\ReceptionController@itemReceive');
     Route::post('/inventory/penerimaan/distribusi/item-receive/add', 'inventory\ReceptionController@itemReceiveAdd');
     Route::get('/inventory/penerimaan/distribusi/item-receive/check/{item}/{code}/{comp}/{dest}', 'inventory\ReceptionController@checkCode');
 	// End penerimaan barang distribusi
