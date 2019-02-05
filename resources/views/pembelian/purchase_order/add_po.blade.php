@@ -229,7 +229,7 @@
                     content: 'Silahkan Pilih Nota sebelum Melanjutkan',
                     color: "#C46A69",
                     timeout: 3000,
-                    icon: "fa fa-check bounce animated"
+                    icon: "fa fa-warning bounce animated"
                 });
                 return false;
 

@@ -93,16 +93,12 @@
                          data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
                             <ul id="widget-tab-1" class="nav nav-tabs pull-left">
+
                                 <li class="active">
-                                    <a data-toggle="tab" href="#hr1"> <i style="color: #739E73;"
-                                                                         class="fa fa-lg fa-rotate-right fa-spin"></i>
-                                        <span
-                                            class="hidden-mobile hidden-tablet"> Menunggu </span> </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#hr2"> <i style="color: #C79121;"
-                                                                         class="fa fa-lg fa-history"></i> <span
-                                            class="hidden-mobile hidden-tablet"> History </span></a>
+                                    <a data-toggle="tab" href="#hr2"> 
+                                        <i style="color: #C79121;" class="fa fa-lg fa-history"></i> 
+                                        <span class="hidden-mobile hidden-tablet"> History </span>
+                                    </a>
                                 </li>
 
                             </ul>

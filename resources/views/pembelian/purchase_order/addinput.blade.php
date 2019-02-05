@@ -167,7 +167,7 @@
                                         <tbody id="dtcoBody">
                                             @foreach ($getDataDT as $dt)
                                             <tr>
-                                                <td>{{ $dt->i_nama }}</td>
+                                                <td><input type="hidden" name="idItem[]" value="{{ $dt->pcd_item }}">{{ $dt->i_nama }}</td>
                                                 <td><input type="text" name="qty[]" class="form-control text-align-right qty" style="width:100%" value="{{ $dt->pcd_qty }}"></td>
                                                 <td><input type="text" name="price[]" class="form-control text-align-right price" style="width:100%"></td>
                                                 <td><input type="text" name="diskP[]" class="form-control text-align-right diskP" style="width:100%"></td>
@@ -241,6 +241,17 @@
         }
 
         function simpanPO(){
+
+            if($('#payment').val() == ''){
+                $.smallBox({
+                    title: "Perhatian",
+                    content: 'Silahkan Pilih Tipe Pembayaran Terlebih Dahulu',
+                    color: "#C46A69",
+                    timeout: 3000,
+                    icon: "fa fa-warning bounce animated"
+                });
+                return false;
+            }
 
             var idSupp = $('#idSupp').val();
             var tipe = $('#payment').val();

@@ -56,6 +56,7 @@ class PurchaseOrderController extends Controller
                 try {
 
                     $idSupp = $request->id;
+                    $idItem = $request->idItem;
                     $qty = $request->qty;
                     $price = $request->price;
                     $diskP = $request->diskP;
@@ -68,9 +69,9 @@ class PurchaseOrderController extends Controller
 
                     $getMax = DB::table('d_purchase')->max('p_id');
                     if($getMax == null){
-                        $idP = 1;
+                        $idPO = 1;
                     }else{
-                        $idP = $getMax + 1;
+                        $idPO = $getMax + 1;
                     }
 
                     $now = Carbon::now('Asia/Jakarta')->format('d/m/Y');
@@ -140,9 +141,10 @@ class PurchaseOrderController extends Controller
                         $dateT = $pecah[2].'-'.$pecah[1].'-'.$pecah[0];
                     }
 
+                    $notaPO = $this->getDataId($now);
                     DB::table('d_purchase')->insert([
-                        'p_id' => $idP,
-                        'p_nota' => $this->getDataId($now),
+                        'p_id' => $idPO,
+                        'p_nota' => $notaPO,
                         'p_date' => $nowInsert,
                         'p_supplier' => $idSupp,
                         'p_total_gross' => $subTotal,
@@ -154,22 +156,67 @@ class PurchaseOrderController extends Controller
                         'p_payment' => null
                     ]);
 
+                    for($i = 0; $i < count($qty); $i++){
+
+                        if(strpos($price[$i], '.') == true){
+                            $harga = implode(explode('.', $price[$i]));
+                        }else{
+                            $harga = $price[$i];
+                        }
+
+                        if(strpos($qty[$i], '.') == true){
+                            $unit = implode(explode('.', $qty[$i]));
+                        }else{
+                            $unit = $qty[$i];
+                        }
+                        
+                        $cekSC = DB::table('d_item')->where('i_id', $idItem[$i])->select('i_specificcode')->first();
+                        if($cekSC->i_specificcode == 'Y'){
+                            $arayPODT = array();
+                            for($j = 0; $j < $qty[$i]; $j++){
+                                $aray = ([
+                                    'pd_purchase' => $idPO,
+                                    'pd_detailid' => $j + 1,
+                                    'pd_item' => $idItem[$i],
+                                    'pd_qty' => 1,
+                                    'pd_value' => $harga,
+                                    'pd_disc_value' => 0,
+                                    'pd_disc_persen' => 0,
+                                    'pd_total_net' => $harga,
+                                    'pd_qtyreceived' => 0
+                                ]);
+                                array_push($arayPODT, $aray);
+                            }
+                            // dd($arayPODT);
+                            DB::table('d_purchase_dt')->insert($arayPODT);
+
+                        }else{
+                            DB::table('d_purchase_dt')->insert([
+                                'pd_purchase' => $idPO,
+                                'pd_detailid' => 1,
+                                'pd_item' => $idItem[$i],
+                                'pd_qty' => $qty[i],
+                                'pd_value' => $harga,
+                                'pd_disc_value' => 0,
+                                'pd_disc_persen' => 0,
+                                'pd_total_net' => $harga,
+                                'pd_qtyreceived' => 0
+                            ]);
+                        }                       
+                    }
+
 
                     DB::commit();
                     return json_encode([
                         'status' => 'tpoSukses'
                     ]);
-
                 } catch (\Exception $e) {
-
                     DB::rollback();
                     return json_encode([
                         'status' => 'tpoGagal',
                         'msg' => $e
                     ]);
-
-                }                
-                            
+                }                                            
 
             }
 
@@ -190,7 +237,7 @@ class PurchaseOrderController extends Controller
                     ->join('d_purchase_confirmdt', 'pcd_purchaseconfirm', '=', 'pc_id')
                     ->join('d_item', 'i_id', '=', 'pcd_item')
                     ->whereIn('pc_id', $arayDT)
-                    ->select('i_nama', DB::raw('SUM(pcd_qty) as pcd_qty'))
+                    ->select('pcd_item', 'i_nama', DB::raw('SUM(pcd_qty) as pcd_qty'))
                     ->groupBy('pcd_item')->get();
                 $add = '+'.$getDataSupp[0]->s_jatuh_tempo.' days';
                 $getTempo = new Carbon($add);
