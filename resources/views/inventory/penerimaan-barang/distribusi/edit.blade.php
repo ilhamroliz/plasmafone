@@ -598,14 +598,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             if ((event.which < 48 || event.which > 57)) {
                                 event.preventDefault();
                             }
-                            var input = parseInt($(this).val());
 
-                            if (isNaN(input)){
-                                input = 0;
-                            }
-                            if (input > parseInt(response.data.qtySisa)){
-                                $(this).val(response.data.qtySisa);
-                            }
                             if ($(this).val() != null || $(this).val() != ""){
                                 $('#simpan').attr("disabled", false);
                             } else {
@@ -615,6 +608,18 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                 simpan();
                             }
 
+                        });
+
+                        $(".qty").on("keyup", function (event){
+                            event.preventDefault();
+                            var input = parseInt($(this).val());
+
+                            if (isNaN(input)){
+                                input = 0;
+                            }
+                            if (input > parseInt(response.data.qtySisa)){
+                                $(this).val(response.data.qtySisa);
+                            }
                         });
 					}
 

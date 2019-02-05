@@ -59,7 +59,7 @@ class DistribusiController extends Controller
             ->groupBy('d_distribusi_dt.dd_specificcode')
             ->distinct('d_stock_mutation.sm_specificcode')
             ->get();
-            
+
         return view('inventory.distribusi.edit')->with(compact('data'));
     }
 
