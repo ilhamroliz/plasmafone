@@ -156,6 +156,7 @@ class PurchaseOrderController extends Controller
                         'p_payment' => null
                     ]);
 
+                    $countDTPO = 0;
                     for($i = 0; $i < count($qty); $i++){
 
                         if(strpos($price[$i], '.') == true){
@@ -176,7 +177,7 @@ class PurchaseOrderController extends Controller
                             for($j = 0; $j < $qty[$i]; $j++){
                                 $aray = ([
                                     'pd_purchase' => $idPO,
-                                    'pd_detailid' => $j + 1,
+                                    'pd_detailid' => $countDTPO + 1,
                                     'pd_item' => $idItem[$i],
                                     'pd_qty' => 1,
                                     'pd_value' => $harga,
@@ -186,6 +187,7 @@ class PurchaseOrderController extends Controller
                                     'pd_qtyreceived' => 0
                                 ]);
                                 array_push($arayPODT, $aray);
+                                $countDTPO += 1;
                             }
                             // dd($arayPODT);
                             DB::table('d_purchase_dt')->insert($arayPODT);
@@ -249,6 +251,7 @@ class PurchaseOrderController extends Controller
                 $getDataSupp = DB::table('d_purchase_confirm')
                     ->join('d_supplier', 's_id', '=', 'pc_supplier')
                     ->select('pc_supplier', 's_company')
+                    ->where('pc_status', 'P')
                     ->groupBy('pc_supplier')->get();
 
                 return view('pembelian.purchase_order.add_po')->with(compact('getDataSupp'));
@@ -267,6 +270,7 @@ class PurchaseOrderController extends Controller
         $getDataDT = DB::table('d_purchase_confirm')
             ->join('d_purchase_confirmdt', 'pcd_purchaseconfirm', '=', 'pc_id')
             ->where('pc_supplier', $idSupp)
+            ->where('pc_status', 'P')
             ->select('pc_id', 'pc_nota')
             ->groupBy('pc_nota')->get();
 
