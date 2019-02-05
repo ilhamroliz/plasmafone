@@ -835,3 +835,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/keuangan/keuangan/add_sub_buku_besar', 'keuangan\keuangan@add_sub_buku_besar');
 
 });
+
+    // Frontend ============================================================== //
+    Route::get('/frontend', 'frontend_controller@index')->name('frontend');
+    Route::get('/frontend/product-detail', 'frontend_controller@product_detail')->name('product_detail');
