@@ -165,15 +165,15 @@ class DistribusiController extends Controller
         } else {
 
             $data = DB::table('d_distribusi')
-                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', DB::raw('coalesce(concat(" (", dd_specificcode, ")"), "") as specificcode'), 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', 'd_distribusi.d_date as tanggal', 'd_mem.m_name as by', DB::raw('DATE_FORMAT(d_distribusi.d_date, "%d-%m-%Y %H:%i:%s") as date'))
-                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
-                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
-                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
-                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
-                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
-                    ->where('d_distribusi.d_id', $id)
-                    ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
-                    ->get();
+                ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_item.i_code', 'd_distribusi_dt.dd_specificcode', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', DB::raw('DATE_FORMAT(d_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as by')
+                ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                ->where('d_distribusi.d_id', $id)
+                ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                ->get();
             return response()->json(['status' => 'OK', 'data' => $data]);
 
         }

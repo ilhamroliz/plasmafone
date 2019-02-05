@@ -973,10 +973,10 @@
 					$('#dt_tgl').text(response.data.data[0].date);
 					$('#dt_by').text(response.data.data[0].by);
 					response.data.data.forEach(function(element) {
-                        if (element.i_code != "") {
-                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>'
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
                         } else {
-                            row = '<tr class="tr"><td>'+element.nama_item+element.specificcode+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>'
+                            row = '<tr class="tr"><td>'+element.nama_item+' ('+element.dd_specificcode+')'+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
                         }
 						$('#table_item tbody').append(row)
 					});
