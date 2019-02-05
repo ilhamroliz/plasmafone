@@ -535,9 +535,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
     Route::get('/inventory/penerimaan/distribusi/detail-terima/{id}', 'inventory\ReceptionController@detailTerima');
     Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
+    Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}', 'inventory\ReceptionController@getItemReceived');
     Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
     Route::get('/inventory/penerimaan/distribusi/item-receive/{id}/{item}', 'inventory\ReceptionController@itemReceive');
     Route::post('/inventory/penerimaan/distribusi/item-receive/add', 'inventory\ReceptionController@itemReceiveAdd');
+    Route::get('/inventory/penerimaan/distribusi/item-receive/check/{item}/{code}/{comp}/{dest}', 'inventory\ReceptionController@checkCode');
 	// End penerimaan barang distribusi
 
 	//=== OPNAME BARANG
@@ -629,6 +631,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Return Penjualan
 	// ####################################
     Route::get('/penjualan/return-penjualan', 'penjualan\ReturnPenjualanController@index')->name('return-penjualan');
+    Route::get('penjualan/return-penjualan/tambah', 'penjualan\ReturnPenjualanController@add');
 	// ####################################
 	// End Return Penjualan
 	// ####################################
@@ -842,3 +845,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/keuangan/keuangan/add_sub_buku_besar', 'keuangan\keuangan@add_sub_buku_besar');
 
 });
+
+    // Frontend ============================================================== //
+    Route::get('/frontend', 'frontend_controller@index')->name('frontend');
+    Route::get('/frontend/product-detail', 'frontend_controller@product_detail')->name('product_detail');

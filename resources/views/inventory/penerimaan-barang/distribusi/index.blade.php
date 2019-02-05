@@ -446,8 +446,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					$('#dt_tgl').text(response.data.data[0].tanggal);
 					$('#dt_by').text(response.data.data[0].by);
 					response.data.data.forEach(function(element) {
-						console.log(element);
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+' ('+element.dd_specificcode+')'+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        }
 						$('#table_item tbody').append(row)
 					});
 					$('#overlay').fadeOut(200);
@@ -461,8 +464,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		function detail(id){
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
-
-			var status;
 
 			axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail/'+id).then(response => {
 
@@ -487,7 +488,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					$('#dt_tgl').text(response.data.data[0].tanggal);
 					$('#dt_by').text(response.data.data[0].by);
 					response.data.data.forEach(function(element) {
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>'
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+' ('+element.dd_specificcode+')'+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        }
+
 						$('#table_item tbody').append(row)
 					});
 					$('#overlay').fadeOut(200);
