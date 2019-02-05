@@ -56,10 +56,10 @@ class DistribusiController extends Controller
             })
             ->where('d_distribusi.d_id', $id)
             ->where('d_stock_mutation.sm_detail', '=', 'PENGURANGAN')
-            ->groupBy('d_stock_mutation.sm_specificcode')
+            ->groupBy('d_distribusi_dt.dd_specificcode')
             ->distinct('d_stock_mutation.sm_specificcode')
             ->get();
-
+            
         return view('inventory.distribusi.edit')->with(compact('data'));
     }
 
