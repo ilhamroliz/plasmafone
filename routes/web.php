@@ -851,6 +851,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/keuangan/keuangan/get_detail_bb', 'keuangan\keuangan@get_detail_bb');
     Route::POST('/keuangan/keuangan/add_sub_buku_besar', 'keuangan\keuangan@add_sub_buku_besar');
 
+    //Pengelolaan Member
+    Route::get('pengelolaan-member', 'PengelolaanMemberController@index');
+
 });
 
     // Frontend ============================================================== //
