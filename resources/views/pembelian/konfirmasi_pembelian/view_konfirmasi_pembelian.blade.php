@@ -118,7 +118,8 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center" width="10%">No.</th>
-                                                    <th class="text-center" width="75%">No. Confirm</th>
+                                                    <th class="text-center" width="30%">No. Confirm</th>
+                                                    <th class="text-center" width="45%">Nama Supplier</th>
                                                     <th class="text-center" width="15%">Aksi</th>
                                                 </tr>
                                             </thead>
@@ -376,6 +377,7 @@
                 "columns":[
                     {"data": "pc_id"},
                     {"data": "pc_nota"},
+                    {"data": "s_company"},
                     {"data": "aksi"}
                 ],
                 "autoWidth" : false,
@@ -407,7 +409,7 @@
 
             axios.get(baseUrl+'/pembelian/konfirmasi-pembelian/edit?id='+id).then((response) => {
 
-                $('#title_detail').html('Konfirmasi Pembelian '+response.data.data.pc_nota)
+                $('#title_detail').html('Konfirmasi Pembelian '+response.data.data.pc_nota);
 
                 $('#dmNoNota').text(response.data.data.pc_nota);
                 $('#dmNamaSupp').text(response.data.data.s_company);
@@ -519,9 +521,9 @@
 				$('#dt_history').DataTable().clear();
 				for(var i = 0; i < response.data.data.length; i++){
                     $status = '';
-                    if(response.data.data[i].i_status == "Y"){
+                    if(response.data.data[i].pc_status == "Y"){
                         $status = '<span class="label label-success">PURCHASING</span>';
-                    }else if(response.data.data[i].i_status == "N"){
+                    }else if(response.data.data[i].pc_status == "N"){
                         $status = '<span class="label label-danger">DITOLAK</span>';
                     }else{
                         $status = '<span class="label label-warning">MENUNGGU</span>';

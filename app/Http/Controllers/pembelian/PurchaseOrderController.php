@@ -280,4 +280,22 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
+    public function detail(Request $request){
+
+        $id = $request->id;
+        $getData = DB::table('d_purchase_confirm')
+            ->join('d_supplier', 's_id', '=', 'pc_supplier')
+            ->where('pc_id', $id)
+            ->select('pc_nota', 's_company', 's_phone', 's_fax', 's_address')->first();
+        $getDataDT = DB::table('d_purchase_confirmdt')
+            ->join('d_item', 'i_id', '=', 'pcd_item')
+            ->where('pcd_purchaseconfirm', $id)
+            ->select('i_nama', 'pcd_qty')->get();
+
+        return json_encode([
+            'data' => $getData,
+            'dataDT' => $getDataDT
+        ]);
+
+    }
 }
