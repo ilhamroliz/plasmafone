@@ -246,7 +246,23 @@
 
             $("#btn_search").on("click", function (evt) {
                 evt.preventDefault();
-                getNota();
+                if (
+                    $("#idmember").val() == "" &&
+                    $("#kode").val() == "" &&
+                    $("#nota").val() == "" &&
+                    $("#tgl_awal").val() == "" &&
+                    $("#tgl_akhir").val() == ""
+                ) {
+                    $.smallBox({
+                        title : "Pesan!",
+                        content : "Tambahkan parameter untuk melakukan pencarian!",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                } else {
+                    getNota();
+                }
             })
 
             function getNota() {
