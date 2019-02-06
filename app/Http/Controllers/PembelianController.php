@@ -96,7 +96,7 @@ class PembelianController extends Controller
             ->make(true);
     }
 
-    public function rencanaDisetujui()
+    public function rencanaDisetujui(Request $request)
     {
         $prive = Auth::user()->m_comp;
         if($prive == "PF00000001"){
@@ -107,14 +107,13 @@ class PembelianController extends Controller
                 'd_purchase_plan.pp_qtyreq',
                 'd_purchase_plan.pp_qtyappr',
                 'd_purchase_plan.pp_status',
-                'd_purchase_plan.pp_date',
+                DB::raw('date_format(pp_date, "%d/%m/%Y") as pp_date'),
                 'd_purchase_plan.pp_insert',
                 'd_item.i_nama'
                 // 'm_company.c_name'
             )
             ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
-            ->where('d_purchase_plan.pp_status', 'Y')
-            ->get();
+            ->where('d_purchase_plan.pp_status', 'Y');
         }else{
             $setujui = DB::table('d_purchase_plan')
             ->select(
@@ -123,16 +122,28 @@ class PembelianController extends Controller
                 'd_purchase_plan.pp_qtyreq',
                 'd_purchase_plan.pp_qtyappr',
                 'd_purchase_plan.pp_status',
-                'd_purchase_plan.pp_date',
+                DB::raw('date_format(pp_date, "%d/%m/%Y") as pp_date'),
                 'd_purchase_plan.pp_insert',
                 'd_item.i_nama'
                 // 'm_company.c_name'
             )
             ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
-            ->where('d_purchase_plan.pp_status', 'Y')
-            ->get();
+            ->where('d_purchase_plan.pp_status', 'Y');
         }
 
+        if (!isset($request->awal) && !isset($request->akhir)){
+            $setujui->whereDate('pp_date', '=', Carbon::now('Asia/Jakarta')->format('Y-m-d'));
+        } else {
+            if (isset($request->awal)){
+                $awal = Carbon::createFromFormat('d/m/Y', $request->awal)->format('Y-m-d');
+                $setujui->whereDate('pp_date', '>=', $awal);
+            }
+            if (isset($request->akhir)){
+                $akhir = Carbon::createFromFormat('d/m/Y', $request->akhir)->format('Y-m-d');
+                $setujui->whereDate('pp_date', '<=', $akhir);
+            }
+        }
+        $setujui->orderBy('pp_date');
 
         return DataTables::of($setujui)
             ->addColumn('input', function ($setujui) {
@@ -140,13 +151,6 @@ class PembelianController extends Controller
                 return '<div class="text-center"><input type="text" class="form-control" name="i_nama" id="i_nama" placeholder="QTy"  style="text-transform: uppercase" /></div>';
 
             })
-            // ->addColumn('aksi', function ($setujui) {
-            //     if (Plasma::checkAkses(47, 'update') == false) {
-            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-            //     } else {
-            //         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-edit"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Non Aktifkan" onclick="statusnonactive(\'' . $setujui->pr_idPlan . '\', \'' . $setujui->pr_idPlan . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
-            //     }
-            // })
             ->rawColumns(['input', 'aksi'])
             ->make(true);
     }
