@@ -7,6 +7,7 @@
 @endsection
 
 @section('ribbon')
+
     <!-- RIBBON -->
     <div id="ribbon">
 
@@ -291,6 +292,9 @@
 
     $(document).ready(function(){
         $('.togel').click();
+
+
+
         if ($("#stockid").val() == "") {
 			$("#tambahketable").attr('disabled', true);
 		}
@@ -302,6 +306,9 @@
             select: function(event, data) {
                 $("#salesman").val(data.item.id);
                 $("#cari-member").focus();
+            },
+            open: function(){
+                $(this).autocomplete('widget').zIndex(10);
             }
         });
 

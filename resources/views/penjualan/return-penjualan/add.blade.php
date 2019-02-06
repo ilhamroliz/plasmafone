@@ -274,6 +274,7 @@
                                                     <td>Item</td>
                                                     <td>Qty</td>
                                                     <td>Harga (Rp)</td>
+                                                    <td style="display: none;" id="aksi">Aksi</td>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -453,6 +454,7 @@
                     $('#dt_member').text(response.data[0].m_name);
                     $('#dt_telp').text(response.data[0].m_telp);
                     $('#dt_address').text(response.data[0].m_address);
+                    $("#aksi").hide();
                     response.data.forEach(function(element) {
                         if (element.i_code != ""){
                             row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
@@ -465,7 +467,61 @@
                     $('#myModal').modal('show');
 
                 }
+            })
+        }
+        
+        function returnPenjualan(id) {
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Mengambil data...');
 
+            axios.get(baseUrl+'/penjualan/return-penjualan/cari/detail/'+id).then(response => {
+
+                if (response.data.status == 'Access denied') {
+
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+
+                } else if (response.data.status == 'Not Found') {
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Data tidak ditemukan",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                } else {
+                    var row = '';
+                    $('.tr').remove();
+                    $('#title_detail').html('<strong>Detail Penjualan</strong>');
+                    $('#dt_tanggal').text(response.data[0].tanggal);
+                    $('#dt_nota').text(response.data[0].s_nota);
+                    $('#dt_total').text(response.data[0].s_total_net);
+                    $('#dt_salesman').text(response.data[0].salesman);
+                    $('#dt_member').text(response.data[0].m_name);
+                    $('#dt_telp').text(response.data[0].m_telp);
+                    $('#dt_address').text(response.data[0].m_address);
+                    $("#aksi").show();
+                    var url;
+                    response.data.forEach(function(element) {
+                        url = baseUrl+'/penjualan/return-penjualan/retun/'+element.sd_sales+'/'+element.sd_item;
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
+                        }
+                        $('#table_item tbody').append(row)
+                    });
+                    $('#overlay').fadeOut(200);
+                    $('#myModal').modal('show');
+
+                }
             })
         }
     </script>
