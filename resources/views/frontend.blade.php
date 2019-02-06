@@ -405,25 +405,24 @@
                 <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->i_merk}}">
                     <!-- Block2 -->
                     <div class="block2">
-                        <div class="block2-pic hov-img0">
+                        <div class="block2-pic hov-img0" style="height: 335px; display: flex; align-items: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
                         	@if($product->i_img != null || $product->i_img != "")
-	                        	<a href="{{route('product_detail')}}">
-	                            	<img src="{{asset('img/items/'.$product->i_img)}}" alt="IMG-PRODUCT">
+	                        	<a href="{{route('product_detail', $product->i_id)}}">
+	                            	<img src="{{asset('img/items/'.$product->i_img)}}" alt="IMG-PRODUCT" class="img-fluid">
 	                        	</a>
                         	@else
-	                        	<a href="{{route('product_detail')}}">
-	                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
+	                        	<a href="{{route('product_detail', $product->i_id)}}">
+	                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT" class="img-fluid">
 	                        	</a>
                         	@endif
-
-                            <a href="{{route('product_detail')}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04">
+                            <a href="{{route('product_detail',$product->i_id)}}" class="btn btn-outline-primary bg0 block2-btn flex-c-m stext-103 cl2 size-102 bor2 hov-btn3 p-lr-15 trans-04">
                                 Lihat Detail
                             </a>
                         </div>
 
                         <div class="block2-txt flex-w flex-t p-t-14">
                             <div class="block2-txt-child1 flex-col-l ">
-                                <a href="{{route('product_detail')}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                <a href="{{route('product_detail', $product->i_id)}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                     {{$product->i_nama}}
                                 </a>
 
@@ -433,7 +432,7 @@
                             </div>
 
                             <div class="block2-txt-child2 flex-r p-t-3">
-                                <a href="{{route('product_detail')}}" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                <a href="" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
                                     <img class="icon-heart1 dis-block trans-04" src="template_asset/frontend/images/icons/icon-heart-01.png"
                                         alt="ICON">
                                     <img class="icon-heart2 dis-block trans-04 ab-t-l" src="template_asset/frontend/images/icons/icon-heart-02.png"

@@ -859,8 +859,8 @@ Route::group(['middleware' => 'auth'], function () {
     // Frontend Onlineshop============================================================== //
     Route::prefix('onlineshop')->group(function () {
         Route::get('/', 'frontend_controller@index')->name('frontend');
-        Route::get('/product-detail', 'frontend_controller@product_detail')->name('product_detail');
         Route::get('/product-all', 'frontend_controller@product_all')->name('product_all');
         Route::get('/handphone', 'frontend_controller@product_hp')->name('product_hp');
         Route::get('/accessories', 'frontend_controller@product_access')->name('product_access');
+        Route::get('/product-detail/{id}', 'frontend_controller@product_detail')->name('product_detail');
     });

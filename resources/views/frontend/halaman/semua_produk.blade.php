@@ -253,11 +253,19 @@
 				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->i_kelompok}}">
 					<!-- Block2 -->
 					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
+						<div class="block2-pic hov-img0" style="height: 300px; display: flex; align-items: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
+                        	@if($product->i_img != null || $product->i_img != "")
+	                        	<a href="{{route('product_detail')}}">
+	                            	<img src="{{asset('img/items/'.$product->i_img)}}" alt="IMG-PRODUCT" class="img-fluid">
+	                        	</a>
+                        	@else
+	                        	<a href="{{route('product_detail')}}">
+	                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT" class="img-fluid">
+	                        	</a>
+                        	@endif
 
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04 js-show-modal1">
-								Quick View
+							<a href="{{route('product_detail')}}" class="btn btn-outline-primary block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04 js-show-modal1">
+								Lihat Detail
 							</a>
 						</div>
 

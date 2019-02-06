@@ -39,7 +39,7 @@
                 <div class="menu-desktop">
                     <ul class="main-menu">
                         <li>
-                            <a href="index.html">Home</a>
+                            <a href="{{route('frontend')}}">Home</a>
                         </li>
 
                         <li>
@@ -52,7 +52,7 @@
                         </li>
 
                         <li>
-                            <a href="shoping-cart.html">Aksesoris</a>
+                            <a href="{{route('product_access')}}">Aksesoris</a>
                             <ul class="sub-menu" style="max-height: 500px;overflow-y: scroll;">
                                 @foreach($menu_acces as $acces)
                                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
@@ -154,11 +154,11 @@
 
         <ul class="main-menu-m">
             <li>
-                <a href="index.html">Home</a>
+                <a href="{{route('frontend')}}">Home</a>
             </li>
 
             <li>
-                <a href="product.html">Handphone</a>
+                <a href="{{route('product_hp')}}">Handphone</a>
                 <ul class="sub-menu-m" style="max-height: 300px;overflow-y: scroll;">
                     @foreach($menu_hp as $hp)
                     <li><a href="index.html">{{$hp->i_merk}}</a></li>
@@ -170,7 +170,7 @@
             </li>
 
             <li>
-                <a href="shoping-cart.html">Aksesoris</a>
+                <a href="{{route('product_access')}}">Aksesoris</a>
                 <ul class="sub-menu-m" style="max-height: 300px;overflow-y: scroll;">
                     @foreach($menu_acces as $acces)
                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
