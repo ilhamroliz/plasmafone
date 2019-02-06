@@ -183,9 +183,9 @@ class opnameBarangController extends Controller
             // dd($gappr);
                 return DataTables::of($pcr)
                     ->addColumn('aksi', function ($pcr) {
-                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                         $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
                         // $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                         if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
                             return '<div class="text-center">' . $detail . '</div>';
@@ -202,9 +202,9 @@ class opnameBarangController extends Controller
             } else {
                 return DataTables::of($pcr)
                     ->addColumn('aksi', function ($pcr) {
-                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                         $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
                         // $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                         if (PlasmafoneController::checkAkses(12, 'delete') == false && PlasmafoneController::checkAkses(12, 'update') == false) {
                             return '<div class="text-center">' . $detail . '</div>';
@@ -315,9 +315,9 @@ class opnameBarangController extends Controller
             // dd($gappr);
                 return DataTables::of($pcr)
                     ->addColumn('aksi', function ($pcr) {
-                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                         $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
                         $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                         if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
                             return '<div class="text-center">' . $detail . '</div>';
@@ -334,9 +334,9 @@ class opnameBarangController extends Controller
             } else {
                 return DataTables::of($pcr)
                     ->addColumn('aksi', function ($pcr) {
-                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                        $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                         $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                        $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
                         $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($pcr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                         if (PlasmafoneController::checkAkses(12, 'delete') == false && PlasmafoneController::checkAkses(12, 'update') == false) {
                             return '<div class="text-center">' . $detail . '</div>';
@@ -370,9 +370,9 @@ class opnameBarangController extends Controller
         // dd($gappr);
         return DataTables::of($gappr)
             ->addColumn('aksi', function ($gappr) {
-                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                 $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
                 // $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                 if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
                     return '<div class="text-center">' . $detail . '</div>';
@@ -402,9 +402,9 @@ class opnameBarangController extends Controller
         // dd($gpend);
         return DataTables::of($gpend)
             ->addColumn('aksi', function ($gpend) {
-                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                 $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
                 $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                 if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
                     return '<div class="text-center">' . $detail . '</div>';
@@ -455,10 +455,10 @@ class opnameBarangController extends Controller
         // dd($gappr);
         return DataTables::of($gappr)
             ->addColumn('aksi', function ($gappr) {
-                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                 $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
-                $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
+                // $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($gappr->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                 if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
                     return '<div class="text-center">' . $detail . '</div>';
                 } else if (PlasmafoneController::checkAkses(11, 'delete') == true && PlasmafoneController::checkAkses(11, 'update') == false) {
@@ -500,9 +500,9 @@ class opnameBarangController extends Controller
         // dd($gpend);
         return DataTables::of($gpend)
             ->addColumn('aksi', function ($gpend) {
-                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                $delete = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="#"><i class="glyphicon glyphicon-trash"></i></button>';
                 $detail = '<button class="btn btn-xs btn-primary btn-circle" data-toggle="tooltip" data-placement="top" title="Lihat Detail" onclick="detail(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
-                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' . Crypt::encrypt($gapend->o_id) . '\')"><i class="glyphicon glyphicon-pencil"></i></button>';
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="#"><i class="glyphicon glyphicon-pencil"></i></button>';
                 $appr = '<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Approval" onclick="appr(\'' . Crypt::encrypt($gpend->o_id) . '\')"><i class="glyphicon glyphicon-check"></i></button>';
                 if (PlasmafoneController::checkAkses(11, 'delete') == false && PlasmafoneController::checkAkses(11, 'update') == false) {
                     return '<div class="text-center">' . $detail . '</div>';
