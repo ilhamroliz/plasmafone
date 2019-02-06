@@ -95,6 +95,13 @@
                             <ul id="widget-tab-1" class="nav nav-tabs pull-left">
 
                                 <li class="active">
+                                    <a data-toggle="tab" href="#hr1"> 
+                                        <i style="color: #739E73;" class="fa fa-lg fa-rotate-right fa-spin"></i> 
+                                        <span class="hidden-mobile hidden-tablet"> History </span>
+                                    </a>
+                                </li>
+
+                                <li>
                                     <a data-toggle="tab" href="#hr2"> 
                                         <i style="color: #C79121;" class="fa fa-lg fa-history"></i> 
                                         <span class="hidden-mobile hidden-tablet"> History </span>
@@ -111,7 +118,23 @@
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
 
-                                    <div class="tab-pane fade in active" id="hr2">
+                                    <div class="tab-pane fade in active" id="hr1">
+                                        <table id="dt_wait" class="table table-striped table-bordered table-hover"
+                                               width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center" width="10%">No.</th>
+                                                    <th class="text-center" width="30%">No. Confirm</th>
+                                                    <th class="text-center" width="45%">Nama Supplier</th>
+                                                    <th class="text-center" width="15%">Aksi</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="hr2">
 
                                         <div class="row form-group">
                                             <div class="col-lg-12 col-md-12 col-sm-12">
@@ -201,6 +224,10 @@
                 tablet: 1024,
                 phone: 480
             };
+
+            $('#dt_wait').DataTable({
+                "language": dataTableLanguage
+            });
 
             $('#dt_history').DataTable({
                 "language": dataTableLanguage

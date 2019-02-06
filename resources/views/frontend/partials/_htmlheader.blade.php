@@ -30,9 +30,9 @@
 	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/css/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/css/main.css')}}">
 <!--===============================================================================================-->
-	<!-- <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}"> -->
-	<style type="text/css">
-		.logo{
-			height: 40% !important;
-		}
-	</style>
+<!-- <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}"> -->
+<style type="text/css">
+	.logo{
+		height: 40% !important;
+	}
+</style>

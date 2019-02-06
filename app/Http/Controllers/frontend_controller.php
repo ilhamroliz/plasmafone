@@ -38,7 +38,7 @@ class frontend_controller extends Controller
             ->get();
 
         $products = DB::table('d_stock')
-            ->select('s_id', 's_item', 'i_nama', 'i_merk', 'i_price')
+            ->select('s_id', 's_item','i_id', 'i_nama', 'i_merk', 'i_price')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->inRandomOrder()
             ->paginate(8);
