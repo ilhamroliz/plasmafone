@@ -180,6 +180,19 @@
 													</div>
 												</div>
 
+												<div class="form-group">
+													<label class="col-xs-4 col-lg-4 control-label text-left">Saldo Poin</label>
+													<div class="col-xs-8 col-lg-8 inputGroupContainer">
+														<div class="input-group">
+															<select class="form-control" name="hassaldo" id="hassaldo" v-model="form_data.hassaldo">
+																<option value="" disabled>== Pilih Status ==</option>
+																<option value="Y">Punya</option>
+																<option value="N">Tidak Punya</option>
+															</select>
+														</div>
+													</div>
+												</div>
+
 											</article>
 
 											<article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -376,7 +389,8 @@
 						tipe	: '',
 						tanggal : '',
 						bulan	: '',
-						tahun	: ''
+						tahun	: '',
+						hassaldo	: ''
 					}
 
 				},
@@ -480,6 +494,7 @@
 						this.form_data.tanggal 		= '';
 						this.form_data.bulan 		= '';
 						this.form_data.tahun 		= '';
+						this.form_data.hassaldo	 	= '';
 
 						$('#form-tambah').data('bootstrapValidator').resetForm();
 					}

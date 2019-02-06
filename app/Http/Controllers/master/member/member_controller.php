@@ -173,9 +173,7 @@ class member_controller extends Controller
 
                 if (Plasma::checkAkses(47, 'insert') == false) {
 
-                    return json_encode([
-                        'status' => 'ditolak'
-                    ]);
+                    return view('errors.407');
 
                 } else {
                     $data = $request->all();
@@ -243,6 +241,13 @@ class member_controller extends Controller
                                     $tipe = $data['tipe'];
                                 }
 
+                                if ($data['hassaldo'] == "") {
+                                    $hassaldo = "N";
+                                } else {
+                                    $hassaldo = $data['hassaldo'];
+                                }
+                                // dd("oke");
+
                                 member::insert([
                                     'm_name' => strtoupper($data['name']),
                                     'm_nik' => $data['nik'],
@@ -250,6 +255,7 @@ class member_controller extends Controller
                                     'm_telp' => $data['telp'],
                                     'm_email' => $email,
                                     'm_jenis' => $tipe,
+                                    'm_hassaldo' => $hassaldo,
                                     'm_address' => $data['address'],
                                     'm_birth' => $tahun . '-' . $bulan . '-' . $tanggal,
                                     'm_provinsi' => $data['provinsi'],
