@@ -184,6 +184,122 @@
             </div>
             <!-- end row -->
         </section>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+
+                        <h4 class="modal-title" id="myModalLabel">Detail</h4>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+
+                            <!-- Widget ID (each widget will need unique ID)-->
+                            <div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+                                <header>
+
+                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+                                    <h2 id="title_detail"></h2>
+
+                                </header>
+
+                                <!-- widget div-->
+                                <div>
+
+                                    <!-- widget content -->
+                                    <div class="widget-body no-padding">
+
+                                        <div class="table-responsive">
+
+                                            <table class="table">
+
+                                                <tbody>
+
+                                                <tr>
+                                                    <td><strong>Tanggal</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_tanggal"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>Nota</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_nota"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>Salesman</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_salesman"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>Member</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_member"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>No. Telp.</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_telp"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>Alamat</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_address"></td>
+                                                </tr>
+
+                                                </tbody>
+
+                                            </table>
+
+                                            <table class="table table-bordered" id="table_item">
+                                                <thead>
+                                                <tr class="text-center">
+                                                    <td>Item</td>
+                                                    <td>Qty</td>
+                                                    <td>Harga (Rp)</td>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- end widget content -->
+
+                                </div>
+                                <!-- end widget div -->
+
+                            </div>
+                            <!-- end widget -->
+                        </div>
+
+                    </div>
+
+                </div><!-- /.modal-content -->
+
+            </div><!-- /.modal-dialog -->
+
+        </div>
     </div>
     <!-- END MAIN CONTENT -->
 @endsection
@@ -195,9 +311,6 @@
             aktif = $('#dt_active').dataTable();
 
             var responsiveHelper_dt_basic = undefined;
-            var responsiveHelper_datatable_fixed_column = undefined;
-            var responsiveHelper_datatable_col_reorder = undefined;
-            var responsiveHelper_datatable_tabletools = undefined;
 
             var breakpointDefinition = {
                 tablet : 1024,
@@ -302,5 +415,58 @@
                 });
             }
         })
+
+        function detail(id){
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Mengambil data...');
+
+            axios.get(baseUrl+'/penjualan/return-penjualan/cari/detail/'+id).then(response => {
+
+                if (response.data.status == 'Access denied') {
+
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+
+                } else if (response.data.status == 'Not Found') {
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Data tidak ditemukan",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                } else {
+                    var row = '';
+                    $('.tr').remove();
+                    $('#title_detail').html('<strong>Detail Penjualan</strong>');
+                    $('#dt_tanggal').text(response.data[0].tanggal);
+                    $('#dt_nota').text(response.data[0].s_nota);
+                    $('#dt_total').text(response.data[0].s_total_net);
+                    $('#dt_salesman').text(response.data[0].salesman);
+                    $('#dt_member').text(response.data[0].m_name);
+                    $('#dt_telp').text(response.data[0].m_telp);
+                    $('#dt_address').text(response.data[0].m_address);
+                    response.data.forEach(function(element) {
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
+                        }
+                        $('#table_item tbody').append(row)
+                    });
+                    $('#overlay').fadeOut(200);
+                    $('#myModal').modal('show');
+
+                }
+
+            })
+        }
     </script>
 @endsection

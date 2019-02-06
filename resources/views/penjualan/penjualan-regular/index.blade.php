@@ -756,8 +756,6 @@
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil data...');
 
-			var status;
-
 			axios.get(baseUrl+'/penjualan-reguler/get-detail/'+id).then(response => {
 
 				if (response.data.status == 'Access denied') {
