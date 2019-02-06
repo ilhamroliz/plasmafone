@@ -44,16 +44,16 @@
 
                         <li>
                             <a href="product.html">Handphone</a>
-                            <ul class="sub-menu" style="width: 500px;">
+                            <ul class="sub-menu" style="max-height: 500px;overflow-y: scroll;">
                                 @foreach($menu_hp as $hp)
-                                    <li style="display: inline-block;"><a href="index.html">{{$hp->i_merk}}</a></li>
+                                    <li><a href="index.html">{{$hp->i_merk}}</a></li>
                                 @endforeach
                             </ul>
                         </li>
 
                         <li>
                             <a href="shoping-cart.html">Aksesoris</a>
-                            <ul class="sub-menu" style="width: 500px !important;">
+                            <ul class="sub-menu" style="max-height: 500px;overflow-y: scroll;">
                                 @foreach($menu_acces as $acces)
                                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
                                 @endforeach
@@ -159,7 +159,7 @@
 
             <li>
                 <a href="product.html">Handphone</a>
-                <ul class="sub-menu-m">
+                <ul class="sub-menu-m" style="max-height: 300px;overflow-y: scroll;">
                     @foreach($menu_hp as $hp)
                     <li><a href="index.html">{{$hp->i_merk}}</a></li>
                     @endforeach
@@ -171,7 +171,7 @@
 
             <li>
                 <a href="shoping-cart.html">Aksesoris</a>
-                <ul class="sub-menu-m">
+                <ul class="sub-menu-m" style="max-height: 300px;overflow-y: scroll;">
                     @foreach($menu_acces as $acces)
                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
                     @endforeach

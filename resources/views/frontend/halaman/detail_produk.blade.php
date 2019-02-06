@@ -69,7 +69,7 @@
 				<div class="col-md-6 col-lg-5 p-b-30">
 					<div class="p-r-50 p-t-5 p-lr-0-lg">
 						<h4 class="mtext-105 cl2 js-name-detail p-b-14">
-							Lightweight Jacket
+							Samsung S9
 						</h4>
 
 						<span class="mtext-106 cl2">
@@ -135,12 +135,12 @@
 										</div>
 									</div>
 									<div class="col-md-6">
-										<button class="btn btn-block flex-c-m stext-101 cl0 size-101 bg-warning bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+										<button class="btn btn-block btn-warning flex-c-m stext-101 text-white size-101 bor1 p-lr-15 trans-04 js-addcart-detail">
 											Tambah Ke Troli
 										</button>
 									</div>
 									<div class="col-md-12 mt-1">
-										<button class="btn btn-block flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+										<button class="btn btn-block btn-primary flex-c-m stext-101 size-101 bor1 p-lr-15 trans-04">
 											Beli Sekarang
 										</button>
 									</div>
