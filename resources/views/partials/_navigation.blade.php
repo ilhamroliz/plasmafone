@@ -231,8 +231,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         @endif
 
                         @if($sidebar['Pengelolaan Member'] == 'Y')
-                            <li>
-                                <a href="flot.html">Pengelolaan Member</a>
+                            <li class="{{ (Request::is('pengelolaan-member') ? 'active': '') }}">
+                                <a href="{{ url('pengelolaan-member') }}">Pengelolaan Member</a>
                             </li>
                         @endif
 
