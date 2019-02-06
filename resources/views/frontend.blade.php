@@ -165,7 +165,7 @@
 
 
     <!-- Product -->
-    <section class="bg0 p-t-23 p-b-140">
+    <section class="bg0 p-t-23 p-b-140" id="productID">
         <div class="container">
             <div class="p-b-10">
                 <h3 class="ltext-103 cl5">
@@ -183,26 +183,6 @@
                         {{$merk->i_merk}}
                     </button>
                     @endforeach
-
-                    <!-- <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".women">
-                        Women
-                    </button>
-
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".men">
-                        Men
-                    </button>
-
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".bag">
-                        Bag
-                    </button>
-
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".shoes">
-                        Shoes
-                    </button>
-
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".watches">
-                        Watches
-                    </button> -->
                 </div>
 
                 <div class="flex-w flex-c-m m-tb-10">
@@ -426,10 +406,12 @@
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
-                            <img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
+                        	<a href="{{route('product_detail')}}">
+                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
+                        	</a>
 
-                            <a href="{{route('product_detail')}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04 js-show-modal1">
-                                Quick View
+                            <a href="{{route('product_detail')}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04">
+                                Lihat Detail
                             </a>
                         </div>
 
