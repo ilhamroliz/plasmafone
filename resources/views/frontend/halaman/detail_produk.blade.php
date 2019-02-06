@@ -32,11 +32,11 @@
 							<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
 							<div class="slick3 gallery-lb">
-								<div class="item-slick3" data-thumb="{{asset('template_asset/frontend/images/product-detail-01.jpg')}}">
+								<div class="item-slick3" data-thumb="{{asset('template_asset/frontend/images/product-mark.jpg')}}">
 									<div class="wrap-pic-w pos-relative">
-										<img src="{{asset('template_asset/frontend/images/product-detail-01.jpg')}}" alt="IMG-PRODUCT">
+										<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
 
-										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('template_asset/frontend/images/product-detail-01.jpg')}}">
+										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('template_asset/frontend/images/product-mark.jpg')}}">
 											<i class="fa fa-expand"></i>
 										</a>
 									</div>
@@ -52,11 +52,11 @@
 									</div>
 								</div>
 
-								<div class="item-slick3" data-thumb="{{asset('template_asset/frontend/images/product-detail-03.jpg')}}">
+								<div class="item-slick3" data-thumb="{{asset('template_asset/frontend/images/product-mark.jpg')}}">
 									<div class="wrap-pic-w pos-relative">
-										<img src="{{asset('template_asset/frontend/images/product-detail-03.jpg')}}" alt="IMG-PRODUCT">
+										<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
 
-										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('template_asset/frontend/images/product-detail-03.jpg')}}">
+										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="{{asset('template_asset/frontend/images/product-mark.jpg')}}">
 											<i class="fa fa-expand"></i>
 										</a>
 									</div>
