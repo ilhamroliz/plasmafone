@@ -136,7 +136,7 @@
                                             <label for="" class="col-md-4">Jatuh Tempo</label>
                                             <div class="col-md-8">
                                                 <input type="hidden" id="hiddenTempo" value="{{ $getTempo }}">
-                                                <input type="text" id="tempo" class="form-control" readonly>
+                                                <input type="text" id="tempo" class="form-control" value="{{ $getTempo }}" readonly>
                                             </div>
                                         </div>  
     
@@ -168,9 +168,9 @@
                                             @foreach ($getDataDT as $dt)
                                             <tr>
                                                 <td><input type="hidden" name="idItem[]" value="{{ $dt->pcd_item }}">{{ $dt->i_nama }}</td>
-                                                <td><input type="text" name="qty[]" class="form-control text-align-right qty" style="width:100%" value="{{ $dt->pcd_qty }}"></td>
+                                                <td><input type="text" name="qty[]" class="form-control text-align-right qty" style="width:100%" value="{{ $dt->pcd_qty }}" readonly></td>
                                                 <td><input type="text" name="price[]" class="form-control text-align-right price" style="width:100%"></td>
-                                                <td><input type="text" name="diskP[]" class="form-control text-align-right diskP" style="width:100%"></td>
+                                                <td><input type="text" name="diskP[]" class="form-control text-align-right diskP" style="width:100%" max="100"></td>
                                                 <td><input type="text" name="diskV[]" class="form-control text-align-right diskV" style="width:100%"></td>
                                                 <td><input type="text" name="subTotal[]" class="form-control text-align-right subTotal" style="width:100%" readonly></td>
                                             </tr>
@@ -227,7 +227,14 @@
 
             $('.price').maskMoney({thousands: '.', precision: 0});
             $('.diskV').maskMoney({thousands: '.', precision: 0});
+
         })
+
+        function cekpersen(){
+            if($('.diskP').val() >= 100){
+                $(this).val(100);
+            }
+        }
 
         function changePayment(){
             if($('#payment').val() == 'T'){

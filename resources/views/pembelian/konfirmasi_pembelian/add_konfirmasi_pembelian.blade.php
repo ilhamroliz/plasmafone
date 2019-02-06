@@ -696,7 +696,7 @@ function rupiah($angka)
                                 for(var i = 0; i < data.pcId.length; i++){
                                     window.open("{{url('/pembelian/konfirmasi-pembelian/print')}}"+"/"+data.pcId[i].idpc);
                                 }
-                                {{--  location.reload();  --}}
+                                location.reload();
 
                             } else {
                                 $.smallBox({

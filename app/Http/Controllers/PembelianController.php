@@ -1349,7 +1349,8 @@ class PembelianController extends Controller
     public function view_confirmApp()
     {
         $confirmOrder = DB::table('d_purchase_confirm')
-            ->select('pc_id','pc_nota')
+            ->join('d_supplier', 's_id', '=', 'pc_supplier')
+            ->select('pc_id','pc_nota','s_company')
             ->where('pc_status', 'P')
             ->get();
         return DataTables::of($confirmOrder)

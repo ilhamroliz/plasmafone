@@ -52,7 +52,7 @@
 
                 <div class="page-title">
 
-                    <a href="{{ url('pembelian/request-pembelian') }}" class="btn btn-default"><i
+                    <a href="{{ url('pembelian/purchase-order') }}" class="btn btn-default"><i
                             class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 
                 </div>
@@ -133,7 +133,8 @@
                                            width="100%">
                                         <thead class="table-responsive">
                                             <tr>
-                                                <th width="10%"><div class="text-center"><input type="checkbox" id="cekParent" onclick="myCheck()"></div></th>
+                                                <th width="10%"><div class="text-center">
+                                                    <input type="checkbox" onclick="myCheck()" id="cekParent"></div></th>
                                                 <th width="75%">No. Nota</th>
                                                 <th width="15%">Aksi</th>
                                             </tr>
@@ -162,6 +163,100 @@
 
             </div>
             <!-- end widget -->
+
+            <!-- Modal untuk Detil & Edit Konfirmasi Pembelian -->
+			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel">Detail Konfirmasi Pembelian</h4>
+
+						</div>
+
+						<div class="modal-body">			
+							<div class="row">
+
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+									<header>
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<h2 id="title_detail"></h2>
+									</header>
+
+									<!-- widget div-->
+									<div>
+
+										<!-- widget content -->
+										<div class="widget-body no-padding">
+											<div class="table-responsive">
+
+												<div class="col-md-12 padding-top-10 ">
+													<input type="hidden" id="dmId">
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmNoNota"></label>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Nama Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<div class="col-md-8">
+															<label id="dmNamaSupp"></label>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Alamat Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmAddrSupp"></label>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Telp Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmTelpSupp"></label>
+                                                    </div>                                                
+												</div>
+
+                                                <div>
+                                                    <table id="dt_detail" class="table table-striped table-bordered table-hover">
+                                                        <thead>		
+                                                            <tr>
+                                                                <th width="10%">&nbsp;No.</th>
+                                                                <th width="70%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                                <th width="20%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
+                                                            </tr>
+                                                        </thead>
+    
+                                                        <tbody>
+                                                        </tbody>
+    
+                                                    </table>
+                                                </div>												
+											</div>
+										</div>
+										<!-- end widget content -->
+
+									</div>
+									<!-- end widget div -->
+
+								</div>
+								<!-- end widget -->
+
+							</div>			
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
+            <!-- /.modal -->
+
         </div>
     </div>
 
@@ -173,10 +268,15 @@
 @section('extra_script')
 
     <script type="text/javascript">
-
+        var dt_co;
         $(document).ready(function () {
 
-            $('#dt_co').DataTable({
+            dt_co = $('#dt_co').DataTable({
+                "language": dataTableLanguage,
+                "order": []
+            });
+
+            $('#dt_detail').DataTable({
                 "language": dataTableLanguage,
                 "order": []
             });
@@ -243,6 +343,34 @@
             }
 
             window.location.href = baseUrl+'/pembelian/purchase-order/tambah?id='+idSupp+'&a="1"&'+ar.find('input').serialize();
+
+        }
+
+        function detil(id){
+
+            axios.post(baseUrl+'/pembelian/purchase-order/detil?id='+id).then((response) => {
+
+                $('#title_detail').html('Konfirmasi Pembelian '+response.data.data.pc_nota);
+
+                $('#dmNoNota').text(response.data.data.pc_nota);
+                $('#dmNamaSupp').text(response.data.data.s_company);
+                $('#dmAddrSupp').text(response.data.data.s_address);
+                $('#dmTelpSupp').text(response.data.data.s_phone);
+
+                $('#dt_detail').DataTable().clear();
+
+                for(var i = 0; i < response.data.dataDT.length; i++){
+
+                    $('#dt_detail').DataTable().row.add([
+                        i+1,
+                        response.data.dataDT[i].i_nama,
+                        '<div><input type="text" name="qtyDT[]" class="form-control text-align-right qtyDT" value="'+response.data.dataDT[i].pcd_qty+'" style="width: 100%" readonly></div>'
+                    ]).draw();
+                }
+
+            })
+
+            $('#detilModal').modal('show');
 
         }
 
