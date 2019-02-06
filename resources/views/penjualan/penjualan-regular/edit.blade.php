@@ -343,8 +343,8 @@
 
     $(document).ready(function(){
         $('.togel').click();
-        $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
-        $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+        $('.discp').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true, suffix: '%'});
+        $('.discv').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true});
         if ($("#stockid").val() == "") {
 			$("#tambahketable").attr('disabled', true);
 		}
@@ -678,8 +678,8 @@
                     '</tr>';
 
                 $("#table-penjualan tbody").append(row);
-                $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
-                $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+                $('.discp').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true, suffix: '%'});
+                $('.discv').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true});
 
                 $(".qtyTable").on("keypress keyup blur",function (event) {
                     $(this).val($(this).val().replace(/[^\d].+/, ""));
@@ -719,8 +719,8 @@
                     '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus('+id+')"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
                 $("#table-penjualan tbody").append(row);
-                $('.discp').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true, suffix: '%'});
-                $('.discv').maskMoney({thousands:'.', precision: 0, decimal:',', allowZero:true});
+                $('.discp').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true, suffix: '%'});
+                $('.discv').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true});
                 setArrayId();
             }
         }
@@ -809,7 +809,11 @@
     function isiDiscp(discp, discv, qty, harga, lbltotItem, totItem) {
         var total = 0;
         var a = $("#"+discv).val(), quantity = parseInt($("#"+qty).val()), price = parseInt($("#"+harga).val()), disc = parseInt($("#"+discp).val().replace("%", ""));
-        
+
+        if (disc > 100) {
+            $("#"+discp).val("100%");
+        }
+
         if (a == "") {
             a = 0;
             
