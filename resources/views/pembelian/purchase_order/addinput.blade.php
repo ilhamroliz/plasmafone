@@ -244,6 +244,21 @@
             getSubTotal(id);
         }
 
+        $(".diskP").on("keypress",function (event) {
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+            if ($(this).val() != null || $(this).val() != ""){
+                $('#simpan').attr("disabled", false);
+            } else {
+                $('#simpan').attr("disabled", true);
+            }
+            if (event.which == 13){
+                simpan();
+            }
+
+        });
+
         function getSubTotal(id){
 
             if($('#qty'+id).val() == ''){
