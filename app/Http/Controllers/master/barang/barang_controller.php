@@ -292,7 +292,7 @@ class barang_controller extends Controller
 
                                 //Resize images
                                 ini_set('memory_limit', '256M');
-                                Image::make($image_tmp)->resize(250, 190)->save($image_path);
+                                Image::make($image_tmp)->resize(190, 190)->save($image_path);
                                 ImageOptimizer::optimize($image_path);
 
                                 //Store image name in item table
@@ -388,7 +388,7 @@ class barang_controller extends Controller
 
                                     //Resize images
                                     ini_set('memory_limit', '256M');
-                                    Image::make($image_tmp)->resize(250, 190)->save($image_path);
+                                    Image::make($image_tmp)->resize(190, 190)->save($image_path);
                                     ImageOptimizer::optimize($image_path);
 
                                     //Store image name in item table

@@ -136,12 +136,11 @@
                                             <label for="" class="col-md-4">Jatuh Tempo</label>
                                             <div class="col-md-8">
                                                 <input type="hidden" id="hiddenTempo" value="{{ $getTempo }}">
-                                                <input type="text" id="tempo" class="form-control" value="{{ $getTempo }}" readonly>
+                                                <input type="text" id="tempo" class="form-control" value="{{ $getTempo }}" disabled>
                                             </div>
                                         </div>  
     
                                     </div>
-                                </div>
                             </div>
                             <form id="idNota">
                                 @foreach($check as $cek)
@@ -168,11 +167,11 @@
                                             @foreach ($getDataDT as $dt)
                                             <tr>
                                                 <td><input type="hidden" name="idItem[]" value="{{ $dt->pcd_item }}">{{ $dt->i_nama }}</td>
-                                                <td><input type="text" name="qty[]" class="form-control text-align-right qty" style="width:100%" value="{{ $dt->pcd_qty }}" readonly></td>
-                                                <td><input type="text" name="price[]" class="form-control text-align-right price" style="width:100%"></td>
-                                                <td><input type="text" name="diskP[]" class="form-control text-align-right diskP" style="width:100%" max="100"></td>
-                                                <td><input type="text" name="diskV[]" class="form-control text-align-right diskV" style="width:100%"></td>
-                                                <td><input type="text" name="subTotal[]" class="form-control text-align-right subTotal" style="width:100%" readonly></td>
+                                                <td><input type="text" name="qty[]" id="qty{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right qty" style="width:100%" value="{{ $dt->pcd_qty }}" readonly></td>
+                                                <td><input type="text" name="price[]" id="price{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right price" style="width:100%" onkeyup="cekprice({{ $dt->pcd_purchaseconfirm }})"></td>
+                                                <td><input type="text" name="diskP[]" id="diskP{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right diskP" style="width:100%" onkeyup="cekpersen({{ $dt->pcd_purchaseconfirm }})"></td>
+                                                <td><input type="text" name="diskV[]" id="diskV{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right diskV" style="width:100%" onkeyup="cekvalue({{ $dt->pcd_purchaseconfirm }})"></td>
+                                                <td><input type="text" name="subTotal[]" id="subTotal{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right subTotal" style="width:100%" readonly></td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -206,7 +205,7 @@
 @endsection
 
 @section('extra_script')
-
+    <script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -230,19 +229,85 @@
 
         })
 
-        function cekpersen(){
-            if($('.diskP').val() >= 100){
-                $(this).val(100);
+        function cekpersen(id){
+            if($('#diskP'+id).val() >= 100){
+                $('#diskP'+id).val(100);
             }
+            getSubTotal(id);
+        }
+
+        function cekprice(id){
+            getSubTotal(id);
+        }
+
+        function cekvalue(id){
+            getSubTotal(id);
+        }
+
+        $(".diskP").on("keypress",function (event) {
+            if ((event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+            if ($(this).val() != null || $(this).val() != ""){
+                $('#simpan').attr("disabled", false);
+            } else {
+                $('#simpan').attr("disabled", true);
+            }
+            if (event.which == 13){
+                simpan();
+            }
+
+        });
+
+        function getSubTotal(id){
+
+            if($('#qty'+id).val() == ''){
+                qty = 0;
+            }else{
+                cnqty = $('#qty'+id).val();
+                strqty = cnqty.replace(/[^0-9\-]+/g,"");
+                qty = parseInt(strqty);
+            }
+
+            if($('#price'+id).val() == ''){
+                price = 0;
+            }else{
+                cnprice = $('#price'+id).val();
+                strprice = cnprice.replace(/[^0-9\-]+/g,"");
+                price = parseInt(strprice);
+            }
+
+            if($('#diskP'+id).val() == ''){
+                diskP = 0;
+            }else{
+                cndiskP = $('#diskP'+id).val();
+                strdiskP = cndiskP.replace(/[^0-9\-]+/g,"");
+                diskP = parseInt(strdiskP);
+            }
+
+            if($('#diskV'+id).val() == ''){
+                diskV = 0;
+            }else{
+                cndiskV = $('#diskV'+id).val();
+                strdiskV = cndiskV.replace(/[^0-9\-]+/g,"");
+                diskV = parseInt(strdiskV);
+            }
+
+
+            var subTotal = (( qty * price ) * (( 100 - diskP ) / 100)) - diskV;
+            console.log(price);
+            console.log(subTotal);
+
+            $('#subTotal'+id).val(accounting.formatMoney(subTotal, "", 0, ".", ","));
         }
 
         function changePayment(){
             if($('#payment').val() == 'T'){
-                $('#tempo').prop('readonly', false);
+                $('#tempo').prop('disabled', false);
                 var tempo = $('#hiddenTempo').val();
                 $('#tempo').val(tempo);
-            }else if($('#payment').val() == 'C'){
-                $('#tempo').prop('readonly', true);
+            }else{
+                $('#tempo').prop('disabled', true);
                 $('#tempo').val('');
             }
         }

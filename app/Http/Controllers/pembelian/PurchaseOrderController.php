@@ -195,7 +195,7 @@ class PurchaseOrderController extends Controller
                         }else{
                             DB::table('d_purchase_dt')->insert([
                                 'pd_purchase' => $idPO,
-                                'pd_detailid' => 1,
+                                'pd_detailid' => $countDTPO + 1,
                                 'pd_item' => $idItem[$i],
                                 'pd_qty' => $qty[i],
                                 'pd_value' => $harga,
@@ -204,6 +204,7 @@ class PurchaseOrderController extends Controller
                                 'pd_total_net' => $harga,
                                 'pd_qtyreceived' => 0
                             ]);
+                            $countDTPO += 1;
                         }                       
                     }
 
@@ -239,7 +240,7 @@ class PurchaseOrderController extends Controller
                     ->join('d_purchase_confirmdt', 'pcd_purchaseconfirm', '=', 'pc_id')
                     ->join('d_item', 'i_id', '=', 'pcd_item')
                     ->whereIn('pc_id', $arayDT)
-                    ->select('pcd_item', 'i_nama', DB::raw('SUM(pcd_qty) as pcd_qty'))
+                    ->select('pcd_item', 'pcd_purchaseconfirm', 'i_nama', DB::raw('SUM(pcd_qty) as pcd_qty'))
                     ->groupBy('pcd_item')->get();
                 $add = '+'.$getDataSupp[0]->s_jatuh_tempo.' days';
                 $getTempo = new Carbon($add);

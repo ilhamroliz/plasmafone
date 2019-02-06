@@ -221,6 +221,7 @@
             minLength: 1,
             select: function(event, data) {
                 setStock(data.item);
+                $('#qty').focus();
 				$("#stockid").val(data.item.id);
 				if ($("#stockid").val() == "") {
 					$("#tambahketable").attr('disabled', true);
@@ -274,6 +275,7 @@
             minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+                $('#qty').focus();
                 $("#stockid").val(data.item.id);
                 if ($("#stockid").val() == "") {
                     $("#tambahketable").attr('disabled', true);
@@ -309,7 +311,7 @@
         searchGlobal = $('#cari-stock').val();
     }
 
-    $("#qty").on("keypress keyup blur",function (event) {
+    $("#qty").on("keypress blur",function (event) {
         $(this).val($(this).val().replace(/[^\d].+/, ""));
         if ((event.which < 48 || event.which > 57)) {
             event.preventDefault();
@@ -336,6 +338,10 @@
     });
 
     $("#cari-stock").on('keyup',function(e) {
+        $('#stockid').val('');
+    });
+
+    $("#cari-stock").on('keypress',function(e) {
         if(e.which === 13) {
             var specificcode = $(this).val();
             if (spkode.includes(specificcode) == true) {
@@ -354,8 +360,8 @@
                 var qty = parseInt(kuantitas) + 1;
         
                 $(".qty-"+specificcode).val(qty);
-                
                 $(this).val("");
+                $('#qty').focus();
             } else {
                 searchStock();
             }
@@ -492,6 +498,7 @@
             minLength: 2,
             select: function(event, data) {
                 setStock(data.item);
+                $('#qty').focus();
 				$("#stockid").val(data.item.id);
 				if ($("#stockid").val() == "") {
 					$("#tambahketable").attr('disabled', true);
