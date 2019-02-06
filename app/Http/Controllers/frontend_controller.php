@@ -15,6 +15,20 @@ class frontend_controller extends Controller
      */
     public function index()
     {
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
         $i_merk = DB::table('d_item')
             ->select('i_merk')
             ->distinct('i_merk')
@@ -22,13 +36,14 @@ class frontend_controller extends Controller
             ->whereIn('i_merk', ['ACER','ASUS','APPLE','BLACKBERRY','OPPO','LENOVO','LG','XIAOMI','SAMSUNG','HUAWEI','NOKIA'])
             ->orderBy('i_merk')
             ->get();
+
         $products = DB::table('d_stock')
             ->select('s_id', 's_item', 'i_nama', 'i_merk', 'i_price')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
-            // ->whereIn('i_merk', ['ACER','ASUS','APPLE','BLACKBERRY','OPPO','LENOVO','LG','XIAOMI','SAMSUNG','HUAWEI','NOKIA'])
             ->inRandomOrder()
             ->paginate(8);
-        return view('frontend', compact('i_merk', 'products'));
+
+        return view('frontend', compact('menu_hp', 'menu_acces','i_merk', 'products'));
     }
 
     /**
@@ -39,7 +54,52 @@ class frontend_controller extends Controller
 
     public function product_detail()
     {
-        return view('frontend.halaman.detail_produk');
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
+        return view('frontend.halaman.detail_produk', compact('menu_hp', 'menu_acces'));
+    }
+
+    public function product_all()
+    {
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
+        $i_kelompok = DB::table('d_item')
+            ->select('i_kelompok')
+            ->distinct('i_kelompok')
+            ->orderBy('i_kelompok')
+            ->get();
+
+        $products = DB::table('d_stock')
+            ->select('s_id', 's_item', 'i_nama', 'i_merk', 'i_price', 'i_kelompok')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->inRandomOrder()
+            ->paginate(8);
+
+        return view('frontend.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_kelompok', 'products'));
     }
 
     public function create()

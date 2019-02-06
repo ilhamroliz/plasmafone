@@ -465,7 +465,7 @@
 
             <!-- Load more -->
             <div class="flex-c-m flex-w w-full p-t-45">
-                <a href="{{route('product_detail')}}" class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn1 p-lr-15 trans-04">
+                <a href="{{route('product_all')}}" class="flex-c-m stext-101 cl0 size-103 bg1 bor1 hov-btn1 p-lr-15 trans-04">
                     Lebih Banyak
                 </a>
             </div>

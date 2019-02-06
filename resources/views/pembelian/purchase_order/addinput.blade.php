@@ -90,42 +90,64 @@
 
                             <div class="row">
                                 <div class="col-md-6">
-
+                                    @foreach($getDataSupp as $supp) 
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <label for="" class="col-md-4">Nama Supplier</label>
                                             <div class="col-md-8">
-                                                <select id="namaSupp" class="select2" onchange="getCO()">
-                                                    <option value="">== PILIH SUPPLIER ==</option>
-                                                    @foreach ($getDataSupp as $supp)
-                                                        <option value="{{ $supp->pc_supplier }}">{{ $supp->s_company }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="hidden" id="idSupp" value="{{ $supp->s_id }}">
+                                                <input type="text" id="namaSupp" class="form-control" value="{{ $supp->s_company }}" readonly>
                                             </div>
                                         </div>
     
                                         <div class="col-md-12 margin-top-10">
                                             <label for="" class="col-md-4">No. Telp</label>
                                             <div class="col-md-8">
-                                                <input type="text" id="telpSupp" class="form-control" readonly>
+                                                <input type="text" id="telpSupp" class="form-control" value="{{ $supp->s_phone }}" readonly>
                                             </div>
                                         </div>                                
     
                                         <div class="col-md-12 margin-top-10">
                                             <label for="" class="col-md-4">No Fax</label>
                                             <div class="col-md-8">
-                                                <input type="text" id="faxSupp" class="form-control" readonly>
+                                                <input type="text" id="faxSupp" class="form-control" value="{{ $supp->s_fax }}" readonly>
                                             </div>
                                         </div>
                                     </div>
-    
+                                    @endforeach
                                 </div>
     
                                 <div class="col-md-6">
                                     
+                                    <div class="form-group">
+    
+                                        <div class="col-md-12">
+                                            <label for="" class="col-md-4">Tipe Pembayaran</label>
+                                            <div class="col-md-8">
+                                                <select id="payment" class="form-control" onchange="changePayment()">
+                                                    <option value="">== PILIH TIPE PEMBAYARAN ==</option>
+                                                    <option value="T">Tempo</option>
+                                                    <option value="C">Cash</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 margin-top-10">
+                                            <label for="" class="col-md-4">Jatuh Tempo</label>
+                                            <div class="col-md-8">
+                                                <input type="hidden" id="hiddenTempo" value="{{ $getTempo }}">
+                                                <input type="text" id="tempo" class="form-control" readonly>
+                                            </div>
+                                        </div>  
+    
+                                    </div>
                                 </div>
                             </div>
-
+                            <form id="idNota">
+                                @foreach($check as $cek)
+                                <input type="hidden" value="{{ $cek }}" name="idNota[]">
+                                @endforeach
+                            </form>
                             <!-- widget body text-->
                             <div class="tab-content padding-10">
                                 <div class="tab-pane fade in active">
@@ -133,13 +155,26 @@
                                            width="100%">
                                         <thead class="table-responsive">
                                             <tr>
-                                                <th width="10%"><div class="text-center"><input type="checkbox" id="cekParent" onclick="myCheck()"></div></th>
-                                                <th width="75%">No. Nota</th>
-                                                <th width="15%">Aksi</th>
+                                                <th width="30%">Nama Barang</th>
+                                                <th width="10%">Qty</th>
+                                                <th width="17%">Harga Barang</th>
+                                                <th width="10%">Diskon %</th>
+                                                <th width="15%">Diskon Value</th>
+                                                <th width="18%">Sub Total</th>
                                             </tr>
                                         </thead>
 
                                         <tbody id="dtcoBody">
+                                            @foreach ($getDataDT as $dt)
+                                            <tr>
+                                                <td><input type="hidden" name="idItem[]" value="{{ $dt->pcd_item }}">{{ $dt->i_nama }}</td>
+                                                <td><input type="text" name="qty[]" class="form-control text-align-right qty" style="width:100%" value="{{ $dt->pcd_qty }}"></td>
+                                                <td><input type="text" name="price[]" class="form-control text-align-right price" style="width:100%"></td>
+                                                <td><input type="text" name="diskP[]" class="form-control text-align-right diskP" style="width:100%"></td>
+                                                <td><input type="text" name="diskV[]" class="form-control text-align-right diskV" style="width:100%"></td>
+                                                <td><input type="text" name="subTotal[]" class="form-control text-align-right subTotal" style="width:100%" readonly></td>
+                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
@@ -149,7 +184,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button class="btn-lg btn-block btn-primary text-center"
-                                                onclick="toDetail()">Lanjutkan Input Harga
+                                                onclick="simpanPO()">Simpan Purchase Order
                                         </button>
                                     </div>
                                 </div>
@@ -181,70 +216,80 @@
                 "order": []
             });
 
+            $('#tempo').datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $('.price').maskMoney({thousands: '.', precision: 0});
+            $('.diskV').maskMoney({thousands: '.', precision: 0});
         })
 
-
-        function getCO(){
-            if($('#namaSupp').val() != ''){
-                var idSupp = $('#namaSupp').val();
-                axios.post(baseUrl+'/pembelian/purchase-order/getCO?id='+idSupp).then((response) =>{
-
-                    $('#telpSupp').val(response.data.dataSupp.s_phone);
-                    $('#faxSupp').val(response.data.dataSupp.s_fax);
-                    $('#addrSupp').val(response.data.dataSupp.s_address);
-
-                    $('#dt_co').DataTable().clear();
-                    for(var i = 0; i < response.data.dataDT.length; i++){
-
-                        $('#dt_co').DataTable().row.add([
-                            '<div class="text-center"><input type="checkbox" name="check[]" class="form-control checkB" value="'+response.data.dataDT[i].pc_id+'"></div>',
-                            response.data.dataDT[i].pc_nota,
-                            '<div class="text-center">'+
-                                '<button class="btn btn-primary btn-circle" onclick="detil('+response.data.dataDT[i].pc_id+')"><i class="fa fa-list"></i></button>'+
-                            '</div>'
-                        ]).draw();
-
-                    }
-
-                })
-
+        function changePayment(){
+            if($('#payment').val() == 'T'){
+                $('#tempo').prop('readonly', false);
+                var tempo = $('#hiddenTempo').val();
+                $('#tempo').val(tempo);
+            }else if($('#payment').val() == 'C'){
+                $('#tempo').prop('readonly', true);
+                $('#tempo').val('');
             }
         }
 
-        function myCheck(){
-            var checkBox = document.getElementById("cekParent");
-            if(checkBox.checked == true){
-                $('.checkB').prop('checked', true);
-            }else{
-                $('.checkB').prop('checked', false);
-            }
-        }
+        function simpanPO(){
 
-        function toDetail(){
-
-            if($('#dt_co input:checked').length == 0){
-
+            if($('#payment').val() == ''){
                 $.smallBox({
                     title: "Perhatian",
-                    content: 'Silahkan Pilih Nota sebelum Melanjutkan',
+                    content: 'Silahkan Pilih Tipe Pembayaran Terlebih Dahulu',
                     color: "#C46A69",
                     timeout: 3000,
                     icon: "fa fa-warning bounce animated"
                 });
                 return false;
-
             }
 
-            var idSupp = $('#namaSupp').val();
+            var idSupp = $('#idSupp').val();
+            var tipe = $('#payment').val();
+            var tempo = $('#tempo').val();
 
             var ar = $();
             for (var i = 0; i < $('#dt_co').DataTable().rows()[0].length; i++) {
                 ar = ar.add($('#dt_co').DataTable().row(i).node());
             }
+            var data = ar.find('input').serialize()+'&id='+idSupp+'&tipe='+tipe+'&tempo='+tempo+'&'+$('#idNota').serialize();
 
-            window.location.href = baseUrl+'/pembelian/purchase-order/tambah?id='+idSupp+'&a="1"&'+ar.find('input').serialize();
+            axios.post(baseUrl+'/pembelian/purchase-order/tambah', data).then((response) => {
+
+                if(response.data.status == 'tpoSukses'){
+                    $.smallBox({
+                        title: "Berhasil",
+                        content: 'Purchase Order Berhasil Dibuat...!',
+                        color: "#739E73",
+                        timeout: 3000,
+                        icon: "fa fa-check bounce animated"
+                    });
+
+                    {{--  window.open("{{url('/pembelian/konfirmasi-pembelian/print')}}"+"/"+data.pcId[i].idpc);  --}}
+                    window.location.href = baseUrl+'/pembelian/purchase-order/tambah';
+
+                } else {
+                    $.smallBox({
+                        title: "Gagal",
+                        content: 'Purchase Order Gagal Dibuat, Silahkan coba beberapa saat lagi..',
+                        color: "#C46A69",
+                        timeout: 3000,
+                        icon: "fa fa-check bounce animated"
+                    });
+                }
+            })
 
         }
+
 
     </script>
 
