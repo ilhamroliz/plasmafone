@@ -38,7 +38,7 @@ class frontend_controller extends Controller
             ->get();
 
         $products = DB::table('d_stock')
-            ->select('s_id', 's_item','i_id', 'i_nama', 'i_merk', 'i_price')
+            ->select('s_id', 's_item','i_id', 'i_nama', 'i_merk','i_img', 'i_price')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->inRandomOrder()
             ->paginate(8);
@@ -102,64 +102,37 @@ class frontend_controller extends Controller
         return view('frontend.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_kelompok', 'products'));
     }
 
-    public function create()
+    public function product_hp()
     {
-        //
-    }
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $i_merk = DB::table('d_stock')
+            ->select('s_item', 'i_merk')
+            ->distinct('d_item.i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('d_item.i_merk')
+            ->get();
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $products = DB::table('d_stock')
+            ->select('s_id', 's_item', 'i_nama', 'i_merk', 'i_price', 'i_kelompok')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->inRandomOrder()
+            ->paginate(8);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('frontend.handphone.index', compact('menu_hp', 'menu_acces', 'i_merk', 'products'));
     }
 }

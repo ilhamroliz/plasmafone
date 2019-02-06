@@ -406,9 +406,15 @@
                     <!-- Block2 -->
                     <div class="block2">
                         <div class="block2-pic hov-img0">
-                        	<a href="{{route('product_detail')}}">
-                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
-                        	</a>
+                        	@if($product->i_img != null || $product->i_img != "")
+	                        	<a href="{{route('product_detail')}}">
+	                            	<img src="{{asset('img/items/'.$product->i_img)}}" alt="IMG-PRODUCT">
+	                        	</a>
+                        	@else
+	                        	<a href="{{route('product_detail')}}">
+	                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT">
+	                        	</a>
+                        	@endif
 
                             <a href="{{route('product_detail')}}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04">
                                 Lihat Detail

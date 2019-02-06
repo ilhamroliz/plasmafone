@@ -14,7 +14,7 @@
 			</a>
 
 			<span class="stext-109 cl4">
-				Detail Produk
+				Aksesoris
 			</span>
 		</div>
 	</div>

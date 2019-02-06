@@ -43,7 +43,7 @@
                         </li>
 
                         <li>
-                            <a href="product.html">Handphone</a>
+                            <a href="{{route('product_hp')}}">Handphone</a>
                             <ul class="sub-menu" style="max-height: 500px;overflow-y: scroll;">
                                 @foreach($menu_hp as $hp)
                                     <li><a href="index.html">{{$hp->i_merk}}</a></li>
