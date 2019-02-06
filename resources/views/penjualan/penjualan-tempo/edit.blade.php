@@ -810,6 +810,10 @@
             var total = 0;
             var a = $("#"+discv).val(), quantity = parseInt($("#"+qty).val()), price = parseInt($("#"+harga).val()), disc = parseInt($("#"+discp).val().replace("%", ""));
 
+            if (disc > 100) {
+                $("#"+discp).val("100%");
+            }
+
             if (a == "") {
                 a = 0;
 

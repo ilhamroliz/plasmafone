@@ -639,6 +639,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/return-penjualan/cari-tanggal', 'penjualan\ReturnPenjualanController@cariTanggal');
     Route::get('/penjualan/return-penjualan/cari/member', 'penjualan\ReturnPenjualanController@cariNotaMember');
     Route::get('/penjualan/return-penjualan/cari', 'penjualan\ReturnPenjualanController@cariNotaPenjualan');
+    Route::get('/penjualan/return-penjualan/cari/detail/{id}', 'penjualan\ReturnPenjualanController@cariNotaDetail');
+    Route::get('/penjualan/return-penjualan/retun/{idsales}/{iditem}', 'penjualan\ReturnPenjualanController@cariNotaDetail');
 	// ####################################
 	// End Return Penjualan
 	// ####################################
