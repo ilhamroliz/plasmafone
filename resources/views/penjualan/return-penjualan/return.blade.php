@@ -149,7 +149,7 @@
                                                     <div class="col-md-9">
                                                         <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="fa fa-balance-scale"></i></span>
-                                                            <input class="form-control" id="qty_baru" name="qty_baru" type="text"  style="text-transform: uppercase">
+                                                            <input class="form-control" id="qty_baru" name="qty_baru" readonly type="text"  style="text-transform: uppercase">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -390,7 +390,6 @@
                                 var value = '{{ number_format($data->sd_value, 0, ',', '') }}';
                                 var kembali = parseInt(value) * parseInt($("#qty").val());
                                 $("#kembali").val(toRupiah(kembali));
-                                console.log(value);
                                 $("#form_gb").hide('slow');
                                 $("#form_gbl").hide('slow');
                                 $("#form_gu").show('slow');
@@ -410,6 +409,12 @@
                 if ($(this).val() > qty_awal) {
                     $(this).val(qty_awal);
                 }
+                $("#aksi").val('');
+                $("#form_gb").hide('slow');
+                $("#form_gbl").hide('slow');
+                $("#form_gu").hide('slow');
+                $("#btn_position").removeClass("col-md-12");
+                $("#btn_position").addClass("col-md-6");
             })
 
             $("#qty_baru").on("keyup", function (evt) {
@@ -427,7 +432,7 @@
                 },
                 minLength: 1,
                 select: function(event, data) {
-                    $("#codespecific").val(data.item.spcode);
+                    $("#codespecific").val(data.item.data.sm_specificcode);
                 }
             });
         })

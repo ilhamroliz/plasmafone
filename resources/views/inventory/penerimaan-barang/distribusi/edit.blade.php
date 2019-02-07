@@ -410,6 +410,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		}
 
 		function terima(id, item){
+            if ( $.fn.DataTable.isDataTable('#dt_code') ) {
+                $('#dt_code').DataTable().destroy();
+            }
             var qty = 0, qtyReceived = 0;
 			hapus();
 			$('#overlay').fadeIn(200);
