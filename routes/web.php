@@ -857,6 +857,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member', 'PengelolaanMemberController@index');
     Route::get('pengelolaan-member/get-konversi', 'PengelolaanMemberController@getKonversi');
     Route::get('pengelolaan-member/update-konversi', 'PengelolaanMemberController@updateKonversi');
+    Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
 
 });
 
