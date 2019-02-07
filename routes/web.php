@@ -640,7 +640,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/return-penjualan/cari/member', 'penjualan\ReturnPenjualanController@cariNotaMember');
     Route::get('/penjualan/return-penjualan/cari', 'penjualan\ReturnPenjualanController@cariNotaPenjualan');
     Route::get('/penjualan/return-penjualan/cari/detail/{id}', 'penjualan\ReturnPenjualanController@cariNotaDetail');
-    Route::get('/penjualan/return-penjualan/retun/{idsales}/{iditem}', 'penjualan\ReturnPenjualanController@cariNotaDetail');
+    Route::get('/penjualan/return-penjualan/return/{idsales}/{iditem}/{spcode}', 'penjualan\ReturnPenjualanController@retunPenjualan');
+    Route::get('/penjualan/return-penjualan/checkStock/{item}', 'penjualan\ReturnPenjualanController@checkStock');
+    Route::get('/penjualan/return-penjualan/cariitembaru', 'penjualan\ReturnPenjualanController@cariItemBaru');
 	// ####################################
 	// End Return Penjualan
 	// ####################################
@@ -787,6 +789,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('penjualan-reguler/simpan', 'PenjualanController@savePenjualan');
     Route::post('penjualan-reguler/edit', 'PenjualanController@editPenjualan');
     Route::get('penjualan-reguler/search-stock', 'PenjualanController@searchStock');
+    Route::get('penjualan-reguler/checkStock/{item}', 'PenjualanController@checkStock');
     Route::get('penjualan-reguler/struk/{salesman}/{id}/{totHarga}/{payment_method}/{payment}/{dibayar}/{kembali}', 'PenjualanController@struck');
     Route::get('penjualan-reguler/detailPembayaran/{total}', 'PenjualanController@detailpembayaran');
 	//==============
@@ -808,6 +811,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('penjualan-tempo/getdetailmember/{id}', 'PenjualanController@getDetailMember');
     Route::post('penjualan-tempo/simpan', 'PenjualanController@savePenjualan');
     Route::get('penjualan-tempo/search-stock', 'PenjualanController@searchStock');
+    Route::get('penjualan-tempo/checkStock/{item}', 'PenjualanController@checkStock');
     Route::get('penjualan-tempo/struktempo/{salesman}/{id}/{totHarga}/{payment_method}/{payment}/{dibayar}/{kembali}', 'PenjualanController@struckTempo');
     Route::get('penjualan-tempo/detailpembayarantempo/{total}', 'PenjualanController@detailpembayaranTempo');
 	// =========================
@@ -858,7 +862,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member/get-konversi', 'PengelolaanMemberController@getKonversi');
     Route::get('pengelolaan-member/update-konversi', 'PengelolaanMemberController@updateKonversi');
     Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
-
+    Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
 });
 
     // Frontend Onlineshop============================================================== //

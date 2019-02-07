@@ -360,14 +360,23 @@
 
         function setStock(info){
             var data = info.data;
+
+            axios.get(baseUrl+'/penjualan-tempo/checkStock/'+data.i_id)
+                .then(function (response) {
+                    // handle success
+                    stockGlobal = response.data;
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+
             var price = 0;
             if (data.i_code == "") {
                 namaGlobal = data.i_nama;
             } else {
                 namaGlobal = data.i_code+" - "+data.i_nama;
             }
-
-            stockGlobal = data.s_qty;
 
             iCode = data.i_code;
 
