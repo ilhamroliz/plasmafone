@@ -448,7 +448,7 @@
                     $('.tr').remove();
                     $('#title_detail').html('<strong>Detail Penjualan</strong>');
                     $('#dt_tanggal').text(response.data[0].tanggal);
-                    $('#dt_nota').text(response.data[0].s_nota);
+                    $('#dt_nota').text(response.data[0].nota);
                     $('#dt_total').text(response.data[0].s_total_net);
                     $('#dt_salesman').text(response.data[0].salesman);
                     $('#dt_member').text(response.data[0].m_name);
@@ -456,10 +456,10 @@
                     $('#dt_address').text(response.data[0].m_address);
                     $("#aksi").hide();
                     response.data.forEach(function(element) {
-                        if (element.i_code != ""){
-                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
+                        if (element.code != ""){
+                            row = '<tr class="tr"><td>'+element.code+' - '+element.nama_item+'</td><td align="center">'+element.qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
                         } else {
-                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
+                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.specificcode +')'+'</td><td align="center">'+element.qty+'</td><td><p style="float: right">'+element.total_net+'</p></td></tr>'
                         }
                         $('#table_item tbody').append(row)
                     });
@@ -501,7 +501,7 @@
                     $('.tr').remove();
                     $('#title_detail').html('<strong>Detail Penjualan</strong>');
                     $('#dt_tanggal').text(response.data[0].tanggal);
-                    $('#dt_nota').text(response.data[0].s_nota);
+                    $('#dt_nota').text(response.data[0].nota);
                     $('#dt_total').text(response.data[0].s_total_net);
                     $('#dt_salesman').text(response.data[0].salesman);
                     $('#dt_member').text(response.data[0].m_name);
@@ -510,11 +510,17 @@
                     $("#aksi").show();
                     var url;
                     response.data.forEach(function(element) {
-                        url = baseUrl+'/penjualan/return-penjualan/retun/'+element.sd_sales+'/'+element.sd_item;
-                        if (element.i_code != ""){
-                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
+                        var spcode;
+                        if (element.specificcode == "") {
+                            spcode = null;
                         } else {
-                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.sd_specificcode +')'+'</td><td align="center">'+element.sd_qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
+                            spcode = element.specificcode;
+                        }
+                        url = baseUrl+'/penjualan/return-penjualan/return/'+element.idsales+'/'+element.iditem+'/'+spcode;
+                        if (element.code != ""){
+                            row = '<tr class="tr"><td>'+element.code+' - '+element.nama_item+'</td><td align="center">'+element.qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+ ' (' + element.specificcode +')'+'</td><td align="center">'+element.qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
                         }
                         $('#table_item tbody').append(row)
                     });
