@@ -8,7 +8,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 use DB;
 
-class frontend_controller extends Controller
+class onlineshop_controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -45,7 +45,7 @@ class frontend_controller extends Controller
             ->inRandomOrder()
             ->paginate(8);
 
-        return view('frontend', compact('menu_hp', 'menu_acces','i_merk', 'products'));
+        return view('onlineshop', compact('menu_hp', 'menu_acces','i_merk', 'products'));
     }
 
     public function product_detail($id)
@@ -75,7 +75,7 @@ class frontend_controller extends Controller
             ->where('i_id', '=', $id)
             ->first();
 
-        return view('frontend.halaman.detail_produk', compact('menu_hp', 'menu_acces', 'products'));
+        return view('onlineshop.halaman.detail_produk', compact('menu_hp', 'menu_acces', 'products'));
 
     }
 
@@ -107,7 +107,7 @@ class frontend_controller extends Controller
             ->inRandomOrder()
             ->paginate(8);
 
-        return view('frontend.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_kelompok', 'products'));
+        return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_kelompok', 'products'));
     }
 
     public function product_hp()
@@ -127,11 +127,10 @@ class frontend_controller extends Controller
             ->get();
 
         $i_merk = DB::table('d_stock')
-            ->select('s_item', 'i_merk')
-            ->distinct('d_item.i_merk')
+            ->selectRaw('distinct i_merk')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->where('i_kelompok', '=', 'HANDPHONE')
-            ->orderBy('d_item.i_merk')
+            ->orderBy('i_merk')
             ->get();
 
         $products = DB::table('d_stock')
@@ -141,10 +140,10 @@ class frontend_controller extends Controller
             ->inRandomOrder()
             ->paginate(8);
 
-        return view('frontend.handphone.index', compact('menu_hp', 'menu_acces', 'i_merk', 'products'));
+        return view('onlineshop.handphone.index', compact('menu_hp', 'menu_acces', 'i_merk', 'products'));
     }
 
-    public function product_access()
+    public function product_acces()
     {
         $menu_hp = DB::table('d_item')
             ->select('i_merk')
@@ -161,11 +160,10 @@ class frontend_controller extends Controller
             ->get();
 
         $i_merk = DB::table('d_stock')
-            ->select('s_item', 'i_merk')
-            ->distinct('d_item.i_merk')
+            ->selectRaw('distinct i_merk')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->where('i_kelompok', '=', 'ACCESORIES')
-            ->orderBy('d_item.i_merk')
+            ->orderBy('i_merk')
             ->get();
 
         $products = DB::table('d_stock')
@@ -175,6 +173,27 @@ class frontend_controller extends Controller
             ->inRandomOrder()
             ->paginate(8);
 
-        return view('frontend.aksesoris.index', compact('menu_hp', 'menu_acces', 'i_merk', 'products'));
+        return view('onlineshop.aksesoris.index', compact('menu_hp', 'menu_acces', 'i_merk', 'products'));
+    }
+
+    public function shoping_cart()
+    {
+
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
+        return view('onlineshop.halaman.shoping_cart', compact('menu_hp', 'menu_acces', 'products'));
+
     }
 }

@@ -415,7 +415,7 @@
 	                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT" class="img-fluid">
 	                        	</a>
                         	@endif
-                            <a href="{{route('product_detail',$product->i_id)}}" class="btn btn-outline-primary bg0 block2-btn flex-c-m stext-103 cl2 size-102 bor2 hov-btn3 p-lr-15 trans-04">
+                            <a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}" class="btn btn-outline-primary bg0 block2-btn flex-c-m stext-103 cl2 size-102 bor2 hov-btn3 p-lr-15 trans-04">
                                 Lihat Detail
                             </a>
                         </div>

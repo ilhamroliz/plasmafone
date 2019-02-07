@@ -1,16 +1,16 @@
-<!-- New Frontend -->
+<!-- New onlineshop -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<title>Plasmafone</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	@include('frontend.partials._htmlheader')
+	@include('onlineshop.partials._htmlheader')
 </head>
 <body class="animsition">
 
 	<!-- Header -->
-	@include('frontend.partials._header')
+	@include('onlineshop.partials._header')
 
     <!-- breadcrumb -->
     @yield('breadcrumb')
@@ -18,7 +18,7 @@
 	<!-- Content -->
 	@yield('content')
 
-	@include('frontend.partials._footer')
+	@include('onlineshop.partials._footer')
 
 	<!-- Back to top -->
 	<div class="btn-back-to-top" id="myBtn">
@@ -28,7 +28,7 @@
 	</div>
 
 
-	@include('frontend.partials._script')
+	@include('onlineshop.partials._script')
 
 </body>
 </html>
