@@ -71,10 +71,14 @@ function rupiah($angka){
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <div class="inbox-checkbox-triggered pull-right" style="padding-top: 15px;">
                     <div class="btn-group">
+                        @if(Access::checkAkses(22, 'update'))
                         <a onclick="setKonversi()" rel="tooltip" title="" data-placement="bottom" data-original-title="Konversi" class="btn btn-default"><strong><i class="fa fa-exchange fa-lg text-warning"></i></strong></a>
-                        <a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="Pengaturan" class="btn btn-default"><strong><i class="fa fa-cogs fa-lg text-primary"></i></strong></a>
+                        <a rel="tooltip" title="" data-placement="bottom" data-original-title="Pengaturan" class="btn btn-default"><strong><i class="fa fa-cogs fa-lg text-primary"></i></strong></a>
+                        @endif
                         <a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="History Penukaran Poin" class="btn btn-default"><strong><i class="fa fa-history fa-lg text-danger"></i></strong></a>
-                        <a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="Tambah Saldo Poin" class="btn btn-default"><strong><i class="fa fa-cart-plus fa-lg text-success"></i></strong></a>
+                        @if(Access::checkAkses(22, 'insert'))
+                        <a onclick="addSaldo()" rel="tooltip" title="" data-placement="bottom" data-original-title="Tambah Saldo Poin" class="btn btn-default"><strong><i class="fa fa-cart-plus fa-lg text-success"></i></strong></a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -199,6 +203,46 @@ function rupiah($angka){
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal-tambahsaldo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Tambah Saldo Member</h4>
+                </div>
+                <div class="modal-body no-padding">
+                    <form id="form-konversi" class="smart-form no-padding" novalidate="novalidate">
+                        <fieldset class="">
+                            <div class="row">
+                                <section class="col col-12" style="width: 100%">
+                                    <label class="input"> <i class="icon-prepend fa fa-user"></i>
+                                        <input type="text" id="nama-member" name="nama" placeholder="Nama Member">
+                                    </label>
+                                </section>
+                                <section class="col col-12" style="width: 100%">
+                                    <label class="input"> <i class="icon-prepend fa fa-credit-card"></i>
+                                        <input type="text" id="jmlsaldo" name="jml_saldo" placeholder="Jumlah Saldo">
+                                    </label>
+                                </section>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="updateKonversi()">
+                        Simpan
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 @endsection
 
 @section('extra_script')
@@ -244,6 +288,10 @@ function rupiah($angka){
                     $('#modal-konversi').modal('hide');
                 }
             })
+        }
+
+        function addSaldo() {
+            $('#modal-tambahsaldo').modal('show');
         }
     </script>
 

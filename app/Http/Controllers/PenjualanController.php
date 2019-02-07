@@ -61,6 +61,7 @@ class PenjualanController extends Controller
         $cari = $request->term;
         $results = [];
         $nama = DB::table('m_member')
+            ->where('m_status', '=', 'AKTIF')
             ->where(function ($q) use ($cari){
                 $q->orWhere('m_name', 'like', '%'.$cari.'%');
                 $q->orWhere('m_telp', 'like', '%'.$cari.'%');
