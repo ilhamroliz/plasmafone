@@ -36,4 +36,15 @@ class PengelolaanMemberController extends Controller
             'status' => 'sukses'
         ]);
     }
+
+    public function getSaldoPoin(Request $request)
+    {
+        $id = $request->id;
+        $data = DB::table('d_saldo')
+            ->where('s_member','=', $id)
+            ->first();
+        return Response::json(
+            $data
+        );
+    }
 }

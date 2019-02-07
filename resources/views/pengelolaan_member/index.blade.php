@@ -2,25 +2,10 @@
 
 @section('title', 'Pengelolaan Member')
 
-<?php
-use App\Http\Controllers\PlasmafoneController as Access;
-
-function rupiah($angka){
-    $hasil_rupiah = "Rp" . number_format($angka,2,',','.');
-    return $hasil_rupiah;
-}
-?>
-
 @section('extra_style')
     <style type="text/css">
-        .dataTables_length {
-            float: right;
-        }
-        .dt-toolbar-footer > :last-child, .dt-toolbar > :last-child {
-            padding-right: 0 !important;
-        }
-        .col-sm-1.col-xs-12.hidden-xs {
-            padding: 0px;
+        .ui-autocomplete-input {
+            z-index: 909 !important;
         }
     </style>
 @endsection
@@ -205,7 +190,7 @@ function rupiah($angka){
 
     <!-- Modal -->
     <div class="modal fade" id="modal-tambahsaldo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -218,12 +203,20 @@ function rupiah($angka){
                         <fieldset class="">
                             <div class="row">
                                 <section class="col col-12" style="width: 100%">
-                                    <label class="input"> <i class="icon-prepend fa fa-user"></i>
-                                        <input type="text" id="nama-member" name="nama" placeholder="Nama Member">
+                                    <label class="label">Nama Member</label>
+                                    <label class="input">
+                                        <input type="text" id="namamember" name="nama_member" placeholder="Nama Member">
                                     </label>
                                 </section>
-                                <section class="col col-12" style="width: 100%">
+                                <section class="col col-6">
+                                    <label class="label">Saldo Poin Saat ini</label>
                                     <label class="input"> <i class="icon-prepend fa fa-credit-card"></i>
+                                        <input type="text" id="jmlsaldo" name="saldo_now" placeholder="Jumlah Saldo">
+                                    </label>
+                                </section>
+                                <section class="col col-6">
+                                    <label class="label">Jumlah Pembelian</label>
+                                    <label class="input"> <i class="icon-prepend fa fa-cart-plus"></i>
                                         <input type="text" id="jmlsaldo" name="jml_saldo" placeholder="Jumlah Saldo">
                                     </label>
                                 </section>
@@ -255,11 +248,20 @@ function rupiah($angka){
                 allowZero:false,
                 suffix: ' Poin'
             });
+
             $('#uang').maskMoney({
                 thousands:'.',
                 decimal:',',
                 allowZero:false,
                 prefix: 'Rp. '
+            });
+
+            $( "#namamember" ).autocomplete({
+                source: baseUrl+'/penjualan-reguler/cari-member',
+                minLength: 1,
+                select: function(event, data) {
+                    setSaldo(data.item.id);
+                }
             });
         })
 
@@ -292,6 +294,17 @@ function rupiah($angka){
 
         function addSaldo() {
             $('#modal-tambahsaldo').modal('show');
+        }
+
+        function setSaldo(data) {
+            console.log(data);
+            axios.get(baseUrl+'/pengelolaan-member/get-saldo-poin', {
+                params: {
+                    id: data
+                }
+            }).then((response) => {
+                console.log(response);
+            })
         }
     </script>
 
