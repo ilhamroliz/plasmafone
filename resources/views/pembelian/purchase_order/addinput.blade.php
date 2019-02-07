@@ -461,7 +461,7 @@
                         icon: "fa fa-check bounce animated"
                     });
 
-                    {{--  window.open("{{url('/pembelian/konfirmasi-pembelian/print')}}"+"/"+data.pcId[i].idpc);  --}}
+                    window.open("{{url('/pembelian/purchase-order/print')}}"+"/"+response.data.id);
                     window.location.href = baseUrl+'/pembelian/purchase-order/tambah';
 
                 } else {

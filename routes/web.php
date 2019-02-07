@@ -466,7 +466,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::match(['get', 'post'], '/pembelian/purchase-order/multiple-delete', 'PurchaseOrderController@multiple_delete_purchase_order');
     Route::get('/pembelian/purchase-order/cetak', 'PurchaseOrderController@cetak_purchase');
     Route::get('/pembelian/purchase-order/get-purchase-data/{id}', 'PurchaseOrderController@get_purchase_data');
-    Route::get('/pembelian/purchase-order/print/{id}', 'PurchaseOrderController@print_purchase');
+    Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
     Route::get('/pembelian/purchase-order/purchase-pdf/{id}', 'PurchaseOrderController@viewpdf_purchase');
     Route::get('/pembelian/purchase-order/generate-pdf/{id}', 'PurchaseOrderController@pdf_purchase');
 
