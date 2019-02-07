@@ -259,22 +259,22 @@
 					<div class="block2">
 						<div class="block2-pic hov-img0" style="height: 335px; display: flex; align-items: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
                         	@if($product->i_img != null || $product->i_img != "")
-	                        	<a href="{{route('product_detail')}}">
+	                        	<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}">
 	                            	<img src="{{asset('img/items/'.$product->i_img)}}" alt="IMG-PRODUCT" class="img-fluid">
 	                        	</a>
                         	@else
-	                        	<a href="{{route('product_detail')}}">
+	                        	<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}">
 	                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT" class="img-fluid">
 	                        	</a>
                         	@endif
-							<a href="{{route('product_detail')}}" class="btn btn-outline-primary block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04">
+							<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}" class="btn btn-outline-primary block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04">
 								Lihat Detail
 							</a>
 						</div>
 
 						<div class="block2-txt flex-w flex-t p-t-14">
 							<div class="block2-txt-child1 flex-col-l ">
-								<a href="{{route('product_detail')}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+								<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
 									{{$product->i_nama}}
 								</a>
 
