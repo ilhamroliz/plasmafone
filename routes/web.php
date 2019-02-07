@@ -858,7 +858,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member/get-konversi', 'PengelolaanMemberController@getKonversi');
     Route::get('pengelolaan-member/update-konversi', 'PengelolaanMemberController@updateKonversi');
     Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
-
+    Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
 });
 
     // Frontend Onlineshop============================================================== //

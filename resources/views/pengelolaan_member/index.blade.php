@@ -199,23 +199,24 @@
                     <h4 class="modal-title" id="myModalLabel">Tambah Saldo Member</h4>
                 </div>
                 <div class="modal-body no-padding">
-                    <form id="form-konversi" class="smart-form no-padding" novalidate="novalidate">
+                    <form id="form-belipoin" class="smart-form no-padding" novalidate="novalidate">
                         <fieldset class="">
                             <div class="row">
                                 <section class="col col-12" style="width: 100%">
                                     <label class="label">Nama Member</label>
                                     <label class="input">
                                         <input type="text" id="namamember" name="nama_member" placeholder="Nama Member">
+                                        <input type="hidden" id="id_member" name="id_member">
                                     </label>
                                 </section>
                                 <section class="col col-6">
                                     <label class="label">Saldo Poin Saat ini</label>
                                     <label class="input"> <i class="icon-prepend fa fa-credit-card"></i>
-                                        <input type="text" id="jmlsaldo" name="saldo_now" placeholder="Jumlah Saldo">
+                                        <input type="text" id="saldo_now" name="saldo_now" placeholder="Jumlah Saldo" readonly>
                                     </label>
                                 </section>
                                 <section class="col col-6">
-                                    <label class="label">Jumlah Pembelian</label>
+                                    <label class="label">Jumlah Penambahan</label>
                                     <label class="input"> <i class="icon-prepend fa fa-cart-plus"></i>
                                         <input type="text" id="jmlsaldo" name="jml_saldo" placeholder="Jumlah Saldo">
                                     </label>
@@ -228,7 +229,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="updateKonversi()">
+                    <button type="button" class="btn btn-primary" onclick="simpanPembelianPoin()">
                         Simpan
                     </button>
                 </div>
@@ -243,6 +244,20 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#saldo').maskMoney({
+                thousands:'.',
+                decimal:',',
+                allowZero:false,
+                suffix: ' Poin'
+            });
+
+            $('#jmlsaldo').maskMoney({
+                thousands:'.',
+                decimal:',',
+                allowZero:false,
+                suffix: ' Poin'
+            });
+
+            $('#saldo_now').maskMoney({
                 thousands:'.',
                 decimal:',',
                 allowZero:false,
@@ -296,14 +311,43 @@
             $('#modal-tambahsaldo').modal('show');
         }
 
-        function setSaldo(data) {
-            console.log(data);
+        function setSaldo(id) {
             axios.get(baseUrl+'/pengelolaan-member/get-saldo-poin', {
                 params: {
-                    id: data
+                    id: id
                 }
             }).then((response) => {
-                console.log(response);
+                var data = response.data;
+                var saldo = parseInt(data.s_saldo);
+                $('#saldo_now').maskMoney('mask', saldo);
+                $('#id_member').val(id);
+            })
+        }
+
+        function simpanPembelianPoin() {
+            axios.get(baseUrl+'/pengelolaan-member/simpan-saldo-poin?'+$('#form-belipoin').serialize()).then((response) => {
+                if (response.data.status == 'sukses'){
+                    $.smallBox({
+                        title: "Berhasil",
+                        content: 'Penambahan saldo berhasil...',
+                        color: "#739E73",
+                        timeout: 3000,
+                        icon: "fa fa-check bounce animated"
+                    });
+                } else {
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Simpan gagal, hubungi admin...",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                }
+                $('#namamember').val('');
+                $('#id_member').val("");
+                $('#saldo_now').val("");
+                $('#jmlsaldo').val("");
+                $('#modal-tambahsaldo').modal('hide');
             })
         }
     </script>
