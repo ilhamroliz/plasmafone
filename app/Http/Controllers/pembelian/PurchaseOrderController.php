@@ -14,6 +14,7 @@ use DB;
 use Session;
 use PDF;
 use Response;
+use Crypt;
 
 class PurchaseOrderController extends Controller
 {
@@ -62,11 +63,28 @@ class PurchaseOrderController extends Controller
                     $diskP = $request->diskP;
                     $diskV = $request->diskV;
                     $idNota = $request->idNota;
+                    $subT = $request->subTotal;
 
+                    $pecah1 = explode(' ', $request->htgDiskP);
+                    $htgDiskP = $pecah1[0];
+                    $pecah2 = explode(' ', $request->htgPajak);
+                    $htgPajak = $pecah2[0];
+
+                    if(strpos($request->htgDiskV, '.') == true){
+                        $htgDiskV = implode(explode('.', $request->htgDiskV));                    
+                    }else{
+                        $htgDiskV = $request->htgDiskV;
+                        if($htgDiskV == ''){
+                            $htgDiskV = 0;
+                        }
+                    }
+                    
+                    /// UPDATE ke D_PURCHASE_CONFIRM
                     for($i = 0; $i < count($idNota); $i++){
                         DB::table('d_purchase_confirm')->where('pc_id', $idNota[$i])->update([ 'pc_status' => 'Y' ]);
                     }
 
+                    /// GET Id for PURCHASE ID
                     $getMax = DB::table('d_purchase')->max('p_id');
                     if($getMax == null){
                         $idPO = 1;
@@ -77,68 +95,17 @@ class PurchaseOrderController extends Controller
                     $now = Carbon::now('Asia/Jakarta')->format('d/m/Y');
                     $nowInsert = Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s');
 
-                    $subTotal = 0; $dv = 0;
-                    for($i = 0; $i < count($qty); $i++){
-                        if(strpos($price[$i], '.') == true){
-                            $harga = implode(explode('.', $price[$i]));
-                        }else{
-                            $harga = $price[$i];
-                        }
-
-                        if(strpos($qty[$i], '.') == true){
-                            $unit = implode(explode('.', $qty[$i]));
-                        }else{
-                            $unit = $qty[$i];
-                        }
-
-                        if(strpos($diskV[$i], '.') == true){
-                            $diskVal = implode(explode('.', $diskV[$i]));
-                        }else{
-                            $diskVal = $diskV[$i];
-                        }
-
-
-                        if($diskP[$i] != null && $diskV[$i] != null){
-                            $total = ($unit * $harga * ((100 - $diskP[$i]) / 100)) - $diskVal;
-                        }else if($diskP[$i] != null && $diskV[$i] == null){
-                            $total = $unit * $harga * ((100 - $diskP[$i]) / 100);
-                        }else if($diskP[$i] == null && $diskV[$i] != null){
-                            $total = ($unit * $harga) - $diskVal;
-                        }else{
-                            $total = $unit * $harga;
-                        }
-
-                        $subTotal += $total;
-                        $dv += $diskVal;
-
-                    }
-
-                    $dp =0; 
-                    for($i = 0; $i < count($qty); $i++){
-
-                        if(strpos($price[$i], '.') == true){
-                            $harga = implode(explode('.', $price[$i]));
-                        }else{
-                            $harga = $price[$i];
-                        }
-                        $harga = intval($harga);
-
-                        if(strpos($qty[$i], '.') == true){
-                            $unit = implode(explode('.', $qty[$i]));
-                        }else{
-                            $unit = $qty[$i];
-                        }
-                        $unit = intval($unit);
-
-                        $diskPc = $diskP[$i] * (($unit * $harga) / $subTotal);
-                        $dp += $diskPc;
-
-                    }
-
                     $dateT = null;
                     if($request->tempo != ''){
                         $pecah = explode('/', $request->tempo);
                         $dateT = $pecah[2].'-'.$pecah[1].'-'.$pecah[0];
+                    }
+
+                    $subTotal = implode(explode('.', $request->htgTotal));
+
+                    $totalDT = 0;
+                    for($i = 0; $i < count($subT); $i++){
+                        $totalDT += implode(explode('.', $subT[$i]));
                     }
 
                     $notaPO = $this->getDataId($now);
@@ -147,9 +114,10 @@ class PurchaseOrderController extends Controller
                         'p_nota' => $notaPO,
                         'p_date' => $nowInsert,
                         'p_supplier' => $idSupp,
-                        'p_total_gross' => $subTotal,
-                        'p_disc_value' => $dv,
-                        'p_disc_persen' => $dp,
+                        'p_total_gross' => $totalDT,
+                        'p_disc_value' => $htgDiskV,
+                        'p_disc_persen' => $htgDiskP,
+                        'p_pajak' => $htgPajak,
                         'p_total_net' => $subTotal,
                         'p_type' => $request->tipe,
                         'p_due_date' => $dateT,
@@ -159,18 +127,33 @@ class PurchaseOrderController extends Controller
                     $countDTPO = 0;
                     for($i = 0; $i < count($qty); $i++){
 
-                        if(strpos($price[$i], '.') == true){
+                        $harga = 0;
+                        if($price[$i] != null){
                             $harga = implode(explode('.', $price[$i]));
-                        }else{
-                            $harga = $price[$i];
                         }
 
-                        if(strpos($qty[$i], '.') == true){
+                        $unit = 0;
+                        if($qty[$i] != null){
                             $unit = implode(explode('.', $qty[$i]));
-                        }else{
-                            $unit = $qty[$i];
                         }
-                        
+
+                        $divDiskV = 0;
+                        if($diskV[$i] != null){
+                            $valDisk = implode(explode('.', $diskV[$i]));
+                            $divDiskV = $valDisk / $unit;
+                        }
+
+
+                        if(strpos($diskP[$i], ' ') == true){
+                            $pecah4 = explode(' ', $diskP[$i]);
+                            $persenDisk = $pecah4[0];
+                        }else{
+                            $persenDisk = 0;
+                        }
+
+                        $subTot = implode(explode('.', $subT[$i]));
+                        $divSubT = $subTot / $unit;
+
                         $cekSC = DB::table('d_item')->where('i_id', $idItem[$i])->select('i_specificcode')->first();
                         if($cekSC->i_specificcode == 'Y'){
                             $arayPODT = array();
@@ -181,17 +164,15 @@ class PurchaseOrderController extends Controller
                                     'pd_item' => $idItem[$i],
                                     'pd_qty' => 1,
                                     'pd_value' => $harga,
-                                    'pd_disc_value' => 0,
-                                    'pd_disc_persen' => 0,
-                                    'pd_total_net' => $harga,
+                                    'pd_disc_value' => $divDiskV,
+                                    'pd_disc_persen' => $persenDisk,
+                                    'pd_total_net' => $divSubT,
                                     'pd_qtyreceived' => 0
                                 ]);
                                 array_push($arayPODT, $aray);
                                 $countDTPO += 1;
                             }
-                            // dd($arayPODT);
                             DB::table('d_purchase_dt')->insert($arayPODT);
-
                         }else{
                             DB::table('d_purchase_dt')->insert([
                                 'pd_purchase' => $idPO,
@@ -199,9 +180,9 @@ class PurchaseOrderController extends Controller
                                 'pd_item' => $idItem[$i],
                                 'pd_qty' => $qty[i],
                                 'pd_value' => $harga,
-                                'pd_disc_value' => 0,
-                                'pd_disc_persen' => 0,
-                                'pd_total_net' => $harga,
+                                'pd_disc_value' => $divDiskV,
+                                'pd_disc_persen' => $persenDisk,
+                                'pd_total_net' => $divSubT,
                                 'pd_qtyreceived' => 0
                             ]);
                             $countDTPO += 1;
@@ -211,7 +192,8 @@ class PurchaseOrderController extends Controller
 
                     DB::commit();
                     return json_encode([
-                        'status' => 'tpoSukses'
+                        'status' => 'tpoSukses',
+                        'id' => Crypt::encrypt($idPO)
                     ]);
                 } catch (\Exception $e) {
                     DB::rollback();
@@ -229,7 +211,7 @@ class PurchaseOrderController extends Controller
                 $check = $request->check;
                 $getDataSupp = DB::table('d_supplier')
                     ->where('s_id', $idSupp)
-                    ->select('s_id', 's_company', 's_phone', 's_fax', 's_address', 's_jatuh_tempo')->get();
+                    ->select('s_id', 's_company', 's_phone', 's_fax', 's_address', 's_jatuh_tempo', 's_limit')->get();
 
                 $arayDT = array();
                 for($i = 0; $i < count($check); $i++){
@@ -297,6 +279,22 @@ class PurchaseOrderController extends Controller
             'data' => $getData,
             'dataDT' => $getDataDT
         ]);
+
+    }
+
+    public function print($id){
+
+        $id = Crypt::decrypt($id);
+        $datas = DB::table('d_purchase')
+            ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
+            ->join('d_supplier', 's_id', '=', 'p_supplier')
+            ->join('d_item', 'i_id', '=', 'pd_item')
+            ->where('p_id', $id)
+            ->select('p_id', 'p_nota', 's_company', 's_phone', 'p_date', 
+                    'i_nama', DB::raw('SUM(pd_qty) as pd_qty'), 'pd_value', 'pd_disc_persen', DB::raw('SUM(pd_disc_value) as pd_disc_value'))
+            ->groupBy('pd_item')->get();
+
+        return view('pembelian.purchase_order.print_purchase')->with(compact('datas'));
 
     }
 }

@@ -466,7 +466,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::match(['get', 'post'], '/pembelian/purchase-order/multiple-delete', 'PurchaseOrderController@multiple_delete_purchase_order');
     Route::get('/pembelian/purchase-order/cetak', 'PurchaseOrderController@cetak_purchase');
     Route::get('/pembelian/purchase-order/get-purchase-data/{id}', 'PurchaseOrderController@get_purchase_data');
-    Route::get('/pembelian/purchase-order/print/{id}', 'PurchaseOrderController@print_purchase');
+    Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
     Route::get('/pembelian/purchase-order/purchase-pdf/{id}', 'PurchaseOrderController@viewpdf_purchase');
     Route::get('/pembelian/purchase-order/generate-pdf/{id}', 'PurchaseOrderController@pdf_purchase');
 
@@ -859,10 +859,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Pengelolaan Member
     Route::get('pengelolaan-member', 'PengelolaanMemberController@index');
-
+    Route::get('pengelolaan-member/get-konversi', 'PengelolaanMemberController@getKonversi');
+    Route::get('pengelolaan-member/update-konversi', 'PengelolaanMemberController@updateKonversi');
+    Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
+    Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
 });
 
-    // Frontend ============================================================== //
-    Route::get('/frontend', 'frontend_controller@index')->name('frontend');
-    Route::get('/frontend/product-detail', 'frontend_controller@product_detail')->name('product_detail');
-    Route::get('/frontend/product-all', 'frontend_controller@product_all')->name('product_all');
+    // Frontend Onlineshop============================================================== //
+    Route::prefix('onlineshop')->group(function () {
+        Route::get('/', 'frontend_controller@index')->name('frontend');
+        Route::get('/product-all', 'frontend_controller@product_all')->name('product_all');
+        Route::get('/handphone', 'frontend_controller@product_hp')->name('product_hp');
+        Route::get('/accessories', 'frontend_controller@product_access')->name('product_access');
+        Route::get('/product-detail/{id}', 'frontend_controller@product_detail')->name('product_detail');
+    });

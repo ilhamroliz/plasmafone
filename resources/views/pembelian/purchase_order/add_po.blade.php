@@ -127,22 +127,30 @@
                             </div>
 
                             <!-- widget body text-->
-                            <div class="tab-content padding-10">
-                                <div class="tab-pane fade in active">
-                                    <table id="dt_co" class="table table-striped table-bordered table-hover"
-                                           width="100%">
-                                        <thead class="table-responsive">
-                                            <tr>
-                                                <th width="10%"><div class="text-center">
-                                                    <input type="checkbox" onclick="myCheck()" id="cekParent"></div></th>
-                                                <th width="75%">No. Nota</th>
-                                                <th width="15%">Aksi</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody id="dtcoBody">
-                                        </tbody>
-                                    </table>
+                            <div class="ibox">
+                                <div class="ibox-content">
+                                    <div class="tab-content padding-10">
+                                        <div class="tab-pane fade in active">
+                                            <table id="dt_co" class="table table-striped table-bordered table-hover" width="100%">
+                                                <thead class="table-responsive">
+                                                    <tr>
+                                                        <th width="10%">
+                                                            <div class="text-center">
+                                                                {{--  <div class="checkbox checkbox-success checkbox-single checkbox-inline">  --}}
+                                                                    <input type="checkbox" onclick="myCheck()" id="cekParent">
+                                                                {{--  </div>  --}}
+                                                            </div>
+                                                        </th>
+                                                        <th width="75%">No. Nota</th>
+                                                        <th width="15%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+        
+                                                <tbody id="dtcoBody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>                                    
                                 </div>
                             </div>
 
@@ -297,7 +305,11 @@
                     for(var i = 0; i < response.data.dataDT.length; i++){
 
                         $('#dt_co').DataTable().row.add([
-                            '<div class="text-center"><input type="checkbox" name="check[]" class="form-control checkB" value="'+response.data.dataDT[i].pc_id+'"></div>',
+                            '<div class="text-center">'+
+                                {{--  '<div class="checkbox checkbox-success checkbox-single checkbox-inline">'+  --}}
+                                '<input type="checkbox" name="check[]" class="checkB" value="'+response.data.dataDT[i].pc_id+'">'+
+                                {{--  '</div>'+  --}}
+                                '</div>',
                             response.data.dataDT[i].pc_nota,
                             '<div class="text-center">'+
                                 '<button class="btn btn-primary btn-circle" onclick="detil('+response.data.dataDT[i].pc_id+')"><i class="fa fa-list"></i></button>'+

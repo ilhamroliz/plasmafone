@@ -8,26 +8,30 @@
 				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 			</a>
 
-			<span class="stext-109 cl4">
+			<a href="{{route('product_all')}}" class="stext-109 cl8 hov-cl1 trans-04">
 				Produk
+				<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+			</a>
+
+			<span class="stext-109 cl4">
+				Handphone
 			</span>
 		</div>
 	</div>
 @endsection
 
 @section('content')
-
-<div class="bg0 m-t-23 p-b-140">
+	<div class="bg0 m-t-23 p-b-140">
 		<div class="container">
 			<div class="flex-w flex-sb-m p-b-52">
 				<div class="flex-w flex-l-m filter-tope-group m-tb-10">
 					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
 						All Products
 					</button>
-					@foreach($i_kelompok as $kelompok)
-					<?php $temp = mb_convert_case($kelompok->i_kelompok, MB_CASE_TITLE, "UTF-8"); ?>
-					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".{{$kelompok->i_kelompok}}">
-						{{$temp}}
+					@foreach($i_merk as $merk)
+					<?php $merks = mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8"); ?>
+					<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".{{$merk->i_merk}}">
+						{{$merks}}
 					</button>
 					@endforeach
 
@@ -250,7 +254,7 @@
 
 			<div class="row isotope-grid">
 				@foreach($products as $product)
-				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->i_kelompok}}">
+				<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->i_merk}}">
 					<!-- Block2 -->
 					<div class="block2">
 						<div class="block2-pic hov-img0" style="height: 300px; display: flex; align-items: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
@@ -263,8 +267,7 @@
 	                            	<img src="{{asset('template_asset/frontend/images/product-mark.jpg')}}" alt="IMG-PRODUCT" class="img-fluid">
 	                        	</a>
                         	@endif
-
-							<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}" class="btn btn-outline-primary block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04 js-show-modal1">
+							<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}" class="btn btn-outline-primary block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn3 p-lr-15 trans-04">
 								Lihat Detail
 							</a>
 						</div>
@@ -299,5 +302,4 @@
 
 		</div>
 	</div>
-
 @endsection

@@ -113,15 +113,8 @@
                                                 <input type="text" id="faxSupp" class="form-control" value="{{ $supp->s_fax }}" readonly>
                                             </div>
                                         </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-    
-                                <div class="col-md-6">
-                                    
-                                    <div class="form-group">
-    
-                                        <div class="col-md-12">
+
+                                        <div class="col-md-12 margin-top-10">
                                             <label for="" class="col-md-4">Tipe Pembayaran</label>
                                             <div class="col-md-8">
                                                 <select id="payment" class="form-control" onchange="changePayment()">
@@ -131,17 +124,73 @@
                                                 </select>
                                             </div>
                                         </div>
-
+    
                                         <div class="col-md-12 margin-top-10">
                                             <label for="" class="col-md-4">Jatuh Tempo</label>
                                             <div class="col-md-8">
                                                 <input type="hidden" id="hiddenTempo" value="{{ $getTempo }}">
                                                 <input type="text" id="tempo" class="form-control" value="{{ $getTempo }}" disabled>
                                             </div>
-                                        </div>  
-    
+                                        </div>
                                     </div>
-                            </div>
+                                </div>
+    
+                                <div class="col-md-6">                                   
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <label for="" class="col-md-4">Batas Maks Hutang</label>
+                                            <div class="col-md-8">
+                                                <input type="text" id="htgBatas" class="form-control text-align-right" value="{{ number_format($supp->s_limit, 0,",",".") }}" readonly>
+                                            </div>
+                                        </div>
+                                        @endforeach
+
+                                        <div class="col-md-12 margin-top-10">
+                                            <label for="" class="col-md-4">Hutang Sekarang</label>
+                                            <div class="col-md-8">
+                                                <input type="text" id="htgNow" class="form-control text-align-right" value="" readonly>
+                                            </div>
+                                        </div>                                
+                                        
+                                        <form id="formDPVP">
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">Diskon Persen (%)</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="htgDiskP" name="htgDiskP" class="form-control text-align-right persen" onkeyup="cekpersenS()">
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">Diskon Value</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="htgDiskV" name="htgDiskV" class="form-control text-align-right" onkeyup="getTotal()">
+                                                </div>
+                                            </div>
+        
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">Pajak (%)</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="htgPajak" name="htgPajak" class="form-control text-align-right persen" onkeyup="cekpajak()">
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">Total PO</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="htgTotal" name="htgTotal" class="form-control text-align-right" readonly>
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+                                        <div class="col-md-12 margin-top-10">
+                                            <label for="" class="col-md-4">Estimasi Total Hutang</label>
+                                            <div class="col-md-8">
+                                                <input type="text" id="htgEstTotal" class="form-control text-align-right" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             <form id="idNota">
                                 @foreach($check as $cek)
                                 <input type="hidden" value="{{ $cek }}" name="idNota[]">
@@ -164,16 +213,28 @@
                                         </thead>
 
                                         <tbody id="dtcoBody">
-                                            @foreach ($getDataDT as $dt)
+                                            @for($i = 0; $i < count($getDataDT); $i++)
                                             <tr>
-                                                <td><input type="hidden" name="idItem[]" value="{{ $dt->pcd_item }}">{{ $dt->i_nama }}</td>
-                                                <td><input type="text" name="qty[]" id="qty{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right qty" style="width:100%" value="{{ $dt->pcd_qty }}" readonly></td>
-                                                <td><input type="text" name="price[]" id="price{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right price" style="width:100%" onkeyup="cekprice({{ $dt->pcd_purchaseconfirm }})"></td>
-                                                <td><input type="text" name="diskP[]" id="diskP{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right diskP" style="width:100%" onkeyup="cekpersen({{ $dt->pcd_purchaseconfirm }})"></td>
-                                                <td><input type="text" name="diskV[]" id="diskV{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right diskV" style="width:100%" onkeyup="cekvalue({{ $dt->pcd_purchaseconfirm }})"></td>
-                                                <td><input type="text" name="subTotal[]" id="subTotal{{ $dt->pcd_purchaseconfirm }}" class="form-control text-align-right subTotal" style="width:100%" readonly></td>
+                                                <td>
+                                                    <input type="hidden" name="idItem[]" value="{{ $getDataDT[$i]->pcd_item }}">{{ $getDataDT[$i]->i_nama }}
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="qty[]" id="qty{{ $i }}" class="form-control text-align-right qty" style="width:100%" value="{{ $getDataDT[$i]->pcd_qty }}" readonly>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="price[]" id="price{{ $i }}" class="form-control text-align-right price" style="width:100%" onkeyup="getSubTotal({{ $i }})">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="diskP[]" id="diskP{{ $i }}" class="form-control text-align-right diskP persen" style="width:100%" onkeyup="cekpersen({{ $i }})">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="diskV[]" id="diskV{{ $i }}" class="form-control text-align-right diskV" style="width:100%" onkeyup="getSubTotal({{ $i }})">
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="subTotal[]" id="subTotal{{ $i }}" class="form-control text-align-right subTotal" style="width:100%" readonly>
+                                                </td>
                                             </tr>
-                                            @endforeach
+                                            @endfor
                                         </tbody>
                                     </table>
                                 </div>
@@ -226,39 +287,48 @@
 
             $('.price').maskMoney({thousands: '.', precision: 0});
             $('.diskV').maskMoney({thousands: '.', precision: 0});
+            $('#htgDiskV').maskMoney({thousands: '.', precision: 0});
 
+            $('.persen').maskMoney({thousands: '.', precision: 0, suffix: ' %'});
         })
 
         function cekpersen(id){
-            if($('#diskP'+id).val() >= 100){
-                $('#diskP'+id).val(100);
+            cndiskP = $('#diskP'+id).val();
+            strdiskP = cndiskP.replace(/[^0-9\-]+/g,"");
+            diskP = parseInt(strdiskP);
+            if(diskP >= 100){
+                $('#diskP'+id).val(100+' %');
             }
             getSubTotal(id);
         }
 
-        function cekprice(id){
-            getSubTotal(id);
+        function cekpersenS(){
+            cnhtgDiskP = $('#htgDiskP').val();
+            strhtgDiskP = cnhtgDiskP.replace(/[^0-9\-]+/g,"");
+            htgDiskP = parseInt(strhtgDiskP);
+            if(htgDiskP >= 100){
+                $('#htgDiskP').val(100+' %');
+            }
+            getTotal();
         }
 
-        function cekvalue(id){
-            getSubTotal(id);
+        function cekpajak(){
+            cnhtgPajak = $('#htgPajak').val();
+            strhtgPajak = cnhtgPajak.replace(/[^0-9\-]+/g,"");
+            htgPajak = parseInt(strhtgPajak);
+            if(htgPajak >= 100){
+                $('#htgPajak').val(100+' %');
+            }
+            getTotal();
         }
 
-        $(".diskP").on("keypress",function (event) {
+        $(".persen").on("keypress",function (event) {
             if ((event.which < 48 || event.which > 57)) {
                 event.preventDefault();
             }
-            if ($(this).val() != null || $(this).val() != ""){
-                $('#simpan').attr("disabled", false);
-            } else {
-                $('#simpan').attr("disabled", true);
-            }
-            if (event.which == 13){
-                simpan();
-            }
-
         });
 
+        
         function getSubTotal(id){
 
             if($('#qty'+id).val() == ''){
@@ -295,10 +365,55 @@
 
 
             var subTotal = (( qty * price ) * (( 100 - diskP ) / 100)) - diskV;
-            console.log(price);
-            console.log(subTotal);
-
             $('#subTotal'+id).val(accounting.formatMoney(subTotal, "", 0, ".", ","));
+
+            getTotal();
+        }
+
+        function getTotal(){
+
+            var total = 0;
+            for (var i = 0; i < $('#dt_co').DataTable().rows()[0].length; i++) {
+
+                if($('#subTotal'+i).val() == ''){
+                    subTotal = 0;
+                }else{
+                    cnSubTotal = $('#subTotal'+i).val();
+                    strsubtotal = cnSubTotal.replace(/[^0-9\-]+/g,"");
+                    subTotal = parseInt(strsubtotal);
+                }
+
+                total += subTotal;
+            }
+
+            if($('#htgDiskP').val() == ''){
+                diskPS = 0;
+            }else{
+                cnDiskPS = $('#htgDiskP').val();
+                strDiskPS = cnDiskPS.replace(/[^0-9\-]+/g,"");
+                diskPS = parseInt(strDiskPS);
+            }
+
+            if($('#htgDiskV').val() == ''){
+                diskVS = 0;
+            }else{
+                cnDiskVS = $('#htgDiskV').val();
+                strDiskVS = cnDiskVS.replace(/[^0-9\-]+/g,"");
+                diskVS = parseInt(strDiskVS);
+            }
+
+            if($('#htgPajak').val() == ''){
+                pajak = 0;
+            }else{
+                cnPajak = $('#htgPajak').val();
+                strPajak = cnPajak.replace(/[^0-9\-]+/g,"");
+                pajak = parseInt(strPajak);
+            }
+
+            var finalTotalBT = ( total * (( 100 - diskPS) / 100 )) - diskVS;
+            var finalTotal = finalTotalBT + ( finalTotalBT *  ( pajak / 100 ));
+
+            $('#htgTotal').val(accounting.formatMoney(finalTotal, "", 0, ".", ","));
         }
 
         function changePayment(){
@@ -333,7 +448,7 @@
             for (var i = 0; i < $('#dt_co').DataTable().rows()[0].length; i++) {
                 ar = ar.add($('#dt_co').DataTable().row(i).node());
             }
-            var data = ar.find('input').serialize()+'&id='+idSupp+'&tipe='+tipe+'&tempo='+tempo+'&'+$('#idNota').serialize();
+            var data = ar.find('input').serialize()+'&id='+idSupp+'&tipe='+tipe+'&tempo='+tempo+'&'+$('#idNota').serialize() +'&'+$('#formDPVP').serialize();
 
             axios.post(baseUrl+'/pembelian/purchase-order/tambah', data).then((response) => {
 
@@ -346,7 +461,7 @@
                         icon: "fa fa-check bounce animated"
                     });
 
-                    {{--  window.open("{{url('/pembelian/konfirmasi-pembelian/print')}}"+"/"+data.pcId[i].idpc);  --}}
+                    window.open("{{url('/pembelian/purchase-order/print')}}"+"/"+response.data.id);
                     window.location.href = baseUrl+'/pembelian/purchase-order/tambah';
 
                 } else {
