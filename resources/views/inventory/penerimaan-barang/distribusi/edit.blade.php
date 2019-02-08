@@ -512,9 +512,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         });
 
                         $("#kode").on("keypress",function (event) {
-                            if ((event.which < 48 || event.which > 57)) {
-                                event.preventDefault();
-                            }
+                            
                             if ($(this).val() != null || $(this).val() != ""){
                                 $('#simpan').attr("disabled", false);
                             } else {
