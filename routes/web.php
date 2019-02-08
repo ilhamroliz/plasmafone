@@ -643,6 +643,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/return-penjualan/return/{idsales}/{iditem}/{spcode}', 'penjualan\ReturnPenjualanController@retunPenjualan');
     Route::get('/penjualan/return-penjualan/checkStock/{item}', 'penjualan\ReturnPenjualanController@checkStock');
     Route::get('/penjualan/return-penjualan/cariitembaru', 'penjualan\ReturnPenjualanController@cariItemBaru');
+    Route::get('/penjualan/return-penjualan/cariitemlain', 'penjualan\ReturnPenjualanController@cariItemlain');
 	// ####################################
 	// End Return Penjualan
 	// ####################################

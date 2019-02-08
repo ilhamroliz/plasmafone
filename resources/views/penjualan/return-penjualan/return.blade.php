@@ -140,6 +140,7 @@
                                                             <span class="input-group-addon"><i class="fa fa-cube"></i></span>
                                                             <input class="form-control" id="item_baru" name="item_baru" type="text"  style="text-transform: uppercase">
                                                             <input type="hidden" name="codespecific" id="codespecific">
+                                                            <input type="hidden" name="idstock" id="idstock">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -163,6 +164,9 @@
                                                         <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="fa fa-cube"></i></span>
                                                             <input class="form-control" id="item_lain" name="item_lain" type="text"  style="text-transform: uppercase">
+                                                            <input type="hidden" id="iditem_lain" name="iditem_lain">
+                                                            <input type="hidden" name="code_lain" id="code_lain">
+                                                            <input type="hidden" name="idstock_lain" id="idstock_lain">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -245,7 +249,7 @@
                                     <div class="form-action">
                                         <div class="row">
                                             <div class="col-md-6" id="btn_position">
-                                                <button class="btn btn-primary pull-right" id="btn_search"><i class="fa fa-send"></i> Lanjutkan</button>
+                                                <button class="btn btn-primary pull-right" id="btn_next" disabled><i class="fa fa-send"></i> Lanjutkan</button>
                                             </div>
                                         </div>
                                     </div>
@@ -264,7 +268,7 @@
 
 @section('extra_script')
     <script type="text/javascript">
-
+        var stockGlobal = null;
         $(document).ready(function () {
             $("#aksi").on("change", function (evt) {
                 evt.preventDefault();
@@ -315,8 +319,14 @@
                                         $("#form_gb").show('slow');
                                         $("#btn_position").removeClass("col-md-6");
                                         $("#btn_position").addClass("col-md-12");
+                                        $("#item_baru").val('');
+                                        $("#codespecific").val('');
+                                        $("#idstock").val('');
                                     }
                                 })
+                            } else {
+                                $("#aksi").val('');
+                                $("#btn_next").attr("disabled", true);
                             }
                         });
 
@@ -354,6 +364,13 @@
                                 $("#form_gbl").show('slow');
                                 $("#btn_position").removeClass("col-md-6");
                                 $("#btn_position").addClass("col-md-12");
+                                $("#item_lain").val('')
+                                $("#iditem_lain").val('');
+                                $("#code_lain").val('');
+                                $("#idstock_lain").val('');
+                            } else {
+                                $("#aksi").val('');
+                                $("#btn_next").attr("disabled", true);
                             }
                         });
 
@@ -395,6 +412,10 @@
                                 $("#form_gu").show('slow');
                                 $("#btn_position").removeClass("col-md-6");
                                 $("#btn_position").addClass("col-md-12");
+                                $("#btn_next").attr("disabled", false);
+                            } else {
+                                $("#aksi").val('');
+                                $("#btn_next").attr("disabled", true);
                             }
                         });
 
@@ -425,6 +446,13 @@
                 }
             })
 
+            $("#item_baru").on("keyup", function (evt) {
+                evt.preventDefault();
+                $("#codespecific").val('');
+                $("#idstock").val('');
+                $("#btn_next").attr("disabled", true);
+            })
+
             $( "#item_baru" ).autocomplete({
                 source: function(request, response) {
                     $.getJSON(baseUrl+'/penjualan/return-penjualan/cariitembaru', { item: $("#iditem").val(), term: $("#item_baru").val() },
@@ -433,8 +461,45 @@
                 minLength: 1,
                 select: function(event, data) {
                     $("#codespecific").val(data.item.data.sm_specificcode);
+                    $("#idstock").val(data.item.data.s_id);
+                    $("#btn_next").attr("disabled", false);
                 }
             });
+
+            $( "#item_lain" ).autocomplete({
+                source: baseUrl+'/penjualan/return-penjualan/cariitemlain',
+                minLength: 1,
+                select: function(event, data) {
+                    // console.log(data.item)
+                    setStock(data.item);
+                }
+            });
+
+            $("#item_lain").on("keyup", function (evt) {
+                evt.preventDefault();
+                $("#iditem_lain").val('');
+                $("#code_lain").val('');
+                $("#idstock_lain").val('');
+                $("#btn_next").attr("disabled", true);
+            })
+
+            function setStock(info){
+                var data = info.data;
+
+                axios.get(baseUrl+'/penjualan-reguler/checkStock/'+data.i_id)
+                    .then(function (response) {
+                        // handle success
+                        stockGlobal = response.data;
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    });
+                $("#iditem_lain").val(data.i_id);
+                $("#code_lain").val(data.sm_specificcode);
+                $("#idstock_lain").val(data.s_id)
+                $("#btn_next").attr("disabled", false);
+            }
         })
     </script>
 @endsection

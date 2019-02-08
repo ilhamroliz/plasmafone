@@ -282,4 +282,48 @@ class ReturnPenjualanController extends Controller
         }
         return Response::json($results);
     }
+
+    public function cariItemlain(Request $request)
+    {
+        $outlet = Auth::user()->m_comp;
+        $cari = $request->term;
+
+        $data = DB::table('d_stock')
+            ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+            ->join('d_stock_mutation', function ($q){
+                $q->on('d_stock_mutation.sm_stock', '=', 's_id');
+                $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
+            })
+            ->leftJoin('d_stock_dt', function ($a) {
+                $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
+                $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
+            })
+            ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+            ->where(function ($w) use ($cari){
+                $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
+                $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
+            })
+            ->where('d_stock.s_position', '=', $outlet)
+            ->groupBy('d_stock_mutation.sm_specificcode')
+            ->get();
+
+        $results = [];
+        if (count($data) < 1) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($data as $query) {
+                if($query->i_code == "") {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                } else {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_code. ' - ' . $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                }
+
+            }
+        }
+
+        return Response::json($results);
+    }
 }
