@@ -63,6 +63,7 @@
                         <div role="content">
                             <div class="widget-body">
                                 <form class="form-horizontal" id="form_return">
+                                    {{csrf_field()}}
                                     <fieldset>
                                         <div class="row">
                                             <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -483,6 +484,11 @@
                 $("#btn_next").attr("disabled", true);
             })
 
+            $("#btn_next").on("click", function (evt) {
+                evt.preventDefault();
+                simpan();
+            })
+
             function setStock(info){
                 var data = info.data;
 
@@ -499,6 +505,45 @@
                 $("#code_lain").val(data.sm_specificcode);
                 $("#idstock_lain").val(data.s_id)
                 $("#btn_next").attr("disabled", false);
+            }
+
+            function simpan() {
+                overlay();
+                axios.post(baseUrl+'/penjualan/return-penjualan/add', $("#form_return").serialize())
+                .then(function (response) {
+                    console.log(response.data);
+                    out();
+                    if (response.data == true) {
+                        $.smallBox({
+                            title : "Berhasil",
+                            content : 'Return barang berhasil...!',
+                            color : "#739E73",
+                            timeout: 5000,
+                            icon : "fa fa-check bounce animated"
+                        });
+                        window.location = baseUrl + '/penjualan/return-penjualan';
+                    } else if (response.data == "not found") {
+                        $.smallBox({
+                            title : "Gagal",
+                            content : "Upsss. Data tidak ditemukan distok!",
+                            color : "#A90329",
+                            timeout: 5000,
+                            icon : "fa fa-times bounce animated"
+                        });
+                    } else {
+                        $.smallBox({
+                            title : "Gagal",
+                            content : "Upsss. Terjadi kesalahan sistem!",
+                            color : "#A90329",
+                            timeout: 5000,
+                            icon : "fa fa-times bounce animated"
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    out();
+                    console.log(error);
+                });
             }
         })
     </script>

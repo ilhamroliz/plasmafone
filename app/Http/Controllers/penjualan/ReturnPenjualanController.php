@@ -5,6 +5,7 @@ namespace App\Http\Controllers\penjualan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlasmafoneController as Access;
+use App\Http\Controllers\CodeGenerator as GenerateCode;
 use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
 use DB;
@@ -176,7 +177,7 @@ class ReturnPenjualanController extends Controller
         return json_encode($row);
     }
 
-    public function retunPenjualan($idsales = null, $iditem = null, $spcode = null)
+    public function returnPenjualan($idsales = null, $iditem = null, $spcode = null)
     {
         try {
             $idsales = Crypt::decrypt($idsales);
@@ -325,5 +326,516 @@ class ReturnPenjualanController extends Controller
         }
 
         return Response::json($results);
+    }
+
+    public function returnAdd(Request $request)
+    {
+        $nota = GenerateCode::codeReturn('d_return_penjualan', 'rp_notareturn', 12, 10, 3, 'RETURN');
+
+        $comp = Auth::user()->m_comp;
+        $member = Auth::user()->m_id;
+
+        $rp_id = DB::table('d_return_penjualan')->max('rp_id');
+        if ($rp_id == null){
+            $rp_id = 1;
+        } else {
+            $rp_id = $rp_id + 1;
+        }
+
+        $rpd_detailid = DB::table('d_return_penjualandt')->where('rpd_return', $rp_id)->max('rpd_detailid');
+        if ($rpd_detailid == null){
+            $rpd_detailid = 1;
+        } else {
+            $rpd_detailid = $rpd_detailid + 1;
+        }
+
+        $rpg_detailid = DB::table('d_return_penjualanganti')->where('rpg_return', $rp_id)->max('rpg_detailid');
+        if ($rpg_detailid == null){
+            $rpg_detailid = 1;
+        } else {
+            $rpg_detailid = $rpg_detailid + 1;
+        }
+
+        if ($request->aksi == "Ganti Barang Sejenis")
+        {
+            DB::beginTransaction();
+            try{
+                //Penambahan stock
+                $stock_check = DB::table('d_stock')
+                    ->where('s_comp', $comp)
+                    ->where('s_position', $comp)
+                    ->where('s_item', Crypt::decrypt($request->iditem))
+                    ->where('s_status', 'On Destination');
+
+                if ($stock_check->count() == 0) {
+                    $msg = 'not found';
+                } else {
+                    $stock_check = DB::table('d_stock')
+                        ->where('s_comp', $comp)
+                        ->where('s_position', $comp)
+                        ->where('s_item', Crypt::decrypt($request->iditem))
+                        ->where('s_status', 'On Destination')->first();
+
+                    DB::table('d_stock')
+                        ->where('s_comp', $comp)
+                        ->where('s_position', $comp)
+                        ->where('s_item', Crypt::decrypt($request->iditem))
+                        ->where('s_status', 'On Destination')
+                        ->update([
+                            's_qty' => $stock_check->s_qty + $request->qty
+                        ]);
+
+                    if ($request->kode != null) {
+                        $sd_iddetail = DB::table('d_stock_dt')->where('sd_stock', $stock_check->s_id)->max('sd_detailid');
+                        if ($sd_iddetail == null){
+                            $sd_iddetail = 1;
+                        } else {
+                            $sd_iddetail = $sd_iddetail + 1;
+                        }
+
+                        DB::table('d_stock_dt')->insert([
+                            'sd_stock' => $stock_check->s_id,
+                            'sd_detailid' => $sd_iddetail,
+                            'sd_specificcode' => $request->kode
+                        ]);
+                    }
+
+                    //insert stock mutation
+                    $detalidsm = DB::table('d_stock_mutation')->where('sm_stock', $stock_check->s_id)->max('sm_detailid');
+                    if ($detalidsm == null){
+                        $detalidsm = 1;
+                    } else {
+                        $detalidsm = $detalidsm + 1;
+                    }
+
+                    $sm = DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stock_check->s_id)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_specificcode', $request->kode)
+                        ->where('sm_reff', '!=', 'RUSAK')
+                        ->first();
+
+                    DB::table('d_stock_mutation')
+                        ->insert([
+                            'sm_stock' => $stock_check->s_id,
+                            'sm_detailid' => $detalidsm,
+                            'sm_date' => Carbon::now('Asia/Jakarta'),
+                            'sm_detail' => 'PENAMBAHAN',
+                            'sm_specificcode' => $request->kode,
+                            'sm_qty' => $request->qty,
+                            'sm_use' => 0,
+                            'sm_sisa' => $request->qty,
+                            'sm_hpp' => $sm->sm_hpp,
+                            'sm_sell' => $sm->sm_sell,
+                            'sm_nota' => $nota,
+                            'sm_reff' => 'RUSAK',
+                            'sm_mem' => $member
+                        ]);
+
+                    //insert return_penjualan
+                    DB::table('d_return_penjualan')->insert([
+                        'rp_id'             => $rp_id,
+                        'rp_notareturn'     => $nota,
+                        'rp_notapenjualan'  => $request->nota,
+                        'rp_date'           => Carbon::now('Asia/Jakarta'),
+                        'rp_aksi'           => 'GBS',
+                        'rp_status'         => 'PROSES'
+                    ]);
+
+                    //insert return_penjualandt
+                    DB::table('d_return_penjualandt')->insert([
+                        'rpd_return'       => $rp_id,
+                        'rpd_detailid'     => $rpd_detailid,
+                        'rpd_item'         => Crypt::decrypt($request->iditem),
+                        'rpd_qty'          => $request->qty,
+                        'rpd_specificcode' => $request->kode,
+                        'rpd_note'         => strtoupper($request->ket)
+                    ]);
+
+                    //insert return_penjualanganti
+                    DB::table('d_return_penjualanganti')->insert([
+                        'rpg_return'       => $rp_id,
+                        'rpg_returndetail' => $rpd_detailid,
+                        'rpg_detailid'     => $rpg_detailid,
+                        'rpg_item'         => Crypt::decrypt($request->iditem),
+                        'rpg_qty'          => $request->qty_baru,
+                        'rpg_specificcode' => $request->codespecific
+                    ]);
+
+                    //pengurangan stock
+                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $request->idstock)->where('sm_specificcode', $request->codespecific)->where('sm_detail', 'PENAMBAHAN');
+
+                    $get_smiddetail = $count_smiddetail->get();
+
+                    if ($request->codespecific != null) {
+                        $specificcode = $request->codespecific;
+
+                        DB::table('d_stock_dt')->where(['sd_stock' => $request->idstock, 'sd_specificcode' => $specificcode])->delete();
+
+                    } else {
+                        $specificcode = null;
+                    }
+
+//                    update d_stock
+                    $stockQty = DB::table('d_stock')->where('s_id', $request->idstock)->first();
+                    DB::table('d_stock')->where('s_id', $request->idstock)->update([
+                        's_qty' => $stockQty->s_qty - $request->qty_baru
+                    ]);
+
+                    foreach ($get_smiddetail as $key => $value) {
+
+                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $request->idstock)->max('sm_detailid');
+                        if ($get_countiddetail == null){
+                            $get_countiddetail = 1;
+                        } else {
+                            $get_countiddetail = $get_countiddetail + 1;
+                        }
+
+                        if ($get_smiddetail[$key]->sm_specificcode == $specificcode && $get_smiddetail[$key]->sm_sisa != 0) {
+
+                            $sm_hpp = $get_smiddetail[$key]->sm_hpp;
+                            $sm_sell = $get_smiddetail[$key]->sm_sell;
+
+                            $sm_reff = $get_smiddetail[$key]->sm_nota;
+
+                            if ($get_smiddetail[$key]->sm_use != 0) {
+                                $sm_use = $request->qty_baru + $get_smiddetail[$key]->sm_use;
+                                $sm_sisa = $get_smiddetail[$key]->sm_qty - $get_smiddetail[$key]->sm_use - $request->qty_baru;
+                            } else {
+                                $sm_use = $request->qty_baru + $get_smiddetail[$key]->sm_use;
+                                $sm_sisa = $get_smiddetail[$key]->sm_qty - $request->qty_baru;
+                            }
+
+                            // Insert to table d_stock_mutation
+                            DB::table('d_stock_mutation')->insert([
+                                'sm_stock'          => $request->idstock,
+                                'sm_detailid'       => $get_countiddetail,
+                                'sm_date'           => Carbon::now('Asia/Jakarta'),
+                                'sm_detail'         => 'PENGURANGAN',
+                                'sm_specificcode'   => $specificcode,
+                                'sm_qty'            => $request->qty_baru,
+                                'sm_use'            => 0,
+                                'sm_sisa'           => 0,
+                                'sm_hpp'            => $sm_hpp,
+                                'sm_sell'           => $sm_sell,
+                                'sm_nota'           => $nota,
+                                'sm_reff'           => $sm_reff,
+                                'sm_mem'            => $member
+                            ]);
+
+                            // Update in table d_stock_mutation
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' => $get_smiddetail[$key]->sm_detailid, 'sm_detail' =>  'PENAMBAHAN', 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
+                                'sm_use' => $sm_use,
+                                'sm_sisa' => $sm_sisa
+                            ]);
+                            break;
+                        }
+
+                    }
+
+                    $msg = 'true';
+                }
+
+                DB::commit();
+                return $msg;
+            }catch (\Exception $e){
+                DB::rollback();
+                return 'false';
+            }
+        }
+        else if ($request->aksi == "Ganti Barang Lain")
+        {
+            DB::beginTransaction();
+            try{
+                //Penambahan stock
+                $stock_check = DB::table('d_stock')
+                    ->where('s_comp', $comp)
+                    ->where('s_position', $comp)
+                    ->where('s_item', Crypt::decrypt($request->iditem))
+                    ->where('s_status', 'On Destination');
+
+                if ($stock_check->count() == 0) {
+                    $msg = 'not found';
+                } else {
+                    $stock_check = DB::table('d_stock')
+                        ->where('s_comp', $comp)
+                        ->where('s_position', $comp)
+                        ->where('s_item', Crypt::decrypt($request->iditem))
+                        ->where('s_status', 'On Destination')->first();
+
+                    DB::table('d_stock')
+                        ->where('s_comp', $comp)
+                        ->where('s_position', $comp)
+                        ->where('s_item', Crypt::decrypt($request->iditem))
+                        ->where('s_status', 'On Destination')
+                        ->update([
+                            's_qty' => $stock_check->s_qty + $request->qty
+                        ]);
+
+                    if ($request->kode != null) {
+                        $sd_iddetail = DB::table('d_stock_dt')->where('sd_stock', $stock_check->s_id)->max('sd_detailid');
+                        if ($sd_iddetail == null){
+                            $sd_iddetail = 1;
+                        } else {
+                            $sd_iddetail = $sd_iddetail + 1;
+                        }
+
+                        DB::table('d_stock_dt')->insert([
+                            'sd_stock' => $stock_check->s_id,
+                            'sd_detailid' => $sd_iddetail,
+                            'sd_specificcode' => $request->kode
+                        ]);
+                    }
+
+                    //insert stock mutation
+                    $detalidsm = DB::table('d_stock_mutation')->where('sm_stock', $stock_check->s_id)->max('sm_detailid');
+                    if ($detalidsm == null){
+                        $detalidsm = 1;
+                    } else {
+                        $detalidsm = $detalidsm + 1;
+                    }
+
+                    $sm = DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stock_check->s_id)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_specificcode', $request->kode)
+                        ->where('sm_reff', '!=', 'RUSAK')
+                        ->first();
+
+                    DB::table('d_stock_mutation')
+                        ->insert([
+                            'sm_stock' => $stock_check->s_id,
+                            'sm_detailid' => $detalidsm,
+                            'sm_date' => Carbon::now('Asia/Jakarta'),
+                            'sm_detail' => 'PENAMBAHAN',
+                            'sm_specificcode' => $request->kode,
+                            'sm_qty' => $request->qty,
+                            'sm_use' => 0,
+                            'sm_sisa' => $request->qty,
+                            'sm_hpp' => $sm->sm_hpp,
+                            'sm_sell' => $sm->sm_sell,
+                            'sm_nota' => $nota,
+                            'sm_reff' => 'RUSAK',
+                            'sm_mem' => $member
+                        ]);
+
+                    //insert return_penjualan
+                    DB::table('d_return_penjualan')->insert([
+                        'rp_id'             => $rp_id,
+                        'rp_notareturn'     => $nota,
+                        'rp_notapenjualan'  => $request->nota,
+                        'rp_date'           => Carbon::now('Asia/Jakarta'),
+                        'rp_aksi'           => 'GBL',
+                        'rp_status'         => 'PROSES'
+                    ]);
+
+                    //insert return_penjualandt
+                    DB::table('d_return_penjualandt')->insert([
+                        'rpd_return'       => $rp_id,
+                        'rpd_detailid'     => $rpd_detailid,
+                        'rpd_item'         => Crypt::decrypt($request->iditem),
+                        'rpd_qty'          => $request->qty,
+                        'rpd_specificcode' => $request->kode,
+                        'rpd_note'         => strtoupper($request->ket)
+                    ]);
+
+                    //insert return_penjualanganti
+                    DB::table('d_return_penjualanganti')->insert([
+                        'rpg_return'       => $rp_id,
+                        'rpg_returndetail' => $rpd_detailid,
+                        'rpg_detailid'     => $rpg_detailid,
+                        'rpg_item'         => $request->iditem_lain,
+                        'rpg_qty'          => $request->qty_lain,
+                        'rpg_specificcode' => $request->code_lain
+                    ]);
+
+                    //pengurangan stock
+                    $count_smiddetail = DB::table('d_stock_mutation')->where('sm_stock', $request->idstock_lain)->where('sm_specificcode', $request->code_lain)->where('sm_detail', 'PENAMBAHAN');
+
+                    $get_smiddetail = $count_smiddetail->get();
+
+                    if ($request->code_lain != null) {
+                        $specificcode = $request->code_lain;
+
+                        DB::table('d_stock_dt')->where(['sd_stock' => $request->idstock, 'sd_specificcode' => $specificcode])->delete();
+
+                    } else {
+                        $specificcode = null;
+                    }
+
+//                    update d_stock
+                    $stockQty = DB::table('d_stock')->where('s_id', $request->idstock_lain)->first();
+                    DB::table('d_stock')->where('s_id', $request->idstock_lain)->update([
+                        's_qty' => $stockQty->s_qty - $request->qty_lain
+                    ]);
+
+                    foreach ($get_smiddetail as $key => $value) {
+
+                        $get_countiddetail = DB::table('d_stock_mutation')->where('sm_stock', $request->idstock_lain)->max('sm_detailid');
+                        if ($get_countiddetail == null){
+                            $get_countiddetail = 1;
+                        } else {
+                            $get_countiddetail = $get_countiddetail + 1;
+                        }
+
+                        if ($get_smiddetail[$key]->sm_specificcode == $specificcode && $get_smiddetail[$key]->sm_sisa != 0) {
+
+                            $sm_hpp = $get_smiddetail[$key]->sm_hpp;
+                            $sm_sell = $get_smiddetail[$key]->sm_sell;
+
+                            $sm_reff = $get_smiddetail[$key]->sm_nota;
+
+                            if ($get_smiddetail[$key]->sm_use != 0) {
+                                $sm_use = $request->qty_lain + $get_smiddetail[$key]->sm_use;
+                                $sm_sisa = $get_smiddetail[$key]->sm_qty - $get_smiddetail[$key]->sm_use - $request->qty_lain;
+                            } else {
+                                $sm_use = $request->qty_lain + $get_smiddetail[$key]->sm_use;
+                                $sm_sisa = $get_smiddetail[$key]->sm_qty - $request->qty_lain;
+                            }
+
+                            // Insert to table d_stock_mutation
+                            DB::table('d_stock_mutation')->insert([
+                                'sm_stock'          => $request->idstock_lain,
+                                'sm_detailid'       => $get_countiddetail,
+                                'sm_date'           => Carbon::now('Asia/Jakarta'),
+                                'sm_detail'         => 'PENGURANGAN',
+                                'sm_specificcode'   => $specificcode,
+                                'sm_qty'            => $request->qty_lain,
+                                'sm_use'            => 0,
+                                'sm_sisa'           => 0,
+                                'sm_hpp'            => $sm_hpp,
+                                'sm_sell'           => $sm_sell,
+                                'sm_nota'           => $nota,
+                                'sm_reff'           => $sm_reff,
+                                'sm_mem'            => $member
+                            ]);
+
+                            // Update in table d_stock_mutation
+                            DB::table('d_stock_mutation')->where(['sm_stock' => $get_smiddetail[$key]->sm_stock, 'sm_detailid' => $get_smiddetail[$key]->sm_detailid, 'sm_detail' =>  'PENAMBAHAN', 'sm_specificcode' => $get_smiddetail[$key]->sm_specificcode])->update([
+                                'sm_use' => $sm_use,
+                                'sm_sisa' => $sm_sisa
+                            ]);
+                            break;
+                        }
+
+                    }
+
+                    $msg = 'true';
+                }
+
+                DB::commit();
+                return $msg;
+            }catch (\Exception $e){
+                DB::rollback();
+                return 'false';
+            }
+        }
+        else if ($request->aksi == "Ganti Uang")
+        {
+            DB::beginTransaction();
+            try{
+                //Penambahan stock
+                $stock_check = DB::table('d_stock')
+                    ->where('s_comp', $comp)
+                    ->where('s_position', $comp)
+                    ->where('s_item', Crypt::decrypt($request->iditem))
+                    ->where('s_status', 'On Destination');
+
+                if ($stock_check->count() == 0) {
+                    $msg = 'not found';
+                } else {
+                    $stock_check = DB::table('d_stock')
+                        ->where('s_comp', $comp)
+                        ->where('s_position', $comp)
+                        ->where('s_item', Crypt::decrypt($request->iditem))
+                        ->where('s_status', 'On Destination')->first();
+
+                    DB::table('d_stock')
+                        ->where('s_comp', $comp)
+                        ->where('s_position', $comp)
+                        ->where('s_item', Crypt::decrypt($request->iditem))
+                        ->where('s_status', 'On Destination')
+                        ->update([
+                            's_qty' => $stock_check->s_qty + $request->qty
+                        ]);
+
+                    if ($request->kode != null) {
+                        $sd_iddetail = DB::table('d_stock_dt')->where('sd_stock', $stock_check->s_id)->max('sd_detailid');
+                        if ($sd_iddetail == null){
+                            $sd_iddetail = 1;
+                        } else {
+                            $sd_iddetail = $sd_iddetail + 1;
+                        }
+
+                        DB::table('d_stock_dt')->insert([
+                            'sd_stock' => $stock_check->s_id,
+                            'sd_detailid' => $sd_iddetail,
+                            'sd_specificcode' => $request->kode
+                        ]);
+                    }
+
+                    //insert stock mutation
+                    $detalidsm = DB::table('d_stock_mutation')->where('sm_stock', $stock_check->s_id)->max('sm_detailid');
+                    if ($detalidsm == null){
+                        $detalidsm = 1;
+                    } else {
+                        $detalidsm = $detalidsm + 1;
+                    }
+
+                    $sm = DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stock_check->s_id)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_specificcode', $request->kode)
+                        ->where('sm_reff', '!=', 'RUSAK')
+                        ->first();
+
+                    DB::table('d_stock_mutation')
+                        ->insert([
+                            'sm_stock' => $stock_check->s_id,
+                            'sm_detailid' => $detalidsm,
+                            'sm_date' => Carbon::now('Asia/Jakarta'),
+                            'sm_detail' => 'PENAMBAHAN',
+                            'sm_specificcode' => $request->kode,
+                            'sm_qty' => $request->qty,
+                            'sm_use' => 0,
+                            'sm_sisa' => $request->qty,
+                            'sm_hpp' => $sm->sm_hpp,
+                            'sm_sell' => $sm->sm_sell,
+                            'sm_nota' => $nota,
+                            'sm_reff' => 'RUSAK',
+                            'sm_mem' => $member
+                        ]);
+
+
+                    //insert return_penjualan
+                    DB::table('d_return_penjualan')->insert([
+                        'rp_id'             => $rp_id,
+                        'rp_notareturn'     => $nota,
+                        'rp_notapenjualan'  => $request->nota,
+                        'rp_date'           => Carbon::now('Asia/Jakarta'),
+                        'rp_aksi'           => 'GU',
+                        'rp_status'         => 'PROSES'
+                    ]);
+
+                    //insert return_penjualandt
+                    DB::table('d_return_penjualandt')->insert([
+                        'rpd_return'       => $rp_id,
+                        'rpd_detailid'     => $rpd_detailid,
+                        'rpd_item'         => Crypt::decrypt($request->iditem),
+                        'rpd_qty'          => $request->qty,
+                        'rpd_specificcode' => $request->kode,
+                        'rpd_note'         => strtoupper($request->ket)
+                    ]);
+
+                    $msg = 'true';
+                }
+
+                DB::commit();
+                return $msg;
+            }catch (\Exception $e){
+                DB::rollback();
+                return 'false';
+            }
+        }
     }
 }
