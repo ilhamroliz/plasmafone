@@ -1626,7 +1626,7 @@ class ReceptionController extends Controller
                 return 'true';
             } catch (\Exception $e) {
                 DB::rollback();
-                return 'false';
+                return 'false => '.$e;
             }
 
         }

@@ -290,8 +290,11 @@ class PurchaseOrderController extends Controller
             ->join('d_supplier', 's_id', '=', 'p_supplier')
             ->join('d_item', 'i_id', '=', 'pd_item')
             ->where('p_id', $id)
-            ->select('p_id', 'p_nota', 's_company', 's_phone', 'p_date', 
-                    'i_nama', DB::raw('SUM(pd_qty) as pd_qty'), 'pd_value', 'pd_disc_persen', DB::raw('SUM(pd_disc_value) as pd_disc_value'))
+            ->select('p_id', 'p_nota', 's_company', 's_phone', 'p_date', 'p_total_gross', 'p_total_net', DB::raw('IFNULL(p_pajak, 0) as pajak'),
+                    'p_disc_persen', 'p_disc_value', 'p_type', 'p_due_date', 'i_nama', 
+                    DB::raw('SUM(pd_qty) as qty'), 'pd_value', 'pd_disc_persen', 
+                    DB::raw('ROUND(SUM(pd_disc_value)) as disc_value'),
+                    DB::raw('(pd_value * SUM(pd_qty)) * ((100 - IFNULL(pd_disc_persen, 0)) / 100) - IFNULL(SUM(pd_disc_value), 0) as subTotal'))
             ->groupBy('pd_item')->get();
 
         return view('pembelian.purchase_order.print_purchase')->with(compact('datas'));
