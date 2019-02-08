@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use DB;
 use Response;
 use DataTables;
+Use Auth;
 
 class ReturnPenjualanController extends Controller
 {
@@ -152,6 +153,177 @@ class ReturnPenjualanController extends Controller
             ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
             ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
             ->where('d_sales.s_id', $id)->get();
-        return json_encode($regular);
+
+        $row = [];
+        foreach ($regular as $key => $penjualan) {
+            $row[] = array(
+                'tanggal' => $penjualan->tanggal,
+                'nota' => $penjualan->s_nota,
+                's_total_net' => $penjualan->s_total_net,
+                'salesman' => $penjualan->salesman,
+                'm_name' => $penjualan->m_name,
+                'm_telp' => $penjualan->m_telp,
+                'm_address' => $penjualan->m_address,
+                'idsales' => Crypt::encrypt($penjualan->sd_sales),
+                'iditem' => Crypt::encrypt($penjualan->sd_item),
+                'code' => $penjualan->i_code,
+                'specificcode' => $penjualan->sd_specificcode,
+                'nama_item' => $penjualan->nama_item,
+                'qty' => $penjualan->sd_qty,
+                'total_net' => $penjualan->total_net
+            );
+        }
+        return json_encode($row);
+    }
+
+    public function retunPenjualan($idsales = null, $iditem = null, $spcode = null)
+    {
+        try {
+            $idsales = Crypt::decrypt($idsales);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
+
+        try {
+            $iditem = Crypt::decrypt($iditem);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
+
+        if ($spcode == "null"){
+            $spcode = null;
+        }
+
+        $data = DB::table('d_sales')
+            ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
+            ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
+            ->where('d_sales_dt.sd_sales', $idsales)
+            ->where('d_sales_dt.sd_item', $iditem)
+            ->where('d_sales_dt.sd_specificcode', $spcode)
+            ->first();
+
+        return view('penjualan.return-penjualan.return')->with(compact('data'));
+    }
+
+    public function checkStock($item = null)
+    {
+        $position = Auth::user()->m_comp;
+        $totalqty = 0;
+
+        $check = DB::table('d_stock')
+            ->where('s_comp', $position)
+            ->where('s_position', $position)
+            ->where('s_item', Crypt::decrypt($item))
+            ->first();
+
+        $checksm = DB::table('d_stock_mutation')
+            ->where('sm_stock', $check->s_id)
+            ->where('sm_detail', 'PENAMBAHAN')
+            ->where('sm_reff', 'RUSAK');
+
+        if ($checksm->count() != 0) {
+            $checksm->get();
+
+            $qtysm = 0;
+
+            foreach ($checksm as $key => $sm) {
+                $qtysm += $sm->sm_qty;
+            }
+
+            $totalqty = $check->s_qty - $qtysm;
+        } else {
+            $totalqty = $check->s_qty;
+        }
+
+        return json_encode($totalqty);
+    }
+
+    public function cariItemBaru(Request $request)
+    {
+        $outlet = Auth::user()->m_comp;
+        $cari = $request->term;
+        $item = $request->item;
+
+        $data = DB::table('d_stock')
+            ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+            ->join('d_stock_mutation', function ($q){
+                $q->on('d_stock_mutation.sm_stock', '=', 's_id');
+                $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
+            })
+            ->leftJoin('d_stock_dt', function ($a) {
+                $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
+                $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
+            })
+            ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+            ->where(function ($w) use ($cari){
+                $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
+                $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
+            })
+            ->where('d_stock.s_position', '=', $outlet)
+            ->where('d_stock.s_item', '=', Crypt::decrypt($item))
+            ->groupBy('d_stock_mutation.sm_specificcode')
+            ->get();
+
+        $results = [];
+        if (count($data) < 1) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($data as $query) {
+                if($query->i_code == "") {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                } else {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_code. ' - ' . $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                }
+
+            }
+        }
+        return Response::json($results);
+    }
+
+    public function cariItemlain(Request $request)
+    {
+        $outlet = Auth::user()->m_comp;
+        $cari = $request->term;
+
+        $data = DB::table('d_stock')
+            ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
+            ->join('d_stock_mutation', function ($q){
+                $q->on('d_stock_mutation.sm_stock', '=', 's_id');
+                $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
+                $q->where('d_stock_mutation.sm_sisa', '>', '0');
+                $q->where('d_stock_mutation.sm_reff', '!=', 'RUSAK');
+            })
+            ->leftJoin('d_stock_dt', function ($a) {
+                $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
+                $a->on('d_stock_dt.sd_specificcode', '=', 'd_stock_mutation.sm_specificcode');
+            })
+            ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')
+            ->where(function ($w) use ($cari){
+                $w->orWhere('d_item.i_nama', 'like', '%'.$cari.'%');
+                $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
+                $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
+            })
+            ->where('d_stock.s_position', '=', $outlet)
+            ->groupBy('d_stock_mutation.sm_specificcode')
+            ->get();
+
+        $results = [];
+        if (count($data) < 1) {
+            $results[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($data as $query) {
+                if($query->i_code == "") {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                } else {
+                    $results[] = ['id' => $query->s_id, 'label' => $query->i_code. ' - ' . $query->i_nama . $query->sd_specificcode, 'data' => $query];
+                }
+
+            }
+        }
+
+        return Response::json($results);
     }
 }

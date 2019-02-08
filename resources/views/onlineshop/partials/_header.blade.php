@@ -52,7 +52,7 @@
                         </li>
 
                         <li>
-                            <a href="{{route('product_access')}}">Aksesoris</a>
+                            <a href="{{route('product_acces')}}">Aksesoris</a>
                             <ul class="sub-menu" style="max-height: 500px;overflow-y: scroll;">
                                 @foreach($menu_acces as $acces)
                                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
@@ -170,7 +170,7 @@
             </li>
 
             <li>
-                <a href="{{route('product_access')}}">Aksesoris</a>
+                <a href="{{route('product_acces')}}">Aksesoris</a>
                 <ul class="sub-menu-m" style="max-height: 300px;overflow-y: scroll;">
                     @foreach($menu_acces as $acces)
                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
@@ -284,7 +284,7 @@
                 </div>
 
                 <div class="header-cart-buttons flex-w w-full">
-                    <a href="shoping-cart.html" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+                    <a href="{{route('shoping_cart')}}" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
                         View Cart
                     </a>
 

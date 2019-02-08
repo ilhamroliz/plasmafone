@@ -367,7 +367,41 @@ class PenjualanController extends Controller
                 
             }
         }
+
         return Response::json($results);
+    }
+
+    public function checkStock($item = null)
+    {
+        $position = Auth::user()->m_comp;
+        $totalqty = 0;
+
+        $check = DB::table('d_stock')
+            ->where('s_comp', $position)
+            ->where('s_position', $position)
+            ->where('s_item', $item)
+            ->first();
+
+        $checksm = DB::table('d_stock_mutation')
+            ->where('sm_stock', $check->s_id)
+            ->where('sm_detail', 'PENAMBAHAN')
+            ->where('sm_reff', 'RUSAK');
+
+        if ($checksm->count() != 0) {
+            $checksm->get();
+
+            $qtysm = 0;
+
+            foreach ($checksm as $key => $sm) {
+                $qtysm += $sm->sm_qty;
+            }
+
+            $totalqty = $check->s_qty - $qtysm;
+        } else {
+            $totalqty = $check->s_qty;
+        }
+
+        return json_encode($totalqty);
     }
 
     public function getDetailMember($id = null)
@@ -388,7 +422,7 @@ class PenjualanController extends Controller
                     ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
                     ->where('d_sales.s_jenis', 'C')
                     ->groupBy('d_sales.s_id')
-                    ->orderBy('d_sales.s_date', 'desc');
+                    ->orderBy('d_sales.s_date', 'desc')->get();
 
         return DataTables::of($regular)
 
@@ -418,7 +452,7 @@ class PenjualanController extends Controller
             ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
             ->where('d_sales.s_jenis', 'T')
             ->groupBy('d_sales.s_id')
-            ->orderBy('d_sales.s_date', 'desc');
+            ->orderBy('d_sales.s_date', 'desc')->get();
 
         return DataTables::of($regular)
 
@@ -495,7 +529,59 @@ class PenjualanController extends Controller
                 ->distinct('d_stock_mutation.sm_specificcode')
                 ->get();
 
-        return view('penjualan.penjualan-regular.edit')->with(compact('data'));
+        $results = [];
+
+        foreach ($data as $key => $val) {
+            $totalqty = 0;
+            $check = DB::table('d_stock')
+                ->where('s_comp', $val->sd_comp)
+                ->where('s_position', $val->sd_comp)
+                ->where('s_item', $val->sd_item)
+                ->first();
+
+            $checksm = DB::table('d_stock_mutation')
+                ->where('sm_stock', $check->s_id)
+                ->where('sm_detail', 'PENAMBAHAN')
+                ->where('sm_reff', 'RUSAK');
+
+            if ($checksm->count() != 0) {
+                $checksm->get();
+
+                $qtysm = 0;
+
+                foreach ($checksm as $key => $sm) {
+                    $qtysm += $sm->sm_qty;
+                }
+
+                $totalqty = $check->s_qty - $qtysm;
+            } else {
+                $totalqty = $check->s_qty;
+            }
+
+            $results[] = array(
+                'specificcode' => $val->specificcode,
+                'idStock' => $val->idStock,
+                'i_code' => $val->i_code,
+                'nama_item' => $val->nama_item,
+                'stock_qty' => $val->stock_qty,
+                'sm_specificcode' => $val->sm_specificcode,
+                'sd_value' => $val->sd_value,
+                'sd_total_gross' => $val->sd_total_gross,
+                'sd_total_net' => $val->sd_total_net,
+                'sd_qty' => $val->sd_qty,
+                'gp_price' => $val->gp_price,
+                'op_price' => $val->op_price,
+                'i_price' => $val->i_price,
+                'sd_disc_persen' => $val->sd_disc_persen,
+                'sd_disc_value' => $val->sd_disc_value,
+                'sd_total_gross' => $val->sd_total_gross,
+                'sd_sales' => $val->sd_sales,
+                'sd_item' => $val->sd_item,
+                'stock' => $totalqty
+            );
+        }
+
+        return view('penjualan.penjualan-regular.edit')->with(compact('results', 'data'));
     }
 
     public function editPenjualanTempo($id = null)
@@ -540,7 +626,59 @@ class PenjualanController extends Controller
             ->distinct('d_stock_mutation.sm_specificcode')
             ->get();
 
-        return view('penjualan.penjualan-tempo.edit')->with(compact('data'));
+        $results = [];
+
+        foreach ($data as $key => $val) {
+            $totalqty = 0;
+            $check = DB::table('d_stock')
+                ->where('s_comp', $val->sd_comp)
+                ->where('s_position', $val->sd_comp)
+                ->where('s_item', $val->sd_item)
+                ->first();
+
+            $checksm = DB::table('d_stock_mutation')
+                ->where('sm_stock', $check->s_id)
+                ->where('sm_detail', 'PENAMBAHAN')
+                ->where('sm_reff', 'RUSAK');
+
+            if ($checksm->count() != 0) {
+                $checksm->get();
+
+                $qtysm = 0;
+
+                foreach ($checksm as $key => $sm) {
+                    $qtysm += $sm->sm_qty;
+                }
+
+                $totalqty = $check->s_qty - $qtysm;
+            } else {
+                $totalqty = $check->s_qty;
+            }
+
+            $results[] = array(
+                'specificcode' => $val->specificcode,
+                'idStock' => $val->idStock,
+                'i_code' => $val->i_code,
+                'nama_item' => $val->nama_item,
+                'stock_qty' => $val->stock_qty,
+                'sm_specificcode' => $val->sm_specificcode,
+                'sd_value' => $val->sd_value,
+                'sd_total_gross' => $val->sd_total_gross,
+                'sd_total_net' => $val->sd_total_net,
+                'sd_qty' => $val->sd_qty,
+                'gp_price' => $val->gp_price,
+                'op_price' => $val->op_price,
+                'i_price' => $val->i_price,
+                'sd_disc_persen' => $val->sd_disc_persen,
+                'sd_disc_value' => $val->sd_disc_value,
+                'sd_total_gross' => $val->sd_total_gross,
+                'sd_sales' => $val->sd_sales,
+                'sd_item' => $val->sd_item,
+                'stock' => $totalqty
+            );
+        }
+
+        return view('penjualan.penjualan-tempo.edit')->with(compact('results', 'data'));
     }
 
     public function savePenjualan(Request $request)

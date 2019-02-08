@@ -58,17 +58,17 @@
 
 				<div class="col-md-6 col-lg-5 p-b-30">
 					<div class="p-r-50 p-t-5 p-lr-0-lg">
-						<h4 class="mtext-105 cl2 js-name-detail p-b-14">
+						<h4 class="mtext-111 cl2 js-name-detail p-b-0">
 							{{$products->i_nama}}
 						</h4>
 
-						<span class="mtext-106 cl2">
-							Rp. {{$products->i_price}}
-						</span>
-
-						<p class="stext-102 cl3 p-t-23">
-							Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus ligula. Mauris consequat ornare feugiat.
+						<p class="mtext-110 cl3 p-b-15">
+							{{$products->i_merk}}
 						</p>
+
+						<span class="ltext-103 text-danger">
+							Rp. {{number_format($products->i_price,0,",",".")}}
+						</span>
 
 						<!--  -->
 						<div class="p-t-33">
@@ -125,15 +125,10 @@
 										</div>
 									</div>
 									<div class="col-md-6">
-										<button class="btn btn-block btn-warning flex-c-m stext-101 text-white size-101 bor1 p-lr-15 trans-04 js-addcart-detail">
+										<button class="btn btn-block btn-primary flex-c-m stext-101 text-white size-101 bor1 p-lr-15 trans-04 js-addcart-detail">
 											Tambah Ke Troli
 										</button>
-									</div>
-									<div class="col-md-12 mt-1">
-										<button class="btn btn-block btn-primary flex-c-m stext-101 size-101 bor1 p-lr-15 trans-04">
-											Beli Sekarang
-										</button>
-									</div>
+									</div>\
 							</div>
 						</div>
 

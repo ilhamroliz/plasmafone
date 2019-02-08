@@ -195,41 +195,41 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach ($data as $index => $item)
-                                                        @if ($data[$index]->specificcode == 'N')
-                                                            <tr id="{{ $item->idStock }}" class="tr">
-                                                                <td style="width: 32%;">{{ $item->i_code }} - {{ $item->nama_item }}
-                                                                    <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
-                                                                    <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
-                                                                    <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
-                                                                    <input type="hidden" class="harga {{ $item->i_code }}" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ number_format($item->sd_value,0,',','') }}" />
-                                                                    <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item->idStock }}" value="{{ $item->sd_total_gross }}">
-                                                                    <input type="hidden" class="totalItem totalItem-{{ $item->i_code }} totalItem-{{ $item->idStock }}" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
+                                                    @foreach ($results as $index => $item)
+                                                        @if ($item['specificcode'] == 'N')
+                                                            <tr id="{{ $item['idStock'] }}" class="tr">
+                                                                <td style="width: 32%;">{{ $item['i_code'] }} - {{ $item['nama_item'] }}
+                                                                    <input type="hidden" class="idStock" name="idStock[]" value="{{ $item['idStock'] }}" />
+                                                                    <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item['stock_qty'] }}" />
+                                                                    <input type="hidden" class="kode" name="kode[]" value="{{ $item['sm_specificcode'] }}" />
+                                                                    <input type="hidden" class="harga {{ $item['i_code'] }}" id="harga-{{ $item['idStock'] }}" name="harga[]" value="{{ number_format($item['sd_value'],0,',','') }}" />
+                                                                    <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item['idStock'] }}" value="{{ $item['sd_total_gross'] }}">
+                                                                    <input type="hidden" class="totalItem totalItem-{{ $item['i_code'] }} totalItem-{{ $item['idStock'] }}" name="totalItem[]" id="totalItem-{{ $item['idStock'] }}" value="{{ number_format($item['sd_total_net'],0,',','') }}">
                                                                 </td>
-                                                                <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item->sd_qty }}', '{{ $item->stock_qty }}', 'harga-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}', 'grossItem-{{ $item->idStock }}')" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->sd_qty }}" /></td>
-                                                                <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price != null) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
-                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}" class="harga-{{ $item->idStock }} harga-{{ $item->i_code }}">Rp.<p style="float: right">{{ number_format($item->sd_total_gross,0,',','.') }}</p></td>
-                                                                <td style="width: 10%;" class="text-center"><button type="button" onclick="hapusItem('{{ $item->idStock }}', '{{ Crypt::encrypt($item->sd_sales) }}', '{{ Crypt::encrypt($item->sd_item) }}', null)" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
+                                                                <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item['sd_qty'] }}', '{{ $item['stock'] }}', 'harga-{{ $item['idStock'] }}', 'qty-{{ $item['idStock'] }}', 'discp-{{ $item['idStock'] }}', 'discv-{{ $item['idStock'] }}', 'lbltotalItem-{{ $item['idStock'] }}', 'totalItem-{{ $item['idStock'] }}', 'grossItem-{{ $item['idStock'] }}')" type="text" class="qtyTable qty-{{ $item['idStock'] }} qty-{{ $item['i_code'] }}" id="qty-{{ $item['idStock'] }}" name="qtyTable[]" value="{{ $item['sd_qty'] }}" /></td>
+                                                                <td style="width: 15%;">Rp.<p style="float: right">@if($item['gp_price'] != null) {{ number_format($item['gp_price'],0,',','.') }} @elseif($item['op_price'] != null) {{ number_format($item['op_price'],0,',','.') }} @else {{ number_format($item['i_price'],0,',','.') }} @endif</p></td>
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp('discp-{{ $item['idStock'] }}', 'discv-{{ $item['idStock'] }}', 'qty-{{ $item['idStock'] }}', 'harga-{{ $item['idStock'] }}', 'lbltotalItem-{{ $item['idStock'] }}', 'totalItem-{{ $item['idStock'] }}')" class="discp discp-{{ $item['i_code'] }}" id="discp-{{ $item['idStock'] }}" name="discp[]" value="{{ $item['sd_disc_persen'] * 100 . '%' }}" /></td>@endif
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv('discp-{{ $item['idStock'] }}', 'discv-{{ $item['idStock'] }}', 'qty-{{ $item['idStock'] }}', 'harga-{{ $item['idStock'] }}', 'lbltotalItem-{{ $item['idStock'] }}', 'totalItem-{{ $item['idStock'] }}')" class="discv discv-{{ $item['i_code'] }}" id="discv-{{ $item['idStock'] }}" name="discv[]" value="{{ number_format($item['sd_disc_value'],0,',','.') }}" /></td>@endif
+                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item['idStock'] }}" class="harga-{{ $item['idStock'] }} harga-{{ $item['i_code'] }}">Rp.<p style="float: right">{{ number_format($item['sd_total_gross'],0,',','.') }}</p></td>
+                                                                <td style="width: 10%;" class="text-center"><button type="button" onclick="hapusItem('{{ $item['idStock'] }}', '{{ Crypt::encrypt($item['sd_sales']) }}', '{{ Crypt::encrypt($item['sd_item']) }}', null)" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>
                                                             </tr>
                                                         @else
-                                                            <tr id="{{ $item->idStock }}{{ $item->sm_specificcode }}" class="tr">
-                                                                <td style="width: 32%;">{{ $item->nama_item }} ({{ $item->sm_specificcode }})
-                                                                    <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
-                                                                    <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
-                                                                    <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
-                                                                    <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item->sm_specificcode }}" />
-                                                                    <input type="hidden" class="harga" id="harga-{{ $item->idStock }}" name="harga[]" value="{{ number_format($item->sd_value,0,',','') }}" />
-                                                                    <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item->idStock }}" value="{{ $item->sd_total_gross }}">
-                                                                    <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item->idStock }}" value="{{ number_format($item->sd_total_net,0,',','') }}">
+                                                            <tr id="{{ $item['idStock'] }}{{ $item['sm_specificcode'] }}" class="tr">
+                                                                <td style="width: 32%;">{{ $item['nama_item'] }} ({{ $item['sm_specificcode'] }})
+                                                                    <input type="hidden" class="idStock" name="idStock[]" value="{{ $item['idStock'] }}" />
+                                                                    <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item['stock_qty'] }}" />
+                                                                    <input type="hidden" class="kode" name="kode[]" value="{{ $item['sm_specificcode'] }}" />
+                                                                    <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item['sm_specificcode'] }}" />
+                                                                    <input type="hidden" class="harga" id="harga-{{ $item['idStock'] }}" name="harga[]" value="{{ number_format($item['sd_value'],0,',','') }}" />
+                                                                    <input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-{{ $item['idStock'] }}" value="{{ $item['sd_total_gross'] }}">
+                                                                    <input type="hidden" class="totalItem" name="totalItem[]" id="totalItem-{{ $item['idStock'] }}" value="{{ number_format($item['sd_total_net'],0,',','') }}">
                                                                 </td>
-                                                                <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="1" />1</td>
-                                                                <td style="width: 15%;">Rp.<p style="float: right">@if($item->gp_price != null) {{ number_format($item->gp_price,0,',','.') }} @elseif($item->op_price != null) {{ number_format($item->op_price,0,',','.') }} @else {{ number_format($item->i_price,0,',','.') }} @endif</p></td>
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discp discp-{{ $item->i_code }}" id="discp-{{ $item->idStock }}" name="discp[]" value="{{ $item->sd_disc_persen * 100 . '%' }}" /></td>@endif
-                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv('discp-{{ $item->idStock }}', 'discv-{{ $item->idStock }}', 'qty-{{ $item->idStock }}', 'harga-{{ $item->idStock }}', 'lbltotalItem-{{ $item->idStock }}', 'totalItem-{{ $item->idStock }}')" class="discv discv-{{ $item->i_code }}" id="discv-{{ $item->idStock }}" name="discv[]" value="{{ number_format($item->sd_disc_value,0,',','.') }}" /></td>@endif
-                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item->idStock }}">Rp.<p style="float: right">{{ number_format($item->sd_total_gross,0,',','.') }}</p></td>
-                                                                <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}{{ $item->sm_specificcode }}', '{{ Crypt::encrypt($item->sd_sales) }}', '{{ Crypt::encrypt($item->sd_item) }}', '{{ $item->sm_specificcode }}')"><i class="fa fa-minus"></i></button></td>
+                                                                <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-{{ $item['idStock'] }}" name="qtyTable[]" value="1" />1</td>
+                                                                <td style="width: 15%;">Rp.<p style="float: right">@if($item['gp_price'] != null) {{ number_format($item['gp_price'],0,',','.') }} @elseif($item['op_price'] != null) {{ number_format($item['op_price'],0,',','.') }} @else {{ number_format($item['i_price'],0,',','.') }} @endif</p></td>
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right;" type="text" onkeyup="isiDiscp('discp-{{ $item['idStock'] }}', 'discv-{{ $item['idStock'] }}', 'qty-{{ $item['idStock'] }}', 'harga-{{ $item['idStock'] }}', 'lbltotalItem-{{ $item['idStock'] }}', 'totalItem-{{ $item['idStock'] }}')" class="discp discp-{{ $item['idStock'] }}" id="discp-{{ $item['idStock'] }}" name="discp[]" value="{{ $item['sd_disc_persen'] * 100 . '%' }}" /></td>@endif
+                                                                @if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right;" type="text" onkeyup="isiDiscv('discp-{{ $item['idStock'] }}', 'discv-{{ $item['idStock'] }}', 'qty-{{ $item['idStock'] }}', 'harga-{{ $item['idStock'] }}', 'lbltotalItem-{{ $item['idStock'] }}', 'totalItem-{{ $item['idStock'] }}')" class="discv discv-{{ $item['idStock'] }}" id="discv-{{ $item['idStock'] }}" name="discv[]" value="{{ number_format($item['sd_disc_value'],0,',','.') }}" /></td>@endif
+                                                                <td style="width: 15%;" id="lbltotalItem-{{ $item['idStock'] }}">Rp.<p style="float: right">{{ number_format($item['sd_total_gross'],0,',','.') }}</p></td>
+                                                                <td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item['idStock'] }}{{ $item['sm_specificcode'] }}', '{{ Crypt::encrypt($item['sd_sales']) }}', '{{ Crypt::encrypt($item['sd_item']) }}', '{{ $item['sm_specificcode'] }}')"><i class="fa fa-minus"></i></button></td>
                                                             </tr>
                                                         @endif
                                                     @endforeach
@@ -416,14 +416,23 @@
 
         function setStock(info){
             var data = info.data;
+
+            axios.get(baseUrl+'/penjualan-tempo/checkStock/'+data.i_id)
+                .then(function (response) {
+                    // handle success
+                    stockGlobal = response.data;
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+
             var price = 0;
             if (data.i_code == "") {
                 namaGlobal = data.i_nama;
             } else {
                 namaGlobal = data.i_code+" - "+data.i_nama;
             }
-
-            stockGlobal = data.s_qty;
 
             iCode = data.i_code;
 
