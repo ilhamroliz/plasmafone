@@ -533,11 +533,15 @@ class ReturnPenjualanController extends Controller
 
                     }
 
-                    $msg = 'true';
+                    $msg = 'ok';
                 }
 
                 DB::commit();
-                return $msg;
+                return json_encode([
+                    'status' => $msg,
+                    'id' => Crypt::encrypt($rp_id),
+                    'nota' => $nota
+                ]);
             }catch (\Exception $e){
                 DB::rollback();
                 return 'false';
@@ -720,11 +724,15 @@ class ReturnPenjualanController extends Controller
 
                     }
 
-                    $msg = 'true';
+                    $msg = 'ok';
                 }
 
                 DB::commit();
-                return $msg;
+                return json_encode([
+                    'status' => $msg,
+                    'id' => Crypt::encrypt($rp_id),
+                    'nota' => $nota
+                ]);
             }catch (\Exception $e){
                 DB::rollback();
                 return 'false';
@@ -827,15 +835,44 @@ class ReturnPenjualanController extends Controller
                         'rpd_note'         => strtoupper($request->ket)
                     ]);
 
-                    $msg = 'true';
+                    $msg = 'ok';
                 }
 
                 DB::commit();
-                return $msg;
+                return json_encode([
+                    'status' => $msg,
+                    'id' => Crypt::encrypt($rp_id),
+                    'nota' => $nota
+                ]);
             }catch (\Exception $e){
                 DB::rollback();
                 return 'false';
             }
         }
+    }
+
+    public function struk($id = null)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
+
+        $datas = DB::table('d_return_penjualan')
+            ->where('d_return_penjualan.rp_id', $id)
+            ->join('d_return_penjualandt', 'd_return_penjualan.rp_id', '=', 'd_return_penjualandt.rpd_return')
+            ->join('d_sales', 'd_sales.s_nota', '=', 'd_return_penjualan.rp_notapenjualan')
+            ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
+            ->join('d_item', 'd_item.i_id', '=', 'd_return_penjualandt.rpd_item')
+            ->get();
+
+        dd($datas);
+
+        if ($datas == null) {
+            return view('errors/404');
+        }
+
+        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'totHarga', 'payment_method', 'payment', 'dibayar', 'kembali'));
     }
 }

@@ -513,7 +513,7 @@
                 .then(function (response) {
                     console.log(response.data);
                     out();
-                    if (response.data == true) {
+                    if (response.data.status == "ok") {
                         $.smallBox({
                             title : "Berhasil",
                             content : 'Return barang berhasil...!',
@@ -521,8 +521,9 @@
                             timeout: 5000,
                             icon : "fa fa-check bounce animated"
                         });
+                        cetak(response.data.id)
                         window.location = baseUrl + '/penjualan/return-penjualan';
-                    } else if (response.data == "not found") {
+                    } else if (response.data.status == "not found") {
                         $.smallBox({
                             title : "Gagal",
                             content : "Upsss. Data tidak ditemukan distok!",
@@ -544,6 +545,10 @@
                     out();
                     console.log(error);
                 });
+            }
+
+            function cetak(id){
+                window.open(baseUrl + '/penjualan/return-penjualan/struk/'+id, '', "width=800,height=600");
             }
         })
     </script>
