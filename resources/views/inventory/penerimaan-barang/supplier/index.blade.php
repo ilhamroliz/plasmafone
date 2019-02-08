@@ -119,11 +119,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 													<th><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal</th>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
+													<th><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
-
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Supplier</th>
 
 													<th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
@@ -149,11 +147,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 													<th><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal</th>
 
-													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nota</th>
+													<th><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;No. Nota</th>
 
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Asal Outlet</th>
-
-													<th><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Tujuan Outlet</th>
+													<th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Supplier</th>
 
 													<th class="text-center"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
@@ -233,27 +229,21 @@ use App\Http\Controllers\PlasmafoneController as Access;
 													</tr>
 
 													<tr>
-														<td><strong>Dari Outlet</strong></td>
+														<td><strong>Nama Supplier</strong></td>
 														<td><strong>:</strong></td>
-														<td id="dt_from"></td>
+														<td id="dt_supp"></td>
 													</tr>
 
 													<tr>
-														<td><strong>Tujuan Outlet</strong></td>
+														<td><strong>No. Telp Supplier</strong></td>
 														<td><strong>:</strong></td>
-														<td id="dt_destination"></td>
+														<td id="dt_telp"></td>
 													</tr>
 
 													<tr>
-														<td><strong>Tanggal Distribusi</strong></td>
+														<td><strong>Tanggal PO</strong></td>
 														<td><strong>:</strong></td>
 														<td id="dt_tgl"></td>
-													</tr>
-
-													<tr>
-														<td><strong>Petugas</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_by"></td>
 													</tr>
 
 												</tbody>
@@ -330,6 +320,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				phone : 480
 			};
 
+			$('#table_item').DataTable({
+				"language": dataTableLanguage,
+				"pageLength": 8,
+				"lengthChange": false,
+				"searching": false
+			});
+
 			setTimeout(function () {
 
 				aktif = $('#dt_active').dataTable({
@@ -337,12 +334,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"serverSide": true,
 					"orderable": false,
 					"order": [],
-					"ajax": "{{ route('distribusi.proses') }}",
+					"ajax": "{{ url('/inventory/penerimaan/supplier/get-proses') }}",
 					"columns":[
-						{"data": "tanggal"},
-						{"data": "nota"},
-						{"data": "from"},
-						{"data": "destination"},
+						{"data": "date"},
+						{"data": "p_nota"},
+						{"data": "s_company"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -362,10 +358,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						responsiveHelper_dt_basic.respond();
 					}
 				});
+                $('#overlay').fadeOut(200);
 
 			}, 500);
 
-			setTimeout(function () {
+			{{--  setTimeout(function () {
 
 				semua = $('#dt_all').dataTable({
 					"processing": true,
@@ -374,10 +371,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					"order": [],
 					"ajax": "{{ route('distribusi.terima') }}",
 					"columns":[
-						{"data": "tanggal"},
-						{"data": "nota"},
-						{"data": "from"},
-						{"data": "destination"},
+						{"data": "date"},
+						{"data": "p_nota"},
+						{"data": "s_company"},
 						{"data": "aksi"}
 					],
 					"autoWidth" : true,
@@ -398,7 +394,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					}
 				});
                 $('#overlay').fadeOut(200);
-			}, 1000);
+			}, 1000);  --}}
 
 		/* END BASIC */
 
@@ -413,7 +409,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Memproses...');
 
-			window.location = baseUrl+'/master/outlet/edit/'+val;
+			window.location = baseUrl+'/inventory/penerimaan/supplier/edit?id='+val;
 
 		}
 
@@ -464,7 +460,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			var status;
 
-			axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail/'+id).then(response => {
+			axios.post(baseUrl+'/inventory/penerimaan/supplier/detail?id='+id).then(response => {
 
 				if (response.data.status == 'Access denied') {
 
@@ -480,16 +476,23 @@ use App\Http\Controllers\PlasmafoneController as Access;
 				} else {
 					var row = '';
 					$('.tr').remove();
-					$('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
-					$('#dt_nota').text(response.data.data[0].nota);
-					$('#dt_from').text(response.data.data[0].from);
-					$('#dt_destination').text(response.data.data[0].destination);
-					$('#dt_tgl').text(response.data.data[0].tanggal);
-					$('#dt_by').text(response.data.data[0].by);
-					response.data.data.forEach(function(element) {
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>'
-						$('#table_item tbody').append(row)
-					});
+					$('#title_detail').html('<strong>Detail Penerimaan Barang</strong>');
+					$('#dt_nota').text(response.data.data[0].p_nota);
+					$('#dt_supp').text(response.data.data[0].s_company);
+					$('#dt_telp').text(response.data.data[0].s_phone);
+					$('#dt_tgl').text(response.data.data[0].p_date);
+
+					$('#table_item').DataTable().clear();
+					for(var i = 0; i < response.data.data.length; i++){
+
+						$('#table_item').DataTable().row.add([
+							response.data.data[i].i_nama,
+							response.data.data[i].pd_qty,
+							response.data.data[i].pd_qtyreceived
+						]).draw();
+						
+					}
+
 					$('#overlay').fadeOut(200);
 					$('#myModal').modal('show');
 
