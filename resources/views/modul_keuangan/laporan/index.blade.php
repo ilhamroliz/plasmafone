@@ -9,8 +9,8 @@
     
     <style type="text/css">
         .laporan-wrap{
-            /*box-shadow: 0px 0px 5px #aaa;*/
-            border: 1px solid #ccc;
+            box-shadow: 0px 0px 5px #aaa;
+            border: 0px solid #ccc;
             padding: 20px;
         }
 
@@ -25,12 +25,16 @@
             color: #777;
             text-decoration: none;
         }
+
+        .laporan-wrap a:hover{
+            color: #000;
+        }
     </style>
 
 @endsection
 
 
-@section('content')
+@section('main_content')
 
     <?php 
 
@@ -67,7 +71,7 @@
             $piutang = "_token=".csrf_token()."&d1=".date('d/m/Y')."&jenis=rekap&type=Piutang_Customer&semua=on";
     ?>
 
-    <div class="col-md-12" style="background: none;">
+    <div class="col-md-12" style="background: none; margin-top: 20px;">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-6 content-title">
@@ -82,7 +86,7 @@
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="{{ route('laporan.keuangan.jurnal_umum', $jurnalRequest) }}">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-clipboard" style="font-size: 42pt; color: #ffbb33;"></i>
                             </a>
                         </div>
 
@@ -98,7 +102,7 @@
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="{{ route('laporan.keuangan.buku_besar', $buku_besar) }}">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-book" style="font-size: 42pt; color: #ffbb33;"></i>
                             </a>
                         </div>
 
@@ -114,7 +118,7 @@
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="{{ Route('laporan.keuangan.neraca_saldo', $neraca_saldo) }}">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-bar-chart" style="font-size: 42pt; color: #ffbb33;"></i>
                             </a>
                         </div>
 
@@ -130,7 +134,7 @@
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="{{ Route('laporan.keuangan.neraca', $neraca) }}">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-balance-scale" style="font-size: 42pt; color: #ffbb33;"></i>
                             </a>
                         </div>
 
@@ -146,7 +150,7 @@
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="{{ Route('laporan.keuangan.laba_rugi', $laba_rugi) }}">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-list-ul" style="font-size: 42pt; color: #ffbb33;"></i>
                             </a>
                         </div>
 
@@ -162,7 +166,7 @@
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="#">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-random" style="font-size: 42pt; color: #ffbb33;"></i>
                             </a>
                         </div>
 
@@ -173,14 +177,12 @@
                         </div>    
                     </div>
                 </div>
-            </div>
 
-            <div class="row" style="padding: 20px 30px 10px 30px; border-top: 1px solid #eee; margin-top: 20px;">
                 <div class="col-md-3" style="padding: 10px 30px;">
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="{{ Route('laporan.keuangan.hutang', $hutang) }}">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-upload" style="font-size: 42pt; color: #33b5e5;"></i>
                             </a>
                         </div>
 
@@ -196,7 +198,7 @@
                     <div class="row laporan-wrap">
                         <div class="col-md-12 text-center">
                             <a href="{{ Route('laporan.keuangan.piutang', $piutang) }}">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
+                                <i class="fa fa-download" style="font-size: 42pt; color: #33b5e5;"></i>
                             </a>
                         </div>
 
@@ -209,39 +211,6 @@
                 </div>
             </div>
 
-            <div class="row" style="padding: 20px 30px 10px 30px; border-top: 1px solid #eee; margin-top: 20px;">
-                <div class="col-md-3" style="padding: 10px 30px;">
-                    <div class="row laporan-wrap">
-                        <div class="col-md-12 text-center">
-                            <a href="#">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
-                            </a>
-                        </div>
-
-                        <div class="col-md-12 text-center text">
-                            <a href="#">
-                                Penyusutan Aktiva Tetap
-                            </a>
-                        </div>    
-                    </div>
-                </div>
-
-                <div class="col-md-3" style="padding: 10px 30px;">
-                    <div class="row laporan-wrap">
-                        <div class="col-md-12 text-center">
-                            <a href="#">
-                                <i class="fa fa-clipboard" style="font-size: 42pt;"></i>
-                            </a>
-                        </div>
-
-                        <div class="col-md-12 text-center text">
-                            <a href="#">
-                                Saldo Akun
-                            </a>
-                        </div>    
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 @endsection

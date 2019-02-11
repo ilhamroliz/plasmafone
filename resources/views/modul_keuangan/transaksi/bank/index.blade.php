@@ -13,15 +13,15 @@
 @endsection
 
 
-@section('content')
-    <div class="col-md-12" style="background: none;" id="vue-component">
+@section('main_content')
+    <div class="col-md-12" style="background: none; margin-top: 20px;" id="vue-component">
     	<div class="col-md-12">
     		<div class="row">
     			<div class="col-md-6 content-title">
     				Tambah Data Transaksi Bank
     			</div>
 
-    			<div class="col-md-6 text-right form-status">
+    			<div class="col-md-6 text-right form-status" style="padding-right: 30px;">
     				<span v-if="stat == 'standby'" v-cloak>
                         <i class="fa fa-exclamation"></i> &nbsp; Pastikan Data Terisi Dengan Benar            
                     </span>
@@ -41,7 +41,7 @@
                     <div class="col-md-6" style="background: none;">
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Nomor Transaksi</label>
                             </div>
 
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Type Transaksi Bank</label>
                             </div>
 
@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Tanggal Transaksi *</label>
                             </div>
 
@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="row mt-form" style="border-top: 1px solid #eee; padding-top: 20px;">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Ket. Transaksi *</label>
                             </div>
 
@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Pilih Akun Bank</label>
                             </div>
 
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Nominal Transaksi</label>
                             </div>
 
@@ -117,7 +117,7 @@
                         </div>
 
                         <div class="row mt-form" v-if="locked">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan"></label>
                             </div>
 
@@ -225,7 +225,7 @@
                 <div class="row content-button">
                     <div class="col-md-6">
                         <a href="{{ route('grup-akun.index') }}">
-                            <button type="button" class="btn btn-default btn-sm"><i class="fa fa-arrow-left" :disabled="btnDisabled"></i> &nbsp;Kembali Ke Halaman Data Group Akun</button>
+                            {{-- <button type="button" class="btn btn-default btn-sm"><i class="fa fa-arrow-left" :disabled="btnDisabled"></i> &nbsp;Kembali Ke Halaman Data Group Akun</button> --}}
                         </a>
                     </div>
 
@@ -246,7 +246,7 @@
             <div class="layout" style="width: 70%">
                 <div class="top-popup" style="background: none;">
                     <span class="title">
-                        Data Transaksi Kas Yang Sudah Masuk
+                        Data Transaksi Bank Yang Sudah Masuk
                     </span>
 
                     <span class="close"><i class="fa fa-times" style="font-size: 12pt; color: #CC0000"></i></span>
@@ -712,7 +712,7 @@
                     this.list_data_table = [];
                     this.onAjaxLoading = true;
 
-                    axios.get('{{ Request('/') }}/modul/keuangan/transaksi/bank/datatable?type='+$('#tr_type').val()+'&tanggal='+$('#tr_tanggal').val())
+                    axios.get('{{ Route('transaksi.bank.datatable') }}?type='+$('#tr_type').val()+'&tanggal='+$('#tr_tanggal').val())
                             .then((response) => {
                                 // console.log(response.data);
                                 if(response.data.length){

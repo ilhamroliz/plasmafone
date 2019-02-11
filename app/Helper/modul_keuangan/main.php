@@ -111,7 +111,7 @@
 			// setting
 				'allowJurnalToExecute'	=> true,
 				'comp'					=> 1,
-				'companyName'			=> 'Dirga Ambara Corporindo',
+				'companyName'			=> 'Plasmafone',
 		];
 
 		return (object) $setting;
