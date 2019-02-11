@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-<<<<<<< HEAD
     <list default="true" id="c1fafb65-daf5-4c94-858a-66fc52492e53" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/distribusi/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/distribusi/edit.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/return-penjualan/return.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/return-penjualan/return.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/return-penjualan/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/return-penjualan/index.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-    </list>
 =======
-    <list default="true" id="c1fafb65-daf5-4c94-858a-66fc52492e53" name="Default Changelist" comment="" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" afterDir="false" />
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
+    </list>
     <ignored path="$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf/" />
     <ignored path="$PROJECT_DIR$/vendor/beyondcode/laravel-dump-server/" />
     <ignored path="$PROJECT_DIR$/vendor/codedge/laravel-fpdf/" />
@@ -134,7 +134,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
+          <entry key="project.closed" value="15" />
           <entry key="project.open.time.11" value="4" />
           <entry key="project.open.time.12" value="3" />
           <entry key="project.open.time.16" value="1" />
@@ -145,35 +145,36 @@
           <entry key="project.open.time.61" value="1" />
           <entry key="project.open.time.62" value="1" />
           <entry key="project.open.time.65" value="1" />
+          <entry key="project.open.time.67" value="1" />
           <entry key="project.open.time.76" value="1" />
-          <entry key="project.opened" value="16" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="css" value="1" />
           <entry key="js" value="1" />
-          <entry key="php" value="52" />
+          <entry key="php" value="54" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Blade" value="28" />
+          <entry key="Blade" value="29" />
           <entry key="CSS" value="1" />
           <entry key="JavaScript" value="1" />
-          <entry key="PHP" value="24" />
+          <entry key="PHP" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="php" value="6368" />
+          <entry key="php" value="6975" />
           <entry key="txt" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="Blade" value="3415" />
-          <entry key="PHP" value="2953" />
+          <entry key="PHP" value="3560" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
@@ -185,146 +186,140 @@
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< HEAD
-            <state relative-caret-position="346">
-              <caret line="641" column="107" selection-start-line="641" selection-start-column="102" selection-end-line="641" selection-end-column="107" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="415">
-              <caret line="1147" lean-forward="true" selection-start-line="1147" selection-end-line="1147" />
-              <folding>
-                <element signature="e#40#58#0#PHP" expanded="true" />
-                <element signature="e#393#486#0#PHP" />
-                <element signature="e#492#589#0#PHP" />
-                <element signature="e#595#686#0#PHP" />
-                <element signature="e#692#785#0#PHP" />
-                <element signature="e#791#1523#0#PHP" />
-                <element signature="e#249#255#1" expanded="true" />
-                <element signature="e#472#478#1" expanded="true" />
-                <element signature="e#249#255#1" expanded="true" />
-                <element signature="e#472#478#1" expanded="true" />
-              </folding>
+            <state relative-caret-position="139">
+              <caret line="631" column="82" lean-forward="true" selection-start-line="631" selection-start-column="82" selection-end-line="631" selection-end-column="82" />
+=======
+            <state relative-caret-position="170">
+              <caret line="403" column="99" selection-start-line="403" selection-start-column="99" selection-end-line="403" selection-end-column="99" />
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="870" column="17" selection-start-line="870" selection-start-column="17" selection-end-line="870" selection-end-column="17" />
+<<<<<<< HEAD
+            <state relative-caret-position="64">
+              <caret line="37" column="47" selection-start-line="37" selection-start-column="47" selection-end-line="37" selection-end-column="47" />
               <folding>
-                <element signature="e#50#78#0#PHP" expanded="true" />
-                <element signature="e#336#428#0#PHP" />
-                <element signature="e#434#522#0#PHP" />
-                <element signature="e#528#1236#0#PHP" />
-                <element signature="e#1242#1972#0#PHP" />
-                <element signature="e#1978#2598#0#PHP" />
-                <element signature="e#2604#4978#0#PHP" />
+                <element signature="e#392#484#0#PHP" />
+                <element signature="e#490#578#0#PHP" />
+                <element signature="e#588#636#0#PHP" />
+                <element signature="e#472#478#1" expanded="true" />
+                <element signature="e#584#1292#0#PHP" />
+                <element signature="e#1298#2028#0#PHP" />
+                <element signature="e#2034#2654#0#PHP" />
+                <element signature="e#2660#5034#0#PHP" />
                 <element signature="e#248#254#1" expanded="true" />
-                <element signature="e#4984#6975#0#PHP" />
-                <element signature="e#6981#7900#0#PHP" />
-                <element signature="e#7906#8758#0#PHP" />
-                <element signature="e#8764#10928#0#PHP" />
-                <element signature="e#10938#18083#0#PHP" />
+                <element signature="e#5040#7031#0#PHP" />
+                <element signature="e#7037#7957#0#PHP" />
+                <element signature="e#7963#8815#0#PHP" />
+                <element signature="e#8821#10985#0#PHP" />
+                <element signature="e#10991#13058#0#PHP" />
+                <element signature="e#13064#37551#0#PHP" />
               </folding>
-=======
-            <state relative-caret-position="18039">
-              <caret line="859" column="97" selection-start-line="859" selection-start-column="97" selection-end-line="859" selection-end-column="97" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CodeGenerator.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/add.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-<<<<<<< HEAD
-            <state relative-caret-position="129">
-              <caret line="76" column="27" selection-start-line="76" selection-start-column="27" selection-end-line="76" selection-end-column="27" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/return.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="550" column="86" selection-start-line="550" selection-start-column="86" selection-end-line="550" selection-end-column="86" />
+            <state relative-caret-position="188">
+              <caret line="481" column="8" lean-forward="true" selection-start-line="481" selection-start-column="8" selection-end-line="481" selection-end-column="8" />
               <folding>
-                <element signature="e#12738#18217#0#HTML" />
-                <element signature="e#19345#22193#0#HTML" />
-                <element signature="e#22241#24030#0#HTML" />
-                <element signature="e#22316#22772#0#HTML" />
-                <element signature="e#22805#23254#0#HTML" />
-                <element signature="e#22842#23146#0#HTML" />
-                <element signature="e#23304#23515#0#HTML" />
-                <element signature="e#23541#23987#0#HTML" />
-                <element signature="e#23599#23961#0#HTML" />
-                <element signature="e#24553#24636#0#HTML" />
-                <element signature="e#24635#25084#0#HTML" />
-                <element signature="e#24672#24976#0#HTML" />
-                <element signature="e#26255#26758#0#HTML" />
-                <element signature="e#26815#27031#0#HTML" />
-                <element signature="e#27587#27619#0#HTML" />
-                <element signature="e#27077#27513#0#HTML" />
-                <element signature="e#27692#27933#0#HTML" />
-                <element signature="e#28161#28193#0#HTML" />
-                <element signature="e#28003#29117#0#HTML" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/struk.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2898">
-              <caret line="126" lean-forward="true" selection-start-line="126" selection-end-line="126" />
+                <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
 =======
-            <state relative-caret-position="2016">
-              <caret line="97" column="141" selection-start-line="97" selection-start-column="141" selection-end-line="97" selection-end-column="142" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+            <state relative-caret-position="305">
+              <caret line="1315" column="32" lean-forward="true" selection-start-line="1315" selection-start-column="32" selection-end-line="1315" selection-end-column="32" />
+              <folding>
+                <element signature="e#237#243#1" expanded="true" />
+                <element signature="e#443#449#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#217#223#1" expanded="true" />
+                <element signature="e#416#422#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#215#221#1" expanded="true" />
+                <element signature="e#412#418#1" expanded="true" />
+                <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
+                <element signature="e#34#40#0" expanded="true" />
+                <element signature="e#33#39#0" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#225#231#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#274#280#1" expanded="true" />
+                <element signature="e#234#240#1" expanded="true" />
+                <element signature="e#437#443#1" expanded="true" />
+                <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+                <element signature="e#186#192#1" expanded="true" />
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
 <<<<<<< HEAD
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="253">
-              <caret line="1018" column="5" lean-forward="true" selection-start-line="1016" selection-start-column="4" selection-end-line="1018" selection-end-column="5" />
-              <folding>
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-              </folding>
-=======
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1239">
-              <caret line="59" column="93" selection-start-line="59" selection-start-column="93" selection-end-line="59" selection-end-column="93" />
+            <state relative-caret-position="291">
+              <caret line="62" column="86" selection-start-line="62" selection-start-column="86" selection-end-line="62" selection-end-column="86" />
               <folding>
-                <element signature="e#40#58#0#PHP" expanded="true" />
+                <element signature="e#10566#10611#0#HTML" expanded="true" />
+                <element signature="e#6128#6152#0#HTML" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7161">
-              <caret line="341" column="34" selection-start-line="341" selection-start-column="34" selection-end-line="341" selection-end-column="34" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+            <state relative-caret-position="458">
+              <caret line="798" column="49" lean-forward="true" selection-start-line="798" selection-start-column="49" selection-end-line="798" selection-end-column="49" />
+              <folding>
+                <element signature="e#15264#19200#0#HTML" />
+                <element signature="e#19446#25324#0#HTML" />
+                <element signature="e#25436#29289#0#HTML" />
+                <element signature="e#29316#29396#0#HTML" />
+                <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+              </folding>
+=======
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/pembelian/request_order/tambah_request_order.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="386">
+              <caret line="588" column="30" selection-start-line="588" selection-start-column="17" selection-end-line="588" selection-end-column="30" />
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
             </state>
           </provider>
         </entry>
@@ -334,16 +329,11 @@
   <component name="FindInProjectRecents">
     <findStrings>
 <<<<<<< HEAD
-=======
-      <find>purchase-order/tambah-purchase-prder</find>
-      <find>pembelian/refund</find>
-      <find>layanan-perbaikan</find>
-      <find>return</find>
-      <find>perbaikan</find>
-      <find>return-p</find>
       <find>rencana pem</find>
       <find>pembelian/rencana-pembelian</find>
       <find>pembelian/konfirmasi-pembelian</find>
+=======
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
       <find>rencanaDisetujui</find>
       <find>tambah-distribusi</find>
       <find>setsearch</find>
@@ -353,7 +343,6 @@
       <find>distribusi/tambah-distribusi</find>
       <find>master/pembayaran</find>
       <find>PLasma</find>
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
       <find>Plasma</find>
       <find>tempo/tambah</find>
       <find>autocomplete</find>
@@ -367,26 +356,23 @@
       <find>penjualan-regul</find>
       <find>nota</find>
 <<<<<<< HEAD
-      <find>dt_code</find>
-      <find>terima</find>
-      <find>function ter</find>
-      <find>/inventory/penerimaan/distribusi/get-item/</find>
-      <find>terima(</find>
-      <find>getItem</find>
-      <find>destroy</find>
-      <find>/inventory/penerimaan/distribusi/item-receive/</find>
-      <find>/penjualan/return-penjualan/cariitembaru</find>
-      <find>item_baru</find>
-      <find>axios.post</find>
-      <find>cariSto</find>
-      <find>smallBox</find>
-      <find>GenerateCode</find>
-      <find>sm_specififccode</find>
-      <find>kode</find>
-      <find>cetak</find>
-      <find>str</find>
+      <find>return-pe</find>
+      <find>DataTables</find>
+      <find>/penjualan/return-penjualan/cari/detail/</find>
+      <find>cariNotaDetail</find>
+      <find>detail</find>
+      <find>DATE</find>
 =======
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+      <find>addDum</find>
+      <find>simpanreq</find>
+      <find>excep</find>
+      <find>exce</find>
+      <find>simpanRequest</find>
+      <find>simpan</find>
+      <find>request-pembelian/tambah</find>
+      <find>simpanRequestverifikasi_simpanRequest</find>
+      <find>konfirmasi-pembelian/view_addKonfirmasi</find>
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
     </findStrings>
     <replaceStrings>
       <replace>PurchaseOrderController</replace>
@@ -407,28 +393,16 @@
         <option value="$PROJECT_DIR$/resources/views/perbaikan/add.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/return-penjualan/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/pembelian/rencana_pembelian/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" />
         <option value="$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_navigation.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/partials/_head.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PlasmafoneController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php" />
-<<<<<<< HEAD
-        <option value="$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/inventory/ReceptionController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/CodeGenerator.php" />
-        <option value="$PROJECT_DIR$/resources/views/penjualan/return-penjualan/struk.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/distribusi/edit.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/penjualan/return-penjualan/return.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php" />
-=======
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/CodeGenerator.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" />
       </list>
     </option>
   </component>
@@ -555,16 +529,15 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="10" />
-    <option name="y" value="20" />
-    <option name="width" value="1346" />
-    <option name="height" value="688" />
+    <option name="width" value="1338" />
+    <option name="height" value="585" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -594,33 +567,7 @@
               <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
               <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
-              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
 <<<<<<< HEAD
-            <path>
-              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
-              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="inventory" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
-              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="inventory" type="462c0819:PsiDirectoryNode" />
-              <item name="distribusi" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
-              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="penjualan" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -630,23 +577,20 @@
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="penjualan" type="462c0819:PsiDirectoryNode" />
-              <item name="penjualan-regular" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
-              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="penjualan" type="462c0819:PsiDirectoryNode" />
-              <item name="return-penjualan" type="462c0819:PsiDirectoryNode" />
-            </path>
+              <item name="penjualan-tempo" type="462c0819:PsiDirectoryNode" />
 =======
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
+            </path>
+            <path>
+              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
+              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -669,21 +613,13 @@
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
           <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/workspace.xml</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/inventory/ReceptionController.php</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/inventory/SupplierReceptionController.php</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/pembelian/PurchaseOrderController.php</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/distribusi/edit.blade.php</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/edit.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/index.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/main_frontend.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/print_purchase.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/edit.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/edit.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/return-penjualan/add.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/view_purchase_order.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/return-penjualan/return.blade.php</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/routes/web.php</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
@@ -692,20 +628,6 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="CREATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/onlineshop_controller.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/img/items/2019020713020749407.jpg</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/img/items/2019020713021293160.jpg</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/aksesoris/index.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/halaman/detail_produk.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/halaman/semua_produk.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/halaman/shoping_cart.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/handphone/index.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_footer.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_header.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_htmlheader.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_script.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/return-penjualan/return.blade.php</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Deleted" />
@@ -713,17 +635,6 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="true" />
           <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/frontend_controller.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/aksesoris/index.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/halaman/detail_produk.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/halaman/semua_produk.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/handphone/index.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/partials/_footer.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/partials/_header.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/partials/_htmlheader.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/frontend/partials/_script.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/tambah.blade.php</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Restored" />
@@ -833,10 +744,6 @@
       <workItem from="1549331780210" duration="486000" />
       <workItem from="1549419452129" duration="12024000" />
       <workItem from="1549466410381" duration="5406000" />
-<<<<<<< HEAD
-      <workItem from="1549501534758" duration="13756000" />
-      <workItem from="1549585854697" duration="21886000" />
-=======
       <workItem from="1549501534758" duration="14153000" />
       <workItem from="1549535153276" duration="633000" />
       <workItem from="1549593982718" duration="128000" />
@@ -846,8 +753,8 @@
       <workItem from="1549598188882" duration="8000" />
       <workItem from="1549598226624" duration="4000" />
       <workItem from="1549598283552" duration="7000" />
-      <workItem from="1549598440823" duration="3704000" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+      <workItem from="1549598440823" duration="4388000" />
+      <workItem from="1549852358610" duration="4536000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1549088688030</created>
@@ -947,25 +854,39 @@
       <option name="project" value="LOCAL" />
       <updated>1549609926403</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="roliz">
+      <created>1549616940634</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1549616940634</updated>
+    </task>
+    <task id="LOCAL-00016" summary="roliz">
+      <created>1549853099733</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1549853099733</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
 <<<<<<< HEAD
-    <option name="totallyTimeSpent" value="65824000" />
+    <option name="totallyTimeSpent" value="53989000" />
 =======
-    <option name="totallyTimeSpent" value="46264000" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+    <option name="totallyTimeSpent" value="51484000" />
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-8" width="1366" height="740" extended-state="6" />
+    <frame x="0" y="0" width="1366" height="732" extended-state="6" />
     <editor active="true" />
     <layout>
 <<<<<<< HEAD
-      <window_info content_ui="combo" id="Project" order="0" weight="0.1689394" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18636364" />
 =======
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25378788" />
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -1087,13 +1008,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-10">
-          <caret line="209" column="14" selection-start-line="209" selection-start-column="14" selection-end-line="209" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/partials/_navigation.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="197">
@@ -1179,9 +1093,6 @@
         </state>
       </provider>
     </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/resources/views/inventory/distribusi/add.blade.php">
-=======
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="401">
@@ -1190,166 +1101,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1063">
           <caret line="568" column="47" selection-start-line="568" selection-start-column="47" selection-end-line="568" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/resources/views/partials/_script.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4570" />
-=======
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18039">
-          <caret line="859" column="97" selection-start-line="859" selection-start-column="97" selection-end-line="859" selection-end-column="97" />
-        </state>
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CodeGenerator.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2016">
-          <caret line="97" column="141" selection-start-line="97" selection-start-column="141" selection-end-line="97" selection-end-column="142" />
-        </state>
-      </provider>
-    </entry>
-<<<<<<< HEAD
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/struk.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" column="32" lean-forward="true" selection-start-line="11" selection-start-column="32" selection-end-line="11" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/distribusi/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7004">
-          <caret line="332" column="32" selection-start-line="332" selection-start-column="32" selection-end-line="332" selection-end-column="32" />
-          <folding>
-            <element signature="n#style#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/distribusi/edit.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2685">
-          <caret line="514" column="28" selection-start-line="514" selection-start-column="28" selection-end-line="514" selection-end-column="28" />
-          <folding>
-            <element signature="e#7994#8001#0#HTML" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/struk.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2898">
-          <caret line="126" lean-forward="true" selection-start-line="126" selection-end-line="126" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="1018" column="5" lean-forward="true" selection-start-line="1016" selection-start-column="4" selection-end-line="1018" selection-end-column="5" />
-          <folding>
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/return.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="550" column="86" selection-start-line="550" selection-start-column="86" selection-end-line="550" selection-end-column="86" />
-          <folding>
-            <element signature="e#12738#18217#0#HTML" />
-            <element signature="e#19345#22193#0#HTML" />
-            <element signature="e#22241#24030#0#HTML" />
-            <element signature="e#22316#22772#0#HTML" />
-            <element signature="e#22805#23254#0#HTML" />
-            <element signature="e#22842#23146#0#HTML" />
-            <element signature="e#23304#23515#0#HTML" />
-            <element signature="e#23541#23987#0#HTML" />
-            <element signature="e#23599#23961#0#HTML" />
-            <element signature="e#24553#24636#0#HTML" />
-            <element signature="e#24635#25084#0#HTML" />
-            <element signature="e#24672#24976#0#HTML" />
-            <element signature="e#26255#26758#0#HTML" />
-            <element signature="e#26815#27031#0#HTML" />
-            <element signature="e#27587#27619#0#HTML" />
-            <element signature="e#27077#27513#0#HTML" />
-            <element signature="e#27692#27933#0#HTML" />
-            <element signature="e#28161#28193#0#HTML" />
-            <element signature="e#28003#29117#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="641" column="107" selection-start-line="641" selection-start-column="102" selection-end-line="641" selection-end-column="107" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="1147" lean-forward="true" selection-start-line="1147" selection-end-line="1147" />
-          <folding>
-            <element signature="e#40#58#0#PHP" expanded="true" />
-            <element signature="e#393#486#0#PHP" />
-            <element signature="e#492#589#0#PHP" />
-            <element signature="e#595#686#0#PHP" />
-            <element signature="e#692#785#0#PHP" />
-            <element signature="e#791#1523#0#PHP" />
-            <element signature="e#249#255#1" expanded="true" />
-            <element signature="e#472#478#1" expanded="true" />
-            <element signature="e#249#255#1" expanded="true" />
-            <element signature="e#472#478#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="870" column="17" selection-start-line="870" selection-start-column="17" selection-end-line="870" selection-end-column="17" />
-          <folding>
-            <element signature="e#50#78#0#PHP" expanded="true" />
-            <element signature="e#336#428#0#PHP" />
-            <element signature="e#434#522#0#PHP" />
-            <element signature="e#528#1236#0#PHP" />
-            <element signature="e#1242#1972#0#PHP" />
-            <element signature="e#1978#2598#0#PHP" />
-            <element signature="e#2604#4978#0#PHP" />
-            <element signature="e#248#254#1" expanded="true" />
-            <element signature="e#4984#6975#0#PHP" />
-            <element signature="e#6981#7900#0#PHP" />
-            <element signature="e#7906#8758#0#PHP" />
-            <element signature="e#8764#10928#0#PHP" />
-            <element signature="e#10938#18083#0#PHP" />
-=======
-    <entry file="file://$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7161">
-          <caret line="341" column="34" selection-start-line="341" selection-start-column="34" selection-end-line="341" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -1367,16 +1121,213 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CodeGenerator.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2394">
+          <caret line="115" column="141" selection-start-line="115" selection-start-column="141" selection-end-line="115" selection-end-column="142" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7161">
+          <caret line="341" column="34" selection-start-line="341" selection-start-column="34" selection-end-line="341" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1239">
+        <state relative-caret-position="243">
           <caret line="59" column="93" selection-start-line="59" selection-start-column="93" selection-end-line="59" selection-end-column="93" />
           <folding>
             <element signature="e#40#58#0#PHP" expanded="true" />
->>>>>>> 4c7fa42e5aba45382f446475cd8289af0e3c1d13
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="34" column="58" selection-start-line="34" selection-start-column="58" selection-end-line="34" selection-end-column="58" />
+          <folding>
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="547" column="55" lean-forward="true" selection-start-line="547" selection-start-column="55" selection-end-line="547" selection-end-column="55" />
+          <folding>
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/add.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="481" column="8" lean-forward="true" selection-start-line="481" selection-start-column="8" selection-end-line="481" selection-end-column="8" />
+          <folding>
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="458">
+          <caret line="798" column="49" lean-forward="true" selection-start-line="798" selection-start-column="49" selection-end-line="798" selection-end-column="49" />
+          <folding>
+            <element signature="e#15264#19200#0#HTML" />
+            <element signature="e#19446#25324#0#HTML" />
+            <element signature="e#25436#29289#0#HTML" />
+            <element signature="e#29316#29396#0#HTML" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="422" column="51" lean-forward="true" selection-start-line="422" selection-start-column="51" selection-end-line="422" selection-end-column="51" />
+          <folding>
+            <element signature="e#40#58#0#PHP" expanded="true" />
+            <element signature="e#249#255#1" expanded="true" />
+            <element signature="e#472#478#1" expanded="true" />
+            <element signature="e#249#255#1" expanded="true" />
+            <element signature="e#472#478#1" expanded="true" />
+          </folding>
+=======
+    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/request_order/tambah_request_order.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="386">
+          <caret line="588" column="30" selection-start-line="588" selection-start-column="17" selection-end-line="588" selection-end-column="30" />
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="139">
+          <caret line="631" column="82" lean-forward="true" selection-start-line="631" selection-start-column="82" selection-end-line="631" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="37" column="47" selection-start-line="37" selection-start-column="47" selection-end-line="37" selection-end-column="47" />
+          <folding>
+            <element signature="e#392#484#0#PHP" />
+            <element signature="e#490#578#0#PHP" />
+            <element signature="e#588#636#0#PHP" />
+            <element signature="e#472#478#1" expanded="true" />
+            <element signature="e#584#1292#0#PHP" />
+            <element signature="e#1298#2028#0#PHP" />
+            <element signature="e#2034#2654#0#PHP" />
+            <element signature="e#2660#5034#0#PHP" />
+            <element signature="e#248#254#1" expanded="true" />
+            <element signature="e#5040#7031#0#PHP" />
+            <element signature="e#7037#7957#0#PHP" />
+            <element signature="e#7963#8815#0#PHP" />
+            <element signature="e#8821#10985#0#PHP" />
+            <element signature="e#10991#13058#0#PHP" />
+            <element signature="e#13064#37551#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../company_profile/app/Http/Controllers/About_controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="13" column="57" selection-start-line="13" selection-start-column="57" selection-end-line="13" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="62" column="86" selection-start-line="62" selection-start-column="86" selection-end-line="62" selection-end-column="86" />
+          <folding>
+            <element signature="e#10566#10611#0#HTML" expanded="true" />
+            <element signature="e#6128#6152#0#HTML" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+=======
+        <state relative-caret-position="170">
+          <caret line="403" column="99" selection-start-line="403" selection-start-column="99" selection-end-line="403" selection-end-column="99" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PembelianController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="1315" column="32" lean-forward="true" selection-start-line="1315" selection-start-column="32" selection-end-line="1315" selection-end-column="32" />
+          <folding>
+            <element signature="e#237#243#1" expanded="true" />
+            <element signature="e#443#449#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#217#223#1" expanded="true" />
+            <element signature="e#416#422#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#215#221#1" expanded="true" />
+            <element signature="e#412#418#1" expanded="true" />
+            <element signature="n#style#0;n#ul#0;n#!!top" expanded="true" />
+            <element signature="e#34#40#0" expanded="true" />
+            <element signature="e#33#39#0" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#225#231#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#274#280#1" expanded="true" />
+            <element signature="e#234#240#1" expanded="true" />
+            <element signature="e#437#443#1" expanded="true" />
+            <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#186#192#1" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+>>>>>>> d1753ac0369dcc939de88ebd9573fc888e2565b4
   </component>
 </project>

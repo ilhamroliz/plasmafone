@@ -25,6 +25,229 @@ class ReturnPenjualanController extends Controller
         return view('penjualan.return-penjualan.add');
     }
 
+    public function getDetailReturn($id = null)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return json_encode('Not Found');
+        }
+
+        $datas = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_notareturn as nota_return',
+                'd_return_penjualan.rp_status',
+                'm_company.c_name as nama_outlet',
+                'm_company.c_address as alamat_outlet',
+                'm_member.m_name as nama_member',
+                'm_member.m_telp as telp_member',
+                DB::raw('DATE_FORMAT(d_return_penjualan.rp_date, "%d-%m-%Y") as tgl_return'),
+                'd_return_penjualan.rp_aksi as jenis_return',
+                'rpd.rpd_qty',
+                'a.i_code as rpd_code',
+                'rpd.rpd_specificcode',
+                'a.i_nama as rpd_item',
+                'rpd.rpd_note',
+                'd_return_penjualan.rp_notapenjualan as nota_penjualan',
+                'rpg.rpg_qty',
+                'b.i_code as rpg_code',
+                'rpg.rpg_specificcode',
+                'b.i_nama as rpg_item')
+            ->where('d_return_penjualan.rp_id', $id)
+            ->join('d_return_penjualandt as rpd', 'd_return_penjualan.rp_id', '=', 'rpd.rpd_return')
+            ->join('d_return_penjualanganti as rpg', 'd_return_penjualan.rp_id', '=', 'rpg.rpg_return')
+            ->join('d_sales', 'd_sales.s_nota', '=', 'd_return_penjualan.rp_notapenjualan')
+            ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
+            ->join('d_item as a', 'a.i_id', '=', 'rpd.rpd_item')
+            ->leftjoin('d_item as b', 'b.i_id', '=', 'rpg.rpg_item')
+            ->join('m_company', function ($c){
+                $c->where('c_id', '=', Auth::user()->m_comp);
+            })
+            ->get();
+
+        if ($datas == null) {
+            return json_encode('Not Found');
+        }
+
+        return json_encode($datas);
+    }
+
+    public function getProses()
+    {
+        $data = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_id as id', DB::raw('DATE_FORMAT(d_return_penjualan.rp_date, "%d-%m-%Y") as tanggal'),
+                'd_return_penjualan.rp_notareturn as notareturn', 'm_member.m_name as pelanggan')
+            ->join('d_sales', 'd_return_penjualan.rp_notapenjualan', '=', 'd_sales.s_nota')
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                if (Access::checkAkses(16, 'delete') == false && Access::checkAkses(16, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                }
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
+    public function deleteReturn($id = null)
+    {
+        $getMutasi = null;
+        try{
+            $id = Crypt::decrypt($id);
+        }catch (DecryptException $r){
+            return json_encode('Not Found');
+        }
+
+        DB::beginTransaction();
+        try{
+            $getReturn = DB::table('d_return_penjualan')->where('rp_id', $id)->first();
+            //delete reff rusak
+            $stockMutasiRusak = DB::table('d_stock_mutation')->where('sm_nota', $getReturn->rp_notareturn)->where('sm_detail', 'PENAMBAHAN')->where('sm_reff', 'RUSAK')->get();
+
+            foreach ($stockMutasiRusak as $index => $smr) {
+                if ($stockMutasiRusak[$index]->sm_specificcode != null) {
+                    DB::table('d_stock_dt')->where('sd_stock', $stockMutasiRusak[$index]->sm_stock)->where('sm_specificcode', $stockMutasiRusak[$index]->sm_specificcode)->delete();
+                }
+
+                $getStock = DB::table('d_stock')
+                    ->where('s_id', $stockMutasiRusak[$index]->sm_stock)
+                    ->first();
+
+                DB::table('d_stock')
+                    ->where('s_id', $stockMutasiRusak[$index]->sm_stock)
+                    ->update([
+                        's_qty' => $getStock->s_qty - $stockMutasiRusak[$index]->sm_qty
+                    ]);
+            }
+
+            //delete mutasi
+            $stockMutasi = DB::table('d_stock_mutation')->where('sm_nota', $getReturn->rp_notareturn)->where('sm_detail', 'PENGURANGAN')->get();
+
+            foreach ($stockMutasi as $index => $sm){
+
+                $getMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                    ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                    ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                    ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
+
+                if ($stockMutasi[$index]->sm_specificcode != null){
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $stockMutasi[$index]->sm_stock)->max('sd_detailid');
+
+                    if ($maxStockdt == null){
+                        $maxStockdt = 1;
+                    } else {
+                        $maxStockdt = $maxStockdt + 1;
+                    }
+
+                    // insert stock_dt
+                    DB::table('d_stock_dt')->insert([
+                        'sd_stock' => $stockMutasi[$index]->sm_stock,
+                        'sd_detailid' => $maxStockdt,
+                        'sd_specificcode' => $stockMutasi[$index]->sm_specificcode
+                    ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_reff', 'RUSAK')->delete();
+
+                    // delete d_return_penjualan
+                    $check_ganti = DB::table('d_return_penjualanganti')->where('rpg_return', $id)->count();
+                    if ($check_ganti > 0) {
+                        DB::table('d_return_penjualanganti')->where('rpg_return', $id)->delete();
+                    }
+                    DB::table('d_return_penjualandt')->where('rpd_return', $id)->delete();
+                    DB::table('d_return_penjualan')->where('rp_id', $id)->delete();
+                } else {
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+
+                    // delete d_sales_dt & d_sales
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_reff', 'RUSAK')->delete();
+
+                    // delete d_return_penjualan
+                    $check_ganti = DB::table('d_return_penjualanganti')->where('rpg_return', $id)->count();
+                    if ($check_ganti > 0) {
+                        DB::table('d_return_penjualanganti')->where('rpg_return', $id)->delete();
+                    }
+                    DB::table('d_return_penjualandt')->where('rpd_return', $id)->delete();
+                    DB::table('d_return_penjualan')->where('rp_id', $id)->delete();
+                }
+            }
+
+            DB::commit();
+            return 'true';
+        }catch (\Exception $e){
+            DB::rollback();
+            return 'false';
+        }
+    }
+
     public function cariMember(Request $request)
     {
         $cari = $request->term;
@@ -860,19 +1083,39 @@ class ReturnPenjualanController extends Controller
         }
 
         $datas = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_notareturn as nota_return',
+                'm_company.c_name as nama_outlet',
+                'm_company.c_address as alamat_outlet',
+                'm_member.m_name as nama_member',
+                'm_member.m_telp as telp_member',
+                'd_return_penjualan.rp_date as tgl_return',
+                'd_return_penjualan.rp_aksi as jenis_return',
+                'rpd.rpd_qty',
+                'a.i_code as rpd_code',
+                'rpd.rpd_specificcode',
+                'a.i_nama as rpd_item',
+                'rpd.rpd_note',
+                'd_return_penjualan.rp_notapenjualan as nota_penjualan',
+                'rpg.rpg_qty',
+                'b.i_code as rpg_code',
+                'rpg.rpg_specificcode',
+                'b.i_nama as rpg_item')
             ->where('d_return_penjualan.rp_id', $id)
-            ->join('d_return_penjualandt', 'd_return_penjualan.rp_id', '=', 'd_return_penjualandt.rpd_return')
+            ->join('d_return_penjualandt as rpd', 'd_return_penjualan.rp_id', '=', 'rpd.rpd_return')
+            ->join('d_return_penjualanganti as rpg', 'd_return_penjualan.rp_id', '=', 'rpg.rpg_return')
             ->join('d_sales', 'd_sales.s_nota', '=', 'd_return_penjualan.rp_notapenjualan')
             ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
-            ->join('d_item', 'd_item.i_id', '=', 'd_return_penjualandt.rpd_item')
+            ->join('d_item as a', 'a.i_id', '=', 'rpd.rpd_item')
+            ->leftjoin('d_item as b', 'b.i_id', '=', 'rpg.rpg_item')
+            ->join('m_company', function ($c){
+                $c->where('c_id', '=', Auth::user()->m_comp);
+            })
             ->get();
-
-        dd($datas);
 
         if ($datas == null) {
             return view('errors/404');
         }
 
-        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'totHarga', 'payment_method', 'payment', 'dibayar', 'kembali'));
+        return view('penjualan.return-penjualan.struk')->with(compact('datas'));
     }
 }

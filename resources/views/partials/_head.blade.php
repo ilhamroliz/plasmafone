@@ -53,6 +53,11 @@
 <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('template_asset/img/splash/touch-icon-iphone-retina.png') }}">
 <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('template_asset/img/splash/touch-icon-ipad-retina.png') }}">
 
+{{-- Modul Keuangan --}}
+<link rel="stylesheet" type="text/css" href="{{ asset('modul_keuangan/font-awesome_4_7_0/css/font-awesome.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('modul_keuangan/css/style.css') }}">
+<link rel="stylesheet" type="text/css" href="{{asset('modul_keuangan/js/vendors/ez_popup_v_1_1/ez.popup.css')}}">
+
 <!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
