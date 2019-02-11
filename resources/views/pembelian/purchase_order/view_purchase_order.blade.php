@@ -97,7 +97,7 @@
                                 <li class="active">
                                     <a data-toggle="tab" href="#hr1"> 
                                         <i style="color: #739E73;" class="fa fa-lg fa-rotate-right fa-spin"></i> 
-                                        <span class="hidden-mobile hidden-tablet"> History </span>
+                                        <span class="hidden-mobile hidden-tablet"> Proses </span>
                                     </a>
                                 </li>
 
@@ -124,7 +124,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-center" width="10%">No.</th>
-                                                    <th class="text-center" width="30%">No. Confirm</th>
+                                                    <th class="text-center" width="30%">No. Purchase Order</th>
                                                     <th class="text-center" width="45%">Nama Supplier</th>
                                                     <th class="text-center" width="15%">Aksi</th>
                                                 </tr>
@@ -172,7 +172,7 @@
                                             <thead>
                                             <tr>
                                                 <th class="text-center" width="10%">No.</th>
-                                                <th class="text-center" width="30%">No. Confirm</th>
+                                                <th class="text-center" width="30%">No. Purchase Order</th>
                                                 <th class="text-center" width="40%">Nama Supplier</th>
                                                 <th class="text-center" width="20%">Status</th>
                                             </tr>
@@ -255,7 +255,7 @@
 				idSupp = null;
 			}
 
-			axios.post(baseUrl+'/pembelian/purchase-order/getHistory', {tglAwal: tglAwal, tglAkhir: tglAkhir, nota: nota, idSupp: idSupp}).then((response) => {
+			axios.post(baseUrl+'/pembelian/purchase-order/get-history', {tglAwal: tglAwal, tglAkhir: tglAkhir, nota: nota, idSupp: idSupp}).then((response) => {
 
 				$('#historyBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 
