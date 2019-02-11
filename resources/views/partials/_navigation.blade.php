@@ -322,19 +322,32 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                         @if($sidebar['Pencatatan Transaksi Harian'] == 'Y')
                             <li>
-                                <a href="flot.html">Pencatatan Transaksi Harian</a>
+                                <a href="#">Transaksi Harian</a>
+                                <ul>
+                                    <li class="{{ (Request::is('modul/keuangan/transaksi/kas') || Request::is('modul/keuangan/transaksi/kas/*')) ? 'active' : '' }}">
+                                        <a href="{{ Route('transaksi.kas.index') }}">Transaksi Kas</a>
+                                    </li>
+
+                                    <li class="{{ (Request::is('modul/keuangan/transaksi/bank') || Request::is('modul/keuangan/transaksi/bank/*')) ? 'active' : '' }}">
+                                        <a href="{{ Route('transaksi.bank.index') }}">Transaksi Bank</a>
+                                    </li>
+
+                                    <li class="{{ (Request::is('modul/keuangan/transaksi/memorial') || Request::is('modul/keuangan/transaksi/memorial/*')) ? 'active' : '' }}">
+                                        <a href="{{ Route('transaksi.memorial.index') }}">Transaksi Memorial</a>
+                                    </li>
+                                </ul>
                             </li>
                         @endif
 
                         @if($sidebar['Pengelolaan Akun Payable'] == 'Y')
                             <li>
-                                <a href="flot.html">Pengelolaan Akun Payable</a>
+                                <a href="flot.html">Akun Payable</a>
                             </li>
                         @endif
 
                         @if($sidebar['Pengelolaan Akun Receivable'] == 'Y')
                             <li>
-                                <a href="flot.html">Pengelolaan Akun Receivable</a>
+                                <a href="flot.html">Akun Receivable</a>
                             </li>
                         @endif
 
@@ -346,19 +359,19 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                         @if($sidebar['Pembuatan Laporan Keuangan'] == 'Y')
                             <li>
-                                <a href="flot.html">Pembuatan Laporan Keuangan</a>
+                                <a href="flot.html">Laporan Keuangan</a>
                             </li>
                         @endif
 
                         @if($sidebar['Pembuatan Index Finansial'] == 'Y')
                             <li>
-                                <a href="flot.html">Pembuatan Index Finansial</a>
+                                <a href="flot.html">Index Finansial</a>
                             </li>
                         @endif
 
                         @if($sidebar['Analisis Keuangan'] == 'Y')
                             <li>
-                                <a href="flot.html">Analisis Keuangan</a>
+                                <a href="flot.html">Analisa Keuangan</a>
                             </li>
                         @endif
                     </ul>

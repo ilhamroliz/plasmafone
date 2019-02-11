@@ -20,7 +20,7 @@
     				Tambah Data Akun
     			</div>
 
-    			<div class="col-md-6 text-right form-status">
+    			<div class="col-md-6 text-right form-status" style="padding-right: 30px;">
     				<span v-if="stat == 'standby'" v-cloak>
                         <i class="fa fa-exclamation"></i> &nbsp; Pastikan Data Terisi Dengan Benar            
                     </span>
