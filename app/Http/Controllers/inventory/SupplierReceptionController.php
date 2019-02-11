@@ -69,7 +69,7 @@ class SupplierReceptionController extends Controller
         return DataTables::of($getProses)
             ->addColumn('aksi', function($getProses){
 
-                $detail = '<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima Barang" onclick="terima(\'' . Crypt::encrypt($getProses->p_id) . '\', \'' . Crypt::encrypt($getProses->pd_item) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>';
+                $detail = '<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima Barang" onclick="fm(\'' . Crypt::encrypt($getProses->p_id) . '\', \'' . Crypt::encrypt($getProses->pd_item) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>';
 
                 return '<div class="text-center">'. $detail .'</div>';
 
@@ -80,6 +80,19 @@ class SupplierReceptionController extends Controller
 
     public function get_history(){
 
+    }
+
+    public function getMaks($id = null, $item = null){
+
+        $id = Crypt::decrypt($id);
+        $item = Crypt::decrypt($item);
+        $getMaks = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $item)->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'))->get();
+
+        $getMaksHitung = $getMaks[0]->qty - $getMaks[0]->qtyR;
+
+        return json_encode([
+            'maks' => $getMaksHitung
+        ]);
     }
 
     public function detail(Request $request){

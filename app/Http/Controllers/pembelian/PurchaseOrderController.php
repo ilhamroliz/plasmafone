@@ -26,6 +26,24 @@ class PurchaseOrderController extends Controller
         }
     }
 
+    public function get_proses(){
+
+        $getData = DB::table('d_purchase')
+            ->join('d_supplier', 's_id', '=', 'p_supplier')
+            ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
+            ->having(DB::raw('SUM(pd_qtyreceived)'), '<', DB::raw('SUM(pd_qty)'))
+            ->select('p_id', 'p_nota', 's_comp')
+            ->groupBy('p_id')->get();
+
+        return DataTables::of($getData)
+            ->addIndexColumn()
+            ->addColumn('aksi', function($getData){
+
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
     public function getDataId($date)
     {
         $cekNota = $date;
@@ -299,5 +317,105 @@ class PurchaseOrderController extends Controller
 
         return view('pembelian.purchase_order.print_purchase')->with(compact('datas'));
 
+    }
+
+    public function get_history(Request $request)
+    {
+        // dd($request);
+        $history = '';
+
+        $tglAw = $request->tglAwal;
+        $tglAkh = $request->tglAkhir;
+        $nota = $request->nota;
+        $idSupp = $request->idSupp;
+
+        if($tglAw != null && $tglAkh != null){
+            $taw = explode('/', $tglAw);
+            $tglAwal = $taw[2].'-'.$taw[1].'-'.$taw[0];
+            $tak = explode('/', $tglAkh);
+            $tglAkhir = $tak[2].'-'.$tak[1].'-'.$tak[0];
+
+            if($nota != null && $idSupp == null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota == null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_supplier', $idSupp)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota != null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+                    ->where('pc_supplier', $idSupp)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else{
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_date', '<=', $tglAkhir)
+                    ->where('pc_date', '>=', $tglAwal)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }
+        }else{
+
+            if($nota != null && $idSupp == null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota == null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_supplier', $idSupp)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else if($nota != null && $idSupp != null){
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                    
+                    ->where('pc_supplier', $idSupp)
+                    ->where('pc_nota', $nota)
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }else{
+                $history = DB::table('d_purchase_confirm')
+                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+
+                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
+                    ->orderBy('pc_id', 'desc')->get();
+            }
+            
+        }
+
+        // dd($history);
+        return json_encode([
+            'data' => $history
+        ]);
     }
 }

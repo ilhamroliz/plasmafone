@@ -268,8 +268,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                                                         <thead>
                                                             <tr>
-                                                                <th class="text-center"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Kode</th>
-                                                                <th class="text-center"><i class="fa fa-fw fa-cube txt-color-blue"></i>&nbsp;Status</th>
+                                                                <th class="text-center" width="70%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Kode</th>
+                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-cube txt-color-blue"></i>&nbsp;Aksi</th>
                                                             </tr>
                                                         </thead>
 
@@ -296,6 +296,72 @@ use App\Http\Controllers\PlasmafoneController as Access;
 							</button>
 							<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>
 								Simpan
+							</button>
+						</div>
+
+					</div><!-- /.modal-content -->
+
+				</div><!-- /.modal-dialog -->
+
+			</div>
+            <!-- /.modal -->
+            
+            <!-- Modal -->
+			<div class="modal fade" id="frontModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+				<div class="modal-dialog">
+
+					<div class="modal-content">
+
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel"><strong>Jumlah barang yang diterima</strong></h4>
+
+						</div>
+						<form id="form_qtyReceived">{{ csrf_field() }}
+							<div class="modal-body">
+
+								<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="text-center col-md-12 control-label" id="nama_item" style="font-weight:bold"><h2>Masukkan Jumlah Barang Yang Diterima</h2></label>
+											</div>
+										</div>
+								</div><br>
+
+                                <div class="row">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                        <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                                            
+                                            <section class="text-center">
+                                                <label><h4 id="maksJumlah"></h4></label>
+                                                <input type="hidden" id="idMaks">
+                                                <input type="hidden" id="itemMaks">
+                                            </section>
+                                            <section class="">
+                                                <input type="text" id="jumlah" class="form-control" style="text-align: center" placeholder="Masukkan Jumlah Disini">
+                                            </section>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+				
+							</div>
+						</form>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
+								Batal
+							</button>
+							<button type="button" id="lanjutkan" class="btn btn-primary" onclick="terima()" disabled>
+								Lanjutkan
 							</button>
 						</div>
 
@@ -343,7 +409,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
             };
 
             $(document).ready( function() {
-                $('#dt_code').DataTable();
+                $('#dt_code').DataTable({
+                    "pageLength": 5,
+                    "searching": false,
+                    "lengthChange": false,
+                    "autoWidth": false
+                });
             });
             
 			setTimeout(function () {
@@ -387,11 +458,43 @@ use App\Http\Controllers\PlasmafoneController as Access;
         /* END BASIC */
 
 		function refresh_tab(){
-		    aktif.api().ajax.reload();
+		    aktif.ajax.reload();
         }
 
-		function terima(id, item){
+        function fm(id, item){
+
+            axios.get(baseUrl+'/inventory/penerimaan/supplier/getMaks'+'/'+id+'/'+item).then((response) => {
+
+                $('#maksJumlah').html('Jumlah Maksimal Adalah '+response.data.maks);
+                $('#idMaks').val(id);
+                $('#itemMaks').val(item);
+
+                $("#jumlah").on("keypress",function (event) {
+                    if ((event.which < 48 || event.which > 57)) {
+                        event.preventDefault();
+                    }                   
+                });
+
+                $("#jumlah").on("keyup",function (event) {
+                    if ($("#jumlah").val() != ""){
+                        $('#lanjutkan').attr("disabled", false);
+                        if (event.which == 13){
+                            $('#lanjutkan').click();
+                        }
+                    } else {
+                        $('#lanjutkan').attr("disabled", true);
+                    }
+                });
+                $('#frontModal').modal('show');
+
+            });
+        }
+
+		function terima(){
+            $('#frontModal').modal('hide');
             var qty = 0, qtyReceived = 0;
+            var id = $('#idMaks').val();
+            var item = $('#itemMaks').val();
 			hapus();
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
@@ -425,14 +528,15 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					if (response.data.specificcode == 'Y') {
                         rows = "kode";
+
 						row = '<div id="form_qty">' +
                                 '<fieldset>' +
                                     '<div class="form-group">' +
-                                        '<label class="col-md-4 control-label">Kuantitas yang sudah diterima</label>' +
+                                        '<label class="col-md-4 control-label">Nota Delivery Order</label>' +
                                         '<div class="col-md-8">' +
                                             '<div class="input-group">' +
-                                                '<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" id="qtyreceived" class="qty form-control">'+
-                                                '<span class="input-group-addon"><i class="fa fa-check"></i></span>' +
+                                                '<input type="text" name="notaDO" id="notaDO" class="notaDO form-control">'+
+                                                '<span class="input-group-addon"><i class="fa fa-"></i></span>' +
                                             '</div>' +
                                             '<span class="help-block"></span>' +
                                         '</div>' +
@@ -455,58 +559,25 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                     '</div>' +
                                 '</fieldset>'+
                             '</div>';
-
-                        $(".terima").append(row);
+                        
+                        $(".terima").html(row);
                         $("#kode").focus();
                         $("#tbl_kode").show();
-                        
-                        $('#dt_code').DataTable().destroy();
-                        tbl_code = $('#dt_code').DataTable({
-                            "processing": true,
-                            "serverSide": true,
-                            "orderable": false,
-                            "order": [],
-                            "ajax": "{{ url('/inventory/penerimaan/supplier/get-item-received/'.$id) }}",
-                            "columns":[
-                                {"data": "pd_specificcode"},
-                                {"data": "status"},
-                            ],
-                            "autoWidth" : true,
-                            "language" : dataTableLanguage,
-                            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                            "preDrawCallback" : function() {
-                                // Initialize the responsive datatables helper once.
-                                if (!responsiveHelper_dt_basic) {
-                                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-                                }
-                            },
-                            "rowCallback" : function(nRow) {
-                                responsiveHelper_dt_basic.createExpandIcon(nRow);
-                            },
-                            "drawCallback" : function(oSettings) {
-                                responsiveHelper_dt_basic.respond();
-                            }
-                        });
 
-                        $("#kode").on("keypress",function (event) {
-                            if ((event.which < 48 || event.which > 57)) {
-                                event.preventDefault();
-                            }
-                            if ($(this).val() != null || $(this).val() != ""){
-                                $('#simpan').attr("disabled", false);
-                            } else {
-                                $('#simpan').attr("disabled", true);
-                            }
+                        $('#kode').on('keyup', function(){
+
                             if (event.which == 13){
-                                simpan();
+                                $('#dt_co').DataTable().row.add([
+                                    '<div><input class="form-control"></div>',
+                                    '<div><button class="btn btn-danger btn-circle"><i class="fa fa-close"></i></button></div>'
+                                ]).draw();
                             }
 
                         });
 
 					} else {
                         rows = null;
-						row = '<div id="form_qty">'+
+						{{--  row = '<div id="form_qty">'+
                                 '<fieldset>' +
                                     '<div class="form-group">' +
                                         '<label class="col-md-4 control-label">Kuantitas yang sudah diterima</label>' +
@@ -537,7 +608,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                         '</div>' +
                                     '</div>' +
                                 '</fieldset>' +
-								'</div>';
+								'</div>';  --}}
 
                         $(".terima").append(row);
                         $("#qty").focus();
@@ -610,6 +681,25 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         timeout: 3000,
                         icon : "fa fa-check bounce animated"
                     });
+
+                    if (rows == "kode") {
+                        tbl_code.ajax.reload();
+                        $("#kode").val('');
+                        $("#qtyreceived").val(parseInt($("#qtyreceived").val()) + 1);
+                        $("#error").removeClass("has-success");
+                        $("#error").removeClass("has-error");
+                        $("#icon").removeClass("fa fa-check");
+                        $("#icon").removeClass("glyphicon glyphicon-remove-circle");
+                        $("#icon").addClass("fa fa-barcode");
+                        $("#message").html("");
+                        $("#simpan").attr("disabled", true);
+                    } else if (rows == null) {
+                        $("#qty_received").val(parseInt($("#qty_received").val()) + 1);
+                        $("#qty").val('');
+                        $('#myModal').modal('hide');
+                    }
+
+                    refresh_tab();
 
                 }else if(response.data.status == 'ada'){
 
