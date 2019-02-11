@@ -635,10 +635,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/return-penjualan/cari/member', 'penjualan\ReturnPenjualanController@cariNotaMember');
     Route::get('/penjualan/return-penjualan/cari', 'penjualan\ReturnPenjualanController@cariNotaPenjualan');
     Route::get('/penjualan/return-penjualan/cari/detail/{id}', 'penjualan\ReturnPenjualanController@cariNotaDetail');
-    Route::get('/penjualan/return-penjualan/return/{idsales}/{iditem}/{spcode}', 'penjualan\ReturnPenjualanController@retunPenjualan');
+    Route::get('/penjualan/return-penjualan/return/{idsales}/{iditem}/{spcode}', 'penjualan\ReturnPenjualanController@returnPenjualan');
     Route::get('/penjualan/return-penjualan/checkStock/{item}', 'penjualan\ReturnPenjualanController@checkStock');
     Route::get('/penjualan/return-penjualan/cariitembaru', 'penjualan\ReturnPenjualanController@cariItemBaru');
     Route::get('/penjualan/return-penjualan/cariitemlain', 'penjualan\ReturnPenjualanController@cariItemlain');
+    Route::post('/penjualan/return-penjualan/add', 'penjualan\ReturnPenjualanController@returnAdd');
+    Route::get('/penjualan/return-penjualan/struk/{id}', 'penjualan\ReturnPenjualanController@struk');
 	// ####################################
 	// End Return Penjualan
 	// ####################################
