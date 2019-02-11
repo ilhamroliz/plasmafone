@@ -60,7 +60,7 @@
         <span style="float: left; width: 10%;">Jumlah</span>
         <span style="width: 60%">Nama Barang</span>
         {{--<span style="width: 20%; float: right;">Harga(*)</span>--}}
-        <span style="width: 20%; float: right;">Total Harga</span>
+        <span style="width: 20%; float: right;">Harga</span>
     </div>
 </div>
 <div style="border: .6px dashed;"></div>
@@ -88,7 +88,7 @@
 <div style="border: .6px dashed;"></div>
 <div class="hasil"  style="margin-bottom: 18px">
     <span style="width: 60%; float: left;"></span>
-    <span style="width: 20%; margin-left: 5px;">Sub Total Harga:</span>
+    <span style="width: 20%; margin-left: 5px;">Total Harga:</span>
     <span style="width: 20%; float: right;">Rp. {{ number_format( $totHarga, 0 , '' , '.' ) . ',-' }}</span>
 </div>
 <?php

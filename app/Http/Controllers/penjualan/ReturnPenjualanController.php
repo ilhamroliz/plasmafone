@@ -860,19 +860,39 @@ class ReturnPenjualanController extends Controller
         }
 
         $datas = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_notareturn as nota_return',
+                'm_company.c_name as nama_outlet',
+                'm_company.c_address as alamat_outlet',
+                'm_member.m_name as nama_member',
+                'm_member.m_telp as telp_member',
+                'd_return_penjualan.rp_date as tgl_return',
+                'd_return_penjualan.rp_aksi as jenis_return',
+                'rpd.rpd_qty',
+                'a.i_code as rpd_code',
+                'rpd.rpd_specificcode',
+                'a.i_nama as rpd_item',
+                'rpd.rpd_note',
+                'd_return_penjualan.rp_notapenjualan as nota_penjualan',
+                'rpg.rpg_qty',
+                'b.i_code as rpg_code',
+                'rpg.rpg_specificcode',
+                'b.i_nama as rpg_item')
             ->where('d_return_penjualan.rp_id', $id)
-            ->join('d_return_penjualandt', 'd_return_penjualan.rp_id', '=', 'd_return_penjualandt.rpd_return')
+            ->join('d_return_penjualandt as rpd', 'd_return_penjualan.rp_id', '=', 'rpd.rpd_return')
+            ->join('d_return_penjualanganti as rpg', 'd_return_penjualan.rp_id', '=', 'rpg.rpg_return')
             ->join('d_sales', 'd_sales.s_nota', '=', 'd_return_penjualan.rp_notapenjualan')
             ->join('m_member', 'm_member.m_id', '=', 'd_sales.s_member')
-            ->join('d_item', 'd_item.i_id', '=', 'd_return_penjualandt.rpd_item')
+            ->join('d_item as a', 'a.i_id', '=', 'rpd.rpd_item')
+            ->leftjoin('d_item as b', 'b.i_id', '=', 'rpg.rpg_item')
+            ->join('m_company', function ($c){
+                $c->where('c_id', '=', Auth::user()->m_comp);
+            })
             ->get();
-
-        dd($datas);
 
         if ($datas == null) {
             return view('errors/404');
         }
 
-        return view('penjualan.penjualan-regular.struk')->with(compact('datas', 'salesman', 'totHarga', 'payment_method', 'payment', 'dibayar', 'kembali'));
+        return view('penjualan.return-penjualan.struk')->with(compact('datas'));
     }
 }
