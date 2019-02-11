@@ -1424,6 +1424,10 @@ Route::group(['middleware' => 'auth'], function () {
 
             // Analisa Keuangan
                     
+                    Route::get('modul/keuangan/analisa', function(){
+                        return view('modul_keuangan.analisa.index');
+                    })->name('analisa.keuangan.index');
+
                     // Analisa Net Profitt OCF
                         Route::get('modul/keuangan/analisa/npo', [
                             'uses'  => 'modul_keuangan\analisa\net_profit_ocf\analisa_net_profit_ocf_controller@index'

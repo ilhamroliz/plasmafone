@@ -13,15 +13,15 @@
 @endsection
 
 
-@section('content')
-    <div class="col-md-12" style="background: none;" id="vue-component">
+@section('main_content')
+    <div class="col-md-12" style="background: none; margin-top: 20px; margin-bottom: 60px;" id="vue-component">
     	<div class="col-md-12">
     		<div class="row">
     			<div class="col-md-6 content-title">
     				Input Penerimaan Piutang
     			</div>
 
-    			<div class="col-md-6 text-right form-status">
+    			<div class="col-md-6 text-right form-status" style="padding-right: 30px;">
     				<span v-if="stat == 'standby'" v-cloak>
                         <i class="fa fa-exclamation"></i> &nbsp; Pastikan Data Terisi Dengan Benar            
                     </span>
@@ -41,7 +41,7 @@
                     <div class="col-md-6" style="background: none;">
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Nomor Penerimaan</label>
                             </div>
 
@@ -59,7 +59,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Jenis Piutang *</label>
                             </div>
 
@@ -73,7 +73,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Tgl Penerimaan *</label>
                             </div>
 
@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="row mt-form" style="border-top: 1px solid #eee; padding-top: 20px;">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Nomor Piutang *</label>
                             </div>
 
@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Ket. Transaksi *</label>
                             </div>
 
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Jenis Penerimaan</label>
                             </div>
 
@@ -117,7 +117,7 @@
                         </div>
 
                         <div class="row mt-form" v-if="jenis == 'C'">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Pilih Akun Kas</label>
                             </div>
 
@@ -127,7 +127,7 @@
                         </div>
 
                         <div class="row mt-form" v-if="jenis == 'T'">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Pilih Akun Bank</label>
                             </div>
 
@@ -137,7 +137,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan">Nominal Penerimaan</label>
                             </div>
 
@@ -147,7 +147,7 @@
                         </div>
 
                         <div class="row mt-form">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="modul-keuangan"></label>
                             </div>
 

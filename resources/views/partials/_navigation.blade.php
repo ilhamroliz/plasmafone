@@ -341,13 +341,23 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                         @if($sidebar['Pengelolaan Akun Payable'] == 'Y')
                             <li>
-                                <a href="flot.html">Akun Payable</a>
+                                <a href="#">Akun Payable</a>
+                                <ul>
+                                    <li class="{{ (Request::is('modul/keuangan/transaksi/pelunasan_hutang') || Request::is('modul/keuangan/transaksi/pelunasan_hutang/*')) ? 'active' : '' }}">
+                                        <a href="{{ Route('transaksi.pelunasan_hutang.index') }}">Penerimaan Hutang</a>
+                                    </li>
+                                </ul>
                             </li>
                         @endif
 
                         @if($sidebar['Pengelolaan Akun Receivable'] == 'Y')
                             <li>
-                                <a href="flot.html">Akun Receivable</a>
+                                <a href="#">Akun Receivable</a>
+                                <ul>
+                                    <li class="{{ (Request::is('modul/keuangan/transaksi/penerimaan_piutang') || Request::is('modul/keuangan/transaksi/penerimaan_piutang/*')) ? 'active' : '' }}">
+                                        <a href="{{ Route('transaksi.penerimaan_piutang.index') }}">Penerimaan Piutang</a>
+                                    </li>
+                                </ul>
                             </li>
                         @endif
 
@@ -358,8 +368,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         @endif
 
                         @if($sidebar['Pembuatan Laporan Keuangan'] == 'Y')
-                            <li>
-                                <a href="flot.html">Laporan Keuangan</a>
+                            <li class="{{ (Request::is('modul/keuangan/laporan')) ? 'active' : '' }}">
+                                <a href="{{ Route('laporan.keuangan.index') }}">Laporan Keuangan</a>
                             </li>
                         @endif
 
@@ -370,8 +380,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         @endif
 
                         @if($sidebar['Analisis Keuangan'] == 'Y')
-                            <li>
-                                <a href="flot.html">Analisa Keuangan</a>
+                            <li class="{{ (Request::is('modul/keuangan/analisa')) ? 'active' : '' }}">
+                                <a href="{{ Route('analisa.keuangan.index') }}">Analisa Keuangan</a>
                             </li>
                         @endif
                     </ul>
