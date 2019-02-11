@@ -188,6 +188,28 @@ class SupplierReceptionController extends Controller
             ->make(true);
     }
 
+    public function itemReceiveDT(Request $request){
+
+        $id = Crypt::decrypt($request->id);
+        $item =  Crypt::decrypt($request->item);
+        $getDT = DB::table('d_purchase_dt')
+            ->join('d_purchase', 'p_id', '=', 'pd_purchase')
+            ->join('d_stock_mutation', 'sm_nota', '=', 'p_nota')
+            ->where('pd_purchase', $id)
+            ->where('pd_item', $item)
+            ->where('pd_qtyreceived', '!=', 0)
+            ->where('sm_detail', 'PENAMBAHAN')
+            ->select('sm_reff', 'sm_expired', 'sm_specificcode', 'sm_qty')
+            ->groupBy('sm_detailid')->get();
+
+        $getSCEX = DB::table('d_item')->where('i_id', $item)->select('i_specificcode', 'i_expired')->first();
+        // dd($getDT);
+        return json_encode([
+            'item' => $getSCEX,
+            'dataDT' => $getDT
+        ]);
+    }
+
     public function itemReceiveAdd(Request $request){
 
         if(Plasma::checkAkses(8, 'update') == false){
@@ -196,6 +218,14 @@ class SupplierReceptionController extends Controller
             // dd($request);
             DB::beginTransaction();
             try {
+
+                $cekSCSM = DB::table('d_stock_mutation')->where('sm_specificcode', $request->kode)->count();
+                if($cekSCSM > 0){
+                    return json_encode([
+                        'status' => 'ada'
+                    ]);
+                }
+
                 $getSCEXP = DB::table('d_item')->where('i_id', $request->iditem)->select('i_specificcode', 'i_expired')->first();
                 $sc = $getSCEXP->i_specificcode;
                 $exp = $getSCEXP->i_expired;
@@ -255,7 +285,7 @@ class SupplierReceptionController extends Controller
 
                     $getIdSMax = DB::table('d_stock')->max('s_id');
                     $idS = $getIdSMax + 1;
-                    if($request->status == "Y"){
+                    if($sc == "Y"){
                         DB::table('d_stock')->insert([
                             's_id' => $idS,
                             's_comp' => 'PF00000001',
@@ -268,6 +298,7 @@ class SupplierReceptionController extends Controller
                             's_update' => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s')
                         ]);
                     }else{
+
                         DB::table('d_stock')->insert([
                             's_id' => $idS,
                             's_comp' => 'PF00000001',
@@ -335,7 +366,7 @@ class SupplierReceptionController extends Controller
                     'sm_hpp' => $smhpp,
                     'sm_sell' => $smsell,
                     'sm_nota' => $smnota,
-                    'sm_reff' => $smnota
+                    'sm_reff' => $request->notaDO
                 ]);
 
 
