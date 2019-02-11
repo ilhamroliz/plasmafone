@@ -25,6 +25,35 @@ class ReturnPenjualanController extends Controller
         return view('penjualan.return-penjualan.add');
     }
 
+    public function getProses()
+    {
+        $data = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_id as id', DB::raw('DATE_FORMAT(d_return_penjualan.rp_date, "%d-%m-%Y") as tanggal'),
+                'd_return_penjualan.rp_notareturn as notareturn', 'm_member.m_name as pelanggan')
+            ->join('d_sales', 'd_return_penjualan.rp_notapenjualan', '=', 'd_sales.s_nota')
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                if (Access::checkAkses(16, 'delete') == false && Access::checkAkses(16, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+
+                }
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
     public function cariMember(Request $request)
     {
         $cari = $request->term;

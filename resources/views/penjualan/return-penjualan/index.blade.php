@@ -133,4 +133,42 @@
 
 @section('extra_script')
 
+    <script type="text/javascript">
+        var proses;
+        $(document).ready(function () {
+            var responsiveHelper_dt_basic = undefined;
+            var breakpointDefinition = {
+                tablet : 1024,
+                phone : 480
+            };
+
+            proses = $('#dt_menunggu').dataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ route('get-return-proses') }}",
+                "columns":[
+                    {"data": "tanggal"},
+                    {"data": "notareturn"},
+                    {"data": "pelanggan"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_menunggu'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+        })
+    </script>
 @endsection

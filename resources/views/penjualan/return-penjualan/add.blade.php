@@ -42,6 +42,16 @@
                 </h1>
             </div>
 
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
+
+                <div class="page-title">
+
+                    <a href="{{ url('/penjualan/return-penjualan') }}" class="btn btn-default"><i class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
+
+                </div>
+
+            </div>
+
         </div>
 
         <section id="widget-grid" class="">
