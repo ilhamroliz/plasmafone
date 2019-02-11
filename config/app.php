@@ -174,6 +174,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        Swamsid\Keuangan\KeuanganServiceProvider::class,
     ],
 
     /*
@@ -225,7 +226,8 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Access' => App\Http\Controllers\PlasmafoneController::class,
-        'Carbon' => Illuminate\Support\Carbon::class
+        'Carbon' => Illuminate\Support\Carbon::class,
+        'keuangan' => Swamsid\Keuangan\Facades\keuangan::class,
     ],
 
 ];
