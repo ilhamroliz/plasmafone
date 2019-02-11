@@ -69,7 +69,7 @@
                                         <label class="modul-keuangan">Kelompok Akun</label>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <vue-select :name="'ak_kelompok'" :id="'ak_kelompok'" :options="kelompok" :disabled="onUpdate" @input="kelompokChange" :search="true"></vue-select>
                                     </div>
                                 </div>

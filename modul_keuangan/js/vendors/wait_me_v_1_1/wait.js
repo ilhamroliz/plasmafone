@@ -1,6 +1,6 @@
 (function($){
 
-	let appended = '<div id="overlay">'+
+	let appended = '<div id="wait_me_overlay">'+
             		'<div class="content-loader">'+
                 		'<div class="lds-dual-ring"></div><br>'+
                 		'<span class="text">Sedang Memuat Halaman. Harap Tunggu...</span>'+
@@ -11,16 +11,16 @@
 
 	$.fn.wait = function(action){
 		if(action == 'show'){
-			$('#overlay').fadeIn(200);
+			$('#wait_me_overlay').fadeIn(200);
 		}
 
 		if(action == 'close'){
-			$('#overlay').fadeOut('200')
+			$('#wait_me_overlay').fadeOut('200')
 		}
 	}
 
 	$(document).ready(function(){
-		$("#overlay").fadeOut();
+		$("#wait_me_overlay").fadeOut();
 	})
 
 }(jQuery))

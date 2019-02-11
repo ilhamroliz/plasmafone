@@ -1,4 +1,4 @@
-#overlay {
+#wait_me_overlay {
     position: fixed;
     /*display: none;*/
     width: 100%;
@@ -11,13 +11,13 @@
     z-index: 2000;
 }
 
-#overlay .content-loader{
+#wait_me_overlay .content-loader{
     background: none;
     text-align: center;
     margin-top: 15em;
 }
 
-#overlay .content-loader .text{
+#wait_me_overlay .content-loader .text{
     color: white;
     font-size: 10pt;
 }
