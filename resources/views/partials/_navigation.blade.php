@@ -292,11 +292,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             <li>
                                 <a href="#">Master Akun Keuangan</a>
                                 <ul>
-                                    <li>
-                                        <a href="{{ url('/keuangan/coa/jenis') }}">Master COA</a>
+                                    <li class="{{ (Request::is('modul/keuangan/master/akun') || Request::is('modul/keuangan/master/akun/*')) ? 'active' : '' }}">
+                                        <a href="{{ Route('akun.create') }}">Master COA</a>
                                     </li>
-                                    <li>
-                                        <a href="flot.html">Setting Parameter</a>
+                                    <li class="{{ (Request::is('modul/keuangan/setting/klasifikasi-akun')) ? 'active' : '' }}">
+                                        <a href="{{ Route('setting.klasifikasi_akun.index') }}">Setting Klasifikasi</a>
                                     </li>
                                 </ul>
                             </li>

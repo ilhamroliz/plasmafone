@@ -40,6 +40,39 @@
             "time": "2014-10-24T07:27:01+00:00"
         },
         {
+            "name": "swamsid/keuangan",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swamsid/keuangan.git",
+                "reference": "1af8756068bdfe7b7efcbc4c912e86201f510014"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swamsid/keuangan/zipball/1af8756068bdfe7b7efcbc4c912e86201f510014",
+                "reference": "1af8756068bdfe7b7efcbc4c912e86201f510014",
+                "shasum": ""
+            },
+            "type": "laravel",
+            "autoload": {
+                "psr-4": {
+                    "Swamsid\\Keuangan\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "dirga",
+                    "email": "swamsid@gmail.com"
+                }
+            ],
+            "description": "Package Laravel Untuk Modul Keuangan Di Aplikasi-Aplikasi Alamraya.",
+            "time": "2019-01-30T07:59:44+00:00"
+        },
+        {
             "name": "doctrine/inflector",
             "version": "v1.3.0",
             "source": {

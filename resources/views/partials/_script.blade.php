@@ -58,6 +58,28 @@
 		<script src="{{ asset('template_asset/plugins/toast/dist/jquery.toast.min.js') }}"></script>
 		<script src="{{ asset('template_asset/plugins/vue/vue.js') }}"></script>
 
+		{{-- Modul keuangan --}}
+		<script src="{{asset('modul_keuangan/js/vendors/ez_popup_v_1_1/ez.popup.js')}}"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('#trial-popup').ezPopup('show', {
+					closable: false,
+				});
+
+				@if(Session::has('message'))
+					alert('{{ Session::get('message') }}');
+				@endif
+
+				$('#modul_keuangan_proses_periode').click(function(e){
+					e.stopImmediatePropagation();
+
+					$(this).attr('disabled', 'disabled');
+					$('#modul_keuangan_status_periode').fadeIn(200);
+					$('#modul_keuangan_form_periode').submit();
+				})
+			})
+		</script>
+
 		<!--[if IE 8]>
 
 		<h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
