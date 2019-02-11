@@ -32,13 +32,24 @@ class PurchaseOrderController extends Controller
             ->join('d_supplier', 's_id', '=', 'p_supplier')
             ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
             ->having(DB::raw('SUM(pd_qtyreceived)'), '<', DB::raw('SUM(pd_qty)'))
-            ->select('p_id', 'p_nota', 's_comp')
+            ->select('p_id', 'p_nota', 's_company')
             ->groupBy('p_id')->get();
 
         return DataTables::of($getData)
             ->addIndexColumn()
             ->addColumn('aksi', function($getData){
-
+                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detil(\'' . Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' .  Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
+                $hapus = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' .  Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                if (Plasma::checkAkses(4, 'update') == false && Plasma::checkAkses(4, 'delete') == false) {
+                    return '<div class="text-center">'.$detil.'</div>';
+                } else if(Plasma::checkAkses(4, 'update') == true && Plasma::checkAkses(4, 'delete') == false){
+                    return '<div class="text-center">'.$detil.'&nbsp;'.$edit.'</div>';
+                }else if(Plasma::checkAkses(4, 'update') == false && Plasma::checkAkses(4, 'delete') == true){
+                    return '<div class="text-center">'.$detil.'&nbsp;'.$hapus.'</div>';
+                }else{
+                    return '<div class="text-center">'.$detil.'&nbsp;'.$edit.'&nbsp;'.$hapus.'</div>';
+                }
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -192,21 +203,23 @@ class PurchaseOrderController extends Controller
                             }
                             DB::table('d_purchase_dt')->insert($arayPODT);
                         }else{
+                            // dd($harga);
+
                             DB::table('d_purchase_dt')->insert([
                                 'pd_purchase' => $idPO,
                                 'pd_detailid' => $countDTPO + 1,
                                 'pd_item' => $idItem[$i],
-                                'pd_qty' => $qty[i],
+                                'pd_qty' => $qty[$i],
                                 'pd_value' => $harga,
                                 'pd_disc_value' => $divDiskV,
                                 'pd_disc_persen' => $persenDisk,
                                 'pd_total_net' => $divSubT,
                                 'pd_qtyreceived' => 0
                             ]);
+
                             $countDTPO += 1;
                         }                       
                     }
-
 
                     DB::commit();
                     return json_encode([
@@ -336,84 +349,91 @@ class PurchaseOrderController extends Controller
             $tglAkhir = $tak[2].'-'.$tak[1].'-'.$tak[0];
 
             if($nota != null && $idSupp == null){
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
                     
-                    ->where('pc_date', '<=', $tglAkhir)
-                    ->where('pc_date', '>=', $tglAwal)
-                    ->where('pc_nota', $nota)
+                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
+                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
+                    ->where('p_nota', $nota)
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }else if($nota == null && $idSupp != null){
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
-                    
-                    ->where('pc_date', '<=', $tglAkhir)
-                    ->where('pc_date', '>=', $tglAwal)
-                    ->where('pc_supplier', $idSupp)
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
+                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
+                    ->where('p_supplier', $idSupp)
+
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }else if($nota != null && $idSupp != null){
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
-                    
-                    ->where('pc_date', '<=', $tglAkhir)
-                    ->where('pc_date', '>=', $tglAwal)
-                    ->where('pc_supplier', $idSupp)
-                    ->where('pc_nota', $nota)
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
+                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
+                    ->where('p_supplier', $idSupp)
+                    ->where('p_nota', $nota)
+
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }else{
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
-                    
-                    ->where('pc_date', '<=', $tglAkhir)
-                    ->where('pc_date', '>=', $tglAwal)
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
+                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
+
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }
         }else{
 
             if($nota != null && $idSupp == null){
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
-                    
-                    ->where('pc_nota', $nota)
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->where('p_nota', $nota)
+
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }else if($nota == null && $idSupp != null){
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
-                    
-                    ->where('pc_supplier', $idSupp)
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->where('p_supplier', $idSupp)
+
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }else if($nota != null && $idSupp != null){
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
-                    
-                    ->where('pc_supplier', $idSupp)
-                    ->where('pc_nota', $nota)
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->where('p_supplier', $idSupp)
+                    ->where('p_nota', $nota)
+
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }else{
-                $history = DB::table('d_purchase_confirm')
-                    ->join('d_supplier', 's_id', '=', 'pc_supplier')
+                $history = DB::table('d_purchase')
+                    ->join('d_supplier', 's_id', '=', 'p_supplier')
+                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
 
-                    ->select('pc_status', 'pc_id', 'pc_nota', 's_company')
-                    ->orderBy('pc_id', 'desc')->get();
+                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
+                    ->groupBy('p_id')->get();
             }
             
         }
 
-        // dd($history);
         return json_encode([
             'data' => $history
         ]);

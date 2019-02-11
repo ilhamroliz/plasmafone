@@ -225,8 +225,61 @@
                 phone: 480
             };
 
+            $( "#date-range" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $( "#nota" ).autocomplete({
+				source: baseUrl+'/pembelian/konfirmasi-pembelian/auto-nota',
+				minLength: 1,
+				select: function(event, data) {
+					$('#nota').val(data.item.label);
+				}
+			});
+
+			$( "#namaSupp" ).autocomplete({
+				source: baseUrl+'/pembelian/konfirmasi-pembelian/auto-supp',
+				minLength: 1,
+				select: function(event, data) {
+					$('#idSupp').val(data.item.id);
+					$('#namaSupp').val(data.item.label);
+				}
+			});
+
             $('#dt_wait').DataTable({
-                "language": dataTableLanguage
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/purchase-order/get-proses') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
+                "columns":[
+                    {"data": "DT_RowIndex"},
+                    {"data": "p_nota"},
+                    {"data": "s_company"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth" : false,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_wait'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
             });
 
             $('#dt_history').DataTable({
@@ -261,19 +314,17 @@
 
 				$('#dt_history').DataTable().clear();
 				for(var i = 0; i < response.data.data.length; i++){
-                    $status = '';
-                    if(response.data.data[i].i_status == "Y"){
-                        $status = '<span class="label label-success">PURCHASING</span>';
-                    }else if(response.data.data[i].i_status == "N"){
-                        $status = '<span class="label label-danger">DITOLAK</span>';
+                    var status = '';
+                    if(response.data.data[i].qtyR == response.data.data[i].qty){
+                        status = '<span class="label label-success">DITERIMA</span>';
                     }else{
-                        $status = '<span class="label label-warning">MENUNGGU</span>';
+                        status = '<span class="label label-warning">PROSES</span>';
                     }
                     $('#dt_history').DataTable().row.add([
                         i + 1,
-                        response.data.data[i].pc_nota,
+                        response.data.data[i].p_nota,
                         response.data.data[i].s_company,
-                        $status
+                        status
                     ]).draw();
 				}
 

@@ -69,7 +69,7 @@ class SupplierReceptionController extends Controller
         return DataTables::of($getProses)
             ->addColumn('aksi', function($getProses){
 
-                $detail = '<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima Barang" onclick="fm(\'' . Crypt::encrypt($getProses->p_id) . '\', \'' . Crypt::encrypt($getProses->pd_item) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>';
+                $detail = '<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima Barang" onclick="terima(\'' . Crypt::encrypt($getProses->p_id) . '\', \'' . Crypt::encrypt($getProses->pd_item) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>';
 
                 return '<div class="text-center">'. $detail .'</div>';
 
@@ -145,7 +145,18 @@ class SupplierReceptionController extends Controller
 
         } else {
             $data = DB::table('d_purchase')
-                    ->select('d_purchase.p_id as id', 'd_purchase.p_supplier as supplier', 'd_purchase_dt.pd_item as itemId', 'd_purchase_dt.pd_detailid as iddetail', 'd_purchase_dt.pd_qtyreceived as qtyReceived', DB::raw('sum(pd_qtyreceived) as sum_qtyReceived'), 'd_purchase_dt.pd_qty as qty', 'd_item.i_specificcode as specificcode', 'd_item.i_nama as nama_item')
+                    ->select(
+                        'd_purchase.p_id as id', 
+                        'd_purchase.p_supplier as supplier', 
+                        'd_purchase_dt.pd_item as itemId', 
+                        'd_purchase_dt.pd_detailid as iddetail', 
+                        'd_purchase_dt.pd_qtyreceived as qtyReceived', 
+                        DB::raw('sum(pd_qtyreceived) as sum_qtyReceived'), 
+                        'd_purchase_dt.pd_qty as qty', 
+                        'd_item.i_specificcode as specificcode', 
+                        'd_item.i_nama as nama_item',
+                        'i_specificcode', 'i_expired')
+
                     ->join('d_purchase_dt', function($x) use ($item){
                         $x->on('d_purchase_dt.pd_purchase', '=', 'd_purchase.p_id');
                         $x->where('d_purchase_dt.pd_item', Crypt::decrypt($item));
@@ -154,7 +165,10 @@ class SupplierReceptionController extends Controller
                     ->where('d_purchase.p_id', Crypt::decrypt($id))
                     ->groupBy('d_purchase_dt.pd_item')
                     ->first();
-            return json_encode($data);
+            // dd($data);
+            return json_encode([
+                'data' => $data
+            ]);
         }
         
     }
@@ -179,11 +193,15 @@ class SupplierReceptionController extends Controller
         if(Plasma::checkAkses(8, 'update') == false){
             return view('errors.407');
         }else{
-            
+            // dd($request);
             DB::beginTransaction();
             try {
+                $getSCEXP = DB::table('d_item')->where('i_id', $request->iditem)->select('i_specificcode', 'i_expired')->first();
+                $sc = $getSCEXP->i_specificcode;
+                $exp = $getSCEXP->i_expired;
+
                 /// Memasukkan Data SPECIFICCODE ke D_PURCHASE_DT dan update PD_QTYRECEIVED
-                if($request->status == "Y"){
+                if($sc == "Y"){
                     $getIdDT = DB::table('d_purchase_dt')
                     ->where('pd_purchase', $request->idpo)
                     ->where('pd_item', $request->iditem)
@@ -216,7 +234,7 @@ class SupplierReceptionController extends Controller
                         ->select('s_qty', 's_id')->first();
                     $idS = $getQTY->s_id;
 
-                    if($request->status == "Y"){
+                    if($sc == "Y"){
                         DB::table('d_stock')
                             ->where('s_id', $getQTY->s_id)
                             ->update([
@@ -269,7 +287,7 @@ class SupplierReceptionController extends Controller
                 
 
                 /// Insert ke D_STOCK_DT
-                if($request->status == "Y"){
+                if($sc == "Y"){
                     DB::table('d_stock_dt')->insert([
                         'sd_stock' => $idS,
                         'sd_detailid' => $getIdDTMax + 1,
@@ -291,7 +309,13 @@ class SupplierReceptionController extends Controller
                 $getNota = DB::table('d_purchase')->where('p_id', $request->idpo)->select('p_nota')->first();
                 $smnota = $getNota->p_nota;
 
-                if($request->status == "Y"){
+                if($exp == 'Y'){
+                    $expDate = $request->expDate;
+                }else{
+                    $expDate = null;
+                }
+
+                if($sc == "Y"){
                     $speccode = $request->kode;
                     $smqty = 1;
                 }else{
@@ -304,6 +328,7 @@ class SupplierReceptionController extends Controller
                     'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'),
                     'sm_detail' => 'PENAMBAHAN',
                     'sm_specificcode' => $speccode,
+                    'sm_expired' => $expDate,
                     'sm_qty' => $smqty,
                     'sm_use' => 0,
                     'sm_sisa' => $smqty,
