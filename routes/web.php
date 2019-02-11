@@ -440,6 +440,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::match(['get', 'post'],'/pembelian/purchase-order/tambah', 'pembelian\PurchaseOrderController@tambah');
     Route::post('/pembelian/purchase-order/getCO', 'pembelian\PurchaseOrderController@getCO');
     Route::post('/pembelian/purchase-order/detil', 'pembelian\PurchaseOrderController@detail');
+    Route::get('/pembelian/purchase-order/get-proses', 'pembelian\PurchaseOrderController@get_proses');
+    Route::post('/pembelian/purchase-order/get-history', 'pembelian\PurchaseOrderController@get_history');
+    Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
+
+
 
     Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
     Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
@@ -629,6 +634,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/return-penjualan', 'penjualan\ReturnPenjualanController@index')->name('return-penjualan');
     Route::get('/penjualan/return-penjualan/get-proses', 'penjualan\ReturnPenjualanController@getProses')->name('get-return-proses');
     Route::get('/penjualan/return-penjualan/get-detail-return/{id}', 'penjualan\ReturnPenjualanController@getDetailReturn');
+    Route::get('/penjualan/return-penjualan/delete-return/{id}', 'penjualan\ReturnPenjualanController@deleteReturn');
     Route::get('/penjualan/return-penjualan/tambah', 'penjualan\ReturnPenjualanController@add');
     Route::get('/penjualan/return-penjualan/cari-member', 'penjualan\ReturnPenjualanController@cariMember');
     Route::get('/penjualan/return-penjualan/cari-kode', 'penjualan\ReturnPenjualanController@cariKode');

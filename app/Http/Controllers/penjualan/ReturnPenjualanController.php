@@ -100,6 +100,154 @@ class ReturnPenjualanController extends Controller
             ->make(true);
     }
 
+    public function deleteReturn($id = null)
+    {
+        $getMutasi = null;
+        try{
+            $id = Crypt::decrypt($id);
+        }catch (DecryptException $r){
+            return json_encode('Not Found');
+        }
+
+        DB::beginTransaction();
+        try{
+            $getReturn = DB::table('d_return_penjualan')->where('rp_id', $id)->first();
+            //delete reff rusak
+            $stockMutasiRusak = DB::table('d_stock_mutation')->where('sm_nota', $getReturn->rp_notareturn)->where('sm_detail', 'PENAMBAHAN')->where('sm_reff', 'RUSAK')->get();
+
+            foreach ($stockMutasiRusak as $index => $smr) {
+                if ($stockMutasiRusak[$index]->sm_specificcode != null) {
+                    DB::table('d_stock_dt')->where('sd_stock', $stockMutasiRusak[$index]->sm_stock)->where('sm_specificcode', $stockMutasiRusak[$index]->sm_specificcode)->delete();
+                }
+
+                $getStock = DB::table('d_stock')
+                    ->where('s_id', $stockMutasiRusak[$index]->sm_stock)
+                    ->first();
+
+                DB::table('d_stock')
+                    ->where('s_id', $stockMutasiRusak[$index]->sm_stock)
+                    ->update([
+                        's_qty' => $getStock->s_qty - $stockMutasiRusak[$index]->sm_qty
+                    ]);
+            }
+
+            //delete mutasi
+            $stockMutasi = DB::table('d_stock_mutation')->where('sm_nota', $getReturn->rp_notareturn)->where('sm_detail', 'PENGURANGAN')->get();
+
+            foreach ($stockMutasi as $index => $sm){
+
+                $getMutasi = DB::table('d_stock_mutation')
+                    ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                    ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                    ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                    ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
+
+                if ($stockMutasi[$index]->sm_specificcode != null){
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    $maxStockdt = DB::table('d_stock_dt')->where('sd_stock', $stockMutasi[$index]->sm_stock)->max('sd_detailid');
+
+                    if ($maxStockdt == null){
+                        $maxStockdt = 1;
+                    } else {
+                        $maxStockdt = $maxStockdt + 1;
+                    }
+
+                    // insert stock_dt
+                    DB::table('d_stock_dt')->insert([
+                        'sd_stock' => $stockMutasi[$index]->sm_stock,
+                        'sd_detailid' => $maxStockdt,
+                        'sd_specificcode' => $stockMutasi[$index]->sm_specificcode
+                    ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_reff', 'RUSAK')->delete();
+
+                    // delete d_return_penjualan
+                    $check_ganti = DB::table('d_return_penjualanganti')->where('rpg_return', $id)->count();
+                    if ($check_ganti > 0) {
+                        DB::table('d_return_penjualanganti')->where('rpg_return', $id)->delete();
+                    }
+                    DB::table('d_return_penjualandt')->where('rpd_return', $id)->delete();
+                    DB::table('d_return_penjualan')->where('rp_id', $id)->delete();
+                } else {
+                    // update stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_nota', $stockMutasi[$index]->sm_reff)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->update([
+                            'sm_sisa' => $getMutasi->sm_sisa + $stockMutasi[$index]->sm_qty,
+                            'sm_use' => $getMutasi->sm_use - $stockMutasi[$index]->sm_qty
+                        ]);
+
+                    // update dstock
+                    $dstock = DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->first();
+
+                    DB::table('d_stock')->where('s_id', $stockMutasi[$index]->sm_stock)->update([
+                        's_qty' => $dstock->s_qty + $stockMutasi[$index]->sm_qty
+                    ]);
+
+                    // delete stock mutasi
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENGURANGAN')->delete();
+
+                    // delete d_sales_dt & d_sales
+                    DB::table('d_stock_mutation')
+                        ->where('sm_nota', $getReturn->rp_notareturn)
+                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
+                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_reff', 'RUSAK')->delete();
+
+                    // delete d_return_penjualan
+                    $check_ganti = DB::table('d_return_penjualanganti')->where('rpg_return', $id)->count();
+                    if ($check_ganti > 0) {
+                        DB::table('d_return_penjualanganti')->where('rpg_return', $id)->delete();
+                    }
+                    DB::table('d_return_penjualandt')->where('rpd_return', $id)->delete();
+                    DB::table('d_return_penjualan')->where('rp_id', $id)->delete();
+                }
+            }
+
+            DB::commit();
+            return 'true';
+        }catch (\Exception $e){
+            DB::rollback();
+            return 'false';
+        }
+    }
+
     public function cariMember(Request $request)
     {
         $cari = $request->term;

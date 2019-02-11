@@ -217,10 +217,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			<!-- end row -->
 
-			<!-- Modal -->
+
+
+            <!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
-				<div class="modal-dialog">
+				<div class="modal-dialog" style="width: 60%">
 
 					<div class="modal-content">
 
@@ -244,32 +246,80 @@ use App\Http\Controllers\PlasmafoneController as Access;
 										</div>
 								</div><br>
 				
-								<div class="row terima">
-									
+								<div class="row terima margin-bottom-10">
+                                    
+                                    <form id="formInput">
+                                        
+                                        <div class="col-md-12 no-padding margin-bottom-10">
+                                            <label class="col-md-4 control-label text-left">Nota Delivery Order</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="notaDO" name="notaDO" style="text-transform: uppercase" placeholder="Masukkan Nota DO"/>
+                                                    <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 no-padding margin-bottom-10">
+                                            <label class="col-md-4 control-label text-left">Jumlah Diterima</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="rcvd" name="rcvd" style="text-transform: uppercase" readonly/>
+                                                    <span class="input-group-addon"><i class="fa fa-inbox"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-12 no-padding margin-bottom-10 KS">
+                                            <label class="col-md-4 control-label text-left">Kode Spesifik</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="kode" name="kode" style="text-transform: uppercase" placeholder="Masukkan Kode Spesifik"/>
+                                                    <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 no-padding margin-bottom-10 EXP">
+                                            <label class="col-md-4 control-label text-left">Tanggal Kadaluarsa</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="expDate" name="expDate" style="text-transform: uppercase" placeholder="Masukkan Tanggal Kadaluarsa Barang"/>
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 no-padding margin-bottom-10 JML">
+                                            <label class="col-md-4 control-label text-left">Jumlah Barang</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="jmlBarang" name="jmlBarang" style="text-transform: uppercase" placeholder="Masukkan Jumlah Barang Yang Diterima"/>
+                                                    <span class="input-group-addon"><i class="fa fa-calculator"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+
 								</div>
 
-                                <div class="row" id="tbl_kode" style="display: none;">
 
+                                <!-- TABLE untuk Modal TERIMA Barang -->
+                                <div class="row" id="tbl_kode">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
                                         <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-
                                             <header>
-
-                                                <h2><strong>Daftar kode yang sudah diterima</strong></h2>
-
+                                                <h2><strong>Daftar barang yang sudah diterima</strong></h2>
                                             </header>
-
                                             <div>
-
                                                 <div class="widget-body no-padding">
-
                                                     <table id="dt_code" class="table table-striped table-bordered table-hover" width="100%">
-
                                                         <thead>
                                                             <tr>
-                                                                <th class="text-center" width="70%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Kode</th>
-                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-cube txt-color-blue"></i>&nbsp;Aksi</th>
+                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
+                                                                <th class="text-center" width="50%"><i class="fa fa-fw fa-barcode txt-color-blue"></i>&nbsp;Kode</th>
+                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
                                                             </tr>
                                                         </thead>
 
@@ -277,13 +327,92 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                         </tbody>
 
                                                     </table>
-
                                                 </div>
-
                                             </div>
-
                                         </div>
+                                    </div>
+                                </div>
 
+                                <div class="row" id="tbl_exp">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                                            <header>
+                                                <h2><strong>Daftar barang yang sudah diterima</strong></h2>
+                                            </header>
+                                            <div>
+                                                <div class="widget-body no-padding">
+                                                    <table id="dt_exp" class="table table-striped table-bordered table-hover" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
+                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal Kadaluarsa</th>
+                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-cube txt-color-blue"></i>&nbsp;Jumlah Barang Diterima</th>
+                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="tbl_exp_kode">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                                            <header>
+                                                <h2><strong>Daftar barang yang sudah diterima</strong></h2>
+                                            </header>
+                                            <div>
+                                                <div class="widget-body no-padding">
+                                                    <table id="dt_code_exp" class="table table-striped table-bordered table-hover" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center" width="25%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
+                                                                <th class="text-center" width="25%"><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal Kadaluarsa</th>
+                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-barcode txt-color-blue"></i>&nbsp;Kode Spesifik</th>
+                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row" id="tbl_non">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                                            <header>
+                                                <h2><strong>Daftar barang yang sudah diterima</strong></h2>
+                                            </header>
+                                            <div>
+                                                <div class="widget-body no-padding">
+                                                    <table id="dt_non" class="table table-striped table-bordered table-hover" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
+                                                                <th class="text-center" width="50%"><i class="fa fa-fw fa-cube txt-color-blue"></i>&nbsp;Jumlah Barang Diterima</th>
+                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 				
@@ -294,7 +423,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
 								Batal
 							</button>
-							<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>
+							<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()">
 								Simpan
 							</button>
 						</div>
@@ -305,72 +434,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			</div>
             <!-- /.modal -->
-            
-            <!-- Modal -->
-			<div class="modal fade" id="frontModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-
-				<div class="modal-dialog">
-
-					<div class="modal-content">
-
-						<div class="modal-header">
-
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-								&times;
-							</button>
-
-							<h4 class="modal-title" id="myModalLabel"><strong>Jumlah barang yang diterima</strong></h4>
-
-						</div>
-						<form id="form_qtyReceived">{{ csrf_field() }}
-							<div class="modal-body">
-
-								<div class="row">
-										<div class="col-md-12">
-											<div class="form-group">
-												<label class="text-center col-md-12 control-label" id="nama_item" style="font-weight:bold"><h2>Masukkan Jumlah Barang Yang Diterima</h2></label>
-											</div>
-										</div>
-								</div><br>
-
-                                <div class="row">
-
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                                        <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-                                            
-                                            <section class="text-center">
-                                                <label><h4 id="maksJumlah"></h4></label>
-                                                <input type="hidden" id="idMaks">
-                                                <input type="hidden" id="itemMaks">
-                                            </section>
-                                            <section class="">
-                                                <input type="text" id="jumlah" class="form-control" style="text-align: center" placeholder="Masukkan Jumlah Disini">
-                                            </section>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-				
-							</div>
-						</form>
-
-						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
-								Batal
-							</button>
-							<button type="button" id="lanjutkan" class="btn btn-primary" onclick="terima()" disabled>
-								Lanjutkan
-							</button>
-						</div>
-
-					</div><!-- /.modal-content -->
-
-				</div><!-- /.modal-dialog -->
-
-			</div>
-			<!-- /.modal -->
 
 		</section>
 		<!-- end widget grid -->
@@ -409,13 +472,38 @@ use App\Http\Controllers\PlasmafoneController as Access;
             };
 
             $(document).ready( function() {
+                $( "#expDate" ).datepicker({
+                    language: "id",
+                    format: 'dd/mm/yyyy',
+                    prevText: '<i class="fa fa-chevron-left"></i>',
+                    nextText: '<i class="fa fa-chevron-right"></i>',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
                 $('#dt_code').DataTable({
                     "pageLength": 5,
                     "searching": false,
                     "lengthChange": false,
-                    "autoWidth": false
+                    "autoWidth": false,
+                    "language": dataTableLanguage
+                });
+                $('#dt_exp').DataTable({
+                    "pageLength": 5,
+                    "searching": false,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "language": dataTableLanguage
+                });
+                $('#dt_code_exp').DataTable({
+                    "pageLength": 5,
+                    "searching": false,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "language": dataTableLanguage
                 });
             });
+            
             
 			setTimeout(function () {
 
@@ -461,195 +549,74 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		    aktif.ajax.reload();
         }
 
-        function fm(id, item){
+        $('#kode').on('keyup', function(event){
 
-            axios.get(baseUrl+'/inventory/penerimaan/supplier/getMaks'+'/'+id+'/'+item).then((response) => {
+            if($('#kode').val() != ''){
+                $('#simpan').prop('disabled', false);
+            }
 
-                $('#maksJumlah').html('Jumlah Maksimal Adalah '+response.data.maks);
-                $('#idMaks').val(id);
-                $('#itemMaks').val(item);
+        });
 
-                $("#jumlah").on("keypress",function (event) {
-                    if ((event.which < 48 || event.which > 57)) {
-                        event.preventDefault();
-                    }                   
-                });
+        function resetInput(){
+            $('#tbl_kode').css('display', 'none');
+            $('#tbl_exp').css('display', 'none');
+            $('#tbl_exp_kode').css('display', 'none');
+            $('#tbl_non').css('display', 'none');
 
-                $("#jumlah").on("keyup",function (event) {
-                    if ($("#jumlah").val() != ""){
-                        $('#lanjutkan').attr("disabled", false);
-                        if (event.which == 13){
-                            $('#lanjutkan').click();
-                        }
-                    } else {
-                        $('#lanjutkan').attr("disabled", true);
-                    }
-                });
-                $('#frontModal').modal('show');
+            $('#notaDO').val("");
+            $('#kode').val("");
+            $('#expCode').val("");
+            $('#jmlBarang').val("");
 
-            });
+            $('.KS').css('display', 'none');
+            $('.EXP').css('display', 'none');
+            $('.JML').css('display', 'none');
         }
 
-		function terima(){
-            $('#frontModal').modal('hide');
-            var qty = 0, qtyReceived = 0;
-            var id = $('#idMaks').val();
-            var item = $('#itemMaks').val();
-			hapus();
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Mengambil Data...');
-			var row = '';
-			axios.get(baseUrl+'/inventory/penerimaan/supplier/item-receive/'+id+'/'+item).then(response => {
-                console.log(response);
-				if (response.data.status == 'Access denied') {
 
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-						color : "#A90329",
-						timeout: 5000,
-						icon : "fa fa-times bounce animated"
-					});
+		function terima(id, item){
 
-				} else {
 
-					if (response.data.qtySisa == null) {
-						qty = 0;
-					} else {
-						qty = response.data.qtySisa;
-					}
+            axios.get(baseUrl+'/inventory/penerimaan/supplier/item-receive/'+id+'/'+item).then(response => {
 
-					if (response.data.sum_qtyReceived == null) {
-						qtyReceived = 0;
-					} else {
-						qtyReceived = response.data.sum_qtyReceived;
-					}
+                $('#nama_item').html(response.data.data.nama_item);
 
-					if (response.data.specificcode == 'Y') {
-                        rows = "kode";
+                $('#id').val(response.data.data.id);
+                $('#supplier').val(response.data.data.supplier);
+                $('#idItem').val(response.data.data.itemId);
+                $('#detailid').val(response.data.data.iddetail);
+                $('#rcvd').val(response.data.data.sum_qtyReceived);
 
-						row = '<div id="form_qty">' +
-                                '<fieldset>' +
-                                    '<div class="form-group">' +
-                                        '<label class="col-md-4 control-label">Nota Delivery Order</label>' +
-                                        '<div class="col-md-8">' +
-                                            '<div class="input-group">' +
-                                                '<input type="text" name="notaDO" id="notaDO" class="notaDO form-control">'+
-                                                '<span class="input-group-addon"><i class="fa fa-"></i></span>' +
-                                            '</div>' +
-                                            '<span class="help-block"></span>' +
-                                        '</div>' +
-                                    '</div>' +
-                                    '<div id="error" class="form-group ">' +
-                                        '<label class="col-md-4 control-label">Kode Spesifik</label>' +
-                                        '<div class="col-md-8">' +
-                                            '<div class="input-group">' +
-                                                '<input type="hidden" value="Y" name="status">'+
-                                                '<input type="hidden" value="'+response.data.id+'" name="idpo">'+
-                                                '<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-                                                '<input type="hidden" value="'+response.data.supplier+'" name="supplier">'+
-                                                '<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
-                                                '<input type="hidden" value="'+response.data.qty+'" name="qtysupplier">'+
-                                                '<input type="text" id="kode" name="kode" class="kode form-control">' +
-                                                '<span class="input-group-addon"><i class="fa fa-barcode" id="icon"></i></span>' +
-                                            '</div>' +
-                                            '<span id="message" class="help-block"></span>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</fieldset>'+
-                            '</div>';
-                        
-                        $(".terima").html(row);
-                        $("#kode").focus();
-                        $("#tbl_kode").show();
+                resetInput();
 
-                        $('#kode').on('keyup', function(){
+                if(response.data.data.i_specificcode == 'Y' && response.data.data.i_expired == 'N'){
 
-                            if (event.which == 13){
-                                $('#dt_co').DataTable().row.add([
-                                    '<div><input class="form-control"></div>',
-                                    '<div><button class="btn btn-danger btn-circle"><i class="fa fa-close"></i></button></div>'
-                                ]).draw();
-                            }
+                    $('#tbl_kode').css('display', 'block'); 
+                    $('.KS').css('display', 'block');
 
-                        });
+                }else if(response.data.data.i_specificcode == 'N' && response.data.data.i_expired == 'Y'){
 
-					} else {
-                        rows = null;
-						{{--  row = '<div id="form_qty">'+
-                                '<fieldset>' +
-                                    '<div class="form-group">' +
-                                        '<label class="col-md-4 control-label">Kuantitas yang sudah diterima</label>' +
-                                        '<div class="col-md-8">' +
-                                            '<div class="input-group">' +
-                                                '<input type="text" readonly value="'+qtyReceived+'" name="qtyreceived" id="qty_received" class="qty form-control">'+
-                                                '<span class="input-group-addon"><i class="fa fa-database"></i></span>' +
-                                            '</div>' +
-                                            '<span class="help-block"></span>' +
-                                        '</div>' +
-                                    '</div>'+
-                                    '<div class="form-group">' +
-                                        '<label class="col-md-4 control-label">Kuantitas</label>' +
-                                        '<div class="col-md-8">' +
-                                            '<div class="input-group">' +
-                                                '<input type="hidden" value="N" name="status">'+
-                                                '<input type="hidden" value="'+qtyReceived+'" name="qtyR">'+
-                                                '<input type="hidden" value="'+response.data.id+'" name="idpo">'+
-                                                '<input type="hidden" value="'+response.data.iddetail+'" name="iddetail">'+
-                                                '<input type="hidden" value="'+response.data.supplier+'" name="supplier">'+
-                                                '<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
-                                                '<input type="hidden" value="'+response.data.qty+'" name="qtysupplier">'+
-                                                '<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-                                                '<input type="text" id="qty" name="qty" class="qty form-control">'+
-                                                '<span class="input-group-addon"><i class="fa fa-cubes"></i></span>' +
-                                            '</div>' +
-                                            '<span class="help-block"></span>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</fieldset>' +
-								'</div>';  --}}
+                    $('#tbl_exp').css('display', 'block');
+                    $('.EXP').css('display', 'block');
+                    $('.JML').css('display', 'block');
 
-                        $(".terima").append(row);
-                        $("#qty").focus();
-                        $("#tbl_kode").hide();
-                        $(".qty").on("keypress",function (event) {
-                            $(this).val($(this).val().replace(/[^\d].+/, ""));
-                            if ((event.which < 48 || event.which > 57)) {
-                                event.preventDefault();
-                            }
+                }else if(response.data.data.i_specificcode == 'Y' && response.data.data.i_expired == 'Y'){
 
-                            if ($(this).val() != null || $(this).val() != ""){
-                                $('#simpan').attr("disabled", false);
-                            } else {
-                                $('#simpan').attr("disabled", true);
-                            }
-                            if (event.which == 13){
-                                simpan();
-                            }
+                    $('#tbl_exp_kode').css('display', 'block');
+                    $('.KS').css('display', 'block');
+                    $('.EXP').css('display', 'block');
 
-                        });
+                }else{
 
-                        $(".qty").on("keyup", function (event){
-                            event.preventDefault();
-                            var input = parseInt($(this).val());
+                    $('#tbl_non').css('display', 'block');
+                    $('.JML').css('display', 'block');
 
-                            if (isNaN(input)){
-                                input = 0;
-                            }
-                            if (input > parseInt(response.data.qtySisa)){
-                                $(this).val(response.data.qtySisa);
-                            }
-                        });
-					}
+                }
 
-					$('#nama_item').html(response.data.nama_item);
-					$('#overlay').fadeOut(200);
-					$('#myModal').modal('show');
+                $('#myModal').modal('show');
 
-				}
+            })
 
-				})
 		}
 
 		function hapus() {
@@ -669,7 +636,18 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		function simpan() {
             $('#overlay').fadeIn(200);
             
-            axios.post(baseUrl+'/inventory/penerimaan/supplier/item-receive/add', $('#form_qtyReceived').serialize()).then((response) => {
+            var notaDO = $('#notaDO').val();
+            var kode = $('#kode').val();
+            var jmlBarang = $('#jmlBarang').val();
+            var rcvd = $('#rcvd').val();
+            var expDate = $('#expDate').val();
+            
+            var idpo = $('#id').val();
+            var supplier = $('#supplier').val();
+
+            var data = 'notaDO='+ notaDO + '&expDate=' + expDate + '&kode=' + kode + '&qty=' + jmlBarang + '&idpo=' idpo + '&qtyR=' + rcvd;
+
+            axios.post(baseUrl+'/inventory/penerimaan/supplier/item-receive/add', data).then((response) => {
 
                 if(response.data.status == 'sukses'){
 
