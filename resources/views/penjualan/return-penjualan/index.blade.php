@@ -374,5 +374,90 @@
 
             })
         }
+
+        function refresh_tab(){
+            proses.api().ajax.reload();
+        }
+
+        function remove(id){
+            $.SmartMessageBox({
+                title : "Pesan!",
+                content : 'Apakah Anda yakin akan membatalkan return penjualan ini?',
+                buttons : '[Batal][Ya]'
+            }, function(ButtonPressed) {
+                if (ButtonPressed === "Ya") {
+
+                    $('#overlay').fadeIn(200);
+                    $('#load-status-text').text('Sedang Memproses...');
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: baseUrl + '/penjualan/return-penjualan/delete-return/'+id,
+                        type: 'get',
+                        success: function(response){
+                            if (response == "Not Found") {
+                                $.smallBox({
+                                    title : "Gagal",
+                                    content : "Data tidak ditemukan",
+                                    color : "#A90329",
+                                    timeout: 5000,
+                                    icon : "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response == "false") {
+                                $.smallBox({
+                                    title : "Gagal",
+                                    content : "Upsss. Terjadi kesalahan",
+                                    color : "#A90329",
+                                    timeout: 5000,
+                                    icon : "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else {
+                                $.smallBox({
+                                    title : "Berhasil",
+                                    content : 'Transaksi Anda berhasil dibatalkan...!',
+                                    color : "#739E73",
+                                    timeout: 5000,
+                                    icon : "fa fa-check bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+                                $('#deleteModal').modal('hide');
+                                refresh_tab();
+
+                            }
+                        }, error:function(x, e) {
+                            if (x.status == 0) {
+                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 404) {
+                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 500) {
+                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'parsererror') {
+                                alert('Error.\nParsing JSON Request failed.');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'timeout'){
+                                alert('Request Time out. Harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else {
+                                alert('Unknow Error.\n' + x.responseText);
+                                $('#overlay').fadeOut(200);
+                            }
+                        }
+                    })
+
+                }
+
+            });
+        }
     </script>
 @endsection
