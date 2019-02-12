@@ -443,6 +443,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/purchase-order/get-proses', 'pembelian\PurchaseOrderController@get_proses');
     Route::post('/pembelian/purchase-order/get-history', 'pembelian\PurchaseOrderController@get_history');
     Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
+    Route::get('/pembelian/purchase-order/hapus/{id}', 'pembelian\PurchaseOrderController@hapus');
+
 
     Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
     Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');

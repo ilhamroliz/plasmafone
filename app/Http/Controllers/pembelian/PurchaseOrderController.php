@@ -32,15 +32,20 @@ class PurchaseOrderController extends Controller
             ->join('d_supplier', 's_id', '=', 'p_supplier')
             ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
             ->having(DB::raw('SUM(pd_qtyreceived)'), '<', DB::raw('SUM(pd_qty)'))
-            ->select('p_id', 'p_nota', 's_company')
+            ->select('p_id', 'p_nota', 's_company', DB::raw('SUM(pd_qtyreceived) as qtyR'))
             ->groupBy('p_id')->get();
 
+        // dd($getData);
         return DataTables::of($getData)
             ->addIndexColumn()
             ->addColumn('aksi', function($getData){
-                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detil(\'' . Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' .  Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
                 $hapus = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' .  Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                if($getData->qtyR != "0"){
+                    $hapus = '';
+                }
+            
                 if (Plasma::checkAkses(4, 'update') == false && Plasma::checkAkses(4, 'delete') == false) {
                     return '<div class="text-center">'.$detil.'</div>';
                 } else if(Plasma::checkAkses(4, 'update') == true && Plasma::checkAkses(4, 'delete') == false){

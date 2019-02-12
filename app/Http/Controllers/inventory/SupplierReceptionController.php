@@ -191,16 +191,18 @@ class SupplierReceptionController extends Controller
     public function itemReceiveDT(Request $request){
 
         $id = Crypt::decrypt($request->id);
+        $getNota = DB::table('d_purchase')->where('p_id', $id)->select('p_nota')->first();
+        $nota = $getNota->p_nota;
         $item =  Crypt::decrypt($request->item);
-        $getDT = DB::table('d_purchase_dt')
-            ->join('d_purchase', 'p_id', '=', 'pd_purchase')
+
+        $getDT = DB::table('d_purchase')
             ->join('d_stock_mutation', 'sm_nota', '=', 'p_nota')
-            ->where('pd_purchase', $id)
-            ->where('pd_item', $item)
-            ->where('pd_qtyreceived', '!=', 0)
-            ->where('sm_detail', 'PENAMBAHAN')
-            ->select('sm_reff', 'sm_expired', 'sm_specificcode', 'sm_qty')
-            ->groupBy('sm_detailid')->get();
+            ->join('d_stock', 's_id', '=', 'sm_stock')
+            ->where('p_nota', $nota)
+            ->where('s_item', $item)
+            ->where('s_position', 'PF00000001')
+            ->select('sm_reff', 'sm_specificcode', 'sm_expired', 'sm_qty')
+            ->get();
 
         $getSCEX = DB::table('d_item')->where('i_id', $item)->select('i_specificcode', 'i_expired')->first();
         // dd($getDT);
@@ -218,28 +220,32 @@ class SupplierReceptionController extends Controller
             // dd($request);
             DB::beginTransaction();
             try {
-
-                $cekSCSM = DB::table('d_stock_mutation')->where('sm_specificcode', $request->kode)->count();
-                if($cekSCSM > 0){
-                    return json_encode([
-                        'status' => 'ada'
-                    ]);
-                }
-
-                $getSCEXP = DB::table('d_item')->where('i_id', $request->iditem)->select('i_specificcode', 'i_expired')->first();
+                $idpo = Crypt::decrypt($request->idpo);
+                $iditem = Crypt::decrypt($request->iditem);
+                $getSCEXP = DB::table('d_item')->where('i_id', $iditem)->select('i_specificcode', 'i_expired')->first();
                 $sc = $getSCEXP->i_specificcode;
                 $exp = $getSCEXP->i_expired;
+
+                /// Cek apakah Kode Spesifik sudah ada, jika barang memiliki kode spesifik
+                if($sc == 'Y'){
+                    $cekSCSM = DB::table('d_stock_mutation')->where('sm_specificcode', $request->kode)->count();
+                    if($cekSCSM > 0){
+                        return json_encode([
+                            'status' => 'ada'
+                        ]);
+                    }
+                }
 
                 /// Memasukkan Data SPECIFICCODE ke D_PURCHASE_DT dan update PD_QTYRECEIVED
                 if($sc == "Y"){
                     $getIdDT = DB::table('d_purchase_dt')
-                    ->where('pd_purchase', $request->idpo)
-                    ->where('pd_item', $request->iditem)
+                    ->where('pd_purchase', $idpo)
+                    ->where('pd_item', $iditem)
                     ->where('pd_qtyreceived', '!=', 1)->min('pd_detailid');
 
                     DB::table('d_purchase_dt')
-                    ->where('pd_purchase', $request->idpo)
-                    ->where('pd_item', $request->iditem)
+                    ->where('pd_purchase', $idpo)
+                    ->where('pd_item', $iditem)
                     ->where('pd_qtyreceived', '!=', 1)
                     ->where('pd_detailid', $getIdDT)
                     ->update([
@@ -248,8 +254,8 @@ class SupplierReceptionController extends Controller
                     ]);
                 }else{
                     DB::table('d_purchase_dt')
-                    ->where('pd_purchase', $request->idpo)
-                    ->where('pd_item', $request->iditem)
+                    ->where('pd_purchase', $idpo)
+                    ->where('pd_item', $iditem)
                     ->update([
                         'pd_qtyreceived' => $request->qty + $request->qtyR
                     ]);
@@ -257,10 +263,10 @@ class SupplierReceptionController extends Controller
 
 
                 /// Update QTY di D_STOCK
-                $countQTY = DB::table('d_stock')->where('s_item', $request->iditem)->where('s_position', 'PF00000001')->count();
+                $countQTY = DB::table('d_stock')->where('s_item', $iditem)->where('s_position', 'PF00000001')->count();
                 if($countQTY != 0){
 
-                    $getQTY = DB::table('d_stock')->where('s_item', $request->iditem)->where('s_position', 'PF00000001')
+                    $getQTY = DB::table('d_stock')->where('s_item', $iditem)->where('s_position', 'PF00000001')
                         ->select('s_qty', 's_id')->first();
                     $idS = $getQTY->s_id;
 
@@ -290,7 +296,7 @@ class SupplierReceptionController extends Controller
                             's_id' => $idS,
                             's_comp' => 'PF00000001',
                             's_position' => 'PF00000001',
-                            's_item' => $request->iditem,
+                            's_item' => $iditem,
                             's_qty' => 1,
                             's_status' => 'On Destination',
                             's_min' => 0,
@@ -303,7 +309,7 @@ class SupplierReceptionController extends Controller
                             's_id' => $idS,
                             's_comp' => 'PF00000001',
                             's_position' => 'PF00000001',
-                            's_item' => $request->iditem,
+                            's_item' => $iditem,
                             's_qty' => $request->qty,
                             's_status' => 'On Destination',
                             's_min' => 0,
@@ -329,15 +335,15 @@ class SupplierReceptionController extends Controller
 
                 /// Memasukkan Data ke D_STOCK_MUTATION untuk PENAMBAHAN
                 $getHPP = DB::table('d_purchase')->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-                    ->where('p_id', $request->idpo)->where('pd_item', $request->iditem)->select(
+                    ->where('p_id', $idpo)->where('pd_item', $iditem)->select(
                         'pd_total_net', 'p_total_gross', 'p_total_net', DB::raw('COUNT(pd_detailid) as banyak')
                     )->get();                
                 $smhpp = ($getHPP[0]->pd_total_net / $getHPP[0]->p_total_gross ) * $getHPP[0]->p_total_net ;
 
-                $getSell = DB::table('d_item')->where('i_id', $request->iditem)->select('i_price')->first();
+                $getSell = DB::table('d_item')->where('i_id', $iditem)->select('i_price')->first();
                 $smsell = $getSell->i_price;
 
-                $getNota = DB::table('d_purchase')->where('p_id', $request->idpo)->select('p_nota')->first();
+                $getNota = DB::table('d_purchase')->where('p_id', $idpo)->select('p_nota')->first();
                 $smnota = $getNota->p_nota;
 
                 if($exp == 'Y'){
