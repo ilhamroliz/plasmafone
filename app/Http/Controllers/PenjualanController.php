@@ -162,7 +162,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'Fine')
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -194,7 +197,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'Fine')
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -226,7 +232,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'Fine')
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -285,7 +294,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'Fine')
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -317,7 +329,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'Fine')
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -349,7 +364,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'Fine')
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -380,6 +398,8 @@ class PenjualanController extends Controller
             ->where('s_comp', $position)
             ->where('s_position', $position)
             ->where('s_item', $item)
+            ->where('s_status', 'On Destination')
+            ->where('s_condition', 'Fine')
             ->first();
 
         $checksm = DB::table('d_stock_mutation')
