@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c1fafb65-daf5-4c94-858a-66fc52492e53" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_script.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/refund/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/pembelian/refund/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template_asset/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/template_asset/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template_asset/js/plugin/select2/select2.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/template_asset/js/plugin/select2/select2.min.js" afterDir="false" />
-    </list>
+    <list default="true" id="c1fafb65-daf5-4c94-858a-66fc52492e53" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf/" />
     <ignored path="$PROJECT_DIR$/vendor/beyondcode/laravel-dump-server/" />
     <ignored path="$PROJECT_DIR$/vendor/codedge/laravel-fpdf/" />
@@ -536,11 +528,12 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/halaman/shoping_cart.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/handphone/index.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_header.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_htmlheader.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/inventory/SupplierReceptionController.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/pembelian/PurchaseOrderController.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/edit.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/index.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/view_purchase_order.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/routes/web.php</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Created" />
@@ -548,7 +541,6 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="CREATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/handphone/product_with_merk.blade.php</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Deleted" />
@@ -678,7 +670,7 @@
       <workItem from="1549852358610" duration="11200000" />
       <workItem from="1549938945273" duration="880000" />
       <workItem from="1549939943912" duration="1184000" />
-      <workItem from="1549941182089" duration="4345000" />
+      <workItem from="1549941182089" duration="5165000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1549088688030</created>
@@ -799,14 +791,22 @@
       <option name="project" value="LOCAL" />
       <updated>1549858154351</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="roliz">
+      <created>1549946039289</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1549946039289</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="64557000" />
+    <option name="totallyTimeSpent" value="65377000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23787878" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
