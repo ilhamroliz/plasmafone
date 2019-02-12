@@ -453,15 +453,51 @@
 					$('#myModal').modal('show');
 
 				}
-
 			})
+        }
+
+        function edit(id){
+
+            window.location.href = baseUrl+'/pembelian/purchase-order/edit?id='+id;
+
         }
         
         function hapus(id){
+			$.SmartMessageBox({
+				title : "Pesan!",
+				content : 'Apakah Anda yakin akan manghapus data Purchase Order ini ?',
+				buttons : '[Batal][Ya]'
+			}, function(ButtonPressed) {
+				if (ButtonPressed === "Ya") {
 
-            axios.get(baseUrl+'/pembelian/purchase-order/hapus')
+					$('#overlay').fadeIn(200);
+					$('#load-status-text').text('Sedang Menghapus Data...');
 
-        }
+					axios.get(baseUrl+'/pembelian/purchase-order/hapus'+'/'+id).then((response) => {
+						if(response.data.status == 'sukses'){
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Berhasil",
+								content : 'Data Purchase Order '+response.data.nota+' Berhasil Dihapus !',
+								color : "#739E73",
+								timeout: 4000,
+								icon : "fa fa-check bounce animated"
+							});
+							location.reload();
+						}else{
+							$('#overlay').fadeOut(200);
+							$.smallBox({
+								title : "Gagal",
+								content : "Maaf, Data Purchase Order "+response.data.nota+" Gagal Dihapus ",
+								color : "#A90329",
+								timeout: 4000,
+								icon : "fa fa-times bounce animated"
+							});
+						}
+					});
+				}
+			});
+		}
 
         function cariHistory(){
 

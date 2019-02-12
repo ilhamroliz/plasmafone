@@ -445,36 +445,37 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/pembelian/purchase-order/get-history', 'pembelian\PurchaseOrderController@get_history');
     Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
     Route::get('/pembelian/purchase-order/hapus/{id}', 'pembelian\PurchaseOrderController@hapus');
+    Route::match(['get', 'post'],'/pembelian/purchase-order/edit', 'pembelian\PurchaseOrderController@edit');
 
 
-    Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
-    Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
-    Route::get('/pembelian/purchase-order/purchaseComplete', 'PurchaseOrderController@purchaseComplete');
-    Route::get('/pembelian/purchase-order/getDetail_purchase', 'PurchaseOrderController@getDetail_purchase');
-    Route::get('/pembelian/purchase-order/get_idDetail', 'PurchaseOrderController@get_idDetail');
-    Route::get('/pembelian/purchase-order/PurchaseTambah', 'PurchaseOrderController@purchaseTambah');
-    Route::get('/pembelian/purchase-order/add_purchaseOrder', 'PurchaseOrderController@add_purchaseOrder');
+    // Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
+    // Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
+    // Route::get('/pembelian/purchase-order/purchaseComplete', 'PurchaseOrderController@purchaseComplete');
+    // Route::get('/pembelian/purchase-order/getDetail_purchase', 'PurchaseOrderController@getDetail_purchase');
+    // Route::get('/pembelian/purchase-order/get_idDetail', 'PurchaseOrderController@get_idDetail');
+    // Route::get('/pembelian/purchase-order/PurchaseTambah', 'PurchaseOrderController@purchaseTambah');
+    // Route::get('/pembelian/purchase-order/add_purchaseOrder', 'PurchaseOrderController@add_purchaseOrder');
 
 	// aksi purchase
-    Route::get('/pembelian/purchase-order/getSupplier_po', 'PurchaseOrderController@getSupplier_po');
-    Route::get('/pembelian/purchase-order/getOutlet_po', 'PurchaseOrderController@getOutlet_po');
-    Route::get('/pembelian/purchase-order/list_draftPo', 'PurchaseOrderController@list_draftPo');
-    Route::get('/pembelian/purchase-order/simpanPo', 'PurchaseOrderController@simpanPo');
-	// end aksi purchase
-    Route::get('/pembelian/purchase-order/add', 'PurchaseOrderController@purchase_order_add');
-    Route::get('/pembelian/purchase-order/get-purchase/{id}', 'PurchaseOrderController@get_purchase');
-    Route::get('/pembelian/purchase-order/get-request-purchase/{id}', 'PurchaseOrderController@get_request_purchase');
-    Route::post('/pembelian/purchase-order/add-purchase', 'PurchaseOrderController@add_purchase');
-    Route::get('/pembelian/purchase-order/get/{id}', 'PurchaseOrderController@get_purchase_order');
-    Route::get('/pembelian/purchase-order/edit', 'PurchaseOrderController@edit_purchase_order');
-    Route::post('/pembelian/purchase-order/update', 'PurchaseOrderController@update_purchase_order');
-    Route::post('/pembelian/purchase-order/edit-multiple', 'PurchaseOrderController@multiple_edit_purchase_order');
-    Route::match(['get', 'post'], '/pembelian/purchase-order/multiple-delete', 'PurchaseOrderController@multiple_delete_purchase_order');
-    Route::get('/pembelian/purchase-order/cetak', 'PurchaseOrderController@cetak_purchase');
-    Route::get('/pembelian/purchase-order/get-purchase-data/{id}', 'PurchaseOrderController@get_purchase_data');
-    Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
-    Route::get('/pembelian/purchase-order/purchase-pdf/{id}', 'PurchaseOrderController@viewpdf_purchase');
-    Route::get('/pembelian/purchase-order/generate-pdf/{id}', 'PurchaseOrderController@pdf_purchase');
+    // Route::get('/pembelian/purchase-order/getSupplier_po', 'PurchaseOrderController@getSupplier_po');
+    // Route::get('/pembelian/purchase-order/getOutlet_po', 'PurchaseOrderController@getOutlet_po');
+    // Route::get('/pembelian/purchase-order/list_draftPo', 'PurchaseOrderController@list_draftPo');
+    // Route::get('/pembelian/purchase-order/simpanPo', 'PurchaseOrderController@simpanPo');
+	// // end aksi purchase
+    // Route::get('/pembelian/purchase-order/add', 'PurchaseOrderController@purchase_order_add');
+    // Route::get('/pembelian/purchase-order/get-purchase/{id}', 'PurchaseOrderController@get_purchase');
+    // Route::get('/pembelian/purchase-order/get-request-purchase/{id}', 'PurchaseOrderController@get_request_purchase');
+    // Route::post('/pembelian/purchase-order/add-purchase', 'PurchaseOrderController@add_purchase');
+    // Route::get('/pembelian/purchase-order/get/{id}', 'PurchaseOrderController@get_purchase_order');
+    // Route::get('/pembelian/purchase-order/edit', 'PurchaseOrderController@edit_purchase_order');
+    // Route::post('/pembelian/purchase-order/update', 'PurchaseOrderController@update_purchase_order');
+    // Route::post('/pembelian/purchase-order/edit-multiple', 'PurchaseOrderController@multiple_edit_purchase_order');
+    // Route::match(['get', 'post'], '/pembelian/purchase-order/multiple-delete', 'PurchaseOrderController@multiple_delete_purchase_order');
+    // Route::get('/pembelian/purchase-order/cetak', 'PurchaseOrderController@cetak_purchase');
+    // Route::get('/pembelian/purchase-order/get-purchase-data/{id}', 'PurchaseOrderController@get_purchase_data');
+    // Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
+    // Route::get('/pembelian/purchase-order/purchase-pdf/{id}', 'PurchaseOrderController@viewpdf_purchase');
+    // Route::get('/pembelian/purchase-order/generate-pdf/{id}', 'PurchaseOrderController@pdf_purchase');
 
 	// End Purchase Order
 
