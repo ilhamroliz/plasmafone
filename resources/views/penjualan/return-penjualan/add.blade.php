@@ -371,6 +371,7 @@
             $("#btn_search").on("click", function (evt) {
                 evt.preventDefault();
                 if (
+                    $("#cari-member").val() == "" &&
                     $("#idmember").val() == "" &&
                     $("#kode").val() == "" &&
                     $("#nota").val() == "" &&

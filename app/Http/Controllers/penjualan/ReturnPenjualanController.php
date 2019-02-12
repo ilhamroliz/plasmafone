@@ -370,18 +370,21 @@ class ReturnPenjualanController extends Controller
     public function cariNotaPenjualan(Request $request)
     {
         $data = DB::table('d_sales')
-            ->join('d_sales_dt', 'd_sales.s_id', 'd_sales_dt.sd_sales');
+            ->join('d_sales_dt', 'd_sales.s_id', 'd_sales_dt.sd_sales')
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
 
-        if ($request->idmember != "") {
-            $data->where('d_sales.s_member', $request->idmember);
+        if ($request->member != "") {
+            $data->where('m_member.m_name', 'like', '%'.$request->member.'%');
+        } else if ($request->idmember != "") {
+            $data->orWhere('d_sales.s_member', $request->idmember);
         } else if ($request->kode != "") {
-            $data->where('d_sales_dt.sd_specificcode', $request->kode);
+            $data->orWhere('d_sales_dt.sd_specificcode', $request->kode);
         } else if ($request->nota != "") {
-            $data->where('d_sales.s_nota', $request->nota);
+            $data->orWhere('d_sales.s_nota', $request->nota);
         } else if ($request->tgl_awal != ""  && $request->tgl_akhir == "") {
-            $data->where('d_sales.s_date', Carbon::parse($request->tglAwal)->format('Y-m-d'));
+            $data->orWhere('d_sales.s_date', Carbon::parse($request->tglAwal)->format('Y-m-d'));
         } else if ($request->tgl_awal == "" && $request->tgl_akhir != "") {
-            $data->where('d_sales.s_date', Carbon::parse($request->tgl_akhir)->format('Y-m-d'));
+            $data->orWhere('d_sales.s_date', Carbon::parse($request->tgl_akhir)->format('Y-m-d'));
         } else if ($request->tgl_awal != "" && $request->tgl_akhir != "") {
             $data->whereBetween('d_sales.s_date', [Carbon::parse($request->tgl_awal)->format('Y-m-d'), Carbon::parse($request->tgl_akhir)->format('Y-m-d')]);
         }
