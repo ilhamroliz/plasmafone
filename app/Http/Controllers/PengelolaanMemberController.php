@@ -18,13 +18,13 @@ class PengelolaanMemberController extends Controller
     {
         $data = DB::table('d_saldo_converting')
             ->first();
-        if ($data == null){
+        if ($data == null) {
             DB::table('d_saldo_converting')
                 ->insert([
                     'sc_id' => 1,
                     'sc_saldo' => 1,
                     'sc_money' => 1
-                    ]);
+                ]);
             $data = DB::table('d_saldo_converting')
                 ->first();
         }
@@ -52,7 +52,7 @@ class PengelolaanMemberController extends Controller
     {
         $id = $request->id;
         $data = DB::table('d_saldo')
-            ->where('s_member','=', $id)
+            ->where('s_member', '=', $id)
             ->first();
         return Response::json(
             $data
@@ -81,7 +81,7 @@ class PengelolaanMemberController extends Controller
                 ->where('s_member', '=', $member)
                 ->get();
 
-            if (count($data) > 0){
+            if (count($data) > 0) {
                 //update
                 $saldoAkhir = intval($saldo) + intval($data[0]->s_saldo);
                 DB::table('d_saldo')
@@ -90,7 +90,7 @@ class PengelolaanMemberController extends Controller
                         's_saldo' => $saldoAkhir
                     ]);
                 $max = count($data);
-                $detailid = $data[$max-1]->sm_detailid;
+                $detailid = $data[$max - 1]->sm_detailid;
                 ++$detailid;
 
                 DB::table('d_saldo_mutation')
@@ -139,6 +139,106 @@ class PengelolaanMemberController extends Controller
                 'status' => 'gagal',
                 'data' => $e
             ]);
+        }
+    }
+
+    public function getDataSetting($id)
+    {
+        $idFitur = $id;
+        $data = DB::table('d_saldo_setting')
+            ->where('ss_fitur', '=', $idFitur)
+            ->first();
+        return json_encode($data);
+    }
+
+    public function updateSetting(Request $request)
+    {
+        $fitur = $request->fitur;
+        $poin = intval(str_replace(' Poin', '', $request->getpoin));
+        $trans = str_replace('Rp. ', '', $request->mintrans);
+        $trans = intval(str_replace('.', '', $trans));
+
+        DB::beginTransaction();
+        try {
+            DB::table('d_saldo_setting')
+                ->where('ss_fitur', '=', $fitur)
+                ->update([
+                    'ss_poin' => $poin,
+                    'ss_mintransaction' => $trans
+                ]);
+            DB::commit();
+            return Response::json([
+                'status' => 'sukses',
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Response::json([
+                'status' => 'gagal'
+            ]);
+        }
+    }
+
+    public static function addSaldoFromTransaction($member, $transaksi, $nota, $idFitur)
+    {
+        if ($idFitur == 16 || $idFitur == 17 || $idFitur == 19) {
+            $data = DB::table('d_saldo_setting')
+                ->where('ss_fitur', '=', $idFitur)
+                ->first();
+
+            if ($transaksi >= intval($data->ss_mintransaction)) {
+                $kelipatan = $transaksi / $data->ss_mintransaction;
+                $kelipatan = intval($kelipatan);
+                $getPoin = $data->ss_poin * $kelipatan;
+                $getSaldo = DB::table('d_saldo')
+                    ->join('d_saldo_mutation', 'sm_saldo', '=', 's_id')
+                    ->where('s_member', '=', $member)
+                    ->select('s_id', 's_saldo', DB::raw('max(sm_detailid) as sm_detailid'))
+                    ->groupBy('s_id')
+                    ->get();
+
+                if (count($getSaldo) > 0) {
+                    DB::table('d_saldo')
+                        ->where('s_member', '=', $member)
+                        ->update([
+                            's_saldo' => intval($getSaldo[0]->s_saldo) + $getPoin
+                        ]);
+
+                    DB::table('d_saldo_mutation')
+                        ->insert([
+                            'sm_saldo' => $getSaldo[0]->s_id,
+                            'sm_detailid' => $getSaldo[0]->sm_detailid + 1,
+                            'sm_date' => Carbon::now('Asia/Jakarta'),
+                            'sm_detail' => 'PENAMBAHAN',
+                            'sm_value' => $getPoin,
+                            'sm_note' => 'Penambahan poin transaksi ' . $nota,
+                            'sm_nota' => $nota,
+                            'sm_reff' => $nota
+                        ]);
+                } else {
+                    $idSaldo = DB::table('d_saldo')
+                        ->max('s_id');
+                    DB::table('d_saldo')
+                        ->insert([
+                            's_id' => $idSaldo + 1,
+                            's_member' => $member,
+                            's_saldo' => $getPoin,
+                            's_insert' => Carbon::now('Asia/Jakarta'),
+                            's_update' => Carbon::now('Asia/Jakarta')
+                        ]);
+
+                    DB::table('d_saldo_mutation')
+                        ->insert([
+                            'sm_saldo' => $idSaldo + 1,
+                            'sm_detailid' => 1,
+                            'sm_date' => Carbon::now('Asia/Jakarta'),
+                            'sm_detail' => 'PENAMBAHAN',
+                            'sm_value' => $getPoin,
+                            'sm_note' => 'Penambahan poin transaksi ' . $nota,
+                            'sm_nota' => $nota,
+                            'sm_reff' => $nota
+                        ]);
+                }
+            }
         }
     }
 }
