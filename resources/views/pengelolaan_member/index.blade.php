@@ -7,6 +7,24 @@
         .ui-autocomplete-input {
             z-index: 909 !important;
         }
+
+        .checkbox.checkbox-single {
+
+        label {
+            width: 0;
+            height: 16px;
+            visibility: hidden;
+
+                &
+                :before,
+
+                &
+                :after {
+                    visibility: visible;
+                }
+
+            }
+        }
     </style>
 @endsection
 
@@ -247,13 +265,68 @@
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Pengaturan Transaksi Saldo Poin</h4>
                 </div>
-                <div class="modal-body no-padding">
-                    <form id="form-belipoin" class="smart-form no-padding" novalidate="novalidate">
-                        <fieldset class="">
-                            <div class="row">
-
+                <div class="modal-body">
+                    <form id="form-pengaturan" class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6 col-lg-6">
+                                <table class="table table-bordered table-striped table-striped table-hover" style="overflow: auto;" id="table-fitur">
+                                    <thead>
+                                    <tr>
+                                        <th>Fitur</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr onclick="check(16, this)">
+                                        <td>Penjualan Reguler</td>
+                                        <td>
+                                            <div class="text-center">
+                                                <div
+                                                    class="checkbox checkbox-primary checkbox-single checkbox-inline">
+                                                    <input id="fitur-16" type="checkbox" class="checkfitur pilih" value="16" name="fitur" aria-label="Single radio One">
+                                                    <label></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr onclick="check(17, this)">
+                                        <td>Penjualan Tempo</td>
+                                        <td>
+                                            <div class="text-center">
+                                                <div
+                                                    class="checkbox checkbox-primary checkbox-single checkbox-inline">
+                                                    <input id="fitur-17" type="checkbox" class="checkfitur pilih" value="17" name="fitur" aria-label="Single radio One">
+                                                    <label></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr onclick="check(19, this)">
+                                        <td>Penjualan Online</td>
+                                        <td>
+                                            <div class="text-center">
+                                                <div
+                                                    class="checkbox checkbox-primary checkbox-single checkbox-inline">
+                                                    <input id="fitur-19" type="checkbox" class="checkfitur pilih" value="19" name="fitur" aria-label="Single radio One">
+                                                    <label></label>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                        </fieldset>
+                            <div class="col-md-6 col-sm-6 col-lg-6">
+                                <div class="form-group padding-10">
+                                    <label>Minimal Transaksi</label>
+                                    <input class="form-control mintrans" placeholder="Minimal Transaksi" type="text">
+                                </div>
+                                <div class="form-group padding-10 padding-top-0">
+                                    <label>Poin yang didapat</label>
+                                    <input class="form-control getpoin" placeholder="Poin yang didapat" type="text">
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -307,6 +380,26 @@
                 minLength: 1,
                 select: function(event, data) {
                     setSaldo(data.item.id);
+                }
+            });
+
+            $('#table-fitur').dataTable({
+                "autoWidth" : true,
+                "paging"	: false,
+                "info"	: false,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-12'f>r>"+"t"+
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-fitur'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
                 }
             });
         })
@@ -384,6 +477,11 @@
 
         function pengaturan() {
             $('#modal-pengaturan').modal('show');
+        }
+
+        function check(id, field) {
+            $(".checkfitur").prop("checked", false);
+            document.getElementById("fitur-" + id).checked = true;
         }
     </script>
 

@@ -15,7 +15,8 @@
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-production-plugins.min.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-production.min.css') }}">
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-skins.min.css') }}">
-
+<!-- SmartAdmin RTL Support -->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-rtl.min.css') }}">
 <!-- Checkbox style -->
 <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/bootstrap/awesome-bootstrap-checkbox.css') }}">
 <!-- Datepicker -->

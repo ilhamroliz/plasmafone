@@ -417,15 +417,17 @@
     function setStock(info){
         var data = info.data;
 
-        axios.get(baseUrl+'/penjualan-reguler/checkStock/'+data.i_id)
-            .then(function (response) {
-                // handle success
-                stockGlobal = response.data;
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            });
+        // axios.get(baseUrl+'/penjualan-reguler/checkStock/'+data.i_id)
+        //     .then(function (response) {
+        //         // handle success
+        //         stockGlobal = response.data;
+        //     })
+        //     .catch(function (error) {
+        //         // handle error
+        //         console.log(error);
+        //     });
+
+        stockGlobal = data.s_qty;
 
         var price = 0;
         if (data.i_code == "") {
@@ -683,7 +685,7 @@
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'" data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'" data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
                     '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'" class="harga-'+idGlobal+' harga-'+iCode+'">Rp.<p style="float: right">'+toRupiah(qtyGlobal * hargaGlobal)+'</p></td>' +
-                    '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus('+idGlobal+')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
+                    '<td style="width: 10%;" class="text-center"><button type="button" onclick="hapus(\''+idGlobal+'\')" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
 
                 $("#table-penjualan tbody").append(row);
@@ -725,7 +727,7 @@
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 8%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscp(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discp discp-'+iCode+'"  data-id="'+idGlobal+'" id="discp-'+idGlobal+'" name="discp[]" value="0%" /></td>@endif' +
                     '@if(Auth::user()->m_level === 1 OR Auth::user()->m_level === 2 OR Auth::user()->m_level === 3 OR Auth::user()->m_level == 4)<td style="width: 12%;"><input style="width: 100%; text-align: right" type="text" onkeyup="isiDiscv(\'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'harga-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\')" class="discv discv-'+iCode+'"  data-id="'+idGlobal+'" id="discv-'+idGlobal+'" name="discv[]" value="0" /></td>@endif' +
                     '<td style="width: 15%;" id="lbltotalItem-'+idGlobal+'">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
-                    '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus('+id+')"><i class="fa fa-minus"></i></button></td>' +
+                    '<td style="width: 10%;" class="text-center"><button type="button" class="btn btn-danger btn-xs" onclick="hapus(\''+id+'\')"><i class="fa fa-minus"></i></button></td>' +
                     '</tr>';
                 $("#table-penjualan tbody").append(row);
                 $('.discp').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true, suffix: '%'});
