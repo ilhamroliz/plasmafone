@@ -387,6 +387,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/rencana-pembelian/deleteRencana', 'PembelianController@deleteRencana');
 
     Route::post('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
+    Route::get('/pembelian/rencana-pembelian/tambahRencana', 'PembelianController@tambahRencana');
     Route::get('/pembelian/rencana-pembelian/tolakRequest', 'PembelianController@tolakRequest');
     Route::get('/pembelian/rencana-pembelian/getRequest_id', 'PembelianController@getRequest_id');
 
@@ -440,6 +441,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::match(['get', 'post'],'/pembelian/purchase-order/tambah', 'pembelian\PurchaseOrderController@tambah');
     Route::post('/pembelian/purchase-order/getCO', 'pembelian\PurchaseOrderController@getCO');
     Route::post('/pembelian/purchase-order/detil', 'pembelian\PurchaseOrderController@detail');
+    Route::get('/pembelian/purchase-order/get-proses', 'pembelian\PurchaseOrderController@get_proses');
+    Route::post('/pembelian/purchase-order/get-history', 'pembelian\PurchaseOrderController@get_history');
+    Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
+    Route::get('/pembelian/purchase-order/hapus/{id}', 'pembelian\PurchaseOrderController@hapus');
+
 
     Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
     Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
@@ -520,6 +526,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/supplier/get-item-received/{id}', 'inventory\SupplierReceptionController@getItemReceived');
     Route::post('/inventory/penerimaan/supplier/item-receive/add', 'inventory\SupplierReceptionController@itemReceiveAdd');
     Route::get('/inventory/penerimaan/supplier/getMaks/{id}/{item}', 'inventory\SupplierReceptionController@getMaks');
+    Route::post('/inventory/penerimaan/supplier/getItemDT', 'inventory\SupplierReceptionController@itemReceiveDT');
 
 
 	// End penerimaan barang dari supplier
@@ -1421,6 +1428,10 @@ Route::group(['middleware' => 'auth'], function () {
 
             // Analisa Keuangan
                     
+                    Route::get('modul/keuangan/analisa', function(){
+                        return view('modul_keuangan.analisa.index');
+                    })->name('analisa.keuangan.index');
+
                     // Analisa Net Profitt OCF
                         Route::get('modul/keuangan/analisa/npo', [
                             'uses'  => 'modul_keuangan\analisa\net_profit_ocf\analisa_net_profit_ocf_controller@index'

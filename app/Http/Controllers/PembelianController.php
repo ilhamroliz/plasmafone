@@ -913,7 +913,6 @@ class PembelianController extends Controller
 
     public function tambahRencana(Request $request)
     {
-        // dd($request);
         $comp = Auth::user()->m_id;
         $req_id = $request->input('req_id');
         $ind_id = $request->input('ind_id');
@@ -944,6 +943,7 @@ class PembelianController extends Controller
                     if (count($check) > 0) {
                         $qtyAkhir = $check[0]->pp_qtyreq + $qtyAppInd[$i];
                         DB::table('d_purchase_plan')
+                            ->where('pp_id', '=', $check[0]->pp_id)
                             ->update([
                                 'pp_qtyreq' => $qtyAkhir,
                                 'pp_date' => $req_date
@@ -956,16 +956,12 @@ class PembelianController extends Controller
                             'pp_qtyreq' => $qtyAppInd[$i],
                             'pp_status' => 'P'
                         ]);
-                        array_push($indInsert, $indAray);
-
+                        DB::table('d_purhase_plan')->insert($indAray);
                     }
                 }
-                DB::table('d_purhase_plan')->insert($indInsert);
-
             }
 
             if (isset($req_id)) {
-
                 DB::table('d_requestorder')
                     ->whereIn('ro_id', $req_id)
                     ->where('ro_state', '=', 'P')
@@ -984,10 +980,12 @@ class PembelianController extends Controller
                     if (count($check) > 0) {
                         $qtyAkhir = $check[0]->pp_qtyreq + $qtyAppReq[$j];
                         DB::table('d_purchase_plan')
+                            ->where('pp_id', '=', $check[0]->pp_id)
                             ->update([
                                 'pp_qtyreq' => $qtyAkhir,
                                 'pp_date' => $req_date
                             ]);
+
                     } else {
 
                         $reqAray = ([
@@ -996,12 +994,9 @@ class PembelianController extends Controller
                             'pp_qtyreq' => $qtyAppReq[$j],
                             'pp_status' => 'P'
                         ]);
-                        array_push($reqInsert, $reqAray);
-
+                        DB::table('d_purchase_plan')->insert($reqAray);
                     }
                 }
-                DB::table('d_purchase_plan')->insert($reqInsert);
-
             }
 
             DB::commit();
@@ -1308,12 +1303,11 @@ class PembelianController extends Controller
                 'd_purchase_plan.pp_id',
                 DB::raw('date_format(d_purchase_plan.pp_date, "%d/%m/%Y") as pp_date'),
                 'd_purchase_plan.pp_item',
-                DB::raw('sum(pp_qtyreq) as pp_qtyreq'),
+                'pp_qtyreq',
                 'd_item.i_nama'
             )
             ->join('d_item', 'd_purchase_plan.pp_item', '=', 'd_item.i_id')
             ->where('d_purchase_plan.pp_status', 'P')
-            ->groupBy('pp_item')
             ->get();
 
         $supplier = $this->getSupplier();

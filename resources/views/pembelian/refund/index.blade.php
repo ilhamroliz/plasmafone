@@ -87,7 +87,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </select>
                                         </div>
                                         <div class="col-md-3">
-                                            <select class="select2" id="supplier">
+                                            <select class="form-control" id="supplier">
                                                 <option value="Y">Semua Supplier</option>
                                                 @foreach($supplier as $dataSup)
                                                     <option value="{{ $dataSup->s_id }}">{{ $dataSup->s_name }}</option>

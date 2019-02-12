@@ -18,6 +18,16 @@ class PengelolaanMemberController extends Controller
     {
         $data = DB::table('d_saldo_converting')
             ->first();
+        if ($data == null){
+            DB::table('d_saldo_converting')
+                ->insert([
+                    'sc_id' => 1,
+                    'sc_saldo' => 1,
+                    'sc_money' => 1
+                    ]);
+            $data = DB::table('d_saldo_converting')
+                ->first();
+        }
         return json_encode($data);
     }
 

@@ -202,6 +202,112 @@
         </section>
         <!-- end widget grid -->
 
+        <!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+
+					<div class="modal-header">
+
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							&times;
+						</button>
+
+						<h4 class="modal-title" id="myModalLabel">Detail</h4>
+
+					</div>
+
+					<div class="modal-body">
+		
+						<div class="row">
+
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+								<header>
+
+									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+									<h2 id="title_detail"></h2>
+
+								</header>
+
+								<!-- widget div-->
+								<div>
+
+									<!-- widget content -->
+									<div class="widget-body no-padding">
+										
+										<div class="table-responsive">
+											
+											<table class="table">
+
+												<tbody>
+
+													<tr>
+														<td><strong>Nota</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_nota"></td>
+													</tr>
+
+													<tr>
+														<td><strong>Nama Supplier</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_supp"></td>
+													</tr>
+
+													<tr>
+														<td><strong>No. Telp Supplier</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_telp"></td>
+													</tr>
+
+													<tr>
+														<td><strong>Tanggal PO</strong></td>
+														<td><strong>:</strong></td>
+														<td id="dt_tgl"></td>
+													</tr>
+
+												</tbody>
+
+											</table>
+
+											<table class="table table-bordered" id="table_item">
+												<thead>
+													<tr class="text-center">
+														<td>Item</td>
+														<td>Qty</td>
+														<td>Qty Diterima</td>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
+											</table>
+											
+										</div>
+
+									</div>
+									<!-- end widget content -->
+
+								</div>
+								<!-- end widget div -->
+
+							</div>
+							<!-- end widget -->
+						</div>
+		
+					</div>
+
+				</div><!-- /.modal-content -->
+
+			</div><!-- /.modal-dialog -->
+
+		</div>
+		<!-- /.modal -->
+
     </div>
     <!-- END MAIN CONTENT -->
 @endsection
@@ -225,8 +331,68 @@
                 phone: 480
             };
 
+            $('#table_item').DataTable({
+				"language": dataTableLanguage,
+				"pageLength": 5,
+				"lengthChange": false,
+				"searching": false
+			});
+
+            $( "#date-range" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            $( "#nota" ).autocomplete({
+				source: baseUrl+'/pembelian/konfirmasi-pembelian/auto-nota',
+				minLength: 1,
+				select: function(event, data) {
+					$('#nota').val(data.item.label);
+				}
+			});
+
+			$( "#namaSupp" ).autocomplete({
+				source: baseUrl+'/pembelian/konfirmasi-pembelian/auto-supp',
+				minLength: 1,
+				select: function(event, data) {
+					$('#idSupp').val(data.item.id);
+					$('#namaSupp').val(data.item.label);
+				}
+			});
+
             $('#dt_wait').DataTable({
-                "language": dataTableLanguage
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/purchase-order/get-proses') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                    },
+                "columns":[
+                    {"data": "DT_RowIndex"},
+                    {"data": "p_nota"},
+                    {"data": "s_company"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth" : false,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_wait'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
             });
 
             $('#dt_history').DataTable({
@@ -243,6 +409,59 @@
 			});
             
         })
+
+        function detail(id){
+			$('#overlay').fadeIn(200);
+			$('#load-status-text').text('Sedang Mengambil data...');
+
+			var status;
+
+			axios.post(baseUrl+'/inventory/penerimaan/supplier/detail?id='+id).then(response => {
+
+				if (response.data.status == 'Access denied') {
+
+					$('#overlay').fadeOut(200);
+					$.smallBox({
+						title : "Gagal",
+						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+						color : "#A90329",
+						timeout: 5000,
+						icon : "fa fa-times bounce animated"
+					});
+
+				} else {
+					var row = '';
+					$('.tr').remove();
+					$('#title_detail').html('<strong>Detail Purchase Order</strong>');
+					$('#dt_nota').text(response.data.data[0].p_nota);
+					$('#dt_supp').text(response.data.data[0].s_company);
+					$('#dt_telp').text(response.data.data[0].s_phone);
+					$('#dt_tgl').text(response.data.data[0].p_date);
+
+					$('#table_item').DataTable().clear();
+					for(var i = 0; i < response.data.data.length; i++){
+
+						$('#table_item').DataTable().row.add([
+							response.data.data[i].i_nama,
+							response.data.data[i].pd_qty,
+							response.data.data[i].pd_qtyreceived
+						]).draw();
+						
+					}
+
+					$('#overlay').fadeOut(200);
+					$('#myModal').modal('show');
+
+				}
+
+			})
+        }
+        
+        function hapus(id){
+
+            axios.get(baseUrl+'/pembelian/purchase-order/hapus')
+
+        }
 
         function cariHistory(){
 
@@ -261,19 +480,17 @@
 
 				$('#dt_history').DataTable().clear();
 				for(var i = 0; i < response.data.data.length; i++){
-                    $status = '';
-                    if(response.data.data[i].i_status == "Y"){
-                        $status = '<span class="label label-success">PURCHASING</span>';
-                    }else if(response.data.data[i].i_status == "N"){
-                        $status = '<span class="label label-danger">DITOLAK</span>';
+                    var status = '';
+                    if(response.data.data[i].qtyR == response.data.data[i].qty){
+                        status = '<span class="label label-success">DITERIMA</span>';
                     }else{
-                        $status = '<span class="label label-warning">MENUNGGU</span>';
+                        status = '<span class="label label-warning">PROSES</span>';
                     }
                     $('#dt_history').DataTable().row.add([
                         i + 1,
-                        response.data.data[i].pc_nota,
+                        response.data.data[i].p_nota,
                         response.data.data[i].s_company,
-                        $status
+                        status
                     ]).draw();
 				}
 
