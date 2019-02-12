@@ -650,7 +650,7 @@ class ReturnPenjualanController extends Controller
                     ->where('s_position', $comp)
                     ->where('s_item', Crypt::decrypt($request->iditem))
                     ->where('s_status', 'On Destination')
-                    ->where('s_condition', 'Broken');
+                    ->where('s_condition', 'BROKEN');
 
                 if ($stockRusak->count() == 0) {
                     $idStockRusak = (DB::table('d_stock')->max('s_id')) ? (DB::table('d_stock')->max('s_id') + 1) : 1;
@@ -662,7 +662,7 @@ class ReturnPenjualanController extends Controller
                             's_item'        => Crypt::decrypt($request->iditem),
                             's_qty'         => $request->qty,
                             's_status'      => 'On Destination',
-                            's_condition'   => 'Broken'
+                            's_condition'   => 'BROKEN'
                         ]);
                 } else {
                     $idStockRusak = $stockRusak->first()->s_id;
@@ -701,7 +701,7 @@ class ReturnPenjualanController extends Controller
                     ->where('s_position', $comp)
                     ->where('s_item', Crypt::decrypt($request->iditem))
                     ->where('s_status', 'On Destination')
-                    ->where('s_condition', 'Fine')
+                    ->where('s_condition', 'FINE')
                     ->first();
 
                 $sm = DB::table('d_stock_mutation')
@@ -853,7 +853,7 @@ class ReturnPenjualanController extends Controller
                     ->where('s_position', $comp)
                     ->where('s_item', Crypt::decrypt($request->iditem))
                     ->where('s_status', 'On Destination')
-                    ->where('s_condition', 'Broken');
+                    ->where('s_condition', 'BROKEN');
 
                 if ($stockRusak->count() == 0) {
                     $idStockRusak = (DB::table('d_stock')->max('s_id')) ? (DB::table('d_stock')->max('s_id') + 1) : 1;
@@ -865,7 +865,7 @@ class ReturnPenjualanController extends Controller
                             's_item'        => Crypt::decrypt($request->iditem),
                             's_qty'         => $request->qty,
                             's_status'      => 'On Destination',
-                            's_condition'   => 'Broken'
+                            's_condition'   => 'BROKEN'
                         ]);
                 } else {
                     $idStockRusak = $stockRusak->first()->s_id;
@@ -904,7 +904,7 @@ class ReturnPenjualanController extends Controller
                     ->where('s_position', $comp)
                     ->where('s_item', Crypt::decrypt($request->iditem))
                     ->where('s_status', 'On Destination')
-                    ->where('s_condition', 'Fine')
+                    ->where('s_condition', 'FINE')
                     ->first();
 
                 $sm = DB::table('d_stock_mutation')
@@ -1056,7 +1056,7 @@ class ReturnPenjualanController extends Controller
                     ->where('s_position', $comp)
                     ->where('s_item', Crypt::decrypt($request->iditem))
                     ->where('s_status', 'On Destination')
-                    ->where('s_condition', 'Broken');
+                    ->where('s_condition', 'BROKEN');
 
                 if ($stockRusak->count() == 0) {
                     $idStockRusak = (DB::table('d_stock')->max('s_id')) ? (DB::table('d_stock')->max('s_id') + 1) : 1;
@@ -1068,7 +1068,7 @@ class ReturnPenjualanController extends Controller
                             's_item'        => Crypt::decrypt($request->iditem),
                             's_qty'         => $request->qty,
                             's_status'      => 'On Destination',
-                            's_condition'   => 'Broken'
+                            's_condition'   => 'BROKEN'
                         ]);
                 } else {
                     $idStockRusak = $stockRusak->first()->s_id;
@@ -1107,7 +1107,7 @@ class ReturnPenjualanController extends Controller
                     ->where('s_position', $comp)
                     ->where('s_item', Crypt::decrypt($request->iditem))
                     ->where('s_status', 'On Destination')
-                    ->where('s_condition', 'Fine')
+                    ->where('s_condition', 'FINE')
                     ->first();
 
                 $sm = DB::table('d_stock_mutation')

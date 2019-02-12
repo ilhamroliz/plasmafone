@@ -163,21 +163,21 @@
                                                                     <td style="width: 32%;">{{ $item->i_code }} - {{ $item->nama_item }}
                                                                         <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
                                                                         <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
-                                                                        <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
+                                                                        <input type="hidden" class="kode" name="kode[]" value="{{ $item->dd_specificcode }}" />
                                                                     </td>
                                                                     <td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty('{{ $item->dd_qty_sisa }}', '{{ $item->stock_qty }}', 'qty-{{ $item->idStock }}')" type="text" class="qtyTable qty-{{ $item->idStock }} qty-{{ $item->i_code }}" id="qty-{{ $item->idStock }}" name="qtyTable[]" value="{{ $item->dd_qty_sisa }}" /></td>
                                                                     <td style="width: 10%;" class="text-center">@if($item->dd_status == "Received")<span class="label label-success">Diterima</span>@else<button type="button" onclick="hapusItem('{{ $item->idStock }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', null)" class="btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>@endif</td>
                                                                 </tr>
                                                             @else
-                                                                <tr id="{{ $item->idStock }}{{ $item->sm_specificcode }}" class="tr">
-                                                                    <td style="width: 32%;">{{ $item->nama_item }} ({{ $item->sm_specificcode }})
+                                                                <tr id="{{ $item->idStock }}{{ $item->dd_specificcode }}" class="tr">
+                                                                    <td style="width: 32%;">{{ $item->nama_item }} ({{ $item->dd_specificcode }})
                                                                         <input type="hidden" class="idStock" name="idStock[]" value="{{ $item->idStock }}" />
                                                                         <input type="hidden" class="qtystock" name="qtystock[]" value="{{ $item->stock_qty }}" />
-                                                                        <input type="hidden" class="kode" name="kode[]" value="{{ $item->sm_specificcode }}" />
-                                                                        <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item->sm_specificcode }}" />
+                                                                        <input type="hidden" class="kode" name="kode[]" value="{{ $item->dd_specificcode }}" />
+                                                                        <input type="hidden" class="spesifikkode" name="spesifikkode[]" value="{{ $item->dd_specificcode }}" />
                                                                     </td>
                                                                     <td style="width: 8%;" class="text-center"><input style="width: 100%; text-align: center;" type="hidden" class="qtyTable" id="qty-'+idGlobal+'" name="qtyTable[]" value="1" />1</td>
-                                                                    <td style="width: 10%;" class="text-center">@if($item->dd_status == "Received")<span class="label label-success">Diterima</span>@else<button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}{{ $item->sm_specificcode }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', '{{ $item->sm_specificcode }}')"><i class="fa fa-minus"></i></button>@endif</td>
+                                                                    <td style="width: 10%;" class="text-center">@if($item->dd_status == "Received")<span class="label label-success">Diterima</span>@else<button type="button" class="btn btn-danger btn-xs" onclick="hapusItem('{{ $item->idStock }}{{ $item->dd_specificcode }}', '{{ Crypt::encrypt($item->dd_distribusi) }}', '{{ Crypt::encrypt($item->dd_item) }}', '{{ $item->dd_specificcode }}')"><i class="fa fa-minus"></i></button>@endif</td>
                                                                 </tr>
                                                             @endif
                                                         @endforeach
