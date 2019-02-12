@@ -9,6 +9,7 @@ use App\Http\Controllers\CodeGenerator as GenerateCode;
 use App\Http\Controllers\PlasmafoneController as Access;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use App\Http\Controllers\PengelolaanMemberController;
 use Response;
 use DataTables;
 Use Auth;
@@ -1079,8 +1080,10 @@ class PenjualanController extends Controller
 
                 if ($data['jenis_pembayaran'] == "T") {
                     Access::logActivity('Membuat penjualan tempo ' . $nota);
+                    PengelolaanMemberController::addSaldoFromTransaction($data['idMember'], $totHarga, $nota, 16);
                 } else {
                     Access::logActivity('Membuat penjualan regular ' . $nota);
+                    PengelolaanMemberController::addSaldoFromTransaction($data['idMember'], $totHarga, $nota, 17);
                 }
 
                 $outlet = Auth::user()->m_comp;
