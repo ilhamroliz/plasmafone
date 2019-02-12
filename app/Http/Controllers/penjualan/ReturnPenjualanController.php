@@ -90,7 +90,7 @@ class ReturnPenjualanController extends Controller
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Selesai" onclick="selesai(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-check"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
                 }
 
@@ -722,7 +722,7 @@ class ReturnPenjualanController extends Controller
                         'rp_notapenjualan'  => $request->nota,
                         'rp_date'           => Carbon::now('Asia/Jakarta'),
                         'rp_aksi'           => 'GBS',
-                        'rp_status'         => 'PROSES'
+                        'rp_status'         => 'DONE'
                     ]);
 
                     //insert return_penjualandt
@@ -913,7 +913,7 @@ class ReturnPenjualanController extends Controller
                         'rp_notapenjualan'  => $request->nota,
                         'rp_date'           => Carbon::now('Asia/Jakarta'),
                         'rp_aksi'           => 'GBL',
-                        'rp_status'         => 'PROSES'
+                        'rp_status'         => 'DONE'
                     ]);
 
                     //insert return_penjualandt
@@ -1105,7 +1105,7 @@ class ReturnPenjualanController extends Controller
                         'rp_notapenjualan'  => $request->nota,
                         'rp_date'           => Carbon::now('Asia/Jakarta'),
                         'rp_aksi'           => 'GU',
-                        'rp_status'         => 'PROSES'
+                        'rp_status'         => 'DONE'
                     ]);
 
                     //insert return_penjualandt

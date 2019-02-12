@@ -62,12 +62,12 @@
                          data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
                             <ul id="widget-tab-1" class="nav nav-tabs pull-left">
+                                {{--<li class="active">--}}
+                                    {{--<a data-toggle="tab" href="#hr1"> <i style="color: #C79121;" class="fa fa-lg fa-rotate-right fa-spin"></i>--}}
+                                        {{--<span class="hidden-mobile hidden-tablet"> Diproses </span>--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
                                 <li class="active">
-                                    <a data-toggle="tab" href="#hr1"> <i style="color: #C79121;" class="fa fa-lg fa-rotate-right fa-spin"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Diproses </span>
-                                    </a>
-                                </li>
-                                <li>
                                     <a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check"></i>
                                         <span class="hidden-mobile hidden-tablet"> Selesai </span>
                                     </a>
@@ -85,7 +85,7 @@
                             <div class="widget-body no-padding">
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
-                                    <div class="tab-pane fade in active" id="hr1">
+                                    <div class="tab-pane fade" id="hr1">
                                         <table id="dt_menunggu" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
@@ -100,7 +100,7 @@
                                             <tbody></tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade" id="hr2">
+                                    <div class="tab-pane fade in active" id="hr2">
                                         <table id="dt_selesai" class="table table-striped table-bordered table-hover"
                                                width="100%">
                                             <thead>
