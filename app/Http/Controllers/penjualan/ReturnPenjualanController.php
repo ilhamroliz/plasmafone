@@ -90,7 +90,7 @@ class ReturnPenjualanController extends Controller
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Selesai" onclick="selesai(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-check"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Batalkan" onclick="remove(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button></div>';
 
                 }
 
@@ -275,7 +275,33 @@ class ReturnPenjualanController extends Controller
             return 'true';
         }catch (\Exception $e){
             DB::rollback();
-            return 'false => '.$e;
+            return 'false';
+        }
+    }
+
+    public function doneReturn($id = null)
+    {
+        try{
+            $id = Crypt::decrypt($id);
+        }catch (DecryptException $r){
+            return json_encode('Not Found');
+        }
+
+        DB::beginTransaction();
+        try{
+
+            // update d_return_penjualan
+            DB::table('d_return_penjualan')
+                ->where('rp_id', $id)
+                ->update([
+                    'rp_status' => 'DONE'
+                ]);
+
+            DB::commit();
+            return 'true';
+        }catch (\Exception $e){
+            DB::rollback();
+            return 'false';
         }
     }
 
