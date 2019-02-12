@@ -77,7 +77,8 @@ class ReturnPenjualanController extends Controller
             ->select('d_return_penjualan.rp_id as id', DB::raw('DATE_FORMAT(d_return_penjualan.rp_date, "%d-%m-%Y") as tanggal'),
                 'd_return_penjualan.rp_notareturn as notareturn', 'm_member.m_name as pelanggan')
             ->join('d_sales', 'd_return_penjualan.rp_notapenjualan', '=', 'd_sales.s_nota')
-            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+            ->where('d_return_penjualan.rp_status', 'PROSES');
 
         return DataTables::of($data)
 
@@ -100,7 +101,51 @@ class ReturnPenjualanController extends Controller
             ->make(true);
     }
 
-    public function deleteReturn($id = null)
+    public function getDone()
+    {
+        $data = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_id as id', DB::raw('DATE_FORMAT(d_return_penjualan.rp_date, "%d-%m-%Y") as tanggal'),
+                'd_return_penjualan.rp_notareturn as notareturn', 'm_member.m_name as pelanggan')
+            ->join('d_sales', 'd_return_penjualan.rp_notapenjualan', '=', 'd_sales.s_nota')
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+            ->where('d_return_penjualan.rp_status', 'DONE');
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
+    public function getCancel()
+    {
+        $data = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_id as id', DB::raw('DATE_FORMAT(d_return_penjualan.rp_date, "%d-%m-%Y") as tanggal'),
+                'd_return_penjualan.rp_notareturn as notareturn', 'm_member.m_name as pelanggan')
+            ->join('d_sales', 'd_return_penjualan.rp_notapenjualan', '=', 'd_sales.s_nota')
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+            ->where('d_return_penjualan.rp_status', 'CANCEL');
+
+        return DataTables::of($data)
+
+            ->addColumn('aksi', function ($data) {
+
+                return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
+    }
+
+    public function cancelReturn($id = null)
     {
         $getMutasi = null;
         try{
@@ -117,7 +162,7 @@ class ReturnPenjualanController extends Controller
 
             foreach ($stockMutasiRusak as $index => $smr) {
                 if ($stockMutasiRusak[$index]->sm_specificcode != null) {
-                    DB::table('d_stock_dt')->where('sd_stock', $stockMutasiRusak[$index]->sm_stock)->where('sm_specificcode', $stockMutasiRusak[$index]->sm_specificcode)->delete();
+                    DB::table('d_stock_dt')->where('sd_stock', $stockMutasiRusak[$index]->sm_stock)->where('sd_specificcode', $stockMutasiRusak[$index]->sm_specificcode)->delete();
                 }
 
                 $getStock = DB::table('d_stock')
@@ -139,8 +184,7 @@ class ReturnPenjualanController extends Controller
                 $getMutasi = DB::table('d_stock_mutation')
                     ->where('sm_stock', $stockMutasi[$index]->sm_stock)
                     ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
-                    ->where('sm_nota', $stockMutasi[$index]->sm_reff)
-                    ->where('sm_hpp', $stockMutasi[$index]->sm_hpp)->first();
+                    ->where('sm_nota', $stockMutasi[$index]->sm_reff)->first();
 
                 if ($stockMutasi[$index]->sm_specificcode != null){
                     // update stock mutasi
@@ -181,26 +225,14 @@ class ReturnPenjualanController extends Controller
                         ->where('sm_nota', $getReturn->rp_notareturn)
                         ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
-                        ->where('sm_detail', 'PENGURANGAN')->delete();
-                    DB::table('d_stock_mutation')
-                        ->where('sm_nota', $getReturn->rp_notareturn)
-                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
-                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
-                        ->where('sm_detail', 'PENAMBAHAN')
-                        ->where('sm_reff', 'RUSAK')->delete();
+                        ->where('sm_detail', 'PENGURANGAN')
+                        ->delete();
 
-                    // delete d_return_penjualan
-                    $check_ganti = DB::table('d_return_penjualanganti')->where('rpg_return', $id)->count();
-                    if ($check_ganti > 0) {
-                        DB::table('d_return_penjualanganti')->where('rpg_return', $id)->delete();
-                    }
-                    DB::table('d_return_penjualandt')->where('rpd_return', $id)->delete();
-                    DB::table('d_return_penjualan')->where('rp_id', $id)->delete();
                 } else {
                     // update stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
-                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_specificcode', null)
                         ->where('sm_nota', $stockMutasi[$index]->sm_reff)
                         ->where('sm_detail', 'PENAMBAHAN')
                         ->update([
@@ -218,33 +250,32 @@ class ReturnPenjualanController extends Controller
                     // delete stock mutasi
                     DB::table('d_stock_mutation')
                         ->where('sm_nota', $getReturn->rp_notareturn)
-                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
+                        ->where('sm_specificcode', null)
                         ->where('sm_stock', $stockMutasi[$index]->sm_stock)
                         ->where('sm_detail', 'PENGURANGAN')->delete();
-
-                    // delete d_sales_dt & d_sales
-                    DB::table('d_stock_mutation')
-                        ->where('sm_nota', $getReturn->rp_notareturn)
-                        ->where('sm_specificcode', $stockMutasi[$index]->sm_specificcode)
-                        ->where('sm_stock', $stockMutasi[$index]->sm_stock)
-                        ->where('sm_detail', 'PENAMBAHAN')
-                        ->where('sm_reff', 'RUSAK')->delete();
-
-                    // delete d_return_penjualan
-                    $check_ganti = DB::table('d_return_penjualanganti')->where('rpg_return', $id)->count();
-                    if ($check_ganti > 0) {
-                        DB::table('d_return_penjualanganti')->where('rpg_return', $id)->delete();
-                    }
-                    DB::table('d_return_penjualandt')->where('rpd_return', $id)->delete();
-                    DB::table('d_return_penjualan')->where('rp_id', $id)->delete();
                 }
             }
+
+            // delete mutasi rusak
+            DB::table('d_stock_mutation')
+                ->where('sm_nota', $getReturn->rp_notareturn)
+                ->where('sm_detail', 'PENAMBAHAN')
+                ->where('sm_reff', '=', 'RUSAK')
+                ->delete();
+
+            // update d_return_penjualan
+            //edit cancel
+            DB::table('d_return_penjualan')
+                ->where('rp_id', $id)
+                ->update([
+                    'rp_status' => 'CANCEL'
+                ]);
 
             DB::commit();
             return 'true';
         }catch (\Exception $e){
             DB::rollback();
-            return 'false';
+            return 'false => '.$e;
         }
     }
 
