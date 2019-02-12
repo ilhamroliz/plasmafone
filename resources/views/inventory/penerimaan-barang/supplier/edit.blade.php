@@ -249,6 +249,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 								<div class="row terima margin-bottom-10">
                                     
                                     <form id="formInput">
+
+                                        <input type="hidden" id="id">
+                                        <input type="hidden" id="idItem">
+                                        <input type="hidden" id="supplier">
+                                        <input type="hidden" id="detailid">
                                         
                                         <div class="col-md-12 no-padding margin-bottom-10">
                                             <label class="col-md-4 control-label text-left">Nota Delivery Order</label>
@@ -452,7 +457,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
 	<script type="text/javascript">
-		var aktif, tbl_code, rows = null;
+        var aktif, tbl_code, rows = null;
+        var dtc, dtce, dte, dtn;
 
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
@@ -481,21 +487,28 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     todayHighlight: true
                 });
 
-                $('#dt_code').DataTable({
+                dtc = $('#dt_code').DataTable({
                     "pageLength": 5,
                     "searching": false,
                     "lengthChange": false,
                     "autoWidth": false,
                     "language": dataTableLanguage
                 });
-                $('#dt_exp').DataTable({
+                dte = $('#dt_exp').DataTable({
                     "pageLength": 5,
                     "searching": false,
                     "lengthChange": false,
                     "autoWidth": false,
                     "language": dataTableLanguage
                 });
-                $('#dt_code_exp').DataTable({
+                dtce = $('#dt_code_exp').DataTable({
+                    "pageLength": 5,
+                    "searching": false,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "language": dataTableLanguage
+                });
+                dtn = $('#dt_non').DataTable({
                     "pageLength": 5,
                     "searching": false,
                     "lengthChange": false,
@@ -546,7 +559,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
         /* END BASIC */
 
 		function refresh_tab(){
-		    aktif.ajax.reload();
+            aktif.ajax.reload();
+            dtc.ajax.reload();
+            {{-- $('#dt_code_exp').DataTable().ajax.reload();
+            $('#dt_exp').DataTable().ajax.reload();
+            $('#dt_non').DataTable().ajax.reload(); --}}
         }
 
         $('#kode').on('keyup', function(event){
@@ -589,29 +606,62 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                 resetInput();
 
-                if(response.data.data.i_specificcode == 'Y' && response.data.data.i_expired == 'N'){
+                var dataDT = 'id=' + id + '&item=' + item;
+                axios.post(baseUrl+'/inventory/penerimaan/supplier/getItemDT', dataDT).then((respon) => {
+                    if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'N'){
 
-                    $('#tbl_kode').css('display', 'block'); 
-                    $('.KS').css('display', 'block');
+                        $('#dt_code').DataTable().clear();
+                        for(var i = 0; i < respon.data.dataDT.length; i++){
+                            $('#dt_code').DataTable().row.add([
+                                respon.data.dataDT[i].sm_reff,
+                                respon.data.dataDT[i].sm_specificcode,
+                                0
+                            ]).draw();
+                        }
 
-                }else if(response.data.data.i_specificcode == 'N' && response.data.data.i_expired == 'Y'){
+                        $('#tbl_kode').css('display', 'block'); 
+                        $('.KS').css('display', 'block');
+    
+                    }else if(respon.data.item.i_specificcode == 'N' && respon.data.item.i_expired == 'Y'){
+    
+                        $('#dt_exp').DataTable().clear();
+                        for(var i = 0; i < respon.data.dataDT.length; i++){
+                            $('#dt_exp').DataTable().row.add([
 
-                    $('#tbl_exp').css('display', 'block');
-                    $('.EXP').css('display', 'block');
-                    $('.JML').css('display', 'block');
+                            ]).draw();
+                        }                        
 
-                }else if(response.data.data.i_specificcode == 'Y' && response.data.data.i_expired == 'Y'){
+                        $('#tbl_exp').css('display', 'block');
+                        $('.EXP').css('display', 'block');
+                        $('.JML').css('display', 'block');
+    
+                    }else if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'Y'){
+    
+                        $('#dt_code_exp').DataTable().clear();
+                        for(var i = 0; i < respon.data.dataDT.length; i++){
+                            $('#dt_code_exp').DataTable().row.add([
 
-                    $('#tbl_exp_kode').css('display', 'block');
-                    $('.KS').css('display', 'block');
-                    $('.EXP').css('display', 'block');
+                            ]).draw();
+                        }
 
-                }else{
+                        $('#tbl_exp_code').css('display', 'block');
+                        $('.KS').css('display', 'block');
+                        $('.EXP').css('display', 'block');
+    
+                    }else{
 
-                    $('#tbl_non').css('display', 'block');
-                    $('.JML').css('display', 'block');
-
-                }
+                        $('#dt_non').DataTable().clear();
+                        for(var i = 0; i < respon.data.dataDT.length; i++){
+                            $('#dt_non').DataTable().row.add([
+                                
+                            ]).draw();
+                        }
+    
+                        $('#tbl_non').css('display', 'block');
+                        $('.JML').css('display', 'block');
+    
+                    }
+                })
 
                 $('#myModal').modal('show');
 
@@ -644,8 +694,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
             
             var idpo = $('#id').val();
             var supplier = $('#supplier').val();
+            var idItem = $('#idItem').val();
 
-            var data = 'notaDO='+ notaDO + '&expDate=' + expDate + '&kode=' + kode + '&qty=' + jmlBarang + '&idpo=' idpo + '&qtyR=' + rcvd;
+            var data = 'notaDO='+ notaDO + '&expDate=' + expDate + '&kode=' + kode + '&qty=' + jmlBarang + '&idpo=' + idpo + '&qtyR=' + rcvd + '&iditem=' + idItem;
 
             axios.post(baseUrl+'/inventory/penerimaan/supplier/item-receive/add', data).then((response) => {
 
@@ -659,23 +710,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         timeout: 3000,
                         icon : "fa fa-check bounce animated"
                     });
-
-                    if (rows == "kode") {
-                        tbl_code.ajax.reload();
-                        $("#kode").val('');
-                        $("#qtyreceived").val(parseInt($("#qtyreceived").val()) + 1);
-                        $("#error").removeClass("has-success");
-                        $("#error").removeClass("has-error");
-                        $("#icon").removeClass("fa fa-check");
-                        $("#icon").removeClass("glyphicon glyphicon-remove-circle");
-                        $("#icon").addClass("fa fa-barcode");
-                        $("#message").html("");
-                        $("#simpan").attr("disabled", true);
-                    } else if (rows == null) {
-                        $("#qty_received").val(parseInt($("#qty_received").val()) + 1);
-                        $("#qty").val('');
-                        $('#myModal').modal('hide');
-                    }
 
                     refresh_tab();
 

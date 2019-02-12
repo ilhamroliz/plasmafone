@@ -445,8 +445,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/pembelian/purchase-order/get-history', 'pembelian\PurchaseOrderController@get_history');
     Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
 
-
-
     Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
     Route::get('/pembelian/purchase-order/purchasing', 'PurchaseOrderController@purchasing');
     Route::get('/pembelian/purchase-order/purchaseComplete', 'PurchaseOrderController@purchaseComplete');
@@ -526,6 +524,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/supplier/get-item-received/{id}', 'inventory\SupplierReceptionController@getItemReceived');
     Route::post('/inventory/penerimaan/supplier/item-receive/add', 'inventory\SupplierReceptionController@itemReceiveAdd');
     Route::get('/inventory/penerimaan/supplier/getMaks/{id}/{item}', 'inventory\SupplierReceptionController@getMaks');
+    Route::post('/inventory/penerimaan/supplier/getItemDT', 'inventory\SupplierReceptionController@itemReceiveDT');
 
 
 	// End penerimaan barang dari supplier
