@@ -277,36 +277,35 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr onclick="check(16, this)">
+                                    <tr onclick="check(16, this)" style="cursor:pointer;">
                                         <td>Penjualan Reguler</td>
                                         <td>
                                             <div class="text-center">
-                                                <div
-                                                    class="checkbox checkbox-primary checkbox-single checkbox-inline">
-                                                    <input id="fitur-16" type="checkbox" class="checkfitur pilih" value="16" name="fitur" aria-label="Single radio One">
+                                                <div class="checkbox checkbox-primary no-padding checkbox-single checkbox-inline">
+                                                    <input id="fitur-16" checked type="checkbox" class="checkfitur pilih" value="16" name="fitur" aria-label="Single radio One">
                                                     <label></label>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr onclick="check(17, this)">
+                                    <tr onclick="check(17, this)" style="cursor:pointer;">
                                         <td>Penjualan Tempo</td>
                                         <td>
                                             <div class="text-center">
                                                 <div
-                                                    class="checkbox checkbox-primary checkbox-single checkbox-inline">
+                                                    class="checkbox checkbox-primary no-padding checkbox-single checkbox-inline">
                                                     <input id="fitur-17" type="checkbox" class="checkfitur pilih" value="17" name="fitur" aria-label="Single radio One">
                                                     <label></label>
                                                 </div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr onclick="check(19, this)">
+                                    <tr onclick="check(19, this)" style="cursor:pointer;">
                                         <td>Penjualan Online</td>
                                         <td>
                                             <div class="text-center">
                                                 <div
-                                                    class="checkbox checkbox-primary checkbox-single checkbox-inline">
+                                                    class="checkbox checkbox-primary no-padding checkbox-single checkbox-inline">
                                                     <input id="fitur-19" type="checkbox" class="checkfitur pilih" value="19" name="fitur" aria-label="Single radio One">
                                                     <label></label>
                                                 </div>
@@ -317,13 +316,33 @@
                                 </table>
                             </div>
                             <div class="col-md-6 col-sm-6 col-lg-6">
-                                <div class="form-group padding-10">
-                                    <label>Minimal Transaksi</label>
-                                    <input class="form-control mintrans" placeholder="Minimal Transaksi" type="text">
+                                <div id="form-setting">
+                                    <div class="form-group padding-10" style="display: block;">
+                                        <label>Minimal Transaksi</label>
+                                        <input class="form-control mintrans" name="mintrans" placeholder="Minimal Transaksi" type="text">
+                                    </div>
+                                    <div class="form-group padding-10 padding-top-0">
+                                        <label>Poin yang didapat</label>
+                                        <input class="form-control getpoin" name="getpoin" placeholder="Poin yang didapat" type="text">
+                                    </div>
                                 </div>
-                                <div class="form-group padding-10 padding-top-0">
-                                    <label>Poin yang didapat</label>
-                                    <input class="form-control getpoin" placeholder="Poin yang didapat" type="text">
+                                <div class="text-center" id="loading" style="display: none;">
+                                    <div class="card-box" style="padding-top: 50px;">
+                                        <div class="sk-circle">
+                                            <div class="sk-circle1 sk-child"></div>
+                                            <div class="sk-circle2 sk-child"></div>
+                                            <div class="sk-circle3 sk-child"></div>
+                                            <div class="sk-circle4 sk-child"></div>
+                                            <div class="sk-circle5 sk-child"></div>
+                                            <div class="sk-circle6 sk-child"></div>
+                                            <div class="sk-circle7 sk-child"></div>
+                                            <div class="sk-circle8 sk-child"></div>
+                                            <div class="sk-circle9 sk-child"></div>
+                                            <div class="sk-circle10 sk-child"></div>
+                                            <div class="sk-circle11 sk-child"></div>
+                                            <div class="sk-circle12 sk-child"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -333,7 +352,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         Cancel
                     </button>
-                    <button type="button" class="btn btn-primary" onclick="">
+                    <button type="button" class="btn btn-primary" onclick="simpanSetting()">
                         Simpan
                     </button>
                 </div>
@@ -368,7 +387,21 @@
                 suffix: ' Poin'
             });
 
+            $('.getpoin').maskMoney({
+                thousands:'.',
+                decimal:',',
+                allowZero:false,
+                suffix: ' Poin'
+            });
+
             $('#uang').maskMoney({
+                thousands:'.',
+                decimal:',',
+                allowZero:false,
+                prefix: 'Rp. '
+            });
+
+            $('.mintrans').maskMoney({
                 thousands:'.',
                 decimal:',',
                 allowZero:false,
@@ -477,11 +510,51 @@
 
         function pengaturan() {
             $('#modal-pengaturan').modal('show');
+            $(".checkfitur").prop("checked", false);
+            document.getElementById("fitur-16").checked = true;
+            getDataSetting(16);
+        }
+
+        function getDataSetting(id) {
+            $('#form-setting').hide();
+            $('#loading').show();
+            axios.get(baseUrl+'/pengelolaan-member/get-data-setting/'+id).then((response) => {
+                var poin = parseInt(response.data.ss_poin);
+                var mintrans = parseInt(response.data.ss_mintransaction);
+                $('.mintrans').maskMoney('mask', mintrans);
+                $('.getpoin').maskMoney('mask', poin);
+                $('#form-setting').show();
+                $('#loading').hide();
+            })
         }
 
         function check(id, field) {
             $(".checkfitur").prop("checked", false);
             document.getElementById("fitur-" + id).checked = true;
+            getDataSetting(id);
+        }
+        
+        function simpanSetting() {
+            axios.get(baseUrl+'/pengelolaan-member/update-setting?'+$("#form-pengaturan").serialize()).then((response) => {
+                if (response.data.status == 'sukses'){
+                    $.smallBox({
+                        title: "Berhasil",
+                        content: 'Data setting berhasil diubah...',
+                        color: "#739E73",
+                        timeout: 3000,
+                        icon: "fa fa-check bounce animated"
+                    });
+                    $('#modal-pengaturan').modal('hide');
+                } else {
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. data setting gagal diubah, hubungi admin...",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                }
+            })
         }
     </script>
 
