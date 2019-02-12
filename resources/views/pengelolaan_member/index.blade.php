@@ -58,7 +58,7 @@
                     <div class="btn-group">
                         @if(Access::checkAkses(22, 'update'))
                         <a onclick="setKonversi()" rel="tooltip" title="" data-placement="bottom" data-original-title="Konversi" class="btn btn-default"><strong><i class="fa fa-exchange fa-lg text-warning"></i></strong></a>
-                        <a rel="tooltip" title="" data-placement="bottom" data-original-title="Pengaturan" class="btn btn-default"><strong><i class="fa fa-cogs fa-lg text-primary"></i></strong></a>
+                        <a onclick="pengaturan()" rel="tooltip" title="" data-placement="bottom" data-original-title="Pengaturan" class="btn btn-default"><strong><i class="fa fa-cogs fa-lg text-primary"></i></strong></a>
                         @endif
                         <a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="History Penukaran Poin" class="btn btn-default"><strong><i class="fa fa-history fa-lg text-danger"></i></strong></a>
                         @if(Access::checkAkses(22, 'insert'))
@@ -237,6 +237,37 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal-pengaturan" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Pengaturan Transaksi Saldo Poin</h4>
+                </div>
+                <div class="modal-body no-padding">
+                    <form id="form-belipoin" class="smart-form no-padding" novalidate="novalidate">
+                        <fieldset class="">
+                            <div class="row">
+
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="">
+                        Simpan
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 @endsection
 
 @section('extra_script')
@@ -349,6 +380,10 @@
                 $('#jmlsaldo').val("");
                 $('#modal-tambahsaldo').modal('hide');
             })
+        }
+
+        function pengaturan() {
+            $('#modal-pengaturan').modal('show');
         }
     </script>
 
