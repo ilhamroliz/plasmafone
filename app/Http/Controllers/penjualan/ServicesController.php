@@ -335,7 +335,72 @@ class ServicesController extends Controller
 
     public function addService(Request $request)
     {
-        //
+        try {
+            $idsales = Crypt::decrypt($request->idsales);
+        } catch (DecryptException $e) {
+            return json_encode(['status' => 'not found']);
+        }
+
+        try {
+            $iditem = Crypt::decrypt($request->iditem);
+        } catch (DecryptException $e) {
+            return json_encode(['status' => 'not found']);
+        }
+
+        $nota = GenerateCode::codeReturn('d_service_item', 'si_nota', 8, 10, 3, 'PB');
+
+        $notasales = $request->nota;
+
+        $qty = $request->qty;
+
+        $kode = $request->kode;
+
+        $note = strtoupper($request->ket);
+
+        $comp = Auth::user()->m_comp;
+
+        $petugas = Auth::user()->m_id;
+
+        $date = Carbon::now('Asia/Jakarta');
+
+        $idpelanggan = DB::table('d_sales')->where('s_id', $idsales)->first()->s_member;
+
+        $sid = (DB::table('d_service_item')->max('si_id')) ? (DB::table('d_service_item')->max('si_id') + 1) : 1;
+
+        $detailid = (DB::table('d_service_itemdt')->where('sid_serviceitem', $sid)->max('sid_detailid')) ? (DB::table('d_service_itemdt')->where('sid_serviceitem', $sid)->max('sid_detailid') + 1) : 1;
+
+        DB::beginTransaction();
+        try{
+            $service[] = [
+                'si_id' => $sid,
+                'si_position' => $comp,
+                'si_date' => $date,
+                'si_nota' => $nota,
+                'si_notasales' => $notasales,
+                'si_mem' => $idpelanggan,
+                'si_status' => 'PENDING'
+            ];
+
+            $item[] = [
+                'sid_serviceitem' => $sid,
+                'sid_detailid' => $detailid,
+                'sid_item' => $iditem,
+                'sid_qty' => $qty,
+                'sid_specificcode' => $kode,
+                'sid_note' => $note,
+                'sid_mem' => $petugas
+            ];
+
+            DB::table('d_service_item')->insert($service);
+
+            DB::table('d_service_itemdt')->insert($item);
+
+            DB::commit();
+            return json_encode(['status' => 'true']);
+        }catch (\Exception $e){
+            DB::rollback();
+            return json_encode(['status' => 'false']);
+        }
     }
 
     public function edit()

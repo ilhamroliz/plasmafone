@@ -171,43 +171,51 @@
             })
 
             function simpan() {
-                overlay();
-                axios.post(baseUrl+'/penjualan/service-barang/add-service', $("#form_service").serialize())
-                    .then(function (response) {
-                        console.log(response.data);
-                        out();
-                        if (response.data.status == "ok") {
-                            $.smallBox({
-                                title : "Berhasil",
-                                content : 'Return barang berhasil...!',
-                                color : "#739E73",
-                                timeout: 5000,
-                                icon : "fa fa-check bounce animated"
+                $.SmartMessageBox({
+                    title: "Pesan!",
+                    content: 'Service barang ini?',
+                    buttons: '[Batal][Ya]'
+                }, function (ButtonPressed) {
+                    if (ButtonPressed === "Ya") {
+                        overlay();
+                        axios.post(baseUrl+'/penjualan/service-barang/add-service', $("#form_service").serialize())
+                            .then(function (response) {
+                                console.log(response.data.status);
+                                out();
+                                if (response.data.status == "true") {
+                                    $.smallBox({
+                                        title : "Berhasil",
+                                        content : 'Return barang berhasil...!',
+                                        color : "#739E73",
+                                        timeout: 5000,
+                                        icon : "fa fa-check bounce animated"
+                                    });
+                                    cetak(response.data.id)
+                                    window.location = baseUrl + '/penjualan/return-penjualan';
+                                } else if (response.data.status == "not found") {
+                                    $.smallBox({
+                                        title : "Gagal",
+                                        content : "Upsss. Data tidak ditemukan!",
+                                        color : "#A90329",
+                                        timeout: 5000,
+                                        icon : "fa fa-times bounce animated"
+                                    });
+                                } else if (response.data.status == "false") {
+                                    $.smallBox({
+                                        title : "Gagal",
+                                        content : "Upsss. Terjadi kesalahan sistem!",
+                                        color : "#A90329",
+                                        timeout: 5000,
+                                        icon : "fa fa-times bounce animated"
+                                    });
+                                }
+                            })
+                            .catch(function (error) {
+                                out();
+                                console.log(error);
                             });
-                            cetak(response.data.id)
-                            window.location = baseUrl + '/penjualan/return-penjualan';
-                        } else if (response.data.status == "not found") {
-                            $.smallBox({
-                                title : "Gagal",
-                                content : "Upsss. Data tidak ditemukan distok!",
-                                color : "#A90329",
-                                timeout: 5000,
-                                icon : "fa fa-times bounce animated"
-                            });
-                        } else {
-                            $.smallBox({
-                                title : "Gagal",
-                                content : "Upsss. Terjadi kesalahan sistem!",
-                                color : "#A90329",
-                                timeout: 5000,
-                                icon : "fa fa-times bounce animated"
-                            });
-                        }
-                    })
-                    .catch(function (error) {
-                        out();
-                        console.log(error);
-                    });
+                    }
+                });
             }
 
             function cetak(id){
