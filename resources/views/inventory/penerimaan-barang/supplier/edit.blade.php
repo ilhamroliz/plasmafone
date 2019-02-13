@@ -598,76 +598,96 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                 $('#nama_item').html(response.data.data.nama_item);
 
-                $('#id').val(response.data.data.id);
+                $('#id').val(id);
                 $('#supplier').val(response.data.data.supplier);
-                $('#idItem').val(response.data.data.itemId);
+                $('#idItem').val(item);
                 $('#detailid').val(response.data.data.iddetail);
                 $('#rcvd').val(response.data.data.sum_qtyReceived);
 
                 resetInput();
 
-                var dataDT = 'id=' + id + '&item=' + item;
-                axios.post(baseUrl+'/inventory/penerimaan/supplier/getItemDT', dataDT).then((respon) => {
-                    if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'N'){
-
-                        $('#dt_code').DataTable().clear();
-                        for(var i = 0; i < respon.data.dataDT.length; i++){
-                            $('#dt_code').DataTable().row.add([
-                                respon.data.dataDT[i].sm_reff,
-                                respon.data.dataDT[i].sm_specificcode,
-                                0
-                            ]).draw();
-                        }
-
-                        $('#tbl_kode').css('display', 'block'); 
-                        $('.KS').css('display', 'block');
-    
-                    }else if(respon.data.item.i_specificcode == 'N' && respon.data.item.i_expired == 'Y'){
-    
-                        $('#dt_exp').DataTable().clear();
-                        for(var i = 0; i < respon.data.dataDT.length; i++){
-                            $('#dt_exp').DataTable().row.add([
-
-                            ]).draw();
-                        }                        
-
-                        $('#tbl_exp').css('display', 'block');
-                        $('.EXP').css('display', 'block');
-                        $('.JML').css('display', 'block');
-    
-                    }else if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'Y'){
-    
-                        $('#dt_code_exp').DataTable().clear();
-                        for(var i = 0; i < respon.data.dataDT.length; i++){
-                            $('#dt_code_exp').DataTable().row.add([
-
-                            ]).draw();
-                        }
-
-                        $('#tbl_exp_code').css('display', 'block');
-                        $('.KS').css('display', 'block');
-                        $('.EXP').css('display', 'block');
-    
-                    }else{
-
-                        $('#dt_non').DataTable().clear();
-                        for(var i = 0; i < respon.data.dataDT.length; i++){
-                            $('#dt_non').DataTable().row.add([
-                                
-                            ]).draw();
-                        }
-    
-                        $('#tbl_non').css('display', 'block');
-                        $('.JML').css('display', 'block');
-    
-                    }
-                })
-
+                getTableModal(id, item);
+                
                 $('#myModal').modal('show');
 
             })
+        }
+        
+        function getTableModal(id, item){
+            var dataDT = 'id=' + id + '&item=' + item;
+            axios.post(baseUrl+'/inventory/penerimaan/supplier/getItemDT', dataDT).then((respon) => {
+                if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'N'){
 
-		}
+                    $('#dt_code').DataTable().clear();
+                    for(var i = 0; i < respon.data.dataDT.length; i++){
+                        $('#dt_code').DataTable().row.add([
+                            respon.data.dataDT[i].sm_reff,
+                            respon.data.dataDT[i].sm_specificcode,
+                            '<div class="text-center">'+
+                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                            '</div>'
+                        ]).draw();
+                    }
+
+                    $('#tbl_kode').css('display', 'block'); 
+                    $('.KS').css('display', 'block');
+
+                }else if(respon.data.item.i_specificcode == 'N' && respon.data.item.i_expired == 'Y'){
+
+                    $('#dt_exp').DataTable().clear();
+                    for(var i = 0; i < respon.data.dataDT.length; i++){
+                        $('#dt_exp').DataTable().row.add([
+                            respon.data.dataDT[i].sm_reff,
+                            respon.data.dataDT[i].sm_expired,
+                            '<span class="text-center">'+respon.data.dataDT[i].sm_qty+'</span>',
+                            '<div class="text-center">'+
+                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                            '</div>'
+                        ]).draw();
+                    }                        
+
+                    $('#tbl_exp').css('display', 'block');
+                    $('.EXP').css('display', 'block');
+                    $('.JML').css('display', 'block');
+
+                }else if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'Y'){
+
+                    $('#dt_code_exp').DataTable().clear();
+                    for(var i = 0; i < respon.data.dataDT.length; i++){
+                        $('#dt_code_exp').DataTable().row.add([
+                            respon.data.dataDT[i].sm_reff,
+                            respon.data.dataDT[i].sm_expired,
+                            respon.data.dataDT[i].sm_specificcode,
+                            '<div class="text-center">'+
+                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                            '</div>'
+                        ]).draw();
+                    }
+
+                    $('#tbl_exp_code').css('display', 'block');
+                    $('.KS').css('display', 'block');
+                    $('.EXP').css('display', 'block');
+
+                }else{
+
+                    $('#dt_non').DataTable().clear();
+                    for(var i = 0; i < respon.data.dataDT.length; i++){
+                        $('#dt_non').DataTable().row.add([
+                            respon.data.dataDT[i].sm_reff,
+                            '<div class="text-center">'+respon.data.dataDT[i].sm_qty+'</div>',
+                            '<div class="text-center">'+
+                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                            '</div>'
+                        ]).draw();
+                    }
+
+                    $('#tbl_non').css('display', 'block');
+                    $('.JML').css('display', 'block');
+
+                }
+            })
+
+        }
 
 		function hapus() {
 			$('#form_qty').remove();
@@ -711,7 +731,14 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         icon : "fa fa-check bounce animated"
                     });
 
-                    refresh_tab();
+                    var id = $('#id').val();
+                    var item = $('#idItem').val();
+
+                    $('#kode').val("");
+                    $('#expCode').val("");
+                    $('#jmlBarang').val("");
+
+                    getTableModal(id, item);
 
                 }else if(response.data.status == 'ada'){
 

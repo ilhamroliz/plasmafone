@@ -219,7 +219,7 @@
                                                     <input type="hidden" name="idItem[]" value="{{ $getDataDT[$i]->pcd_item }}">{{ $getDataDT[$i]->i_nama }}
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="qty[]" id="qty{{ $i }}" class="form-control text-align-right qty" style="width:100%" value="{{ $getDataDT[$i]->pcd_qty }}" readonly>
+                                                    <input type="text" name="qty[]" id="qty{{ $i }}" class="form-control text-align-right qty" style="width:100%" value="{{ $getDataDT[$i]->pcd_qty }}">
                                                 </td>
                                                 <td>
                                                     <input type="text" name="price[]" id="price{{ $i }}" class="form-control text-align-right price" style="width:100%" onkeyup="getSubTotal({{ $i }})">

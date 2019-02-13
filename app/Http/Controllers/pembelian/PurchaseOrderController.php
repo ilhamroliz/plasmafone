@@ -32,15 +32,20 @@ class PurchaseOrderController extends Controller
             ->join('d_supplier', 's_id', '=', 'p_supplier')
             ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
             ->having(DB::raw('SUM(pd_qtyreceived)'), '<', DB::raw('SUM(pd_qty)'))
-            ->select('p_id', 'p_nota', 's_company')
+            ->select('p_id', 'p_nota', 's_company', DB::raw('SUM(pd_qtyreceived) as qtyR'))
             ->groupBy('p_id')->get();
 
+        // dd($getData);
         return DataTables::of($getData)
             ->addIndexColumn()
             ->addColumn('aksi', function($getData){
-                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detil(\'' . Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
                 $edit = '<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Edit Data" onclick="edit(\'' .  Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-edit"></i></button>';
                 $hapus = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' .  Crypt::encrypt($getData->p_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                if($getData->qtyR != "0"){
+                    $hapus = '';
+                }
+            
                 if (Plasma::checkAkses(4, 'update') == false && Plasma::checkAkses(4, 'delete') == false) {
                     return '<div class="text-center">'.$detil.'</div>';
                 } else if(Plasma::checkAkses(4, 'update') == true && Plasma::checkAkses(4, 'delete') == false){
@@ -437,5 +442,167 @@ class PurchaseOrderController extends Controller
         return json_encode([
             'data' => $history
         ]);
+    }
+
+    public function edit(Request $request){
+
+        if(Plasma::checkAkses(4, 'update') == false){
+            return view('errors.407');
+        }else{
+
+            $id = Crypt::decrypt($request->id);
+            $qty = $request->qty;
+            $price = $request->price;
+            $idItem = $request->idItem;
+            $diskP = $request->diskP;
+            $diskV = $request->diskV;
+            $subTotal = $request->subTotal;
+
+            if($request->isMethod('post')){
+
+                dd($request);
+                DB::beginTransaction();
+                try {
+                    $totalGross = 0;
+                    for($i = 0; i < count($subTotal); $i++){
+                        $totalGross += implode(explode('.', $subTotal[$i]));
+                    }
+                    DB::table('d_purchase')->where('p_id', $id)->update([
+                        'p_type' => $request->tipe,
+                        'p_jatuh_tempo' => Crypt::parse($request->tempo)->format('Y-m-d'),
+                        'p_total_gross' => $totalGross,
+                        'p_disc_persen' => str_replace(' %', '', $request->htgDiskP),
+                        'p_disc_value' => implode(explode('.', $request->htgDiskV)),
+                        'p_pajak' => str_replace(' %', '', $request->htgPajak),
+                        'p_total_net' => implode(explode('.', $request->htgTotal))
+                    ]);
+
+                    $counterDT = 1;
+                    for($i = 0; $i < count($request->qty); $i++){
+
+                        $cekQTYR = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->select(DB::raw('SUM(pd_qtyreceived) as qtyR'))->first();
+                        $getNama = DB::table('d_item')->where('i_id', $idItem[$i])->select('i_nama')->first();
+                        if($qty[$i] > $cekQTYR->qtyR){
+                            return json_encode([
+                                'status' => 'kurang',
+                                'itemNama' => $getNama->i_nama
+                            ]);
+                        }
+
+                        $cekSC = DB::table('d_item')->where('i_id', $idItem[$i])->select('i_specificcode')->first();
+                        if($cekSC->i_specificcode == 'Y'){
+
+                            $getDTPrev = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->select('pd_specificcode', 'pd_qtyreceived', 'pd_receivedtime')->get();
+                            DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->delete();
+
+                            $araySCDT = array();
+                            for($j = 0; $j < $request->qty[$i]; $j++){
+
+                                $aray = ([
+                                    'pd_purchase' => $id,
+                                    'pd_detailid' => $counter,
+                                    'pd_item' => $idItem[$i],
+                                    'pd_qty' => $qty[$i],
+                                    'pd_specificcode' => $getDTPrev->pd_specificcode,
+                                    'pd_value' => implode(explode('.', $price[$i])),
+                                    'pd_disc_value' => implode(explode('.', $diskV[$i])) / $qty[$i],
+                                    'pd_disc_persen' => str_replace(' %', '', $diskP[$i]),
+                                    'pd_total_net' => implode(explode('.', $subTotal[$i])) / $qty[$i],
+                                    'pd_qtyreceived' => $getDTPrev->pd_qtyreceived,
+                                    'pd_receivedtime' => $getDTPrev->pd_receivedtime
+                                ]);
+                                $counter += 1;
+                            }
+                            DB::table('d_purchase_dt')->insert();
+
+                        }else{
+                            $getDTPrev = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->select('pd_qtyreceived', 'pd_receivedtime')->get();
+                            DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->delete();
+
+                            DB::table('d_purchase_dt')->insert([
+                                'pd_purchase' => $id,
+                                'pd_detailid' => $counter,
+                                'pd_item' => $idItem[$i],
+                                'pd_qty' => $qty[$i],
+                                'pd_specificcode' => null,
+                                'pd_value' => implode(explode('.', $price[$i])),
+                                'pd_disc_value' => implode(explode('.', $diskV[$i])),
+                                'pd_disc_persen' => str_replace(' %', '', $diskP[$i]),
+                                'pd_total_net' => implode(explode('.', $subTotal[$i])) / $qty[$i],
+                                'pd_qtyreceived' => $getDTPrev->pd_qtyreceived,
+                                'pd_receivedtime' => $getDTPrev->pd_receivedtime
+                            ]);
+                            $counter += 1;
+                        }
+
+                    }
+
+                    DB::commit();
+                    return json_encode([
+                        'status' => 'sukses'
+                    ]);
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    return json_encode([
+                        'status' => 'gagal'
+                    ]);
+                }
+
+            }
+
+
+            $getPurchase = DB::table('d_purchase')
+                ->join('d_supplier', 's_id', '=', 'p_supplier')
+                ->where('p_id', $id)->get();
+
+            $getDataDT = DB::table('d_purchase_dt')
+                ->join('d_item', 'i_id', '=', 'pd_item')
+                ->where('pd_purchase', $id)
+                ->select('pd_item', 'i_nama', DB::raw('SUM(pd_qty) as qty'), 'pd_value', 'pd_disc_persen', DB::raw('ROUND(SUM(pd_disc_value)) as disc_value'), DB::raw('ROUND(SUM(pd_total_net)) as subTotal'))
+                ->groupBy('pd_item')->get();
+            // dd($getPurchaseDT);
+            $getId = Crypt::encrypt($id);
+
+            return view('pembelian.purchase_order.edit_purchase_order')->with(compact('getPurchase', 'getDataDT', 'getId'));
+
+        }
+
+    }
+
+    public function hapus($id){
+
+        if(Plasma::checkAkses(4, 'delete') == false){
+            return view('errors.407');
+        }else{
+
+            DB::beginTransaction();
+            try {
+                $id = Crypt::decrypt($id);
+                $getNota = DB::table('d_purchase')->where('p_id', $id)->select('p_nota')->first();
+                $nota = $getNota->p_nota;
+
+                DB::table('d_purchase_dt')->where('pd_purchase', $id)->delete();
+                DB::table('d_purchase')->where('p_id', $id)->delete();
+                
+                $log = 'Menghapus Purchase Order dengan Nota '.$nota;
+                Plasma::logActivity($log);
+
+                DB::commit();
+                return json_encode([
+                    'status' => 'sukses',
+                    'nota' => $nota
+                ]);
+                
+            } catch (\Exception $e) {
+                
+                DB::rollback();
+                return json_encode([
+                    'status' => 'gagal',
+                    'msg' => $e
+                ]);
+            }
+
+        }
+
     }
 }

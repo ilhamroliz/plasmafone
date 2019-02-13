@@ -51,6 +51,9 @@
 		<!-- JQUERY Mask Money -->
 		<script src="{{ asset('template_asset/js/plugin/mask-money/jquery.maskMoney.js') }}"></script>
 
+        <!-- JQUERY SELECT2 INPUT -->
+        <script src="{{ asset('template_asset/js/plugin/select2/select2.min.js') }}"></script>
+
 		<!-- FastClick: For mobile devices -->
 		<script src="{{ asset('template_asset/js/plugin/fastclick/fastclick.min.js') }}"></script>
 

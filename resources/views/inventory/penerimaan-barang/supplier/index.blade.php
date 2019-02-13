@@ -322,7 +322,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			$('#table_item').DataTable({
 				"language": dataTableLanguage,
-				"pageLength": 8,
+				"pageLength": 5,
 				"lengthChange": false,
 				"searching": false
 			});
@@ -411,47 +411,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 			window.location = baseUrl+'/inventory/penerimaan/supplier/edit?id='+val;
 
-		}
-
-		function detailTerima(id){
-			$('#overlay').fadeIn(200);
-			$('#load-status-text').text('Sedang Mengambil data...');
-
-			var status;
-
-			axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail-terima/'+id).then(response => {
-
-				if (response.data.status == 'Access denied') {
-
-					$('#overlay').fadeOut(200);
-					$.smallBox({
-						title : "Gagal",
-						content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-						color : "#A90329",
-						timeout: 5000,
-						icon : "fa fa-times bounce animated"
-					});
-
-				} else {
-					var row = '';
-					$('.tr').remove();
-					$('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
-					$('#dt_nota').text(response.data.data[0].nota);
-					$('#dt_from').text(response.data.data[0].from);
-					$('#dt_destination').text(response.data.data[0].destination);
-					$('#dt_tgl').text(response.data.data[0].tanggal);
-					$('#dt_by').text(response.data.data[0].by);
-					response.data.data.forEach(function(element) {
-						console.log(element);
-						row = '<tr class="tr"><td>'+element.nama_item+'</td><td>'+element.qty+'</td><td>'+element.qty_received+'</td></tr>'
-						$('#table_item tbody').append(row)
-					});
-					$('#overlay').fadeOut(200);
-					$('#myModal').modal('show');
-
-				}
-
-				})
 		}
 
 		function detail(id){

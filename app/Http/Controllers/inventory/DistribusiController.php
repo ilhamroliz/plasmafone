@@ -756,7 +756,10 @@ class DistribusiController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -783,7 +786,10 @@ class DistribusiController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -810,7 +816,10 @@ class DistribusiController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -869,7 +878,10 @@ class DistribusiController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -896,7 +908,10 @@ class DistribusiController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -923,7 +938,10 @@ class DistribusiController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -999,6 +1017,7 @@ class DistribusiController extends Controller
                                     ->where('s_position', $data['outlet'])
                                     ->where('s_item', $compitem->s_item)
                                     ->where('s_status', 'On Going')
+                                    ->where('s_condition', 'FINE')
                                     ->count();
 
                     if ($check_stock == 0) {
@@ -1018,12 +1037,14 @@ class DistribusiController extends Controller
                                         ->where('s_position', $data['outlet'])
                                         ->where('s_item', $compitem->s_item)
                                         ->where('s_status', 'On Going')
+                                        ->where('s_condition', 'FINE')
                                         ->first();
                         DB::table('d_stock')
                             ->where('s_comp', $compitem->s_comp)
                             ->where('s_position', $data['outlet'])
                             ->where('s_item', $compitem->s_item)
                             ->where('s_status', 'On Going')
+                            ->where('s_condition', 'FINE')
                             ->update([
                                 's_qty' => $stock_going->s_qty + $data['qtyTable'][$i]
                             ]);
@@ -1175,6 +1196,7 @@ class DistribusiController extends Controller
                         ->where('s_position', $data['outlet'])
                         ->where('s_item', $compitem->s_item)
                         ->where('s_status', 'On Going')
+                        ->where('s_condition', 'FINE')
                         ->count();
 
                     if ($check_stock == 0) {
@@ -1194,12 +1216,14 @@ class DistribusiController extends Controller
                             ->where('s_position', $data['outlet'])
                             ->where('s_item', $compitem->s_item)
                             ->where('s_status', 'On Going')
+                            ->where('s_condition', 'FINE')
                             ->first();
                         DB::table('d_stock')
                             ->where('s_comp', $compitem->s_comp)
                             ->where('s_position', $data['outlet'])
                             ->where('s_item', $compitem->s_item)
                             ->where('s_status', 'On Going')
+                            ->where('s_condition', 'FINE')
                             ->update([
                                 's_qty' => $stock_going->s_qty + $data['qtyTable'][$i]
                             ]);

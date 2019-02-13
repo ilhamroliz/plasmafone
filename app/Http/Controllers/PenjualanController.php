@@ -9,6 +9,7 @@ use App\Http\Controllers\CodeGenerator as GenerateCode;
 use App\Http\Controllers\PlasmafoneController as Access;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
+use App\Http\Controllers\PengelolaanMemberController;
 use Response;
 use DataTables;
 Use Auth;
@@ -162,7 +163,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -194,7 +198,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -226,7 +233,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -285,7 +295,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'N')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -317,7 +330,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->where('d_item.i_specificcode', '=', 'Y')
                 ->groupBy('d_stock_mutation.sm_specificcode');
 
@@ -349,7 +365,10 @@ class PenjualanController extends Controller
                     $w->orWhere('d_item.i_code', 'like', '%'.$cari.'%');
                     $w->orWhere('d_stock_dt.sd_specificcode', 'like', '%'.$cari.'%');
                 })
+                ->where('d_stock.s_comp', '=', $outlet)
                 ->where('d_stock.s_position', '=', $outlet)
+                ->where('d_stock.s_status', '=', 'On Destination')
+                ->where('d_stock.s_condition', '=', 'FINE')
                 ->groupBy('d_stock_mutation.sm_specificcode')
                 ->get();
         }
@@ -380,6 +399,8 @@ class PenjualanController extends Controller
             ->where('s_comp', $position)
             ->where('s_position', $position)
             ->where('s_item', $item)
+            ->where('s_status', 'On Destination')
+            ->where('s_condition', 'FINE')
             ->first();
 
         $checksm = DB::table('d_stock_mutation')
@@ -1059,8 +1080,10 @@ class PenjualanController extends Controller
 
                 if ($data['jenis_pembayaran'] == "T") {
                     Access::logActivity('Membuat penjualan tempo ' . $nota);
+                    PengelolaanMemberController::addSaldoFromTransaction($data['idMember'], $totHarga, $nota, 16);
                 } else {
                     Access::logActivity('Membuat penjualan regular ' . $nota);
+                    PengelolaanMemberController::addSaldoFromTransaction($data['idMember'], $totHarga, $nota, 17);
                 }
 
                 $outlet = Auth::user()->m_comp;

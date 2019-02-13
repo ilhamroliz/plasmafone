@@ -286,6 +286,9 @@
 
             $('#dt_detail').DataTable({
                 "language": dataTableLanguage,
+                "searching": false,
+                "pageLength": 5,
+                "lengthChange": false,
                 "order": []
             });
 
