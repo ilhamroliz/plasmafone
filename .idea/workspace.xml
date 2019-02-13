@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c1fafb65-daf5-4c94-858a-66fc52492e53" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/partials/_head.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf/" />
     <ignored path="$PROJECT_DIR$/vendor/beyondcode/laravel-dump-server/" />
@@ -131,7 +127,7 @@
     <session id="-2130313779">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="19" />
+          <entry key="project.closed" value="21" />
           <entry key="project.open.time.11" value="4" />
           <entry key="project.open.time.12" value="3" />
           <entry key="project.open.time.16" value="1" />
@@ -147,7 +143,8 @@
           <entry key="project.open.time.65" value="1" />
           <entry key="project.open.time.67" value="1" />
           <entry key="project.open.time.76" value="1" />
-          <entry key="project.opened" value="21" />
+          <entry key="project.open.time.80" value="1" />
+          <entry key="project.opened" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -187,7 +184,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
+            <state relative-caret-position="18438">
               <caret line="878" column="94" selection-start-line="878" selection-start-column="81" selection-end-line="878" selection-end-column="94" />
             </state>
           </provider>
@@ -196,8 +193,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="180" column="18" selection-start-line="180" selection-start-column="18" selection-end-line="180" selection-end-column="18" />
+            <state relative-caret-position="285">
+              <caret line="172" column="33" lean-forward="true" selection-start-line="172" selection-start-column="33" selection-end-line="172" selection-end-column="33" />
               <folding>
                 <element signature="e#40#58#0#PHP" expanded="true" />
               </folding>
@@ -208,16 +205,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-590">
+            <state relative-caret-position="10794">
               <caret line="514" column="29" selection-start-line="514" selection-start-column="29" selection-end-line="514" selection-end-column="29" />
-              <folding>
-                <element signature="e#13773#13796#0#HTML" expanded="true" />
-                <element signature="e#14650#14673#0#HTML" expanded="true" />
-                <element signature="e#15524#15547#0#HTML" expanded="true" />
-                <element signature="e#16570#16593#0#HTML" expanded="true" />
-                <element signature="e#17169#17192#0#HTML" expanded="true" />
-                <element signature="e#17228#17254#0#HTML" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -225,7 +214,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/partials/_head.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="208">
+            <state relative-caret-position="609">
               <caret line="29" column="96" selection-start-line="29" selection-start-column="96" selection-end-line="29" selection-end-column="96" />
             </state>
           </provider>
@@ -439,6 +428,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -497,7 +487,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -520,18 +509,15 @@
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
           <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/PenjualanController.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/inventory/DistribusiController.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/pembelian/PurchaseOrderController.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/inventory/distribusi/edit.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/add_po.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/addinput.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/edit_purchase_order.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/view_purchase_order.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/add.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-regular/edit.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/add.blade.php</PATH>
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/penjualan/penjualan-tempo/edit.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/app/Http/Controllers/onlineshop_controller.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/halaman/detail_produk.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/halaman/semua_produk.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/halaman/shoping_cart.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/handphone/index.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_header.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_htmlheader.blade.php</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/onlineshop/partials/_script.blade.php</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/routes/web.php</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
@@ -540,7 +526,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="CREATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/resources/views/pembelian/purchase_order/edit_purchase_order.blade.php.bak</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/template_asset/frontend/js/bootstrap-input-spinner.js</PATH>
         </FILE-GROUP>
         <FILE-GROUP>
           <option name="myUpdateName" value="Deleted" />
@@ -674,7 +660,8 @@
       <workItem from="1549938945273" duration="880000" />
       <workItem from="1549939943912" duration="1184000" />
       <workItem from="1549941182089" duration="5492000" />
-      <workItem from="1549953789084" duration="8071000" />
+      <workItem from="1549953789084" duration="8706000" />
+      <workItem from="1550025400319" duration="81000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1549088688030</created>
@@ -802,17 +789,23 @@
       <option name="project" value="LOCAL" />
       <updated>1549946039289</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="roliz">
+      <created>1549967570191</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1549967570191</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="73775000" />
+    <option name="totallyTimeSpent" value="74491000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.24166666" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.24545455" />
       <window_info id="Structure" order="1" sideWeight="0.50165564" side_tool="true" weight="0.24166666" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -1108,39 +1101,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/partials/_head.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="208">
-          <caret line="29" column="96" selection-start-line="29" selection-start-column="96" selection-end-line="29" selection-end-column="96" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="18438">
           <caret line="878" column="94" selection-start-line="878" selection-start-column="81" selection-end-line="878" selection-end-column="94" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-590">
+        <state relative-caret-position="10794">
           <caret line="514" column="29" selection-start-line="514" selection-start-column="29" selection-end-line="514" selection-end-column="29" />
-          <folding>
-            <element signature="e#13773#13796#0#HTML" expanded="true" />
-            <element signature="e#14650#14673#0#HTML" expanded="true" />
-            <element signature="e#15524#15547#0#HTML" expanded="true" />
-            <element signature="e#16570#16593#0#HTML" expanded="true" />
-            <element signature="e#17169#17192#0#HTML" expanded="true" />
-            <element signature="e#17228#17254#0#HTML" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/partials/_head.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="29" column="96" selection-start-line="29" selection-start-column="96" selection-end-line="29" selection-end-column="96" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="180" column="18" selection-start-line="180" selection-start-column="18" selection-end-line="180" selection-end-column="18" />
+        <state relative-caret-position="285">
+          <caret line="172" column="33" lean-forward="true" selection-start-line="172" selection-start-column="33" selection-end-line="172" selection-end-column="33" />
           <folding>
             <element signature="e#40#58#0#PHP" expanded="true" />
           </folding>
