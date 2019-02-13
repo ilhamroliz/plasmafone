@@ -140,16 +140,12 @@ class ServicesController extends Controller
             ->make(true);
     }
 
-    public function add(Request $request)
+    public function add()
     {
-        if (!$request->isMethod('post')) {
-            if (Access::checkAkses(21, 'insert') == true) {
-                return view('penjualan.service-barang.add');
-            } else {
-                return view('errors.404');
-            }
+        if (Access::checkAkses(21, 'insert') == true) {
+            return view('penjualan.service-barang.add');
         } else {
-            //
+            return view('errors.404');
         }
     }
 
@@ -335,6 +331,11 @@ class ServicesController extends Controller
             ->first();
 
         return view('penjualan.service-barang.service')->with(compact('data'));
+    }
+
+    public function addService(Request $request)
+    {
+        //
     }
 
     public function edit()

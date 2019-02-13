@@ -670,6 +670,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/get-done', 'penjualan\ServicesController@getDone')->name('get-service-done');
     Route::get('/penjualan/service-barang/get-detail-service/{id}', 'penjualan\ServicesController@getDetailService');
     Route::match(['get', 'post'], '/penjualan/service-barang/add', 'penjualan\ServicesController@add')->name('service-add');
+    Route::match(['get', 'post'], '/penjualan/service-barang/add-service', 'penjualan\ServicesController@addService')->name('addService');
     Route::get('/penjualan/service-barang/cari-member', 'penjualan\ServicesController@cariMember');
     Route::get('/penjualan/service-barang/cari-kode', 'penjualan\ServicesController@cariKode');
     Route::get('/penjualan/service-barang/cari-nota', 'penjualan\ServicesController@cariNota');
