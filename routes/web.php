@@ -874,7 +874,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Route Dirga
 
         // Routes keuangan Package Here
-            
+
             Route::get('modul_keuangan/connection', function () {
                 return keuangan::connection()->version();
             });
@@ -919,7 +919,7 @@ Route::group(['middleware' => 'auth'], function () {
             //  Group Akun End
 
 
-            // Master Data Akun 
+            // Master Data Akun
 
                 Route::get('modul/keuangan/master/akun', [
                     "uses"  => 'modul_keuangan\master\akun\akun_controller@index'
@@ -952,7 +952,7 @@ Route::group(['middleware' => 'auth'], function () {
             // Data Akun Selesai
 
 
-            // Master Data Transaksi 
+            // Master Data Transaksi
 
                 Route::get('modul/keuangan/master/transaksi', [
                     "uses"  => 'modul_keuangan\master\transaksi\transaksi_controller@index'
@@ -1376,7 +1376,7 @@ Route::group(['middleware' => 'auth'], function () {
                     ])->name('laporan.keuangan.arus_kas.print.excel');
 
 
-                // laporan Hutang 
+                // laporan Hutang
                     Route::get('modul/keuangan/laporan/hutang', [
                         'uses'  => 'modul_keuangan\laporan\hutang\laporan_hutang_controller@index'
                     ])->name('laporan.keuangan.hutang');
@@ -1398,7 +1398,7 @@ Route::group(['middleware' => 'auth'], function () {
                     ])->name('laporan.keuangan.hutang.print.excel');
 
 
-                // laporan Piutang 
+                // laporan Piutang
                     Route::get('modul/keuangan/laporan/piutang', [
                         'uses'  => 'modul_keuangan\laporan\piutang\laporan_piutang_controller@index'
                     ])->name('laporan.keuangan.piutang');
@@ -1423,7 +1423,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
             // Analisa Keuangan
-                    
+
                     Route::get('modul/keuangan/analisa', function(){
                         return view('modul_keuangan.analisa.index');
                     })->name('analisa.keuangan.index');
@@ -1550,4 +1550,5 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/accesories', 'onlineshop_controller@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'onlineshop_controller@product_detail')->name('product_detail');
         Route::get('/shoping-cart', 'onlineshop_controller@shoping_cart')->name('shoping_cart');
+        Route::get('/add_cart', 'onlineshop_controller@add_cart')->name('add_cart');
     });

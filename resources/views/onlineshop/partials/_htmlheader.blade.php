@@ -33,7 +33,7 @@
 <!-- <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}"> -->
 <style type="text/css">
 	p {
-	    font-family: 'Poppins', sans-serif;
+	    font-family: 'Poppins-Medium', sans-serif;
 	    font-size: 1.1em;
 	    font-weight: 300;
 	    line-height: 1.7em;
@@ -41,26 +41,32 @@
 	}
 
 	a, a:hover, a:focus {
-	    color: inherit;
+	    color: #7386D5;
 	    text-decoration: none;
 	    transition: all 0.3s;
 	}
 
 	#sidebar {
 	    /* don't forget to add all the previously mentioned styles here too */
-	    background: #7386D5;
+	    /*background: #7386D5;*/
 	    color: #fff;
 	    transition: all 0.3s;
 	}
 
 	#sidebar .sidebar-header {
-	    padding: 20px;
-	    background: #6d7fcc;
+	    font-family: 'Poppins-Medium', sans-serif;
+	    padding: 10px;
+	    padding-left: 0px;
+	    color: #333;
 	}
 
 	#sidebar ul.components {
-	    padding: 20px 0;
-	    border-bottom: 1px solid #47748b;
+	    padding: 10px;
+	    border-top: 3px solid #7386D5;
+	    border-bottom: 3px solid #7386D5;
+	    border-left: 1px solid #9e9e9e;
+	    border-right: 0.1px solid #9e9e9e;
+	    font-size: 12px;
 	}
 
 	#sidebar ul p {
@@ -69,8 +75,9 @@
 	}
 
 	#sidebar ul li a {
-	    padding: 10px;
-	    font-size: 1.1em;
+	    /*padding: 10px;*/
+	    /*font-size: 1.1em;*/
+	    color: #333;
 	    display: block;
 	}
 	#sidebar ul li a:hover {
@@ -79,13 +86,14 @@
 	}
 
 	#sidebar ul li.active > a, a[aria-expanded="true"] {
-	    color: #fff;
-	    background: #6d7fcc;
+	    color: #333;
+	    /*background: #6d7fcc;*/
 	}
 	ul ul a {
 	    font-size: 0.9em !important;
 	    padding-left: 30px !important;
-	    background: #6d7fcc;
+	    color: #000;
+	    /*background: #6d7fcc;*/
 	}
 	.logo{
 		height: 40% !important;
@@ -96,12 +104,16 @@
 	}
 
 	#sidebar {
-	    min-width: 250px;
-	    max-width: 250px;
+	    min-width: 220px;
+	    max-width: 220px;
+	}
+
+	#content {
+		margin-left: 20px;
 	}
 
 	#sidebar.active {
-	    margin-left: -250px;
+	    margin-left: -270px;
 	}
 	a[data-toggle="collapse"] {
 	    position: relative;
@@ -114,12 +126,28 @@
 	    right: 20px;
 	    transform: translateY(-50%);
 	}
+
+	#sidebarCollapse {
+		display: none;
+	}
+
 	@media (max-width: 768px) {
 	    #sidebar {
-	        margin-left: -250px;
+	        margin-left: -360px;
 	    }
 	    #sidebar.active {
 	        margin-left: 0;
+	    }
+	    #sidebarCollapse {
+	        display: block;
+	    }
+
+	    #content {
+		    margin-left: 138px;
+		}
+
+	    .block2-pic {
+	    	height: 335px !important;
 	    }
 	}
 </style>

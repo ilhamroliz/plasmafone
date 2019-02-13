@@ -99,3 +99,6 @@ $('.js-pscroll').each(function(){
 </script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/js/main.js')}}"></script>
+<script type="text/javascript" src="{{asset('template_asset/frontend/js/bootstrap-input-spinner.js')}}"></script>
+
+@yield('extra-script')

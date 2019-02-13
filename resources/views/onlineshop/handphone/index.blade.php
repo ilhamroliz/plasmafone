@@ -26,34 +26,75 @@
 			<div class="wrapper">
 				<nav id="sidebar">
 					<div class="sidebar-header">
-			            <h3>Bootstrap Sidebar</h3>
+			            <h5>Kategori</h5>
 			        </div>
-			        <ul class="list-unstyled components">
-			            <p>Dummy Heading</p>
+			        <ul class="main-menu-m components" style="background-color: #fff;">
 			            <li class="active">
-			            	<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
-					        <ul class="collapse list-unstyled" id="homeSubmenu">
-					        	<li class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">All Merk</li>
-					        	@foreach($i_merk as $merk)
+			            	<a href="#menu_hp" aria-expanded="true" style="line-height: 1.5;">Handphone</a>
+					        <ul class="sub-menu-m py-0" id="menu_hp">
+					        	@foreach($i_merk_hp as $merk)
 								<?php $merks = mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8"); ?>
 								<li>
-									<button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" data-filter=".{{$merk->i_merk}}">
+									<a href="#" class="cl6 bor3 trans-04 m-r-32 m-tb-0 p-0" data-filter=".{{$merk->i_merk}}">
 										{{$merks}}
-									</button>
+									</a>
 								</li>
-
 								@endforeach
+					        </ul>
+			                <span class="arrow-main-menu-m" style="color: #333;">
+			                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+			                </span>
+					    </li>
+			            <li class="active">
+			            	<a href="#menu_hp" aria-expanded="true" style="line-height: 1.5;">Aksesoris</a>
+					        <ul class="sub-menu-m py-0" id="menu_hp">
+					        	@foreach($i_merk_acces as $merk)
+								<?php $merks = mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8"); ?>
+								<li>
+									<a href="#" class="cl6 bor3 trans-04 m-r-32 m-tb-0 p-0" data-filter=".{{$merk->i_merk}}">
+										{{$merks}}
+									</a>
+								</li>
+								@endforeach
+					        </ul>
+			                <span class="arrow-main-menu-m" style="color: #333;">
+			                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+			                </span>
+					    </li>
+					</ul>
+					<div class="sidebar-header">
+			            <h5>Harga</h5>
+			        </div>
+			        <ul class="list-unstyled components">
+			            <li class="active">
+			            	<a href="#menu_hp2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Handphone</a>
+					        <ul class="collapse list-unstyled" id="menu_hp2">
+								<li>
+									<a href="#" class="cl6 bor3 trans-04 m-r-32 m-tb-5" data-filter=".{{$merk->i_merk}}">
+										AAAAAAAAAAAAAAAAAA
+									</a>
+								</li>
+					        </ul>
+					    </li>
+			            <li class="active">
+			            	<a href="#menu_acces2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Aksesoris</a>
+					        <ul class="collapse list-unstyled" id="menu_acces2">
+								<li>
+									<a href="#" class="cl6 bor3 trans-04 m-r-32 m-tb-5" data-filter=".{{$merk->i_merk}}">
+										BBBBBBBBBBBBBBBBBBB
+									</a>
+								</li>
 					        </ul>
 					    </li>
 					</ul>
 				</nav>
 				<div id="content">
-					<div class="row isotope-grid">
+					<div class="row">
 						@foreach($products as $product)
-						<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->i_merk}}">
+						<div class="col-sm-6 col-md-4 col-lg-3 p-b-35">
 							<!-- Block2 -->
 							<div class="block2">
-								<div class="block2-pic hov-img0" style="height: 300px; display: flex; align-items: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
+								<div class="block2-pic hov-img0" style="min-height:250px;max-height:250px; display: flex; align-items: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
 		                        	@if($product->i_img != null || $product->i_img != "")
 			                        	<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}">
 			                            	<img src="{{asset('img/items/'.$product->i_img)}}" alt="IMG-PRODUCT" class="img-fluid">

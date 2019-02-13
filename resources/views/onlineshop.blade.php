@@ -175,8 +175,8 @@
                 </h3>
             </div>
 
-            <div class="flex-w flex-sb-m p-b-52">
-                <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+            <div class="flex-w flex-sb-m p-b-20">
+                <!-- <div class="flex-w flex-l-m filter-tope-group m-tb-10">
                     <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1" data-filter="*">
                         All Products
                     </button>
@@ -185,7 +185,7 @@
                         {{$merk->i_merk}}
                     </button>
                     @endforeach
-                </div>
+                </div> -->
 
                 <div class="flex-w flex-c-m m-tb-10">
                     <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
@@ -429,7 +429,7 @@
                                 </a>
 
                                 <span class="stext-105 cl3">
-                                    {{$product->i_price}}
+                                    Rp. {{number_format($product->i_price,0,",",".")}}
                                 </span>
                             </div>
 

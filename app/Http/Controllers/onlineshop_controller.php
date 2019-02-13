@@ -42,6 +42,7 @@ class onlineshop_controller extends Controller
         $products = DB::table('d_stock')
             ->select('s_id', 's_item','i_id', 'i_nama', 'i_merk','i_img', 'i_price')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('s_qty', '!=', 0)
             ->inRandomOrder()
             ->paginate(8);
 
@@ -70,8 +71,9 @@ class onlineshop_controller extends Controller
             ->orderBy('i_merk')
             ->get();
 
-        $products = DB::table('d_item')
-            ->select('d_item.*')
+        $products = DB::table('d_stock')
+            ->select('s_id', 's_item', 's_qty', 'i_id', 'i_nama', 'i_merk', 'i_price', 'i_img')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->where('i_id', '=', $id)
             ->first();
 
@@ -95,19 +97,28 @@ class onlineshop_controller extends Controller
             ->orderBy('i_merk')
             ->get();
 
-        $i_kelompok = DB::table('d_item')
-            ->select('i_kelompok')
-            ->distinct('i_kelompok')
-            ->orderBy('i_kelompok')
+        $i_merk_hp = DB::table('d_stock')
+            ->selectRaw('distinct i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $i_merk_acces = DB::table('d_stock')
+            ->selectRaw('distinct i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
             ->get();
 
         $products = DB::table('d_stock')
             ->select('s_id', 'i_id', 's_item', 'i_nama', 'i_merk','i_img', 'i_price', 'i_kelompok')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('s_qty', '!=', 0)
             ->inRandomOrder()
             ->paginate(8);
 
-        return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_kelompok', 'products'));
+        return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
     }
 
     public function product_hp()
@@ -126,21 +137,27 @@ class onlineshop_controller extends Controller
             ->orderBy('i_merk')
             ->get();
 
-        $i_merk = DB::table('d_stock')
+        $i_merk_hp = DB::table('d_stock')
             ->selectRaw('distinct i_merk')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->where('i_kelompok', '=', 'HANDPHONE')
             ->orderBy('i_merk')
             ->get();
 
+        $i_merk_acces = DB::table('d_stock')
+            ->selectRaw('distinct i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
         $products = DB::table('d_stock')
             ->select('s_id', 'i_id', 's_item', 'i_nama', 'i_merk','i_img', 'i_price', 'i_kelompok')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
-            ->where('i_kelompok', '=', 'HANDPHONE')
             ->inRandomOrder()
             ->paginate(8);
 
-        return view('onlineshop.handphone.index', compact('menu_hp', 'menu_acces', 'i_merk', 'products'));
+        return view('onlineshop.handphone.index', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
     }
 
     public function product_acces()
