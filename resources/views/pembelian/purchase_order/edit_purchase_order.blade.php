@@ -87,7 +87,7 @@
 
                         <!-- widget content -->
                         <div class="widget-body">
-							@foreach($getPurchase as $purchase)
+                          @foreach($getPurchase as $purchase)
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -98,14 +98,14 @@
                                                 <input type="text" id="namaSupp" class="form-control" value="{{ $purchase->s_company }}" readonly>
                                             </div>
                                         </div>
-    
+
                                         <div class="col-md-12 margin-top-10">
-                                            <label for="" class="col-md-4">No. Telp</label>
+                                          <label for="" class="col-md-4">No. Telp</label>
                                             <div class="col-md-8">
                                                 <input type="text" id="telpSupp" class="form-control" value="{{ $purchase->s_phone }}" readonly>
                                             </div>
-                                        </div>                                
-    
+                                        </div>
+
                                         <div class="col-md-12 margin-top-10">
                                             <label for="" class="col-md-4">No Fax</label>
                                             <div class="col-md-8">
@@ -123,21 +123,22 @@
                                                 </select>
                                             </div>
                                         </div>
-    
+
                                         <div class="col-md-12 margin-top-10">
                                             <label for="" class="col-md-4">Jatuh Tempo</label>
                                             <div class="col-md-8">
-												@if($purchase->p_due_date != '' || $purchase->p_due_date != null)
-												<input type="text" id="tempo" class="form-control" value="{{ Carbon::parse($purchase->p_due_date)->format('d-m-Y') }}" disabled>
-												@else
-												<input type="text" id="tempo" class="form-control" value="" disabled>
-												@endif
+                                                <input type="hidden" id="hiddenTempo" value="{{ Carbon::parse($purchase->p_due_date)->format('d/m/Y') }}">
+                                                @if($purchase->p_due_date != '' || $purchase->p_due_date != null)
+                        												<input type="text" id="tempo" class="form-control" value="{{ Carbon::parse($purchase->p_due_date)->format('d/m/Y') }}">
+                        												@else
+                        												<input type="text" id="tempo" class="form-control" value="" disabled>
+                        												@endif
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-    
-                                <div class="col-md-6">                                   
+
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="col-md-12">
                                             <label for="" class="col-md-4">Batas Maks Hutang</label>
@@ -151,8 +152,8 @@
                                             <div class="col-md-8">
                                                 <input type="text" id="htgNow" class="form-control text-align-right" value="" readonly>
                                             </div>
-                                        </div>                                
-                                        
+                                        </div>
+
                                         <form id="formDPVP">
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Diskon Persen (%)</label>
@@ -160,21 +161,21 @@
                                                     <input type="text" id="htgDiskP" name="htgDiskP" class="form-control text-align-right persen" onkeyup="cekpersenS()" value="{{ number_format($purchase->p_disc_persen, 0,",",".") }}">
                                                 </div>
                                             </div>
-    
+
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Diskon Value</label>
                                                 <div class="col-md-8">
                                                     <input type="text" id="htgDiskV" name="htgDiskV" class="form-control text-align-right" onkeyup="getTotal()" value="{{ number_format($purchase->p_disc_value, 0,",",".") }}">
                                                 </div>
                                             </div>
-        
+
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Pajak (%)</label>
                                                 <div class="col-md-8">
                                                     <input type="text" id="htgPajak" name="htgPajak" class="form-control text-align-right persen" onkeyup="cekpajak()" value="{{ number_format($purchase->p_pajak, 0,",",".") }}">
                                                 </div>
                                             </div>
-    
+
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Total PO</label>
                                                 <div class="col-md-8">
@@ -219,7 +220,7 @@
                                                     <input type="hidden" name="idItem[]" value="{{ $getDataDT[$i]->pd_item }}">{{ $getDataDT[$i]->i_nama }}
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="qty[]" id="qty{{ $i }}" class="form-control text-align-right qty" style="width:100%" value="{{ number_format($getDataDT[$i]->qty, 0,",",".") }}">
+                                                    <input type="text" name="qty[]" id="qty{{ $i }}" class="form-control text-align-right qty" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->qty, 0,",",".") }}">
                                                 </td>
                                                 <td>
                                                     <input type="text" name="price[]" id="price{{ $i }}" class="form-control text-align-right price" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->pd_value, 0,",",".") }}">
@@ -231,7 +232,11 @@
                                                     <input type="text" name="diskV[]" id="diskV{{ $i }}" class="form-control text-align-right diskV" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->disc_value, 0,",",".") }}">
                                                 </td>
                                                 <td>
+                                                    @if($getDataDT[$i]->i_specificcode == 'Y')
                                                     <input type="text" name="subTotal[]" id="subTotal{{ $i }}" class="form-control text-align-right subTotal" style="width:100%" value="{{ number_format($getDataDT[$i]->subTotal, 0,",",".") }}" readonly>
+                                                    @else
+                                                    <input type="text" name="subTotal[]" id="subTotal{{ $i }}" class="form-control text-align-right subTotal" style="width:100%" value="{{ number_format($getDataDT[$i]->subTotalNonSC, 0,",",".") }}" readonly>
+                                                    @endif
                                                 </td>
 											</tr>
                                             @endfor
@@ -328,7 +333,7 @@
             }
         });
 
-        
+
         function getSubTotal(id){
 
             if($('#qty'+id).val() == ''){
@@ -452,7 +457,7 @@
 
             axios.post(baseUrl+'/pembelian/purchase-order/edit', data).then((response) => {
 
-                if(response.data.status == 'tpoSukses'){
+                if(response.data.status == 'sukses'){
                     $.smallBox({
                         title: "Berhasil",
                         content: 'Purchase Order Berhasil Dibuat...!',
@@ -462,7 +467,7 @@
                     });
 
                     window.open("{{url('/pembelian/purchase-order/print')}}"+"/"+response.data.id);
-                    window.location.href = baseUrl+'/pembelian/purchase-order/tambah';
+                    location.reload();
 
 				} else if(response.data.status == 'kurang'){
 					$.smallBox({

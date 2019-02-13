@@ -69,7 +69,11 @@ class SupplierReceptionController extends Controller
         return DataTables::of($getProses)
             ->addColumn('aksi', function($getProses){
 
-                $detail = '<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima Barang" onclick="terima(\'' . Crypt::encrypt($getProses->p_id) . '\', \'' . Crypt::encrypt($getProses->pd_item) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>';
+                if($getProses->qty == $getProses->qtyr){
+                    $detail = '<button class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="top" disabled><i class="glyphicon glyphicon-check"></i>&nbsp;Diterima</button>';
+                }else{
+                    $detail = '<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima Barang" onclick="terima(\'' . Crypt::encrypt($getProses->p_id) . '\', \'' . Crypt::encrypt($getProses->pd_item) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>';
+                }
 
                 return '<div class="text-center">'. $detail .'</div>';
 
@@ -196,19 +200,25 @@ class SupplierReceptionController extends Controller
         $item =  Crypt::decrypt($request->item);
 
         $getDT = DB::table('d_purchase')
-            ->join('d_stock_mutation', 'sm_nota', '=', 'p_nota')
-            ->join('d_stock', 's_id', '=', 'sm_stock')
+            ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
             ->where('p_nota', $nota)
-            ->where('s_item', $item)
-            ->where('s_position', 'PF00000001')
-            ->select('sm_reff', 'sm_specificcode', 'sm_expired', 'sm_qty')
+            ->where('pd_item', $item)
+            ->where('pd_qtyreceived', '!=', 0)
+            ->select('pd_specificcode', 'pd_purchase', 'pd_detailid', 'pd_qty')
+            ->groupBy('pd_detailid')
+            ->get();
+
+        $getReff = DB::table('d_stock_mutation')
+            ->where('sm_nota', $nota)
+            ->select('sm_reff', 'sm_expired')
             ->get();
 
         $getSCEX = DB::table('d_item')->where('i_id', $item)->select('i_specificcode', 'i_expired')->first();
         // dd($getDT);
         return json_encode([
             'item' => $getSCEX,
-            'dataDT' => $getDT
+            'dataDT' => $getDT,
+            'dataSM' => $getReff
         ]);
     }
 

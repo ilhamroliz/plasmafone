@@ -593,7 +593,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 		function terima(id, item){
 
-
             axios.get(baseUrl+'/inventory/penerimaan/supplier/item-receive/'+id+'/'+item).then(response => {
 
                 $('#nama_item').html(response.data.data.nama_item);
@@ -617,14 +616,14 @@ use App\Http\Controllers\PlasmafoneController as Access;
             var dataDT = 'id=' + id + '&item=' + item;
             axios.post(baseUrl+'/inventory/penerimaan/supplier/getItemDT', dataDT).then((respon) => {
                 if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'N'){
-
+                    console.log(respon.data.dataDT.length);
                     $('#dt_code').DataTable().clear();
                     for(var i = 0; i < respon.data.dataDT.length; i++){
                         $('#dt_code').DataTable().row.add([
-                            respon.data.dataDT[i].sm_reff,
-                            respon.data.dataDT[i].sm_specificcode,
+                            '<input type="hidden" id="pkida-'+i+'">'+respon.data.dataSM[i].sm_reff,
+                            '<input type="hidden" id="pka-'+i+'" value="'+respon.data.dataDT[i].pd_specificcode+'">'+respon.data.dataDT[i].pd_specificcode,
                             '<div class="text-center">'+
-                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'a-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
                             '</div>'
                         ]).draw();
                     }
@@ -637,11 +636,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     $('#dt_exp').DataTable().clear();
                     for(var i = 0; i < respon.data.dataDT.length; i++){
                         $('#dt_exp').DataTable().row.add([
-                            respon.data.dataDT[i].sm_reff,
-                            respon.data.dataDT[i].sm_expired,
-                            '<span class="text-center">'+respon.data.dataDT[i].sm_qty+'</span>',
+                            respon.data.dataSM[i].sm_reff,
+                            respon.data.dataSM[i].sm_expired,
+                            '<span class="text-center">'+respon.data.dataDT[i].pd_qty+'</span>',
                             '<div class="text-center">'+
-                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'b-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
                             '</div>'
                         ]).draw();
                     }                        
@@ -655,11 +654,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     $('#dt_code_exp').DataTable().clear();
                     for(var i = 0; i < respon.data.dataDT.length; i++){
                         $('#dt_code_exp').DataTable().row.add([
-                            respon.data.dataDT[i].sm_reff,
-                            respon.data.dataDT[i].sm_expired,
-                            respon.data.dataDT[i].sm_specificcode,
+                            respon.data.dataSM[i].sm_reff,
+                            respon.data.dataSM[i].sm_expired,
+                            '<input type="hidden" id="pkc-'+i+'" value="'+respon.data.dataDT[i].pd_specificcode+'">'+respon.data.dataDT[i].pd_specificcode,
                             '<div class="text-center">'+
-                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'c-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
                             '</div>'
                         ]).draw();
                     }
@@ -673,10 +672,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     $('#dt_non').DataTable().clear();
                     for(var i = 0; i < respon.data.dataDT.length; i++){
                         $('#dt_non').DataTable().row.add([
-                            respon.data.dataDT[i].sm_reff,
-                            '<div class="text-center">'+respon.data.dataDT[i].sm_qty+'</div>',
+                            respon.data.dataSM[i].sm_reff,
+                            '<div class="text-center">'+respon.data.dataDT[i].pd_qty+'</div>',
                             '<div class="text-center">'+
-                                '<button class="btn btn-danger btn-circle" onclick="hapus()"><i class="glyphicon glyphicon-trash"></i></button>'+
+                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'d-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
                             '</div>'
                         ]).draw();
                     }
@@ -689,8 +688,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
         }
 
-		function hapus() {
-			$('#form_qty').remove();
+		function hapus(id) {
+            
+            var nilai = $('#pk'+id).val();
+            alert('Hapur Baris '+nilai);
+
 		}
 
 		function qtyTerima(qtySisa) {
