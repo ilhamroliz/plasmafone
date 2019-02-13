@@ -225,8 +225,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         @endif
 
                         @if($sidebar['Service Barang'] == 'Y')
-                            <li>
-                                <a href="">Service Barang</a>
+                            <li class="{{ (Request::is('penjualan/service-barang/*') || Request::is('penjualan/service-barang')) ? 'active' : '' }}">
+                                <a href="{{ route('service-barang') }}">Service Barang</a>
                             </li>
                         @endif
 

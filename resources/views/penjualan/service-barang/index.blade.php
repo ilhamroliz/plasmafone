@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Return Penjualan')
+@section('title', 'Service Barang')
 
 @section('extra_style')
     <style type="text/css">
@@ -24,7 +24,7 @@
         <ol class="breadcrumb">
             <li>Home</li>
             <li>Penjualan</li>
-            <li>Return Penjualan</li>
+            <li>Service Barang</li>
         </ol>
         <!-- end breadcrumb -->
     </div>
@@ -42,13 +42,12 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-handshake-o"></i>
-                    Penjualan <span><i class="fa fa-angle-double-right"></i> Return Penjualan </span>
+                    Penjualan <span><i class="fa fa-angle-double-right"></i> Service Barang </span>
                 </h1>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right padding-top-10">
-                @if(Access::checkAkses(20, 'insert') == true)
-                    <a class="btn btn-success" type="button" href="{{ url('penjualan/return-penjualan/tambah') }}"><i
-                            class="fa fa-plus"></i>&nbsp;Tambah Data</a>
+                @if(Access::checkAkses(21, 'insert') == true)
+                    <a class="btn btn-success" type="button" href="{{ route('service-add') }}"><i class="fa fa-plus"></i>&nbsp;Tambah Data</a>
                 @endif
             </div>
 
@@ -62,19 +61,24 @@
                          data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header>
                             <ul id="widget-tab-1" class="nav nav-tabs pull-left">
-                                {{--<li class="active">--}}
-                                    {{--<a data-toggle="tab" href="#hr1"> <i style="color: #C79121;" class="fa fa-lg fa-rotate-right fa-spin"></i>--}}
-                                        {{--<span class="hidden-mobile hidden-tablet"> Diproses </span>--}}
-                                    {{--</a>--}}
-                                {{--</li>--}}
                                 <li class="active">
-                                    <a data-toggle="tab" href="#hr2"> <i style="color: #739E73;" class="fa fa-lg fa-check"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Selesai </span>
+                                    <a data-toggle="tab" href="#hr1"> <i style="color: #C79121;" class="fa fa-lg fa-minus-circle"></i>
+                                        <span class="hidden-mobile hidden-tablet"> Pending </span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a data-toggle="tab" href="#hr3"> <i style="color: #A90329;" class="fa fa-lg fa-remove"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Batal </span>
+                                    <a data-toggle="tab" href="#hr2"> <i style="color: #A90329;" class="fa fa-lg fa-remove"></i>
+                                        <span class="hidden-mobile hidden-tablet"> Tolak </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#hr3"> <i style="color: #3276B1;" class="fa fa-lg fa-rotate-right fa-spin"></i>
+                                        <span class="hidden-mobile hidden-tablet"> Proses </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-toggle="tab" href="#hr4"> <i style="color: #739E73;" class="fa fa-lg fa-check"></i>
+                                        <span class="hidden-mobile hidden-tablet"> Selesai </span>
                                     </a>
                                 </li>
                             </ul>
@@ -85,9 +89,8 @@
                             <div class="widget-body no-padding">
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
-                                    <div class="tab-pane fade" id="hr1">
-                                        <table id="dt_menunggu" class="table table-striped table-bordered table-hover"
-                                               width="100%">
+                                    <div class="tab-pane fade in active" id="hr1">
+                                        <table id="dt_pending" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>Tanggal</th>
@@ -96,13 +99,11 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-
                                             <tbody></tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade in active" id="hr2">
-                                        <table id="dt_selesai" class="table table-striped table-bordered table-hover"
-                                               width="100%">
+                                    <div class="tab-pane fade" id="hr2">
+                                        <table id="dt_tolak" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>Tanggal</th>
@@ -111,13 +112,11 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-
                                             <tbody></tbody>
                                         </table>
                                     </div>
                                     <div class="tab-pane fade" id="hr3">
-                                        <table id="dt_batal" class="table table-striped table-bordered table-hover"
-                                               width="100%">
+                                        <table id="dt_proses" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>Tanggal</th>
@@ -126,7 +125,19 @@
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="hr4">
+                                        <table id="dt_selesai" class="table table-striped table-bordered table-hover" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Tanggal</th>
+                                                    <th>Nota</th>
+                                                    <th>Pelanggan</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
                                             <tbody></tbody>
                                         </table>
                                     </div>
@@ -194,79 +205,54 @@
 
                                                 <tbody>
 
-                                                <tr>
-                                                    <td><strong>Tanggal</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_tanggal"></td>
-                                                </tr>
+                                                    <tr>
+                                                        <td><strong>Posisi</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_posisi"></td>
+                                                    </tr>
 
-                                                <tr>
-                                                    <td><strong>Nota Return</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_notareturn"></td>
-                                                </tr>
+                                                    <tr>
+                                                        <td><strong>Tanggal</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_tanggal"></td>
+                                                    </tr>
 
-                                                <tr>
-                                                    <td><strong>Nota Penjualan</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_notapenjualan"></td>
-                                                </tr>
+                                                    <tr>
+                                                        <td><strong>Nota Service</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_notaservice"></td>
+                                                    </tr>
 
-                                                <tr>
-                                                    <td><strong>Jenis Return</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_jenisreturn"></td>
-                                                </tr>
+                                                    <tr>
+                                                        <td><strong>Pelanggan</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_pelanggan"></td>
+                                                    </tr>
 
-                                                <tr>
-                                                    <td><strong>Status</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_status"></td>
-                                                </tr>
+                                                    <tr>
+                                                        <td><strong>Status</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_status"></td>
+                                                    </tr>
 
-                                                <tr>
-                                                    <td><strong>Member</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_member"></td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td><strong>Telp.</strong></td>
-                                                    <td><strong>:</strong></td>
-                                                    <td id="dt_telp"></td>
-                                                </tr>
+                                                    <tr>
+                                                        <td><strong>Petugas</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_petugas"></td>
+                                                    </tr>
 
                                                 </tbody>
 
                                             </table>
 
-                                            <table class="table table-bordered" id="table_item_return">
+                                            <table class="table table-bordered" id="table_item_service">
                                                 <thead>
-                                                    <tr class="text-center">
-                                                        <td>Item</td>
-                                                        <td>Qty</td>
-                                                        <td>Keterangan</td>
-                                                    </tr>
+                                                <tr>
+                                                    <td>Item</td>
+                                                    <td class="text-center">Qty</td>
+                                                </tr>
                                                 </thead>
                                                 <tbody></tbody>
-                                            </table>
-
-                                            <div style="border: .6px dashed; border-color: #CCCCCC;"></div>
-
-                                            <div>
-                                                <legend style="padding-left: 10px;"><i><strong>BARANG PENGGANTI</strong></i></legend>
-                                            </div>
-
-                                            <table class="table table-bordered" id="table_item_ganti">
-                                                <thead>
-                                                <tr class="text-center">
-                                                    <td>Item</td>
-                                                    <td>Qty</td>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
                                             </table>
 
                                         </div>
@@ -297,7 +283,7 @@
 @section('extra_script')
 
     <script type="text/javascript">
-        var proses, done, cancel;
+        var pending, tolak, proses, done;
         $(document).ready(function () {
             var responsiveHelper_dt_basic = undefined;
             var breakpointDefinition = {
@@ -307,13 +293,13 @@
 
             setTimeout(function () {
 
-                proses = $('#dt_menunggu').dataTable({
+                pending = $('#dt_pending').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ajax": "{{ route('get-return-proses') }}",
+                    "ajax": "{{ route('get-service-pending') }}",
                     "columns": [
                         {"data": "tanggal"},
-                        {"data": "notareturn"},
+                        {"data": "nota"},
                         {"data": "pelanggan"},
                         {"data": "aksi"}
                     ],
@@ -324,7 +310,39 @@
                     "preDrawCallback": function () {
                         // Initialize the responsive datatables helper once.
                         if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_menunggu'), breakpointDefinition);
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_pending'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback": function (nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback": function (oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+
+            }, 10);
+
+            setTimeout(function () {
+
+                tolak = $('#dt_tolak').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "{{ route('get-service-tolak') }}",
+                    "columns": [
+                        {"data": "tanggal"},
+                        {"data": "nota"},
+                        {"data": "pelanggan"},
+                        {"data": "aksi"}
+                    ],
+                    "autoWidth": true,
+                    "language": dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" + "t" +
+                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                    "preDrawCallback": function () {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_tolak'), breakpointDefinition);
                         }
                     },
                     "rowCallback": function (nRow) {
@@ -339,13 +357,45 @@
 
             setTimeout(function () {
 
+                proses = $('#dt_proses').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "{{ route('get-service-proses') }}",
+                    "columns": [
+                        {"data": "tanggal"},
+                        {"data": "nota"},
+                        {"data": "pelanggan"},
+                        {"data": "aksi"}
+                    ],
+                    "autoWidth": true,
+                    "language": dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" + "t" +
+                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                    "preDrawCallback": function () {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_proses'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback": function (nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback": function (oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+
+            }, 1000);
+
+            setTimeout(function () {
+
                 done = $('#dt_selesai').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ajax": "{{ route('get-return-done') }}",
+                    "ajax": "{{ route('get-service-done') }}",
                     "columns": [
                         {"data": "tanggal"},
-                        {"data": "notareturn"},
+                        {"data": "nota"},
                         {"data": "pelanggan"},
                         {"data": "aksi"}
                     ],
@@ -367,38 +417,6 @@
                     }
                 });
 
-            }, 1000);
-
-            setTimeout(function () {
-
-                cancel = $('#dt_batal').dataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": "{{ route('get-return-cancel') }}",
-                    "columns": [
-                        {"data": "tanggal"},
-                        {"data": "notareturn"},
-                        {"data": "pelanggan"},
-                        {"data": "aksi"}
-                    ],
-                    "autoWidth": true,
-                    "language": dataTableLanguage,
-                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" + "t" +
-                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                    "preDrawCallback": function () {
-                        // Initialize the responsive datatables helper once.
-                        if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_batal'), breakpointDefinition);
-                        }
-                    },
-                    "rowCallback": function (nRow) {
-                        responsiveHelper_dt_basic.createExpandIcon(nRow);
-                    },
-                    "drawCallback": function (oSettings) {
-                        responsiveHelper_dt_basic.respond();
-                    }
-                });
-
             }, 1500);
         })
 
@@ -406,7 +424,7 @@
             $('#overlay').fadeIn(200);
             $('#load-status-text').text('Sedang Mengambil data...');
 
-            axios.get(baseUrl + '/penjualan/return-penjualan/get-detail-return/' + id).then(response => {
+            axios.get(baseUrl + '/penjualan/service-barang/get-detail-service/' + id).then(response => {
 
                 if (response.data == 'Not Found') {
 
@@ -423,11 +441,10 @@
                     var row = '';
                     var jenis = '';
                     $('.tr').remove();
-                    $('#title_detail').html('<strong>Detail Return Penjualan</strong>');
-                    $('#dt_tanggal').text(response.data[0].tgl_return);
-                    $('#dt_notareturn').text(response.data[0].nota_return);
-                    $('#dt_notapenjualan').text(response.data[0].nota_penjualan);
-                    $('#dt_status').text(response.data[0].rp_status);
+                    $('#title_detail').html('<strong>Detail Service Barang</strong>');
+                    $('#dt_tanggal').text(response.data[0].tgl_service);
+                    $('#dt_notaservice').text(response.data[0].nota_sevice);
+                    $('#dt_status').text(response.data[0].status_service);
                     if (response.data[0].jenis_return == "GBS") {
                         jenis = "Ganti Barang Sejenis";
                     } else if (response.data[0].jenis_return == "GBL") {
@@ -629,9 +646,10 @@
         }
 
         function refresh_tab() {
+            pending.api().ajax.reload();
+            tolak.api().ajax.reload();
             proses.api().ajax.reload();
             done.api().ajax.reload();
-            cancel.api().ajax.reload();
         }
     </script>
 @endsection
