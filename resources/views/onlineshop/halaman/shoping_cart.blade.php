@@ -14,7 +14,7 @@
 			</a>
 
 			<span class="stext-109 cl4">
-				Detail Produk
+				Troli Belanjaan
 			</span>
 		</div>
 	</div>
@@ -23,11 +23,11 @@
 @section('content')
 
 	<!-- Shoping Cart -->
-	<form class="bg0 p-t-75 p-b-85">
+	<form class="bg0 p-t-20 p-b-85">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
-					<div class="m-l-25 m-r--38 m-lr-0-xl">
+					<div class="m-l-0 m-r--38 m-lr-0-xl">
 						<div class="wrap-table-shopping-cart">
 							<table class="table-shopping-cart">
 								<tr class="table_head">
@@ -41,7 +41,7 @@
 								<tr class="table_row">
 									<td class="column-1">
 										<div class="how-itemcart1">
-											<img src="images/item-cart-04.jpg" alt="IMG">
+											<img src="{{asset('template_asset/frontend/images/item-cart-04.jpg')}}" alt="IMG">
 										</div>
 									</td>
 									<td class="column-2">Fresh Strawberries</td>
@@ -65,7 +65,7 @@
 								<tr class="table_row">
 									<td class="column-1">
 										<div class="how-itemcart1">
-											<img src="images/item-cart-05.jpg" alt="IMG">
+											<img src="{{asset('template_asset/frontend/images/item-cart-05.jpg')}}" alt="IMG">
 										</div>
 									</td>
 									<td class="column-2">Lightweight Jacket</td>
@@ -105,7 +105,7 @@
 				</div>
 
 				<div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
-					<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+					<div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-0 m-lr-0-xl p-lr-15-sm">
 						<h4 class="mtext-109 cl2 p-b-30">
 							Cart Totals
 						</h4>

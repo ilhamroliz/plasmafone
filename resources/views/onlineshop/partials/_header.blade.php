@@ -43,7 +43,7 @@
                         </li>
 
                         <li>
-                            <a href="{{route('product_hp')}}">Handphone</a>
+                            <a href="">Handphone</a>
                             <ul class="sub-menu" style="max-height: 500px;overflow-y: scroll;">
                                 @foreach($menu_hp as $hp)
                                     <li><a href="#">{{$hp->i_merk}}</a></li>
@@ -52,7 +52,7 @@
                         </li>
 
                         <li>
-                            <a href="{{route('product_acces')}}">Aksesoris</a>
+                            <a href="">Aksesoris</a>
                             <ul class="sub-menu" style="max-height: 500px;overflow-y: scroll;">
                                 @foreach($menu_acces as $acces)
                                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
@@ -158,7 +158,7 @@
             </li>
 
             <li>
-                <a href="{{route('product_hp')}}">Handphone</a>
+                <a href="">Handphone</a>
                 <ul class="sub-menu-m" style="max-height: 300px;overflow-y: scroll;">
                     @foreach($menu_hp as $hp)
                     <li><a href="index.html">{{$hp->i_merk}}</a></li>
@@ -170,7 +170,7 @@
             </li>
 
             <li>
-                <a href="{{route('product_acces')}}">Aksesoris</a>
+                <a href="">Aksesoris</a>
                 <ul class="sub-menu-m" style="max-height: 300px;overflow-y: scroll;">
                     @foreach($menu_acces as $acces)
                     <li><a href="index.html">{{$acces->i_merk}}</a></li>
