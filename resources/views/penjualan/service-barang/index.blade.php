@@ -224,6 +224,12 @@
                                                     </tr>
 
                                                     <tr>
+                                                        <td><strong>Nota Penjualan</strong></td>
+                                                        <td><strong>:</strong></td>
+                                                        <td id="dt_notapenjualan"></td>
+                                                    </tr>
+
+                                                    <tr>
                                                         <td><strong>Pelanggan</strong></td>
                                                         <td><strong>:</strong></td>
                                                         <td id="dt_pelanggan"></td>
@@ -250,6 +256,7 @@
                                                 <tr>
                                                     <td>Item</td>
                                                     <td class="text-center">Qty</td>
+                                                    <td>Keterangan</td>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -439,41 +446,24 @@
 
                 } else {
                     var row = '';
-                    var jenis = '';
                     $('.tr').remove();
                     $('#title_detail').html('<strong>Detail Service Barang</strong>');
-                    $('#dt_tanggal').text(response.data[0].tgl_service);
-                    $('#dt_notaservice').text(response.data[0].nota_sevice);
-                    $('#dt_status').text(response.data[0].status_service);
-                    if (response.data[0].jenis_return == "GBS") {
-                        jenis = "Ganti Barang Sejenis";
-                    } else if (response.data[0].jenis_return == "GBL") {
-                        jenis = "Ganti Barang Lain";
-                    } else {
-                        jenis = "Ganti Uang";
-                    }
-                    $('#dt_jenisreturn').text(jenis);
-                    $('#dt_member').text(response.data[0].nama_member);
-                    $('#dt_telp').text(response.data[0].telp_member);
-                    response.data.forEach(function (element) {
-                        if (element.rpd_code != "") {
-                            row = '<tr class="tr"><td>' + element.rpd_code + ' - ' + element.rpd_item + '</td><td align="center">' + element.rpd_qty + '</td><td>' + element.rpd_note + '</td></tr>'
-                        } else {
-                            row = '<tr class="tr"><td>' + element.rpd_item + ' (' + element.rpd_specificcode + ')' + '</td><td align="center">' + element.rpd_qty + '</td><td>' + element.rpd_note + '</td></tr>'
-                        }
-                        $('#table_item_return tbody').append(row)
-                    });
+                    $('#dt_posisi').text(response.data[0].position);
+                    $('#dt_tanggal').text(response.data[0].date);
+                    $('#dt_notaservice').text(response.data[0].nota_service);
+                    $('#dt_notapenjualan').text(response.data[0].nota_sales);
+                    $('#dt_pelanggan').text(response.data[0].buyer);
+                    $('#dt_status').text(response.data[0].status);
+                    $('#dt_petugas').text(response.data[0].officer);
 
-                    if (response.data[0].jenis_return != "GU") {
-                        response.data.forEach(function (element) {
-                            if (element.rpg_code != "") {
-                                row = '<tr class="tr"><td>' + element.rpg_code + ' - ' + element.rpg_item + '</td><td align="center">' + element.rpg_qty + '</td></tr>'
-                            } else {
-                                row = '<tr class="tr"><td>' + element.rpg_item + ' (' + element.rpg_specificcode + ')' + '</td><td align="center">' + element.rpg_qty + '</td></tr>'
-                            }
-                            $('#table_item_ganti tbody').append(row)
-                        });
-                    }
+                    response.data.forEach(function (element) {
+                        if (element.code != "") {
+                            row = '<tr class="tr"><td>' + element.code + ' - ' + element.item + '</td><td align="center">' + element.qty + '</td><td>' + element.note + '</td></tr>'
+                        } else {
+                            row = '<tr class="tr"><td>' + element.item + ' (' + element.specificcode + ')' + '</td><td align="center">' + element.qty + '</td><td>' + element.note + '</td></tr>'
+                        }
+                        $('#table_item_service tbody').append(row)
+                    });
 
                     $('#overlay').fadeOut(200);
                     $('#myModal').modal('show');

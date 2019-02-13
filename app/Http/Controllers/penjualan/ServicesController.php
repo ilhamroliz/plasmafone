@@ -140,6 +140,45 @@ class ServicesController extends Controller
             ->make(true);
     }
 
+    public function getDetailService($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return json_encode('Not Found');
+        }
+
+        $datas = DB::table('d_service_item')
+            ->select(
+                'm_company.c_name as position',
+                DB::raw('DATE_FORMAT(d_service_item.si_date, "%d-%m-%Y") as date'),
+                'd_service_item.si_nota as nota_service',
+                'd_service_item.si_notasales as nota_sales',
+                'd_service_item.si_status as status',
+                'm_member.m_name as buyer',
+                'd_item.i_nama as item',
+                'd_item.i_code as code',
+                'd_service_itemdt.sid_qty as qty',
+                'd_service_itemdt.sid_specificcode as specificcode',
+                'd_service_itemdt.sid_note as note',
+                'd_mem.m_name as officer'
+            )
+            ->where('d_service_item.si_id', $id)
+            ->join('d_service_itemdt', 'd_service_item.si_id', '=', 'd_service_itemdt.sid_serviceitem')
+            ->join('d_sales', 'd_sales.s_nota', '=', 'd_service_item.si_notasales')
+            ->join('m_member', 'm_member.m_id', '=', 'd_service_item.si_mem')
+            ->join('d_item', 'd_item.i_id', '=', 'd_service_itemdt.sid_item')
+            ->join('m_company', 'd_service_item.si_position', '=', 'm_company.c_id')
+            ->join('d_mem', 'd_service_itemdt.sid_mem', '=', 'd_mem.m_id')
+            ->get();
+
+        if ($datas == null) {
+            return json_encode('Not Found');
+        }
+
+        return json_encode($datas);
+    }
+
     public function add()
     {
         if (Access::checkAkses(21, 'insert') == true) {
