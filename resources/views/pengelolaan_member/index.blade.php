@@ -15,15 +15,15 @@
             height: 16px;
             visibility: hidden;
 
-                &
-                :before,
+                /*&
+                :before {
+
+                }
 
                 &
                 :after {
                     visibility: visible;
-                }
-
-            }
+                }*/
         }
     </style>
 @endsection
@@ -78,7 +78,6 @@
                         <a onclick="setKonversi()" rel="tooltip" title="" data-placement="bottom" data-original-title="Konversi" class="btn btn-default"><strong><i class="fa fa-exchange fa-lg text-warning"></i></strong></a>
                         <a onclick="pengaturan()" rel="tooltip" title="" data-placement="bottom" data-original-title="Pengaturan" class="btn btn-default"><strong><i class="fa fa-cogs fa-lg text-primary"></i></strong></a>
                         @endif
-                        <a href="javascript:void(0);" rel="tooltip" title="" data-placement="bottom" data-original-title="History Penukaran Poin" class="btn btn-default"><strong><i class="fa fa-history fa-lg text-danger"></i></strong></a>
                         @if(Access::checkAkses(22, 'insert'))
                         <a onclick="addSaldo()" rel="tooltip" title="" data-placement="bottom" data-original-title="Tambah Saldo Poin" class="btn btn-default"><strong><i class="fa fa-cart-plus fa-lg text-success"></i></strong></a>
                         @endif
@@ -109,13 +108,12 @@
                         <div role="content">
                             <div class="widget-body no-padding form-horizontal">
                                 <div class="tab-content padding-10">
-                                    <table class="table table-hover table-striped table-bordered">
+                                    <table class="table table-hover table-striped table-bordered" id="poinmember">
                                         <thead>
                                         <tr>
                                             <th>Nama Member</th>
                                             <th>No Telp</th>
                                             <th>Saldo Poin</th>
-                                            <th>Aksi</th>
                                         </tr>
                                         </thead>
                                     </table>
@@ -144,12 +142,50 @@
                         <div role="content">
                             <div class="widget-body no-padding form-horizontal">
                                 <div class="tab-content padding-10">
-                                    <table class="table table-hover table-striped table-bordered">
+                                    <table class="table table-hover table-striped table-bordered" id="birthmember">
                                         <thead>
                                         <tr>
                                             <th>Nama Member</th>
-                                            <th>Hari Lahir</th>
+                                            <th>Tgl Lahir</th>
+                                            <th>Usia</th>
+                                            <th>Ulangtahun</th>
                                             <th>No Telp</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12 col-sm-12 ">
+                    <div class="jarviswidget jarviswidget-color-blue" id="wid-id-0"
+                         data-widget-colorbutton="false"
+                         data-widget-editbutton="false"
+                         data-widget-togglebutton="false"
+                         data-widget-deletebutton="false"
+                         data-widget-fullscreenbutton="false"
+                         data-widget-custombutton="false"
+                         data-widget-sortable="false">
+                        <header role="heading"><div class="jarviswidget-ctrls" role="menu"><a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> </div>
+                            <h2><strong>History Penukaran Saldo Poin</strong></h2>
+                        </header>
+                        <div role="content">
+                            <div class="widget-body no-padding form-horizontal">
+                                <div class="tab-content padding-10">
+                                    <table class="table table-hover table-striped table-bordered" id="historymember">
+                                        <thead>
+                                        <tr>
+                                            <th>Nama Member</th>
+                                            <th>Tanggal</th>
+                                            <th>Poin</th>
+                                            <th>Barang</th>
+                                            <th>Qty</th>
                                             <th>Aksi</th>
                                         </tr>
                                         </thead>
@@ -365,6 +401,9 @@
 @section('extra_script')
 
     <script type="text/javascript">
+        var poinmember = null;
+        var birthmember = null;
+        var historymember = null;
         $(document).ready(function () {
             $('#saldo').maskMoney({
                 thousands:'.',
@@ -415,6 +454,107 @@
                     setSaldo(data.item.id);
                 }
             });
+
+            setTimeout(function () {
+                poinmember = $('#poinmember').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "{{ url('pengelolaan-member/get-member-poin') }}",
+                        "type": "get"
+                    },
+                    "columns":[
+                        {"data": "m_name"},
+                        {"data": "m_telp"},
+                        {"data": "s_saldo"}
+                    ],
+                    "autoWidth" : true,
+                    "language" : dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                        "<'dt-toolbar-footer'<'col-xs-12 col-sm-12 pull-right'p>>",
+                    "preDrawCallback" : function() {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#poinmember'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback" : function(nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback" : function(oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+            }, 500);
+
+            setTimeout(function () {
+                birthmember = $('#birthmember').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "{{ url('pengelolaan-member/get-member-birth') }}",
+                        "type": "get"
+                    },
+                    "columns":[
+                        {"data": "m_name"},
+                        {"data": "lahir"},
+                        {"data": "usia"},
+                        {"data": "sisa"},
+                        {"data": "m_telp"},
+                    ],
+                    "autoWidth" : true,
+                    "language" : dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                        "<'dt-toolbar-footer'<'col-xs-12 col-sm-12 pull-right'p>>",
+                    "preDrawCallback" : function() {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#birthmember'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback" : function(nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback" : function(oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+            }, 750);
+
+            setTimeout(function () {
+                historymember = $('#historymember').DataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "{{ url('pengelolaan-member/get-member-history') }}",
+                        "type": "get"
+                    },
+                    "columns":[
+                        {"data": "m_name"},
+                        {"data": "birth"},
+                        {"data": "sc_poin"},
+                        {"data": "sc_item"},
+                        {"data": "sc_qty"},
+                        {"data": "aksi"}
+                    ],
+                    "autoWidth" : true,
+                    "language" : dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                        "<'dt-toolbar-footer'<'col-xs-12 col-sm-12 pull-right'p>>",
+                    "preDrawCallback" : function() {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#historymember'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback" : function(nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback" : function(oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+            }, 1000);
 
             $('#table-fitur').dataTable({
                 "autoWidth" : true,

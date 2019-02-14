@@ -901,8 +901,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
     Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
     Route::get('pengelolaan-member/get-data-setting/{id}', 'PengelolaanMemberController@getDataSetting');
-    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@updateSetting');
-
+    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@pengelolaan-member');
+    Route::get('pengelolaan-member/get-member-poin', 'PengelolaanMemberController@getMemberPoin');
+    Route::get('pengelolaan-member/get-member-birth', 'PengelolaanMemberController@getMemberBirth');
+    Route::get('pengelolaan-member/get-member-history', 'PengelolaanMemberController@getMemberHistory');
 
     // Route Dirga
 

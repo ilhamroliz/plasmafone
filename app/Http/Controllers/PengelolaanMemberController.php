@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use DB;
 use Response;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class PengelolaanMemberController extends Controller
 {
@@ -240,5 +241,66 @@ class PengelolaanMemberController extends Controller
                 }
             }
         }
+    }
+
+    public function getMemberPoin()
+    {
+        $data = DB::table('d_saldo')
+            ->join('m_member', 's_member', '=', 'm_id')
+            ->where('m_status', '=', 'AKTIF');
+
+        return DataTables::of($data)
+            ->addColumn('aksi', function ($data){
+                return '<div class="text-center">
+                        <button title="Edit" type="button" data-toggle="modal" data-target="#detail-pembayaran" class="btn btn-warning btn-xs" ><i class="glyphicon glyphicon-edit"></i></button>
+                        <button title="Non Aktifkan" type="button" class="nonaktif btn btn-danger btn-xs" ><i class="glyphicon glyphicon-remove"></i></button>
+                        <button title="Tambahkan" type="button" data-toggle="modal" data-target="#add-pembayaran" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-circle-arrow-right"></i></button>
+                        </div>';
+            })
+            ->editColumn('s_saldo', function ($data){
+                return intval($data->s_saldo);
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    public function getMemberBirth()
+    {
+        $data = DB::table('m_member')
+            ->where('m_status', '=', 'AKTIF')
+            ->select('m_member.*', DB::raw("concat((dayofyear(m_birth) - dayofyear(now())), ' Hari') as sisa"), DB::raw("date_format(m_birth, '%d/%m/%Y') as lahir"))
+            ->where(DB::raw("dayofyear(concat(year(now()), '-', month(m_birth), '-', dayofmonth(m_birth)))"), '>=', DB::raw("(dayofyear(now()) -7)"))
+            ->where(DB::raw("dayofyear(concat(year(now()), '-', month(m_birth), '-', dayofmonth(m_birth)))"), '<=', DB::raw("(dayofyear(now()) +30)"));
+
+        return DataTables::of($data)
+            ->addColumn('usia', function ($data){
+                return Carbon::createFromFormat('Y-m-d', $data->m_birth)->age . ' Tahun';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    public function getMemberHistory(Request $request)
+    {
+        $data = DB::table('d_saldo_change')
+            ->join('m_member','m_id', '=', 'sc_member')
+            ->select('d_saldo_change.*', 'm_member.*', DB::raw('date_format(m_birth, "%d/%m/%Y") as birth'));
+        if (isset($request->tglAwal) && $request->tglAwal != ''){
+            $data->where('sc_date', '>=', Carbon::createFromFormat('d/m/Y', $request->tglAwal)->format('Y-m-d'));
+        }
+        if (isset($request->tglAkhir) && $request->tglAkhir != ''){
+            $data->where('sc_date', '<=', Carbon::createFromFormat('d/m/Y', $request->tglAkhir)->format('Y-m-d'));
+        }
+
+        return DataTables::of($data)
+            ->addColumn('aksi', function ($data){
+                return '<div class="text-center">
+                        <button title="Edit" type="button" data-toggle="modal" data-target="#detail-pembayaran" class="btn btn-warning btn-xs" ><i class="glyphicon glyphicon-edit"></i></button>
+                        <button title="Non Aktifkan" type="button" class="nonaktif btn btn-danger btn-xs" ><i class="glyphicon glyphicon-remove"></i></button>
+                        <button title="Tambahkan" type="button" data-toggle="modal" data-target="#add-pembayaran" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-circle-arrow-right"></i></button>
+                        </div>';
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 }
