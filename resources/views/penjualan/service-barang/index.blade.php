@@ -615,6 +615,10 @@
             });
         }
 
+        function serviceTerima(id) {
+
+        }
+
         function refresh_tab() {
             tabel.api().ajax.reload();
             // pending.api().ajax.reload();

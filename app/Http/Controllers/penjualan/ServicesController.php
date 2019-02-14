@@ -68,8 +68,12 @@ class ServicesController extends Controller
 
                     if ($data->si_shipping_status == "Delivery" || $data->si_shipping_status == "On Center") {
                         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-                    } else {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-send"></i></button></div>';
+                    } else if($data->si_shipping_status == "On Outlet") {
+                        if ($data->si_status == "TOLAK" || $data->si_status == "PROSES" || $data->si_status == "DONE") {
+                            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                        } else {
+                            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-send"></i></button></div>';
+                        }
                     }
 
                 }
