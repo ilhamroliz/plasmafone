@@ -446,6 +446,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
     Route::get('/pembelian/purchase-order/hapus/{id}', 'pembelian\PurchaseOrderController@hapus');
     Route::match(['get', 'post'],'/pembelian/purchase-order/edit', 'pembelian\PurchaseOrderController@edit');
+    Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
 
 
     // Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
@@ -473,7 +474,6 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::match(['get', 'post'], '/pembelian/purchase-order/multiple-delete', 'PurchaseOrderController@multiple_delete_purchase_order');
     // Route::get('/pembelian/purchase-order/cetak', 'PurchaseOrderController@cetak_purchase');
     // Route::get('/pembelian/purchase-order/get-purchase-data/{id}', 'PurchaseOrderController@get_purchase_data');
-    // Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
     // Route::get('/pembelian/purchase-order/purchase-pdf/{id}', 'PurchaseOrderController@viewpdf_purchase');
     // Route::get('/pembelian/purchase-order/generate-pdf/{id}', 'PurchaseOrderController@pdf_purchase');
 
@@ -529,6 +529,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/supplier/getMaks/{id}/{item}', 'inventory\SupplierReceptionController@getMaks');
     Route::post('/inventory/penerimaan/supplier/getItemDT', 'inventory\SupplierReceptionController@itemReceiveDT');
 
+    Route::post('/inventory/penerimaan/supplier/detailReceived/{id}/{item}', 'inventory\SupplierReceptionController@detailReceived');
+    Route::match(['get', 'post'],'/inventory/penerimaan/supplier/editReceived', 'inventory\SupplierReceptionController@editReceived');
+    Route::post('/inventory/penerimaan/supplier/hapusReceived/{id}/{item}', 'inventory\SupplierReceptionController@hapusReceived');
 
 	// End penerimaan barang dari supplier
 
