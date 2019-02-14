@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlasmafoneController as Access;
 use App\Http\Controllers\CodeGenerator as GenerateCode;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Carbon\Carbon;
 use DB;
 use Response;

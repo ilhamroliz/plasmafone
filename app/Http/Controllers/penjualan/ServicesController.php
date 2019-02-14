@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\PlasmafoneController as Access;
 use App\Http\Controllers\CodeGenerator as GenerateCode;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Carbon\Carbon;
 use DB;
 use Response;
@@ -42,8 +43,8 @@ class ServicesController extends Controller
             ->addColumn('posisi', function ($data){
                 if ($data->si_shipping_status == "On Outlet"){
                     return $data->position;
-                } else if ($data->si_shipping_status == "Delivary") {
-                    return '<span class="label label-info">Sedang Dikirim ke Pusat</span>';
+                } else if ($data->si_shipping_status == "Delivery") {
+                    return '<center><span class="label label-info">Sedang Dikirim ke Pusat</span></center>';
                 } else if ($data->si_shipping_status == "On Center") {
                     return $data->position;
                 }
@@ -51,13 +52,13 @@ class ServicesController extends Controller
 
             ->addColumn('status', function ($data){
                 if ($data->si_status == "PENDING") {
-                    return '<span class="label label-warning">PENDING</span>';
+                    return '<center><span class="label label-warning">PENDING</span></center>';
                 } else if ($data->si_status == "PROSES") {
-                    return '<span class="label label-info">PROSES</span>';
+                    return '<center><span class="label label-info">PROSES</span></center>';
                 } else if ($data->si_status == "TOLAK") {
-                    return '<span class="label label-danger">TOLAK</span>';
+                    return '<center><span class="label label-danger">TOLAK</span></center>';
                 } else if ($data->si_status == "DONE") {
-                    return '<span class="label label-success">SELESAI</span>';
+                    return '<center><span class="label label-success">SELESAI</span></center>';
                 }
             })
 
@@ -65,7 +66,11 @@ class ServicesController extends Controller
 
                 if (Access::checkAkses(21, 'read') == true) {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-send"></i></button></div>';
+                    if ($data->si_shipping_status == "Delivery" || $data->si_shipping_status == "On Center") {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    } else {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-send"></i></button></div>';
+                    }
 
                 }
 
@@ -580,6 +585,30 @@ class ServicesController extends Controller
             DB::rollback();
             return $e;
             return json_encode(['status' => 'false']);
+        }
+    }
+
+    public function sendService($id = null)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return response()->json(['status' => 'Not Found']);
+        }
+
+        DB::beginTransaction();
+        try{
+            DB::table('d_service_item')
+                ->where('si_id', $id)
+                ->update([
+                    'si_position' => 'PF00000001',
+                    'si_shipping_status' => 'Delivery'
+                ]);
+            DB::commit();
+            return response()->json(['status' => 'True']);
+        }catch (\Exception $e){
+            DB::rollback();
+            return response()->json(['status' => 'False']);
         }
     }
 

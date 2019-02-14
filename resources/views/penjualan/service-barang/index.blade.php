@@ -307,7 +307,7 @@
 
     <script type="text/javascript">
         var tabel;
-        // var tolak, proses, done;
+        // var pending, tolak, proses, done;
         $(document).ready(function () {
             var responsiveHelper_dt_basic = undefined;
             var breakpointDefinition = {
@@ -534,10 +534,10 @@
             })
         }
 
-        function selesai(id) {
+        function servicePenjualan(id) {
             $.SmartMessageBox({
                 title: "Pesan!",
-                content: 'Return penjualan barang ini sudah selesai?',
+                content: 'Kirim barang ini ke pusat untuk diperbaiki?',
                 buttons: '[Batal][Ya]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Ya") {
@@ -551,10 +551,10 @@
                         }
                     });
                     $.ajax({
-                        url: baseUrl + '/penjualan/return-penjualan/done-return/' + id,
+                        url: baseUrl + '/penjualan/service-barang/send-service/' + id,
                         type: 'get',
                         success: function (response) {
-                            if (response == "Not Found") {
+                            if (response.status == "Not Found") {
                                 $.smallBox({
                                     title: "Gagal",
                                     content: "Data tidak ditemukan",
@@ -564,7 +564,7 @@
                                 });
                                 $('#overlay').fadeOut(200);
 
-                            } else if (response == "false") {
+                            } else if (response.status == "False") {
                                 $.smallBox({
                                     title: "Gagal",
                                     content: "Upsss. Terjadi kesalahan",
@@ -574,91 +574,10 @@
                                 });
                                 $('#overlay').fadeOut(200);
 
-                            } else {
+                            } else if (response.status == "True") {
                                 $.smallBox({
                                     title: "Berhasil",
-                                    content: 'Return penjualan selesai',
-                                    color: "#739E73",
-                                    timeout: 5000,
-                                    icon: "fa fa-check bounce animated"
-                                });
-                                $('#overlay').fadeOut(200);
-                                $('#deleteModal').modal('hide');
-                                refresh_tab();
-
-                            }
-                        }, error: function (x, e) {
-                            if (x.status == 0) {
-                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-                                $('#overlay').fadeOut(200);
-                            } else if (x.status == 404) {
-                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-                                $('#overlay').fadeOut(200);
-                            } else if (x.status == 500) {
-                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-                                $('#overlay').fadeOut(200);
-                            } else if (e == 'parsererror') {
-                                alert('Error.\nParsing JSON Request failed.');
-                                $('#overlay').fadeOut(200);
-                            } else if (e == 'timeout') {
-                                alert('Request Time out. Harap coba lagi nanti');
-                                $('#overlay').fadeOut(200);
-                            } else {
-                                alert('Unknow Error.\n' + x.responseText);
-                                $('#overlay').fadeOut(200);
-                            }
-                        }
-                    })
-
-                }
-
-            });
-        }
-
-        function remove(id) {
-            $.SmartMessageBox({
-                title: "Pesan!",
-                content: 'Apakah Anda yakin akan membatalkan return penjualan ini?',
-                buttons: '[Batal][Ya]'
-            }, function (ButtonPressed) {
-                if (ButtonPressed === "Ya") {
-
-                    $('#overlay').fadeIn(200);
-                    $('#load-status-text').text('Sedang Memproses...');
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: baseUrl + '/penjualan/return-penjualan/cancel-return/' + id,
-                        type: 'get',
-                        success: function (response) {
-                            if (response == "Not Found") {
-                                $.smallBox({
-                                    title: "Gagal",
-                                    content: "Data tidak ditemukan",
-                                    color: "#A90329",
-                                    timeout: 5000,
-                                    icon: "fa fa-times bounce animated"
-                                });
-                                $('#overlay').fadeOut(200);
-
-                            } else if (response == "false") {
-                                $.smallBox({
-                                    title: "Gagal",
-                                    content: "Upsss. Terjadi kesalahan",
-                                    color: "#A90329",
-                                    timeout: 5000,
-                                    icon: "fa fa-times bounce animated"
-                                });
-                                $('#overlay').fadeOut(200);
-
-                            } else {
-                                $.smallBox({
-                                    title: "Berhasil",
-                                    content: 'Transaksi Anda berhasil dibatalkan...!',
+                                    content: 'Barang sedang dikirim ke pusat untuk perbaikan',
                                     color: "#739E73",
                                     timeout: 5000,
                                     icon: "fa fa-check bounce animated"
@@ -697,10 +616,11 @@
         }
 
         function refresh_tab() {
-            pending.api().ajax.reload();
-            tolak.api().ajax.reload();
-            proses.api().ajax.reload();
-            done.api().ajax.reload();
+            tabel.api().ajax.reload();
+            // pending.api().ajax.reload();
+            // tolak.api().ajax.reload();
+            // proses.api().ajax.reload();
+            // done.api().ajax.reload();
         }
     </script>
 @endsection
