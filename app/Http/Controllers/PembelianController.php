@@ -913,14 +913,14 @@ class PembelianController extends Controller
 
     public function tambahRencana(Request $request)
     {
-        $comp = Auth::user()->m_id;
-        $req_id = $request->input('req_id');
-        $ind_id = $request->input('ind_id');
-        $item_id = $request->input('item_id');
+        $comp       = Auth::user()->m_id;
+        $req_id     = $request->input('req_id');
+        $ind_id     = $request->input('ind_id');
+        $item_id    = $request->input('item_id');
         $item_idReq = $request->input('item_idReq');
-        $qtyAppInd = $request->input('qtyAppInd');
-        $qtyAppReq = $request->input('qtyAppReq');
-        $req_date = Carbon::now('Asia/Jakarta');
+        $qtyAppInd  = $request->input('qtyAppInd');
+        $qtyAppReq  = $request->input('qtyAppReq');
+        $req_date   = Carbon::now('Asia/Jakarta');
 
         DB::beginTransaction();
         try {
@@ -951,8 +951,8 @@ class PembelianController extends Controller
                     } else {
 
                         $indAray = ([
-                            'pp_date' => $req_date,
-                            'pp_item' => $ind_id[$i],
+                            'pp_date'   => $req_date,
+                            'pp_item'   => $ind_id[$i],
                             'pp_qtyreq' => $qtyAppInd[$i],
                             'pp_status' => 'P'
                         ]);
@@ -983,14 +983,14 @@ class PembelianController extends Controller
                             ->where('pp_id', '=', $check[0]->pp_id)
                             ->update([
                                 'pp_qtyreq' => $qtyAkhir,
-                                'pp_date' => $req_date
+                                'pp_date'   => $req_date
                             ]);
 
                     } else {
 
                         $reqAray = ([
-                            'pp_date' => $req_date,
-                            'pp_item' => $item_idReq[$j],
+                            'pp_date'   => $req_date,
+                            'pp_item'   => $item_idReq[$j],
                             'pp_qtyreq' => $qtyAppReq[$j],
                             'pp_status' => 'P'
                         ]);
@@ -1007,7 +1007,7 @@ class PembelianController extends Controller
             DB::rollback();
             return response()->json([
                 'status' => 'gagal',
-                'data' => $e
+                'data'   => $e
             ]);
         }
 
@@ -2496,12 +2496,12 @@ class PembelianController extends Controller
     public function addDumyReq(Request $request)
     {
 
-        $comp = Auth::user()->m_comp;
-        $user = Auth::user()->m_id;
-        $item = $request->input('item');
-        $qty = $request->input('qty');
+        $comp    = Auth::user()->m_comp;
+        $user    = Auth::user()->m_id;
+        $item    = $request->input('item');
+        $qty     = $request->input('qty');
         $dateReq = Carbon::now('Asia/Jakarta');
-        $status = 'D';
+        $status  = 'D';
 
         if ($item == null) {
             return Response::json([
@@ -2530,11 +2530,11 @@ class PembelianController extends Controller
             $insert = DB::table('d_requestorder')
                 ->insert([
 
-                    'ro_id' => $getId,
-                    'ro_comp' => $comp,
-                    'ro_item' => $item,
-                    'ro_qty' => $qty,
-                    'ro_date' => $dateReq,
+                    'ro_id'    => $getId,
+                    'ro_comp'  => $comp,
+                    'ro_item'  => $item,
+                    'ro_qty'   => $qty,
+                    'ro_date'  => $dateReq,
                     'ro_state' => $status
 
                 ]);
@@ -2550,11 +2550,11 @@ class PembelianController extends Controller
             $insert = DB::table('d_requestorder')
                 ->insert([
 
-                    'ro_id' => $getId,
-                    'ro_comp' => $comp,
-                    'ro_item' => $item,
-                    'ro_qty' => '1',
-                    'ro_date' => $dateReq,
+                    'ro_id'    => $getId,
+                    'ro_comp'  => $comp,
+                    'ro_item'  => $item,
+                    'ro_qty'   => '1',
+                    'ro_date'  => $dateReq,
                     'ro_state' => $status
 
                 ]);

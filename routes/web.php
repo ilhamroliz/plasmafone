@@ -1558,5 +1558,5 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/accesories', 'onlineshop_controller@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'onlineshop_controller@product_detail')->name('product_detail');
         Route::get('/shoping-cart', 'onlineshop_controller@shoping_cart')->name('shoping_cart');
-        Route::get('/add_cart', 'onlineshop_controller@add_cart')->name('add_cart');
+        Route::get('/add-cart', 'onlineshop_controller@addToCart')->name('addToCart');
     });
