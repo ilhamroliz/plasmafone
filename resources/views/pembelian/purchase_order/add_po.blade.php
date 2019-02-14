@@ -136,9 +136,9 @@
                                                     <tr>
                                                         <th width="10%">
                                                             <div class="text-center">
-                                                                <div class="checkbox checkbox-success checkbox-single checkbox-inline"> 
+                                                                {{--  <div class="checkbox checkbox-success checkbox-single checkbox-inline">   --}}
                                                                     <input type="checkbox" onclick="myCheck()" id="cekParent">
-                                                                </div> 
+                                                                {{--  </div>   --}}
                                                             </div>
                                                         </th>
                                                         <th width="75%">No. Nota</th>
@@ -318,9 +318,9 @@
 
                         $('#dt_co').DataTable().row.add([
                             '<td><div class="text-center">'+
-                                '<div class="checkbox checkbox-primary no-padding checkbox-single checkbox-inline">'+ 
+                                {{--  '<div class="checkbox checkbox-primary no-padding checkbox-single checkbox-inline">'+   --}}
                                     '<input type="checkbox" name="check[]" class="checkB" value="'+response.data.dataDT[i].pc_id+'">'+
-                                '</div>'+ 
+                                {{--  '</div>'+   --}}
                             '</div></td>',
                             response.data.dataDT[i].pc_nota,
                             '<div class="text-center">'+
