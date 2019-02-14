@@ -499,9 +499,17 @@
 
                 } else {
                     var row = '';
+                    var posisi = '';
                     $('.tr').remove();
                     $('#title_detail').html('<strong>Detail Service Barang</strong>');
-                    $('#dt_posisi').text(response.data[0].position);
+                    if (response.data[0].shipping_status == "On Outlet") {
+                        posisi = response.data[0].position;
+                    } else if (response.data[0].shipping_status == "Delivery") {
+                        posisi = 'Sedang Dikirim ke Pusat';
+                    } else if (response.data[0].shipping_status == "On Center") {
+                        posisi = response.data[0].position;
+                    }
+                    $('#dt_posisi').text(posisi);
                     $('#dt_tanggal').text(response.data[0].date);
                     $('#dt_notaservice').text(response.data[0].nota_service);
                     $('#dt_notapenjualan').text(response.data[0].nota_sales);

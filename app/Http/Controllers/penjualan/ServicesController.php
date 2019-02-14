@@ -30,21 +30,34 @@ class ServicesController extends Controller
             ->select('d_service_item.si_id as id',
                 DB::raw('DATE_FORMAT(d_service_item.si_date, "%d-%m-%Y") as tanggal'),
                 'd_service_item.si_nota as nota',
+                'd_service_item.si_shipping_status',
                 'm_member.m_name as pelanggan',
-                'm_company.c_name as posisi',
+                'm_company.c_name as position',
                 'd_service_item.si_status')
             ->join('m_member', 'd_service_item.si_mem', '=', 'm_member.m_id')
-            ->join('m_company', 'd_service_item.si_position', '=', 'm_company.c_id')
-            ->where('d_service_item.si_status', 'PENDING')
-            ->orWhere('d_service_item.si_status', 'PROSES');
+            ->join('m_company', 'd_service_item.si_position', '=', 'm_company.c_id');
 
         return DataTables::of($data)
+
+            ->addColumn('posisi', function ($data){
+                if ($data->si_shipping_status == "On Outlet"){
+                    return $data->position;
+                } else if ($data->si_shipping_status == "Delivary") {
+                    return '<span class="label label-info">Sedang Dikirim ke Pusat</span>';
+                } else if ($data->si_shipping_status == "On Center") {
+                    return $data->position;
+                }
+            })
 
             ->addColumn('status', function ($data){
                 if ($data->si_status == "PENDING") {
                     return '<span class="label label-warning">PENDING</span>';
                 } else if ($data->si_status == "PROSES") {
                     return '<span class="label label-info">PROSES</span>';
+                } else if ($data->si_status == "TOLAK") {
+                    return '<span class="label label-danger">TOLAK</span>';
+                } else if ($data->si_status == "DONE") {
+                    return '<span class="label label-success">SELESAI</span>';
                 }
             })
 
@@ -52,13 +65,13 @@ class ServicesController extends Controller
 
                 if (Access::checkAkses(21, 'read') == true) {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-send"></i></button></div>';
 
                 }
 
             })
 
-            ->rawColumns(['aksi', 'status'])
+            ->rawColumns(['aksi', 'status', 'posisi'])
 
             ->make(true);
     }
@@ -194,6 +207,7 @@ class ServicesController extends Controller
                 'd_service_item.si_nota as nota_service',
                 'd_service_item.si_notasales as nota_sales',
                 'd_service_item.si_status as status',
+                'd_service_item.si_shipping_status as shipping_status',
                 'm_member.m_name as buyer',
                 'd_item.i_nama as item',
                 'd_item.i_code as code',
@@ -327,7 +341,7 @@ class ServicesController extends Controller
 
                 } else {
 
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Service Barang" onclick="servicePenjualan(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-transfer"></i></button></div>';
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Service Barang" onclick="servicePenjualan(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button></div>';
 
                 }
 
@@ -447,6 +461,8 @@ class ServicesController extends Controller
 
         $detailid = (DB::table('d_service_itemdt')->where('sid_serviceitem', $sid)->max('sid_detailid')) ? (DB::table('d_service_itemdt')->where('sid_serviceitem', $sid)->max('sid_detailid') + 1) : 1;
 
+        $compsales = DB::table('d_sales')->where('s_id', $idsales)->first()->s_comp;
+
         DB::beginTransaction();
         try{
             $service[] = [
@@ -473,10 +489,96 @@ class ServicesController extends Controller
 
             DB::table('d_service_itemdt')->insert($item);
 
+            //insert stock mutasi rusak
+            //check item rusak
+            $stockRusak = DB::table('d_stock')
+                ->where('s_comp', $comp)
+                ->where('s_position', $comp)
+                ->where('s_item', $iditem)
+                ->where('s_status', 'On Destination')
+                ->where('s_condition', 'BROKEN');
+
+            if ($stockRusak->count() == 0) {
+                $idStockRusak = (DB::table('d_stock')->max('s_id')) ? (DB::table('d_stock')->max('s_id') + 1) : 1;
+                DB::table('d_stock')
+                    ->insert([
+                        's_id'          => $idStockRusak,
+                        's_comp'        => $comp,
+                        's_position'    => $comp,
+                        's_item'        => $iditem,
+                        's_qty'         => $qty,
+                        's_status'      => 'On Destination',
+                        's_condition'   => 'BROKEN'
+                    ]);
+            } else {
+                $idStockRusak = $stockRusak->first()->s_id;
+                DB::table('d_stock')
+                    ->where('s_id', $idStockRusak)
+                    ->update([
+                        's_qty'         => $stockRusak->first()->s_qty + $qty,
+                    ]);
+            }
+
+            if ($kode != null) {
+                $sd_iddetail = DB::table('d_stock_dt')->where('sd_stock', $idStockRusak)->max('sd_detailid');
+                if ($sd_iddetail == null){
+                    $sd_iddetail = 1;
+                } else {
+                    $sd_iddetail = $sd_iddetail + 1;
+                }
+
+                DB::table('d_stock_dt')->insert([
+                    'sd_stock' => $idStockRusak,
+                    'sd_detailid' => $sd_iddetail,
+                    'sd_specificcode' => $kode
+                ]);
+            }
+
+            //insert stock mutation
+            $detalidsm = DB::table('d_stock_mutation')->where('sm_stock', $idStockRusak)->max('sm_detailid');
+            if ($detalidsm == null){
+                $detalidsm = 1;
+            } else {
+                $detalidsm = $detalidsm + 1;
+            }
+
+            $stock_check = DB::table('d_stock')
+                ->where('s_comp', $compsales)
+                ->where('s_position', $compsales)
+                ->where('s_item', $iditem)
+                ->where('s_status', 'On Destination')
+                ->where('s_condition', 'FINE')
+                ->first();
+
+            $sm = DB::table('d_stock_mutation')
+                ->where('sm_stock', $stock_check->s_id)
+                ->where('sm_detail', 'PENAMBAHAN')
+                ->where('sm_specificcode', $kode)
+                ->where('sm_reff', '!=', 'RUSAK')
+                ->first();
+
+            DB::table('d_stock_mutation')
+                ->insert([
+                    'sm_stock' => $idStockRusak,
+                    'sm_detailid' => $detalidsm,
+                    'sm_date' => Carbon::now('Asia/Jakarta'),
+                    'sm_detail' => 'PENAMBAHAN',
+                    'sm_specificcode' => $kode,
+                    'sm_qty' => $qty,
+                    'sm_use' => 0,
+                    'sm_sisa' => $qty,
+                    'sm_hpp' => $sm->sm_hpp,
+                    'sm_sell' => $sm->sm_sell,
+                    'sm_nota' => $nota,
+                    'sm_reff' => 'RUSAK',
+                    'sm_mem' => $petugas
+                ]);
+
             DB::commit();
             return json_encode(['status' => 'true']);
         }catch (\Exception $e){
             DB::rollback();
+            return $e;
             return json_encode(['status' => 'false']);
         }
     }
