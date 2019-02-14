@@ -188,13 +188,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                                         <tr>
 
-                                            <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                            <th width="50%"><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
 
-											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
+											<th width="15%"><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
 											
-											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty Diterima</th>
+											<th width="15%"><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty Diterima</th>
 
-                                            <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
+                                            <th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
 
                                         </tr>
 
@@ -319,7 +319,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             </header>
                                             <div>
                                                 <div class="widget-body no-padding">
-                                                    <table id="dt_code" class="table table-striped table-bordered table-hover" width="100%">
+                                                    <table id="dt_code" class="table table-striped table-bordered table-hover tbl_input" width="100%">
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
@@ -346,7 +346,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             </header>
                                             <div>
                                                 <div class="widget-body no-padding">
-                                                    <table id="dt_exp" class="table table-striped table-bordered table-hover" width="100%">
+                                                    <table id="dt_exp" class="table table-striped table-bordered table-hover tbl_input" width="100%">
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
@@ -374,7 +374,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             </header>
                                             <div>
                                                 <div class="widget-body no-padding">
-                                                    <table id="dt_code_exp" class="table table-striped table-bordered table-hover" width="100%">
+                                                    <table id="dt_code_exp" class="table table-striped table-bordered table-hover tbl_input" width="100%">
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center" width="25%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
@@ -402,7 +402,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             </header>
                                             <div>
                                                 <div class="widget-body no-padding">
-                                                    <table id="dt_non" class="table table-striped table-bordered table-hover" width="100%">
+                                                    <table id="dt_non" class="table table-striped table-bordered table-hover tbl_input" width="100%">
                                                         <thead>
                                                             <tr>
                                                                 <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
@@ -488,32 +488,38 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 });
 
                 dtc = $('#dt_code').DataTable({
-                    "pageLength": 5,
                     "searching": false,
-                    "lengthChange": false,
                     "autoWidth": false,
-                    "language": dataTableLanguage
+                    "language": dataTableLanguage,
+                    "paging": false,
+                    "info": false
                 });
                 dte = $('#dt_exp').DataTable({
                     "pageLength": 5,
                     "searching": false,
                     "lengthChange": false,
                     "autoWidth": false,
-                    "language": dataTableLanguage
+                    "language": dataTableLanguage,
+                    "paging": false,
+                    "info": false
                 });
                 dtce = $('#dt_code_exp').DataTable({
                     "pageLength": 5,
                     "searching": false,
                     "lengthChange": false,
                     "autoWidth": false,
-                    "language": dataTableLanguage
+                    "language": dataTableLanguage,
+                    "paging": false,
+                    "info": false
                 });
                 dtn = $('#dt_non').DataTable({
                     "pageLength": 5,
                     "searching": false,
                     "lengthChange": false,
                     "autoWidth": false,
-                    "language": dataTableLanguage
+                    "language": dataTableLanguage,
+                    "paging": false,
+                    "info": false
                 });
             });
             
@@ -566,14 +572,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
             $('#dt_non').DataTable().ajax.reload(); --}}
         }
 
-        $('#kode').on('keyup', function(event){
-
-            if($('#kode').val() != ''){
-                $('#simpan').prop('disabled', false);
-            }
-
-        });
-
         function resetInput(){
             $('#tbl_kode').css('display', 'none');
             $('#tbl_exp').css('display', 'none');
@@ -588,6 +586,143 @@ use App\Http\Controllers\PlasmafoneController as Access;
             $('.KS').css('display', 'none');
             $('.EXP').css('display', 'none');
             $('.JML').css('display', 'none');
+        }
+
+        $('#kode').on('keyup', function(event){
+
+            if($('#kode').val() != ''){
+                $('#simpan').prop('disabled', false);
+            }
+
+            if ( event.which == 13 ) {
+                addRow();
+             }
+
+        });
+
+        $('.tbl_input tbody').on( 'click', 'a.btnhapus', function () {
+            console.log("Mashooookk");
+            
+            if(sc == 'Y' && exp == 'N'){
+
+                dtc.row( $(this).parents('tr') ).remove().draw();
+
+            }else if(sc == 'N' && exp == 'Y'){
+
+                dte.row( $(this).parents('tr') ).remove().draw();
+                
+            }else if(sc == 'Y' && exp == 'Y'){
+
+                dtce.row( $(this).parents('tr') ).remove().draw();
+                
+            }else{
+
+                dtn.row( $(this).parents('tr') ).remove().draw();
+
+            }
+
+        });
+
+        function addRow(){
+
+            var speccode = $('#kode').val();
+            var expdate = $('#expDate').val();
+            var notado = $('#notaDO').val();
+            var jmlbrg = $('#jmlBarang').val();
+
+            if(sc == 'Y' && exp == 'N'){
+
+                if(speccode == ''){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Mohon isi KODE SPESIFIKASI terlebih dahulu !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
+                }
+
+                if(notado == ''){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Mohon isi NOTA DELIVERY ORDER terlebih dahulu !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
+                }
+
+                var inputs = document.getElementsByClassName( 'kode' ),
+                names  = [].map.call(inputs, function( input ) {
+                    return input.value;
+                });
+
+                if(names.includes(speccode) == true){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Kode Spesifikasi sudah ada di dalam tabel !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
+                }
+
+                $('#dt_code').DataTable().row.add([
+                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
+                    '<input type="hidden" class="kode" name="kode[]" value="'+speccode+'">'+speccode.toUpperCase(),
+                    '<div class="text-center">'+
+                        '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
+                    '</div>'
+                ]).draw();
+
+            }else if(sc == 'N' && exp == 'Y'){
+
+                $('#dt_exp').DataTable().row.add([
+                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
+                    '<input type="hidden" name="expDate[]" value="'+expdate+'">'+expdate,
+                    '<input type="hidden" name="jmlBarang[]" value="'+jmlbrg+'">'+jmlbrg,
+                    '<div class="text-center">'+
+                        '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
+                    '</div>'
+                ]).draw();
+
+            }else if(sc == 'Y' && exp == 'Y'){
+
+                var check_value = $('#dt_code_exp').DataTable().find("tr").data();
+
+                if(check_value == speccode) {
+                    alert("Kode Pesifik sudah ada !!!");
+                    return false; 
+                }
+
+                $('#dt_code_exp').DataTable().row.add([
+                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
+                    '<input type="hidden" name="expDate[]" value="'+expdate+'">'+expdate,
+                    '<input type="hidden" class="kode" name="kode[]" value="'+speccode+'">'+speccode.toUpperCase(),
+                    '<div class="text-center">'+
+                        '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
+                    '</div>'
+                ]).draw();
+
+            }else{
+
+                $('#dt_non').DataTable().row.add([
+                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
+                    '<input type="hidden" name="jmlBarang[]" value="'+jmlbrg+'">'+jmlbrg,
+                    '<div class="text-center">'+
+                        '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
+                    '</div>'
+                ]).draw();
+
+            }
+
+            $('#kode').val('');
+            $('#expDate').val('');
+            $('#jmlBarang').val('');            
+
         }
 
 
@@ -615,35 +750,19 @@ use App\Http\Controllers\PlasmafoneController as Access;
         function getTableModal(id, item){
             var dataDT = 'id=' + id + '&item=' + item;
             axios.post(baseUrl+'/inventory/penerimaan/supplier/getItemDT', dataDT).then((respon) => {
+
+                sc = respon.data.item.i_specificcode;
+                exp = respon.data.item.i_expired; 
+
                 if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'N'){
-                    console.log(respon.data.dataDT.length);
-                    $('#dt_code').DataTable().clear();
-                    for(var i = 0; i < respon.data.dataDT.length; i++){
-                        $('#dt_code').DataTable().row.add([
-                            '<input type="hidden" id="pkida-'+i+'">'+respon.data.dataSM[i].sm_reff,
-                            '<input type="hidden" id="pka-'+i+'" value="'+respon.data.dataDT[i].pd_specificcode+'">'+respon.data.dataDT[i].pd_specificcode,
-                            '<div class="text-center">'+
-                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'a-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
-                            '</div>'
-                        ]).draw();
-                    }
+                    $('#dt_code').DataTable().clear();                    
 
                     $('#tbl_kode').css('display', 'block'); 
                     $('.KS').css('display', 'block');
 
                 }else if(respon.data.item.i_specificcode == 'N' && respon.data.item.i_expired == 'Y'){
 
-                    $('#dt_exp').DataTable().clear();
-                    for(var i = 0; i < respon.data.dataDT.length; i++){
-                        $('#dt_exp').DataTable().row.add([
-                            respon.data.dataSM[i].sm_reff,
-                            respon.data.dataSM[i].sm_expired,
-                            '<span class="text-center">'+respon.data.dataDT[i].pd_qty+'</span>',
-                            '<div class="text-center">'+
-                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'b-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
-                            '</div>'
-                        ]).draw();
-                    }                        
+                    $('#dt_exp').DataTable().clear();                 
 
                     $('#tbl_exp').css('display', 'block');
                     $('.EXP').css('display', 'block');
@@ -652,16 +771,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 }else if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'Y'){
 
                     $('#dt_code_exp').DataTable().clear();
-                    for(var i = 0; i < respon.data.dataDT.length; i++){
-                        $('#dt_code_exp').DataTable().row.add([
-                            respon.data.dataSM[i].sm_reff,
-                            respon.data.dataSM[i].sm_expired,
-                            '<input type="hidden" id="pkc-'+i+'" value="'+respon.data.dataDT[i].pd_specificcode+'">'+respon.data.dataDT[i].pd_specificcode,
-                            '<div class="text-center">'+
-                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'c-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
-                            '</div>'
-                        ]).draw();
-                    }
 
                     $('#tbl_exp_code').css('display', 'block');
                     $('.KS').css('display', 'block');
@@ -670,15 +779,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 }else{
 
                     $('#dt_non').DataTable().clear();
-                    for(var i = 0; i < respon.data.dataDT.length; i++){
-                        $('#dt_non').DataTable().row.add([
-                            respon.data.dataSM[i].sm_reff,
-                            '<div class="text-center">'+respon.data.dataDT[i].pd_qty+'</div>',
-                            '<div class="text-center">'+
-                                '<a class="btn btn-danger btn-circle" onclick="hapus(\''+'d-'+i+'\')"><i class="glyphicon glyphicon-trash"></i></a>'+
-                            '</div>'
-                        ]).draw();
-                    }
 
                     $('#tbl_non').css('display', 'block');
                     $('.JML').css('display', 'block');
@@ -688,12 +788,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
         }
 
-		function hapus(id) {
-            
-            var nilai = $('#pk'+id).val();
-            alert('Hapur Baris '+nilai);
-
-		}
 
 		function qtyTerima(qtySisa) {
 			var input = parseInt($("#qty").val());
@@ -708,17 +802,30 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		function simpan() {
             $('#overlay').fadeIn(200);
             
-            var notaDO = $('#notaDO').val();
-            var kode = $('#kode').val();
-            var jmlBarang = $('#jmlBarang').val();
-            var rcvd = $('#rcvd').val();
-            var expDate = $('#expDate').val();
-            
             var idpo = $('#id').val();
             var supplier = $('#supplier').val();
             var idItem = $('#idItem').val();
 
-            var data = 'notaDO='+ notaDO + '&expDate=' + expDate + '&kode=' + kode + '&qty=' + jmlBarang + '&idpo=' + idpo + '&qtyR=' + rcvd + '&iditem=' + idItem;
+            var ar = $();
+            if(sc == 'Y' && exp == 'N'){
+                for (var i = 0; i < dtc.rows()[0].length; i++) {
+                    ar = ar.add(dtc.row(i).node())
+                }
+            }else if(sc == 'Y' && exp == 'N'){
+                for (var i = 0; i < dte.rows()[0].length; i++) {
+                    ar = ar.add(dte.row(i).node())
+                }
+            }else if(sc == 'Y' && exp == 'N'){
+                for (var i = 0; i < dtce.rows()[0].length; i++) {
+                    ar = ar.add(dtce.row(i).node())
+                }
+            }else{
+                for (var i = 0; i < dtn.rows()[0].length; i++) {
+                    ar = ar.add(dtn.row(i).node())
+                }
+            }
+
+            var data = ar.find('select,input,textarea').serialize() + '&idpo=' + idpo + '&iditem=' + idItem;
 
             axios.post(baseUrl+'/inventory/penerimaan/supplier/item-receive/add', data).then((response) => {
 

@@ -502,19 +502,25 @@ class PurchaseOrderController extends Controller
                             $araySCDT = array();
                             for($j = 0; $j < $request->qty[$i]; $j++){
 
+                                if($diskV[$i] == null){
+                                    $dv = 0;
+                                }else{
+                                    $dv = implode(explode('.', $diskV[$i])) / $qty[$i];
+                                }
                                 $aray = ([
                                     'pd_purchase' => $id,
                                     'pd_detailid' => $counterDT,
                                     'pd_item' => $idItem[$i],
                                     'pd_qty' => 1,
-                                    'pd_specificcode' => $getDTPrev[$j]->pd_specificcode,
+                                    'pd_specificcode' => strtoupper($getDTPrev[$j]->pd_specificcode),
                                     'pd_value' => implode(explode('.', $price[$i])),
-                                    'pd_disc_value' => implode(explode('.', $diskV[$i])) / $qty[$i],
+                                    'pd_disc_value' => $dv,
                                     'pd_disc_persen' => str_replace(' %', '', $diskP[$i]),
                                     'pd_total_net' => implode(explode('.', $subTotal[$i])) / $qty[$i],
                                     'pd_qtyreceived' => $getDTPrev[$j]->pd_qtyreceived,
                                     'pd_receivedtime' => $getDTPrev[$j]->pd_receivedtime
                                 ]);
+
                                 array_push($araySCDT, $aray);
                                 $counterDT += 1;
 
@@ -548,7 +554,7 @@ class PurchaseOrderController extends Controller
                     DB::commit();
                     return json_encode([
                         'status' => 'sukses',
-                        'id' => $id
+                        'id' => Crypt::encrypt($id)
                     ]);
                 } catch (\Exception $e) {
                     DB::rollback();
