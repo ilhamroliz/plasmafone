@@ -645,7 +645,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/return-penjualan/cari-member', 'penjualan\ReturnPenjualanController@cariMember');
     Route::get('/penjualan/return-penjualan/cari-kode', 'penjualan\ReturnPenjualanController@cariKode');
     Route::get('/penjualan/return-penjualan/cari-nota', 'penjualan\ReturnPenjualanController@cariNota');
-    Route::get('/penjualan/return-penjualan/cari-tanggal', 'penjualan\ReturnPenjualanController@cariTanggal');
     Route::get('/penjualan/return-penjualan/cari/member', 'penjualan\ReturnPenjualanController@cariNotaMember');
     Route::get('/penjualan/return-penjualan/cari', 'penjualan\ReturnPenjualanController@cariNotaPenjualan');
     Route::get('/penjualan/return-penjualan/cari/detail/{id}', 'penjualan\ReturnPenjualanController@cariNotaDetail');
@@ -658,6 +657,33 @@ Route::group(['middleware' => 'auth'], function () {
 	// ####################################
 	// End Return Penjualan
 	// ####################################
+
+
+
+    // ####################################
+    // Service Barang
+    // ####################################
+    Route::get('/penjualan/service-barang', 'penjualan\ServicesController@index')->name('service-barang');
+    Route::get('/penjualan/service-barang/get-data-service', 'penjualan\ServicesController@getDataService')->name('get-data-service');
+    Route::get('/penjualan/service-barang/get-pending', 'penjualan\ServicesController@getPending')->name('get-service-pending');
+    Route::get('/penjualan/service-barang/get-tolak', 'penjualan\ServicesController@getTolak')->name('get-service-tolak');
+    Route::get('/penjualan/service-barang/get-proses', 'penjualan\ServicesController@getProses')->name('get-service-proses');
+    Route::get('/penjualan/service-barang/get-done', 'penjualan\ServicesController@getDone')->name('get-service-done');
+    Route::get('/penjualan/service-barang/get-detail-service/{id}', 'penjualan\ServicesController@getDetailService');
+    Route::match(['get', 'post'], '/penjualan/service-barang/add', 'penjualan\ServicesController@add')->name('service-add');
+    Route::match(['get', 'post'], '/penjualan/service-barang/add-service', 'penjualan\ServicesController@addService')->name('addService');
+    Route::get('/penjualan/service-barang/cari-member', 'penjualan\ServicesController@cariMember');
+    Route::get('/penjualan/service-barang/cari-kode', 'penjualan\ServicesController@cariKode');
+    Route::get('/penjualan/service-barang/cari-nota', 'penjualan\ServicesController@cariNota');
+    Route::get('/penjualan/service-barang/cari/member', 'penjualan\ServicesController@cariNotaMember');
+    Route::get('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
+    Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
+    Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
+    // ####################################
+    // End Service Barang
+    // ####################################
+
+
 
 	/////// OUTLET
 
@@ -876,8 +902,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
     Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
     Route::get('pengelolaan-member/get-data-setting/{id}', 'PengelolaanMemberController@getDataSetting');
-    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@updateSetting');
-
+    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@pengelolaan-member');
+    Route::get('pengelolaan-member/get-member-poin', 'PengelolaanMemberController@getMemberPoin');
+    Route::get('pengelolaan-member/get-member-birth', 'PengelolaanMemberController@getMemberBirth');
+    Route::get('pengelolaan-member/get-member-history', 'PengelolaanMemberController@getMemberHistory');
 
     // Route Dirga
 
@@ -1558,5 +1586,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/accesories', 'onlineshop_controller@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'onlineshop_controller@product_detail')->name('product_detail');
         Route::get('/shoping-cart', 'onlineshop_controller@shoping_cart')->name('shoping_cart');
-        Route::get('/add_cart', 'onlineshop_controller@add_cart')->name('add_cart');
+        Route::get('/add-cart', 'onlineshop_controller@addToCart')->name('addToCart');
     });
+
+
+
+    /*
+     *
+     * TTTTTTTTTTTTT   HHH       HHH   EEE E E E
+     *      TTT        HHH       HHH   EEE
+     *      TTT        HHH H H H HHH   EEE E E E
+     *      TTT        HHH       HHH   EEE
+     *      TTT        HHH       HHH   EEE E E E
+     *
+     */

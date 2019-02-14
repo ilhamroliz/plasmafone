@@ -511,7 +511,6 @@
                 overlay();
                 axios.post(baseUrl+'/penjualan/return-penjualan/add', $("#form_return").serialize())
                 .then(function (response) {
-                    console.log(response.data);
                     out();
                     if (response.data.status == "ok") {
                         $.smallBox({

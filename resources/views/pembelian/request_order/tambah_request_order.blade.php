@@ -459,7 +459,7 @@ function rupiah($angka)
                 url: '{{url('/pembelian/request-pembelian/addDumyReq')}}',
                 type: "POST",
                 data: {
-                    'qty': $('#qty').val(),
+                    'qty' : $('#qty').val(),
                     'item': $('#tpMemberId').val(),
                     _token: '{{ csrf_token() }}'
                 },
@@ -493,7 +493,6 @@ function rupiah($angka)
                         $('#tpMemberNama').focus();
                     }
 
-                    // reload_table();
                 },
 
             });
