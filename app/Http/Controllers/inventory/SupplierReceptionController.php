@@ -157,7 +157,8 @@ class SupplierReceptionController extends Controller
                         'd_purchase_dt.pd_item as itemId', 
                         'd_purchase_dt.pd_detailid as iddetail', 
                         'd_purchase_dt.pd_qtyreceived as qtyReceived', 
-                        DB::raw('sum(pd_qtyreceived) as sum_qtyReceived'), 
+                        DB::raw('sum(pd_qtyreceived) as sum_qtyReceived'),
+                        DB::raw('sum(pd_qty) as sum_qty'),  
                         'd_purchase_dt.pd_qty as qty', 
                         'd_item.i_specificcode as specificcode', 
                         'd_item.i_nama as nama_item',
@@ -229,7 +230,7 @@ class SupplierReceptionController extends Controller
         if(Plasma::checkAkses(8, 'update') == false){
             return view('errors.407');
         }else{
-            dd($request);
+            // dd($request);
             DB::beginTransaction();
             try {
                 $idpo = Crypt::decrypt($request->idpo);
@@ -241,6 +242,7 @@ class SupplierReceptionController extends Controller
                 if($sc == "Y"){
                     $kode = $request->kode;
                 }
+
                 /// Cek apakah Kode Spesifik sudah ada, jika barang memiliki kode spesifik
                 // if($sc == 'Y'){
                 //     $cekSCSM = DB::table('d_stock_mutation')->where('sm_specificcode', $kode)->count();
@@ -301,8 +303,10 @@ class SupplierReceptionController extends Controller
                             ]);
                     }
 
-                    $getIdDTMax = DB::table('d_stock_dt')->where('sd_stock', $idS)->max('sd_detailid');
-                    $getIdSMMax = DB::table('d_stock_mutation')->where('sm_stock', $idS)->max('sm_detailid');
+                    $getDTMax = DB::table('d_stock_dt')->where('sd_stock', $idS)->max('sd_detailid');
+                    $getIdDTMax = $getDTMax + 1;
+                    $getSMMax = DB::table('d_stock_mutation')->where('sm_stock', $idS)->max('sm_detailid');
+                    $getIdSMMax = $getSMMax + 1;
 
                 }else{
 
@@ -345,7 +349,7 @@ class SupplierReceptionController extends Controller
                     for($i = 0; $i < count($request->notaDO); $i++){
                         DB::table('d_stock_dt')->insert([
                             'sd_stock' => $idS,
-                            'sd_detailid' => $getIdDTMax + 1,
+                            'sd_detailid' => $getIdDTMax + $i,
                             'sd_specificcode' => $kode[$i]
                         ]);
                     }
@@ -365,18 +369,18 @@ class SupplierReceptionController extends Controller
                 $getNota = DB::table('d_purchase')->where('p_id', $idpo)->select('p_nota')->first();
                 $smnota = $getNota->p_nota;
 
-                if($exp == 'Y'){
+                if($sc == 'Y'){
 
                     $araySM = array();
                     for($i = 0; $i < count($request->notaDO); $i++){
-                        
+
                         $expDate = $request->expDate[$i];
                         $speccode = $kode[$i];
                         $smqty = 1;
-                        
+
                         $aray = ([
                             'sm_stock' => $idS,
-                            'sm_detailid' => $getIdSMMax + 1,
+                            'sm_detailid' => $getIdSMMax + $i,
                             'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'),
                             'sm_detail' => 'PENAMBAHAN',
                             'sm_specificcode' => $speccode,
@@ -387,23 +391,22 @@ class SupplierReceptionController extends Controller
                             'sm_hpp' => $smhpp,
                             'sm_sell' => $smsell,
                             'sm_nota' => $smnota,
-                            'sm_reff' => $request->notaDO
+                            'sm_reff' => $request->notaDO[$i]
                         ]);
                         array_push($araySM, $aray);
                     }
-                    DB::table('d_stock_mutation')->where('sm_stock', $idS)->insert();
+                    DB::table('d_stock_mutation')->insert($araySM);
 
                 }else{
                     $expDate = null;
-                    $speccode = '';
                     $smqty = $request->qty;
 
-                    DB::table('d_stock_mutation')->where('sm_stock', $idS)->insert([
+                    DB::table('d_stock_mutation')->insert([
                         'sm_stock' => $idS,
-                        'sm_detailid' => $getIdSMMax + 1,
+                        'sm_detailid' => $getIdSMMax,
                         'sm_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'),
                         'sm_detail' => 'PENAMBAHAN',
-                        'sm_specificcode' => $speccode,
+                        'sm_specificcode' => null,
                         'sm_expired' => $expDate,
                         'sm_qty' => $smqty,
                         'sm_use' => 0,
@@ -436,8 +439,8 @@ class SupplierReceptionController extends Controller
 
     }
 
-    public function editSCDT(){
 
+    public function editReceived()
     }
 
     public function hapus(){

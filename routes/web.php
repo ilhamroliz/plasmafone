@@ -529,6 +529,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/supplier/getMaks/{id}/{item}', 'inventory\SupplierReceptionController@getMaks');
     Route::post('/inventory/penerimaan/supplier/getItemDT', 'inventory\SupplierReceptionController@itemReceiveDT');
 
+    Route::post('/inventory/penerimaan/supplier/detailReceived/{id}/{item}', 'inventory\SupplierReceptionController@detailReceived');
+    Route::match(['get', 'post'],'/inventory/penerimaan/supplier/editReceived', 'inventory\SupplierReceptionController@editReceived');
+    Route::post('/inventory/penerimaan/supplier/hapusReceived/{id}/{item}', 'inventory\SupplierReceptionController@hapusReceived');
 
 	// End penerimaan barang dari supplier
 

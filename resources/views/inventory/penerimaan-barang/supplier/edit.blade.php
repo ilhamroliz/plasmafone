@@ -254,6 +254,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                         <input type="hidden" id="idItem">
                                         <input type="hidden" id="supplier">
                                         <input type="hidden" id="detailid">
+                                        <input type="hidden" id="sumqty">
                                         
                                         <div class="col-md-12 no-padding margin-bottom-10">
                                             <label class="col-md-4 control-label text-left">Nota Delivery Order</label>
@@ -338,34 +339,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                     </div>
                                 </div>
 
-                                <div class="row" id="tbl_exp">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-                                            <header>
-                                                <h2><strong>Daftar barang yang sudah diterima</strong></h2>
-                                            </header>
-                                            <div>
-                                                <div class="widget-body no-padding">
-                                                    <table id="dt_exp" class="table table-striped table-bordered table-hover tbl_input" width="100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
-                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-calendar txt-color-blue"></i>&nbsp;Tanggal Kadaluarsa</th>
-                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-cube txt-color-blue"></i>&nbsp;Jumlah Barang Diterima</th>
-                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-                                                            </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                        </tbody>
-
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="row" id="tbl_exp_kode">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
@@ -393,39 +366,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="row" id="tbl_non">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-                                            <header>
-                                                <h2><strong>Daftar barang yang sudah diterima</strong></h2>
-                                            </header>
-                                            <div>
-                                                <div class="widget-body no-padding">
-                                                    <table id="dt_non" class="table table-striped table-bordered table-hover tbl_input" width="100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th class="text-center" width="30%"><i class="fa fa-fw fa-building txt-color-blue"></i>&nbsp;Nota DO</th>
-                                                                <th class="text-center" width="50%"><i class="fa fa-fw fa-cube txt-color-blue"></i>&nbsp;Jumlah Barang Diterima</th>
-                                                                <th class="text-center" width="20%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
-                                                            </tr>
-                                                        </thead>
-
-                                                        <tbody>
-                                                        </tbody>
-
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
 				
 							</div>
 						</form>
 
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
+							<button type="button" class="btn btn-default" data-dismiss="modal">
 								Batal
 							</button>
 							<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()">
@@ -467,116 +413,114 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		var baseUrl = '{{ url('/') }}';
 
 		/* BASIC ;*/
-			var responsiveHelper_dt_basic = undefined;
-			var responsiveHelper_datatable_fixed_column = undefined;
-			var responsiveHelper_datatable_col_reorder = undefined;
-			var responsiveHelper_datatable_tabletools = undefined;
-			
-			var breakpointDefinition = {
-				tablet : 1024,
-				phone : 480
-            };
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+        
+        var breakpointDefinition = {
+            tablet : 1024,
+            phone : 480
+        };
 
-            $(document).ready( function() {
-                $( "#expDate" ).datepicker({
-                    language: "id",
-                    format: 'dd/mm/yyyy',
-                    prevText: '<i class="fa fa-chevron-left"></i>',
-                    nextText: '<i class="fa fa-chevron-right"></i>',
-                    autoclose: true,
-                    todayHighlight: true
-                });
-
-                dtc = $('#dt_code').DataTable({
-                    "searching": false,
-                    "autoWidth": false,
-                    "language": dataTableLanguage,
-                    "paging": false,
-                    "info": false
-                });
-                dte = $('#dt_exp').DataTable({
-                    "pageLength": 5,
-                    "searching": false,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "language": dataTableLanguage,
-                    "paging": false,
-                    "info": false
-                });
-                dtce = $('#dt_code_exp').DataTable({
-                    "pageLength": 5,
-                    "searching": false,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "language": dataTableLanguage,
-                    "paging": false,
-                    "info": false
-                });
-                dtn = $('#dt_non').DataTable({
-                    "pageLength": 5,
-                    "searching": false,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "language": dataTableLanguage,
-                    "paging": false,
-                    "info": false
-                });
+        $(document).ready( function() {
+            $( "#expDate" ).datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
             });
-            
-            
-			setTimeout(function () {
 
-				aktif = $('#dt_active').DataTable({
-					"processing": true,
-					"serverSide": true,
-					"orderable": false,
-					"order": [],
-					"ajax": "{{ url('/inventory/penerimaan/supplier/get-item?id='.$id) }}",
-                    "columnDefs": [
-                        { className: 'text-center', targets: [1, 2] }
-                    ],
-					"columns":[
-						{"data": "i_nama"},
-						{"data": "qty"},
-						{"data": "qtyr"},
-						{"data": "aksi"}
-					],
-					"autoWidth" : true,
-					"language" : dataTableLanguage,
-					"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-					"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-					"preDrawCallback" : function() {
-						// Initialize the responsive datatables helper once.
-						if (!responsiveHelper_dt_basic) {
-							responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-						}
-					},
-					"rowCallback" : function(nRow) {
-						responsiveHelper_dt_basic.createExpandIcon(nRow);
-					},
-					"drawCallback" : function(oSettings) {
-						responsiveHelper_dt_basic.respond();
-					}
-				});
-                $('#overlay').fadeOut(200);
+            dtc = $('#dt_code').DataTable({
+                "searching": false,
+                "autoWidth": false,
+                "language": dataTableLanguage,
+                "paging": false,
+                "info": false
+            });
 
-			}, 500);
+            dtce = $('#dt_code_exp').DataTable({
+                "pageLength": 5,
+                "searching": false,
+                "lengthChange": false,
+                "autoWidth": false,
+                "language": dataTableLanguage,
+                "paging": false,
+                "info": false
+            });
+
+        });
+        
+        
+        setTimeout(function () {
+
+            aktif = $('#dt_active').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "orderable": false,
+                "order": [],
+                "ajax": "{{ url('/inventory/penerimaan/supplier/get-item?id='.$id) }}",
+                "columnDefs": [
+                    { className: 'text-center', targets: [1, 2] }
+                ],
+                "columns":[
+                    {"data": "i_nama"},
+                    {"data": "qty"},
+                    {"data": "qtyr"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
+            $('#overlay').fadeOut(200);
+
+        }, 500);
 
         /* END BASIC */
 
+        function detail(id, item){
+
+            axios.post(baseUrl+'/inventory/penerimaan/supplier/detail'+'/'+id+'/'+item ).then((response) => {
+                
+                
+
+            })
+
+        }
+
+        /* Sebelum Menampilkan Form Edit .... */
+        function edit(){
+
+        }
+
+        function simpanEdit(){
+
+        }
+
+
 		function refresh_tab(){
             aktif.ajax.reload();
-            dtc.ajax.reload();
-            {{-- $('#dt_code_exp').DataTable().ajax.reload();
-            $('#dt_exp').DataTable().ajax.reload();
-            $('#dt_non').DataTable().ajax.reload(); --}}
         }
 
         function resetInput(){
             $('#tbl_kode').css('display', 'none');
-            $('#tbl_exp').css('display', 'none');
             $('#tbl_exp_kode').css('display', 'none');
-            $('#tbl_non').css('display', 'none');
 
             $('#notaDO').val("");
             $('#kode').val("");
@@ -606,18 +550,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
             if(sc == 'Y' && exp == 'N'){
 
                 dtc.row( $(this).parents('tr') ).remove().draw();
-
-            }else if(sc == 'N' && exp == 'Y'){
-
-                dte.row( $(this).parents('tr') ).remove().draw();
                 
             }else if(sc == 'Y' && exp == 'Y'){
 
                 dtce.row( $(this).parents('tr') ).remove().draw();
-                
-            }else{
-
-                dtn.row( $(this).parents('tr') ).remove().draw();
 
             }
 
@@ -629,6 +565,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
             var expdate = $('#expDate').val();
             var notado = $('#notaDO').val();
             var jmlbrg = $('#jmlBarang').val();
+
+            var sumqty = $('#sumqty').val();
+            var rcvd = $('#rcvd').val();
 
             if(sc == 'Y' && exp == 'N'){
 
@@ -647,6 +586,17 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     $.smallBox({
                         title : "Perhatian",
                         content : "Mohon isi NOTA DELIVERY ORDER terlebih dahulu !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
+                }
+
+                if(parseInt(sumqty) == parseInt(rcvd) + dtc.rows().data().length){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Jumlah Masukkan dan Barang yang sudah diterima sudah mencapai QTY Maksimal PO ini !!!",
                         color : "#A90329",
                         timeout: 3000,
                         icon : "fa fa-times bounce animated"
@@ -678,40 +628,62 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     '</div>'
                 ]).draw();
 
-            }else if(sc == 'N' && exp == 'Y'){
-
-                $('#dt_exp').DataTable().row.add([
-                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
-                    '<input type="hidden" name="expDate[]" value="'+expdate+'">'+expdate,
-                    '<input type="hidden" name="jmlBarang[]" value="'+jmlbrg+'">'+jmlbrg,
-                    '<div class="text-center">'+
-                        '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
-                    '</div>'
-                ]).draw();
 
             }else if(sc == 'Y' && exp == 'Y'){
 
-                var check_value = $('#dt_code_exp').DataTable().find("tr").data();
+                if(speccode == ''){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Mohon isi KODE SPESIFIKASI terlebih dahulu !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
+                }
 
-                if(check_value == speccode) {
-                    alert("Kode Pesifik sudah ada !!!");
-                    return false; 
+                if(notado == ''){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Mohon isi NOTA DELIVERY ORDER terlebih dahulu !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
+                }
+
+                if(parseInt(sumqty) == parseInt(rcvd) + dtc.rows().data().length){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Jumlah Masukkan dan Barang yang sudah diterima sudah mencapai QTY Maksimal PO ini !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
+                }
+
+                var inputs = document.getElementsByClassName( 'kode' ),
+                names  = [].map.call(inputs, function( input ) {
+                    return input.value;
+                });
+
+                if(names.includes(speccode) == true){
+                    $.smallBox({
+                        title : "Perhatian",
+                        content : "Kode Spesifikasi sudah ada di dalam tabel !!!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                    return false;
                 }
 
                 $('#dt_code_exp').DataTable().row.add([
                     '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
                     '<input type="hidden" name="expDate[]" value="'+expdate+'">'+expdate,
                     '<input type="hidden" class="kode" name="kode[]" value="'+speccode+'">'+speccode.toUpperCase(),
-                    '<div class="text-center">'+
-                        '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
-                    '</div>'
-                ]).draw();
-
-            }else{
-
-                $('#dt_non').DataTable().row.add([
-                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
-                    '<input type="hidden" name="jmlBarang[]" value="'+jmlbrg+'">'+jmlbrg,
                     '<div class="text-center">'+
                         '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
                     '</div>'
@@ -725,7 +697,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
         }
 
-
 		function terima(id, item){
 
             axios.get(baseUrl+'/inventory/penerimaan/supplier/item-receive/'+id+'/'+item).then(response => {
@@ -736,6 +707,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 $('#supplier').val(response.data.data.supplier);
                 $('#idItem').val(item);
                 $('#detailid').val(response.data.data.iddetail);
+                $('#sumqty').val(response.data.data.sum_qty);
                 $('#rcvd').val(response.data.data.sum_qtyReceived);
 
                 resetInput();
@@ -751,26 +723,23 @@ use App\Http\Controllers\PlasmafoneController as Access;
             var dataDT = 'id=' + id + '&item=' + item;
             axios.post(baseUrl+'/inventory/penerimaan/supplier/getItemDT', dataDT).then((respon) => {
 
+                $('#dt_code').DataTable().clear();                    
+                $('#dt_code_exp').DataTable().clear();
+
                 sc = respon.data.item.i_specificcode;
                 exp = respon.data.item.i_expired; 
 
                 if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'N'){
-                    $('#dt_code').DataTable().clear();                    
 
                     $('#tbl_kode').css('display', 'block'); 
                     $('.KS').css('display', 'block');
 
                 }else if(respon.data.item.i_specificcode == 'N' && respon.data.item.i_expired == 'Y'){
 
-                    $('#dt_exp').DataTable().clear();                 
-
-                    $('#tbl_exp').css('display', 'block');
                     $('.EXP').css('display', 'block');
                     $('.JML').css('display', 'block');
 
                 }else if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'Y'){
-
-                    $('#dt_code_exp').DataTable().clear();
 
                     $('#tbl_exp_code').css('display', 'block');
                     $('.KS').css('display', 'block');
@@ -778,16 +747,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                 }else{
 
-                    $('#dt_non').DataTable().clear();
-
-                    $('#tbl_non').css('display', 'block');
                     $('.JML').css('display', 'block');
 
                 }
             })
 
         }
-
 
 		function qtyTerima(qtySisa) {
 			var input = parseInt($("#qty").val());
@@ -805,32 +770,55 @@ use App\Http\Controllers\PlasmafoneController as Access;
             var idpo = $('#id').val();
             var supplier = $('#supplier').val();
             var idItem = $('#idItem').val();
+            var sumqty = $('#sumqty').val();
+
+            var notaDO = $('#notaDO').val();
+            var expDate = $('#expDate').val();
+            var jmlBarang = $('#jmlBarang').val();
+            var rcvd = $('#rcvd').val();
+
+
+            if(parseInt(sumqty) < parseInt(rcvd) + parseInt(jmlBarang)){
+                $('#overlay').fadeOut(200);
+                $.smallBox({
+                    title : "Perhatian",
+                    content : "Maaf, Jumlah Barang dan yang sudah diterima melebihi QTY Barang pada PO ini !!! Max 22",
+                    color : "#A90329",
+                    timeout: 3000,
+                    icon : "fa fa-times bounce animated"
+                });
+                return false;
+            }
+
 
             var ar = $();
+            var data = '';
             if(sc == 'Y' && exp == 'N'){
                 for (var i = 0; i < dtc.rows()[0].length; i++) {
                     ar = ar.add(dtc.row(i).node())
                 }
+
+                data = ar.find('select,input,textarea').serialize() + '&idpo=' + idpo + '&iditem=' + idItem;
             }else if(sc == 'Y' && exp == 'N'){
-                for (var i = 0; i < dte.rows()[0].length; i++) {
-                    ar = ar.add(dte.row(i).node())
-                }
+
+                data =  'notaDO=' + notaDO + '&expDate=' + expDate + '&qty=' + jmlBarang + '&qtyR=' + rcvd + '&idpo=' + idpo + '&iditem=' + idItem;
             }else if(sc == 'Y' && exp == 'N'){
                 for (var i = 0; i < dtce.rows()[0].length; i++) {
                     ar = ar.add(dtce.row(i).node())
                 }
+
+                data = ar.find('select,input,textarea').serialize() + '&idpo=' + idpo + '&iditem=' + idItem;
             }else{
-                for (var i = 0; i < dtn.rows()[0].length; i++) {
-                    ar = ar.add(dtn.row(i).node())
-                }
+
+                data =  'notaDO=' + notaDO + '&expDate=' + expDate + '&qty=' + jmlBarang + '&qtyR=' + rcvd + '&idpo=' + idpo + '&iditem=' + idItem;
             }
 
-            var data = ar.find('select,input,textarea').serialize() + '&idpo=' + idpo + '&iditem=' + idItem;
 
             axios.post(baseUrl+'/inventory/penerimaan/supplier/item-receive/add', data).then((response) => {
 
                 if(response.data.status == 'sukses'){
 
+                    $('#myModal').modal('hide');
                     $('#overlay').fadeOut(200);
                     $.smallBox({
                         title : "Berhasil",
@@ -847,7 +835,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     $('#expCode').val("");
                     $('#jmlBarang').val("");
 
-                    getTableModal(id, item);
+                    refresh_tab();
 
                 }else if(response.data.status == 'ada'){
 
