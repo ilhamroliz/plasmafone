@@ -24,6 +24,45 @@ class ServicesController extends Controller
         }
     }
 
+    public function getDataService()
+    {
+        $data = DB::table('d_service_item')
+            ->select('d_service_item.si_id as id',
+                DB::raw('DATE_FORMAT(d_service_item.si_date, "%d-%m-%Y") as tanggal'),
+                'd_service_item.si_nota as nota',
+                'm_member.m_name as pelanggan',
+                'm_company.c_name as posisi',
+                'd_service_item.si_status')
+            ->join('m_member', 'd_service_item.si_mem', '=', 'm_member.m_id')
+            ->join('m_company', 'd_service_item.si_position', '=', 'm_company.c_id')
+            ->where('d_service_item.si_status', 'PENDING')
+            ->orWhere('d_service_item.si_status', 'PROSES');
+
+        return DataTables::of($data)
+
+            ->addColumn('status', function ($data){
+                if ($data->si_status == "PENDING") {
+                    return '<span class="label label-warning">PENDING</span>';
+                } else if ($data->si_status == "PROSES") {
+                    return '<span class="label label-info">PROSES</span>';
+                }
+            })
+
+            ->addColumn('aksi', function ($data) {
+
+                if (Access::checkAkses(21, 'read') == true) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                }
+
+            })
+
+            ->rawColumns(['aksi', 'status'])
+
+            ->make(true);
+    }
+
     public function getPending()
     {
         $data = DB::table('d_service_item')
