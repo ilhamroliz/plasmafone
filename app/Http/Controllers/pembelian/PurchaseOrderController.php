@@ -45,7 +45,7 @@ class PurchaseOrderController extends Controller
                 if($getData->qtyR != "0"){
                     $hapus = '';
                 }
-            
+
                 if (Plasma::checkAkses(4, 'update') == false && Plasma::checkAkses(4, 'delete') == false) {
                     return '<div class="text-center">'.$detil.'</div>';
                 } else if(Plasma::checkAkses(4, 'update') == true && Plasma::checkAkses(4, 'delete') == false){
@@ -105,14 +105,14 @@ class PurchaseOrderController extends Controller
                     $htgPajak = $pecah2[0];
 
                     if(strpos($request->htgDiskV, '.') == true){
-                        $htgDiskV = implode(explode('.', $request->htgDiskV));                    
+                        $htgDiskV = implode(explode('.', $request->htgDiskV));
                     }else{
                         $htgDiskV = $request->htgDiskV;
                         if($htgDiskV == ''){
                             $htgDiskV = 0;
                         }
                     }
-                    
+
                     /// UPDATE ke D_PURCHASE_CONFIRM
                     for($i = 0; $i < count($idNota); $i++){
                         DB::table('d_purchase_confirm')->where('pc_id', $idNota[$i])->update([ 'pc_status' => 'Y' ]);
@@ -223,7 +223,7 @@ class PurchaseOrderController extends Controller
                             ]);
 
                             $countDTPO += 1;
-                        }                       
+                        }
                     }
 
                     DB::commit();
@@ -237,7 +237,7 @@ class PurchaseOrderController extends Controller
                         'status' => 'tpoGagal',
                         'msg' => $e
                     ]);
-                }                                            
+                }
 
             }
 
@@ -275,7 +275,7 @@ class PurchaseOrderController extends Controller
 
                 return view('pembelian.purchase_order.add_po')->with(compact('getDataSupp'));
             }
-            
+
         }
     }
 
@@ -327,8 +327,8 @@ class PurchaseOrderController extends Controller
             ->join('d_item', 'i_id', '=', 'pd_item')
             ->where('p_id', $id)
             ->select('p_id', 'p_nota', 's_company', 's_phone', 'p_date', 'p_total_gross', 'p_total_net', DB::raw('IFNULL(p_pajak, 0) as pajak'),
-                    'p_disc_persen', 'p_disc_value', 'p_type', 'p_due_date', 'i_nama', 
-                    DB::raw('SUM(pd_qty) as qty'), 'pd_value', 'pd_disc_persen', 
+                    'p_disc_persen', 'p_disc_value', 'p_type', 'p_due_date', 'i_nama',
+                    DB::raw('SUM(pd_qty) as qty'), 'pd_value', 'pd_disc_persen',
                     DB::raw('ROUND(SUM(pd_disc_value)) as disc_value'),
                     DB::raw('(pd_value * SUM(pd_qty)) * ((100 - IFNULL(pd_disc_persen, 0)) / 100) - IFNULL(SUM(pd_disc_value), 0) as subTotal'))
             ->groupBy('pd_item')->get();
@@ -357,7 +357,7 @@ class PurchaseOrderController extends Controller
                 $history = DB::table('d_purchase')
                     ->join('d_supplier', 's_id', '=', 'p_supplier')
                     ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-                    
+
                     ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
                     ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
                     ->where('p_nota', $nota)
@@ -436,7 +436,7 @@ class PurchaseOrderController extends Controller
                     ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
                     ->groupBy('p_id')->get();
             }
-            
+
         }
 
         return json_encode([
@@ -460,16 +460,20 @@ class PurchaseOrderController extends Controller
 
             if($request->isMethod('post')){
 
-                dd($request);
+                // dd($request);
                 DB::beginTransaction();
                 try {
+
                     $totalGross = 0;
-                    for($i = 0; i < count($subTotal); $i++){
+                    for($i = 0; $i < count($subTotal); $i++){
                         $totalGross += implode(explode('.', $subTotal[$i]));
                     }
+
+                    $pisah = explode('/', $request->tempo);
+                    $tgl = $pisah[2].'-'.$pisah[1].'-'.$pisah[0];
                     DB::table('d_purchase')->where('p_id', $id)->update([
                         'p_type' => $request->tipe,
-                        'p_jatuh_tempo' => Crypt::parse($request->tempo)->format('Y-m-d'),
+                        'p_due_date' => $tgl,
                         'p_total_gross' => $totalGross,
                         'p_disc_persen' => str_replace(' %', '', $request->htgDiskP),
                         'p_disc_value' => implode(explode('.', $request->htgDiskV)),
@@ -482,7 +486,7 @@ class PurchaseOrderController extends Controller
 
                         $cekQTYR = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->select(DB::raw('SUM(pd_qtyreceived) as qtyR'))->first();
                         $getNama = DB::table('d_item')->where('i_id', $idItem[$i])->select('i_nama')->first();
-                        if($qty[$i] > $cekQTYR->qtyR){
+                        if($qty[$i] < $cekQTYR->qtyR){
                             return json_encode([
                                 'status' => 'kurang',
                                 'itemNama' => $getNama->i_nama
@@ -500,28 +504,31 @@ class PurchaseOrderController extends Controller
 
                                 $aray = ([
                                     'pd_purchase' => $id,
-                                    'pd_detailid' => $counter,
+                                    'pd_detailid' => $counterDT,
                                     'pd_item' => $idItem[$i],
-                                    'pd_qty' => $qty[$i],
-                                    'pd_specificcode' => $getDTPrev->pd_specificcode,
+                                    'pd_qty' => 1,
+                                    'pd_specificcode' => $getDTPrev[$j]->pd_specificcode,
                                     'pd_value' => implode(explode('.', $price[$i])),
                                     'pd_disc_value' => implode(explode('.', $diskV[$i])) / $qty[$i],
                                     'pd_disc_persen' => str_replace(' %', '', $diskP[$i]),
                                     'pd_total_net' => implode(explode('.', $subTotal[$i])) / $qty[$i],
-                                    'pd_qtyreceived' => $getDTPrev->pd_qtyreceived,
-                                    'pd_receivedtime' => $getDTPrev->pd_receivedtime
+                                    'pd_qtyreceived' => $getDTPrev[$j]->pd_qtyreceived,
+                                    'pd_receivedtime' => $getDTPrev[$j]->pd_receivedtime
                                 ]);
-                                $counter += 1;
+                                array_push($araySCDT, $aray);
+                                $counterDT += 1;
+
                             }
-                            DB::table('d_purchase_dt')->insert();
+                            DB::table('d_purchase_dt')->insert($araySCDT);
 
                         }else{
-                            $getDTPrev = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->select('pd_qtyreceived', 'pd_receivedtime')->get();
+
+                            $getDTPrev = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->select('pd_qtyreceived', 'pd_receivedtime')->first();
                             DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->delete();
 
                             DB::table('d_purchase_dt')->insert([
                                 'pd_purchase' => $id,
-                                'pd_detailid' => $counter,
+                                'pd_detailid' => $counterDT,
                                 'pd_item' => $idItem[$i],
                                 'pd_qty' => $qty[$i],
                                 'pd_specificcode' => null,
@@ -532,19 +539,22 @@ class PurchaseOrderController extends Controller
                                 'pd_qtyreceived' => $getDTPrev->pd_qtyreceived,
                                 'pd_receivedtime' => $getDTPrev->pd_receivedtime
                             ]);
-                            $counter += 1;
+                            $counterDT += 1;
+
                         }
 
                     }
 
                     DB::commit();
                     return json_encode([
-                        'status' => 'sukses'
+                        'status' => 'sukses',
+                        'id' => $id
                     ]);
-                } catch (\Throwable $th) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     return json_encode([
-                        'status' => 'gagal'
+                        'status' => 'gagal',
+                        'msg' => $e
                     ]);
                 }
 
@@ -558,7 +568,11 @@ class PurchaseOrderController extends Controller
             $getDataDT = DB::table('d_purchase_dt')
                 ->join('d_item', 'i_id', '=', 'pd_item')
                 ->where('pd_purchase', $id)
-                ->select('pd_item', 'i_nama', DB::raw('SUM(pd_qty) as qty'), 'pd_value', 'pd_disc_persen', DB::raw('ROUND(SUM(pd_disc_value)) as disc_value'), DB::raw('ROUND(SUM(pd_total_net)) as subTotal'))
+                ->select('pd_item', 'i_nama',
+                    DB::raw('SUM(pd_qty) as qty'), 'pd_value', 'pd_disc_persen', 'i_specificcode',
+                    DB::raw('ROUND(SUM(pd_disc_value)) as disc_value'),
+                    DB::raw('ROUND(SUM(pd_total_net)) as subTotal'),
+                    DB::raw('ROUND(pd_total_net * pd_qty) as subTotalNonSC'))
                 ->groupBy('pd_item')->get();
             // dd($getPurchaseDT);
             $getId = Crypt::encrypt($id);
@@ -583,7 +597,7 @@ class PurchaseOrderController extends Controller
 
                 DB::table('d_purchase_dt')->where('pd_purchase', $id)->delete();
                 DB::table('d_purchase')->where('p_id', $id)->delete();
-                
+
                 $log = 'Menghapus Purchase Order dengan Nota '.$nota;
                 Plasma::logActivity($log);
 
@@ -592,9 +606,9 @@ class PurchaseOrderController extends Controller
                     'status' => 'sukses',
                     'nota' => $nota
                 ]);
-                
+
             } catch (\Exception $e) {
-                
+
                 DB::rollback();
                 return json_encode([
                     'status' => 'gagal',
