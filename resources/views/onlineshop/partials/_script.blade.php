@@ -70,15 +70,6 @@ $('.js-addwish-detail').each(function(){
 	});
 });
 
-/*---------------------------------------------*/
-
-$('.js-addcart-detail').each(function(){
-	var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-	$(this).on('click', function(){
-		swal(nameProduct, "is added to cart !", "success");
-	});
-});
-
 </script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
@@ -100,5 +91,12 @@ $('.js-pscroll').each(function(){
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/js/main.js')}}"></script>
 <script type="text/javascript" src="{{asset('template_asset/frontend/js/bootstrap-input-spinner.js')}}"></script>
+<script type="text/javascript">
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf_token"]').attr('content')
+		}
+	});
+</script>
 
 @yield('extra-script')

@@ -72,20 +72,22 @@
 
 						<!--  -->
 						<div class="p-t-15">
-
+							<form id="formCart">
+							<input type="hidden" name="_token" value="{{ csrf_token() }}">
+							<input type="hidden" name="i_id" value="{{$products->i_id}}">
 							<div class="flex-w flex-r-m p-b-10">
 								<div class="col-md-6">
 									<div class="flex-w m-r-20 m-tb-10">
-										<input type="number" min="1" max="{{$products->s_qty}}" value="{{$products->s_qty}}">
+										<input type="number" name="qty" min="1" max="{{$products->s_qty}}" value="{{$products->s_qty}}">
 									</div>
 								</div>
 								<div class="col-md-6">
-									<button class="btn btn-block btn-primary flex-c-m stext-101 text-white size-101 bor1 p-lr-15 trans-04 js-addcart-detail" onclick="">
+									<button type="button" class="btn btn-block btn-primary flex-c-m stext-101 text-white size-101 bor1 p-lr-15 trans-04 js-addcart-detail" onclick="addToCart()">
 										Add To Cart
 									</button>
 								</div>
 							</div>
-
+							</form>
 						</div>
 						<!--  -->
 						<div class="flex-w flex-m p-l-100 p-t-40 respon7">
@@ -300,6 +302,21 @@
 
 @section('extra-script')
 	<script type="text/javascript">
+		function addToCart(){
+			$.ajax({
+				url: '{{route("addToCart")}}',
+				type: 'get',
+				data: $('#formCart').serialize(),
+				dataType: 'json'
+			});
+		}
+
 	    $("input[type='number']").inputSpinner();
+	    $('.js-addcart-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "Berhasil ditambahkan ke dalam Cart !", "success");
+			});
+		});
 	</script>
 @endsection

@@ -902,8 +902,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
     Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
     Route::get('pengelolaan-member/get-data-setting/{id}', 'PengelolaanMemberController@getDataSetting');
-    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@updateSetting');
-
+    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@pengelolaan-member');
+    Route::get('pengelolaan-member/get-member-poin', 'PengelolaanMemberController@getMemberPoin');
+    Route::get('pengelolaan-member/get-member-birth', 'PengelolaanMemberController@getMemberBirth');
+    Route::get('pengelolaan-member/get-member-history', 'PengelolaanMemberController@getMemberHistory');
 
     // Route Dirga
 
@@ -1584,7 +1586,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/accesories', 'onlineshop_controller@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'onlineshop_controller@product_detail')->name('product_detail');
         Route::get('/shoping-cart', 'onlineshop_controller@shoping_cart')->name('shoping_cart');
-        Route::get('/add_cart', 'onlineshop_controller@add_cart')->name('add_cart');
+        Route::get('/add-cart', 'onlineshop_controller@addToCart')->name('addToCart');
     });
 
 
