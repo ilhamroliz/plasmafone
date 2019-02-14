@@ -78,7 +78,7 @@
                                                                      data-original-title="Fullscreen"><i
                                     class="fa fa-expand "></i></a>
                         </div>
-                        <h2><strong>Edit Purchase Order</strong></h2>
+                        <h2><strong>Tambah Purchase Order</strong></h2>
 
                         <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
@@ -87,80 +87,98 @@
 
                         <!-- widget content -->
                         <div class="widget-body">
-                          @foreach($getPurchase as $purchase)
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <label for="" class="col-md-4">Nama Supplier</label>
-                                            <div class="col-md-8">
-                                                <input type="hidden" id="idSupp" value="{{ $purchase->s_id }}">
-                                                <input type="text" id="namaSupp" class="form-control" value="{{ $purchase->s_company }}" readonly>
+                            @foreach($getPurchase as $purchase)
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label for="" class="col-md-4">Nama Supplier</label>
+                                                <div class="col-md-8">
+                                                    <input type="hidden" id="idSupp" value="{{ $purchase->s_id }}">
+                                                    <input type="text" id="namaSupp" class="form-control"
+                                                           value="{{ $purchase->s_company }}" readonly>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-12 margin-top-10">
-                                          <label for="" class="col-md-4">No. Telp</label>
-                                            <div class="col-md-8">
-                                                <input type="text" id="telpSupp" class="form-control" value="{{ $purchase->s_phone }}" readonly>
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">No. Telp</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="telpSupp" class="form-control"
+                                                           value="{{ $purchase->s_phone }}" readonly>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-12 margin-top-10">
-                                            <label for="" class="col-md-4">No Fax</label>
-                                            <div class="col-md-8">
-                                                <input type="text" id="faxSupp" class="form-control" value="{{ $purchase->s_fax }}" readonly>
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">No Fax</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="faxSupp" class="form-control"
+                                                           value="{{ $purchase->s_fax }}" readonly>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-12 margin-top-10">
-                                            <label for="" class="col-md-4">Tipe Pembayaran</label>
-                                            <div class="col-md-8">
-                                                <select id="payment" class="form-control" onchange="changePayment()">
-                                                    <option value="">== PILIH TIPE PEMBAYARAN ==</option>
-                                                    <option value="T" @if($purchase->p_type == 'T') selected @endif>Tempo</option>
-                                                    <option value="C" @if($purchase->p_type == 'C') selected @endif>Cash</option>
-                                                </select>
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">Tipe Pembayaran</label>
+                                                <div class="col-md-8">
+                                                    <select id="payment" class="form-control"
+                                                            onchange="changePayment()">
+                                                        <option value="">== PILIH TIPE PEMBAYARAN ==</option>
+                                                        <option value="T" @if($purchase->p_type == 'T') selected @endif>
+                                                            Tempo
+                                                        </option>
+                                                        <option value="C" @if($purchase->p_type == 'C') selected @endif>
+                                                            Cash
+                                                        </option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-md-12 margin-top-10">
-                                            <label for="" class="col-md-4">Jatuh Tempo</label>
-                                            <div class="col-md-8">
-                                                <input type="hidden" id="hiddenTempo" value="{{ Carbon::parse($purchase->p_due_date)->format('d/m/Y') }}">
-                                                @if($purchase->p_due_date != '' || $purchase->p_due_date != null)
-                        												<input type="text" id="tempo" class="form-control" value="{{ Carbon::parse($purchase->p_due_date)->format('d/m/Y') }}">
-                        												@else
-                        												<input type="text" id="tempo" class="form-control" value="" disabled>
-                        												@endif
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">Jatuh Tempo</label>
+                                                <div class="col-md-8">
+                                                    <input type="hidden" id="hiddenTempo"
+                                                           value="{{ Carbon::parse($purchase->p_due_date)->format('d/m/Y') }}">
+                                                    @if($purchase->p_due_date != '' || $purchase->p_due_date != null)
+                                                        <input type="text" id="tempo" class="form-control"
+                                                               value="{{ Carbon::parse($purchase->p_due_date)->format('d/m/Y') }}">
+                                                    @else
+                                                        <input type="text" id="tempo" class="form-control" value=""
+                                                               disabled>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <label for="" class="col-md-4">Batas Maks Hutang</label>
-                                            <div class="col-md-8">
-                                                <input type="text" id="htgBatas" class="form-control text-align-right" value="{{ number_format($purchase->s_limit, 0,",",".") }}" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-12 margin-top-10">
-                                            <label for="" class="col-md-4">Hutang Sekarang</label>
-                                            <div class="col-md-8">
-                                                <input type="text" id="htgNow" class="form-control text-align-right" value="" readonly>
-                                            </div>
-                                        </div>
-
-                                        <form id="formDPVP">
-                                            <div class="col-md-12 margin-top-10">
-                                                <label for="" class="col-md-4">Diskon Persen (%)</label>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <label for="" class="col-md-4">Batas Maks Hutang</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" id="htgDiskP" name="htgDiskP" class="form-control text-align-right persen" onkeyup="cekpersenS()" value="{{ $purchase->p_disc_persen }}">
+                                                    <input type="text" id="htgBatas"
+                                                           class="form-control text-align-right"
+                                                           value="{{ number_format($purchase->s_limit, 0,",",".") }}"
+                                                           readonly>
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-12 margin-top-10">
+                                                <label for="" class="col-md-4">Hutang Sekarang</label>
+                                                <div class="col-md-8">
+                                                    <input type="text" id="htgNow" class="form-control text-align-right"
+                                                           value="" readonly>
+                                                </div>
+                                            </div>
+
+                                            <form id="formDPVP">
+                                                <div class="col-md-12 margin-top-10">
+                                                    <label for="" class="col-md-4">Diskon Persen (%)</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" id="htgDiskP" name="htgDiskP"
+                                                               class="form-control text-align-right persen"
+                                                               onkeyup="cekpersenS()"
+                                                               value="{{ number_format($purchase->p_disc_persen, 0,",",".") }}">
+                                                    </div>
+                                                </div>
 
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Diskon Value</label>
@@ -169,12 +187,15 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12 margin-top-10">
-                                                <label for="" class="col-md-4">Pajak (%)</label>
-                                                <div class="col-md-8">
-                                                    <input type="text" id="htgPajak" name="htgPajak" class="form-control text-align-right persen" onkeyup="cekpajak()" value="{{ $purchase->p_pajak }}">
+                                                <div class="col-md-12 margin-top-10">
+                                                    <label for="" class="col-md-4">Pajak (%)</label>
+                                                    <div class="col-md-8">
+                                                        <input type="text" id="htgPajak" name="htgPajak"
+                                                               class="form-control text-align-right persen"
+                                                               onkeyup="cekpajak()"
+                                                               value="{{ number_format($purchase->p_pajak, 0,",",".") }}">
+                                                    </div>
                                                 </div>
-                                            </div>
 
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Total PO</label>
@@ -213,92 +234,116 @@
                                             </tr>
                                         </thead>
 
-                                        <tbody id="dtcoBody">
-                                            @for($i = 0; $i < count($getDataDT); $i++)
-                                            <tr>
-                                                <td>
-                                                    <input type="hidden" name="idItem[]" value="{{ $getDataDT[$i]->pd_item }}">{{ $getDataDT[$i]->i_nama }}
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="qty[]" id="qty{{ $i }}" class="form-control text-align-right qty" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->qty, 0,",",".") }}">
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="price[]" id="price{{ $i }}" class="form-control text-align-right price" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->pd_value, 0,",",".") }}">
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="diskP[]" id="diskP{{ $i }}" class="form-control text-align-right diskP persen" style="width:100%" onkeyup="cekpersen({{ $i }})" value="{{ number_format($getDataDT[$i]->pd_disc_persen, 0,",",".") }} %">
-                                                </td>
-                                                <td>
-                                                    <input type="text" name="diskV[]" id="diskV{{ $i }}" class="form-control text-align-right diskV" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->disc_value, 0,",",".") }}">
-                                                </td>
-                                                <td>
-                                                    @if($getDataDT[$i]->i_specificcode == 'Y')
-                                                    <input type="text" name="subTotal[]" id="subTotal{{ $i }}" class="form-control text-align-right subTotal" style="width:100%" value="{{ number_format($getDataDT[$i]->subTotal, 0,",",".") }}" readonly>
-                                                    @else
-                                                    <input type="text" name="subTotal[]" id="subTotal{{ $i }}" class="form-control text-align-right subTotal" style="width:100%" value="{{ number_format($getDataDT[$i]->subTotalNonSC, 0,",",".") }}" readonly>
-                                                    @endif
-                                                </td>
-											</tr>
-                                            @endfor
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <button class="btn-lg btn-block btn-primary text-center"
-                                                onclick="simpanPO()">Simpan Purchase Order
-                                        </button>
+                                                <tbody id="dtcoBody">
+                                                @for($i = 0; $i < count($getDataDT); $i++)
+                                                    <tr>
+                                                        <td>
+                                                            <input type="hidden" name="idItem[]"
+                                                                   value="{{ $getDataDT[$i]->pd_item }}">{{ $getDataDT[$i]->i_nama }}
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="qty[]" id="qty{{ $i }}"
+                                                                   class="form-control text-align-right qty"
+                                                                   style="width:100%" onkeyup="getSubTotal({{ $i }})"
+                                                                   value="{{ number_format($getDataDT[$i]->qty, 0,",",".") }}">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="price[]" id="price{{ $i }}"
+                                                                   class="form-control text-align-right price"
+                                                                   style="width:100%" onkeyup="getSubTotal({{ $i }})"
+                                                                   value="{{ number_format($getDataDT[$i]->pd_value, 0,",",".") }}">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="diskP[]" id="diskP{{ $i }}"
+                                                                   class="form-control text-align-right diskP persen"
+                                                                   style="width:100%" onkeyup="cekpersen({{ $i }})"
+                                                                   value="{{ number_format($getDataDT[$i]->pd_disc_persen, 0,",",".") }}">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" name="diskV[]" id="diskV{{ $i }}"
+                                                                   class="form-control text-align-right diskV"
+                                                                   style="width:100%" onkeyup="getSubTotal({{ $i }})"
+                                                                   value="{{ number_format($getDataDT[$i]->disc_value, 0,",",".") }}">
+                                                        </td>
+                                                        <td>
+                                                            @if($getDataDT[$i]->i_specificcode == 'Y')
+                                                                <input type="text" name="subTotal[]"
+                                                                       id="subTotal{{ $i }}"
+                                                                       class="form-control text-align-right subTotal"
+                                                                       style="width:100%"
+                                                                       value="{{ number_format($getDataDT[$i]->subTotal, 0,",",".") }}"
+                                                                       readonly>
+                                                            @else
+                                                                <input type="text" name="subTotal[]"
+                                                                       id="subTotal{{ $i }}"
+                                                                       class="form-control text-align-right subTotal"
+                                                                       style="width:100%"
+                                                                       value="{{ number_format($getDataDT[$i]->subTotalNonSC, 0,",",".") }}"
+                                                                       readonly>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endfor
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn-lg btn-block btn-primary text-center"
+                                                        onclick="simpanPO()">Simpan Purchase Order
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </div>
-
+                                <!-- end widget content -->
                         </div>
-                        <!-- end widget content -->
+                        <!-- end widget div -->
+
+                    </div>
+                    <!-- end widget -->
                 </div>
-                <!-- end widget div -->
-
             </div>
-            <!-- end widget -->
+
         </div>
-    </div>
+        <!-- END MAIN CONTENT -->
 
-    </div>
-    <!-- END MAIN CONTENT -->
+        @endsection
 
-@endsection
+        @section('extra_script')
+            <script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
+            <script type="text/javascript">
 
-@section('extra_script')
-    <script src="{{ asset('template_asset/js/plugin/accounting/accounting.js') }}"></script>
-    <script type="text/javascript">
+                $(document).ready(function () {
 
-        $(document).ready(function () {
+                    $('#dt_co').DataTable({
+                        "language": dataTableLanguage,
+                        "order": []
+                    });
 
-            $('#htgDiskP').maskMoney('mask', {thousands: '.', precision: 0, suffix: ' %'});
-            $('#htgPajak').maskMoney('mask', {thousands: '.', precision: 0, suffix: ' %'});
+                    $('#tempo').datepicker({
+                        language: "id",
+                        format: 'dd/mm/yyyy',
+                        prevText: '<i class="fa fa-chevron-left"></i>',
+                        nextText: '<i class="fa fa-chevron-right"></i>',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
 
-            $('#dt_co').DataTable({
-                "language": dataTableLanguage,
-                "order": []
-            });
-
-            $('#tempo').datepicker({
-                language: "id",
-                format: 'dd/mm/yyyy',
-                prevText: '<i class="fa fa-chevron-left"></i>',
-                nextText: '<i class="fa fa-chevron-right"></i>',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-            $('.price').maskMoney('mask', {thousands: '.', precision: 0});
-            $('.diskV').maskMoney('mask', {thousands: '.', precision: 0});
-            $('#htgDiskV').maskMoney('mask', {thousands: '.', precision: 0});
-
-            $('.persen').maskMoney({thousands: '.', precision: 0, suffix: ' %'});
-        })
+                    $('.price').maskMoney({thousands: '.', precision: 0});
+                    $('.diskV').maskMoney({thousands: '.', precision: 0});
+                    $('.persen').maskMoney({
+                        thousands: '.',
+                        precision: 0,
+                        suffix: ' %'
+                    });
+                    $('.persen').maskMoney('mask');
+                    $('#htgDiskV').maskMoney({thousands: '.', precision: 0});
+                })
 
         function cekpersen(id){
             cndiskP = $('#diskP'+id).val();
