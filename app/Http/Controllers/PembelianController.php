@@ -1173,7 +1173,8 @@ class PembelianController extends Controller
     {
         $cari = $request->term;
         $supp = DB::table('d_supplier')
-            ->whereRaw('s_company like "%' . $cari . '%"')
+            ->where('s_company', 'like', '%'.$cari.'%')
+            ->where('s_isactive', '=', 'Y')
             ->select('s_id', 's_company')->get();
 
         if ($supp == null) {

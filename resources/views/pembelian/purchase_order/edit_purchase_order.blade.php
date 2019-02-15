@@ -5,7 +5,9 @@
 @section('extra_style')
 
     <style type="text/css">
-
+        .page-footer {
+            padding-left: 10px !important;
+        }
     </style>
 @endsection
 
@@ -52,7 +54,7 @@
 
                 <div class="page-title">
 
-                    <a href="{{ url('pembelian/request-pembelian') }}" class="btn btn-default"><i
+                    <a href="{{ url('pembelian/purchase-order') }}" class="btn btn-default"><i
                             class="fa fa-arrow-left"></i>&nbsp;Kembali</a>
 
                 </div>
