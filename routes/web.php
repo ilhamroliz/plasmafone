@@ -1585,21 +1585,21 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Frontend Onlineshop============================================================== //
     Route::prefix('onlineshop')->group(function () {
-        Route::get('/', 'OnlineshopController@index')->name('frontend');
-        Route::get('/product-all', 'OnlineshopController@product_all')->name('product_all');
-        Route::get('/handphone', 'OnlineshopController@product_hp')->name('product_hp');
-        Route::get('/accesories', 'OnlineshopController@product_acces')->name('product_acces');
-        Route::get('/product-detail/{id}', 'OnlineshopController@product_detail')->name('product_detail');
-        Route::get('/shoping-cart/{id}', 'OnlineshopController@shoping_cart')->name('shoping_cart');
-        Route::get('/add-cart', 'OnlineshopController@addToCart')->name('addToCart');
+        Route::get('/', 'onlineshop_controller@index')->name('frontend');
+        Route::get('/product-all', 'onlineshop_controller@product_all')->name('product_all');
+        Route::get('/handphone', 'onlineshop_controller@product_hp')->name('product_hp');
+        Route::get('/accesories', 'onlineshop_controller@product_acces')->name('product_acces');
+        Route::get('/product-detail/{id}', 'onlineshop_controller@product_detail')->name('product_detail');
+        Route::get('/shoping-cart', 'onlineshop_controller@shoping_cart')->name('shoping_cart');
+        Route::get('/add-cart', 'onlineshop_controller@addToCart')->name('addToCart');
     });
 
 
 
     /*
      *
-     * TTTTTTTTTTTTT   HHH       HHH   EEE E E E           sssssssss
-     *      TTT        HHH       HHH   EEE                ssssssssss
+     * TTTTTTTTTTTTT   HHH       HHH   EEE E E E
+     *      TTT        HHH       HHH   EEE
      *      TTT        HHH H H H HHH   EEE E E E
      *      TTT        HHH       HHH   EEE
      *      TTT        HHH       HHH   EEE E E E
