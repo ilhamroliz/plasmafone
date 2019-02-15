@@ -158,7 +158,7 @@
                                                     <div class="form-group">
                                                         <input type="text" id="nota" class="form-control" name="nota"
                                                                placeholder="Masukkan No.Nota"
-                                                               style="width: 100%; float: left">
+                                                               style="width: 100%; float: left; text-transform: uppercase">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-5">
@@ -166,7 +166,7 @@
                                                         <input type="hidden" name="idSupp" id="idSupp">
                                                         <input type="text" id="namaSupp" class="form-control"
                                                                name="namaSupp" placeholder="Masukkan Nama Supplier"
-                                                               style="width: 80%; float: left">
+                                                               style="width: 80%; float: left; text-transform: uppercase;">
 
                                                         <button type="button"
                                                                 class="btn btn-primary btn-sm icon-btn ml-2"
@@ -363,7 +363,7 @@
             });
 
             $("#nota").autocomplete({
-                source: baseUrl + '/pembelian/konfirmasi-pembelian/auto-nota',
+                source: baseUrl + '/pembelian/purchase-order/auto-nota',
                 minLength: 1,
                 select: function (event, data) {
                     $('#nota').val(data.item.label);
@@ -534,7 +534,7 @@
             }).then((response) => {
 
                 $('#historyBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
-
+                console.log(response);
                 $('#dt_history').DataTable().clear();
                 for (var i = 0; i < response.data.data.length; i++) {
                     var status = '';
