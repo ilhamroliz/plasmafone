@@ -683,6 +683,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
     Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
     Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
+    Route::get('/penjualan/service-barang/struk/{id}', 'penjualan\ServicesController@struk');
     // ####################################
     // End Service Barang
     // ####################################

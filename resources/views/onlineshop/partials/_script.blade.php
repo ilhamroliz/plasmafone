@@ -1,5 +1,6 @@
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/jquery/jquery-3.2.1.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('template_asset/frontend/js/jquery-ui.js')}}"></script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/animsition/js/animsition.min.js')}}"></script>
 <!--===============================================================================================-->
@@ -98,5 +99,17 @@ $('.js-pscroll').each(function(){
 		}
 	});
 </script>
+<!-- CUSTOM NOTIFICATION =========================================================================-->
+<script src="{{asset('template_asset/js/notification/SmartNotification.min.js')}}"></script>
+<script type="text/javascript">
+	// function viewCart(token)
+	// {
+	// 	var data = 'id=' + id + '&nama=' + nama;
+	// 	axios.get(baseUrl+'', data).then((response) => {
 
+
+
+	// 	})
+	// }
+</script>
 @yield('extra-script')

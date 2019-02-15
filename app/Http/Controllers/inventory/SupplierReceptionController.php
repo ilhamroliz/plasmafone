@@ -109,7 +109,9 @@ class SupplierReceptionController extends Controller
             ->join('d_item', 'i_id', '=', 'pd_item')
             ->join('d_supplier', 's_id', '=', 'p_supplier')
             ->where('p_id', $id)
-            ->select('p_nota', 'p_date', 's_company', 's_phone', 'i_nama', 'pd_qty', 'pd_qtyreceived')->get();
+            ->select('p_nota', DB::raw('date_format(p_date, "%d/%m/%Y") as p_date'), 's_company', 's_phone', 'i_nama', DB::raw('sum(pd_qty) as pd_qty'), DB::raw('sum(pd_qtyreceived) as pd_qtyreceived'))
+            ->groupBy('pd_item')
+            ->get();
 
         return json_encode([
             'data' => $getData,
