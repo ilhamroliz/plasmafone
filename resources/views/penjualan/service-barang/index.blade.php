@@ -504,7 +504,7 @@
                     $('#title_detail').html('<strong>Detail Service Barang</strong>');
                     if (response.data[0].shipping_status == "On Outlet") {
                         posisi = response.data[0].position;
-                    } else if (response.data[0].shipping_status == "Delivery") {
+                    } else if (response.data[0].shipping_status == "Delivery to Center") {
                         posisi = 'Sedang Dikirim ke Pusat';
                     } else if (response.data[0].shipping_status == "On Center") {
                         posisi = response.data[0].position;
