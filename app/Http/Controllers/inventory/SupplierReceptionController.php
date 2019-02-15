@@ -269,7 +269,7 @@ class SupplierReceptionController extends Controller
                         ->where('pd_qtyreceived', '!=', 1)
                         ->where('pd_detailid', $getIdDT)
                         ->update([
-                            'pd_specificcode' => $kode[$i],
+                            'pd_specificcode' => strtoupper($kode[$i]),
                             'pd_qtyreceived' => 1
                         ]);
                     }
@@ -352,7 +352,7 @@ class SupplierReceptionController extends Controller
                         DB::table('d_stock_dt')->insert([
                             'sd_stock' => $idS,
                             'sd_detailid' => $getIdDTMax + $i,
-                            'sd_specificcode' => $kode[$i]
+                            'sd_specificcode' => strtoupper($kode[$i])
                         ]);
                     }
                 }
@@ -377,7 +377,7 @@ class SupplierReceptionController extends Controller
                     for($i = 0; $i < count($request->notaDO); $i++){
 
                         $expDate = $request->expDate[$i];
-                        $speccode = $kode[$i];
+                        $speccode = strtoupper($kode[$i]);
                         $smqty = 1;
 
                         $aray = ([
@@ -393,7 +393,7 @@ class SupplierReceptionController extends Controller
                             'sm_hpp' => $smhpp,
                             'sm_sell' => $smsell,
                             'sm_nota' => $smnota,
-                            'sm_reff' => $request->notaDO[$i]
+                            'sm_reff' => strtoupper($request->notaDO[$i])
                         ]);
                         array_push($araySM, $aray);
                     }
@@ -416,10 +416,9 @@ class SupplierReceptionController extends Controller
                         'sm_hpp' => $smhpp,
                         'sm_sell' => $smsell,
                         'sm_nota' => $smnota,
-                        'sm_reff' => $request->notaDO
+                        'sm_reff' => strtoupper($request->notaDO)
                     ]);
                 }
-                
 
 
                 DB::commit();
@@ -454,7 +453,6 @@ class SupplierReceptionController extends Controller
             ->join('d_item', 'i_id', '=', 'pd_item')
             ->where('p_nota', $nota)
             ->where('pd_item', $item)
-            ->select('p_nota', 's_company', 's_phone', 'i_nama')
             ->first();
 
         $getDT = DB::table('d_purchase')
@@ -464,7 +462,6 @@ class SupplierReceptionController extends Controller
             ->where('p_nota', $nota)
             ->where('pd_item', $item)
             ->where('pd_qtyreceived', '!=', 0)
-            ->select('pd_specificcode', 'pd_purchase', 'pd_detailid', 'pd_qty')
             ->groupBy('pd_detailid')
             ->get();
 
@@ -475,7 +472,6 @@ class SupplierReceptionController extends Controller
             ->get();
 
         $getSCEX = DB::table('d_item')->where('i_id', $item)->select('i_specificcode', 'i_expired')->first();
-        // dd($getDT);
         return json_encode([
             'item' => $getSCEX,
             'data' => $getData,
@@ -484,11 +480,108 @@ class SupplierReceptionController extends Controller
         ]);
     }
 
-    public function editReceived(){
+    public function editReceived(Request $request){
 
-    }
+        if(Plasma::checkAkses(8, 'update') == false){
+            
+            return view('errors.407');
 
-    public function hapus(){
+        }else{
+
+            if($request->isMethod('post')){
+
+                // dd($request);
+                DB::beginTransaction();
+                try {
+
+                    // Update di PURCHASE_DT
+                    $pecahPD = explode('-', $request->refPD);
+                    $pd_purchase = $pecahPD[0];
+                    $pd_detailid = $pecahPD[1];
+
+                    $qtyNew = $request->jml;
+                    $qtyOld = $request->jmlEdit;
+
+                    $pdUpdate = DB::table('d_purchase_dt')->where('pd_purchase', $pd_purchase)->where('pd_detailid', $pd_detailid);
+                    if($request->status == 'sc' || $request->status == 'scexp'){
+                        $pdUpdate->update(['pd_specificcode' => $request->kode]);
+                    }else{
+                        $getQTYR = $pdUpdate->select('pd_qtyreceived')->first();
+                        $fixQTYR = ($getQTYR->pd_qtyreceived - $qtyOld) + $qtyNew;
+                        $pdUpdate->update(['pd_qtyreceived' => $fixQTYR]);
+                    }
+
+                    // UPDATE di STOCK
+                    if($request->status == 'exp' || $request->status == 'non'){
+                        $getQTY = DB::table('d_stock')->where('s_item', $request->item)->where('s_position', 'PF00000001')->where('s_status', 'On Destination')->select('s_qty')->first();
+                        $fixQty = ($getQTY->s_qty - $qtyOld) + $qtyNew;
+
+                        DB::table('d_stock')->where('s_item', $request->item)->where('s_position', 'PF00000001')->where('s_status', 'On Destination')->update(['s_qty' => $fixQty]);
+                    }
+
+                    // UPDATE di STOCK_DT
+                    $scNew = $request->kode;
+                    $scOld = $request->scEdit;
+                    if($request->status == 'sc' || $request->status == 'scexp'){
+
+                        DB::table('d_stock_dt')->where('sd_specificcode', $scOld)->update(['sd_specificcode' => $scNew]);
+
+                    }
+
+                    // UPDATE di STOCK_MUTATION
+                    $pecahSM = explode('-', $request->refSM);
+                    $sm_stock = $pecahSM[0];
+                    $sm_detailid = $pecahSM[1];
+                    $smUpdate = DB::table('d_stock_mutation')->where('sm_stock', $sm_stock)->where('sm_detailid', $sm_detailid);
+
+                    $sm_reff = strtoupper($request->notaDO);
+
+                    if($request->status == 'sc'){
+
+                        $smUpdate->update(['sm_specificcode' => $scNew, 'sm_reff' => $sm_reff]);
+
+                    }else if($request->status == 'exp'){
+
+                        $getSMUse = DB::table('d_stock_mutation')->where('sm_stock', $sm_stock)->where('sm_detailid', $sm_detailid)->select('sm_use')->first();
+                        $sm_sisa = $smNew - $getSMUse->sm_use;
+                        $sm_expired = Carbon::createFromFormat('d/m/Y', $request->exp)->format('Y-m-d');
+
+                        $smUpdate->update(['sm_qty' => $smNew, 'sm_sisa' => $sm_sisa, 'sm_expired' => $sm_expired, 'sm_reff' => $sm_reff]);
+
+                    }else if($request->status == 'scexp'){
+
+                        $sm_expired = Carbon::createFromFormat('d/m/Y', $request->exp)->format('Y-m-d');
+
+                        $smUpdate->update(['sm_specificcode' => $scNew, 'sm_expired' => $sm_expired, 'sm_reff' => $sm_reff]);
+
+                    }else{
+
+                        $getSMUse = DB::table('d_stock_mutation')->where('sm_stock', $sm_stock)->where('sm_detailid', $sm_detailid)->select('sm_use')->first();
+                        $sm_sisa = $qtyNew - $getSMUse->sm_use;
+
+                        $smUpdate->update(['sm_qty' => $qtyNew, 'sm_sisa' => $sm_sisa, 'sm_reff' => $sm_reff]);
+                    }
+
+                    DB::commit();
+                    return json_encode([
+                        'status' => 'sukses',
+                        'id' => Crypt::encrypt($pd_purchase),
+                        'item' => Crypt::encrypt($request->item)
+                    ]);
+
+                } catch (\Exception $e) {
+                    
+                    DB::rollback();
+                    return json_encode([
+                        'status' => 'gagal',
+                        'msg' => $e
+                    ]);
+
+                }
+
+            }
+
+        }
 
     }
 
