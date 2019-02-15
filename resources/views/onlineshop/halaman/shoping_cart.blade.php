@@ -140,5 +140,13 @@
 		var total = parseInt(qty) * parseInt(harga);
 		$('#p_tot-'+id).html(total);
 	}
+
+	function plus(field){
+	    console.log(field);
+    }
+
+    function min(field){
+        console.log(field);
+    }
 </script>
 @endsection
