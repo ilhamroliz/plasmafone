@@ -386,9 +386,137 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			</div>
             <!-- /.modal -->
 
+
+            <!-- Modal -->
+			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel">Detail</h4>
+
+						</div>
+
+						<div class="modal-body">		
+							<div class="row">
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+									<header>
+
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<h2 id="title_detail"></h2>
+
+									</header>
+
+									<!-- widget div-->
+									<div>
+										<!-- widget content -->
+										<div class="widget-body no-padding">											
+											<div class="table-responsive">
+												<table class="table">
+													<tbody>
+														<tr>
+															<td><strong>Nota PO</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_nota"></td>
+														</tr>
+														<tr>
+															<td><strong>Nama Supplier</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_supp"></td>
+														</tr>
+														<tr>
+															<td><strong>No. Telp Supplier</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_telp"></td>
+														</tr>
+														<tr>
+															<td><strong>Nama Barang</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_item"></td>
+														</tr>
+													</tbody>
+												</table>
+
+
+                                                <div id="divDTC" style="display:none">
+                                                    <table class="table table-bordered" id="table_item_sc">
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <td>Nota DO</td>
+                                                                <td>Kode Spesifik</td>
+                                                                <td>Aksi</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="dtcBody">
+                                                        </tbody>
+                                                    </table>		
+                                                </div>
+                                                <div id="divDTE" style="display:none">
+                                                    <table class="table table-bordered" id="table_item_exp">
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <td>Nota DO</td>
+                                                                <td>Tanggal Kadaluarsa</td>
+                                                                <td>QTY Diterima</td>
+                                                                <td>Aksi</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="dteBody">
+                                                        </tbody>
+                                                    </table>		
+                                                </div>
+                                                <div id="divDTCE" style="display:none">
+                                                    <table class="table table-bordered" id="table_item_scexp">
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <td>Nota DO</td>
+                                                                <td>Tanggal Kadaluarsa</td>
+                                                                <td>Kode Spesifik</td>
+                                                                <td>Aksi</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="dtceBody">
+                                                        </tbody>
+                                                    </table>		
+                                                </div>
+                                                <div id="divDTN" style="display:none">
+                                                    <table class="table table-bordered" id="table_item_non">
+                                                        <thead>
+                                                            <tr class="text-center">
+                                                                <td>Nota DO</td>
+                                                                <td>Qty</td>
+                                                                <td>Aksi</td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="dtnBody">
+                                                        </tbody>
+                                                    </table>		
+                                                </div>
+
+																						
+											</div>
+										</div>
+										<!-- end widget content -->
+									</div>
+									<!-- end widget div -->
+								</div>
+								<!-- end widget -->
+							</div>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
+            <!-- /.modal -->
+            
+
 		</section>
 		<!-- end widget grid -->
-
 	</div>
 	<!-- END MAIN CONTENT -->
 @endsection
@@ -434,14 +562,55 @@ use App\Http\Controllers\PlasmafoneController as Access;
             });
 
             dtc = $('#dt_code').DataTable({
+                "order": [],
                 "searching": false,
                 "autoWidth": false,
                 "language": dataTableLanguage,
                 "paging": false,
                 "info": false
             });
-
             dtce = $('#dt_code_exp').DataTable({
+                "order": [],
+                "pageLength": 5,
+                "searching": false,
+                "lengthChange": false,
+                "autoWidth": false,
+                "language": dataTableLanguage,
+                "paging": false,
+                "info": false
+            });
+
+
+            ddtc = $('#table_item_sc').DataTable({
+                "order": [],
+                "searching": false,
+                "autoWidth": false,
+                "language": dataTableLanguage,
+                "paging": false,
+                "info": false
+            });
+            ddte = $('#table_item_exp').DataTable({
+                "order": [],
+                "pageLength": 5,
+                "searching": false,
+                "lengthChange": false,
+                "autoWidth": false,
+                "language": dataTableLanguage,
+                "paging": false,
+                "info": false
+            });
+            ddtce = $('#table_item_scexp').DataTable({
+                "order": [],
+                "pageLength": 5,
+                "searching": false,
+                "lengthChange": false,
+                "autoWidth": false,
+                "language": dataTableLanguage,
+                "paging": false,
+                "info": false
+            });
+            ddtn = $('#table_item_non').DataTable({
+                "order": [],
                 "pageLength": 5,
                 "searching": false,
                 "lengthChange": false,
@@ -496,11 +665,42 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
         function detail(id, item){
 
-            axios.post(baseUrl+'/inventory/penerimaan/supplier/detail'+'/'+id+'/'+item ).then((response) => {
+            axios.post(baseUrl+'/inventory/penerimaan/supplier/detailReceived'+'/'+id+'/'+item ).then((response) => {
+
+                $('#dt_nota').html(response.data.data.p_nota);
+                $('#dt_supp').html(response.data.data.s_company);
+                $('#dt_telp').html(response.data.data.s_phone);
+                $('#dt_item').html(response.data.data.i_nama);
                 
-                
+                if(response.data.item.i_specificcode == 'Y' && response.data.item.i_expired == 'N'){
+
+                    $('#dtcBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+                    $('#divDTC').css('display', 'block');
+
+                }else if(response.data.item.i_specificcode == 'N' && response.data.item.i_expired == 'Y'){
+
+                    $('#dteBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+                    $('#divDTE').css('display', 'block');
+
+                }else if(response.data.item.i_specificcode == 'Y' && response.data.item.i_expired == 'Y'){
+
+                    $('#dtceBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+                    $('#divDTCE').css('display', 'block');
+
+                }else{
+
+                    $('#dtnBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+                    $('#divDTN').css('display', 'block');
+
+                }
 
             })
+
+            $('#detilModal').modal('show');
 
         }
 

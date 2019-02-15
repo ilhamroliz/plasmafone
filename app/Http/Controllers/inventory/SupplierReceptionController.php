@@ -439,8 +439,51 @@ class SupplierReceptionController extends Controller
 
     }
 
+    // HANYA Untuk Detail dan Edit Barang yang sudah diterima Pusat
+    public function detailReceived($id = null, $item = null){
+        $id = Crypt::decrypt($id);
+        $item = Crypt::decrypt($item);
+        $getNota = DB::table('d_purchase')->where('p_id', $id)->select('p_nota')->first();
+        $nota = $getNota->p_nota;
 
-    public function editReceived()
+        $getData = DB::table('d_purchase')
+            ->join('d_supplier', 's_id', '=', 'p_supplier')
+            ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
+            ->join('d_item', 'i_id', '=', 'pd_item')
+            ->where('p_nota', $nota)
+            ->where('pd_item', $item)
+            ->select('p_nota', 's_company', 's_phone', 'i_nama')
+            ->first();
+
+        $getDT = DB::table('d_purchase')
+            ->join('d_supplier', 's_id', '=', 'p_supplier')
+            ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
+            ->join('d_item', 'i_id', '=', 'pd_item')
+            ->where('p_nota', $nota)
+            ->where('pd_item', $item)
+            ->where('pd_qtyreceived', '!=', 0)
+            ->select('pd_specificcode', 'pd_purchase', 'pd_detailid', 'pd_qty')
+            ->groupBy('pd_detailid')
+            ->get();
+
+        $getReff = DB::table('d_stock')
+            ->join('d_stock_mutation', 'sm_stock', '=', 's_id')
+            ->where('s_item', $item)
+            ->where('sm_nota', $nota)
+            ->get();
+
+        $getSCEX = DB::table('d_item')->where('i_id', $item)->select('i_specificcode', 'i_expired')->first();
+        // dd($getDT);
+        return json_encode([
+            'item' => $getSCEX,
+            'data' => $getData,
+            'dataDT' => $getDT,
+            'dataSM' => $getReff
+        ]);
+    }
+
+    public function editReceived(){
+
     }
 
     public function hapus(){

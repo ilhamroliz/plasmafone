@@ -9,7 +9,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 use DB;
 use Carbon\Carbon;
 
-class onlineshop_controller extends Controller
+class OnlineshopController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -122,7 +122,7 @@ class onlineshop_controller extends Controller
 
     }
 
-    public function shoping_cart()
+    public function shoping_cart($id)
     {
 
         $menu_hp = DB::table('d_item')
@@ -138,8 +138,14 @@ class onlineshop_controller extends Controller
             ->where('i_kelompok', '=', 'ACCESORIES')
             ->orderBy('i_merk')
             ->get();
+        $query = DB::table('d_cart')->select('d_cart.*')->where('c_token', '=', $id)->first();
+        $carts = DB::table('d_cartdt')
+            ->join('d_item', 'cd_item', 'i_id')
+            ->select('cd_item', 'cd_qty','i_nama', 'i_img','i_merk', 'i_price')
+            ->where('cd_cart', '=', $query->c_id)
+            ->get();
 
-        return view('onlineshop.halaman.shoping_cart', compact('menu_hp', 'menu_acces', 'products'));
+        return view('onlineshop.halaman.shoping_cart', compact('menu_hp', 'menu_acces', 'carts'));
 
     }
 
@@ -150,20 +156,62 @@ class onlineshop_controller extends Controller
         $qty   = $request->input('qty');
         $date  = Carbon::now('Asia/Jakarta');
 
-        $checkId = DB::table('d_cart')->select('d_cart.*')->get();
-        if (count($checkId) == 0) {
-            $c_id = 1;
-        }else {
-            $c_id  = DB::table('d_cart')->max('c_id');
-            ++$c_id;
-        }
 
-        DB::table('d_cart')->insert([
-            'c_id'     => $c_id,
-            'c_date'   => $date,
-            'c_token'  => $token,
-            'c_member' => "Example"
-        ]);
+        DB::beginTransaction();
+        try {
+
+                $checkId = DB::table('d_cart')->select('d_cart.*')->get();
+                if (count($checkId) == 0) {
+                    $c_id = 1;
+                }else {
+                    $c_id  = DB::table('d_cart')->max('c_id');
+                    ++$c_id;
+                }
+
+            $checkRow = DB::table('d_cart')->select('d_cart.*')
+            ->where('c_token', '=', $token)->first();
+
+            if ($checkRow != null) {
+                $detail = DB::table('d_cart')->select('d_cart.*')
+                    ->join('d_cartdt', 'c_id', '=', 'cd_cart')
+                    ->select('d_cart.*', DB::raw('max(cd_detailid) as cd_detailid'))
+                    ->where('c_token', '=', $token)->first();
+
+                DB::table('d_cartdt')->insert([
+                    'cd_cart' => $checkRow->c_id,
+                    'cd_detailid' => $detail->cd_detailid + 1,
+                    'cd_item' => $i_id,
+                    'cd_qty' => $qty
+                ]);
+            } else {
+
+                $cd_dtId = 0;
+                DB::table('d_cart')->insert([
+                    'c_id' => $c_id,
+                    'c_date' => $date,
+                    'c_token' => $token
+                ]);
+
+                DB::table('d_cartdt')->insert([
+                    'cd_cart' => $c_id,
+                    'cd_detailid' => $cd_dtId+1,
+                    'cd_item' => $i_id,
+                    'cd_qty' => $qty
+                ]);
+            }
+
+            DB::commit();
+            return response()->json([
+                'status' => 'sukses'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => 'gagal',
+                'data' => $e
+            ]);
+        }
 
     }
 }

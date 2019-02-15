@@ -37,22 +37,22 @@
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
-
+								@foreach($carts as $cart)
 								<tr class="table_row">
 									<td class="column-1">
 										<div class="how-itemcart1">
-											<img src="{{asset('template_asset/frontend/images/item-cart-04.jpg')}}" alt="IMG">
+											<img src="{{asset('img/items/'.$cart->i_img)}}" alt="IMG">
 										</div>
 									</td>
-									<td class="column-2">Fresh Strawberries</td>
-									<td class="column-3">$ 36.00</td>
+									<td class="column-2">{{$cart->i_nama}}</td>
+									<td class="column-3">$ {{$cart->i_price}}</td>
 									<td class="column-4">
 										<div class="wrap-num-product flex-w m-l-auto m-r-0">
 											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
 												<i class="fs-16 zmdi zmdi-minus"></i>
 											</div>
 
-											<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="1">
+											<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="{{$cart->cd_qty}}">
 
 											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 												<i class="fs-16 zmdi zmdi-plus"></i>
@@ -61,6 +61,7 @@
 									</td>
 									<td class="column-5">$ 36.00</td>
 								</tr>
+								@endforeach
 
 							</table>
 						</div>

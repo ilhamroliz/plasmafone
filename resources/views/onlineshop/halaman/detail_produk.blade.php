@@ -307,16 +307,23 @@
 				url: '{{route("addToCart")}}',
 				type: 'get',
 				data: $('#formCart').serialize(),
-				dataType: 'json'
+				dataType: 'json',
+				success: function (data) {
+					if(data.status =='sukses'){
+						$.smallBox({
+							title : "{{$products->i_nama}}",
+							content : "<i>Berhasil ditambahkan ke dalam cart!</i>",
+							color : "#0069d9",
+							iconSmall : "fa fa-thumbs-up bounce animated",
+							timeout : 7000
+						});
+					}else{
+						console.log('Gagal');
+					}
+				}
 			});
 		}
 
 	    $("input[type='number']").inputSpinner();
-	    $('.js-addcart-detail').each(function(){
-			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-			$(this).on('click', function(){
-				swal(nameProduct, "Berhasil ditambahkan ke dalam Cart !", "success");
-			});
-		});
 	</script>
 @endsection
