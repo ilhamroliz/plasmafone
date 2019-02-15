@@ -285,11 +285,21 @@
                 todayHighlight: true
             });
 
-            $('.price').maskMoney('mask', {thousands: '.', precision: 0});
-            $('.diskV').maskMoney('mask', {thousands: '.', precision: 0});
+            $('.price').maskMoney({
+                thousands: '.',
+                precision: 0
+            });
+            $('.diskV').maskMoney({
+                thousands: '.',
+                precision: 0
+            });
             $('#htgDiskV').maskMoney('mask', {thousands: '.', precision: 0});
 
-            $('.persen').maskMoney('mask', {thousands: '.', precision: 0, suffix: ' %'});
+            $('.persen').maskMoney({
+                thousands: '.',
+                precision: 0,
+                suffix: ' %'
+            });
         })
 
         function cekpersen(id){
