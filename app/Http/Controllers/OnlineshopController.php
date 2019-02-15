@@ -138,11 +138,11 @@ class OnlineshopController extends Controller
             ->where('i_kelompok', '=', 'ACCESORIES')
             ->orderBy('i_merk')
             ->get();
-        $query = DB::table('d_cart')->select('d_cart.*')->where('c_token', '=', $id)->first();
-        $carts = DB::table('d_cartdt')
+        $carts = DB::table('d_cart')
+            ->join('d_cartdt', 'c_id', '=', 'cd_cart')
             ->join('d_item', 'cd_item', 'i_id')
-            ->select('cd_item', 'cd_qty','i_nama', 'i_img','i_merk', 'i_price')
-            ->where('cd_cart', '=', $query->c_id)
+            ->select('cd_item', 'cd_qty','i_nama', 'i_img','i_merk', 'i_price', 'd_cart.*')
+            ->where('c_token', '=', $id)
             ->get();
 
         return view('onlineshop.halaman.shoping_cart', compact('menu_hp', 'menu_acces', 'carts'));
