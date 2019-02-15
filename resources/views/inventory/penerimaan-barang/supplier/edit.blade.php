@@ -329,7 +329,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                             </tr>
                                                         </thead>
 
-                                                        <tbody>
+                                                        <tbody id="dc">
                                                         </tbody>
 
                                                     </table>
@@ -357,7 +357,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                             </tr>
                                                         </thead>
 
-                                                        <tbody>
+                                                        <tbody id="dce">
                                                         </tbody>
 
                                                     </table>
@@ -411,7 +411,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
 										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
 										<h2 id="title_detail"></h2>
 
-									</header>
+                                    </header>
+                                    <input type="hidden" id="idItemEdit">
 
 									<!-- widget div-->
 									<div>
@@ -511,6 +512,128 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						</div>
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
+			</div>
+            <!-- /.modal -->
+
+
+            <!-- Modal -->
+			<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+				<div class="modal-dialog" style="width: 60%">
+
+					<div class="modal-content">
+
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel"><strong>Jumlah barang yang diterima</strong></h4>
+
+						</div>
+						<form id="form_qtyReceived">{{ csrf_field() }}
+							<div class="modal-body">
+
+								<div class="row">
+										<div class="col-md-12">
+											<div class="form-group">
+												<label class="text-center col-md-12 control-label" id="nama_item" style="font-weight:bold"></label>
+											</div>
+										</div>
+								</div><br>
+				
+								<div class="row terima margin-bottom-10">
+                                    
+                                    <form id="formInput">
+
+                                        <input type="hidden" id="status">
+
+                                        <input type="hidden" id="scEdit">
+                                        <input type="hidden" id="jmlEdit">
+
+                                        <input type="hidden" id="refPD">
+                                        <input type="hidden" id="refSD">
+                                        <input type="hidden" id="refSM">
+                                        
+                                        <div class="col-md-12 no-padding margin-bottom-10">
+                                            <label class="col-md-4 control-label text-left">Nota Delivery Order</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="eNotaDO" name="eNotaDO" style="text-transform: uppercase" placeholder="Masukkan Nota DO"/>
+                                                    <span class="input-group-addon"><i class="fa fa-building"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 no-padding margin-bottom-10">
+                                            <label class="col-md-4 control-label text-left">Nama Barang</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="eItem" name="eItem" style="text-transform: uppercase" readonly/>
+                                                    <span class="input-group-addon"><i class="fa fa-inbox"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 no-padding margin-bottom-10">
+                                            <label class="col-md-4 control-label text-left">Jumlah Diterima</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="eRcvd" name="eRcvd" style="text-transform: uppercase" readonly/>
+                                                    <span class="input-group-addon"><i class="fa fa-inbox"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div class="col-md-12 no-padding margin-bottom-10 EKS">
+                                            <label class="col-md-4 control-label text-left">Kode Spesifik</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="eKode" name="eKode" style="text-transform: uppercase" placeholder="Masukkan Kode Spesifik"/>
+                                                    <span class="input-group-addon"><i class="fa fa-barcode"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 no-padding margin-bottom-10 EEXP">
+                                            <label class="col-md-4 control-label text-left">Tanggal Kadaluarsa</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="eExpDate" name="eExpDate" style="text-transform: uppercase" placeholder="Masukkan Tanggal Kadaluarsa Barang"/>
+                                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 no-padding margin-bottom-10 EJML">
+                                            <label class="col-md-4 control-label text-left">Jumlah Barang</label>
+                                            <div class="col-xs-8 col-lg-8 inputGroupContainer">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="eJmlBarang" name="eJmlBarang" style="text-transform: uppercase" placeholder="Masukkan Jumlah Barang Yang Diterima"/>
+                                                    <span class="input-group-addon"><i class="fa fa-calculator"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </form>
+								</div>
+							</div>
+						</form>
+
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">
+								Batal
+							</button>
+							<button type="button" id="simpan" class="btn btn-primary" onclick="simpanEdit()">
+								Simpan
+							</button>
+						</div>
+
+					</div><!-- /.modal-content -->
+
+				</div><!-- /.modal-dialog -->
+
 			</div>
             <!-- /.modal -->
             
@@ -671,10 +794,29 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 $('#dt_supp').html(response.data.data.s_company);
                 $('#dt_telp').html(response.data.data.s_phone);
                 $('#dt_item').html(response.data.data.i_nama);
+                $('#idItemEdit').val(response.data.data.i_id);
+
+                $('#divDTC').css('display', 'none');
+                $('#divDTE').css('display', 'none');
+                $('#divDTCE').css('display', 'none');
+                $('#divDTN').css('display', 'none');
                 
                 if(response.data.item.i_specificcode == 'Y' && response.data.item.i_expired == 'N'){
 
                     $('#dtcBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+                    ddtc.clear();
+                    for(var i = 0; i < response.data.dataSM.length; i++){
+                        ddtc.row.add([
+                            '<input type="hidden" id="refPD-a'+i+'" value="'+response.data.dataDT[i].pd_purchase+ '-' +response.data.dataDT[i].pd_detailid+'">'+
+                            '<input type="hidden" id="refSM-a'+i+'" value="'+response.data.dataSM[i].sm_stock+ '-' +response.data.dataSM[i].sm_detailid+'">'+
+                            '<input type="hidden" id="reff-a'+i+'" value="'+response.data.dataSM[i].sm_reff+'">'+response.data.dataSM[i].sm_reff,
+                            '<input type="hidden" id="sc-a'+i+'" value="'+response.data.dataDT[i].pd_specificcode+'">'+response.data.dataDT[i].pd_specificcode,
+                            '<div class="text-center">'+
+                                '<a class="btn btn-warning btn-circle" onclick="edit(\''+'a'+i+'\')"><i class="fa fa-edit"></i></a>'+
+                            '</div>'
+                        ]).draw();
+                    }
 
                     $('#divDTC').css('display', 'block');
 
@@ -682,17 +824,58 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                     $('#dteBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 
+                    ddte.clear();
+                    for(var i = 0; i < response.data.dataSM.length; i++){
+                        ddte.row.add([
+                            '<input type="hidden" id="refPD-b'+i+'" value="'+response.data.dataDT[0].pd_purchase+ '-' +response.data.dataDT[0].pd_detailid+'">'+
+                            '<input type="hidden" id="refSM-b'+i+'" value="'+response.data.dataSM[i].sm_stock+ '-' +response.data.dataSM[i].sm_detailid+'">'+
+                            '<input type="hidden" id="reff-b'+i+'" value="'+response.data.dataSM[i].sm_reff+'">'+response.data.dataSM[i].sm_reff,
+                            '<input type="hidden" id="exp-b'+i+'" value="'+response.data.dataSM[i].sm_expired+'">'+response.data.dataSM[i].sm_expired,
+                            '<input type="hidden" id="jml-b'+i+'" value="'+response.data.dataSM[i].sm_qty+'">'+response.data.dataSM[i].sm_qty,
+                            '<div class="text-center">'+
+                                '<a class="btn btn-warning btn-circle" onclick="edit(\''+'b'+i+'\')"><i class="fa fa-edit"></i></a>'+
+                            '</div>'
+                        ]).draw();
+                    }
+
                     $('#divDTE').css('display', 'block');
 
                 }else if(response.data.item.i_specificcode == 'Y' && response.data.item.i_expired == 'Y'){
 
                     $('#dtceBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
 
+                    ddtce.clear();
+                    for(var i = 0; i < response.data.dataSM.length; i++){
+                        ddtce.row.add([
+                            '<input type="hidden" id="refPD-c'+i+'" value="'+response.data.dataDT[i].pd_purchase+ '-' +response.data.dataDT[i].pd_detailid+'">'+
+                            '<input type="hidden" id="refSM-c'+i+'" value="'+response.data.dataSM[i].sm_stock+ '-' +response.data.dataSM[i].sm_detailid+'">'+
+                            '<input type="hidden" id="reff-c'+i+'" value="'+response.data.dataSM[i].sm_reff+'">'+response.data.dataSM[i].sm_reff,
+                            '<input type="hidden" id="exp-c'+i+'" value="'+response.data.dataSM[i].sm_expired+'">'+response.data.dataSM[i].sm_expired,
+                            '<input type="hidden" id="jml-c'+i+'" value="'+response.data.dataDT[i].pd_specificcode+'">'+response.data.dataDT[i].pd_specificcode,
+                            '<div class="text-center">'+
+                                '<a class="btn btn-warning btn-circle" onclick="edit(\''+'c'+i+'\')"><i class="fa fa-edit"></i></a>'+
+                            '</div>'
+                        ]).draw();
+                    }
+
                     $('#divDTCE').css('display', 'block');
 
                 }else{
 
                     $('#dtnBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+
+                    ddtn.clear();
+                    for(var i = 0; i < response.data.dataSM.length; i++){
+                        ddtn.row.add([
+                            '<input type="hidden" id="refPD-d'+i+'" value="'+response.data.dataDT[0].pd_purchase+ '-' +response.data.dataDT[0].pd_detailid+'">'+
+                            '<input type="hidden" id="refSM-d'+i+'" value="'+response.data.dataSM[i].sm_stock+ '-' +response.data.dataSM[i].sm_detailid+'">'+
+                            '<input type="hidden" id="reff-d'+i+'" value="'+response.data.dataSM[i].sm_reff+'">'+response.data.dataSM[i].sm_reff,
+                            '<input type="hidden" id="qty-d'+i+'" value="'+response.data.dataSM[i].sm_qty+'">'+response.data.dataSM[i].sm_qty,
+                            '<div class="text-center">'+
+                                '<a class="btn btn-warning btn-circle" onclick="edit(\''+'d'+i+'\')"><i class="fa fa-edit"></i></a>'+
+                            '</div>'
+                        ]).draw();
+                    }
 
                     $('#divDTN').css('display', 'block');
 
@@ -705,11 +888,121 @@ use App\Http\Controllers\PlasmafoneController as Access;
         }
 
         /* Sebelum Menampilkan Form Edit .... */
-        function edit(){
+        function edit(id){
 
+            var nota, ks, exp, jml, refPD, refSM;
+
+            $('.EKS').css('display', 'none');
+            $('.EEXP').css('display', 'none');
+            $('.EJML').css('display', 'none');
+
+            refPD = $('#refPD-'+id).val();
+            refSM = $('#refSM-'+id).val();
+            $('#refPD').val(refPD);
+            $('#refSM').val(refSM);
+
+            if(id.includes('a') == true){
+
+                $('#status').val('cs');
+
+                nota = $('#reff-'+id).val();
+                $('#eNotaDO').val(nota);
+                ks = $('#sc-'+id).val();
+                $('#eKode').val(ks);
+
+                $('#scEdit').val(ks);
+
+                $('.EKS').css('display', 'block');
+
+            }else if(id.includes('b') == true){
+
+                $('#status').val('exp');
+
+                nota = $('#reff-'+id).val();
+                $('#eNotaDO').val(nota);
+                exp = $('#exp-'+id).val();
+                $('#eExpDate').val(exp);
+                jml = $('#qty-'+id).val();
+                $('#eJmlBarang').val(jml);
+
+                $('#jmlEdit').val(jml);
+
+                $('.EEXP').css('display', 'block');
+                $('.EJML').css('display', 'block');
+
+            }else if(id.includes('c') == true){
+
+                $('#status').val('csexp');
+
+                nota = $('#reff-'+id).val();
+                $('#eNotaDO').val(nota);
+                exp = $('#exp-'+id).val();
+                $('#eExpDate').val(exp);
+                ks = $('#sc-'+id).val();
+                $('#eKode').val(ks);
+
+                $('#scEdit').val(ks);
+
+                $('.EKS').css('display', 'block');
+                $('.EEXP').css('display', 'block');
+                
+            }else{
+
+                $('#status').val('non');
+
+                nota = $('#reff-'+id).val();
+                $('#eNotaDO').val(nota);
+                jml = $('#qty-'+id).val();
+                $('#eJmlBarang').val(jml);
+
+                $('#jmlEdit').val(jml);
+
+                $('.EJML').css('display', 'block');
+
+            }
+            $('#editModal').modal('show');
         }
 
         function simpanEdit(){
+
+            var notaS = $('#eNotaDO').val();
+            var expS = $('#eExpDate').val();
+            var kodeS = $('#eKode').val();
+            var jmlS = $('#eJmlBarang').val();
+
+            var refPD = $('#refPD').val();
+            var refSM = $('#refSM').val();
+
+            var status = $('#status').val();
+            var item = $('#idItemEdit').val();
+
+            var jmlEdit = $('#jmlEdit').val();
+            var scEdit = $('#scEdit').val();
+
+            var data = '';
+            if(status == 'cs'){       
+
+                data = 'kode=' + kodeS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&scEdit=' + scEdit;
+
+            }else if(status == 'exp'){
+
+                data = 'exp=' + expS + '&jml=' + jmlS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&jmlEdit=' + jmlEdit;
+                
+            }else if(status == 'csexp'){
+
+                data = 'exp=' + expS + 'kode=' + kodeS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&scEdit=' + scEdit;
+                
+            }else{
+
+                data = '&jml=' + jmlS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&jmlEdit=' + jmlEdit;
+
+            }
+
+            axios.post(baseUrl+'/inventory/penerimaan/supplier/editReceived', data).then((response) => {
+
+                
+
+            })
 
         }
 
@@ -923,13 +1216,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
             var dataDT = 'id=' + id + '&item=' + item;
             axios.post(baseUrl+'/inventory/penerimaan/supplier/getItemDT', dataDT).then((respon) => {
 
-                $('#dt_code').DataTable().clear();                    
-                $('#dt_code_exp').DataTable().clear();
-
                 sc = respon.data.item.i_specificcode;
                 exp = respon.data.item.i_expired; 
 
                 if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'N'){
+                    $('#dc').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data masukkan</td></tr>');
+                    $('#dt_code').DataTable().clear();
 
                     $('#tbl_kode').css('display', 'block'); 
                     $('.KS').css('display', 'block');
@@ -940,6 +1232,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     $('.JML').css('display', 'block');
 
                 }else if(respon.data.item.i_specificcode == 'Y' && respon.data.item.i_expired == 'Y'){
+                    $('#dce').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data masukkan</td></tr>');
+                    $('#dt_code_exp').DataTable().clear();
 
                     $('#tbl_exp_code').css('display', 'block');
                     $('.KS').css('display', 'block');
