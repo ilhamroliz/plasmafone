@@ -81,7 +81,11 @@
                     </div>
 
                     <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="2">
-                        <i class="zmdi zmdi-shopping-cart"></i>
+
+                        <button type="button" onclick="viewCart('{{csrf_token()}}')">
+                            <i class="zmdi zmdi-shopping-cart"></i>
+                        </button>
+
                     </div>
                 </div>
             </nav>
@@ -276,7 +280,7 @@
                 </div>
 
                 <div class="header-cart-buttons flex-w w-full">
-                    <a href="{{route('shoping_cart')}}" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
+                    <a href="{{route('shoping_cart', csrf_token())}}" class="flex-c-m stext-101 cl0 size-107 bg3 bor2 hov-btn3 p-lr-15 trans-04 m-r-8 m-b-10">
                         View Cart
                     </a>
 

@@ -29,7 +29,10 @@
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/css/util.css')}}">
 	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/css/main.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/css/animate.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/css/jquery-ui.css')}}">
 <!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('template_asset/css/smartadmin-production-plugins.min.css') }}">
 <!-- <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}"> -->
 <style type="text/css">
 	p {

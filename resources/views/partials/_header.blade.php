@@ -4,12 +4,12 @@
 		<!-- PLACE YOUR LOGO HERE -->
 		<span id="logo"> <img src="{{ asset('template_asset/img/logo.png') }}" alt="SmartAdmin"> </span>
 		<!-- END LOGO PLACEHOLDER -->
-		
+
 		@if(Access::checkAkses(13,'read') == true)
 		<!-- Note: The activity badge color changes when clicked and resets the number to 0
 		Suggestion: You may want to set a flag when this happens to tick off all checked messages / notifications -->
-		<span id="activity" class="activity-dropdown"> <i class="fa fa-bell-o"></i> 
-			<b id="countBadge" class="badge"></b> 
+		<span id="activity" class="activity-dropdown"> <i class="fa fa-bell-o"></i>
+			<b id="countBadge" class="badge"></b>
 		</span>
 
 		<!-- AJAX-DROPDOWN : control this dropdown height, look and feel from the LESS variable file -->
@@ -32,7 +32,7 @@
 			<!-- footer: refresh area -->
 			<span> Last updated on: <b id="date-notif"></b>
 				<button type="button" data-loading-text="<i class='fa fa-refresh fa-spin'></i> Loading..." class="btn btn-xs btn-default pull-right">
-					<i class="fa fa-refresh"></i>
+						<i class="fa fa-refresh"></i>
 				</button>
 			</span>
 			<!-- end footer -->
