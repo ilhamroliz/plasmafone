@@ -616,7 +616,15 @@
         }
 
         function serviceTerima(id) {
+            $.SmartMessageBox({
+                title: "Pesan!",
+                content: 'Terima barang ini untuk diperbaiki?',
+                buttons: '[Batal][Ya]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Ya") {
 
+                }
+            });
         }
 
         function refresh_tab() {
