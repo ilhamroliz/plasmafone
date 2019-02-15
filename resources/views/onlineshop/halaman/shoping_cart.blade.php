@@ -37,6 +37,7 @@
 									<th class="column-4">Quantity</th>
 									<th class="column-5">Total</th>
 								</tr>
+								@if (count($carts) > 0)
 								@foreach($carts as $cart)
 								<tr class="table_row">
 									<td class="column-1">
@@ -45,24 +46,31 @@
 										</div>
 									</td>
 									<td class="column-2">{{$cart->i_nama}}</td>
-									<td class="column-3">$ {{$cart->i_price}}</td>
+
+									<td class="column-3">Rp. {{number_format($cart->i_price,0,",",".")}}</td>
+									<input type="hidden" class="harga" id="harga-{{ $cart->cd_item }}" value="{{ $cart->i_price }}">
 									<td class="column-4">
 										<div class="wrap-num-product flex-w m-l-auto m-r-0">
 											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
 												<i class="fs-16 zmdi zmdi-minus"></i>
 											</div>
 
-											<input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="{{$cart->cd_qty}}">
+											<input class="mtext-104 cl3 txt-center num-product cd_qty" type="number" id="qty-{{ $cart->cd_item }}" name="cd_qty[]" value="{{$cart->cd_qty}}" onkeyup="setHarga('{{ $cart->cd_item }}')">
 
 											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
 												<i class="fs-16 zmdi zmdi-plus"></i>
 											</div>
 										</div>
 									</td>
-									<td class="column-5">$ 36.00</td>
+
+									<td class="column-5" id="p_tot-{{ $cart->cd_item }}">Rp. {{number_format(( $cart->i_price * $cart->cd_qty),0,",",".")}}</td>
 								</tr>
 								@endforeach
-
+								@else
+								<tr class="table_row">
+									<td colspan="5" class="txt-center"><h1 class="cl2">No Data Result!</h1></td>
+								</tr>
+								@endif
 							</table>
 						</div>
 
@@ -88,7 +96,7 @@
 							Cart Totals
 						</h4>
 
-						<div class="flex-w flex-t bor12 p-b-13">
+						<div class="flex-w flex-t bor12 p-b-13 m-b-20">
 							<div class="size-208">
 								<span class="stext-110 cl2">
 									Subtotal:
@@ -97,65 +105,7 @@
 
 							<div class="size-209">
 								<span class="mtext-110 cl2">
-									$79.65
-								</span>
-							</div>
-						</div>
 
-						<div class="flex-w flex-t bor12 p-t-15 p-b-30">
-							<div class="size-208 w-full-ssm">
-								<span class="stext-110 cl2">
-									Shipping:
-								</span>
-							</div>
-
-							<div class="size-209 p-r-18 p-r-0-sm w-full-ssm">
-								<p class="stext-111 cl6 p-t-2">
-									There are no shipping methods available. Please double check your address, or contact us if you need any help.
-								</p>
-
-								<div class="p-t-15">
-									<span class="stext-112 cl8">
-										Calculate Shipping
-									</span>
-
-									<div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
-										<select class="js-select2" name="time">
-											<option>Select a country...</option>
-											<option>USA</option>
-											<option>UK</option>
-										</select>
-										<div class="dropDownSelect2"></div>
-									</div>
-
-									<div class="bor8 bg0 m-b-12">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="state" placeholder="State /  country">
-									</div>
-
-									<div class="bor8 bg0 m-b-22">
-										<input class="stext-111 cl8 plh3 size-111 p-lr-15" type="text" name="postcode" placeholder="Postcode / Zip">
-									</div>
-
-									<div class="flex-w">
-										<div class="btn btn-outline-primary flex-c-m stext-101 cl2 size-115 bor11 hov-btn3 p-lr-15 trans-04 pointer">
-											Update Totals
-										</div>
-									</div>
-
-								</div>
-							</div>
-						</div>
-
-						<div class="flex-w flex-t p-t-27 p-b-33">
-							<div class="size-208">
-								<span class="mtext-101 cl2">
-									Total:
-								</span>
-							</div>
-
-							<div class="size-209 p-t-1">
-								<span class="mtext-110 cl2">
-									$79.65
 								</span>
 							</div>
 						</div>
@@ -168,4 +118,35 @@
 			</div>
 		</div>
 	</form>
+@endsection
+
+@section('extra-script')
+<script>
+	$(document).ready(function(){
+		var inputs = document.getElementsByClassName( 'cd_qty' ),
+            arqty  = [].map.call(inputs, function( input ) {
+                return input.value;
+            });
+
+        for (var i = 0; i < arqty.length; i++){
+
+        }
+
+	})
+
+	function setHarga(id){
+		var qty = $('#qty-'+id).val();
+		var harga = $('#harga-'+id).val();
+		var total = parseInt(qty) * parseInt(harga);
+		$('#p_tot-'+id).html(total);
+	}
+
+	function plus(field){
+	    console.log(field);
+    }
+
+    function min(field){
+        console.log(field);
+    }
+</script>
 @endsection
