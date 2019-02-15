@@ -191,7 +191,7 @@
                                         icon : "fa fa-check bounce animated"
                                     });
                                     cetak(response.data.id)
-                                    window.location = baseUrl + '/penjualan/return-penjualan';
+                                    window.location = baseUrl + '/penjualan/service-barang';
                                 } else if (response.data.status == "not found") {
                                     $.smallBox({
                                         title : "Gagal",

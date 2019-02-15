@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c1fafb65-daf5-4c94-858a-66fc52492e53" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/views/penjualan/service-barang/struk.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/penjualan/ServicesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/penjualan/ServicesController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/service-barang/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/service-barang/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/penjualan/service-barang/service.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/penjualan/service-barang/service.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf/" />
     <ignored path="$PROJECT_DIR$/vendor/beyondcode/laravel-dump-server/" />
@@ -148,12 +151,40 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="461">
+              <caret line="686" column="43" lean-forward="true" selection-start-line="686" selection-start-column="43" selection-end-line="686" selection-end-column="43" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/inventory/DistribusiController.php">
+          <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="415">
-              <caret line="684" column="103" selection-start-line="684" selection-start-column="92" selection-end-line="684" selection-end-column="103" />
+              <caret line="1341" column="83" lean-forward="true" selection-start-line="1341" selection-start-column="83" selection-end-line="1341" selection-end-column="83" />
+              <folding>
+                <element signature="e#479#668#0#PHP" />
+                <element signature="e#674#863#0#PHP" />
+                <element signature="e#869#2319#0#PHP" />
+                <element signature="e#2325#5204#0#PHP" />
+                <element signature="e#248#254#1" expanded="true" />
+                <element signature="e#465#471#1" expanded="true" />
+                <element signature="e#248#254#1" expanded="true" />
+                <element signature="e#5210#6406#0#PHP" />
+                <element signature="e#6412#7825#0#PHP" />
+                <element signature="e#7831#9191#0#PHP" />
+                <element signature="e#9197#12048#0#PHP" />
+                <element signature="e#12054#14278#0#PHP" />
+                <element signature="e#14284#24957#0#PHP" />
+                <element signature="e#24963#34510#0#PHP" />
+                <element signature="e#34516#35353#0#PHP" />
+                <element signature="e#35359#42049#0#PHP" />
+                <element signature="e#42055#48503#0#PHP" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -161,33 +192,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/ServicesController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-25">
-              <caret line="27" column="36" selection-start-line="27" selection-start-column="36" selection-end-line="27" selection-end-column="36" />
+            <state relative-caret-position="418">
+              <caret line="720" column="68" selection-start-line="720" selection-start-column="68" selection-end-line="720" selection-end-column="68" />
               <folding>
                 <element signature="e#50#78#0#PHP" expanded="true" />
-                <element signature="e#385#599#0#PHP" />
-                <element signature="e#605#2375#0#PHP" />
                 <element signature="e#246#252#1" expanded="true" />
-                <element signature="e#2385#4155#0#PHP" />
                 <element signature="e#246#252#1" expanded="true" />
                 <element signature="e#460#466#1" expanded="true" />
-                <element signature="e#2381#3928#0#PHP" />
                 <element signature="e#246#252#1" expanded="true" />
-                <element signature="e#3934#5480#0#PHP" />
                 <element signature="e#246#252#1" expanded="true" />
-                <element signature="e#5486#7031#0#PHP" />
                 <element signature="e#246#252#1" expanded="true" />
-                <element signature="e#7037#8659#0#PHP" />
-                <element signature="e#8665#8877#0#PHP" />
-                <element signature="e#8883#9591#0#PHP" />
-                <element signature="e#9597#10327#0#PHP" />
-                <element signature="e#10333#10953#0#PHP" />
-                <element signature="e#10959#13540#0#PHP" />
                 <element signature="e#248#254#1" expanded="true" />
-                <element signature="e#13546#15537#0#PHP" />
-                <element signature="e#15543#16460#0#PHP" />
-                <element signature="e#16466#18658#0#PHP" />
-                <element signature="e#18664#18752#0#PHP" />
               </folding>
             </state>
           </provider>
@@ -197,17 +212,25 @@
         <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="371">
-              <caret line="617" column="36" lean-forward="true" selection-start-line="617" selection-start-column="36" selection-end-line="617" selection-end-column="36" />
-              <folding>
-                <element signature="e#2237#2260#0#HTML" expanded="true" />
-                <element signature="e#14429#15837#0#HTML" />
-                <element signature="e#14442#15850#0#HTML" />
-                <element signature="e#15927#17361#0#HTML" />
-                <element signature="e#17405#18843#0#HTML" />
-                <element signature="e#18888#20324#0#HTML" />
-                <element signature="e#20259#22346#0#HTML" />
-                <element signature="e#25505#25529#0#HTML" />
-              </folding>
+              <caret line="617" column="36" selection-start-line="617" selection-start-column="36" selection-end-line="617" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/service.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="303">
+              <caret line="221" column="71" selection-start-line="221" selection-start-column="71" selection-end-line="221" selection-end-column="71" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/struk.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="115" column="40" selection-start-line="115" selection-start-column="40" selection-end-line="115" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -216,7 +239,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>penjualan-regul</find>
       <find>nota</find>
       <find>addDum</find>
       <find>simpanreq</find>
@@ -246,6 +268,7 @@
       <find>datat</find>
       <find>T</find>
       <find>Terima</find>
+      <find>stru</find>
     </findStrings>
     <replaceStrings>
       <replace>PurchaseOrderController</replace>
@@ -283,9 +306,11 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/PengelolaanMemberController.php" />
         <option value="$PROJECT_DIR$/resources/views/pengelolaan_member/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/service-barang/send.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php" />
         <option value="$PROJECT_DIR$/resources/views/penjualan/service-barang/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/penjualan/service-barang/struk.blade.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/resources/views/penjualan/service-barang/service.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/penjualan/ServicesController.php" />
       </list>
     </option>
@@ -405,6 +430,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -470,21 +496,12 @@
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="views" type="462c0819:PsiDirectoryNode" />
               <item name="penjualan" type="462c0819:PsiDirectoryNode" />
-              <item name="return-penjualan" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="plasmafone" type="b2602c69:ProjectViewProjectNode" />
-              <item name="plasmafone" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="penjualan" type="462c0819:PsiDirectoryNode" />
               <item name="service-barang" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -493,6 +510,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="RunDashboard">
@@ -548,6 +566,7 @@
       <workItem from="1550042190643" duration="946000" />
       <workItem from="1550050817371" duration="9110000" />
       <workItem from="1550110395989" duration="777000" />
+      <workItem from="1550194692838" duration="2757000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1549088688030</created>
@@ -693,13 +712,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="96311000" />
+    <option name="totallyTimeSpent" value="103768000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="0" width="1368" height="768" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.16666667" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49834436" visible="true" weight="0.1689394" />
       <window_info id="Structure" order="1" sideWeight="0.50165564" side_tool="true" weight="0.24166666" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -730,41 +749,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="roliz" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PurchaseOrderController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4704">
-          <caret line="226" column="5" selection-start-line="226" selection-start-column="5" selection-end-line="226" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/add_po.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2100">
-          <caret line="100" column="38" selection-end-line="684" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/view_purchase_order.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="52" column="87" selection-start-line="52" selection-start-column="87" selection-end-line="52" selection-end-column="87" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/perbaikan/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="42" column="18" selection-start-line="42" selection-start-column="18" selection-end-line="42" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/perbaikan/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1365">
-          <caret line="65" column="57" selection-end-line="100" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PerbaikanController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -797,13 +781,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret selection-end-line="1052" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/inventory/DistribusiController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="35" column="44" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
         </state>
       </provider>
     </entry>
@@ -1022,21 +999,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/add.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/send.blade.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/send.blade.php" />
     <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="548">
@@ -1052,23 +1015,6 @@
             <element signature="n#style#0;n#input#0;n#div#0;n#!!top" expanded="true" />
             <element signature="e#246#252#1" expanded="true" />
             <element signature="e#262#268#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="617" column="36" lean-forward="true" selection-start-line="617" selection-start-column="36" selection-end-line="617" selection-end-column="36" />
-          <folding>
-            <element signature="e#2237#2260#0#HTML" expanded="true" />
-            <element signature="e#14429#15837#0#HTML" />
-            <element signature="e#14442#15850#0#HTML" />
-            <element signature="e#15927#17361#0#HTML" />
-            <element signature="e#17405#18843#0#HTML" />
-            <element signature="e#18888#20324#0#HTML" />
-            <element signature="e#20259#22346#0#HTML" />
-            <element signature="e#25505#25529#0#HTML" />
           </folding>
         </state>
       </provider>
@@ -1094,42 +1040,98 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/return-penjualan/struk.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="23" lean-forward="true" selection-start-line="8" selection-start-column="23" selection-end-line="8" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/inventory/distribusi/struck.blade.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/inventory/DistribusiController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="415">
-          <caret line="684" column="103" selection-start-line="684" selection-start-column="92" selection-end-line="684" selection-end-column="103" />
+          <caret line="1341" column="83" lean-forward="true" selection-start-line="1341" selection-start-column="83" selection-end-line="1341" selection-end-column="83" />
+          <folding>
+            <element signature="e#479#668#0#PHP" />
+            <element signature="e#674#863#0#PHP" />
+            <element signature="e#869#2319#0#PHP" />
+            <element signature="e#2325#5204#0#PHP" />
+            <element signature="e#248#254#1" expanded="true" />
+            <element signature="e#465#471#1" expanded="true" />
+            <element signature="e#248#254#1" expanded="true" />
+            <element signature="e#5210#6406#0#PHP" />
+            <element signature="e#6412#7825#0#PHP" />
+            <element signature="e#7831#9191#0#PHP" />
+            <element signature="e#9197#12048#0#PHP" />
+            <element signature="e#12054#14278#0#PHP" />
+            <element signature="e#14284#24957#0#PHP" />
+            <element signature="e#24963#34510#0#PHP" />
+            <element signature="e#34516#35353#0#PHP" />
+            <element signature="e#35359#42049#0#PHP" />
+            <element signature="e#42055#48503#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="371">
+          <caret line="617" column="36" selection-start-line="617" selection-start-column="36" selection-end-line="617" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/struk.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="115" column="40" selection-start-line="115" selection-start-column="40" selection-end-line="115" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/add.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8835">
+          <folding>
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#td#2;n#tr#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="686" column="43" lean-forward="true" selection-start-line="686" selection-start-column="43" selection-end-line="686" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/penjualan/service-barang/service.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="221" column="71" selection-start-line="221" selection-start-column="71" selection-end-line="221" selection-end-column="71" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/ServicesController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-25">
-          <caret line="27" column="36" selection-start-line="27" selection-start-column="36" selection-end-line="27" selection-end-column="36" />
+        <state relative-caret-position="418">
+          <caret line="720" column="68" selection-start-line="720" selection-start-column="68" selection-end-line="720" selection-end-column="68" />
           <folding>
             <element signature="e#50#78#0#PHP" expanded="true" />
-            <element signature="e#385#599#0#PHP" />
-            <element signature="e#605#2375#0#PHP" />
             <element signature="e#246#252#1" expanded="true" />
-            <element signature="e#2385#4155#0#PHP" />
             <element signature="e#246#252#1" expanded="true" />
             <element signature="e#460#466#1" expanded="true" />
-            <element signature="e#2381#3928#0#PHP" />
             <element signature="e#246#252#1" expanded="true" />
-            <element signature="e#3934#5480#0#PHP" />
             <element signature="e#246#252#1" expanded="true" />
-            <element signature="e#5486#7031#0#PHP" />
             <element signature="e#246#252#1" expanded="true" />
-            <element signature="e#7037#8659#0#PHP" />
-            <element signature="e#8665#8877#0#PHP" />
-            <element signature="e#8883#9591#0#PHP" />
-            <element signature="e#9597#10327#0#PHP" />
-            <element signature="e#10333#10953#0#PHP" />
-            <element signature="e#10959#13540#0#PHP" />
             <element signature="e#248#254#1" expanded="true" />
-            <element signature="e#13546#15537#0#PHP" />
-            <element signature="e#15543#16460#0#PHP" />
-            <element signature="e#16466#18658#0#PHP" />
-            <element signature="e#18664#18752#0#PHP" />
           </folding>
         </state>
       </provider>

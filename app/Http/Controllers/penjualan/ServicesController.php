@@ -476,6 +476,7 @@ class ServicesController extends Controller
         try{
             $service[] = [
                 'si_id' => $sid,
+                'si_comp' => $comp,
                 'si_position' => $comp,
                 'si_date' => $date,
                 'si_nota' => $nota,
@@ -584,7 +585,7 @@ class ServicesController extends Controller
                 ]);
 
             DB::commit();
-            return json_encode(['status' => 'true']);
+            return json_encode(['status' => 'true', 'id' => Crypt::encrypt($sid)]);
         }catch (\Exception $e){
             DB::rollback();
             return $e;
@@ -608,6 +609,76 @@ class ServicesController extends Controller
                     'si_position' => 'PF00000001',
                     'si_shipping_status' => 'Delivery'
                 ]);
+
+            $itemService = DB::table('d_service_item')
+                ->join('d_service_itemdt', 'd_service_item.si_id', '=', 'd_service_itemdt.sid_serviceitem')
+                ->where('si_id', $id);
+
+            // insert d_stock
+            $sid = (DB::table('d_stock')->max('s_id')) ? (DB::table('d_stock')->max('s_id')) + 1 : 1;
+
+            $stock = DB::table('d_stock')
+                ->where('s_comp', $itemService->first()->si_comp)
+                ->where('s_position', $itemService->first()->si_position)
+                ->where('s_item', $itemService->first()->sid_item)
+                ->where('s_status', 'On Going')
+                ->where('s_condition', 'BROKEN');
+
+            if ($stock->count() == 0) {
+
+                // insert d_stock
+                DB::table('d_stock')->insert([
+                    's_id' => $sid,
+                    's_comp' => $itemService->first()->si_comp,
+                    's_position' => $itemService->first()->si_position,
+                    's_item' => $itemService->first()->sid_item,
+                    's_qty' => $itemService->first()->sid_qty,
+                    's_status' => 'On Going',
+                    's_condition' => 'BROKEN'
+                ]);
+
+                if ($itemService->first()->sid_specificcode != null) {
+                    // insert kode d_stockdt
+                    $sidDetail = (DB::table('d_stock_dt')->where('sd_stock', $sid)->max('sd_detailid')) ? (DB::table('d_stock_dt')->where('sd_stock', $sid)->max('sd_detailid')) + 1 : 1;
+                    DB::table('d_stock_dt')
+                        ->insert([
+                            'sd_stock' => $sid,
+                            'sd_detailid' => $sidDetail,
+                            'sd_specificcode' => $itemService->first()->sid_specificcode
+                        ]);
+                }
+
+            } else {
+
+                //update qtynya
+                DB::table('d_stock')
+                    ->where('s_comp', $itemService->first()->si_comp)
+                    ->where('s_position', $itemService->first()->si_position)
+                    ->where('s_item', $itemService->first()->sid_item)
+                    ->where('s_status', 'On Going')
+                    ->where('s_condition', 'BROKEN')
+                    ->update([
+                        's_qty' => $stock->s_qty + $itemService->first()->sid_qty
+                    ]);
+
+                if ($itemService->first()->sid_specificcode != null) {
+                    // insert kode d_stockdt
+                    $sidDetail = (DB::table('d_stock_dt')->where('sd_stock', $stock->first()->s_id)->max('sd_detailid')) ? (DB::table('d_stock_dt')->where('sd_stock', $sid)->max('sd_detailid')) + 1 : 1;
+                    DB::table('d_stock_dt')
+                        ->insert([
+                            'sd_stock' => $stock->first()->s_id,
+                            'sd_detailid' => $sidDetail,
+                            'sd_specificcode' => $itemService->first()->sid_specificcode
+                        ]);
+                }
+
+            }
+
+            //Stock mutasi
+            $idsm = DB::table('d_stock_mutation')
+                ->where('sm_detail', 'PENAMBAHAN')
+                ->where('sm_nota', $itemService->first()->si_nota);
+
             DB::commit();
             return response()->json(['status' => 'True']);
         }catch (\Exception $e){
@@ -619,5 +690,43 @@ class ServicesController extends Controller
     public function edit()
     {
         return view('penjualan.service-barang.edit');
+    }
+
+    public function struk($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return view('errors/404');
+        }
+
+        $datas = DB::table('d_service_item')
+            ->select(
+                DB::raw('DATE_FORMAT(d_service_item.si_date, "%d-%m-%Y") as date'),
+                'm_company.c_name as outlet',
+                'm_company.c_address as outlet_address',
+                'd_service_item.si_nota as nota_service',
+                'd_service_item.si_notasales as nota_sales',
+                'm_member.m_name as buyer',
+                'm_member.m_telp as telp',
+                'd_mem.m_name as officer',
+                'd_item.i_code as code',
+                'd_item.i_nama as item',
+                'd_service_itemdt.sid_specificcode as specificcode',
+                'd_service_itemdt.sid_qty as qty',
+                'd_service_itemdt.sid_note as note'
+            )
+            ->join('d_service_itemdt', 'd_service_item.si_id', '=', 'd_service_itemdt.sid_serviceitem')
+            ->join('d_item', 'd_service_itemdt.sid_item', '=', 'd_item.i_id')
+            ->join('m_company', 'd_service_item.si_comp', 'm_company.c_id')
+            ->join('m_member', 'd_service_item.si_mem', '=', 'm_member.m_id')
+            ->join('d_mem', 'd_service_itemdt.sid_mem', '=', 'd_mem.m_id')
+            ->get();
+
+        if ($datas == null) {
+            return view('errors/404');
+        }
+
+        return view('penjualan.service-barang.struk')->with(compact('datas'));
     }
 }
