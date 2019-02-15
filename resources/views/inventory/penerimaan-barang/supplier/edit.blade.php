@@ -576,11 +576,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             </div>
                                         </div>
 
-                                        <div class="col-md-12 no-padding margin-bottom-10">
+                                        <div class="col-md-12 no-padding margin-bottom-10 JMLR">
                                             <label class="col-md-4 control-label text-left">Jumlah Diterima</label>
                                             <div class="col-xs-8 col-lg-8 inputGroupContainer">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="eRcvd" name="eRcvd" style="text-transform: uppercase" readonly/>
+                                                    <input type="hidden" id="eQTY">
                                                     <span class="input-group-addon"><i class="fa fa-inbox"></i></span>
                                                 </div>
                                             </div>
@@ -796,6 +797,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 $('#dt_item').html(response.data.data.i_nama);
                 $('#idItemEdit').val(response.data.data.i_id);
 
+                $('#eItem').val(response.data.data.i_nama);
+                $('#eRcvd').val(response.data.data.pd_qtyreceived);
+
                 $('#divDTC').css('display', 'none');
                 $('#divDTE').css('display', 'none');
                 $('#divDTCE').css('display', 'none');
@@ -892,6 +896,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
             var nota, ks, exp, jml, refPD, refSM;
 
+            $('.JMLR').css('display', 'none');
             $('.EKS').css('display', 'none');
             $('.EEXP').css('display', 'none');
             $('.EJML').css('display', 'none');
@@ -903,7 +908,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
             if(id.includes('a') == true){
 
-                $('#status').val('cs');
+                $('#status').val('sc');
 
                 nota = $('#reff-'+id).val();
                 $('#eNotaDO').val(nota);
@@ -927,12 +932,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                 $('#jmlEdit').val(jml);
 
+                $('.JMLR').css('display', 'block');
                 $('.EEXP').css('display', 'block');
                 $('.EJML').css('display', 'block');
 
             }else if(id.includes('c') == true){
 
-                $('#status').val('csexp');
+                $('#status').val('scexp');
 
                 nota = $('#reff-'+id).val();
                 $('#eNotaDO').val(nota);
@@ -957,6 +963,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                 $('#jmlEdit').val(jml);
 
+                $('.JMLR').css('display', 'block');
                 $('.EJML').css('display', 'block');
 
             }
@@ -964,6 +971,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
         }
 
         function simpanEdit(){
+
+            $('#overlay').fadeIn(200);
 
             var notaS = $('#eNotaDO').val();
             var expS = $('#eExpDate').val();
@@ -980,7 +989,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
             var scEdit = $('#scEdit').val();
 
             var data = '';
-            if(status == 'cs'){       
+            if(status == 'sc'){       
 
                 data = 'kode=' + kodeS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&scEdit=' + scEdit;
 
@@ -988,19 +997,40 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                 data = 'exp=' + expS + '&jml=' + jmlS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&jmlEdit=' + jmlEdit;
                 
-            }else if(status == 'csexp'){
+            }else if(status == 'scexp'){
 
-                data = 'exp=' + expS + 'kode=' + kodeS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&scEdit=' + scEdit;
+                data = 'exp=' + expS + '&kode=' + kodeS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&scEdit=' + scEdit;
                 
             }else{
 
-                data = '&jml=' + jmlS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&jmlEdit=' + jmlEdit;
+                data = 'jml=' + jmlS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&jmlEdit=' + jmlEdit;
 
             }
 
             axios.post(baseUrl+'/inventory/penerimaan/supplier/editReceived', data).then((response) => {
 
-                
+                if(response.data.status == 'sukses'){
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Berhasil",
+                        content : 'Data Barang Diterima Berhasil Disimpan!',
+                        color : "#739E73",
+                        timeout: 3000,
+                        icon : "fa fa-check bounce animated"
+                    });
+                    detail(response.data.id, response.data.item);
+                    refresh_tab();
+                    $('#editModal').modal('hide');
+                }else{
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Data Barang Diterima Gagal Disimpan!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                }                    
 
             })
 
