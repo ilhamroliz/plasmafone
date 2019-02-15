@@ -62,25 +62,25 @@
                         <header>
                             <ul id="widget-tab-1" class="nav nav-tabs pull-left">
                                 <li class="active">
-                                    <a data-toggle="tab" href="#hr1"> <i style="color: #C79121;" class="fa fa-lg fa-minus-circle"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Pending </span>
+                                    <a data-toggle="tab" href="#hr1"> <i style="color: #3276B1;" class="fa fa-lg fa-list"></i>
+                                        <span class="hidden-mobile hidden-tablet"> Daftar Service Barang </span>
                                     </a>
                                 </li>
-                                <li>
-                                    <a data-toggle="tab" href="#hr2"> <i style="color: #A90329;" class="fa fa-lg fa-remove"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Tolak </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#hr3"> <i style="color: #3276B1;" class="fa fa-lg fa-rotate-right fa-spin"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Proses </span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a data-toggle="tab" href="#hr4"> <i style="color: #739E73;" class="fa fa-lg fa-check"></i>
-                                        <span class="hidden-mobile hidden-tablet"> Selesai </span>
-                                    </a>
-                                </li>
+                                {{--<li>--}}
+                                    {{--<a data-toggle="tab" href="#hr2"> <i style="color: #A90329;" class="fa fa-lg fa-remove"></i>--}}
+                                        {{--<span class="hidden-mobile hidden-tablet"> Tolak </span>--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
+                                {{--<li>--}}
+                                    {{--<a data-toggle="tab" href="#hr3"> <i style="color: #3276B1;" class="fa fa-lg fa-rotate-right fa-spin"></i>--}}
+                                        {{--<span class="hidden-mobile hidden-tablet"> Proses </span>--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
+                                {{--<li>--}}
+                                    {{--<a data-toggle="tab" href="#hr4"> <i style="color: #739E73;" class="fa fa-lg fa-check"></i>--}}
+                                        {{--<span class="hidden-mobile hidden-tablet"> Selesai </span>--}}
+                                    {{--</a>--}}
+                                {{--</li>--}}
                             </ul>
                         </header>
                         <!-- widget div-->
@@ -90,57 +90,73 @@
                                 <!-- widget body text-->
                                 <div class="tab-content padding-10">
                                     <div class="tab-pane fade in active" id="hr1">
-                                        <table id="dt_pending" class="table table-striped table-bordered table-hover" width="100%">
+                                        <table id="dt_table" class="table table-striped table-bordered table-hover" width="100%">
                                             <thead>
-                                                <tr>
-                                                    <th>Tanggal</th>
-                                                    <th>Nota</th>
-                                                    <th>Pelanggan</th>
-                                                    <th>Aksi</th>
-                                                </tr>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Nota Service</th>
+                                                <th>Pelanggan</th>
+                                                <th>Posisi Barang</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
                                             </thead>
                                             <tbody></tbody>
                                         </table>
                                     </div>
-                                    <div class="tab-pane fade" id="hr2">
-                                        <table id="dt_tolak" class="table table-striped table-bordered table-hover" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tanggal</th>
-                                                    <th>Nota</th>
-                                                    <th>Pelanggan</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane fade" id="hr3">
-                                        <table id="dt_proses" class="table table-striped table-bordered table-hover" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tanggal</th>
-                                                    <th>Nota</th>
-                                                    <th>Pelanggan</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
-                                    </div>
-                                    <div class="tab-pane fade" id="hr4">
-                                        <table id="dt_selesai" class="table table-striped table-bordered table-hover" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>Tanggal</th>
-                                                    <th>Nota</th>
-                                                    <th>Pelanggan</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
-                                    </div>
+                                    {{--<div class="tab-pane fade in active" id="hr1">--}}
+                                        {{--<table id="dt_pending" class="table table-striped table-bordered table-hover" width="100%">--}}
+                                            {{--<thead>--}}
+                                                {{--<tr>--}}
+                                                    {{--<th>Tanggal</th>--}}
+                                                    {{--<th>Nama Barang</th>--}}
+                                                    {{--<th>Pelanggan</th>--}}
+                                                    {{--<th>Posisi Barang</th>--}}
+                                                    {{--<th>Aksi</th>--}}
+                                                {{--</tr>--}}
+                                            {{--</thead>--}}
+                                            {{--<tbody></tbody>--}}
+                                        {{--</table>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="tab-pane fade" id="hr2">--}}
+                                        {{--<table id="dt_tolak" class="table table-striped table-bordered table-hover" width="100%">--}}
+                                            {{--<thead>--}}
+                                                {{--<tr>--}}
+                                                    {{--<th>Tanggal</th>--}}
+                                                    {{--<th>Nota</th>--}}
+                                                    {{--<th>Pelanggan</th>--}}
+                                                    {{--<th>Aksi</th>--}}
+                                                {{--</tr>--}}
+                                            {{--</thead>--}}
+                                            {{--<tbody></tbody>--}}
+                                        {{--</table>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="tab-pane fade" id="hr3">--}}
+                                        {{--<table id="dt_proses" class="table table-striped table-bordered table-hover" width="100%">--}}
+                                            {{--<thead>--}}
+                                                {{--<tr>--}}
+                                                    {{--<th>Tanggal</th>--}}
+                                                    {{--<th>Nota</th>--}}
+                                                    {{--<th>Pelanggan</th>--}}
+                                                    {{--<th>Aksi</th>--}}
+                                                {{--</tr>--}}
+                                            {{--</thead>--}}
+                                            {{--<tbody></tbody>--}}
+                                        {{--</table>--}}
+                                    {{--</div>--}}
+                                    {{--<div class="tab-pane fade" id="hr4">--}}
+                                        {{--<table id="dt_selesai" class="table table-striped table-bordered table-hover" width="100%">--}}
+                                            {{--<thead>--}}
+                                                {{--<tr>--}}
+                                                    {{--<th>Tanggal</th>--}}
+                                                    {{--<th>Nota</th>--}}
+                                                    {{--<th>Pelanggan</th>--}}
+                                                    {{--<th>Aksi</th>--}}
+                                                {{--</tr>--}}
+                                            {{--</thead>--}}
+                                            {{--<tbody></tbody>--}}
+                                        {{--</table>--}}
+                                    {{--</div>--}}
                                 </div>
                                 <!-- end widget body text-->
 
@@ -290,7 +306,8 @@
 @section('extra_script')
 
     <script type="text/javascript">
-        var pending, tolak, proses, done;
+        var tabel;
+        // var pending, tolak, proses, done;
         $(document).ready(function () {
             var responsiveHelper_dt_basic = undefined;
             var breakpointDefinition = {
@@ -300,10 +317,45 @@
 
             setTimeout(function () {
 
+                tabel = $('#dt_table').dataTable({
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": "{{ route('get-data-service') }}",
+                    "columns": [
+                        {"data": "tanggal"},
+                        {"data": "nota"},
+                        {"data": "pelanggan"},
+                        {"data": "posisi"},
+                        {"data": "status"},
+                        {"data": "aksi"}
+                    ],
+                    "autoWidth": true,
+                    "language": dataTableLanguage,
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" + "t" +
+                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                    "preDrawCallback": function () {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic) {
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_table'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback": function (nRow) {
+                        responsiveHelper_dt_basic.createExpandIcon(nRow);
+                    },
+                    "drawCallback": function (oSettings) {
+                        responsiveHelper_dt_basic.respond();
+                    }
+                });
+
+            }, 100);
+
+            /*
+            setTimeout(function () {
+
                 pending = $('#dt_pending').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ajax": "{{ route('get-service-pending') }}",
+                    "ajax": "",
                     "columns": [
                         {"data": "tanggal"},
                         {"data": "nota"},
@@ -335,7 +387,7 @@
                 tolak = $('#dt_tolak').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ajax": "{{ route('get-service-tolak') }}",
+                    "ajax": "",
                     "columns": [
                         {"data": "tanggal"},
                         {"data": "nota"},
@@ -367,7 +419,7 @@
                 proses = $('#dt_proses').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ajax": "{{ route('get-service-proses') }}",
+                    "ajax": "",
                     "columns": [
                         {"data": "tanggal"},
                         {"data": "nota"},
@@ -399,7 +451,7 @@
                 done = $('#dt_selesai').dataTable({
                     "processing": true,
                     "serverSide": true,
-                    "ajax": "{{ route('get-service-done') }}",
+                    "ajax": "",
                     "columns": [
                         {"data": "tanggal"},
                         {"data": "nota"},
@@ -425,6 +477,7 @@
                 });
 
             }, 1500);
+            */
         })
 
         function detail(id) {
@@ -446,9 +499,17 @@
 
                 } else {
                     var row = '';
+                    var posisi = '';
                     $('.tr').remove();
                     $('#title_detail').html('<strong>Detail Service Barang</strong>');
-                    $('#dt_posisi').text(response.data[0].position);
+                    if (response.data[0].shipping_status == "On Outlet") {
+                        posisi = response.data[0].position;
+                    } else if (response.data[0].shipping_status == "Delivery") {
+                        posisi = 'Sedang Dikirim ke Pusat';
+                    } else if (response.data[0].shipping_status == "On Center") {
+                        posisi = response.data[0].position;
+                    }
+                    $('#dt_posisi').text(posisi);
                     $('#dt_tanggal').text(response.data[0].date);
                     $('#dt_notaservice').text(response.data[0].nota_service);
                     $('#dt_notapenjualan').text(response.data[0].nota_sales);
@@ -473,10 +534,10 @@
             })
         }
 
-        function selesai(id) {
+        function servicePenjualan(id) {
             $.SmartMessageBox({
                 title: "Pesan!",
-                content: 'Return penjualan barang ini sudah selesai?',
+                content: 'Kirim barang ini ke pusat untuk diperbaiki?',
                 buttons: '[Batal][Ya]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Ya") {
@@ -490,10 +551,10 @@
                         }
                     });
                     $.ajax({
-                        url: baseUrl + '/penjualan/return-penjualan/done-return/' + id,
+                        url: baseUrl + '/penjualan/service-barang/send-service/' + id,
                         type: 'get',
                         success: function (response) {
-                            if (response == "Not Found") {
+                            if (response.status == "Not Found") {
                                 $.smallBox({
                                     title: "Gagal",
                                     content: "Data tidak ditemukan",
@@ -503,7 +564,7 @@
                                 });
                                 $('#overlay').fadeOut(200);
 
-                            } else if (response == "false") {
+                            } else if (response.status == "False") {
                                 $.smallBox({
                                     title: "Gagal",
                                     content: "Upsss. Terjadi kesalahan",
@@ -513,10 +574,10 @@
                                 });
                                 $('#overlay').fadeOut(200);
 
-                            } else {
+                            } else if (response.status == "True") {
                                 $.smallBox({
                                     title: "Berhasil",
-                                    content: 'Return penjualan selesai',
+                                    content: 'Barang sedang dikirim ke pusat untuk perbaikan',
                                     color: "#739E73",
                                     timeout: 5000,
                                     icon: "fa fa-check bounce animated"
@@ -554,92 +615,16 @@
             });
         }
 
-        function remove(id) {
-            $.SmartMessageBox({
-                title: "Pesan!",
-                content: 'Apakah Anda yakin akan membatalkan return penjualan ini?',
-                buttons: '[Batal][Ya]'
-            }, function (ButtonPressed) {
-                if (ButtonPressed === "Ya") {
+        function serviceTerima(id) {
 
-                    $('#overlay').fadeIn(200);
-                    $('#load-status-text').text('Sedang Memproses...');
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        url: baseUrl + '/penjualan/return-penjualan/cancel-return/' + id,
-                        type: 'get',
-                        success: function (response) {
-                            if (response == "Not Found") {
-                                $.smallBox({
-                                    title: "Gagal",
-                                    content: "Data tidak ditemukan",
-                                    color: "#A90329",
-                                    timeout: 5000,
-                                    icon: "fa fa-times bounce animated"
-                                });
-                                $('#overlay').fadeOut(200);
-
-                            } else if (response == "false") {
-                                $.smallBox({
-                                    title: "Gagal",
-                                    content: "Upsss. Terjadi kesalahan",
-                                    color: "#A90329",
-                                    timeout: 5000,
-                                    icon: "fa fa-times bounce animated"
-                                });
-                                $('#overlay').fadeOut(200);
-
-                            } else {
-                                $.smallBox({
-                                    title: "Berhasil",
-                                    content: 'Transaksi Anda berhasil dibatalkan...!',
-                                    color: "#739E73",
-                                    timeout: 5000,
-                                    icon: "fa fa-check bounce animated"
-                                });
-                                $('#overlay').fadeOut(200);
-                                $('#deleteModal').modal('hide');
-                                refresh_tab();
-
-                            }
-                        }, error: function (x, e) {
-                            if (x.status == 0) {
-                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
-                                $('#overlay').fadeOut(200);
-                            } else if (x.status == 404) {
-                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
-                                $('#overlay').fadeOut(200);
-                            } else if (x.status == 500) {
-                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
-                                $('#overlay').fadeOut(200);
-                            } else if (e == 'parsererror') {
-                                alert('Error.\nParsing JSON Request failed.');
-                                $('#overlay').fadeOut(200);
-                            } else if (e == 'timeout') {
-                                alert('Request Time out. Harap coba lagi nanti');
-                                $('#overlay').fadeOut(200);
-                            } else {
-                                alert('Unknow Error.\n' + x.responseText);
-                                $('#overlay').fadeOut(200);
-                            }
-                        }
-                    })
-
-                }
-
-            });
         }
 
         function refresh_tab() {
-            pending.api().ajax.reload();
-            tolak.api().ajax.reload();
-            proses.api().ajax.reload();
-            done.api().ajax.reload();
+            tabel.api().ajax.reload();
+            // pending.api().ajax.reload();
+            // tolak.api().ajax.reload();
+            // proses.api().ajax.reload();
+            // done.api().ajax.reload();
         }
     </script>
 @endsection

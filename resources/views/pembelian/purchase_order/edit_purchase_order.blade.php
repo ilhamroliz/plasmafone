@@ -78,7 +78,7 @@
                                                                      data-original-title="Fullscreen"><i
                                     class="fa fa-expand "></i></a>
                         </div>
-                        <h2><strong>Tambah Purchase Order</strong></h2>
+                        <h2><strong>Edit Purchase Order</strong></h2>
 
                         <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span></header>
 
@@ -158,7 +158,7 @@
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Diskon Persen (%)</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" id="htgDiskP" name="htgDiskP" class="form-control text-align-right persen" onkeyup="cekpersenS()" value="{{ number_format($purchase->p_disc_persen, 0,",",".") }}">
+                                                    <input type="text" id="htgDiskP" name="htgDiskP" class="form-control text-align-right persen" onkeyup="cekpersenS()" value="{{ $purchase->p_disc_persen }}">
                                                 </div>
                                             </div>
 
@@ -172,7 +172,7 @@
                                             <div class="col-md-12 margin-top-10">
                                                 <label for="" class="col-md-4">Pajak (%)</label>
                                                 <div class="col-md-8">
-                                                    <input type="text" id="htgPajak" name="htgPajak" class="form-control text-align-right persen" onkeyup="cekpajak()" value="{{ number_format($purchase->p_pajak, 0,",",".") }}">
+                                                    <input type="text" id="htgPajak" name="htgPajak" class="form-control text-align-right persen" onkeyup="cekpajak()" value="{{ $purchase->p_pajak }}">
                                                 </div>
                                             </div>
 
@@ -226,7 +226,7 @@
                                                     <input type="text" name="price[]" id="price{{ $i }}" class="form-control text-align-right price" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->pd_value, 0,",",".") }}">
                                                 </td>
                                                 <td>
-                                                    <input type="text" name="diskP[]" id="diskP{{ $i }}" class="form-control text-align-right diskP persen" style="width:100%" onkeyup="cekpersen({{ $i }})" value="{{ number_format($getDataDT[$i]->pd_disc_persen, 0,",",".") }}">
+                                                    <input type="text" name="diskP[]" id="diskP{{ $i }}" class="form-control text-align-right diskP persen" style="width:100%" onkeyup="cekpersen({{ $i }})" value="{{ number_format($getDataDT[$i]->pd_disc_persen, 0,",",".") }} %">
                                                 </td>
                                                 <td>
                                                     <input type="text" name="diskV[]" id="diskV{{ $i }}" class="form-control text-align-right diskV" style="width:100%" onkeyup="getSubTotal({{ $i }})" value="{{ number_format($getDataDT[$i]->disc_value, 0,",",".") }}">
@@ -276,6 +276,9 @@
 
         $(document).ready(function () {
 
+            $('#htgDiskP').maskMoney('mask', {thousands: '.', precision: 0, suffix: ' %'});
+            $('#htgPajak').maskMoney('mask', {thousands: '.', precision: 0, suffix: ' %'});
+
             $('#dt_co').DataTable({
                 "language": dataTableLanguage,
                 "order": []
@@ -290,9 +293,9 @@
                 todayHighlight: true
             });
 
-            $('.price').maskMoney({thousands: '.', precision: 0});
-            $('.diskV').maskMoney({thousands: '.', precision: 0});
-            $('#htgDiskV').maskMoney({thousands: '.', precision: 0});
+            $('.price').maskMoney('mask', {thousands: '.', precision: 0});
+            $('.diskV').maskMoney('mask', {thousands: '.', precision: 0});
+            $('#htgDiskV').maskMoney('mask', {thousands: '.', precision: 0});
 
             $('.persen').maskMoney({thousands: '.', precision: 0, suffix: ' %'});
         })

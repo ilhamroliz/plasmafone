@@ -179,110 +179,110 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			<!-- end row -->
 
 			<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
-			<div class="modal-dialog">
+				<div class="modal-dialog">
 
-				<div class="modal-content">
+					<div class="modal-content">
 
-					<div class="modal-header">
+						<div class="modal-header">
 
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
 
-						<h4 class="modal-title" id="myModalLabel">Detail</h4>
+							<h4 class="modal-title" id="myModalLabel">Detail</h4>
 
-					</div>
+						</div>
 
-					<div class="modal-body">
-		
-						<div class="row">
+						<div class="modal-body">
+			
+							<div class="row">
 
-							<!-- Widget ID (each widget will need unique ID)-->
-							<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
-								<header>
+									<header>
 
-									<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
 
-									<h2 id="title_detail"></h2>
+										<h2 id="title_detail"></h2>
 
-								</header>
+									</header>
 
-								<!-- widget div-->
-								<div>
+									<!-- widget div-->
+									<div>
 
-									<!-- widget content -->
-									<div class="widget-body no-padding">
-										
-										<div class="table-responsive">
+										<!-- widget content -->
+										<div class="widget-body no-padding">
 											
-											<table class="table">
+											<div class="table-responsive">
+												
+												<table class="table">
 
-												<tbody>
+													<tbody>
 
-													<tr>
-														<td><strong>Nota</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_nota"></td>
-													</tr>
+														<tr>
+															<td><strong>Nota</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_nota"></td>
+														</tr>
 
-													<tr>
-														<td><strong>Nama Supplier</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_supp"></td>
-													</tr>
+														<tr>
+															<td><strong>Nama Supplier</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_supp"></td>
+														</tr>
 
-													<tr>
-														<td><strong>No. Telp Supplier</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_telp"></td>
-													</tr>
+														<tr>
+															<td><strong>No. Telp Supplier</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_telp"></td>
+														</tr>
 
-													<tr>
-														<td><strong>Tanggal PO</strong></td>
-														<td><strong>:</strong></td>
-														<td id="dt_tgl"></td>
-													</tr>
+														<tr>
+															<td><strong>Tanggal PO</strong></td>
+															<td><strong>:</strong></td>
+															<td id="dt_tgl"></td>
+														</tr>
 
-												</tbody>
+													</tbody>
 
-											</table>
+												</table>
 
-											<table class="table table-bordered" id="table_item">
-												<thead>
-													<tr class="text-center">
-														<td>Item</td>
-														<td>Qty</td>
-														<td>Qty Diterima</td>
-													</tr>
-												</thead>
-												<tbody>
+												<table class="table table-bordered" id="table_item">
+													<thead>
+														<tr class="text-center">
+															<td>Item</td>
+															<td>Qty</td>
+															<td>Qty Diterima</td>
+														</tr>
+													</thead>
+													<tbody>
 
-												</tbody>
-											</table>
-											
+													</tbody>
+												</table>
+												
+											</div>
+
 										</div>
+										<!-- end widget content -->
 
 									</div>
-									<!-- end widget content -->
+									<!-- end widget div -->
 
 								</div>
-								<!-- end widget div -->
-
+								<!-- end widget -->
 							</div>
-							<!-- end widget -->
+			
 						</div>
-		
-					</div>
 
-				</div><!-- /.modal-content -->
+					</div><!-- /.modal-content -->
 
-			</div><!-- /.modal-dialog -->
+				</div><!-- /.modal-dialog -->
 
-		</div>
-		<!-- /.modal -->
+			</div>
+			<!-- /.modal -->
 
 		</section>
 		<!-- end widget grid -->

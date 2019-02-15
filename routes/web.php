@@ -446,6 +446,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
     Route::get('/pembelian/purchase-order/hapus/{id}', 'pembelian\PurchaseOrderController@hapus');
     Route::match(['get', 'post'],'/pembelian/purchase-order/edit', 'pembelian\PurchaseOrderController@edit');
+    Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
 
 
     // Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
@@ -473,7 +474,6 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::match(['get', 'post'], '/pembelian/purchase-order/multiple-delete', 'PurchaseOrderController@multiple_delete_purchase_order');
     // Route::get('/pembelian/purchase-order/cetak', 'PurchaseOrderController@cetak_purchase');
     // Route::get('/pembelian/purchase-order/get-purchase-data/{id}', 'PurchaseOrderController@get_purchase_data');
-    // Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
     // Route::get('/pembelian/purchase-order/purchase-pdf/{id}', 'PurchaseOrderController@viewpdf_purchase');
     // Route::get('/pembelian/purchase-order/generate-pdf/{id}', 'PurchaseOrderController@pdf_purchase');
 
@@ -529,6 +529,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/supplier/getMaks/{id}/{item}', 'inventory\SupplierReceptionController@getMaks');
     Route::post('/inventory/penerimaan/supplier/getItemDT', 'inventory\SupplierReceptionController@itemReceiveDT');
 
+    Route::post('/inventory/penerimaan/supplier/detailReceived/{id}/{item}', 'inventory\SupplierReceptionController@detailReceived');
+    Route::match(['get', 'post'],'/inventory/penerimaan/supplier/editReceived', 'inventory\SupplierReceptionController@editReceived');
+    Route::post('/inventory/penerimaan/supplier/hapusReceived/{id}/{item}', 'inventory\SupplierReceptionController@hapusReceived');
 
 	// End penerimaan barang dari supplier
 
@@ -664,6 +667,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Service Barang
     // ####################################
     Route::get('/penjualan/service-barang', 'penjualan\ServicesController@index')->name('service-barang');
+    Route::get('/penjualan/service-barang/get-data-service', 'penjualan\ServicesController@getDataService')->name('get-data-service');
     Route::get('/penjualan/service-barang/get-pending', 'penjualan\ServicesController@getPending')->name('get-service-pending');
     Route::get('/penjualan/service-barang/get-tolak', 'penjualan\ServicesController@getTolak')->name('get-service-tolak');
     Route::get('/penjualan/service-barang/get-proses', 'penjualan\ServicesController@getProses')->name('get-service-proses');
@@ -678,6 +682,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
     Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
     Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
+    Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
     // ####################################
     // End Service Barang
     // ####################################
@@ -901,8 +906,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
     Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
     Route::get('pengelolaan-member/get-data-setting/{id}', 'PengelolaanMemberController@getDataSetting');
-    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@updateSetting');
-
+    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@pengelolaan-member');
+    Route::get('pengelolaan-member/get-member-poin', 'PengelolaanMemberController@getMemberPoin');
+    Route::get('pengelolaan-member/get-member-birth', 'PengelolaanMemberController@getMemberBirth');
+    Route::get('pengelolaan-member/get-member-history', 'PengelolaanMemberController@getMemberHistory');
 
     // Route Dirga
 

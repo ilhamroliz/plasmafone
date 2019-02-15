@@ -136,9 +136,9 @@
                                                     <tr>
                                                         <th width="10%">
                                                             <div class="text-center">
-                                                                {{--  <div class="checkbox checkbox-success checkbox-single checkbox-inline">  --}}
+                                                                {{--  <div class="checkbox checkbox-success checkbox-single checkbox-inline">   --}}
                                                                     <input type="checkbox" onclick="myCheck()" id="cekParent">
-                                                                {{--  </div>  --}}
+                                                                {{--  </div>   --}}
                                                             </div>
                                                         </th>
                                                         <th width="75%">No. Nota</th>
@@ -233,21 +233,24 @@
                                                     </div>                                                
 												</div>
 
-                                                <div>
-                                                    <table id="dt_detail" class="table table-striped table-bordered table-hover">
-                                                        <thead>		
-                                                            <tr>
-                                                                <th width="10%">&nbsp;No.</th>
-                                                                <th width="70%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
-                                                                <th width="20%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
-                                                            </tr>
-                                                        </thead>
-    
-                                                        <tbody>
-                                                        </tbody>
-    
-                                                    </table>
-                                                </div>												
+                                                <div class="ibox">
+                                                    <div class="ibox-content">
+                                                        <table id="dt_detail" class="table table-striped table-bordered table-hover">
+                                                            <thead>		
+                                                                <tr>
+                                                                    <th width="10%">&nbsp;No.</th>
+                                                                    <th width="70%"><i class="fa fa-fw fa-barcode txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
+                                                                    <th width="20%"><i class="fa fa-fw fa-cart-arrow-down txt-color-blue"></i>&nbsp;Jumlah Unit</th>
+                                                                </tr>
+                                                            </thead>
+        
+                                                            <tbody>
+                                                            </tbody>
+        
+                                                        </table>
+                                                    </div>	
+                                                </div>
+                                                											
 											</div>
 										</div>
 										<!-- end widget content -->
@@ -274,6 +277,12 @@
 @endsection
 
 @section('extra_script')
+
+    <script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
+    <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
+    <script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
 
     <script type="text/javascript">
         var dt_co;
@@ -308,11 +317,11 @@
                     for(var i = 0; i < response.data.dataDT.length; i++){
 
                         $('#dt_co').DataTable().row.add([
-                            '<div class="text-center">'+
-                                {{--  '<div class="checkbox checkbox-success checkbox-single checkbox-inline">'+  --}}
-                                '<input type="checkbox" name="check[]" class="checkB" value="'+response.data.dataDT[i].pc_id+'">'+
-                                {{--  '</div>'+  --}}
-                                '</div>',
+                            '<td><div class="text-center">'+
+                                {{--  '<div class="checkbox checkbox-primary no-padding checkbox-single checkbox-inline">'+   --}}
+                                    '<input type="checkbox" name="check[]" class="checkB" value="'+response.data.dataDT[i].pc_id+'">'+
+                                {{--  '</div>'+   --}}
+                            '</div></td>',
                             response.data.dataDT[i].pc_nota,
                             '<div class="text-center">'+
                                 '<button class="btn btn-primary btn-circle" onclick="detil('+response.data.dataDT[i].pc_id+')"><i class="fa fa-list"></i></button>'+
