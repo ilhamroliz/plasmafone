@@ -734,6 +734,7 @@ class DistribusiController extends Controller
             }
             $kode = $temp;
         }
+
         if (count($kode) > 0){
 
             $dataN = DB::table('d_stock')

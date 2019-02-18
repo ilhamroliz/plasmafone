@@ -6,6 +6,7 @@ use function foo\func;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
+use Monolog\Handler\IFTTTHandler;
 use Session;
 use App\Http\Controllers\PlasmafoneController as Plasma;
 use Illuminate\Support\Facades\Crypt;
@@ -174,7 +175,22 @@ class SupplierReceptionController extends Controller
                     ->where('d_purchase.p_id', Crypt::decrypt($id))
                     ->groupBy('d_purchase_dt.pd_item')
                     ->first();
-            // dd($data);
+            if ($data->i_specificcode == 'Y'){
+                $imei = DB::table('d_purchase_dt')
+                    ->where('pd_purchase', '=', $data->id)
+                    ->select('pd_specificcode')
+                    ->whereNotNull('pd_specificcode')
+                    ->get();
+                $kode = [];
+                for ($i = 0; $i < count($imei); $i++){
+                    $kode[$i] = $imei[$i]->pd_specificcode;
+                }
+
+                return json_encode([
+                    'data' => $data,
+                    'imei' => $kode
+                ]);
+            }
             return json_encode([
                 'data' => $data
             ]);
@@ -501,6 +517,20 @@ class SupplierReceptionController extends Controller
 
                     $qtyNew = $request->jml;
                     $qtyOld = $request->jmlEdit;
+
+                    if (isset($request->kode)){
+                        $cek = DB::table('d_purchase_dt')
+                            ->where('pd_purchase', '=', $pd_purchase)
+                            ->where('pd_specificcode', '=', $request->kode)
+                            ->get();
+                        if (count($cek) > 0) {
+                            DB::rollback();
+                            return json_encode([
+                                'status' => 'imei',
+                                'msg' => 'imei sudah ada'
+                            ]);
+                        }
+                    }
 
                     $pdUpdate = DB::table('d_purchase_dt')->where('pd_purchase', $pd_purchase)->where('pd_detailid', $pd_detailid);
                     if($request->status == 'sc' || $request->status == 'scexp'){
