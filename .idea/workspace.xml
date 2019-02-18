@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c1fafb65-daf5-4c94-858a-66fc52492e53" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/addinput.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/pembelian/purchase_order/addinput.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/edit.blade.php" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/vendor/barryvdh/laravel-dompdf/" />
     <ignored path="$PROJECT_DIR$/vendor/beyondcode/laravel-dump-server/" />
@@ -181,18 +180,18 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="css" value="5" />
+          <entry key="css" value="6" />
           <entry key="js" value="5" />
-          <entry key="php" value="96" />
+          <entry key="php" value="99" />
           <entry key="sql" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Blade" value="55" />
-          <entry key="CSS" value="5" />
+          <entry key="Blade" value="57" />
+          <entry key="CSS" value="6" />
           <entry key="JavaScript" value="5" />
-          <entry key="PHP" value="41" />
+          <entry key="PHP" value="42" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -200,17 +199,17 @@
         <counts>
           <entry key="css" value="1" />
           <entry key="js" value="34" />
-          <entry key="php" value="14654" />
+          <entry key="php" value="15102" />
           <entry key="sql" value="19" />
           <entry key="txt" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Blade" value="5578" />
+          <entry key="Blade" value="6004" />
           <entry key="CSS" value="1" />
           <entry key="JavaScript" value="34" />
-          <entry key="PHP" value="9076" />
+          <entry key="PHP" value="9098" />
           <entry key="PLAIN_TEXT" value="22" />
           <entry key="Scratch" value="19" />
         </counts>
@@ -222,32 +221,43 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="440" column="123" selection-start-line="440" selection-start-column="117" selection-end-line="440" selection-end-column="123" />
+            <state relative-caret-position="171">
+              <caret line="531" column="125" selection-start-line="531" selection-start-column="125" selection-end-line="531" selection-end-column="125" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/pembelian/PurchaseOrderController.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/inventory/SupplierReceptionController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="266" column="59" selection-start-line="266" selection-start-column="59" selection-end-line="266" selection-end-column="59" />
+            <state relative-caret-position="-261">
+              <caret line="443" column="20" selection-start-line="443" selection-start-column="20" selection-end-line="443" selection-end-column="20" />
               <folding>
-                <element signature="e#34#40#0" expanded="true" />
-                <element signature="e#34#40#0" expanded="true" />
-                <element signature="e#34#40#0" expanded="true" />
-                <element signature="e#48#54#0" expanded="true" />
+                <element signature="e#35#41#0" expanded="true" />
+                <element signature="e#132#138#0" expanded="true" />
+                <element signature="e#35#41#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/addinput.blade.php">
+        <entry file="file://$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/edit.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="93">
+              <caret line="976" column="26" selection-start-line="976" selection-start-column="26" selection-end-line="976" selection-end-column="26" />
+              <folding>
+                <element signature="e#27440#27473#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modul_keuangan/bootstrap_4_1_3/css/bootstrap.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="198">
-              <caret line="446" column="31" lean-forward="true" selection-start-line="446" selection-start-column="31" selection-end-line="446" selection-end-column="31" />
+              <caret line="5416" column="15" selection-start-line="5416" selection-end-line="5416" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -256,36 +266,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>purchase-order/print</find>
-      <find>edit(</find>
-      <find>kembali</find>
-      <find>purchase-order/edit</find>
-      <find>gethistor</find>
-      <find>pembelian/purchase-order/get-history</find>
-      <find>history</find>
-      <find>konfirmasi-pembelian</find>
-      <find>konfirmasi-pembelian/auto-supp</find>
-      <find>cariHistory</find>
-      <find>purchase-order/auto-nota</find>
-      <find>i</find>
-      <find>idSupp</find>
-      <find>status</find>
-      <find>cari</find>
-      <find>simpan</find>
-      <find>receive</find>
-      <find>sm_specificcode</find>
-      <find>pembelian/purchase-order/tambah</find>
-      <find>chec</find>
-      <find>dt_detail</find>
-      <find>purchase-order/tambah</find>
-      <find>wrap-num-product</find>
-      <find>main</find>
-      <find>btn-num-product-down</find>
-      <find>small</find>
-      <find>color</find>
-      <find>smart</find>
       <find>inventory/penerimaan/supplier/edit</find>
-      <find>tambah</find>
+      <find>inventory/penerimaan/supplier</find>
+      <find>edit</find>
+      <find>supplier/edit</find>
+      <find>penerimaan/supplier</find>
+      <find>penerimaan/supplier/edit</find>
+      <find>edit(</find>
+      <find>kode</find>
+      <find>#kode</find>
+      <find>value=&quot;'+notado</find>
+      <find>modal-ba</find>
+      <find>mymodal</find>
+      <find>.modal-backdrop</find>
+      <find>maaf</find>
+      <find>ercvd</find>
+      <find>simpanEdit</find>
+      <find>detail(</find>
+      <find>supplier/detailReceived</find>
+      <find>detilModal</find>
+      <find>divDTN</find>
+      <find>table_item_non</find>
+      <find>eQTY</find>
+      <find>form_qtyReceived</find>
+      <find>sisa</find>
+      <find>eRcvd</find>
+      <find>simpanE</find>
+      <find>pd_qty</find>
+      <find>eSISA</find>
+      <find>eMax</find>
+      <find>simpan</find>
     </findStrings>
     <replaceStrings>
       <replace>PurchaseOrderController</replace>
@@ -324,11 +334,12 @@
         <option value="$PROJECT_DIR$/resources/views/pembelian/purchase_order/edit_purchase_order.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/PembelianController.php" />
         <option value="$PROJECT_DIR$/resources/views/pembelian/purchase_order/view_purchase_order.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/pembelian/PurchaseOrderController.php" />
         <option value="$PROJECT_DIR$/template_asset/frontend/js/main.js" />
         <option value="$PROJECT_DIR$/resources/views/onlineshop/halaman/shoping_cart.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/resources/views/pembelian/purchase_order/addinput.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/pembelian/PurchaseOrderController.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/edit.blade.php" />
       </list>
     </option>
   </component>
@@ -538,7 +549,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
-    <property name="SearchEverywhereHistoryKey" value="_head&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_head.blade.php&#10;main&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/frontend/js/main.js&#10;btn-num-product-down&#9;null&#9;null&#10;sh&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/onlineshop/halaman/shoping_cart.blade.php&#10;main.js&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/frontend/js/main.js&#10;shop&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/onlineshop/halaman/shoping_cart.blade.php&#10;_scri&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;plasmafone&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PlasmafoneController.php&#10;penjua&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PenjualanController.php&#10;_script&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;_nav&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;_navigation&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;_navigati&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;_naviga&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;plasma&#9;null&#9;null&#10;web&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/routes/web.php&#10;purchase&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="modal-&#9;null&#9;null&#10;SupplierReceptionController&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/inventory/SupplierReceptionController.php&#10;_head&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_head.blade.php&#10;main&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/frontend/js/main.js&#10;btn-num-product-down&#9;null&#9;null&#10;sh&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/onlineshop/halaman/shoping_cart.blade.php&#10;main.js&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/template_asset/frontend/js/main.js&#10;shop&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/onlineshop/halaman/shoping_cart.blade.php&#10;_scri&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;plasmafone&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PlasmafoneController.php&#10;penjua&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/app/Http/Controllers/PenjualanController.php&#10;_script&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_script.blade.php&#10;_nav&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;_navigation&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;_navigati&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;_naviga&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/resources/views/partials/_navigation.blade.php&#10;plasma&#9;null&#9;null&#10;web&#9;FILE&#9;file:///media/hdd/xampp/htdocs/plasmafone/routes/web.php&#10;purchase&#9;null&#9;null" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
@@ -712,7 +723,7 @@
       <workItem from="1550110395989" duration="11206000" />
       <workItem from="1550184226624" duration="314000" />
       <workItem from="1550196467168" duration="5620000" />
-      <workItem from="1550312053590" duration="717000" />
+      <workItem from="1550312053590" duration="6209000" />
     </task>
     <task id="LOCAL-00001" summary="roliz">
       <created>1549088688030</created>
@@ -882,11 +893,18 @@
       <option name="project" value="LOCAL" />
       <updated>1550216452968</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="roliz">
+      <created>1550312845212</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1550312845224</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104249000" />
+    <option name="totallyTimeSpent" value="109741000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="732" extended-state="6" />
@@ -926,20 +944,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="roliz" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/views/perbaikan/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1365">
-          <caret line="65" column="57" selection-end-line="100" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/PerbaikanController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="15" column="32" lean-forward="true" selection-start-line="15" selection-start-column="32" selection-end-line="15" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/penjualan/ReturnPenjualanController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -1175,13 +1179,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/inventory/SupplierReceptionController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-73">
-          <caret line="379" column="24" selection-start-line="379" selection-start-column="24" selection-end-line="379" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/edit_purchase_order.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2940">
@@ -1283,13 +1280,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/add_po.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8001">
-          <caret line="381" column="29" selection-start-line="381" selection-start-column="20" selection-end-line="381" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/template_asset/js/notification/SmartNotification.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1300,17 +1290,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/addinput.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="440" column="123" selection-start-line="440" selection-start-column="117" selection-end-line="440" selection-end-column="123" />
+          <caret line="447" column="52" selection-start-line="447" selection-start-column="52" selection-end-line="447" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/add_po.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="175" column="104" selection-start-line="175" selection-start-column="97" selection-end-line="175" selection-end-column="104" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/pembelian/PurchaseOrderController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="266" column="59" selection-start-line="266" selection-start-column="59" selection-end-line="266" selection-end-column="59" />
+        <state relative-caret-position="240">
+          <caret line="400" lean-forward="true" selection-start-line="400" selection-end-line="400" />
           <folding>
             <element signature="e#34#40#0" expanded="true" />
             <element signature="e#34#40#0" expanded="true" />
@@ -1320,10 +1317,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/pembelian/purchase_order/addinput.blade.php">
+    <entry file="file://$PROJECT_DIR$/modul_keuangan/bootstrap_4_1_3/css/bootstrap.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="446" column="31" lean-forward="true" selection-start-line="446" selection-start-column="31" selection-end-line="446" selection-end-column="31" />
+          <caret line="5416" column="15" selection-start-line="5416" selection-end-line="5416" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="531" column="125" selection-start-line="531" selection-start-column="125" selection-end-line="531" selection-end-column="125" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/inventory/SupplierReceptionController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-261">
+          <caret line="443" column="20" selection-start-line="443" selection-start-column="20" selection-end-line="443" selection-end-column="20" />
+          <folding>
+            <element signature="e#35#41#0" expanded="true" />
+            <element signature="e#132#138#0" expanded="true" />
+            <element signature="e#35#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/inventory/penerimaan-barang/supplier/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="93">
+          <caret line="976" column="26" selection-start-line="976" selection-start-column="26" selection-end-line="976" selection-end-column="26" />
+          <folding>
+            <element signature="e#27440#27473#0#HTML" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
