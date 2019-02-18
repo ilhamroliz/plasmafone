@@ -438,7 +438,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Purchase Order
 
     Route::get('/pembelian/purchase-order', 'pembelian\PurchaseOrderController@index');
-    Route::match(['get', 'post'],'/pembelian/purchase-order/tambah', 'pembelian\PurchaseOrderController@tambah');
+    Route::match(['get', 'post'],'/pembelian/inventory/penerimaan/supplier/edit', 'pembelian\PurchaseOrderController@tambah');
     Route::post('/pembelian/purchase-order/getCO', 'pembelian\PurchaseOrderController@getCO');
     Route::post('/pembelian/purchase-order/detil', 'pembelian\PurchaseOrderController@detail');
     Route::get('/pembelian/purchase-order/get-proses', 'pembelian\PurchaseOrderController@get_proses');

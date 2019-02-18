@@ -27,16 +27,31 @@ class ServicesController extends Controller
 
     public function getDataService()
     {
-        $data = DB::table('d_service_item')
-            ->select('d_service_item.si_id as id',
-                DB::raw('DATE_FORMAT(d_service_item.si_date, "%d-%m-%Y") as tanggal'),
-                'd_service_item.si_nota as nota',
-                'd_service_item.si_shipping_status',
-                'm_member.m_name as pelanggan',
-                'm_company.c_name as position',
-                'd_service_item.si_status')
-            ->join('m_member', 'd_service_item.si_mem', '=', 'm_member.m_id')
-            ->join('m_company', 'd_service_item.si_position', '=', 'm_company.c_id');
+        if (Auth::user()->m_comp == "PF00000001") {
+            $data = DB::table('d_service_item')
+                ->select('d_service_item.si_id as id',
+                    DB::raw('DATE_FORMAT(d_service_item.si_date, "%d-%m-%Y") as tanggal'),
+                    'd_service_item.si_nota as nota',
+                    'd_service_item.si_shipping_status',
+                    'm_member.m_name as pelanggan',
+                    'm_company.c_name as position',
+                    'd_service_item.si_status')
+                ->join('m_member', 'd_service_item.si_mem', '=', 'm_member.m_id')
+                ->join('m_company', 'd_service_item.si_position', '=', 'm_company.c_id')
+                ->where('si_shipping_status', 'Delivery to Center')
+                ->orWhere('si_shipping_status', 'On Center');
+        } else {
+            $data = DB::table('d_service_item')
+                ->select('d_service_item.si_id as id',
+                    DB::raw('DATE_FORMAT(d_service_item.si_date, "%d-%m-%Y") as tanggal'),
+                    'd_service_item.si_nota as nota',
+                    'd_service_item.si_shipping_status',
+                    'm_member.m_name as pelanggan',
+                    'm_company.c_name as position',
+                    'd_service_item.si_status')
+                ->join('m_member', 'd_service_item.si_mem', '=', 'm_member.m_id')
+                ->join('m_company', 'd_service_item.si_position', '=', 'm_company.c_id');
+        }
 
         return DataTables::of($data)
 
@@ -66,8 +81,13 @@ class ServicesController extends Controller
 
             ->addColumn('aksi', function ($data) {
 
-                if (Access::checkAkses(21, 'read') == true) {
-
+                if (Auth::user()->m_comp == "PF00000001") {
+                    if ($data->si_status == "PENDING") {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle view" data-toggle="tooltip" data-placement="top" title="Tolak" onclick="serviceTolak(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="serviceTerima(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-arrow-down"></i></button></div>';
+                    } else if ($data->si_status == "DITERIMA") {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle view" data-toggle="tooltip" data-placement="top" title="Tolak" onclick="serviceTolak(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Proses" onclick="serviceProses(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-refresh"></i></button></div>';
+                    }
+                } else {
                     if ($data->si_shipping_status == "Delivery to Center" || $data->si_shipping_status == "Delivery to Outlet" || $data->si_shipping_status == "On Center") {
                         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     } else if($data->si_shipping_status == "On Outlet") {
@@ -77,7 +97,6 @@ class ServicesController extends Controller
                             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-send"></i></button></div>';
                         }
                     }
-
                 }
 
             })
