@@ -157,8 +157,8 @@ class OnlineshopController extends Controller
         $date  = Carbon::now('Asia/Jakarta');
 
 
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
 
                 $checkId = DB::table('d_cart')->select('d_cart.*')->get();
                 if (count($checkId) == 0) {
@@ -176,13 +176,26 @@ class OnlineshopController extends Controller
                     ->join('d_cartdt', 'c_id', '=', 'cd_cart')
                     ->select('d_cart.*', DB::raw('max(cd_detailid) as cd_detailid'))
                     ->where('c_token', '=', $token)->first();
+                $checkDT = DB::table('d_cartdt')
+                    ->select('d_cartdt.*')
+                    ->where('cd_item', '=', $i_id)
+                    ->where('cd_cart', '=', $detail->c_id)
+                    ->get();
+                if (count($checkDT) > 0) {
+                    $qtyAkhir = $checkDT[0]->cd_qty + $qty;
+                    DB::table('d_cartdt')->update([
+                        'cd_qty' => $qtyAkhir
+                    ]);
+                } else {
+                    DB::table('d_cartdt')->insert([
+                        'cd_cart' => $checkRow->c_id,
+                        'cd_detailid' => $detail->cd_detailid + 1,
+                        'cd_item' => $i_id,
+                        'cd_qty' => $qty
+                    ]);
+                }
 
-                DB::table('d_cartdt')->insert([
-                    'cd_cart' => $checkRow->c_id,
-                    'cd_detailid' => $detail->cd_detailid + 1,
-                    'cd_item' => $i_id,
-                    'cd_qty' => $qty
-                ]);
+
             } else {
 
                 $cd_dtId = 0;
@@ -200,18 +213,18 @@ class OnlineshopController extends Controller
                 ]);
             }
 
-            DB::commit();
-            return response()->json([
-                'status' => 'sukses'
-            ]);
+        //     DB::commit();
+        //     return response()->json([
+        //         'status' => 'sukses'
+        //     ]);
 
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json([
-                'status' => 'gagal',
-                'data' => $e
-            ]);
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollback();
+        //     return response()->json([
+        //         'status' => 'gagal',
+        //         'data' => $e
+        //     ]);
+        // }
 
     }
 }

@@ -51,13 +51,13 @@
 									<input type="hidden" class="harga" id="harga-{{ $cart->cd_item }}" value="{{ $cart->i_price }}">
 									<td class="column-4">
 										<div class="wrap-num-product flex-w m-l-auto m-r-0">
-											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+											<div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" id="{{ $cart->cd_item }}">
 												<i class="fs-16 zmdi zmdi-minus"></i>
 											</div>
 
 											<input class="mtext-104 cl3 txt-center num-product cd_qty" type="number" id="qty-{{ $cart->cd_item }}" name="cd_qty[]" value="{{$cart->cd_qty}}" onkeyup="setHarga('{{ $cart->cd_item }}')">
 
-											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+											<div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" id="{{ $cart->cd_item }}">
 												<i class="fs-16 zmdi zmdi-plus"></i>
 											</div>
 										</div>
@@ -122,18 +122,6 @@
 
 @section('extra-script')
 <script>
-	$(document).ready(function(){
-		var inputs = document.getElementsByClassName( 'cd_qty' ),
-            arqty  = [].map.call(inputs, function( input ) {
-                return input.value;
-            });
-
-        for (var i = 0; i < arqty.length; i++){
-
-        }
-
-	})
-
 	function setHarga(id){
 		var qty = $('#qty-'+id).val();
 		var harga = $('#harga-'+id).val();
@@ -142,11 +130,13 @@
 	}
 
 	function plus(field){
-	    console.log(field);
+	    var id = $(field).attr('id');
+        setHarga(id);
     }
 
     function min(field){
-        console.log(field);
+        var id = $(field).attr('id');
+        setHarga(id);
     }
 </script>
 @endsection

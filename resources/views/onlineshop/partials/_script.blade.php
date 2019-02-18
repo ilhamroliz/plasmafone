@@ -101,15 +101,4 @@ $('.js-pscroll').each(function(){
 </script>
 <!-- CUSTOM NOTIFICATION =========================================================================-->
 <script src="{{asset('template_asset/js/notification/SmartNotification.min.js')}}"></script>
-<script type="text/javascript">
-	// function viewCart(token)
-	// {
-	// 	var data = 'id=' + id + '&nama=' + nama;
-	// 	axios.get(baseUrl+'', data).then((response) => {
-
-
-
-	// 	})
-	// }
-</script>
 @yield('extra-script')
