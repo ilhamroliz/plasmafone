@@ -646,9 +646,15 @@
                 $('.discp').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                 $('.discv').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true});
 
-                $(".qtyTable").on("keypress keyup blur",function (event) {
-                    $(this).val($(this).val().replace(/[^\d].+/, ""));
+                $(".qtyTable").on("blur",function (event) {
                     if ((event.which < 48 || event.which > 57)) {
+                        event.preventDefault();
+                    }
+                });
+
+                $(".qtyTable").on("keyup",function (event) {
+
+                    if ((event.which < 48 || event.which > 57 || event.which != 8)) {
                         event.preventDefault();
                     }
                 });
@@ -863,7 +869,8 @@
         }
 
         if (isNaN(input)){
-            input = 0;
+            input = 1;
+            $('#'+inputQty).val(1);
         }
         if (input > stock){
             input = stock;
