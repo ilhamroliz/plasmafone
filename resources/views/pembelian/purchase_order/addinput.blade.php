@@ -445,7 +445,7 @@
                     content: 'Silahkan Pilih Tipe Pembayaran Terlebih Dahulu',
                     color: "#C46A69",
                     timeout: 3000,
-                    icon: "fa fa-warning bounce animated"
+                    icon: "fa fa-warning bounce animated",
                 });
                 return false;
             }
