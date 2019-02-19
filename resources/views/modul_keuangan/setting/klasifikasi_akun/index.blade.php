@@ -273,7 +273,10 @@
 
                                                         <tr v-for="data in dataSubclassPrint" v-if="data.nama != 'Tidak Memiliki'">
                                                             <td class="text-center">
-                                                                <i class="fa fa-eraser" v-if="data.status != 'locked'" style="cursor: pointer; color: #ff4444;" title="Hapus Hierarki Ini." @click="hapusHierarkiSubclass(data.id)"></i>
+
+                                                                <i class="fa fa-lock" v-if="data.status == 'locked'" title="Subclass Dikunci Tidak Bisa Dihapus"></i>
+
+                                                                <i class="fa fa-eraser" v-if="data.status != 'locked'" style="cursor: pointer; color: #ff4444;" title="Hapus Subclass Ini." @click="hapusHierarkiSubclass(data.id)"></i>
                                                             </td>
 
                                                             <td>

@@ -16,7 +16,7 @@ class klasifikasi_akun_controller extends Controller
     public function form_resource(){
     	$level1 = DB::table('dk_hierarki_lvl_satu')->select('hls_id as id', 'hls_nama as nama')->get();
     	$level2 = DB::table('dk_hierarki_lvl_dua')->select('hld_id as id', 'hld_nama as nama', 'hld_level_1 as lvl1', 'hld_cashflow as cashflow', 'hld_status as status', 'hld_subclass as subclass')->get();
-        $subclass = DB::table('dk_hierarki_subclass')->select('hs_id as id', 'hs_nama as nama', 'hs_level_1 as level1')->get();
+        $subclass = DB::table('dk_hierarki_subclass')->select('hs_id as id', 'hs_nama as nama', 'hs_level_1 as level1', 'hs_status as status')->get();
 
     	return json_encode([
     		'level_1'	=> $level1,
