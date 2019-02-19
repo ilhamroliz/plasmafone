@@ -1,434 +1,559 @@
 @extends('main')
 
-@section('title', 'Return Barang')
+@section('title', 'Purchase Order')
 
 @section('extra_style')
 
 @endsection
 
 @section('ribbon')
-<!-- RIBBON -->
-<div id="ribbon">
+    <!-- RIBBON -->
+    <div id="ribbon">
 
 	<span class="ribbon-button-alignment"> 
-		<span id="refresh" class="btn btn-ribbon" data-title="refresh"  rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.." data-html="true" onclick="location.reload()">
+		<span id="refresh" class="btn btn-ribbon" data-title="refresh" rel="tooltip" data-placement="bottom"
+              data-original-title="<i class='text-warning fa fa-warning'></i> Refresh Halaman? Semua Perubahan Yang Belum Tersimpan Akan Hilang.."
+              data-html="true" onclick="location.reload()">
 			<i class="fa fa-refresh"></i>
 		</span> 
 	</span>
 
-	<!-- breadcrumb -->
-	<ol class="breadcrumb">
-		<li>Home</li><li>Pembelian</li><li>Return Barang</li>
-	</ol>
+        <!-- breadcrumb -->
+        <ol class="breadcrumb">
+            <li>Home</li>
+            <li>Pembelian</li>
+            <li>Return Barang</li>
+        </ol>
 
-</div>
-<!-- END RIBBON -->
+    </div>
+    <!-- END RIBBON -->
 @endsection
 
 
 @section('main_content')
+    <!-- MAIN CONTENT -->
+    <div id="content">
 
-<!-- MAIN CONTENT -->
-<div id="content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <h1 class="page-title txt-color-blueDark">
+                    <i class="fa-fw fa fa-credit-card"></i>
+                    Pembelian
+                    <span>
+						<i class="fa fa-angle-double-right"></i>
+						 Return Barang
+					</span>
+                </h1>
+            </div>
+            @if(Access::checkAkses(4, 'insert') == true)
+                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-align-right">
 
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<ul class="menu-table hide-on-small">
-				<li class="">
-					<a href="{{ url('/pembelian/purchase-return') }}">
-						<i class="fa fa-table"></i> &nbsp;Return Barang
-					</a>
-				</li>
-				<li>
-					<a href="{{ url('/pembelian/purchase-return/add') }}">
-						<i class="fa fa-plus"></i> &nbsp;Tambahkan Data
-					</a>
-				</li>
+                    <div class="page-title">
 
-				<li>
-					<a href="#" id="multiple_edit">
-						<i class="fa fa-pencil-square"></i> &nbsp;Edit Data
-					</a>
-				</li>
-				<li>
-					<a href="#" id="multiple_delete">
-						<i class="fa fa-eraser"></i> &nbsp;Hapus Data
-					</a>
-				</li>
+                        <a href="{{ url('pembelian/purchase-return/add') }}" class="btn btn-success"><i
+                                class="fa fa-plus"></i>&nbsp;Tambah
+                            Data</a>
 
-				<li class="right"><i class="fa fa-bars"></i></li>
-			</ul>
-		</div>
-	</div>
+                    </div>
 
-	<!-- widget grid -->
-	<section id="widget-grid" class="">
+                </div>
+            @endif
+        </div>
 
-		<?php $mt = '20px'; ?>
+        <!-- widget grid -->
+        <section id="widget-grid" class="">
 
-		@if(Session::has('flash_message_success'))
-		<?php $mt = '0px'; ?>
-		<div class="col-md-8" style="margin-top: 20px;">
-			<div class="alert alert-success alert-block">
-				<a class="close" data-dismiss="alert" href="#">×</a>
-				<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-				{{ Session::get('flash_message_success') }} 
-			</div>
-		</div>
-		@elseif(Session::has('flash_message_error'))
-		<?php $mt = '0px'; ?>
-		<div class="col-md-8" style="margin-top: 20px;">
-			<div class="alert alert-danger alert-block">
-				<a class="close" data-dismiss="alert" href="#">×</a>
-				<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
-				{{ Session::get('flash_message_error') }}
-			</div>
-		</div>
-		@endif
+            <?php $mt = '20px'; ?>
 
-		<!-- row -->
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
-				<form id="table-form" method="post" action="{{ url('/pembelian/purchase-return/edit-multiple') }}">
-					{!! csrf_field() !!}
-					<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-						<thead>			                
-							<tr>
-								<th class="text-center" data-hide="phone" width="4%">*</th>
-								<th class="text-center" width="5%" style="vertical-align: middle;">
-									---
-								</th>
-								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;No. Purchase Order</th>
-								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Return Code</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Methode Return</th>
-								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode Barang</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Kuantitas</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Unit Price</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Total Price</th>
-								<th class="text-center" data-hide="phone,tablet" width="15%"> Aksi</th>
-							</tr>
-						</thead>
-						<tbody>
-							 <?php 
-							function rupiah($angka){
-								$hasil_rupiah = "Rp" . number_format($angka,2,',','.');
-								return $hasil_rupiah;
-							}
-							?>
-							
-						</tbody>
-					</table>
-				</form>
-			</div>
-		</div>
+            @if(Session::has('flash_message_success'))
+                <?php $mt = '0px'; ?>
+                <div class="col-md-12">
+                    <div class="alert alert-success alert-block">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        <h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil
+                        </h4>
+                        {{ Session::get('flash_message_success') }}
+                    </div>
+                </div>
+            @elseif(Session::has('flash_message_error'))
+                <?php $mt = '0px'; ?>
+                <div class="col-md-12">
+                    <div class="alert alert-danger alert-block">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        <h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
+                        {{ Session::get('flash_message_error') }}
+                    </div>
+                </div>
+        @endif
 
-		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-						<h4 class="modal-title">
-							<img src="{{ asset('template_asset/img/logo.png') }}" width="150" alt="SmartAdmin">
-						</h4>
-					</div>
-					<div class="modal-body no-padding">
+        <!-- row -->
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false"
+                         data-widget-colorbutton="false" data-widget-deletebutton="false">
+                        <header>
+                            <ul id="widget-tab-1" class="nav nav-tabs pull-left">
 
-						<form id="login-form" class="smart-form">
+                                <li class="active">
+                                    <a data-toggle="tab" href="#hr1">
+                                        <i style="color: #739E73;" class="fa fa-lg fa-rotate-right fa-spin"></i>
+                                        <span class="hidden-mobile hidden-tablet"> Proses </span>
+                                    </a>
+                                </li>
 
-							<fieldset>
+                                <li>
+                                    <a data-toggle="tab" href="#hr2">
+                                        <i style="color: #C79121;" class="fa fa-lg fa-history"></i>
+                                        <span class="hidden-mobile hidden-tablet"> History </span>
+                                    </a>
+                                </li>
 
-								<!-- <section>
-									<div class="row">
-										<label class="label col col-2">Order Nomor</label>
-										<div class="col col-10">
-											<label class="input"> <i class="icon-append fa fa-user"></i>
-												<input type="text" disabled name="ro_no" id="ro_no" />
-											</label>
-										</div>
-									</div>
-								</section> -->
-								<table class="table table-responsive table-bordered">
-									<tr>
-										<td>Nomor Purchase Order</td>
-										<td id="npo"></td>
-									</tr>
-									<tr>
-										<td>Kode Return</td>
-										<td id="rc"></td>
-									</tr>
-									<tr>
-										<td>Methode Return</td>
-										<td id="mr"></td>
-									</tr>
-									<tr>
-										<td>Tanggal Konfirmasi</td>
-										<td id="tk"></td>
-									</tr>
-									<tr>
-										<td>Total Harga Return</td>
-										<td id="th"></td>
-									</tr>
-									<tr>
-										<td>Result Harga</td>
-										<td id="rh"></td>
-									</tr>
-									<tr>
-										<td>Status Return</td>
-										<td id="sr"></td>
-									</tr>
-									<tr>
-										<td>Kode Barang</td>
-										<td id="kb"></td>
-									</tr>
-									<tr>
-										<td>Kuantitas Return</td>
-										<td id="kr"></td>
-									</tr>
-									<tr>
-										<td>Harga Satuan</td>
-										<td id="hs"></td>
-									</tr>
-									
-								</table>
+                            </ul>
+                        </header>
 
-							</fieldset>
+                        <!-- widget div-->
+                        <div>
+                            <!-- widget content -->
+                            <div class="widget-body no-padding">
+                                <!-- widget body text-->
+                                <div class="tab-content padding-10">
 
-							<footer>
-								<button type="button" class="btn btn-default" data-dismiss="modal">
-									Tutup
-								</button>
+                                    <div class="tab-pane fade in active" id="hr1">
+                                        <table id="dt_wait" class="table table-striped table-bordered table-hover"
+                                               width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" width="10%">No.</th>
+                                                <th class="text-center" width="30%">Nota Return Barang</th>
+                                                <th class="text-center" width="45%">Nama Supplier</th>
+                                                <th class="text-center" width="15%">Aksi</th>
+                                            </tr>
+                                            </thead>
 
-							</footer>
-						</form>						
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="tab-pane fade" id="hr2">
 
+                                        <div class="row form-group">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <div class="col-md-4">
 
-					</div>
+                                                    <div>
+                                                        <div class="input-group input-daterange" id="date-range">
+                                                            <input type="text" class="form-control" id="tgl_awal"
+                                                                   name="tgl_awal" placeholder="Tanggal Awal"
+                                                                   data-dateformat="dd/mm/yy">
+                                                            <span
+                                                                class="input-group-addon bg-custom text-white b-0">to</span>
+                                                            <input type="text" class="form-control" id="tgl_akhir"
+                                                                   name="tgl_akhir" placeholder="Tanggal Akhir"
+                                                                   data-dateformat="dd/mm/yy">
+                                                        </div>
+                                                    </div>
 
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <input type="text" id="nota" class="form-control" name="nota"
+                                                               placeholder="Masukkan No.Nota"
+                                                               style="width: 100%; float: left; text-transform: uppercase">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-5">
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="idSupp" id="idSupp">
+                                                        <input type="text" id="namaSupp" class="form-control"
+                                                               name="namaSupp" placeholder="Masukkan Nama Supplier"
+                                                               style="width: 80%; float: left; text-transform: uppercase;">
 
-		<!-- end row -->
+                                                        <button type="button"
+                                                                class="btn btn-primary btn-sm icon-btn ml-2"
+                                                                onclick="cariHistory()"
+                                                                style="width: 10%; margin-left: 5%">
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
-		<!-- row -->
+                                        <table id="dt_history" class="table table-striped table-bordered table-hover"
+                                               width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" width="10%">No.</th>
+                                                <th class="text-center" width="30%">No. Purchase Order</th>
+                                                <th class="text-center" width="40%">Nama Supplier</th>
+                                                <th class="text-center" width="20%">Status</th>
+                                            </tr>
+                                            </thead>
 
-		<div class="row">
+                                            <tbody id="historyBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-		</div>
+                                </div>
+                                <!-- end widget body text-->
 
-		<!-- end row -->
+                                <!-- widget footer -->
+                                <div class="widget-footer text-right">
+                                </div>
+                                <!-- end widget footer -->
+                            </div>
+                            <!-- end widget content -->
+                        </div>
+                        <!-- end widget div -->
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
 
-	</section>
-	<!-- end widget grid -->
+        </section>
+        <!-- end widget grid -->
 
-</div>
-<!-- END MAIN CONTENT -->
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+
+                        <h4 class="modal-title" id="myModalLabel">Detail</h4>
+
+                    </div>
+
+                    <div class="modal-body">
+
+                        <div class="row">
+
+                            <!-- Widget ID (each widget will need unique ID)-->
+                            <div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3"
+                                 data-widget-editbutton="false" data-widget-colorbutton="false"
+                                 data-widget-deletebutton="false">
+
+                                <header>
+
+                                    <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+                                    <h2 id="title_detail"></h2>
+
+                                </header>
+
+                                <!-- widget div-->
+                                <div>
+
+                                    <!-- widget content -->
+                                    <div class="widget-body no-padding">
+
+                                        <div class="table-responsive">
+
+                                            <table class="table">
+
+                                                <tbody>
+
+                                                <tr>
+                                                    <td><strong>Nota</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_nota"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>Nama Supplier</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_supp"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>No. Telp Supplier</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_telp"></td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><strong>Tanggal PO</strong></td>
+                                                    <td><strong>:</strong></td>
+                                                    <td id="dt_tgl"></td>
+                                                </tr>
+
+                                                </tbody>
+
+                                            </table>
+
+                                            <table class="table table-bordered" id="table_item">
+                                                <thead>
+                                                <tr class="text-center">
+                                                    <th>Nama Barang</th>
+                                                    <th>Qty</th>
+                                                    <th>Qty Diterima</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+                                    <!-- end widget content -->
+
+                                </div>
+                                <!-- end widget div -->
+
+                            </div>
+                            <!-- end widget -->
+                        </div>
+
+                    </div>
+
+                </div><!-- /.modal-content -->
+
+            </div><!-- /.modal-dialog -->
+
+        </div>
+        <!-- /.modal -->
+
+    </div>
+    <!-- END MAIN CONTENT -->
 @endsection
 
 @section('extra_script')
 
-<!-- PAGE RELATED PLUGIN(S) -->
-<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+    <script type="text/javascript">
+        var semua, purchase, complete;
+        $(document).ready(function () {
 
-<script type="text/javascript">
-	$(document).ready(function(){
+            let selected = [];
 
-		let selected = [], return_id = [];
+            /* BASIC ;*/
+            var responsiveHelper_dt_basic = undefined;
+            var responsiveHelper_datatable_fixed_column = undefined;
+            var responsiveHelper_datatable_col_reorder = undefined;
+            var responsiveHelper_datatable_tabletools = undefined;
 
-		/* BASIC ;*/
-		var responsiveHelper_dt_basic = undefined;
-		var responsiveHelper_datatable_fixed_column = undefined;
-		var responsiveHelper_datatable_col_reorder = undefined;
-		var responsiveHelper_datatable_tabletools = undefined;
+            var breakpointDefinition = {
+                tablet: 1024,
+                phone: 480
+            };
 
-		var breakpointDefinition = {
-			tablet : 1024,
-			phone : 480
-		};
+            $('#table_item').DataTable({
+                "language": dataTableLanguage,
+                "pageLength": 5,
+                "lengthChange": false,
+                "searching": false
+            });
 
-		$('#dt_basic').dataTable({
-			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-			"t"+
-			"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-			"autoWidth" : true,
-			"preDrawCallback" : function() {
-			// Initialize the responsive datatables helper once.
-			if (!responsiveHelper_dt_basic) {
-			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-			}
-			},
-			"rowCallback" : function(nRow) {
-			responsiveHelper_dt_basic.createExpandIcon(nRow);
-			},
-			"drawCallback" : function(oSettings) {
-			responsiveHelper_dt_basic.respond();
-			}
-		});
+            $("#date-range").datepicker({
+                language: "id",
+                format: 'dd/mm/yyyy',
+                prevText: '<i class="fa fa-chevron-left"></i>',
+                nextText: '<i class="fa fa-chevron-right"></i>',
+                autoclose: true,
+                todayHighlight: true
+            });
 
-		/* END BASIC */
+            $("#nota").autocomplete({
+                source: baseUrl + '/pembelian/purchase-order/auto-nota',
+                minLength: 1,
+                select: function (event, data) {
+                    $('#nota').val(data.item.label);
+                }
+            });
 
-		$('.check-me').change(function(evt){
-			evt.preventDefault(); context = $(this);
-			if(context.is(':checked')){
-			selected.push(context.val());
-			return_id.push(context.data('id'));
-			}else{
-			selected.splice(_.findIndex(selected, function(o) { return o == context.val() }), 1);
-		}
-			//console.log(selected);
-			//console.log(return_id);
-		})
+            $("#namaSupp").autocomplete({
+                source: baseUrl + '/pembelian/konfirmasi-pembelian/auto-supp',
+                minLength: 1,
+                select: function (event, data) {
+                    $('#idSupp').val(data.item.id);
+                    $('#namaSupp').val(data.item.label);
+                }
+            });
 
-		// Hapus Click
+            $('#dt_wait').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "ajax": "{{ url('/pembelian/purchase-order/get-proses') }}",
+                "fnCreatedRow": function (row, data, index) {
+                    $('td', row).eq(0).html(index + 1);
+                },
+                "columns": [
+                    {"data": "DT_RowIndex"},
+                    {"data": "p_nota"},
+                    {"data": "s_company"},
+                    {"data": "aksi"}
+                ],
+                "autoWidth": false,
+                "language": dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" + "t" +
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                "preDrawCallback": function () {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_wait'), breakpointDefinition);
+                    }
+                },
+                "rowCallback": function (nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback": function (oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                }
+            });
 
-		$("#multiple_delete").click(function(evt){
-			evt.preventDefault();
+            $('#dt_history').DataTable({
+                "language": dataTableLanguage
+            });
 
-			if(selected.length == 0){
-				alert('Tidak Ada Data Yang Anda Pilih')
-			}else{
-				let ask = confirm(selected.length+' Data Akan Dihapus Apakah Anda Yakin ?');
-				if(ask){
-					$('#overlay').fadeIn(300);
-					axios.post(baseUrl+'/pembelian/purchase-return/multiple-delete', {
-						pr_id 	: selected,
-						_token 	: '{{ csrf_token() }}'
-					})
-					.then((response) => {
-						if(response.data.status == 'berhasil'){
-						location.reload();
-						// console.log(response);
-					}
-					}).catch((error) => {
-						console.log(error);
-					})
-				}
-			}
-		})
+            $("#namaSupp").autocomplete({
+                source: baseUrl + '/pembelian/konfirmasi-pembelian/auto-supp',
+                minLength: 1,
+                select: function (event, data) {
+                    $('#idSupp').val(data.item.id);
+                    $('#namaSupp').val(data.item.label);
+                }
+            });
 
-		// Edit Click
+        })
 
-		$("#multiple_edit").click(function(evt){
-			evt.preventDefault();
+        function detail(id) {
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Mengambil data...');
 
-			if(selected.length == 0){
-				alert('Tidak Ada Data Yang Anda Pilih')
-			}else{
-				$("#table-form").submit();
-			}
-		});
+            var status;
 
-		// edit 1 click
+            axios.get(baseUrl + '/inventory/penerimaan/supplier/detail?id=' + id).then(response => {
 
-		$(".edit").click(function(evt){
-			evt.preventDefault(); context = $(this);
+                if (response.data.status == 'Access denied') {
 
-			window.location = baseUrl+'/pembelian/purchase-return/edit?id='+context.data('id');
-		});
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title: "Gagal",
+                        content: "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+                        color: "#A90329",
+                        timeout: 5000,
+                        icon: "fa fa-times bounce animated"
+                    });
 
-		// hapus 1 click
-		$(".hapus").click(function(evt){
-			evt.preventDefault(); context = $(this);
+                } else {
+                    console.log(response.data);
+                    var row = '';
+                    $('.tr').remove();
+                    $('#title_detail').html('<strong>Detail Purchase Order</strong>');
+                    $('#dt_nota').text(response.data.data[0].p_nota);
+                    $('#dt_supp').text(response.data.data[0].s_company);
+                    $('#dt_telp').text(response.data.data[0].s_phone);
+                    $('#dt_tgl').text(response.data.data[0].p_date);
 
-			let ask = confirm('Apakah Anda Yakin Akan Menghapus Data Ini?');
-			if(ask){
-				$('#overlay').fadeIn(300);
-				axios.post(baseUrl+'/pembelian/purchase-return/multiple-delete', {
-					pr_id 	: [context.data('id')],
-					_token 	: '{{ csrf_token() }}'
-				})
-				.then((response) => {
-					if(response.data.status == 'berhasil'){
-					location.reload();
-				}
-				}).catch((error) => {
-					console.log(error);
-				})
-			}
-		});
+                    $('#table_item').DataTable().clear();
+                    for (var i = 0; i < response.data.data.length; i++) {
 
-		// view click
-		$(".view").click(function(evt){
-			evt.preventDefault(); context = $(this);
-			axios.get(baseUrl+'/pembelian/get-current-return/'+context.data('id'))
-			.then((response) => {
-				if(response.data == null){
-					$.toast({
-						text: 'Ups . Data Yang Ingin Anda Lihat Sudah Tidak Ada..',
-						showHideTransition: 'fade',
-						icon: 'error'
-					})
-					$('#form-load-section-status').fadeOut(200);
-				}else{
-					// console.log(response.data);
-					initiate(response.data);
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			})
-			// $('#myModal').modal('show');
-		});
+                        $('#table_item').DataTable().row.add([
+                            response.data.data[i].i_nama,
+                            response.data.data[i].pd_qty,
+                            response.data.data[i].pd_qtyreceived
+                        ]).draw();
 
-		function initiate(data){
-			var status_return, methode_return;
+                    }
 
-			if (data.pr_methode_return == 'GB') {
-				methode_return = "Ganti Barang Baru";
-			} else if (data.pr_methode_return == 'PT') {
-				methode_return = "Potong Tagihan";
-			} else if (data.pr_methode_return == 'GU') {
-				methode_return = "Ganti Uang";
-			} else if (data.pr_methode_return == 'PN') {
-				methode_return = "Potong Nota";
-			}
+                    $('#overlay').fadeOut(200);
+                    $('#myModal').modal('show');
 
-			if (data.pr_status_return == 'WT') {
-				status_return = "Waiting";
-			} else if (data.pr_status_return == 'DE') {
-				status_return = "Dapat Diedit";
-			} else if (data.pr_status_return == 'CF') {
-				status_return = "Confirmed";
-			}
+                }
+            })
+        }
 
-			$('#npo').text(data.pr_po_id);
-			$('#rc').text(data.pr_code);
-			$('#mr').text(methode_return);
-			$('#tk').text(data.pr_confirm_date);
-			$('#th').text(formatRupiah(data.pr_total_price, 'Rp'));
-			$('#rh').text(formatRupiah(data.pr_result_price, 'Rp'));
-			$('#sr').text(status_return);
-			$('#kb').text(data.prd_kode_barang);
-			$('#kr').text(data.prd_qty);
-			$('#hs').text(formatRupiah(data.prd_unit_price, 'Rp'));
-			$('#myModal').modal('show');
-		}
+        function edit(id) {
 
-		function formatRupiah(angka, prefix)
-		{
-			var number_string = angka.toString(),
-			split	= number_string.split(','),
-			sisa 	= split[0].length % 3,
-			rupiah 	= split[0].substr(0, sisa),
-			ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
+            window.location.href = baseUrl + '/pembelian/purchase-order/edit?id=' + id;
 
-			if (ribuan) {
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
+        }
 
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
-		}
-	})
-</script>
+        function hapus(id) {
+            $.SmartMessageBox({
+                title: "Pesan!",
+                content: 'Apakah Anda yakin akan manghapus data Purchase Order ini ?',
+                buttons: '[Batal][Ya]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Ya") {
+
+                    $('#overlay').fadeIn(200);
+                    $('#load-status-text').text('Sedang Menghapus Data...');
+
+                    axios.get(baseUrl + '/pembelian/purchase-order/hapus' + '/' + id).then((response) => {
+                        if (response.data.status == 'sukses') {
+                            $('#overlay').fadeOut(200);
+                            $.smallBox({
+                                title: "Berhasil",
+                                content: 'Data Purchase Order ' + response.data.nota + ' Berhasil Dihapus !',
+                                color: "#739E73",
+                                timeout: 4000,
+                                icon: "fa fa-check bounce animated"
+                            });
+                            location.reload();
+                        } else {
+                            $('#overlay').fadeOut(200);
+                            $.smallBox({
+                                title: "Gagal",
+                                content: "Maaf, Data Purchase Order " + response.data.nota + " Gagal Dihapus ",
+                                color: "#A90329",
+                                timeout: 4000,
+                                icon: "fa fa-times bounce animated"
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function cariHistory() {
+
+            var tglAwal = $('#tgl_awal').val();
+            var tglAkhir = $('#tgl_akhir').val();
+            var nota = $('#nota').val();
+            var idSupp = $('#idSupp').val();
+
+            if ($('#namaSupp').val() == '') {
+                idSupp = null;
+            }
+
+            axios.post(baseUrl + '/pembelian/purchase-order/get-history', {
+                tglAwal: tglAwal,
+                tglAkhir: tglAkhir,
+                nota: nota,
+                idSupp: idSupp
+            }).then((response) => {
+
+                $('#historyBody').html('<tr class="odd"><td valign="top" colspan="6" class="dataTables_empty">Tidak ada data</td></tr>');
+                console.log(response);
+                $('#dt_history').DataTable().clear();
+                for (var i = 0; i < response.data.data.length; i++) {
+                    var status = '';
+                    if (response.data.data[i].qtyR == response.data.data[i].qty) {
+                        status = '<span class="label label-success">DITERIMA</span>';
+                    } else {
+                        status = '<span class="label label-warning">PROSES</span>';
+                    }
+                    $('#dt_history').DataTable().row.add([
+                        i + 1,
+                        response.data.data[i].p_nota,
+                        response.data.data[i].s_company,
+                        status
+                    ]).draw();
+                }
+
+            });
+
+        }
+    </script>
 
 @endsection

@@ -285,11 +285,21 @@
                 todayHighlight: true
             });
 
-            $('.price').maskMoney({thousands: '.', precision: 0});
-            $('.diskV').maskMoney({thousands: '.', precision: 0});
-            $('#htgDiskV').maskMoney({thousands: '.', precision: 0});
+            $('.price').maskMoney({
+                thousands: '.',
+                precision: 0
+            });
+            $('.diskV').maskMoney({
+                thousands: '.',
+                precision: 0
+            });
+            $('#htgDiskV').maskMoney('mask', {thousands: '.', precision: 0});
 
-            $('.persen').maskMoney({thousands: '.', precision: 0, suffix: ' %'});
+            $('.persen').maskMoney({
+                thousands: '.',
+                precision: 0,
+                suffix: ' %'
+            });
         })
 
         function cekpersen(id){
@@ -435,7 +445,7 @@
                     content: 'Silahkan Pilih Tipe Pembayaran Terlebih Dahulu',
                     color: "#C46A69",
                     timeout: 3000,
-                    icon: "fa fa-warning bounce animated"
+                    icon: "fa fa-warning bounce animated",
                 });
                 return false;
             }

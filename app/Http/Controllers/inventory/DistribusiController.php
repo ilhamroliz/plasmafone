@@ -733,17 +733,19 @@ class DistribusiController extends Controller
                 array_push($temp, $code);
             }
             $kode = $temp;
+            //end
         }
+
         if (count($kode) > 0){
 
             $dataN = DB::table('d_stock')
                 ->select('sd_detailid', 'i_id', 'sm_specificcode','i_specificcode', 'i_code', 'i_nama', 's_qty', 'op_price', 'i_price', 's_id', DB::raw('coalesce(concat(" (", sd_specificcode, ")"), "") as sd_specificcode'))
-                ->join('d_stock_mutation', function ($q) use ($kode){
+                ->join('d_stock_mutation', function ($q){
                     $q->on('d_stock_mutation.sm_stock', '=', 'd_stock.s_id');
                     $q->where('d_stock_mutation.sm_detail', '=', 'PENAMBAHAN');
                     $q->where('d_stock_mutation.sm_sisa', '>', '0');
                 })
-                ->leftJoin('d_stock_dt', function ($a) use ($kode){
+                ->leftJoin('d_stock_dt', function ($a){
                     $a->on('d_stock_dt.sd_stock', '=', 'd_stock.s_id');
                 })
                 ->join('d_item', 'd_item.i_id', '=', 'd_stock.s_item')

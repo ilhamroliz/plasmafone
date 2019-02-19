@@ -446,6 +446,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/purchase-order/auto-nota', 'pembelian\PurchaseOrderController@auto_nota');
     Route::get('/pembelian/purchase-order/hapus/{id}', 'pembelian\PurchaseOrderController@hapus');
     Route::match(['get', 'post'],'/pembelian/purchase-order/edit', 'pembelian\PurchaseOrderController@edit');
+    Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
 
 
     // Route::get('/pembelian/purchase-order/view_purchaseAll', 'PurchaseOrderController@view_purchaseAll');
@@ -473,34 +474,33 @@ Route::group(['middleware' => 'auth'], function () {
     // Route::match(['get', 'post'], '/pembelian/purchase-order/multiple-delete', 'PurchaseOrderController@multiple_delete_purchase_order');
     // Route::get('/pembelian/purchase-order/cetak', 'PurchaseOrderController@cetak_purchase');
     // Route::get('/pembelian/purchase-order/get-purchase-data/{id}', 'PurchaseOrderController@get_purchase_data');
-    // Route::get('/pembelian/purchase-order/print/{id}', 'pembelian\PurchaseOrderController@print');
     // Route::get('/pembelian/purchase-order/purchase-pdf/{id}', 'PurchaseOrderController@viewpdf_purchase');
     // Route::get('/pembelian/purchase-order/generate-pdf/{id}', 'PurchaseOrderController@pdf_purchase');
 
 	// End Purchase Order
 
 	// Return Barang
+    Route::get('/pembelian/purchase-return', 'pembelian\ReturnPembelianController@index');
+    Route::get('/pembelian/purchase-return/getData', 'pembelian\ReturnPembelianController@getData');
+    Route::match(['get', 'post'],'/pembelian/purchase-return/add', 'pembelian\ReturnPembelianController@tambah');
+    Route::match(['get', 'post'],'/pembelian/purchase-return/add-dari-penjualan', 'pembelian\ReturnPembelianController@tambahFP');
+    Route::match(['get', 'post'],'/pembelian/purchase-return/edit', 'pembelian\ReturnPembelianController@edit');
+    Route::get('/pembelian/purchase-return/detail/{id}', 'pembelian\ReturnPembelianController@detail');
+    Route::get('/pembelian/purchase-return/hapus/{id}', 'pembelian\ReturnPembelianController@hapus');
 
-    Route::get('/pembelian/purchase-return', 'ReturnPembelianController@return_barang');
-    Route::get('/pembelian/purchase-return/getData', 'ReturnPembelianController@getData');
-    Route::get('/pembelian/purchase-return/add', 'ReturnPembelianController@return_barang_add');
-    Route::post('/pembelian/purchase-return/add', 'ReturnPembelianController@return_barang_add');
+    Route::get('/pembelian/purchase-return/auto-nota', 'pembelian\ReturnPembelianController@auto_nota');
+    Route::post('/pembelian/purchase-return/getDataPembelian', 'pembelian\ReturnPembelianController@getDataPembelian');
+    Route::post('/pembelian/purchase-return/getDataPenjualan`', 'pembelian\ReturnPembelianController@getDataPenjualan');
 
-    Route::get('/pembelian/show-purchase/{id}', 'ReturnPembelianController@show_purchase');
+    Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-penjualan', 'pembelian\ReturnPembelianController@tambah_detil_penjualan');
+    Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-pembelian', 'pembelian\ReturnPembelianController@tambah_detil_pembelian');
 
-    Route::get('/pembelian/get-current-return/{id}', 'ReturnPembelianController@get_current_return');
-
-    Route::get('/pembelian/purchase-return/edit', 'ReturnPembelianController@edit_purchase_return');
-
-    Route::get('/pembelian/purchase-return/update', 'ReturnPembelianController@update_purchase_return');
-
-    Route::get('/pembelian/purchase-return/edit-multiple', 'ReturnPembelianController@multiple_edit_purchase_return');
-
-    Route::get('/pembelian/purchase-return/get-current-return/{id}', 'ReturnPembelianController@get_edit_return');
-
-    Route::get('/pembelian/purchase-return/multiple-delete', 'ReturnPembelianController@multiple_delete_purchase_return');
-
-	// Route::get('/newprint', 'PembelianController@new_print');
+    // Route::get('/pembelian/get-current-return/{id}', 'ReturnPembelianController@get_current_return');
+    // Route::get('/pembelian/purchase-return/update', 'ReturnPembelianController@update_purchase_return');
+    // Route::get('/pembelian/purchase-return/edit-multiple', 'ReturnPembelianController@multiple_edit_purchase_return');
+    // Route::get('/pembelian/purchase-return/get-current-return/{id}', 'ReturnPembelianController@get_edit_return');
+    // Route::get('/pembelian/purchase-return/multiple-delete', 'ReturnPembelianController@multiple_delete_purchase_return');
+	// // Route::get('/newprint', 'PembelianController@new_print');
 
 	// End Return Barang
 
@@ -529,6 +529,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/supplier/getMaks/{id}/{item}', 'inventory\SupplierReceptionController@getMaks');
     Route::post('/inventory/penerimaan/supplier/getItemDT', 'inventory\SupplierReceptionController@itemReceiveDT');
 
+    Route::post('/inventory/penerimaan/supplier/detailReceived/{id}/{item}', 'inventory\SupplierReceptionController@detailReceived');
+    Route::match(['get', 'post'],'/inventory/penerimaan/supplier/editReceived', 'inventory\SupplierReceptionController@editReceived');
+    Route::post('/inventory/penerimaan/supplier/hapusReceived/{id}/{item}', 'inventory\SupplierReceptionController@hapusReceived');
 
 	// End penerimaan barang dari supplier
 
@@ -645,7 +648,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/return-penjualan/cari-member', 'penjualan\ReturnPenjualanController@cariMember');
     Route::get('/penjualan/return-penjualan/cari-kode', 'penjualan\ReturnPenjualanController@cariKode');
     Route::get('/penjualan/return-penjualan/cari-nota', 'penjualan\ReturnPenjualanController@cariNota');
-    Route::get('/penjualan/return-penjualan/cari-tanggal', 'penjualan\ReturnPenjualanController@cariTanggal');
     Route::get('/penjualan/return-penjualan/cari/member', 'penjualan\ReturnPenjualanController@cariNotaMember');
     Route::get('/penjualan/return-penjualan/cari', 'penjualan\ReturnPenjualanController@cariNotaPenjualan');
     Route::get('/penjualan/return-penjualan/cari/detail/{id}', 'penjualan\ReturnPenjualanController@cariNotaDetail');
@@ -658,6 +660,41 @@ Route::group(['middleware' => 'auth'], function () {
 	// ####################################
 	// End Return Penjualan
 	// ####################################
+
+
+
+    // ####################################
+    // Service Barang
+    // ####################################
+    Route::get('/penjualan/service-barang', 'penjualan\ServicesController@index')->name('service-barang');
+    Route::get('/penjualan/service-barang/cari-data-service', 'penjualan\ServicesController@cariDataService');
+    Route::get('/penjualan/service-barang/get-data-service', 'penjualan\ServicesController@getDataService')->name('get-data-service');
+    Route::get('/penjualan/service-barang/get-pending', 'penjualan\ServicesController@getPending')->name('get-service-pending');
+    Route::get('/penjualan/service-barang/get-tolak', 'penjualan\ServicesController@getTolak')->name('get-service-tolak');
+    Route::get('/penjualan/service-barang/get-proses', 'penjualan\ServicesController@getProses')->name('get-service-proses');
+    Route::get('/penjualan/service-barang/get-done', 'penjualan\ServicesController@getDone')->name('get-service-done');
+    Route::get('/penjualan/service-barang/get-detail-service/{id}', 'penjualan\ServicesController@getDetailService');
+    Route::match(['get', 'post'], '/penjualan/service-barang/add', 'penjualan\ServicesController@add')->name('service-add');
+    Route::match(['get', 'post'], '/penjualan/service-barang/add-service', 'penjualan\ServicesController@addService')->name('addService');
+    Route::get('/penjualan/service-barang/cari-member', 'penjualan\ServicesController@cariMember');
+    Route::get('/penjualan/service-barang/cari-kode', 'penjualan\ServicesController@cariKode');
+    Route::get('/penjualan/service-barang/cari-nota', 'penjualan\ServicesController@cariNota');
+    Route::get('/penjualan/service-barang/cari/member', 'penjualan\ServicesController@cariNotaMember');
+    Route::get('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
+    Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
+    Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
+    Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
+    Route::get('/penjualan/service-barang/struk/{id}', 'penjualan\ServicesController@struk');
+    Route::get('/penjualan/service-barang/tolak-barang/{id}', 'penjualan\ServicesController@serviceTolak');
+    Route::get('/penjualan/service-barang/terima-barang/{id}', 'penjualan\ServicesController@serviceTerima');
+    Route::get('/penjualan/service-barang/proses-perbaikan/{id}', 'penjualan\ServicesController@serviceProses');
+    Route::get('/penjualan/service-barang/selesai-perbaikan/{id}', 'penjualan\ServicesController@serviceSelesai');
+    Route::get('/penjualan/service-barang/terima-barang-pusat/{id}', 'penjualan\ServicesController@serviceTerimaPusat');
+    // ####################################
+    // End Service Barang
+    // ####################################
+
+
 
 	/////// OUTLET
 
@@ -876,8 +913,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pengelolaan-member/get-saldo-poin', 'PengelolaanMemberController@getSaldoPoin');
     Route::get('pengelolaan-member/simpan-saldo-poin', 'PengelolaanMemberController@saveSaldoPoin');
     Route::get('pengelolaan-member/get-data-setting/{id}', 'PengelolaanMemberController@getDataSetting');
-    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@updateSetting');
-
+    Route::get('pengelolaan-member/update-setting', 'PengelolaanMemberController@pengelolaan-member');
+    Route::get('pengelolaan-member/get-member-poin', 'PengelolaanMemberController@getMemberPoin');
+    Route::get('pengelolaan-member/get-member-birth', 'PengelolaanMemberController@getMemberBirth');
+    Route::get('pengelolaan-member/get-member-history', 'PengelolaanMemberController@getMemberHistory');
 
     // Route Dirga
 
@@ -1552,11 +1591,24 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Frontend Onlineshop============================================================== //
     Route::prefix('onlineshop')->group(function () {
-        Route::get('/', 'onlineshop_controller@index')->name('frontend');
-        Route::get('/product-all', 'onlineshop_controller@product_all')->name('product_all');
-        Route::get('/handphone', 'onlineshop_controller@product_hp')->name('product_hp');
-        Route::get('/accesories', 'onlineshop_controller@product_acces')->name('product_acces');
-        Route::get('/product-detail/{id}', 'onlineshop_controller@product_detail')->name('product_detail');
-        Route::get('/shoping-cart', 'onlineshop_controller@shoping_cart')->name('shoping_cart');
-        Route::get('/add_cart', 'onlineshop_controller@add_cart')->name('add_cart');
+        Route::get('/', 'OnlineshopController@index')->name('frontend');
+        Route::get('/product-all', 'OnlineshopController@product_all')->name('product_all');
+        Route::get('/handphone', 'OnlineshopController@product_hp')->name('product_hp');
+        Route::get('/accesories', 'OnlineshopController@product_acces')->name('product_acces');
+        Route::get('/product-detail/{id}', 'OnlineshopController@product_detail')->name('product_detail');
+        Route::get('/shoping-cart/{id}', 'OnlineshopController@shoping_cart')->name('shoping_cart');
+        Route::get('/add-cart', 'OnlineshopController@addToCart')->name('addToCart');
+        Route::get('/notif-cart', 'OnlineshopController@notifCart')->name('notifCart');
     });
+
+
+
+    /*
+     *
+     * TTTTTTTTTTTTT   HHH       HHH   EEE E E E
+     *      TTT        HHH       HHH   EEE
+     *      TTT        HHH H H H HHH   EEE E E E
+     *      TTT        HHH       HHH   EEE
+     *      TTT        HHH       HHH   EEE E E E
+     *
+     */

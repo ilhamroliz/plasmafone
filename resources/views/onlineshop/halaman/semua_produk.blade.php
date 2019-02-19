@@ -36,11 +36,11 @@
 			            	<a data-toggle="collapse" aria-expanded="false" style="line-height: 1.5;">Handphone</a>
 					        <ul class="sub-menu-m py-0">
 					        	@foreach($i_merk_hp as $merk)
-								<?php $merks = mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8"); ?>
 								<li>
-									<a href="#" class="cl6 bor3 trans-04 m-r-32 m-tb-0 p-0" data-filter=".{{$merk->i_merk}}">
-										{{$merks}}
-									</a>
+									<div class="custom-control custom-checkbox">
+									  <input type="checkbox" class="custom-control-input" id="merk-{{$merk->i_merk}}">
+									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
+									</div>
 								</li>
 								@endforeach
 					        </ul>
@@ -52,11 +52,11 @@
 			            	<a data-toggle="collapse" aria-expanded="false" style="line-height: 1.5;">Aksesoris</a>
 					        <ul class="sub-menu-m py-0">
 					        	@foreach($i_merk_acces as $merk)
-								<?php $merks = mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8"); ?>
 								<li>
-									<a href="#" class="cl6 bor3 trans-04 m-r-32 m-tb-0 p-0" data-filter=".{{$merk->i_merk}}">
-										{{$merks}}
-									</a>
+									<div class="custom-control custom-checkbox">
+									  <input type="checkbox" class="custom-control-input" id="merk-{{$merk->i_merk}}">
+									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
+									</div>
 								</li>
 								@endforeach
 					        </ul>
@@ -73,7 +73,7 @@
 			            	<a href="#">Min - Harga</a>
 					        <ul>
 								<li>
-									<input type="number" min="0" value="0.00" data-decimals="2" step="1.0">
+									<input type="number" min="0" value="0.00" data-decimals="2" step="100.0">
 								</li>
 					        </ul>
 					    </li>
@@ -81,17 +81,17 @@
 			            	<a href="#">Max - Harga</a>
 					        <ul>
 								<li>
-									<input type="number" min="0" value="0.00" data-decimals="2" step="1.0">
+									<input type="number" min="0" value="0.00" data-decimals="2" step="100.0">
 								</li>
 					        </ul>
 					    </li>
 					</ul>
 				</nav>
 				<div id="content">
-					<div class="row">
+					<div class="row results">
 						@foreach($products as $product)
-						<div class="col-sm-6 col-md-4 col-lg-3 p-b-35">
-                    <!-- Block2 -->
+						<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 merk merk-{{$product->i_merk}}">
+                    	<!-- Block2 -->
                     		<div class="block2">
 								<div class="block2-pic hov-img0" style="height: 260px; display: flex; align-items: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;">
 		                        	@if($product->i_img != null || $product->i_img != "")
@@ -146,6 +146,16 @@
 
 	<script type="text/javascript">
         $(document).ready(function () {
+            $('div.custom-checkbox').find('input:checkbox').on('click', function () {
+                $('.results > .merk').hide();
+                $('div.custom-checkbox').find('input:checked').each(function () {
+                    $('.results > .merk.' + $(this).attr('id')).show();
+                });
+                if(!$('div.custom-checkbox').find('input:checked').length){
+                    $('.results > .merk').show();
+                }
+            });
+
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });

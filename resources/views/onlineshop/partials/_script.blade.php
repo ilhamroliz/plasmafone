@@ -1,10 +1,11 @@
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/jquery/jquery-3.2.1.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('template_asset/frontend/js/jquery-ui.js')}}"></script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/animsition/js/animsition.min.js')}}"></script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/bootstrap/js/popper.js')}}"></script>
-<script type="text/javascript" src="{{asset('template_asset/frontend/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('template_asset/frontend/bootstrap-4.0/js/bootstrap.min.js')}}"></script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/select2/select2.min.js')}}"></script>
 <script type="text/javascript">
@@ -70,15 +71,6 @@ $('.js-addwish-detail').each(function(){
 	});
 });
 
-/*---------------------------------------------*/
-
-$('.js-addcart-detail').each(function(){
-	var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-	$(this).on('click', function(){
-		swal(nameProduct, "is added to cart !", "success");
-	});
-});
-
 </script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
@@ -100,5 +92,47 @@ $('.js-pscroll').each(function(){
 <!--===============================================================================================-->
 <script type="text/javascript" src="{{asset('template_asset/frontend/js/main.js')}}"></script>
 <script type="text/javascript" src="{{asset('template_asset/frontend/js/bootstrap-input-spinner.js')}}"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		getNotif();
 
+	});
+
+	function getNotif(){
+		$.ajax({
+	    	type   : "get",
+	    	url    : "{{route('notifCart')}}",
+	    	data   : {token: '{{csrf_token()}}'},
+	    	success : function(response){
+	    		document.getElementById("notifDekstop").setAttribute("data-notify", response.notif);
+	    		document.getElementById("notifMobile").setAttribute("data-notify", response.notif);
+	    	}
+	    });
+	}
+
+    function convertToRupiah(angka) {
+		var rupiah = '';
+		var angkarev = angka.toString().split('').reverse().join('');
+		for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+		var hasil = 'Rp. '+rupiah.split('',rupiah.length-1).reverse().join('');
+		return hasil;
+
+    }
+
+    function toRupiah(angka) {
+		var rupiah = '';
+		var angkarev = angka.toString().split('').reverse().join('');
+		for(var i = 0; i < angkarev.length; i++) if(i%3 == 0) rupiah += angkarev.substr(i,3)+'.';
+		var hasil = rupiah.split('',rupiah.length-1).reverse().join('');
+		return hasil;
+
+   	}
+
+    function convertToAngka(rupiah)
+    {
+        return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+    }
+</script>
+<!-- CUSTOM NOTIFICATION =========================================================================-->
+<script src="{{asset('template_asset/js/notification/SmartNotification.min.js')}}"></script>
 @yield('extra-script')

@@ -356,7 +356,7 @@
                     "preDrawCallback": function () {
                         // Initialize the responsive datatables helper once.
                         if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_menunggu'), breakpointDefinition);
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_selesai'), breakpointDefinition);
                         }
                     },
                     "rowCallback": function (nRow) {
@@ -388,7 +388,7 @@
                     "preDrawCallback": function () {
                         // Initialize the responsive datatables helper once.
                         if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_menunggu'), breakpointDefinition);
+                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_batal'), breakpointDefinition);
                         }
                     },
                     "rowCallback": function (nRow) {

@@ -337,6 +337,27 @@ class PurchaseOrderController extends Controller
 
     }
 
+    public function auto_nota(Request $request)
+    {
+        $cari = $request->term;
+        $supp = DB::table('d_purchase')
+            ->where('p_nota', 'like', '%'.$cari.'%')
+            ->select('p_id', 'p_nota')->get();
+
+        if ($supp == null) {
+            $hasilsupp[] = ['id' => null, 'label' => 'Tidak ditemukan data terkait'];
+        } else {
+            foreach ($supp as $query) {
+                $hasilsupp[] = [
+                    'id' => $query->p_id,
+                    'label' => $query->p_nota
+                ];
+            }
+        }
+
+        return Response::json($hasilsupp);
+    }
+
     public function get_history(Request $request)
     {
         // dd($request);
@@ -347,97 +368,25 @@ class PurchaseOrderController extends Controller
         $nota = $request->nota;
         $idSupp = $request->idSupp;
 
-        if($tglAw != null && $tglAkh != null){
-            $taw = explode('/', $tglAw);
-            $tglAwal = $taw[2].'-'.$taw[1].'-'.$taw[0];
-            $tak = explode('/', $tglAkh);
-            $tglAkhir = $tak[2].'-'.$tak[1].'-'.$tak[0];
+        $data = DB::table('d_purchase')
+            ->join('d_supplier', 's_id', '=', 'p_supplier')
+            ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
+            ->select(DB::raw('sum(pd_qtyreceived) as qtyR'), DB::raw('sum(pd_qty) as qty'), 'p_nota', 's_company');
 
-            if($nota != null && $idSupp == null){
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
-                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
-                    ->where('p_nota', $nota)
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }else if($nota == null && $idSupp != null){
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
-                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
-                    ->where('p_supplier', $idSupp)
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }else if($nota != null && $idSupp != null){
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
-                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
-                    ->where('p_supplier', $idSupp)
-                    ->where('p_nota', $nota)
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }else{
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->having(DB::raw('DATE(p_date)'), '<=', $tglAkhir)
-                    ->having(DB::raw('DATE(p_date)'), '>=', $tglAwal)
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }
-        }else{
-
-            if($nota != null && $idSupp == null){
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->where('p_nota', $nota)
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }else if($nota == null && $idSupp != null){
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->where('p_supplier', $idSupp)
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }else if($nota != null && $idSupp != null){
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->where('p_supplier', $idSupp)
-                    ->where('p_nota', $nota)
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }else{
-                $history = DB::table('d_purchase')
-                    ->join('d_supplier', 's_id', '=', 'p_supplier')
-                    ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
-
-                    ->select(DB::raw('SUM(pd_qty) as qty'), DB::raw('SUM(pd_qtyreceived) as qtyR'), 'p_id', 'p_nota', 's_company')
-                    ->groupBy('p_id')->get();
-            }
-
+        if ($tglAw != '' && $tglAw != null){
+            $data->where('p_date', '>=', Carbon::createFromFormat('d/m/Y', $tglAw)->format('Y-m-d'));
         }
+        if ($tglAkh != '' && $tglAkh != null){
+            $data->where('p_date', '<=', Carbon::createFromFormat('d/m/Y', $tglAkh)->format('Y-m-d'));
+        }
+        if ($nota != null && $nota != ''){
+            $data->where('p_nota', 'like', $nota);
+        }
+        if ($idSupp != '' && $idSupp != null){
+            $data->where('p_supplier', '=', $idSupp);
+        }
+
+        $history = $data->get();
 
         return json_encode([
             'data' => $history
@@ -494,6 +443,7 @@ class PurchaseOrderController extends Controller
                         }
 
                         $cekSC = DB::table('d_item')->where('i_id', $idItem[$i])->select('i_specificcode')->first();
+
                         if($cekSC->i_specificcode == 'Y'){
 
                             $getDTPrev = DB::table('d_purchase_dt')->where('pd_purchase', $id)->where('pd_item', $idItem[$i])->select('pd_specificcode', 'pd_qtyreceived', 'pd_receivedtime')->get();
@@ -502,19 +452,25 @@ class PurchaseOrderController extends Controller
                             $araySCDT = array();
                             for($j = 0; $j < $request->qty[$i]; $j++){
 
+                                if($diskV[$i] == null){
+                                    $dv = 0;
+                                }else{
+                                    $dv = implode(explode('.', $diskV[$i])) / $qty[$i];
+                                }
                                 $aray = ([
                                     'pd_purchase' => $id,
                                     'pd_detailid' => $counterDT,
                                     'pd_item' => $idItem[$i],
                                     'pd_qty' => 1,
-                                    'pd_specificcode' => $getDTPrev[$j]->pd_specificcode,
+                                    'pd_specificcode' => strtoupper($getDTPrev[$j]->pd_specificcode),
                                     'pd_value' => implode(explode('.', $price[$i])),
-                                    'pd_disc_value' => implode(explode('.', $diskV[$i])) / $qty[$i],
+                                    'pd_disc_value' => $dv,
                                     'pd_disc_persen' => str_replace(' %', '', $diskP[$i]),
                                     'pd_total_net' => implode(explode('.', $subTotal[$i])) / $qty[$i],
                                     'pd_qtyreceived' => $getDTPrev[$j]->pd_qtyreceived,
                                     'pd_receivedtime' => $getDTPrev[$j]->pd_receivedtime
                                 ]);
+
                                 array_push($araySCDT, $aray);
                                 $counterDT += 1;
 
@@ -544,11 +500,38 @@ class PurchaseOrderController extends Controller
                         }
 
                     }
+                    //update hpp item yang sudah diterima
+                    $nota = DB::table('d_purchase')
+                        ->where('p_id', '=', $id)
+                        ->first();
+                    $data = DB::table('d_stock_mutation')
+                        ->join('d_stock', 's_id', '=', 'sm_stock')
+                        ->where('sm_nota', '=', $nota->p_nota)
+                        ->groupBy('s_item')
+                        ->get();
+
+                    for ($i = 0; $i < count($data); $i++){
+                        $getHarga = DB::table('d_purchase_dt')
+                            ->join('d_purchase', 'pd_purchase', '=', 'p_id')
+                            ->where('pd_purchase', '=', $id)
+                            ->where('pd_item', '=', $data[$i]->s_item)
+                            ->first();
+
+                        $hpp = $getHarga->pd_total_net / $getHarga->p_total_gross * $getHarga->p_total_net;
+
+                        DB::table('d_stock_mutation')
+                            ->where('sm_stock', '=', $data[$i]->s_id)
+                            ->where('sm_nota', '=', $nota->p_nota)
+                            ->update([
+                                'sm_hpp' => $hpp
+                            ]);
+                    }
+
 
                     DB::commit();
                     return json_encode([
                         'status' => 'sukses',
-                        'id' => $id
+                        'id' => Crypt::encrypt($id)
                     ]);
                 } catch (\Exception $e) {
                     DB::rollback();

@@ -243,7 +243,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 						<div class="modal-header">
 
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="hapus()">
 								&times;
 							</button>
 
@@ -315,11 +315,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
-								Batal
+								Tutup
 							</button>
-							<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>
-								Simpan
-							</button>
+							{{--<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>--}}
+								{{--Simpan--}}
+							{{--</button>--}}
 						</div>
 
 					</div><!-- /.modal-content -->
@@ -470,12 +470,18 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                 '<input type="hidden" value="'+response.data.itemId+'" name="iditem">'+
                                                 '<input type="hidden" value="'+response.data.qty+'" name="qtydistribusi">'+
                                                 '<input type="hidden" value="'+response.data.qtySisa+'" name="qtysisa">'+
-                                                '<input type="text" id="kode" name="kode" class="kode form-control">' +
+                                                '<input type="text" id="kode" name="kode" class="kode form-control" style="text-transform: uppercase">' +
                                                 '<span class="input-group-addon"><i class="fa fa-barcode" id="icon"></i></span>' +
                                             '</div>' +
                                             '<span id="message" class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
+                                    '<div class="col-md-12 form-group">'+
+                                        '<button class="btn btn-primary pull-right" type="button" id="simpan" onclick="simpan()">'+
+                                            '<i class="fa fa-floppy-o"></i>'+
+                                            '&nbsp;Simpan'+
+                                        '</button>'+
+                                    '</div>'+
                                 '</fieldset>'+
                             '</div>';
 
@@ -588,6 +594,12 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
+                                    '<div class="col-md-12 form-group">'+
+                                        '<button class="btn btn-primary pull-right" type="button" id="simpan" onclick="simpan()">'+
+                                            '<i class="fa fa-floppy-o"></i>'+
+                                            '&nbsp;Simpan'+
+                                        '</button>'+
+                                    '</div>'+
                                 '</fieldset>' +
 								'</div>';
 

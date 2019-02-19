@@ -88,11 +88,6 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                             <div class="widget-body padding-10">
                                 <form id="form-tambah" class="smart-form form-horizontal">
                                     <section class="form-group">
-                                        <div class="col col-2 padding-left-0">
-                                            <label class="input"> <i class="icon-prepend fa fa-calendar"></i>
-                                                <input type="text" name="tanggal" id="tanggal" value="{{ Carbon::now('Asia/Jakarta')->format('d/m/Y') }}" placeholder="Tanggal">
-                                            </label>
-                                        </div>
                                         <div class="col col-3 padding-left-0">
                                             <select class="select2" id="supplier" name="supplier" onchange="setSupplier()">
                                                 <option value="" selected>Pilih Supplier</option>
@@ -113,18 +108,21 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                     </section>
                                     <section class="form-group baris-1" style="display: none">
                                         <div class="col col-4 padding-left-0">
+                                            <label class="label">Harga Baru</label>
                                             <label class="input"> <i class="icon-append fa fa-money"></i>
                                                 <input type="text" name="username" id="hargabaru" onkeyup="setHargaBaru()" placeholder="Harga Baru" style="text-transform: uppercase">
                                                 <b class="tooltip tooltip-bottom-right">Harga Baru</b>
                                             </label>
                                         </div>
                                         <div class="col col-4 padding-left-0">
+                                            <label class="label">Harga Pembelian</label>
                                             <label class="input"> <i class="icon-append fa fa-at"></i>
                                                 <input type="text" name="username" id="hargalama" readonly placeholder="Harga Terakhir" style="text-transform: uppercase">
                                                 <b class="tooltip tooltip-bottom-right">Harga Terakhir</b>
                                             </label>
                                         </div>
                                         <div class="col col-4 padding-left-0">
+                                            <label class="label">Refund</label>
                                             <label class="input"> <i class="icon-append fa fa-money"></i>
                                                 <input type="text" name="totalrefund" id="totalrefund" placeholder="Total Refund" readonly style="text-transform: uppercase">
                                                 <b class="tooltip tooltip-bottom-right">Total Refund</b>
@@ -272,8 +270,12 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         }
 
         function setTotalRefund(){
-            var inputs = document.getElementsByClassName( 'hargahpp' ),
-                hargahpp  = [].map.call(inputs, function( input ) {
+            var ar = $();
+            for (var i = 0; i < tablekode.rows()[0].length; i++) {
+                ar = ar.add(tablekode.row(i).node());
+            }
+            var jumlah = ar.find('input.hargahpp'),
+                hargahpp  = [].map.call(jumlah, function( input ) {
                     return parseInt(input.value);
                 });
             var total = 0;
@@ -293,10 +295,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             var baru = $('#hargabaru').val();
             baru = convertToAngka(baru);
             baru = parseInt(baru);
-            var inputs = document.getElementsByClassName( 'hargahpp' ),
-                hargahpp  = [].map.call(inputs, function( input ) {
-                    return parseInt(input.value);
-                });
+
+            var ar = $();
+            for (var i = 0; i < tablekode.rows()[0].length; i++) {
+                ar = ar.add(tablekode.row(i).node());
+            }
+            var jumlah = ar.find('input.hargahpp'),
+                hargahpp  = [].map.call(jumlah, function( input ) {
+                return parseInt(input.value);
+            });
+
             var total = 0;
             for (var i = 0; i < hargahpp.length; i++){
                 total = total + parseInt(hargahpp);
