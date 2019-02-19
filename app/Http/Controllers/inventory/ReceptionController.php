@@ -886,6 +886,7 @@ class ReceptionController extends Controller
 
     public function checkCode($item = null, $code = null, $comp = null, $dest = null)
     {
+        $code = strtoupper($code);
         $data = DB::table('d_distribusi')
                 ->join('d_distribusi_dt', function($x) use ($item, $code){
                     $x->on('d_distribusi.d_id', '=', 'd_distribusi_dt.dd_distribusi');
@@ -996,7 +997,7 @@ class ReceptionController extends Controller
                 $check_code = DB::table('d_distribusi_dt')
                     ->where('dd_distribusi', $data['idditribusi'])
                     ->where('dd_item', $data['iditem'])
-                    ->where('dd_specificcode', $data['kode'])
+                    ->where('dd_specificcode', strtoupper($data['kode']))
                     ->count();
 
                 if ($check_code == 0) {
@@ -1054,7 +1055,7 @@ class ReceptionController extends Controller
                         ->insert([
                             'sd_stock' => $idstock,
                             'sd_detailid' => $idDetail,
-                            'sd_specificcode' => $data['kode']
+                            'sd_specificcode' => strtoupper($data['kode'])
                         ]);
 
                     // update stock mutasi
@@ -1085,7 +1086,7 @@ class ReceptionController extends Controller
                         'sm_detailid' => $sm_detailid,
                         'sm_date' => Carbon::now('Asia/Jakarta'),
                         'sm_detail' => 'PENAMBAHAN',
-                        'sm_specificcode' => $data['kode'],
+                        'sm_specificcode' => strtoupper($data['kode']),
                         'sm_expired' => $expired,
                         'sm_qty' => 1,
                         'sm_use' => 0,
@@ -1102,7 +1103,7 @@ class ReceptionController extends Controller
                         ->where('dd_distribusi', $data['idditribusi'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
-                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_specificcode', strtoupper($data['kode']))
                         ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])->first();
 
@@ -1110,7 +1111,7 @@ class ReceptionController extends Controller
                         ->where('dd_distribusi', $data['idditribusi'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
-                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_specificcode', strtoupper($data['kode']))
                         ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->update([
@@ -1123,7 +1124,7 @@ class ReceptionController extends Controller
                         ->where('dd_distribusi', $data['idditribusi'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
-                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_specificcode', strtoupper($data['kode']))
                         ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->first();
@@ -1133,7 +1134,7 @@ class ReceptionController extends Controller
                             ->where('dd_distribusi', $data['idditribusi'])
                             ->where('dd_comp', $data['destination'])
                             ->where('dd_item', $data['iditem'])
-                            ->where('dd_specificcode', $data['kode'])
+                            ->where('dd_specificcode', strtoupper($data['kode']))
                             ->where('dd_status', 'On Going')
                             ->where('dd_qty', $data['qtydistribusi'])
                             ->update([
@@ -1203,7 +1204,7 @@ class ReceptionController extends Controller
                         ->insert([
                             'sd_stock' => $idstock,
                             'sd_detailid' => $idDetail,
-                            'sd_specificcode' => $data['kode']
+                            'sd_specificcode' => strtoupper($data['kode'])
                         ]);
 
                     // update stock mutasi
@@ -1234,7 +1235,7 @@ class ReceptionController extends Controller
                         'sm_detailid' => $sm_detailid,
                         'sm_date' => Carbon::now('Asia/Jakarta'),
                         'sm_detail' => 'PENAMBAHAN',
-                        'sm_specificcode' => $data['kode'],
+                        'sm_specificcode' => strtoupper($data['kode']),
                         'sm_expired' => $expired,
                         'sm_qty' => 1,
                         'sm_use' => 0,
@@ -1251,7 +1252,7 @@ class ReceptionController extends Controller
                         ->where('dd_distribusi', $data['idditribusi'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
-                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_specificcode', strtoupper($data['kode']))
                         ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])->first();
 
@@ -1259,7 +1260,7 @@ class ReceptionController extends Controller
                         ->where('dd_distribusi', $data['idditribusi'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
-                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_specificcode', strtoupper($data['kode']))
                         ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->update([
@@ -1272,7 +1273,7 @@ class ReceptionController extends Controller
                         ->where('dd_distribusi', $data['idditribusi'])
                         ->where('dd_comp', $data['destination'])
                         ->where('dd_item', $data['iditem'])
-                        ->where('dd_specificcode', $data['kode'])
+                        ->where('dd_specificcode', strtoupper($data['kode']))
                         ->where('dd_status', 'On Going')
                         ->where('dd_qty', $data['qtydistribusi'])
                         ->first();
@@ -1282,7 +1283,7 @@ class ReceptionController extends Controller
                             ->where('dd_distribusi', $data['idditribusi'])
                             ->where('dd_comp', $data['destination'])
                             ->where('dd_item', $data['iditem'])
-                            ->where('dd_specificcode', $data['kode'])
+                            ->where('dd_specificcode', strtoupper($data['kode']))
                             ->where('dd_status', 'On Going')
                             ->where('dd_qty', $data['qtydistribusi'])
                             ->update([
