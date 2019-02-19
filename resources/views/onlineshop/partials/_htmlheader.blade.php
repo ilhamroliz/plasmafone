@@ -3,7 +3,7 @@
 	<link rel="shortcut icon" href="{{ asset('template_asset/img/favicon/logo_small.png') }}" type="image/x-icon">
 	<link rel="icon" href="{{ asset('template_asset/img/logo_small.png') }}" type="image/x-icon">
 <!--===============================================================================================-->
-	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/vendor/bootstrap/css/bootstrap.min.css')}}">
+	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/bootstrap-4.0/css/bootstrap.min.css')}}">
 <!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="{{asset('template_asset/frontend/fonts/font-awesome-4.7.0/css/font-awesome.css')}}">
 <!--===============================================================================================-->

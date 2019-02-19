@@ -667,6 +667,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Service Barang
     // ####################################
     Route::get('/penjualan/service-barang', 'penjualan\ServicesController@index')->name('service-barang');
+    Route::get('/penjualan/service-barang/cari-data-service', 'penjualan\ServicesController@cariDataService');
     Route::get('/penjualan/service-barang/get-data-service', 'penjualan\ServicesController@getDataService')->name('get-data-service');
     Route::get('/penjualan/service-barang/get-pending', 'penjualan\ServicesController@getPending')->name('get-service-pending');
     Route::get('/penjualan/service-barang/get-tolak', 'penjualan\ServicesController@getTolak')->name('get-service-tolak');
@@ -684,6 +685,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
     Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
     Route::get('/penjualan/service-barang/struk/{id}', 'penjualan\ServicesController@struk');
+    Route::get('/penjualan/service-barang/tolak-barang/{id}', 'penjualan\ServicesController@serviceTolak');
+    Route::get('/penjualan/service-barang/terima-barang/{id}', 'penjualan\ServicesController@serviceTerima');
+    Route::get('/penjualan/service-barang/proses-perbaikan/{id}', 'penjualan\ServicesController@serviceProses');
+    Route::get('/penjualan/service-barang/selesai-perbaikan/{id}', 'penjualan\ServicesController@serviceSelesai');
+    Route::get('/penjualan/service-barang/terima-barang-pusat/{id}', 'penjualan\ServicesController@serviceTerimaPusat');
     // ####################################
     // End Service Barang
     // ####################################
@@ -1592,6 +1598,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/product-detail/{id}', 'OnlineshopController@product_detail')->name('product_detail');
         Route::get('/shoping-cart/{id}', 'OnlineshopController@shoping_cart')->name('shoping_cart');
         Route::get('/add-cart', 'OnlineshopController@addToCart')->name('addToCart');
+        Route::get('/notif-cart', 'OnlineshopController@notifCart')->name('notifCart');
     });
 
 

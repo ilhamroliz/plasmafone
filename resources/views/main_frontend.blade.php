@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta name="csrf_token" content="{{ csrf_token() }}">
 	<title>Plasmafone</title>
 	<meta charset="UTF-8">
+	{{-- <meta name="csrf_token" content="{{ csrf_token() }}"> --}}
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	@include('onlineshop.partials._htmlheader')
 </head>
