@@ -259,12 +259,22 @@
             });
         arrKodeGlobal = code;
         arrCode = code;
+        var scode = [];
+        for (var i=0; i < code.length; i++) {
+            if (code[i] != "") {
+                console.log('masuk');
+                scode.push(code[i]);
+            } else {
+                console.log('nggak');
+            }
+        }
+        console.log(scode);
         $( "#cari-stock" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({
                     url: '{{ url('distribusi-barang/cari-stock') }}',
                     data: {
-                        kode: code,
+                        kode: scode,
                         term: searchGlobal
                     },
                     success: function( data ) {
@@ -482,12 +492,19 @@
                 return input.value;
             });
 
+        var scode = [];
+        for (var i=0; i < kode.length; i++) {
+            if (kode[i] != "") {
+                scode.push(kode[i]);
+            }
+        }
+
         $( "#cari-stock" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({
                     url: '{{ url('distribusi-barang/cari-stock') }}',
                     data: {
-                        kode: kode,
+                        kode: scode,
                         term: searchGlobal
                     },
                     success: function( data ) {
