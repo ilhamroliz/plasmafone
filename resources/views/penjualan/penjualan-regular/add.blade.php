@@ -632,7 +632,7 @@
                     '<input type="hidden" class="kode" name="kode[]" value="'+kodespesifikGlobal+'" />'+
                     '<input type="hidden" class="harga '+iCode+'" id="harga-'+idGlobal+'" name="harga[]" value="'+hargaGlobal+'" />'+
                     '<input type="hidden" class="grossItem" name="grossItem[]" id="grossItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
-                    '<input type="hidden" class="totalItem totalItem-'+iCode+' totalItem-'+idGlobal+'" name="totalItem[]" id="totalItem-'+iCode+'" value="'+qtyGlobal * hargaGlobal+'">'+
+                    '<input type="hidden" class="totalItem totalItem-'+iCode+' totalItem-'+idGlobal+'" name="totalItem[]" id="totalItem-'+idGlobal+'" value="'+qtyGlobal * hargaGlobal+'">'+
                     '</td>' +
                     '<td style="width: 8%;"><input style="width: 100%; text-align: center;" onkeyup="ubahQty(\''+stockGlobal+'\', \'harga-'+idGlobal+'\', \'qty-'+idGlobal+'\', \'discp-'+idGlobal+'\', \'discv-'+idGlobal+'\', \'lbltotalItem-'+idGlobal+'\', \'totalItem-'+idGlobal+'\', \'grossItem-'+idGlobal+'\')" type="text" class="qtyTable qty-'+idGlobal+' qty-'+iCode+'" id="qty-'+idGlobal+'" name="qtyTable[]" value="'+qtyGlobal+'" /></td>' +
                     '<td style="width: 15%;">Rp.<p style="float: right">'+toRupiah(hargaGlobal)+'</p></td>' +
@@ -646,9 +646,15 @@
                 $('.discp').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true, suffix: '%'});
                 $('.discv').maskMoney({thousands:'', precision: 0, decimal:',', allowZero:true});
 
-                $(".qtyTable").on("keypress keyup blur",function (event) {
-                    $(this).val($(this).val().replace(/[^\d].+/, ""));
+                $(".qtyTable").on("blur",function (event) {
                     if ((event.which < 48 || event.which > 57)) {
+                        event.preventDefault();
+                    }
+                });
+
+                $(".qtyTable").on("keyup",function (event) {
+
+                    if ((event.which < 48 || event.which > 57 || event.which != 8)) {
                         event.preventDefault();
                     }
                 });
@@ -699,12 +705,19 @@
                 return input.value;
             });
 
+        var scode = [];
+        for (var i=0; i < kode.length; i++) {
+            if (kode[i] != "") {
+                scode.push(kode[i]);
+            }
+        }
+
         $( "#cari-stock" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({
                     url: '{{ url('penjualan-reguler/cari-stock') }}',
                     data: {
-                        kode: kode,
+                        kode: scode,
                         jenis: $("#id_group").val(),
                         term: searchGlobal
                     },
@@ -745,12 +758,18 @@
             });
         arrKodeGlobal = code;
         arrCode = code;
+        var scode = [];
+        for (var i=0; i < code.length; i++) {
+            if (code[i] != "") {
+                scode.push(code[i]);
+            }
+        }
         $( "#cari-stock" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({
                     url: '{{ url('penjualan-reguler/cari-stock') }}',
                     data: {
-                        kode: code,
+                        kode: scode,
                         jenis: $("#id_group").val(),
                         term: searchGlobal
                     },
@@ -850,7 +869,8 @@
         }
 
         if (isNaN(input)){
-            input = 0;
+            input = 1;
+            $('#'+inputQty).val(1);
         }
         if (input > stock){
             input = stock;

@@ -102,7 +102,8 @@ class PenjualanController extends Controller
                     ->insert([
                         'm_id' => $getId + 1,
                         'm_name' => $nama,
-                        'm_telp' => $nomor
+                        'm_telp' => $nomor,
+                        'm_status' => 'AKTIF'
                     ]);
                 DB::commit();
                 return response()->json([

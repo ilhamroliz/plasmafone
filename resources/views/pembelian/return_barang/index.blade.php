@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Return Barang')
+@section('title', 'Purchase Return')
 
 @section('extra_style')
 
@@ -18,8 +18,9 @@
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
-		<li>Home</li><li>Pembelian</li><li>Return Barang</li>
+		<li>Home</li><li>Pembelian</li><li>Return Pembelian</li><li>Tambah</li>
 	</ol>
+
 
 </div>
 <!-- END RIBBON -->
@@ -27,408 +28,193 @@
 
 
 @section('main_content')
+    <div id="content">
 
-<!-- MAIN CONTENT -->
-<div id="content">
+        <div class="row">
 
-	<div class="row">
-		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			<ul class="menu-table hide-on-small">
-				<li class="">
-					<a href="{{ url('/pembelian/purchase-return') }}">
-						<i class="fa fa-table"></i> &nbsp;Return Barang
-					</a>
-				</li>
-				<li>
-					<a href="{{ url('/pembelian/purchase-return/add') }}">
-						<i class="fa fa-plus"></i> &nbsp;Tambahkan Data
-					</a>
-				</li>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <h1 class="page-title txt-color-blueDark">
+                    <i class="fa-fw fa fa-credit-card"></i>
+                    Pembelian <span><i class="fa fa-angle-double-right"></i> Return Pembelian </span>
+                </h1>
+            </div>
 
-				<li>
-					<a href="#" id="multiple_edit">
-						<i class="fa fa-pencil-square"></i> &nbsp;Edit Data
-					</a>
-				</li>
-				<li>
-					<a href="#" id="multiple_delete">
-						<i class="fa fa-eraser"></i> &nbsp;Hapus Data
-					</a>
-				</li>
+        </div>
 
-				<li class="right"><i class="fa fa-bars"></i></li>
-			</ul>
-		</div>
-	</div>
+        <section id="widget-grid" class="">
 
-	<!-- widget grid -->
-	<section id="widget-grid" class="">
+            <!-- row -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="jarviswidget" id="wid-id-0"
+                         data-widget-colorbutton="false"
+                         data-widget-editbutton="false"
+                         data-widget-togglebutton="false"
+                         data-widget-deletebutton="false"
+                         data-widget-fullscreenbutton="false"
+                         data-widget-custombutton="false"
+                         data-widget-sortable="false">
+                        <header role="heading"><div class="jarviswidget-ctrls" role="menu"><a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a> <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a> </div>
+                            <h2><strong>Tambah Return Pembelian</strong></h2>
+                        </header>
+                        <div role="content">
+                            <div class="widget-body no-padding form-horizontal">
+                                <div class="tab-content padding-10">
+                                    <form id="form-pencarian" class="col-lg-12 col-md-12 col-sm-12 text-left form-group" style="margin-top:1%;margin-bottom:1%">
+                                        <div class="col-md-4 pull-left">
+                                            <div class="input-group input-daterange" id="date-range" style="">
+                                                <input type="text" class="form-control" onblur="setDate()" onchange="setDate()" id="tgl_awal" name="tgl_awal" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
+                                                <span class="input-group-addon bg-custom text-white b-0">Sampai</span>
+                                                <input type="text" class="form-control" onblur="setDate()" onchange="setDate()" id="tgl_akhir" name="tgl_akhir" value="" placeholder="Tanggal Pembelian" data-dateformat="dd/mm/yy">
 
-		<?php $mt = '20px'; ?>
-
-		@if(Session::has('flash_message_success'))
-		<?php $mt = '0px'; ?>
-		<div class="col-md-8" style="margin-top: 20px;">
-			<div class="alert alert-success alert-block">
-				<a class="close" data-dismiss="alert" href="#">×</a>
-				<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-				{{ Session::get('flash_message_success') }} 
-			</div>
-		</div>
-		@elseif(Session::has('flash_message_error'))
-		<?php $mt = '0px'; ?>
-		<div class="col-md-8" style="margin-top: 20px;">
-			<div class="alert alert-danger alert-block">
-				<a class="close" data-dismiss="alert" href="#">×</a>
-				<h4 class="alert-heading">&nbsp;<i class="fa fa-frown-o"></i> &nbsp;Pemberitahuan Gagal</h4>
-				{{ Session::get('flash_message_error') }}
-			</div>
-		</div>
-		@endif
-
-		<!-- row -->
-		<div class="row">
-			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0px 20px; margin-top: {{ $mt }};">
-				<form id="table-form" method="post" action="{{ url('/pembelian/purchase-return/edit-multiple') }}">
-					{!! csrf_field() !!}
-					<table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
-						<thead>			                
-							<tr>
-								<th class="text-center" data-hide="phone" width="4%">*</th>
-								<th class="text-center" width="5%" style="vertical-align: middle;">
-									---
-								</th>
-								<th data-class="expand"><i class="fa fa-fw fa-building text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;No. Purchase Order</th>
-								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Return Code</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Methode Return</th>
-								<th data-hide="phone"><i class="fa fa-fw fa-user text-muted hidden-md hidden-sm hidden-xs"></i> &nbsp;Kode Barang</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Kuantitas</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Unit Price</th>
-								<th data-hide="phone,tablet"><i class="fa fa-fw fa-map-marker txt-color-blue hidden-md hidden-sm hidden-xs"></i> &nbsp;Total Price</th>
-								<th class="text-center" data-hide="phone,tablet" width="15%"> Aksi</th>
-							</tr>
-						</thead>
-						<tbody>
-							 <?php 
-							function rupiah($angka){
-								$hasil_rupiah = "Rp" . number_format($angka,2,',','.');
-								return $hasil_rupiah;
-							}
-							?>
-							
-						</tbody>
-					</table>
-				</form>
-			</div>
-		</div>
-
-		<!-- Modal -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-							&times;
-						</button>
-						<h4 class="modal-title">
-							<img src="{{ asset('template_asset/img/logo.png') }}" width="150" alt="SmartAdmin">
-						</h4>
-					</div>
-					<div class="modal-body no-padding">
-
-						<form id="login-form" class="smart-form">
-
-							<fieldset>
-
-								<!-- <section>
-									<div class="row">
-										<label class="label col col-2">Order Nomor</label>
-										<div class="col col-10">
-											<label class="input"> <i class="icon-append fa fa-user"></i>
-												<input type="text" disabled name="ro_no" id="ro_no" />
-											</label>
-										</div>
-									</div>
-								</section> -->
-								<table class="table table-responsive table-bordered">
-									<tr>
-										<td>Nomor Purchase Order</td>
-										<td id="npo"></td>
-									</tr>
-									<tr>
-										<td>Kode Return</td>
-										<td id="rc"></td>
-									</tr>
-									<tr>
-										<td>Methode Return</td>
-										<td id="mr"></td>
-									</tr>
-									<tr>
-										<td>Tanggal Konfirmasi</td>
-										<td id="tk"></td>
-									</tr>
-									<tr>
-										<td>Total Harga Return</td>
-										<td id="th"></td>
-									</tr>
-									<tr>
-										<td>Result Harga</td>
-										<td id="rh"></td>
-									</tr>
-									<tr>
-										<td>Status Return</td>
-										<td id="sr"></td>
-									</tr>
-									<tr>
-										<td>Kode Barang</td>
-										<td id="kb"></td>
-									</tr>
-									<tr>
-										<td>Kuantitas Return</td>
-										<td id="kr"></td>
-									</tr>
-									<tr>
-										<td>Harga Satuan</td>
-										<td id="hs"></td>
-									</tr>
-									
-								</table>
-
-							</fieldset>
-
-							<footer>
-								<button type="button" class="btn btn-default" data-dismiss="modal">
-									Tutup
-								</button>
-
-							</footer>
-						</form>						
-
-
-					</div>
-
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div>
-		<!-- /.modal -->
-
-		<!-- end row -->
-
-		<!-- row -->
-
-		<div class="row">
-
-		</div>
-
-		<!-- end row -->
-
-	</section>
-	<!-- end widget grid -->
-
-</div>
-<!-- END MAIN CONTENT -->
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="text" class="form-control" onblur="setNota()" onkeyup="setNota()" name="carinota" id="carinota" placeholder="Cari Nota Pembelian/DO">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="select2" id="carisupplier" name="carisupplier">
+                                                <option value="kosong">Pilih Supplier</option>
+                                                @foreach($supplier as $supp)
+                                                    <option value="{{ $supp->s_id }}">{{ $supp->s_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-1 pull-right" style="text-align: right">
+                                            <button type="button" class="btn btn-block btn-primary btn-sm icon-btn ml-2" onclick="search()">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                    <div class="padding-10 form-group">
+                                        <div class="col-md-12 pull-left">
+                                            <table class="table table-bordered table-striped table-hover" id="table-nota">
+                                                <thead>
+                                                <tr>
+                                                    <th>Tanggal</th>
+                                                    <th>Nota</th>
+                                                    <th>Supplier</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </section>
+    </div>
 @endsection
 
 @section('extra_script')
 
 <!-- PAGE RELATED PLUGIN(S) -->
-<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.tableTools.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ asset('template_asset/js/plugin/datatable-responsive/datatables.responsive.min.js') }}"></script>
+<script src="{{ asset('template_asset/js/plugin/bootstrapvalidator/bootstrapValidator.min.js') }}"></script>
 
 <script type="text/javascript">
-	$(document).ready(function(){
+    var table;
+    var notaGlobal = null;
+    $(document).ready(function () {
+        $('#date-range').datepicker({
+            todayHighlight: true,
+            autoclose: true
+        });
 
-		let selected = [], return_id = [];
+        table = $('#table-nota').DataTable({
+            "autoWidth" : true,
+            "language" : dataTableLanguage,
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+            "preDrawCallback" : function() {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic) {
+                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-nota'), breakpointDefinition);
+                }
+            },
+            "rowCallback" : function(nRow) {
+                responsiveHelper_dt_basic.createExpandIcon(nRow);
+            },
+            "drawCallback" : function(oSettings) {
+                responsiveHelper_dt_basic.respond();
+            }
+        });
+    })
 
-		/* BASIC ;*/
-		var responsiveHelper_dt_basic = undefined;
-		var responsiveHelper_datatable_fixed_column = undefined;
-		var responsiveHelper_datatable_col_reorder = undefined;
-		var responsiveHelper_datatable_tabletools = undefined;
+    function setDate() {
+        var awal = $('#tgl_awal').val();
+        var akhir = $('#tgl_akhir').val();
 
-		var breakpointDefinition = {
-			tablet : 1024,
-			phone : 480
-		};
+        if ((awal == '' || awal == null) && (akhir == '' || akhir == null)){
+            $('#carinota').removeAttr('readonly');
+        } else {
+            $('#carinota').attr('readonly', 'true');
+        }
+    }
 
-		$('#dt_basic').dataTable({
-			"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+
-			"t"+
-			"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-			"autoWidth" : true,
-			"preDrawCallback" : function() {
-			// Initialize the responsive datatables helper once.
-			if (!responsiveHelper_dt_basic) {
-			responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-			}
-			},
-			"rowCallback" : function(nRow) {
-			responsiveHelper_dt_basic.createExpandIcon(nRow);
-			},
-			"drawCallback" : function(oSettings) {
-			responsiveHelper_dt_basic.respond();
-			}
-		});
-
-		/* END BASIC */
-
-		$('.check-me').change(function(evt){
-			evt.preventDefault(); context = $(this);
-			if(context.is(':checked')){
-			selected.push(context.val());
-			return_id.push(context.data('id'));
-			}else{
-			selected.splice(_.findIndex(selected, function(o) { return o == context.val() }), 1);
-		}
-			//console.log(selected);
-			//console.log(return_id);
-		})
-
-		// Hapus Click
-
-		$("#multiple_delete").click(function(evt){
-			evt.preventDefault();
-
-			if(selected.length == 0){
-				alert('Tidak Ada Data Yang Anda Pilih')
-			}else{
-				let ask = confirm(selected.length+' Data Akan Dihapus Apakah Anda Yakin ?');
-				if(ask){
-					$('#overlay').fadeIn(300);
-					axios.post(baseUrl+'/pembelian/purchase-return/multiple-delete', {
-						pr_id 	: selected,
-						_token 	: '{{ csrf_token() }}'
-					})
-					.then((response) => {
-						if(response.data.status == 'berhasil'){
-						location.reload();
-						// console.log(response);
-					}
-					}).catch((error) => {
-						console.log(error);
-					})
-				}
-			}
-		})
-
-		// Edit Click
-
-		$("#multiple_edit").click(function(evt){
-			evt.preventDefault();
-
-			if(selected.length == 0){
-				alert('Tidak Ada Data Yang Anda Pilih')
-			}else{
-				$("#table-form").submit();
-			}
-		});
-
-		// edit 1 click
-
-		$(".edit").click(function(evt){
-			evt.preventDefault(); context = $(this);
-
-			window.location = baseUrl+'/pembelian/purchase-return/edit?id='+context.data('id');
-		});
-
-		// hapus 1 click
-		$(".hapus").click(function(evt){
-			evt.preventDefault(); context = $(this);
-
-			let ask = confirm('Apakah Anda Yakin Akan Menghapus Data Ini?');
-			if(ask){
-				$('#overlay').fadeIn(300);
-				axios.post(baseUrl+'/pembelian/purchase-return/multiple-delete', {
-					pr_id 	: [context.data('id')],
-					_token 	: '{{ csrf_token() }}'
-				})
-				.then((response) => {
-					if(response.data.status == 'berhasil'){
-					location.reload();
-				}
-				}).catch((error) => {
-					console.log(error);
-				})
-			}
-		});
-
-		// view click
-		$(".view").click(function(evt){
-			evt.preventDefault(); context = $(this);
-			axios.get(baseUrl+'/pembelian/get-current-return/'+context.data('id'))
-			.then((response) => {
-				if(response.data == null){
-					$.toast({
-						text: 'Ups . Data Yang Ingin Anda Lihat Sudah Tidak Ada..',
-						showHideTransition: 'fade',
-						icon: 'error'
-					})
-					$('#form-load-section-status').fadeOut(200);
-				}else{
-					// console.log(response.data);
-					initiate(response.data);
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			})
-			// $('#myModal').modal('show');
-		});
-
-		function initiate(data){
-			var status_return, methode_return;
-
-			if (data.pr_methode_return == 'GB') {
-				methode_return = "Ganti Barang Baru";
-			} else if (data.pr_methode_return == 'PT') {
-				methode_return = "Potong Tagihan";
-			} else if (data.pr_methode_return == 'GU') {
-				methode_return = "Ganti Uang";
-			} else if (data.pr_methode_return == 'PN') {
-				methode_return = "Potong Nota";
-			}
-
-			if (data.pr_status_return == 'WT') {
-				status_return = "Waiting";
-			} else if (data.pr_status_return == 'DE') {
-				status_return = "Dapat Diedit";
-			} else if (data.pr_status_return == 'CF') {
-				status_return = "Confirmed";
-			}
-
-			$('#npo').text(data.pr_po_id);
-			$('#rc').text(data.pr_code);
-			$('#mr').text(methode_return);
-			$('#tk').text(data.pr_confirm_date);
-			$('#th').text(formatRupiah(data.pr_total_price, 'Rp'));
-			$('#rh').text(formatRupiah(data.pr_result_price, 'Rp'));
-			$('#sr').text(status_return);
-			$('#kb').text(data.prd_kode_barang);
-			$('#kr').text(data.prd_qty);
-			$('#hs').text(formatRupiah(data.prd_unit_price, 'Rp'));
-			$('#myModal').modal('show');
-		}
-
-		function formatRupiah(angka, prefix)
-		{
-			var number_string = angka.toString(),
-			split	= number_string.split(','),
-			sisa 	= split[0].length % 3,
-			rupiah 	= split[0].substr(0, sisa),
-			ribuan 	= split[0].substr(sisa).match(/\d{3}/gi);
-
-			if (ribuan) {
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
-
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp' + rupiah : '');
-		}
-	})
+    function setNota() {
+        var nota = $('#carinota').val();
+        if (nota == null || nota == ''){
+            $('#tgl_awal').removeAttr('readonly');
+            $('#tgl_akhir').removeAttr('readonly');
+            $("#carisupplier").select2("readonly", false);
+        } else {
+            $('#tgl_awal').val('');
+            $('#tgl_akhir').val('');
+            $('#tgl_awal').attr('readonly', 'true');
+            $('#tgl_akhir').attr('readonly', 'true');
+            $("#carisupplier").val("kosong").trigger("change");
+            $("#carisupplier").select2("readonly", true);
+        }
+    }
+    
+    function search() {
+        var awal = $('#tgl_awal').val();
+        var akhir = $('#tgl_akhir').val();
+        var nota = notaGlobal;
+        var supplier = $('#carisupplier').val();
+        $("#table-nota").dataTable().fnDestroy();
+        table = $('#table-nota').dataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": baseUrl + '/pembelian/purchase-return/getData',
+                "type": "get",
+                "data": {
+                    'awal': awal,
+                    'akhir': akhir,
+                    'nota': nota,
+                    'supplier': supplier
+                }
+            },
+            "columns":[
+                {"data": "i_merk"},
+                {"data": "i_nama"},
+                {"data": "i_code"},
+                {"data": "harga"}
+            ],
+            "autoWidth" : true,
+            "language" : dataTableLanguage,
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            "preDrawCallback" : function() {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic) {
+                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-nota'), breakpointDefinition);
+                }
+            },
+            "rowCallback" : function(nRow) {
+                responsiveHelper_dt_basic.createExpandIcon(nRow);
+            },
+            "drawCallback" : function(oSettings) {
+                responsiveHelper_dt_basic.respond();
+            }
+        });
+    }
 </script>
 
 @endsection

@@ -3,7 +3,9 @@
 @section('title', 'Inventory|Penerimaan Barang Dari Distribusi')
 
 @section('extra_style')
+    <style>
 
+    </style>
 @endsection
 
 <?php 
@@ -445,13 +447,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
 												</table>
 
 
-                                                <div id="divDTC" style="display:none">
-                                                    <table class="table table-bordered" id="table_item_sc">
+                                                <div id="divDTC" style="display:none; overflow-y: scroll; height: 350px;">
+                                                    <table class="table table-bordered" id="table_item_sc" style="width:100%">
                                                         <thead>
                                                             <tr class="text-center">
-                                                                <td>Nota DO</td>
-                                                                <td>Kode Spesifik</td>
-                                                                <td>Aksi</td>
+                                                                <th style="width: 40%;">Nota DO</th>
+                                                                <th style="width: 40%;">Kode Spesifik</th>
+                                                                <th style="width: 20%;">Aksi</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody id="dtcBody">
@@ -492,6 +494,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                             <tr class="text-center">
                                                                 <td>Nota DO</td>
                                                                 <td>Qty</td>
+                                                                <td>Terima</td>
                                                                 <td>Aksi</td>
                                                             </tr>
                                                         </thead>
@@ -582,6 +585,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="eRcvd" name="eRcvd" style="text-transform: uppercase" readonly/>
                                                     <input type="hidden" id="eQTY">
+                                                    <input type="hidden" id="eMAX">
                                                     <span class="input-group-addon"><i class="fa fa-inbox"></i></span>
                                                 </div>
                                             </div>
@@ -657,7 +661,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 	<script type="text/javascript">
         var aktif, tbl_code, rows = null;
         var dtc, dtce, dte, dtn;
-
+        var imei = [];
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
 
@@ -790,7 +794,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
         function detail(id, item){
 
             axios.post(baseUrl+'/inventory/penerimaan/supplier/detailReceived'+'/'+id+'/'+item ).then((response) => {
-
                 $('#dt_nota').html(response.data.data.p_nota);
                 $('#dt_supp').html(response.data.data.s_company);
                 $('#dt_telp').html(response.data.data.s_phone);
@@ -799,6 +802,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                 $('#eItem').val(response.data.data.i_nama);
                 $('#eRcvd').val(response.data.data.pd_qtyreceived);
+                $('#eMAX').val(response.data.data.pd_qty);
 
                 $('#divDTC').css('display', 'none');
                 $('#divDTE').css('display', 'none');
@@ -819,7 +823,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             '<div class="text-center">'+
                                 '<a class="btn btn-warning btn-circle" onclick="edit(\''+'a'+i+'\')"><i class="fa fa-edit"></i></a>'+
                             '</div>'
-                        ]).draw();
+                        ]).draw(false);
                     }
 
                     $('#divDTC').css('display', 'block');
@@ -874,6 +878,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             '<input type="hidden" id="refPD-d'+i+'" value="'+response.data.dataDT[0].pd_purchase+ '-' +response.data.dataDT[0].pd_detailid+'">'+
                             '<input type="hidden" id="refSM-d'+i+'" value="'+response.data.dataSM[i].sm_stock+ '-' +response.data.dataSM[i].sm_detailid+'">'+
                             '<input type="hidden" id="reff-d'+i+'" value="'+response.data.dataSM[i].sm_reff+'">'+response.data.dataSM[i].sm_reff,
+                            '<input type="hidden" id="pdqty-d'+i+'" value="'+response.data.dataDT[0].pd_qty+'">'+response.data.dataDT[0].pd_qty,
                             '<input type="hidden" id="qty-d'+i+'" value="'+response.data.dataSM[i].sm_qty+'">'+response.data.dataSM[i].sm_qty,
                             '<div class="text-center">'+
                                 '<a class="btn btn-warning btn-circle" onclick="edit(\''+'d'+i+'\')"><i class="fa fa-edit"></i></a>'+
@@ -971,7 +976,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
         }
 
         function simpanEdit(){
-
             $('#overlay').fadeIn(200);
 
             var notaS = $('#eNotaDO').val();
@@ -987,7 +991,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
             var jmlEdit = $('#jmlEdit').val();
             var scEdit = $('#scEdit').val();
-
             var data = '';
             if(status == 'sc'){       
 
@@ -1002,7 +1005,19 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 data = 'exp=' + expS + '&kode=' + kodeS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&scEdit=' + scEdit;
                 
             }else{
-
+                 var max = parseInt($('#eMAX').val());
+                 var input = parseInt($('#eJmlBarang').val());
+                 if (input > max) {
+                     out();
+                     $.smallBox({
+                         title : "Perhatian",
+                         content : "Jumlah barang melebihi jumlah kuantitas barang yang dibeli!",
+                         color : "#A90329",
+                         timeout: 3000,
+                         icon : "fa fa-times bounce animated"
+                     });
+                     return false;
+                 }
                 data = 'jml=' + jmlS + '&notaDO=' + notaS + '&refPD=' + refPD + '&refSM=' + refSM + '&status=' + status + '&item=' + item + '&jmlEdit=' + jmlEdit;
 
             }
@@ -1021,7 +1036,16 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     detail(response.data.id, response.data.item);
                     refresh_tab();
                     $('#editModal').modal('hide');
-                }else{
+                } else if (response.data.status == 'imei') {
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Kode sudah ada!",
+                        color : "#A90329",
+                        timeout: 3000,
+                        icon : "fa fa-times bounce animated"
+                    });
+                } else{
                     $('#overlay').fadeOut(200);
                     $.smallBox({
                         title : "Gagal",
@@ -1132,6 +1156,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     return input.value;
                 });
 
+                if (imei.length > 0){
+                    names.push.apply(names, imei);
+                }
+
                 if(names.includes(speccode) == true){
                     $.smallBox({
                         title : "Perhatian",
@@ -1144,8 +1172,8 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 }
 
                 $('#dt_code').DataTable().row.add([
-                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
-                    '<input type="hidden" class="kode" name="kode[]" value="'+speccode+'">'+speccode.toUpperCase(),
+                    '<input type="hidden" name="notaDO[]" value="'+notado.toUpperCase()+'">'+notado.toUpperCase(),
+                    '<input type="hidden" class="kode" name="kode[]" value="'+speccode.toUpperCase()+'">'+speccode.toUpperCase(),
                     '<div class="text-center">'+
                         '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
                     '</div>'
@@ -1192,6 +1220,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
                     return input.value;
                 });
 
+                if (imei.length > 0){
+                    names.push.apply(names, imei);
+                }
+
                 if(names.includes(speccode) == true){
                     $.smallBox({
                         title : "Perhatian",
@@ -1204,9 +1236,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 }
 
                 $('#dt_code_exp').DataTable().row.add([
-                    '<input type="hidden" name="notaDO[]" value="'+notado+'">'+notado,
+                    '<input type="hidden" name="notaDO[]" value="'+notado.toUpperCase()+'">'+notado.toUpperCase(),
                     '<input type="hidden" name="expDate[]" value="'+expdate+'">'+expdate,
-                    '<input type="hidden" class="kode" name="kode[]" value="'+speccode+'">'+speccode.toUpperCase(),
+                    '<input type="hidden" class="kode" name="kode[]" value="'+speccode.toUpperCase()+'">'+speccode.toUpperCase(),
                     '<div class="text-center">'+
                         '<a class="btn btn-danger btn-circle btnhapus"><i class="fa fa-close"></i></a>'+
                     '</div>'
@@ -1223,7 +1255,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		function terima(id, item){
 
             axios.get(baseUrl+'/inventory/penerimaan/supplier/item-receive/'+id+'/'+item).then(response => {
-
+                
                 $('#nama_item').html(response.data.data.nama_item);
 
                 $('#id').val(id);
@@ -1236,7 +1268,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 resetInput();
 
                 getTableModal(id, item);
-                
+
+                if (response.data.data.i_specificcode == 'Y'){
+                    imei = response.data.imei;
+                }
                 $('#myModal').modal('show');
 
             })
@@ -1306,14 +1341,13 @@ use App\Http\Controllers\PlasmafoneController as Access;
                 $('#overlay').fadeOut(200);
                 $.smallBox({
                     title : "Perhatian",
-                    content : "Maaf, Jumlah Barang dan yang sudah diterima melebihi QTY Barang pada PO ini !!! Max 22",
+                    content : "Maaf, Jumlah Barang dan yang sudah diterima melebihi QTY Barang pada PO ini !!!",
                     color : "#A90329",
                     timeout: 3000,
                     icon : "fa fa-times bounce animated"
                 });
                 return false;
             }
-
 
             var ar = $();
             var data = '';
