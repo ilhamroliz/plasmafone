@@ -506,6 +506,8 @@
                         posisi = response.data[0].position;
                     } else if (response.data[0].shipping_status == "Delivery to Center") {
                         posisi = 'Sedang Dikirim ke Pusat';
+                    } else if (response.data[0].shipping_status == "Delivery to Outlet") {
+                        posisi = 'Sedang Dikirim ke Outlet';
                     } else if (response.data[0].shipping_status == "On Center") {
                         posisi = response.data[0].position;
                     }
@@ -622,7 +624,307 @@
                 buttons: '[Batal][Ya]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Ya") {
+                    $('#overlay').fadeIn(200);
+                    $('#load-status-text').text('Sedang Memproses...');
 
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: baseUrl + '/penjualan/service-barang/terima-barang/' + id,
+                        type: 'get',
+                        success: function (response) {
+                            if (response.status == "Not Found") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Data tidak ditemukan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "False") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Upsss. Terjadi kesalahan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "True") {
+                                $.smallBox({
+                                    title: "Berhasil",
+                                    content: 'Barang berhasil diterima',
+                                    color: "#739E73",
+                                    timeout: 5000,
+                                    icon: "fa fa-check bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+                                $('#deleteModal').modal('hide');
+                                refresh_tab();
+
+                            }
+                        }, error: function (x, e) {
+                            if (x.status == 0) {
+                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 404) {
+                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 500) {
+                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'parsererror') {
+                                alert('Error.\nParsing JSON Request failed.');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'timeout') {
+                                alert('Request Time out. Harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else {
+                                alert('Unknow Error.\n' + x.responseText);
+                                $('#overlay').fadeOut(200);
+                            }
+                        }
+                    })
+                }
+            });
+        }
+
+        function serviceProses(id) {
+            $.SmartMessageBox({
+                title: "Pesan!",
+                content: 'Proses perbaikan untuk barang ini?',
+                buttons: '[Batal][Ya]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Ya") {
+                    $('#overlay').fadeIn(200);
+                    $('#load-status-text').text('Sedang Memproses...');
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: baseUrl + '/penjualan/service-barang/proses-perbaikan/' + id,
+                        type: 'get',
+                        success: function (response) {
+                            if (response.status == "Not Found") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Data tidak ditemukan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "False") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Upsss. Terjadi kesalahan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "True") {
+                                $.smallBox({
+                                    title: "Berhasil",
+                                    content: 'Status berhasil diperbarui ke proses perbaikan',
+                                    color: "#739E73",
+                                    timeout: 5000,
+                                    icon: "fa fa-check bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+                                $('#deleteModal').modal('hide');
+                                refresh_tab();
+
+                            }
+                        }, error: function (x, e) {
+                            if (x.status == 0) {
+                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 404) {
+                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 500) {
+                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'parsererror') {
+                                alert('Error.\nParsing JSON Request failed.');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'timeout') {
+                                alert('Request Time out. Harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else {
+                                alert('Unknow Error.\n' + x.responseText);
+                                $('#overlay').fadeOut(200);
+                            }
+                        }
+                    })
+                }
+            });
+        }
+
+        function serviceSelesai(id) {
+            $.SmartMessageBox({
+                title: "Pesan!",
+                content: 'Proses perbaikan selesai untuk barang ini?',
+                buttons: '[Batal][Ya]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Ya") {
+                    $('#overlay').fadeIn(200);
+                    $('#load-status-text').text('Sedang Memproses...');
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: baseUrl + '/penjualan/service-barang/selesai-perbaikan/' + id,
+                        type: 'get',
+                        success: function (response) {
+                            if (response.status == "Not Found") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Data tidak ditemukan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "False") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Upsss. Terjadi kesalahan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "True") {
+                                $.smallBox({
+                                    title: "Berhasil",
+                                    content: 'Status berhasil diperbarui ke selesai perbaikan',
+                                    color: "#739E73",
+                                    timeout: 5000,
+                                    icon: "fa fa-check bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+                                $('#deleteModal').modal('hide');
+                                refresh_tab();
+
+                            }
+                        }, error: function (x, e) {
+                            if (x.status == 0) {
+                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 404) {
+                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 500) {
+                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'parsererror') {
+                                alert('Error.\nParsing JSON Request failed.');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'timeout') {
+                                alert('Request Time out. Harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else {
+                                alert('Unknow Error.\n' + x.responseText);
+                                $('#overlay').fadeOut(200);
+                            }
+                        }
+                    })
+                }
+            });
+        }
+
+        function serviceTerimaOutlet(id) {
+            $.SmartMessageBox({
+                title: "Pesan!",
+                content: 'Terima barang perbaikan dari pusat?',
+                buttons: '[Batal][Ya]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Ya") {
+                    $('#overlay').fadeIn(200);
+                    $('#load-status-text').text('Sedang Memproses...');
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: baseUrl + '/penjualan/service-barang/terima-barang-pusat/' + id,
+                        type: 'get',
+                        success: function (response) {
+                            if (response.status == "Not Found") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Data tidak ditemukan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "False") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Upsss. Terjadi kesalahan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+
+                            } else if (response.status == "True") {
+                                $.smallBox({
+                                    title: "Berhasil",
+                                    content: 'Berhasil diterima',
+                                    color: "#739E73",
+                                    timeout: 5000,
+                                    icon: "fa fa-check bounce animated"
+                                });
+                                $('#overlay').fadeOut(200);
+                                $('#deleteModal').modal('hide');
+                                refresh_tab();
+
+                            }
+                        }, error: function (x, e) {
+                            if (x.status == 0) {
+                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 404) {
+                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 500) {
+                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'parsererror') {
+                                alert('Error.\nParsing JSON Request failed.');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'timeout') {
+                                alert('Request Time out. Harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else {
+                                alert('Unknow Error.\n' + x.responseText);
+                                $('#overlay').fadeOut(200);
+                            }
+                        }
+                    })
                 }
             });
         }

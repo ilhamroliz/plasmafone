@@ -70,6 +70,8 @@ class ServicesController extends Controller
             ->addColumn('status', function ($data){
                 if ($data->si_status == "PENDING") {
                     return '<center><span class="label label-warning">PENDING</span></center>';
+                } else if ($data->si_status == "DITERIMA") {
+                    return '<center><span class="label label-primary">DITERIMA</span></center>';
                 } else if ($data->si_status == "PROSES") {
                     return '<center><span class="label label-info">PROSES</span></center>';
                 } else if ($data->si_status == "TOLAK") {
@@ -85,16 +87,24 @@ class ServicesController extends Controller
                     if ($data->si_status == "PENDING") {
                         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle view" data-toggle="tooltip" data-placement="top" title="Tolak" onclick="serviceTolak(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="serviceTerima(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-arrow-down"></i></button></div>';
                     } else if ($data->si_status == "DITERIMA") {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle view" data-toggle="tooltip" data-placement="top" title="Tolak" onclick="serviceTolak(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Proses" onclick="serviceProses(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-refresh"></i></button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle view" data-toggle="tooltip" data-placement="top" title="Tolak" onclick="serviceTolak(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Proses" onclick="serviceProses(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-refresh"></i></button></div>';
+                    } else if ($data->si_status == "PROSES") {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-danger btn-circle view" data-toggle="tooltip" data-placement="top" title="Tolak" onclick="serviceTolak(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-remove"></i></button>&nbsp;<button class="btn btn-xs btn-success btn-circle" data-toggle="tooltip" data-placement="top" title="Selesai" onclick="serviceSelesai(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-check"></i></button></div>';
+                    } else if ($data->si_status == "DONE") {
+                        return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     }
                 } else {
-                    if ($data->si_shipping_status == "Delivery to Center" || $data->si_shipping_status == "Delivery to Outlet" || $data->si_shipping_status == "On Center") {
+                    if ($data->si_shipping_status == "Delivery to Center" || $data->si_shipping_status == "On Center") {
                         return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                     } else if($data->si_shipping_status == "On Outlet") {
                         if ($data->si_status == "TOLAK" || $data->si_status == "PROSES" || $data->si_status == "DONE") {
                             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
                         } else {
                             return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-send"></i></button></div>';
+                        }
+                    } else if($data->si_shipping_status == "Delivery to Outlet") {
+                        if($data->si_status == "DONE" || $data->si_status == "TOLAK"){
+                            return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle view" data-toggle="tooltip" data-placement="top" title="Kirim ke Pusat" onclick="serviceTerimaOutlet(\'' . Crypt::encrypt($data->id) . '\')"><i class="glyphicon glyphicon-arrow-down"></i></button></div>';
                         }
                     }
                 }
@@ -809,5 +819,96 @@ class ServicesController extends Controller
         }
 
         return view('penjualan.service-barang.struk')->with(compact('datas'));
+    }
+
+    public function serviceTerima($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return response()->json(['status' => 'Not Found']);
+        }
+
+        try{
+            DB::table('d_service_item')
+                ->where('si_id', $id)
+                ->update([
+                    'si_status' => 'DITERIMA',
+                    'si_shipping_status' => 'On Center'
+                ]);
+            DB::commit();
+            return response()->json(['status' => 'True']);
+        }catch (\Exception $e){
+            DB::rollback();
+            return response()->json(['status' => 'False']);
+        }
+    }
+
+    public function serviceProses($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return response()->json(['status' => 'Not Found']);
+        }
+
+        try{
+            DB::table('d_service_item')
+                ->where('si_id', $id)
+                ->update([
+                    'si_status' => 'PROSES'
+                ]);
+            DB::commit();
+            return response()->json(['status' => 'True']);
+        }catch (\Exception $e){
+            DB::rollback();
+            return response()->json(['status' => 'False']);
+        }
+    }
+
+    public function serviceSelesai($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return response()->json(['status' => 'Not Found']);
+        }
+
+        try{
+            DB::table('d_service_item')
+                ->where('si_id', $id)
+                ->update([
+                    'si_status' => 'DONE',
+                    'si_shipping_status' => 'Delivery to Outlet'
+                ]);
+            DB::commit();
+            return response()->json(['status' => 'True']);
+        }catch (\Exception $e){
+            DB::rollback();
+            return response()->json(['status' => 'False']);
+        }
+    }
+
+    public function serviceTerimaPusat($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return response()->json(['status' => 'Not Found']);
+        }
+
+        try{
+            DB::table('d_service_item')
+                ->where('si_id', $id)
+                ->update([
+                    'si_position' => Auth::user()->m_comp,
+                    'si_shipping_status' => 'On Outlet'
+                ]);
+            DB::commit();
+            return response()->json(['status' => 'True']);
+        }catch (\Exception $e){
+            DB::rollback();
+            return response()->json(['status' => 'False']);
+        }
     }
 }
