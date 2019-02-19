@@ -744,12 +744,19 @@
                     return input.value;
                 });
 
+            var scode = [];
+            for (var i=0; i < kode.length; i++) {
+                if (kode[i] != "") {
+                    scode.push(kode[i]);
+                }
+            }
+
             $( "#cari-stock" ).autocomplete({
                 source: function( request, response ) {
                     $.ajax({
                         url: '{{ url('penjualan-tempo/cari-stock') }}',
                         data: {
-                            kode: kode,
+                            kode: scode,
                             jenis: $("#id_group").val(),
                             term: searchGlobal
                         },
@@ -790,12 +797,18 @@
                 });
             arrKodeGlobal = code;
             arrCode = code;
+            var scode = [];
+            for (var i=0; i < code.length; i++) {
+                if (code[i] != "") {
+                    scode.push(code[i]);
+                }
+            }
             $( "#cari-stock" ).autocomplete({
                 source: function( request, response ) {
                     $.ajax({
                         url: '{{ url('penjualan-tempo/cari-stock') }}',
                         data: {
-                            kode: code,
+                            kode: scode,
                             jenis: $("#id_group").val(),
                             term: searchGlobal
                         },
