@@ -262,13 +262,9 @@
         var scode = [];
         for (var i=0; i < code.length; i++) {
             if (code[i] != "") {
-                console.log('masuk');
                 scode.push(code[i]);
-            } else {
-                console.log('nggak');
             }
         }
-        console.log(scode);
         $( "#cari-stock" ).autocomplete({
             source: function( request, response ) {
                 $.ajax({
