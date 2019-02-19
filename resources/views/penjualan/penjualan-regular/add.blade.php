@@ -905,7 +905,6 @@
             arharga  = [].map.call(inputs, function( input ) {
                 return input.value;
             });
-        console.log(arharga);
         var inputs = document.getElementsByClassName( 'qtyTable' ),
             arqty  = [].map.call(inputs, function( input ) {
                 return input.value;
