@@ -75,10 +75,11 @@
 							<form id="formCart">
 							<input type="hidden" name="_token" value="{{ csrf_token() }}">
 							<input type="hidden" name="i_id" value="{{$products->i_id}}">
+							<input type="hidden" name="i_price" id="harga" value="{{$products->i_price}}">
 							<div class="flex-w flex-r-m p-b-10">
 								<div class="col-md-6">
 									<div class="flex-w m-r-20 m-tb-10">
-										<input type="number" name="qty" min="1" max="{{$products->s_qty}}" value="{{$products->s_qty}}">
+										<input id="qty" type="number" name="qty" min="1" max="{{$products->s_qty}}" value="1">
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -310,15 +311,14 @@
 				dataType: 'json',
 				success: function (data) {
 					if(data.status =='sukses'){
+						getNotif();
 						$.smallBox({
-							title : "{{$products->i_nama}}",
-							content : "<i>Berhasil ditambahkan ke dalam cart!</i>",
-							color : "#0069d9",
+							title 	: "{{$products->i_nama}}",
+							content : "<i style='color:#fff;'>Berhasil ditambahkan ke dalam cart!</i>",
+							color 	: "#0069d9",
 							iconSmall : "fa fa-thumbs-up bounce animated",
 							timeout : 7000
 						});
-					}else{
-						console.log('Gagal');
 					}
 				}
 			});
