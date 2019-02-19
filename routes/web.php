@@ -438,7 +438,7 @@ Route::group(['middleware' => 'auth'], function () {
 	// Purchase Order
 
     Route::get('/pembelian/purchase-order', 'pembelian\PurchaseOrderController@index');
-    Route::match(['get', 'post'],'/pembelian/inventory/penerimaan/supplier/edit', 'pembelian\PurchaseOrderController@tambah');
+    Route::match(['get', 'post'],'/pembelian/purchase-order/tambah', 'pembelian\PurchaseOrderController@tambah');
     Route::post('/pembelian/purchase-order/getCO', 'pembelian\PurchaseOrderController@getCO');
     Route::post('/pembelian/purchase-order/detil', 'pembelian\PurchaseOrderController@detail');
     Route::get('/pembelian/purchase-order/get-proses', 'pembelian\PurchaseOrderController@get_proses');
@@ -483,16 +483,24 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/purchase-return', 'pembelian\ReturnPembelianController@index');
     Route::get('/pembelian/purchase-return/getData', 'pembelian\ReturnPembelianController@getData');
     Route::match(['get', 'post'],'/pembelian/purchase-return/add', 'pembelian\ReturnPembelianController@tambah');
+    Route::match(['get', 'post'],'/pembelian/purchase-return/add-dari-penjualan', 'pembelian\ReturnPembelianController@tambahFP');
     Route::match(['get', 'post'],'/pembelian/purchase-return/edit', 'pembelian\ReturnPembelianController@edit');
     Route::get('/pembelian/purchase-return/detail/{id}', 'pembelian\ReturnPembelianController@detail');
     Route::get('/pembelian/purchase-return/hapus/{id}', 'pembelian\ReturnPembelianController@hapus');
 
-    Route::get('/pembelian/get-current-return/{id}', 'ReturnPembelianController@get_current_return');
-    Route::get('/pembelian/purchase-return/update', 'ReturnPembelianController@update_purchase_return');
-    Route::get('/pembelian/purchase-return/edit-multiple', 'ReturnPembelianController@multiple_edit_purchase_return');
-    Route::get('/pembelian/purchase-return/get-current-return/{id}', 'ReturnPembelianController@get_edit_return');
-    Route::get('/pembelian/purchase-return/multiple-delete', 'ReturnPembelianController@multiple_delete_purchase_return');
-	// Route::get('/newprint', 'PembelianController@new_print');
+    Route::get('/pembelian/purchase-return/auto-nota', 'pembelian\ReturnPembelianController@auto_nota');
+    Route::post('/pembelian/purchase-return/getDataPembelian', 'pembelian\ReturnPembelianController@getDataPembelian');
+    Route::post('/pembelian/purchase-return/getDataPenjualan`', 'pembelian\ReturnPembelianController@getDataPenjualan');
+
+    Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-penjualan', 'pembelian\ReturnPembelianController@tambah_detil_penjualan');
+    Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-pembelian', 'pembelian\ReturnPembelianController@tambah_detil_pembelian');
+
+    // Route::get('/pembelian/get-current-return/{id}', 'ReturnPembelianController@get_current_return');
+    // Route::get('/pembelian/purchase-return/update', 'ReturnPembelianController@update_purchase_return');
+    // Route::get('/pembelian/purchase-return/edit-multiple', 'ReturnPembelianController@multiple_edit_purchase_return');
+    // Route::get('/pembelian/purchase-return/get-current-return/{id}', 'ReturnPembelianController@get_edit_return');
+    // Route::get('/pembelian/purchase-return/multiple-delete', 'ReturnPembelianController@multiple_delete_purchase_return');
+	// // Route::get('/newprint', 'PembelianController@new_print');
 
 	// End Return Barang
 
