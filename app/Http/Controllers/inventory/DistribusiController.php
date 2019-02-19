@@ -733,6 +733,7 @@ class DistribusiController extends Controller
                 array_push($temp, $code);
             }
             $kode = $temp;
+            //end
         }
 
         if (count($kode) > 0){
