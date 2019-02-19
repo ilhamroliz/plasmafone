@@ -928,6 +928,29 @@ class ServicesController extends Controller
         return view('penjualan.service-barang.struk')->with(compact('datas'));
     }
 
+    public function serviceTolak($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            return response()->json(['status' => 'Not Found']);
+        }
+
+        try{
+            DB::table('d_service_item')
+                ->where('si_id', $id)
+                ->update([
+                    'si_status' => 'TOLAK',
+                    'si_shipping_status' => 'Delivery to Outlet'
+                ]);
+            DB::commit();
+            return response()->json(['status' => 'True']);
+        }catch (\Exception $e){
+            DB::rollback();
+            return response()->json(['status' => 'False']);
+        }
+    }
+
     public function serviceTerima($id)
     {
         try {
