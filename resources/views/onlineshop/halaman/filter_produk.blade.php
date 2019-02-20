@@ -37,7 +37,7 @@
 					        <ul class="sub-menu-m py-0 pl-3">
 					        	@foreach($i_merk_hp as $merk)
 								<li>
-									<div class="custom-control custom-checkbox filter filter-hp">
+									<div class="custom-control custom-checkbox filter-hp">
 									  <input type="checkbox" class="custom-control-input hp" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
@@ -53,7 +53,7 @@
 					        <ul class="sub-menu-m py-0 pl-3">
 					        	@foreach($i_merk_acces as $merk)
 								<li>
-									<div class="custom-control custom-checkbox filter filter-acces">
+									<div class="custom-control custom-checkbox filter-acces">
 									  <input type="checkbox" class="custom-control-input acces" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>

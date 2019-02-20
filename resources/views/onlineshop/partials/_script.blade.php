@@ -95,7 +95,6 @@ $('.js-pscroll').each(function(){
 <script type="text/javascript">
 	$(document).ready(function(){
 		getNotif();
-
 	});
 
 	function getNotif(){

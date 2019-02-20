@@ -12,6 +12,22 @@ use Carbon\Carbon;
 
 class OnlineshopController extends Controller
 {
+    // Notifikasi Cart
+    public function notifCart(Request $request)
+    {
+        $token = $request->input('token');
+        $notif = DB::table('d_cart')
+            ->join('d_cartdt', 'c_id', '=', 'cd_cart')
+            ->join('d_item', 'cd_item', 'i_id')
+            ->select('cd_item', 'd_cart.*')
+            ->where('c_token', '=', $token)
+            ->count();
+        return Response::json(array(
+            'success' => true,
+            'notif'   => $notif
+        ));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -91,6 +107,51 @@ class OnlineshopController extends Controller
 
         return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
     }
+
+    public function filter_product(Request $request)
+    {
+        $hp = $request->input('handphone');
+        $acces = $request->input('accesories');
+
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
+        $i_merk_hp = DB::table('d_stock')
+            ->selectRaw('distinct i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $i_merk_acces = DB::table('d_stock')
+            ->selectRaw('distinct i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
+        $products = DB::table('d_stock')
+            ->select('s_id', 'i_id', 's_item', 'i_nama', 'i_merk','i_img', 'i_price', 'i_kelompok')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('s_qty', '!=', 0)
+            ->where('i_merk', '=', $hp)
+            ->inRandomOrder()
+            ->paginate(8);
+
+        return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
+    }
+
 
     public function product_detail($id)
     {
@@ -231,20 +292,5 @@ class OnlineshopController extends Controller
             ]);
         }
 
-    }
-
-    public function notifCart(Request $request)
-    {
-        $token = $request->input('token');
-        $notif = DB::table('d_cart')
-            ->join('d_cartdt', 'c_id', '=', 'cd_cart')
-            ->join('d_item', 'cd_item', 'i_id')
-            ->select('cd_item', 'd_cart.*')
-            ->where('c_token', '=', $token)
-            ->count();
-        return Response::json(array(
-            'success' => true,
-            'notif'   => $notif
-        ));
     }
 }
