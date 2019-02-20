@@ -124,7 +124,7 @@
                                                     <div class="col-md-9">
                                                         <div class="input-group input-daterange" id="date-range">
                                                             <input type="text" class="form-control" id="tgl_awal" name="tgl_awal"  placeholder="Tanggal Awal">
-                                                            <span class="input-group-addon bg-custom text-white b-0">to</span>
+                                                            <span class="input-group-addon bg-custom text-white b-0">-</span>
                                                             <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir"  placeholder="Tanggal Akhir">
                                                         </div>
                                                     </div>
@@ -319,7 +319,25 @@
     <script type="text/javascript">
         var aktif;
         $(document).ready(function () {
-            aktif = $('#dt_active').dataTable();
+            aktif = $('#dt_active').dataTable({
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                    $('#overlay').fadeOut(200);
+                }
+            });
 
             var responsiveHelper_dt_basic = undefined;
 
