@@ -6,7 +6,7 @@
 
 @endsection
 
-<?php 
+<?php
 use App\Http\Controllers\PlasmafoneController as Access;
 ?>
 
@@ -72,7 +72,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -96,17 +96,17 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         <header>
 
                                 <h2><strong>Distribusi</strong></h2>
-                            
+
                         </header>
 
                         <div>
-                            
+
                             <div class="widget-body">
 
                                 <form class="form-horizontal" method="post">
                                     {{ csrf_field() }}
 
-                                    <fieldset>  
+                                    <fieldset>
 
                                         <div class="row">
 
@@ -167,7 +167,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                 </div>
 
                                             </article>
-                                            
+
                                         </div>
 
                                     </fieldset>
@@ -190,25 +190,25 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
-							
+
                             <h2><strong>Daftar Item</strong></h2>
 
 						</header>
 
 						<div>
-							
+
 							<div class="widget-body no-padding">
 
 								<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
-                                    <thead>		
+                                    <thead>
 
                                         <tr>
 
                                             <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
 
 											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
-											
+
 											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty Diterima</th>
 
                                             <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
@@ -260,9 +260,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 											</div>
 										</div>
 								</div><br>
-				
+
 								<div class="row terima">
-									
+
 								</div>
 
                                 <div class="row" id="tbl_kode" style="display: none;">
@@ -309,7 +309,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                                     </div>
                                 </div>
-				
+
 							</div>
 						</form>
 
@@ -337,7 +337,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 @endsection
 
 @section('extra_script')
-	
+
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
@@ -351,7 +351,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
 
-		
+
 		var baseUrl = '{{ url('/') }}';
 
 		/* BASIC ;*/
@@ -359,7 +359,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			var responsiveHelper_datatable_fixed_column = undefined;
 			var responsiveHelper_datatable_col_reorder = undefined;
 			var responsiveHelper_datatable_tabletools = undefined;
-			
+
 			var breakpointDefinition = {
 				tablet : 1024,
 				phone : 480
@@ -459,7 +459,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div id="error" class="form-group ">' +
+                                    '<div id="error" class="form-group float-left">' +
                                         '<label class="col-md-4 control-label">Kode Spesifik</label>' +
                                         '<div class="col-md-8">' +
                                             '<div class="input-group">' +
@@ -477,10 +477,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                         '</div>' +
                                     '</div>' +
                                     '<div class="col-md-12 form-group">'+
-                                        '<button class="btn btn-primary pull-right" type="button" id="simpan" onclick="simpan()">'+
-                                            '<i class="fa fa-floppy-o"></i>'+
-                                            '&nbsp;Simpan'+
-                                        '</button>'+
                                     '</div>'+
                                 '</fieldset>'+
                             '</div>';
@@ -759,7 +755,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					}
 				}
 			})
-			
+
 		}
 
 	</script>
