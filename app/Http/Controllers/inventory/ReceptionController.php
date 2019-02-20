@@ -884,7 +884,7 @@ class ReceptionController extends Controller
         return view('inventory.penerimaan-barang.distribusi.edit')->with(compact('data', 'id'));
     }
 
-    public function checkCode($item = null, $code = null, $comp = null, $dest = null)
+    public function checkCode($iddistribusi = null, $item = null, $code = null, $comp = null, $dest = null)
     {
         $code = strtoupper($code);
         $data = DB::table('d_distribusi')
@@ -894,6 +894,7 @@ class ReceptionController extends Controller
                     $x->where('d_distribusi_dt.dd_specificcode', $code);
                 })
                 ->where('d_distribusi.d_from', $comp)
+                ->where('d_distribusi.d_id', Crypt::decrypt($iddistribusi))
                 ->where('d_distribusi.d_destination', $dest)
                 ->count();
         return json_encode($data);
@@ -923,13 +924,14 @@ class ReceptionController extends Controller
         
     }
 
-    public function getItemReceived($id = null)
+    public function getItemReceived($id = null, $item = null)
     {
         $data = DB::table('d_distribusi_dt')
             ->select('dd_specificcode', 'dd_status')
             ->where('dd_distribusi', Crypt::decrypt($id))
             ->where('dd_specificcode', '!=', null)
-            ->where('dd_status', 'Received');
+            ->where('dd_status', 'Received')
+            ->where('dd_item', Crypt::decrypt($item));
 
         return DataTables::of($data)
 

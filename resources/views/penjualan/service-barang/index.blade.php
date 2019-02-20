@@ -82,7 +82,7 @@
                                                         <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
                                                             <div class="icon-addon addon-md">
-                                                                <input class="form-control" id="nota" name="nota" placeholder="Masukkan Nota Service" type="text"  style="text-transform: uppercase">
+                                                                <input class="form-control" id="nota" name="nota" placeholder="Masukkan Nota Service" type="text" autocomplete="off"  style="text-transform: uppercase">
                                                                 <label for="nota" class="glyphicon glyphicon-search" rel="tooltip" title="Nota Service"></label>
                                                             </div>
                                                         </div>
@@ -94,7 +94,7 @@
                                                     <div class="col-md-9">
                                                         <div class="input-group input-daterange" id="date-range">
                                                             <input type="text" class="form-control" id="tgl_awal" name="tgl_awal"  placeholder="Tanggal Awal">
-                                                            <span class="input-group-addon bg-custom text-white b-0">to</span>
+                                                            <span class="input-group-addon bg-custom text-white b-0">-</span>
                                                             <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir"  placeholder="Tanggal Akhir">
                                                         </div>
                                                     </div>

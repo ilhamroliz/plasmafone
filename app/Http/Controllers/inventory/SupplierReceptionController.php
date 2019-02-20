@@ -532,9 +532,11 @@ class SupplierReceptionController extends Controller
                         }
                     }
 
-                    $pdUpdate = DB::table('d_purchase_dt')->where('pd_purchase', $pd_purchase)->where('pd_detailid', $pd_detailid);
+                    $pdUpdate = DB::table('d_purchase_dt')
+                        ->where('pd_purchase', $pd_purchase)
+                        ->where('pd_detailid', $pd_detailid);
                     if($request->status == 'sc' || $request->status == 'scexp'){
-                        $pdUpdate->update(['pd_specificcode' => $request->kode]);
+                        $pdUpdate->update(['pd_specificcode' => strtoupper($request->kode)]);
                     }else{
                         $getQTYR = $pdUpdate->select('pd_qtyreceived')->first();
                         $fixQTYR = ($getQTYR->pd_qtyreceived - $qtyOld) + $qtyNew;
@@ -543,18 +545,29 @@ class SupplierReceptionController extends Controller
 
                     // UPDATE di STOCK
                     if($request->status == 'exp' || $request->status == 'non'){
-                        $getQTY = DB::table('d_stock')->where('s_item', $request->item)->where('s_position', 'PF00000001')->where('s_status', 'On Destination')->select('s_qty')->first();
+                        $getQTY = DB::table('d_stock')
+                            ->where('s_item', $request->item)
+                            ->where('s_position', 'PF00000001')
+                            ->where('s_status', 'On Destination')
+                            ->select('s_qty')
+                            ->first();
                         $fixQty = ($getQTY->s_qty - $qtyOld) + $qtyNew;
 
-                        DB::table('d_stock')->where('s_item', $request->item)->where('s_position', 'PF00000001')->where('s_status', 'On Destination')->update(['s_qty' => $fixQty]);
+                        DB::table('d_stock')
+                            ->where('s_item', $request->item)
+                            ->where('s_position', 'PF00000001')
+                            ->where('s_status', 'On Destination')
+                            ->update(['s_qty' => $fixQty]);
                     }
 
                     // UPDATE di STOCK_DT
-                    $scNew = $request->kode;
+                    $scNew = strtoupper($request->kode);
                     $scOld = $request->scEdit;
                     if($request->status == 'sc' || $request->status == 'scexp'){
 
-                        DB::table('d_stock_dt')->where('sd_specificcode', $scOld)->update(['sd_specificcode' => $scNew]);
+                        DB::table('d_stock_dt')
+                            ->where('sd_specificcode', $scOld)
+                            ->update(['sd_specificcode' => $scNew]);
 
                     }
 
@@ -562,7 +575,9 @@ class SupplierReceptionController extends Controller
                     $pecahSM = explode('-', $request->refSM);
                     $sm_stock = $pecahSM[0];
                     $sm_detailid = $pecahSM[1];
-                    $smUpdate = DB::table('d_stock_mutation')->where('sm_stock', $sm_stock)->where('sm_detailid', $sm_detailid);
+                    $smUpdate = DB::table('d_stock_mutation')
+                        ->where('sm_stock', $sm_stock)
+                        ->where('sm_detailid', $sm_detailid);
 
                     $sm_reff = strtoupper($request->notaDO);
 
@@ -572,7 +587,11 @@ class SupplierReceptionController extends Controller
 
                     }else if($request->status == 'exp'){
 
-                        $getSMUse = DB::table('d_stock_mutation')->where('sm_stock', $sm_stock)->where('sm_detailid', $sm_detailid)->select('sm_use')->first();
+                        $getSMUse = DB::table('d_stock_mutation')
+                            ->where('sm_stock', $sm_stock)
+                            ->where('sm_detailid', $sm_detailid)
+                            ->select('sm_use')
+                            ->first();
                         $sm_sisa = $smNew - $getSMUse->sm_use;
                         $sm_expired = Carbon::createFromFormat('d/m/Y', $request->exp)->format('Y-m-d');
 

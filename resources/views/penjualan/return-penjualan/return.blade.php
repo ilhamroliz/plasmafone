@@ -135,7 +135,7 @@
                                             <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6" style="display: none" id="form_gb">
                                                 <legend>Ganti Barang Sejenis</legend>
                                                 <div class="form-group">
-                                                    <label class="col-md-3 control-label text-left">Nama Barang</label>
+                                                    <label class="col-md-3 control-label text-left">Pilih Barang</label>
                                                     <div class="col-md-9">
                                                         <div class="input-group input-group-md">
                                                             <span class="input-group-addon"><i class="fa fa-cube"></i></span>
@@ -307,7 +307,7 @@
                                     if (parseInt($("#qty").val()) > parseInt(response.data)) {
                                         $.smallBox({
                                             title : "Peringatan!",
-                                            content : "Stock hanya tersedia "+response.data.s-qty+' buah',
+                                            content : "Stock hanya tersedia "+response.data+' buah',
                                             color : "#A90329",
                                             timeout: 5000,
                                             icon : "fa fa-times bounce animated"

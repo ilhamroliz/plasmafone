@@ -508,8 +508,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pembelian/refund', 'RefundController@index');
     Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
     Route::get('pembelian/refund/tambah', 'RefundController@add');
-    Route::get('pembelian/refund/get-data', 'RefundController@getDataItem');
+    Route::post('pembelian/refund/get-data', 'RefundController@getDataItem');
     Route::get('pembelian/refund/get-supplier', 'RefundController@getSupplier');
+    Route::post('pembelian/refund/simpan', 'RefundController@save');
     //end Refund
 
 	// Pembelian end
@@ -542,11 +543,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
     Route::get('/inventory/penerimaan/distribusi/detail-terima/{id}', 'inventory\ReceptionController@detailTerima');
     Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
-    Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}', 'inventory\ReceptionController@getItemReceived');
+    Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}/{item}', 'inventory\ReceptionController@getItemReceived');
     Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
     Route::get('/inventory/penerimaan/distribusi/item-receive/{id}/{item}', 'inventory\ReceptionController@itemReceive');
     Route::post('/inventory/penerimaan/distribusi/item-receive/add', 'inventory\ReceptionController@itemReceiveAdd');
-    Route::get('/inventory/penerimaan/distribusi/item-receive/check/{item}/{code}/{comp}/{dest}', 'inventory\ReceptionController@checkCode');
+    Route::get('/inventory/penerimaan/distribusi/item-receive/check/{iddistribusi}/{item}/{code}/{comp}/{dest}', 'inventory\ReceptionController@checkCode');
 	// End penerimaan barang distribusi
 
 	//=== OPNAME BARANG
