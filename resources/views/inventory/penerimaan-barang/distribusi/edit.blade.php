@@ -313,7 +313,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 							</div>
 						</form>
 
-						<div class="modal-footer">
+						<div class="modal-footer" id="tmp_btn">
 							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
 								Tutup
 							</button>
@@ -418,6 +418,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
 			var row = '';
+			var btn = '';
 			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item).then(response => {
                 console.log(response);
 				if (response.data.status == 'Access denied') {
@@ -459,7 +460,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div id="error" class="form-group ">' +
+                                    '<div class="form-group" id="error">' +
                                         '<label class="col-md-4 control-label">Kode Spesifik</label>' +
                                         '<div class="col-md-8">' +
                                             '<div class="input-group">' +
@@ -494,7 +495,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             "serverSide": true,
                             "orderable": false,
                             "order": [],
-                            "ajax": "{{ url('/inventory/penerimaan/distribusi/get-item-received/'.$id) }}",
+                            "ajax": "{{ url('/inventory/penerimaan/distribusi/get-item-received/'.$id) }}" + '/'+item,
                             "columns":[
                                 {"data": "dd_specificcode"},
                                 {"data": "status"},
@@ -531,7 +532,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         });
                         $("#kode").on("input", function (evt) {
                             evt.preventDefault();
-                            axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/check/'+response.data.itemId+'/'+$("#kode").val()+'/'+response.data.dari+'/'+response.data.tujuan).then(resp => {
+                            axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/check/'+id+'/'+response.data.itemId+'/'+$("#kode").val()+'/'+response.data.dari+'/'+response.data.tujuan).then(resp => {
                                 // console.log(resp.data);
                                 if (resp.data == 0) {
                                     $("#error").removeClass("has-success");
@@ -594,16 +595,15 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-md-12 form-group">'+
-                                        '<button class="btn btn-primary pull-right" type="button" id="simpan" onclick="simpan()">'+
-                                            '<i class="fa fa-floppy-o"></i>'+
-                                            '&nbsp;Simpan'+
-                                        '</button>'+
-                                    '</div>'+
                                 '</fieldset>' +
 								'</div>';
 
+						btn = '<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>\n' +
+                            '\t\t\t\t\t\t\t\tSimpan\n' +
+                            '\t\t\t\t\t\t\t</button>';
+
                         $(".terima").append(row);
+                        $("#tmp_btn").append(btn);
                         $("#qty").focus();
                         $("#tbl_kode").hide();
                         $(".qty").on("keypress",function (event) {
