@@ -224,6 +224,7 @@
 
                 var idP = $('#idP').val();
                 var pNota = $('#pNota').val();
+                var idSupp = $('#idSupp').val();
                 var namaSupp = $('#namaSupp').val();
                 var telpSupp = $('#telpSupp').val();
 
@@ -232,7 +233,7 @@
                     ar = ar.add($('#dt_co').DataTable().row(i).node());
                 }
 
-                window.location.href = baseUrl+'/pembelian/purchase-return/add?lanjut=yes&'+ar.find('input').serialize()+'&idP='+idP+'&pNota='+pNota+'&namaSupp='+namaSupp+'&telpSupp='+telpSupp;
+                window.location.href = baseUrl+'/pembelian/purchase-return/add?lanjut=yes&'+ar.find('input').serialize()+'&idP='+idP+'&pNota='+pNota+'&idSupp='+idSupp+'&namaSupp='+namaSupp+'&telpSupp='+telpSupp;
             }
 
     </script>
