@@ -37,7 +37,7 @@
 					        <ul class="sub-menu-m py-0">
 					        	@foreach($i_merk_hp as $merk)
 								<li>
-									<div class="custom-control custom-checkbox">
+									<div class="custom-control custom-checkbox filter">
 									  <input type="checkbox" class="custom-control-input" id="merk-{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
@@ -53,7 +53,7 @@
 					        <ul class="sub-menu-m py-0">
 					        	@foreach($i_merk_acces as $merk)
 								<li>
-									<div class="custom-control custom-checkbox">
+									<div class="custom-control custom-checkbox filter">
 									  <input type="checkbox" class="custom-control-input" id="merk-{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
@@ -86,6 +86,16 @@
 					        </ul>
 					    </li>
 					</ul>
+					<div class="sidebar-header"></div>
+			        <ul class="list-unstyled">
+			            <li>
+					        <ul>
+								<li>
+									<button type="button" class="btn btn-sm btn-primary btn-block focus stext-105 bor1" onclick="showFilter()">Aktifkan Filter</button>
+								</li>
+					        </ul>
+					    </li>
+					</ul>
 				</nav>
 				<div id="content">
 					<div class="row results">
@@ -111,7 +121,7 @@
 								<div class="block2-txt flex-w flex-t p-t-14">
 									<div class="block2-txt-child1 flex-col-l ">
 										<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-											{{$product->i_nama}}
+											{{mb_convert_case($product->i_nama, MB_CASE_TITLE, "UTF-8")}}
 										</a>
 
 										<span class="stext-105 cl3">
@@ -146,12 +156,12 @@
 
 	<script type="text/javascript">
         $(document).ready(function () {
-            $('div.custom-checkbox').find('input:checkbox').on('click', function () {
+            $('div.filter').find('input:checkbox').on('click', function () {
                 $('.results > .merk').hide();
-                $('div.custom-checkbox').find('input:checked').each(function () {
+                $('div.filter').find('input:checked').each(function () {
                     $('.results > .merk.' + $(this).attr('id')).show();
                 });
-                if(!$('div.custom-checkbox').find('input:checked').length){
+                if(!$('div.filter').find('input:checked').length){
                     $('.results > .merk').show();
                 }
             });
@@ -162,6 +172,19 @@
 
             $("input[type='number']").inputSpinner();
         });
+
+        function showFilter()
+        {
+        	$.find('input:checked').each(function(){
+        		$hp =
+        	})
+        	$.ajax({
+        		url: '{{url("/onlineshop/products?")}}'+'handphone='+'$aksesoris='+'$harga',
+				type: 'get',
+				data: $('input').serialize(),
+				dataType: 'json',
+        	});
+        }
     </script>
 
 @endsection

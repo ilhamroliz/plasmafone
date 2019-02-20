@@ -446,11 +446,6 @@
                 </div>
                 @endforeach
             </div>
-			<nav>
-			    <ul class="pagination justify-content-center">
-			         {{$products->links()}}
-			    </ul>
-			</nav>
 
             <!-- Load more -->
             <div class="flex-c-m flex-w w-full p-t-45">

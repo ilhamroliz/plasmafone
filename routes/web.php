@@ -508,8 +508,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pembelian/refund', 'RefundController@index');
     Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
     Route::get('pembelian/refund/tambah', 'RefundController@add');
-    Route::get('pembelian/refund/get-data', 'RefundController@getDataItem');
+    Route::post('pembelian/refund/get-data', 'RefundController@getDataItem');
     Route::get('pembelian/refund/get-supplier', 'RefundController@getSupplier');
+    Route::post('pembelian/refund/simpan', 'RefundController@save');
     //end Refund
 
 	// Pembelian end
@@ -1593,7 +1594,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Frontend Onlineshop============================================================== //
     Route::prefix('onlineshop')->group(function () {
         Route::get('/', 'OnlineshopController@index')->name('frontend');
-        Route::get('/product-all', 'OnlineshopController@product_all')->name('product_all');
+        Route::get('/products', 'OnlineshopController@product_all')->name('product_all');
         Route::get('/handphone', 'OnlineshopController@product_hp')->name('product_hp');
         Route::get('/accesories', 'OnlineshopController@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'OnlineshopController@product_detail')->name('product_detail');
