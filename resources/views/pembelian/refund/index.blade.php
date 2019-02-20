@@ -134,7 +134,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         $(document).ready(function () {
             $('#date-range').datepicker({
                 autoclose: true,
-                todayHighlight: true
+                todayHighlight: true,
+                format: 'dd/mm/yyyy'
             });
             $( "#namaitem" ).autocomplete({
                 source: baseUrl+'/penjualan-reguler/cari-sales',

@@ -20,7 +20,7 @@
 
         <!-- breadcrumb -->
         <ol class="breadcrumb">
-            <li>Home</li><li>Layanan Perbaikan</li><li>Perbaikan Barang</li>
+            <li>Home</li><li>Penjualan</li><li>Return Penjualan</li>
         </ol>
         <!-- end breadcrumb -->
     </div>
@@ -38,7 +38,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-wrench"></i>
-                    Layanan Perbaikan <span><i class="fa fa-angle-double-right"></i> Perbaikan Barang </span>
+                    Penjualan <span><i class="fa fa-angle-double-right"></i> Return Penjualan </span>
                 </h1>
             </div>
 

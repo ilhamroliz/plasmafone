@@ -26,7 +26,7 @@ class laporan_neraca_controller extends Controller
                             ->with([
                                 'subclass' => function($query) use ($d1){
                                     $query->select('hs_id', 'hs_nama', 'hs_level_1')
-                                            ->orderBy('hs_status')
+                                            ->orderBy('hs_flag')
                                             ->with([
                                                 'level_2' => function($query) use ($d1){
                                                     $query->select('hld_id', 'hld_nama', 'hld_subclass')
@@ -67,7 +67,7 @@ class laporan_neraca_controller extends Controller
                             ->with([
                                 'subclass' => function($query) use ($d1){
                                     $query->select('hs_id', 'hs_nama', 'hs_level_1')
-                                            ->orderBy('hs_status')
+                                            ->orderBy('hs_flag')
                                             ->with([
                                                 'level_2' => function($query) use ($d1){
                                                     $query->select('hld_id', 'hld_nama', 'hld_subclass')
@@ -104,7 +104,7 @@ class laporan_neraca_controller extends Controller
                             ->with([
                                 'subclass' => function($query) use ($d1){
                                     $query->select('hs_id', 'hs_nama', 'hs_level_1')
-                                            ->orderBy('hs_status')
+                                            ->orderBy('hs_flag')
                                             ->with([
                                                 'level_2' => function($query) use ($d1){
                                                     $query->select('hld_id', 'hld_nama', 'hld_subclass')
@@ -153,7 +153,7 @@ class laporan_neraca_controller extends Controller
                             ->with([
                                 'subclass' => function($query) use ($d1){
                                     $query->select('hs_id', 'hs_nama', 'hs_level_1')
-                                            ->orderBy('hs_status')
+                                            ->orderBy('hs_flag')
                                             ->with([
                                                 'level_2' => function($query) use ($d1){
                                                     $query->select('hld_id', 'hld_nama', 'hld_subclass')

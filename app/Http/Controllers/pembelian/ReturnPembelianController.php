@@ -117,7 +117,7 @@ class ReturnPembelianController extends Controller
                         $getMax = DB::table('d_purchase_return')->max('pr_id');
                         $idMaxPR = $getMax + 1;
                     }
-                    // dd(Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'));
+
                     DB::table('d_purchase_return')->insert([
                         'pr_id' => $idMaxPR,
                         'pr_nota' => $this->getDataId(),
@@ -132,25 +132,27 @@ class ReturnPembelianController extends Controller
                     // Insert untuk PURCHASE_RETURN_DT
                     $arayPRD = array();
                     $count = 1;
-                    for($i = 0; $i < count($request->qty); $i++){
+                    for($i = 0; $i < count($request->kodeqty); $i++){
 
-                        $pecahItem = explode('==', $request->item[$i]);
-                        $index = $pecahItem[0];
-
-                        if(array_key_exists($index, $request->check)){
-                            $pecahCek = explode('==', $request->check[$index]);
-
-                            $aray = ([
-                                'prd_purchasereturn' => $idMaxPR,
-                                'prd_detailid' => $count,
-                                'prd_item' => $pecahItem[1],
-                                'prd_qty' => $request->qty[$index],
-                                'prd_specificcode' => $request->kode[$index]
-                            ]);
-                            array_push($arayPRD, $aray);
-                            $count +=1;
+                        $pecahKQ = explode('==', $request->kodeqty[$i]);
+                        if($pecahKQ[0] == 'Y'){
+                            $qty = 1;
+                            $sc = $pecahKQ[1];
+                        }else{
+                            $qty = $pecahKQ[1];
+                            $sc = null;
                         }
 
+                        $aray = ([
+                            'prd_purchasereturn' => $idMaxPR,
+                            'prd_detailid' => $count,
+                            'prd_item' => $request->idItem[$i],
+                            'prd_qty' => $qty,
+                            'prd_specificcode' => $sc,
+                            'prd_action' => $request->statusReturn[$i]
+                        ]);
+                        array_push($arayPRD, $aray);
+                        $count +=1;
                     }
                     DB::table('d_purchase_returndt')->insert($arayPRD);
                     // dd($arayTry);
@@ -186,7 +188,7 @@ class ReturnPembelianController extends Controller
                     ->get();
 
                 $getId = Crypt::encrypt($id);
-
+                
                 return view('pembelian.return_barang.add_pembelian_pilih')->with(compact('getPurchase', 'getDataDT', 'getId'));
 
             }
@@ -210,7 +212,8 @@ class ReturnPembelianController extends Controller
                             'idItem' => $pecahItem[1],
                             'namaItem' => $nama->i_nama,
                             'qty' => $request->qty[$index],
-                            'specificcode' => $request->kode[$index]
+                            'specificcode' => $request->kode[$index],
+                            'detailid' => $pecahCek[1]
                         ]);
                         array_push($arayPRList, $aray);
                         $count +=1;
@@ -220,20 +223,12 @@ class ReturnPembelianController extends Controller
                 // dd($request->idP);
                 $idP = Crypt::decrypt($request->idP);
                 $id = $idP;
+                $idSupp = $request->idSupp;
                 $p_nota = $request->pNota;
                 $s_company = $request->namaSupp;
                 $s_phone = $request->telpSupp;
 
-                $purchase = ([
-                    'id' => $idP,
-                    'p_nota' => $request->pNota,
-                    's_company' => $request->namaSupp,
-                    's_phone' => $request->telpSupp
-                ]);
-
-                // dd($arayPRList);
-                return view('pembelian.return_barang.tambah_submit_pembelian')->with(compact('arayPRList', 'id', 'p_nota', 's_company', 's_phone'));
-
+                return view('pembelian.return_barang.tambah_submit_pembelian')->with(compact('arayPRList', 'id', 'p_nota', 's_company', 's_phone', 'idSupp'));
             }
 
             $supplier = DB::table('d_supplier')->where('s_isactive', 'Y')->select('s_id', 's_name')->get();

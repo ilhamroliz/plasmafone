@@ -1062,6 +1062,83 @@
             });
         }
 
+        function serviceHapus(id) {
+            $.SmartMessageBox({
+                title: "Pesan!",
+                content: 'Hapus untuk service barang ini?',
+                buttons: '[Batal][Ya]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Ya") {
+                    overlay();
+
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        url: baseUrl + '/penjualan/service-barang/delete/' + id,
+                        type: 'get',
+                        success: function (response) {
+                            if (response.status == "Not Found") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Data tidak ditemukan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                out();
+
+                            } else if (response.status == "False") {
+                                $.smallBox({
+                                    title: "Gagal",
+                                    content: "Upsss. Terjadi kesalahan",
+                                    color: "#A90329",
+                                    timeout: 5000,
+                                    icon: "fa fa-times bounce animated"
+                                });
+                                out();
+
+                            } else if (response.status == "True") {
+                                $.smallBox({
+                                    title: "Berhasil",
+                                    content: 'Data service barang berhasil dihapus',
+                                    color: "#739E73",
+                                    timeout: 5000,
+                                    icon: "fa fa-check bounce animated"
+                                });
+                                out();
+                                $('#deleteModal').modal('hide');
+                                refresh_tab();
+
+                            }
+                        }, error: function (x, e) {
+                            if (x.status == 0) {
+                                alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 404) {
+                                alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                                $('#overlay').fadeOut(200);
+                            } else if (x.status == 500) {
+                                alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'parsererror') {
+                                alert('Error.\nParsing JSON Request failed.');
+                                $('#overlay').fadeOut(200);
+                            } else if (e == 'timeout') {
+                                alert('Request Time out. Harap coba lagi nanti');
+                                $('#overlay').fadeOut(200);
+                            } else {
+                                alert('Unknow Error.\n' + x.responseText);
+                                $('#overlay').fadeOut(200);
+                            }
+                        }
+                    })
+                }
+            });
+        }
+
         function serviceTerimaOutlet(id) {
             $.SmartMessageBox({
                 title: "Pesan!",

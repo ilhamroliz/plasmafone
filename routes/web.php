@@ -690,6 +690,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/proses-perbaikan/{id}', 'penjualan\ServicesController@serviceProses');
     Route::get('/penjualan/service-barang/selesai-perbaikan/{id}', 'penjualan\ServicesController@serviceSelesai');
     Route::get('/penjualan/service-barang/terima-barang-pusat/{id}', 'penjualan\ServicesController@serviceTerimaPusat');
+    Route::get('/penjualan/service-barang/delete/{id}', 'penjualan\ServicesController@serviceDelete');
     // ####################################
     // End Service Barang
     // ####################################
