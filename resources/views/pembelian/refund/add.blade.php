@@ -7,7 +7,7 @@
         .smart-form fieldset {
             padding: 10px 14px 5px;
         }
-        .smart-form .btn-khusus {
+        .smart-form .btn-style {
             display: inline-block;
             margin-bottom: 0;
             font-weight: 400;
@@ -98,30 +98,44 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                         </div>
                                         <div class="col col-6 padding-left-0">
                                             <label class="input"> <i class="icon-append fa fa-font"></i>
-                                                <input type="text" name="username" id="namabarang" placeholder="Masukkan Nama/Kode Barang" style="text-transform: uppercase" readonly>
+                                                <input type="text" id="namabarang" placeholder="Masukkan Nama/Kode Barang" style="text-transform: uppercase" readonly>
+                                                <input type="hidden" name="item" id="idItem">
                                                 <b class="tooltip tooltip-bottom-right">Masukkan Nama/Kode Barang</b>
                                             </label>
                                         </div>
                                         <div class="col col-1 padding-left-0">
-                                            <button type="button" disabled class="btn btn-primary btn-khusus" onclick="cari()"><i class="fa fa-search"></i> Cari</button>
+                                            <button type="button" disabled class="btn btn-primary btn-style btn-khusus" onclick="cari()"><i class="fa fa-search"></i> Cari</button>
+                                        </div>
+                                        <div class="col col-1 padding-left-0">
+                                            <button type="button" disabled class="btn btn-warning btn-style btn-refresh" onclick="refresh()"><i class="fa fa-refresh"></i> Reset</button>
+                                        </div>
+                                        <div class="col col-1 padding-left-0">
+                                            <button type="button" disabled class="btn btn-success btn-style btn-simpan" onclick="simpan()"><i class="fa fa-save"></i> Simpan</button>
                                         </div>
                                     </section>
                                     <section class="form-group baris-1" style="display: none">
-                                        <div class="col col-4 padding-left-0">
-                                            <label class="label">Harga Baru</label>
-                                            <label class="input"> <i class="icon-append fa fa-money"></i>
-                                                <input type="text" name="username" id="hargabaru" onkeyup="setHargaBaru()" placeholder="Harga Baru" style="text-transform: uppercase">
-                                                <b class="tooltip tooltip-bottom-right">Harga Baru</b>
-                                            </label>
-                                        </div>
-                                        <div class="col col-4 padding-left-0">
+                                        <div class="col col-3 padding-left-0">
                                             <label class="label">Harga Pembelian</label>
                                             <label class="input"> <i class="icon-append fa fa-at"></i>
-                                                <input type="text" name="username" id="hargalama" readonly placeholder="Harga Terakhir" style="text-transform: uppercase">
+                                                <input type="text" name="hargalama" id="hargalama" readonly placeholder="Harga Terakhir" style="text-transform: uppercase">
                                                 <b class="tooltip tooltip-bottom-right">Harga Terakhir</b>
                                             </label>
                                         </div>
-                                        <div class="col col-4 padding-left-0">
+                                        <div class="col col-3 padding-left-0">
+                                            <label class="label">Harga Baru</label>
+                                            <label class="input"> <i class="icon-append fa fa-money"></i>
+                                                <input type="text" name="hargabaru" id="hargabaru" onkeyup="setHargaBaru()" placeholder="Harga Baru" style="text-transform: uppercase">
+                                                <b class="tooltip tooltip-bottom-right">Harga Baru</b>
+                                            </label>
+                                        </div>
+                                        <div class="col col-3 padding-left-0">
+                                            <label class="label">Qty</label>
+                                            <label class="input"> <i class="icon-append fa fa-cubes"></i>
+                                                <input type="text" name="qty" id="qty" placeholder="QTY" readonly style="text-transform: uppercase">
+                                                <b class="tooltip tooltip-bottom-right">Kuantitas</b>
+                                            </label>
+                                        </div>
+                                        <div class="col col-3 padding-left-0">
                                             <label class="label">Refund</label>
                                             <label class="input"> <i class="icon-append fa fa-money"></i>
                                                 <input type="text" name="totalrefund" id="totalrefund" placeholder="Total Refund" readonly style="text-transform: uppercase">
@@ -129,6 +143,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </label>
                                         </div>
                                     </section>
+                                </form>
+                                <div class="smart-form form-horizontal">
                                     <section class="form-group baris-1" style="display: none">
                                         <table class="table table-striped table-bordered table-hover" width="100%" id="listkode" style="cursor: pointer">
                                             <thead>
@@ -143,7 +159,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                                             </thead>
                                         </table>
                                     </section>
-                                </form>
+                                </div>
 
                             </div>
                             <!-- end widget content -->
@@ -160,6 +176,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
 @section('extra_script')
     <script type="text/javascript">
         var tablekode;
+        var dataGlobal;
         $(document).ready(function () {
 
             $('#tanggal').datepicker({
@@ -189,6 +206,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 minLength: 1,
                 select: function(event, data) {
                     setData(data);
+                    dataGlobal = data;
                     $('.btn-khusus').attr('disabled', false);
                 }
             });
@@ -208,6 +226,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
         function setData(data) {
             overlay();
             var id = data.item.id;
+            $('#idItem').val(id);
             var supp = $('#supplier').val();
             if (supp == null || supp == ''){
                 $.smallBox({
@@ -226,23 +245,34 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             });
             $.ajax({
                 url: baseUrl + '/pembelian/refund/get-data',
-                type: 'get',
+                type: 'post',
                 data: {id: id, supplier: supp},
                 success: function(response){
+                    tablekode.clear();
                     for (var i = 0; i < response.length; i++){
                         var hargarp = convertToRupiah(response[i].sm_hpp.replace('.00', ''));
                         tablekode.row.add( [
                             '',
                             response[i].posisi + "<input type='hidden' class='stock' name='id_stock[]' value='"+response[i].s_id+"'>",
                             response[i].sd_specificcode + "<input type='hidden' class='specificcode' name='specificcode[]' value='"+response[i].sd_specificcode+"'>",
-                            response[i].supplier + "<input type='hidden' class='supplier' name='supplier[]' value='"+response[i].id_supplier+"'>",
+                            response[i].supplier,
                             hargarp + "<input type='hidden' class='hargahpp' name='hargahpp[]' value='"+response[i].sm_hpp.replace('.00', '')+"'>",
-                            "<div class='text-center'><button type='button' class='btn btn-danger btn-xs'><i class='fa fa-minus'></i></button></div>",
+                            "<div class='text-center'><button type='button' class='btn btn-danger hapusrow btn-xs'><i class='fa fa-minus'></i></button></div>",
                         ] ).draw(false);
                         if (i == (response.length - 1)){
                             var harga = convertToRupiah(response[i].sm_hpp.replace('.00', ''));
                             $('#hargalama').val(harga);
                         }
+                        $('#listkode .hapusrow').on( 'click', function () {
+                            tablekode
+                                .row( $(this).parents('tr') )
+                                .remove()
+                                .draw();
+
+                            setTotalRefund();
+                            $('.btn-refresh').attr('disabled', false);
+                        } );
+                        $('#qty').val(response.length);
                     }
                     tablekode.on( 'order.dt search.dt', function () {
                         tablekode.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -278,16 +308,16 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 hargahpp  = [].map.call(jumlah, function( input ) {
                     return parseInt(input.value);
                 });
-            var total = 0;
-            for (var i = 0; i < hargahpp.length; i++){
-                total = total + parseInt(hargahpp);
-            }
+
             hargabaru = convertToAngka($('#hargabaru').val());
             hargabaru = parseInt(hargabaru);
+            hargalama = convertToAngka($('#hargalama').val());
+            hargalama = parseInt(hargalama);
             if (isNaN(hargabaru)){
                 hargabaru = 0;
             }
-            total = total - (hargabaru * hargahpp.length);
+            $('#qty').val(hargahpp.length);
+            total = (hargalama * hargahpp.length) - (hargabaru * hargahpp.length);
             $('#totalrefund').val(convertToRupiah(total));
         }
 
@@ -295,6 +325,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
             var baru = $('#hargabaru').val();
             baru = convertToAngka(baru);
             baru = parseInt(baru);
+            hargalama = convertToAngka($('#hargalama').val());
+            hargalama = parseInt(hargalama);
 
             var ar = $();
             for (var i = 0; i < tablekode.rows()[0].length; i++) {
@@ -305,18 +337,75 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 return parseInt(input.value);
             });
 
-            var total = 0;
-            for (var i = 0; i < hargahpp.length; i++){
-                total = total + parseInt(hargahpp);
-            }
-            baru = baru * hargahpp.length;
-            total = total - baru;
+            total = (hargalama * hargahpp.length) - (baru * hargahpp.length);
             $('#totalrefund').val(convertToRupiah(total));
         }
 
         function cari() {
             $('.baris-1').show('slow');
+            $('.btn-simpan').attr('disabled', false);
             setTotalRefund();
+        }
+
+        function refresh() {
+            setData(dataGlobal);
+            setTotalRefund();
+        }
+
+        function simpan() {
+            overlay();
+            var ar = $();
+            for (var i = 0; i < tablekode.rows()[0].length; i++) {
+                ar = ar.add(tablekode.row(i).node());
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: baseUrl + '/pembelian/refund/simpan',
+                type: 'post',
+                data: $('#form-tambah').serialize() + '&' + ar.find('input').serialize(),
+                success: function(response){
+                    out();
+                    if (response.status == 'sukses'){
+                        $.smallBox({
+                            title: "Berhasil",
+                            content: 'Data berhasil disimpan',
+                            color: "#739E73",
+                            timeout: 3000,
+                            icon: "fa fa-check bounce animated"
+                        });
+                        setTimeout(function () {
+                            window.location = "{{ url('pembelian/refund') }}";
+                        }, 2000);
+                    } else {
+                        $.smallBox({
+                            title: "Gagal",
+                            content: "Upsss. Simpan gagal, hubungi admin...",
+                            color: "#A90329",
+                            timeout: 3000,
+                            icon: "fa fa-times bounce animated"
+                        });
+                    }
+                }, error:function(x, e) {
+                    out();
+                    if (x.status == 0) {
+                        alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                    } else if (x.status == 404) {
+                        alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                    } else if (x.status == 500) {
+                        alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                    } else if (e == 'parsererror') {
+                        alert('Error.\nParsing JSON Request failed.');
+                    } else if (e == 'timeout'){
+                        alert('Request Time out. Harap coba lagi nanti');
+                    } else {
+                        alert('Unknow Error.\n' + x.responseText);
+                    }
+                }
+            })
         }
 
     </script>
