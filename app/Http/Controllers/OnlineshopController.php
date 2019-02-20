@@ -46,7 +46,8 @@ class OnlineshopController extends Controller
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->where('s_qty', '!=', 0)
             ->inRandomOrder()
-            ->paginate(8);
+            ->limit(8)
+            ->get();
 
         return view('onlineshop', compact('menu_hp', 'menu_acces','i_merk', 'products'));
     }
