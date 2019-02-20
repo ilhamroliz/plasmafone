@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Laporan Neraca Saldo</title>
+		<title>Analisa Rasio Keuangan</title>
         
 		<link rel="stylesheet" type="text/css" href="{{ asset('modul_keuangan/bootstrap_4_1_3/css/bootstrap.min.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{ asset('modul_keuangan/font-awesome_4_7_0/css/font-awesome.min.css') }}">
@@ -97,19 +97,50 @@
 		    }
 
 		    #table-data{
+		    	font-size: 9pt;
+		    }
+
+		    #table-data td, #table-data th {
+		    	padding: 5px 10px;
+		    	border: 1px solid #cfcfcf;
+		    }
+
+		    #table-data th.head{
+		    	font-weight: 800;
+		    	font-size: 12pt;
+		    	border: 0px;
+		    	padding-left: 0px;
+		    	padding-bottom: 0px;
+		    	text-align: left;
+		    	color: #444;
+		    }
+
+		    #table-data th.subHead{
+		    	font-weight: 800;
+		    	font-size: 9pt;
+		    	border: 0px;
+		    	padding-left: 0px;
+		    	padding-bottom: 0px;
+		    	text-align: left;
+		    	color: #444;
+		    	text-decoration: underline;
+		    	font-style: italic;
+		    }
+
+		    #table-data th.subHead.chartLeft{
+		     	padding: 0px 0px;
+		     	width: 60%;
+		    }
+
+		    #table-data th.subHead.chartRight{
+		     	vertical-align: top;
+		     	background: none;
+		     	text-decoration: none;
+		     	width: 40%;
+		     }
+
+		    #table-data td{
 		    	font-size: 8pt;
-		    }
-
-		    #table-data td {
-		    	padding: 5px 10px;
-		    	border: 1px solid #eee;
-		    }
-
-		    #table-data th{
-		    	background-color: #0099CC;
-		    	color: white;
-		    	padding: 5px 10px;
-		    	border: 1px solid white;
 		    }
 
 		    #table-data td.head{
@@ -131,33 +162,42 @@
 	          width: 100%;
 	          padding: 0px 20px;
 	          background: white;
-	          min-height: 700px;
+	          min-height: 550px;
 	          border-radius: 2px;
 	          margin: 0 auto;
+	          padding-bottom: 20px;
 	        }
 
 		</style>
 
 		<style type="text/css" media="print">
           @page { size: landscape; }
+
+          body{
+          	margin: 0mm;
+          }
           nav{
             display: none;
           }
 
-          .ctn-nav{
-            display: none;
-          }
-
           #contentnya{
-          	width: 100%;
-          	padding: 0px;
-          	margin-top: -80px;
-          }
+            margin-top: -80px;
+            width: 100%;
+           }
 
           #table-data th{
              background-color: #0099CC !important;
              color: white;
              -webkit-print-color-adjust: exact;
+          }
+
+          #table-data th.subHead, #table-data th.head{
+             background-color:white !important;
+             -webkit-print-color-adjust: exact;
+          }
+
+          #table-data th.subHead.divide{
+          	display: none;
           }
 
           #table-data td.not-same{
@@ -181,17 +221,17 @@
 			    <div class="collapse navbar-collapse" id="navbarCollapse">
 			      <ul class="navbar-nav ml-auto">
 
-			      	<li class="nav-item">
+			      	{{-- <li class="nav-item">
 			      	  <a href="{{ route('laporan.keuangan.index') }}" style="color: #ffbb33;">
 			          	<i class="fa fa-backward" title="Kembali Ke Menu Laporan"></i>
 			          </a>
-			        </li>
+			        </li> --}}
 
 			        <li class="nav-item">
 			          	<i class="fa fa-print" title="Print Laporan" @click="print"></i>
 			        </li>
 
-			        <li class="nav-item dropdown" title="Download Laporan">
+			        {{-- <li class="nav-item dropdown" title="Download Laporan">
 			          	<i class="fa fa-download" id="dropdownMenuButton" data-toggle="dropdown"></i>
 
 			            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -205,7 +245,7 @@
 						    	<i class="fa fa-file-excel-o" style="font-weight: bold;"></i> &nbsp; Download Excel
 						    </a>
 					    </div>
-			        </li>
+			        </li> --}}
 
 			        <li class="nav-item">
 			          <i class="fa fa-sliders" title="Pengaturan Laporan" @click="showSetting"></i>
@@ -215,42 +255,20 @@
 			    </div>
 			</nav>
 
-			<div class="col-md-4 offset-4 ctn-nav" v-cloak>
-				<div class="row" style="color: white; padding: 8px 0px;">
-					<table width="100%" border="0">
-						<tbody>
-							<tr>
-								<td class="text-center" width="40%" style="border-left: 0px solid #999; font-style: italic;">Menampilkan Halaman</td>
-								<td class="text-center" width="10%" style="border-left: 1px solid #999;">@{{ pageNow }}</td>
-								<td class="text-center" width="10%" style="border-left: 1px solid #999;">
-									/
-								</td>
-								<td class="text-center" width="10%" style="border-left: 1px solid #999;">@{{ dataPage }}</td>
-								<td class="text-center" width="15%" style="border-left: 1px solid #999;">
-									<i class="fa fa-arrow-left" :style="(!previousDisabled) ? 'cursor: pointer; color: #fff' : 'cursor: no-drop; color: #888'" @click="previousPage"></i>
-								</td>
-								<td class="text-center" width="15%">
-									<i class="fa fa-arrow-right" :style="(!nextDisabled) ? 'cursor: pointer; color: #fff' : 'cursor: no-drop; color: #888'" @click="nextPage"></i>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-
-			<div class="container-fluid" style="background: none; margin-top: 70px; padding: 10px 30px;">
+			<div class="container-fluid" id="contentnya" style="background: none; margin-top: 70px; padding: 10px 30px;">
 				<div id="contentnya">
 
 					<?php 
-						$tanggal_1 = switchBulan(explode('/', $_GET['d1'])[0]).' '.explode('/', $_GET['d1'])[1];
+						if($_GET['type'] == 'bulan')
+							$tanggal_1 = explode('/', $_GET['d1'])[0];
 					?>					
 
 					{{-- Judul Kop --}}
 
-						<table width="100%" border="0" style="border-bottom: 1px solid #333;" v-if="pageNow == 1" v-cloak>
+						<table width="100%" border="0" style="border-bottom: 1px solid #333;">
 				          <thead>
 				            <tr>
-				              <th style="text-align: left; font-size: 14pt; font-weight: 600; padding-top: 10px;" colspan="2">Laporan Neraca Saldo <small>(x1000)</small></th>
+				              <th style="text-align: left; font-size: 14pt; font-weight: 600; padding-top: 10px;" colspan="2">Analisa Rasio Keuangan <small>(Rekap)</small></th>
 				            </tr>
 
 				            <tr>
@@ -261,7 +279,7 @@
 				              <th style="text-align: left; font-size: 8pt; font-weight: 500; padding-bottom: 10px;">(Angka Disajikan Dalam Rupiah, Kecuali Dinyatakan Lain)</th>
 
 				              <th class="text-right" style="font-size: 8pt; font-weight: normal;">
-				              	<b>Bulan {{ $tanggal_1 }}</b>
+				              	<b>Periode {{ $tanggal_1 }}</b>
 				              </th>
 				            </tr>
 				          </thead>
@@ -269,95 +287,127 @@
 
 				    {{-- End Judul Kop --}}
 
-			    	<div style="padding-top: 20px;">
+				    <table class="table" id='table-data' style="margin-top: 15px;">
+				    	<thead>
+				    		<tr>
+								<th class="head" colspan="13">
+									<i class="fa fa-chevron-right"></i> &nbsp;Rasio Likuiditas (Liquidity ratio)</th>
+							</tr>
+				    	</thead>
+				    </table>
 
-						<table class="table" id="table-data" v-cloak>
-							<tbody>
+			    	<div style="padding-top: 0px; padding-left: 20px;">
+						<table class="table" id="table-data">
+							<thead>
 								<tr>
-									<th width="8%" class="head" rowspan="2">Kode Akun</th>
-									<th width="10%" class="head" rowspan="2">Saldo Awal</th>
-
-									<th class="head" colspan="2">Mutasi Kas</th>
-									<th class="head" colspan="2">Mutasi Bank</th>
-									<th class="head" colspan="2">Mutasi Memorial</th>
-									<th class="head" colspan="2">Total Mutasi</th>
-									<th width="10%" class="head" rowspan="2">Saldo Akhir</th>
+									<th width="16%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Keterangan</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Jan {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Feb {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Mar {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Apr {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Mei {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Jun {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Juli {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Agu {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Sep {{ $tanggal_1 }}</th>
+									<th width="7%"style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Okt {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Nov {{ $tanggal_1 }}</th>
+									<th width="7%" style="text-align: center; border: 1px solid #eee; background-color: #0099CC; color: white;">Des {{ $tanggal_1 }}</th>
 								</tr>
+							</thead>
+							
+								<tbody>
+									<tr>
+										<td>Quick Ratio</td>
+										
+										<template v-for="stropper in dataPrint">
+											<td v-for="(likuiditas, alpha) in stropper.likuiditas" :style="(likuiditas.onPeriode == 'false') ? 'text-align: center; background: #eee;' : 'text-align: center;'">@{{ likuiditas.quickRasio }}</td>
+										</template>
+									</tr>
 
-								<tr>
-									<th width="8%" class="head">Debet</th>
-									<th width="8%" class="head">Kredit</th>
+									<tr>
+										<td>Current Ratio</td>
 
-									<th width="8%" class="head">Debet</th>
-									<th width="8%" class="head">Kredit</th>
-
-									<th width="8%" class="head">Debet</th>
-									<th width="8%" class="head">Kredit</th>
-
-									<th width="8%" class="head">Debet</th>
-									<th width="8%" class="head">Kredit</th>
-								</tr>
-
-								<tr v-for="data in dataPrint">
-									<td>@{{ data.ak_id }}</td>
-
-									<td class="text-right">
-										@{{ (data.saldo_awal < 0) ? '('+humanizePrice(data.saldo_awal)+')' : humanizePrice(data.saldo_awal) }}
-									</td>
-
-									<td class="text-right">
-										@{{ humanizePrice(data.kas_debet) }}
-									</td>
-									<td class="text-right">
-										@{{ humanizePrice(data.kas_kredit) }}
-									</td>
-
-									<td class="text-right">
-										@{{ humanizePrice(data.bank_debet) }}
-									</td>
-									<td class="text-right">
-										@{{ humanizePrice(data.bank_kredit) }}
-									</td>
-
-									<td class="text-right">
-										@{{ humanizePrice(data.memorial_debet) }}
-									</td>
-									<td class="text-right">
-										@{{ humanizePrice(data.memorial_kredit) }}
-									</td>
-
-									<td class="text-right">
-										@{{ humanizePrice((data.kas_debet + data.bank_debet + data.memorial_debet)) }}
-									</td>
-									<td class="text-right">
-										@{{ humanizePrice((data.kas_kredit + data.bank_kredit + data.memorial_kredit)) }}
-									</td>
-
-									<td class="text-right">
-										@{{ (data.saldo_akhir < 0) ? '('+humanizePrice(data.saldo_akhir)+')' : humanizePrice(data.saldo_akhir) }}
-									</td>
-								</tr>
-
-								<tr>
-									<th></th>
-									<th></th>
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totKasDebet) }}</th>
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totKasKredit) }}</th>
-
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totBankDebet) }}</th>
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totBankKredit) }}</th>
-
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totMemorialDebet) }}</th>
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totMemorialKredit) }}</th>
-
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totDebet) }}</th>
-									<th class="text-right" style="background-color: #0099CC; color: #ffffff;">@{{ humanizePrice(totSum.totKredit) }}</th>
-
-									<th></th>
-								</tr>
-							</tbody>
+										<template v-for="stropper in dataPrint">
+											<td v-for="(likuiditas, alpha) in stropper.likuiditas" :style="(likuiditas.onPeriode == 'false') ? 'text-align: center; background: #eee;' : 'text-align: center;'">@{{ likuiditas.currentRasio }}</td>
+										</template>
+									</tr>
+								</tbody>
 						</table>
 
+						<table class="table" id="table-data" style="margin-top: 20px;">
+							<thead>
+								<tr>
+									<th class="subHead">
+										<i class="fa fa-caret-right" style="font-size: 9pt;"></i> &nbsp;Grafik Rasio Likuiditas Tahun {{ $tanggal_1 }}
+									</th>
+
+									<th class="subHead divide"></th>
+									<th class="subHead divide"></th>
+									<th class="subHead divide"></th>
+									<th class="subHead divide"></th>
+
+									<th class="subHead">
+										<i class="fa fa-caret-right" style="font-size: 9pt;"></i> &nbsp;Persentase Rasio Likuiditas Tahun {{ $tanggal_1 }}
+									</th>
+								</tr>
+
+								<tr>
+									<th class="subHead">
+										<canvas id="canvas" height="150px;"></canvas>
+									</th>
+
+									<th class="subHead divide"></th>
+									<th class="subHead divide"></th>
+									<th class="subHead divide"></th>
+									<th class="subHead divide"></th>
+
+									<th class="subHead chartRight" style="text-decoration: none;">
+										<table class="table" id="table-data" style="background: none">
+											<thead>
+												<tr>
+													<th class="subHead" width="25%" style="padding-left: 20px; padding-top: 15px;">
+														<span id="pie-chart-1"></span>
+													</th>
+
+													<th class="subHead" width="75%" style="text-align: left; vertical-align: top; padding-top: 20px; padding-left: 20px; text-decoration: none;">
+														<i class="fa fa-circle" style="color: #4285F4;"></i> &nbsp;Current Ratio (30)
+														<br><br>
+														<i class="fa fa-circle" style="color: #ff4444;"></i> &nbsp;Quick Ratio (70)
+													</th>
+												</tr>
+
+												<tr>
+													<th class="subHead" colspan="2" style="padding-left: 0px; text-align: left; padding-top: 40px;">
+														<i class="fa fa-caret-right" style="font-size: 9pt;"></i> &nbsp;Rata-Rata Nilai Rasio Likuiditas Tahun {{ $tanggal_1 }}
+													</th>
+												</tr>
+
+												<tr>
+													<th class="subHead" style="padding-top: 20px; font-size: 9pt; vertical-align: middle; text-align: left; text-decoration: none; color: #00695c; padding-left: 20px;">
+														% Current Ratio
+													</th>
+
+													<th class="subHead" style="padding-top: 20px; font-size: 10pt; vertical-align: middle; text-align: center; text-decoration: none; color: #00695c;">
+														0.22%
+													</th>
+												</tr>
+
+												<tr>
+													<th class="subHead" style="padding-top: 20px; font-size: 9pt; vertical-align: middle; text-align: left; text-decoration: none; color: #00695c; padding-left: 20px;">
+														% Quick Ratio
+													</th>
+
+													<th class="subHead" style="padding-top: 20px; font-size: 10pt; vertical-align: middle; text-align: center; text-decoration: none; color: #00695c;">
+														0.22%
+													</th>
+												</tr>
+											</thead>
+										</table>
+									</th>
+								</tr>
+							</thead>
+						</table>
 					</div>
 				</div>
 			</div>
@@ -377,38 +427,44 @@
 	            <div class="layout" style="width: 35%; min-height: 150px;">
 	                <div class="top-popup" style="background: none;">
 	                    <span class="title">
-	                        Setting Laporan Neraca Saldo
+	                        Setting Laporan Analisa
 	                    </span>
 
 	                    <span class="close"><i class="fa fa-times" style="font-size: 12pt; color: #CC0000"></i></span>
 	                </div>
 	                
 	                <div class="content-popup">
-	                	<form id="form-setting" method="get" action="{{ route('laporan.keuangan.neraca_saldo') }}">
+	                	<form id="form-setting" method="get" action="{{ route('analisa.keuangan.cashflow') }}">
 	                	<input type="hidden" readonly name="_token" value="{{ csrf_token() }}">
 	                    <div class="col-md-12">
 
-	                        <div class="row mt-form">
+	                    	<div class="row mt-form">
 	                            <div class="col-md-4">
-	                                <label class="modul-keuangan">Periode Bulan</label>
+	                                <label class="modul-keuangan">Type Analisa</label>
 	                            </div>
 
+	                            <div class="col-md-7">
+	                            	<vue-select :name="'type'" :id="'type'" :options="typeLaporan" :styles="'width:100%'" @input="typeChange"></vue-select>
+	                            </div>
+
+	                        </div>
+
+	                        <div class="row mt-form">
 	                            <div class="col-md-4">
-	                            	<table width="100%" border="0">
-	                            		<tr>
-	                            			<td>
-	                            				<vue-datepicker :name="'d1'" :id="'d1'" :title="'Tidak Boleh Kosong'" :readonly="true" :placeholder="'Pilih Tanggal'" :format="'mm/yyyy'" @input="d1Change" :styles="'font-size: 9pt;'"></vue-datepicker>
-	                            			</td>
-	                            		</tr>
-	                            	</table>
+	                                <label class="modul-keuangan">Periode</label>
+	                            </div>
+
+	                            <div class="col-md-7" v-show="type == 'bulan'">
+                    				<vue-datepicker :name="'d1'" :id="'d1'" :title="'Tidak Boleh Kosong'" :readonly="true" :placeholder="'Pilih Tanggal'" :format="'yyyy'" :styles="'font-size: 9pt;'"></vue-datepicker>
 	                            </div>
 	                        </div>
+
 	                    </div>
 
 	                    <div class="col-md-12" style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
 	                    	<div class="row">
 		                    	<div class="col-md-8" style="padding: 0px; padding-top: 5px; padding-left: 10px; color: #666;">
-	                                <div class="loader" v-if="stat == 'loading'" v-cloak>
+	                                <div class="loader" v-if="stat == 'loading'">
 	                                   <div class="loading"></div> &nbsp; <span>@{{ statMessage }}</span>
 	                                </div>
 	                            </div>
@@ -438,8 +494,131 @@
     	<script src="{{ asset('modul_keuangan/js/vendors/vue_2_x/vue_2_x.js') }}"></script>
     	<script src="{{ asset('modul_keuangan/js/vendors/vue_2_x/components/select.component.js') }}"></script>
     	<script src="{{ asset('modul_keuangan/js/vendors/vue_2_x/components/datepicker.component.js') }}"></script>
+		<script src="{{ asset('modul_keuangan/js/vendors/chart_js_2_7_3/Chart.bundle.min.js') }}"></script>
+		<script src="{{ asset('modul_keuangan/js/vendors/sparkline/sparkline.min.js') }}"></script>
 
     	<script type="text/javascript">
+
+    		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        
+				var config = {
+					type: 'bar',
+					data: {
+						labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+						datasets: [
+
+							{
+								steppedLine: false,
+								label: 'Quick Ratio',
+								backgroundColor: '#ff4444',
+								borderColor: '#ff4444',
+								data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								fill: false,
+								showLine: true,
+								pointRadius: 4,
+								pointHoverRadius: 8
+							},
+
+							{
+								steppedLine: true,
+								label: 'Current Ratio',
+								backgroundColor: '#4285F4',
+								borderColor: '#4285F4',
+								data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+								fill: false,
+								showLine: false,
+								pointRadius: 4,
+								pointHoverRadius: 8,
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						title: {
+							display: false,
+							text: 'Liquidity Ratio'
+						},
+						tooltips: {
+							mode: 'index',
+							intersect: false,
+						},
+						hover: {
+							mode: 'nearest',
+							intersect: true
+						},
+						scales: {
+							xAxes: [{
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: 'Periode'
+								}
+							}],
+							yAxes: [{
+								display: true,
+								scaleLabel: {
+									display: true,
+									labelString: 'Nilai'
+								},
+								ticks: {
+									suggestedMin: 0,
+									suggestedMax: 15,
+								}
+							}]
+						},
+						elements: {
+							point: {
+								pointStyle: 'rectRounded'
+							}
+						},
+						legend: {
+							display: true
+						},
+					}
+				};
+
+				Chart.plugins.register({
+					afterDatasetsDraw: function(chart) {
+						var ctx = chart.ctx;
+
+						chart.data.datasets.forEach(function(dataset, i) {
+							var meta = chart.getDatasetMeta(i);
+							if (!meta.hidden) {
+								meta.data.forEach(function(element, index) {
+									// Draw the text in black, with the specified font
+									ctx.fillStyle = '#2E2E2E';
+
+									var fontSize = 11;
+									var fontStyle = 'normal';
+									var fontFamily = 'Helvetica Neue';
+									ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+									// Just naively convert to string for now
+									var dataString = dataset.data[index].toString();
+
+									// Make sure alignment settings are correct
+									ctx.textAlign = 'center';
+									ctx.textBaseline = 'middle';
+
+									var padding = 5;
+									var position = element.tooltipPosition();
+									ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+								});
+							}
+						});
+					}
+				});
+
+				window.onload = function() {
+					var ctx = document.getElementById('canvas').getContext('2d');
+					window.myLine = new Chart(ctx, config);
+					$("#pie-chart-1").sparkline([1,2], {
+					    type: 'pie',
+					    width: '100',
+					    height: '100',
+					    sliceColors: ['#4285F4', '#ff4444'],
+					});
+				};
 
 			var app = 	new Vue({
 			    			el: '#vue-element',
@@ -453,28 +632,36 @@
 			    				firstElement: 0,
 			    				dataPage: 1,
 			    				pageNow: 0,
-			    				rowsCount: 25,
+			    				rowsCount: 500,
 
 			    				nextDisabled: false,
 			    				previousDisabled: true,
 
 			    				dataSource: [],
 			    				dataPrint: [],
-			    				saldo: 0,
+			    				dataLikuiditas: {},
 
 			    				// setting
-			    					semua: true,
-			    					lawanAkun: [
-			    						{
-			    							id: 'true',
-			    							text: 'Tampilkan Akun Lawan'
-			    						},
+			    					type: 'bulan',
+			    					kelompok: [],
+			    					typeLaporan: [
+				    					{
+				    						id: 'bulan',
+				    						text: 'Laporan Analisa Dalam Bulan',
+				    					}
+				    				],
 
-			    						{
-			    							id: 'false',
-			    							text: 'Jangan Tampilkan Akun Lawan'
-			    						}
-			    					],
+				    				tampilan: [
+				    					{
+				    						id: 'tabular',
+				    						text: 'Tampilan Table',
+				    					},
+
+				    					{
+				    						id: 'menurun',
+				    						text: 'Tampilan Menurun'
+				    					}
+				    				],
 			    			},
 
 			    			created: function(){
@@ -483,14 +670,17 @@
 
 				            mounted: function(){
 				            	console.log('Vue Ready');
+			                    // chartRegist();
 				            	this.textLoading = "Sedang Menyiapkan Laporan . Harap Tunggu...";
 				            	$('#loading-popup').ezPopup('show');
 
 				            	$('#d1').val('{{ $_GET['d1'] }}');
+				            	$('#type').val('{{ $_GET['type'] }}').trigger('change.select2');
+				            	this.typeChange('{{ $_GET['type'] }}');
 
 				            	that = this;
 
-				            	axios.get('{{route('laporan.keuangan.neraca_saldo.data_resource')}}?'+that.url.searchParams)
+				            	axios.get('{{route('analisa.keuangan.rasio.data_resource')}}?'+that.url.searchParams)
 			                            .then((response) => {
 
 			                                if(response.data.data.length){
@@ -515,6 +705,10 @@
 			                                	this.pageNow = 1;
 			                                }
 
+			                                // if(response.data.kelompok.length){
+			                                // 	this.kelompok = response.data.kelompok;
+			                                // }
+
 			                                $('#loading-popup').ezPopup('close');
 			                            })
 			                            .catch((e) => {
@@ -523,42 +717,34 @@
 				            },
 
 				            computed: {
-				            	totSum: function(){
+				            	detail: function(){
 				            		that = this;
-				            		var clock;
+				            		var clock = []; grandAktiva = grandPasiva = 0; $a = 0;
+				            		var level2Bucket = {}; level1Bucket = {OCF: 0, ICF: 0, FCF:0};
+				            		var bucket = {};
 
-				            		var kd = kk = bd = bk = md = mk = td = tk = 0;
+				            		$.each(this.dataPrint, function(idx1, level_2){
+				            			var level2 = 0;
 
-				                	$.each(this.dataSource, function(a, b){
-				                		
-				                		kd += parseFloat(b.kas_debet);
-				                		kk += parseFloat(b.kas_kredit);
+				            			$.each(level_2.akun, function(idx2, akun){
+				            				level2 += akun.saldo_akhir
+				            			})
 
-				                		bd += parseFloat(b.bank_debet);
-				                		bk += parseFloat(b.bank_kredit);
+				            			level2Bucket['_'+level_2.hld_id] = level2
 
-				                		md += parseFloat(b.memorial_debet);
-				                		mk += parseFloat(b.memorial_kredit);
+				            			level1Bucket[level_2.hld_cashflow] += level2;
 
-				                		td += (parseFloat(b.kas_debet) + parseFloat(b.bank_debet) + parseFloat(b.memorial_debet));
-				                		tk += (parseFloat(b.kas_kredit) + parseFloat(b.bank_kredit) + parseFloat(b.memorial_kredit));
+				            		})
 
-				                	})
+				            		bucket = {
+				            			level1 : level1Bucket,
+				            			level2 : level2Bucket,
+				            			// grandAktiva : grandAktiva,
+				            			// grandPasiva : grandPasiva
+				            		}
 
-				                	clock = {
-				                		totKasDebet 	: kd,
-				                		totKasKredit 	: kk,
-				                		totBankDebet 	: bd,
-				                		totBankKredit 	: bk,
-				                		totMemorialDebet : md,
-				                		totMemorialKredit : mk,
-				                		totDebet : td,
-				                		totKredit : tk
-				                	}
-
-				                	console.log(clock);
-
-				                	return clock;
+				                	// console.log(bucket);
+				                	return bucket;
 				            	}
 				            },
 
@@ -576,6 +762,22 @@
 				            		}
 
 				            		this.dataPrint = dump;
+				            		// console.log(this.dataPrint);
+				            	},
+
+				            	dataSource: function(){
+
+				            		that = this;
+				            		quickRasio = []; currentRasio = [];
+
+				            		$.each(this.dataSource[0].likuiditas, function(idex, alpha){
+				            			quickRasio.push(parseFloat(alpha.quickRasio));
+				            			currentRasio.push(parseFloat(alpha.currentRasio));
+				            		})
+
+				            		config.data.datasets[0].data = quickRasio;
+				            		config.data.datasets[1].data = currentRasio;
+									window.myLine.update();
 				            	}
 				            },
 
@@ -622,7 +824,7 @@
 			                            stack: false
 									});
 
-				                    $('#pdfIframe').attr('src', '{{route('laporan.keuangan.neraca_saldo.print.pdf')}}?'+that.url.searchParams)
+				                    $('#pdfIframe').attr('src', '{{route('analisa.keuangan.cashflow.print.pdf')}}?'+that.url.searchParams)
 
 				            	},
 
@@ -641,7 +843,7 @@
 			                            stack: false
 			                        });
 
-			                        $('#pdfIframe').attr('src', '{{route('laporan.keuangan.neraca_saldo.print.excel')}}?'+that.url.searchParams)
+			                        $('#pdfIframe').attr('src', '{{route('laporan.keuangan.arus_kas.print.excel')}}?'+that.url.searchParams)
 				            	},
 
 				            	print: function(evt){
@@ -659,9 +861,9 @@
 			                            stack: false
 			                        });
 
-				            		window.print();
+			                        window.print();
 
-				            		// $('#pdfIframe').attr('src', '{{route('laporan.keuangan.neraca_saldo.print')}}?'+that.url.searchParams)
+				            		// $('#pdfIframe').attr('src', '{{route('analisa.keuangan.cashflow.print')}}?'+that.url.searchParams)
 				            	},
 
 				            	humanizePrice: function(alpha){
@@ -695,9 +897,8 @@
 				                	return d;
 				                },
 
-				                d1Change: function(e){
-				                	$('#d2').val("");
-				                	$('#d2').datepicker("setStartDate", e);
+				                typeChange: function(e){
+				                	this.type = e;
 				                },
 
 				                akunChange:function(e){
@@ -732,17 +933,10 @@
 				                	return true;
 				                },
 
-				                getDK: function(index){
-				                	var data = this.dataPrint[index];
+				                getNamaKelompok: function(index){
+				                	var idx = this.kelompok.findIndex(alpha => alpha.ak_kelompok == index);
 
-				                	if(data.ak_saldo_awal < 0){
-				                		if(data.ak_posisi == "D")
-				                			return "K";
-				                		else
-				                			return "D";
-				                	}else{
-				                		return data.ak_posisi;
-				                	}
+				                	return this.kelompok[idx].ak_nama;
 				                },
 				            }
 			    		})
