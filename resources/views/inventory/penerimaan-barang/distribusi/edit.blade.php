@@ -235,6 +235,116 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			<!-- end row -->
 
 			<!-- Modal -->
+                <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+
+                                <h4 class="modal-title" id="myModalLabel">Detail</h4>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <div class="row">
+
+                                    <!-- Widget ID (each widget will need unique ID)-->
+                                    <div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+                                        <header>
+
+                                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+                                            <h2 id="title_detail"></h2>
+
+                                        </header>
+
+                                        <!-- widget div-->
+                                        <div>
+
+                                            <!-- widget content -->
+                                            <div class="widget-body no-padding">
+
+                                                <div class="table-responsive">
+
+                                                    <table class="table">
+
+                                                        <tbody>
+
+                                                        <tr>
+                                                            <td><strong>Nota</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_nota"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Dari Outlet</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_from"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Tujuan Outlet</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_destination"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Tanggal Distribusi</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_tgl"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Petugas</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_by"></td>
+                                                        </tr>
+
+                                                        </tbody>
+
+                                                    </table>
+
+                                                    <table class="table table-bordered" id="table_item">
+                                                        <thead>
+                                                        <tr class="text-center">
+                                                            <td>Item</td>
+                                                            <td>Qty</td>
+                                                            <td>Qty Diterima</td>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+
+                                            </div>
+                                            <!-- end widget content -->
+
+                                        </div>
+                                        <!-- end widget div -->
+
+                                    </div>
+                                    <!-- end widget -->
+                                </div>
+
+                            </div>
+
+                        </div><!-- /.modal-content -->
+
+                    </div><!-- /.modal-dialog -->
+
+                </div>
+
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
 				<div class="modal-dialog">
@@ -409,6 +519,48 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		    aktif.api().ajax.reload();
 		}
 
+        function detailTerima(id, item){
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Mengambil data...');
+
+            axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail-terima-barang/'+id+'/'+item).then(response => {
+
+                if (response.data.status == 'Access denied') {
+
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+
+                } else {
+                    var row = '';
+                    $('.tr').remove();
+                    $('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
+                    $('#dt_nota').text(response.data.data[0].nota);
+                    $('#dt_from').text(response.data.data[0].from);
+                    $('#dt_destination').text(response.data.data[0].destination);
+                    $('#dt_tgl').text(response.data.data[0].tanggal);
+                    $('#dt_by').text(response.data.data[0].by);
+                    response.data.data.forEach(function(element) {
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+' ('+element.dd_specificcode+')'+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        }
+                        $('#table_item tbody').append(row)
+                    });
+                    $('#overlay').fadeOut(200);
+                    $('#modalDetail').modal('show');
+
+                }
+
+            })
+        }
+
 		function terima(id, item){
             if ( $.fn.DataTable.isDataTable('#dt_code') ) {
                 $('#dt_code').DataTable().destroy();
@@ -420,7 +572,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			var row = '';
 			var btn = '';
 			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item).then(response => {
-                console.log(response);
+                // console.log(response);
 				if (response.data.status == 'Access denied') {
 
 					$('#overlay').fadeOut(200);
@@ -460,11 +612,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-<<<<<<< HEAD
-                                    '<div class="form-group" id="error">' +
-=======
                                     '<div id="error" class="form-group float-left">' +
->>>>>>> 04f044642eb18aa6fbacba3a8af7c7ada3b31049
                                         '<label class="col-md-4 control-label">Kode Spesifik</label>' +
                                         '<div class="col-md-8">' +
                                             '<div class="input-group">' +
@@ -566,6 +714,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					} else {
                         rows = null;
+                        btn = '';
+                        if ($("#simpan").length){
+                            $("#simpan").remove();
+                        }
 						row = '<div id="form_qty">'+
                                 '<fieldset>' +
                                     '<div class="form-group">' +
@@ -598,9 +750,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                 '</fieldset>' +
 								'</div>';
 
-						btn = '<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>\n' +
-                            '\t\t\t\t\t\t\t\tSimpan\n' +
-                            '\t\t\t\t\t\t\t</button>';
+						btn = '<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>' +
+                            'Simpan' +
+                            '</button>';
 
                         $(".terima").append(row);
                         $("#tmp_btn").append(btn);

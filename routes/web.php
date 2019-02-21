@@ -542,6 +542,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/distribusi/terima', 'inventory\ReceptionController@dataDistribusiTerima')->name('distribusi.terima');
     Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
     Route::get('/inventory/penerimaan/distribusi/detail-terima/{id}', 'inventory\ReceptionController@detailTerima');
+    Route::get('/inventory/penerimaan/distribusi/detail-terima-barang/{id}/{item}', 'inventory\ReceptionController@detailTerimaBarang');
     Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
     Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}/{item}', 'inventory\ReceptionController@getItemReceived');
     Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
@@ -681,7 +682,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/cari-kode', 'penjualan\ServicesController@cariKode');
     Route::get('/penjualan/service-barang/cari-nota', 'penjualan\ServicesController@cariNota');
     Route::get('/penjualan/service-barang/cari/member', 'penjualan\ServicesController@cariNotaMember');
-    Route::get('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
+    Route::post('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
     Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
     Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
     Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
