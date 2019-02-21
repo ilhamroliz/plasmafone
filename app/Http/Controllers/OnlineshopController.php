@@ -38,7 +38,7 @@ class OnlineshopController extends Controller
             ->get();
         return Response::json(array(
             'success' => true,
-            'menuHp'   => $menuHp
+            'menuHp'   => $menu_hp
         ));
     }
 
@@ -52,7 +52,7 @@ class OnlineshopController extends Controller
             ->get();
         return Response::json(array(
             'success' => true,
-            'menuAcces'   => $menuAcces
+            'menuAcces'   => $menu_acces
         ));
     }
 
