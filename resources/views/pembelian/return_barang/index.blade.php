@@ -382,13 +382,13 @@
             $('#dt_wait').DataTable({
                 "processing": true,
                 "serverSide": true,
-                "ajax": "{{ url('/pembelian/purchase-order/get-proses') }}",
+                "ajax": "{{ url('/pembelian/purchase-return/get-proses') }}",
                 "fnCreatedRow": function (row, data, index) {
                     $('td', row).eq(0).html(index + 1);
                 },
                 "columns": [
                     {"data": "DT_RowIndex"},
-                    {"data": "p_nota"},
+                    {"data": "pr_nota"},
                     {"data": "s_company"},
                     {"data": "aksi"}
                 ],
