@@ -543,7 +543,7 @@
                         } else {
                             spcode = element.specificcode;
                         }
-                        url = baseUrl+'/penjualan/service-barang/service/'+element.idsales+'/'+element.iditem+'/'+spcode;
+                        url = baseUrl+'/penjualan/service-barang/service/'+element.idsales+'/'+element.iditem+'/'+spcode+'/'+element.flag;
                         if (element.code != ""){
                             row = '<tr class="tr"><td>'+element.code+' - '+element.nama_item+'</td><td align="center">'+element.qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
                         } else {
