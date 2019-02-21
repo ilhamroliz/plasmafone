@@ -38,7 +38,7 @@
 					        <ul class="sub-menu-m py-0 pl-3" style="display: block;">
 					        	@foreach($i_merk_hp as $merk)
 								<li>
-									<div class="custom-control custom-checkbox filter filter-hp">
+									<div class="custom-control custom-checkbox filter">
 									  <input type="checkbox" name="merk[]" class="custom-control-input merkClass" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
@@ -54,7 +54,7 @@
 					        <ul class="sub-menu-m py-0 pl-3" style="display: block;">
 					        	@foreach($i_merk_acces as $merk)
 								<li>
-									<div class="custom-control custom-checkbox filter filter-acces">
+									<div class="custom-control custom-checkbox filter">
 									  <input type="checkbox" name="merk[]" class="custom-control-input merkClass" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
@@ -162,28 +162,19 @@
 
 	<script type="text/javascript">
         $(document).ready(function () {
-            $('div.filter').find('input:checkbox').on('click', function () {
-                $('.results > .merk').hide();
-                $('div.filter').find('input:checked').each(function () {
-                    $('.results > .merk.' + $(this).attr('id')).show();
-                });
-                if(!$('div.filter').find('input:checked').length){
-                    $('.results > .merk').show();
-                }
-            });
-
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
 
             $("input[type='number']").inputSpinner();
-
         });
 
         function getFilter()
         {
-        	var inputs = document.getElementsByClassName( 'merkClass' ),
-            names  = [].map.call(inputs, function( input ) {
+        	// var inputs =  document.getElementsByClassName( 'merkClass' );
+
+        	var inputs = $('div.filter').find('input:checked');
+            names  = [].map.call(inputs, function( input) {
             	return input.value;
             });
 

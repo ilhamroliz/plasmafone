@@ -323,6 +323,101 @@
         </div>
         <!-- /.modal -->
 
+
+        <!-- Modal untuk Detil & Edit Konfirmasi Pembelian -->
+			<div class="modal fade" id="detilModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog" style="width: 60%">
+					<div class="modal-content">
+						<div class="modal-header">
+
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+
+							<h4 class="modal-title" id="myModalLabel">Detail Return Barang</h4>
+
+						</div>
+
+						<div class="modal-body">			
+							<div class="row">
+
+								<!-- Widget ID (each widget will need unique ID)-->
+								<div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+									<header>
+										<span class="widget-icon"> <i class="fa fa-table"></i> </span>
+										<h2 id="title_detail"></h2>
+									</header>
+
+									<!-- widget div-->
+									<div>
+
+										<!-- widget content -->
+										<div class="widget-body no-padding">
+											<div class="table-responsive">
+
+												<div class="col-md-12 padding-top-10 ">
+													<input type="hidden" id="dmId">
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>No. Nota</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmNoNota"></label>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Nama Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<div class="col-md-8">
+															<label id="dmNamaSupp"></label>
+														</div>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Alamat Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmAddrSupp"></label>
+													</div>
+
+													<div class="form-group">
+														<label class="col-md-3" style="float:left"><strong>Telp Supplier</strong></label>
+														<label class="col-md-1">:</label>
+														<label class="col-md-8" id="dmTelpSupp"></label>
+                                                    </div>                                                
+												</div>
+
+                                                <div>
+                                                    <table id="dt_detail" class="table table-striped table-bordered table-hover">
+                                                        <thead>		
+                                                            <tr>
+                                                                <th width="10%">No.</th>
+                                                                <th width="40%">Nama Item</th>
+                                                                <th width="20%">Kode Spesifikasi / QTY</th>
+                                                                <th width="30%">Status Return</th>
+                                                            </tr>
+                                                        </thead>
+    
+                                                        <tbody>
+                                                        </tbody>
+    
+                                                    </table>
+                                                </div>												
+											</div>
+										</div>
+										<!-- end widget content -->
+
+									</div>
+									<!-- end widget div -->
+
+								</div>
+								<!-- end widget -->
+							</div>			
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div>
+            <!-- /.modal -->
+
+
     </div>
     <!-- END MAIN CONTENT -->
 @endsection
@@ -330,7 +425,7 @@
 @section('extra_script')
 
     <script type="text/javascript">
-        var semua, purchase, complete;
+        var proses, purchase, complete;
         $(document).ready(function () {
 
             let selected = [];
@@ -379,7 +474,7 @@
                 }
             });
 
-            $('#dt_wait').DataTable({
+            proses = $('#dt_wait').DataTable({
                 "processing": true,
                 "serverSide": true,
                 "ajax": "{{ url('/pembelian/purchase-return/get-proses') }}",
@@ -414,6 +509,12 @@
                 "language": dataTableLanguage
             });
 
+            $('#dt_detail').DataTable({
+                "language": dataTableLanguage,
+                "pageLength": 5,
+                "lengthChange": false
+            });
+
             $("#namaSupp").autocomplete({
                 source: baseUrl + '/pembelian/konfirmasi-pembelian/auto-supp',
                 minLength: 1,
@@ -429,46 +530,49 @@
             $('#overlay').fadeIn(200);
             $('#load-status-text').text('Sedang Mengambil data...');
 
-            var status;
+            axios.get(baseUrl+'/pembelian/purchase-return/detail'+'/'+id).then(response => {
 
-            axios.get(baseUrl + '/inventory/penerimaan/supplier/detail?id=' + id).then(response => {
+                $('#title_detail').html('<strong>Detail Return Barang</strong>');
+                $('#dmNoNota').text(response.data.data.pr_nota);
+                $('#dmNamaSupp').text(response.data.data.s_company);
+                $('#dmAddrSupp').text(response.data.data.s_phone);
+                $('#dmTelpSupp').text(response.data.data.p_date);
 
-                if (response.data.status == 'Access denied') {
+                $('#dt_detail').DataTable().clear();
+                for (var i = 0; i < response.data.dataDT.length; i++) {
 
-                    $('#overlay').fadeOut(200);
-                    $.smallBox({
-                        title: "Gagal",
-                        content: "Upsss. Anda tidak diizinkan untuk mengakses data ini",
-                        color: "#A90329",
-                        timeout: 5000,
-                        icon: "fa fa-times bounce animated"
-                    });
-
-                } else {
-                    console.log(response.data);
-                    var row = '';
-                    $('.tr').remove();
-                    $('#title_detail').html('<strong>Detail Purchase Order</strong>');
-                    $('#dt_nota').text(response.data.data[0].p_nota);
-                    $('#dt_supp').text(response.data.data[0].s_company);
-                    $('#dt_telp').text(response.data.data[0].s_phone);
-                    $('#dt_tgl').text(response.data.data[0].p_date);
-
-                    $('#table_item').DataTable().clear();
-                    for (var i = 0; i < response.data.data.length; i++) {
-
-                        $('#table_item').DataTable().row.add([
-                            response.data.data[i].i_nama,
-                            response.data.data[i].pd_qty,
-                            response.data.data[i].pd_qtyreceived
-                        ]).draw();
-
+                    var status = '';
+                    if(response.data.dataDT[i].prd_action == 'BB'){
+                        status = 'Ganti Barang Baru';
+                    }else if(response.data.dataDT[i].prd_action == 'PT'){
+                        status = 'Potong Tagihan';
+                    }else if(response.data.dataDT[i].prd_action == 'GU'){
+                        status = 'Ganti Uang';
+                    }else if(response.data.dataDT[i].prd_action == 'PN'){
+                        status = 'Potong Nota Selanjutnya';
                     }
 
-                    $('#overlay').fadeOut(200);
-                    $('#myModal').modal('show');
+                    if(response.data.dataDT[i].i_specificcode == 'Y'){
+                        $('#dt_detail').DataTable().row.add([
+                            i+1,
+                            response.data.dataDT[i].i_nama,
+                            response.data.dataDT[i].prd_specificcode,
+                            status
+                        ]).draw();
+                    }else{
+                        $('#dt_detail').DataTable().row.add([
+                            i+1,
+                            response.data.dataDT[i].i_nama,
+                            response.data.dataDT[i].prd_qty,
+                            status
+                        ]).draw();
+                    }
+                    
 
                 }
+
+                $('#overlay').fadeOut(200);
+                $('#detilModal').modal('show');
             })
         }
 
@@ -481,7 +585,7 @@
         function hapus(id) {
             $.SmartMessageBox({
                 title: "Pesan!",
-                content: 'Apakah Anda yakin akan manghapus data Purchase Order ini ?',
+                content: 'Apakah Anda yakin akan manghapus data Return Barang ini ?',
                 buttons: '[Batal][Ya]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Ya") {
@@ -489,22 +593,22 @@
                     $('#overlay').fadeIn(200);
                     $('#load-status-text').text('Sedang Menghapus Data...');
 
-                    axios.get(baseUrl + '/pembelian/purchase-order/hapus' + '/' + id).then((response) => {
+                    axios.get(baseUrl + '/pembelian/purchase-return/hapus' + '/' + id).then((response) => {
                         if (response.data.status == 'sukses') {
                             $('#overlay').fadeOut(200);
                             $.smallBox({
                                 title: "Berhasil",
-                                content: 'Data Purchase Order ' + response.data.nota + ' Berhasil Dihapus !',
+                                content: 'Data Return Barang ' + response.data.nota + ' Berhasil Dihapus !',
                                 color: "#739E73",
                                 timeout: 4000,
                                 icon: "fa fa-check bounce animated"
                             });
-                            location.reload();
+                            proses.ajax.reload();
                         } else {
                             $('#overlay').fadeOut(200);
                             $.smallBox({
                                 title: "Gagal",
-                                content: "Maaf, Data Purchase Order " + response.data.nota + " Gagal Dihapus ",
+                                content: "Maaf, Data Return Barang " + response.data.nota + " Gagal Dihapus ",
                                 color: "#A90329",
                                 timeout: 4000,
                                 icon: "fa fa-times bounce animated"
