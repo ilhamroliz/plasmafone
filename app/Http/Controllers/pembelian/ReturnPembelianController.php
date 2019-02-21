@@ -50,17 +50,41 @@ class ReturnPembelianController extends Controller
 
     public function get_proses(){
 
-        $getData = DB::table('d_purchas_return')
+        $getData = DB::table('d_purchase_return')
             ->join('d_supplier', 's_id', '=', 'pr_supplier')
-            ->where('d_status', 'P')->get();
+            ->where('pr_status', 'P')->get();
 
-        DataTables::of($getData)
+        return DataTables::of($getData)
+            ->addIndexColumn()
             ->addColumn('aksi', function($getData){
-
+                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($getData->pr_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                $hapus = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' .  Crypt::encrypt($getData->pr_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                if(Plasma::checkAkses(5, 'delete') == true){
+                    return '<div class="text-center">'. $detil .'&nbsp;'. $hapus .'</div>';
+                }else{
+                    return '<div class="text-center">'. $detil .'</div>';
+                }
             })
             ->rawColumns(['aksi'])
             ->make(true);
 
+    }
+
+    public function detail($id){
+
+        $id = Crypt::decrypt($id);
+        $getData = DB::table('d_purchase_return')
+            ->join('d_supplier', 's_id', '=', 'pr_supplier')
+            ->where('pr_id', $id)->first();
+
+        $getDataDT = DB::table('d_purchase_returndt')
+            ->join('d_item', 'i_id', '=', 'prd_item')
+            ->where('prd_purchasereturn', $id)->get();
+
+        return json_encode([
+            'data' => $getData,
+            'dataDT' => $getDataDT
+        ]);
     }
 
     public function getDataPembelian(Request $request){
@@ -320,17 +344,27 @@ class ReturnPembelianController extends Controller
 
             DB::beginTransaction();
                 try {
+                    $id = Crypt::decrypt($id);
+                    $getNota = DB::table('d_purchase_return')->where('pr_id', $id)->select('pr_nota')->first();
+                    $nota = $getNota->pr_nota;
+                    $log = 'Menghapus Data Return Barang dengan Nota '. $nota;
+
+                    DB::table('d_purchase_returndt')->where('prd_purchasereturn', $id)->delete();
+                    DB::table('d_purchase_return')->where('pr_id', $id)->delete();
 
                     DB::commit();
+                    Plasma::logActivity($log);
                     return json_encode([
-                        'status' => 'sukses'
+                        'status' => 'sukses',
+                        'nota' => $nota
                     ]);
 
                 } catch (\Exception $e) {
 
                     DB::rollback();
                     return json_encode([
-                        'status' => 'gagal'
+                        'status' => 'gagal',
+                        'msg' => $e
                     ]);
 
                 }
