@@ -452,78 +452,79 @@ class ServicesController extends Controller
 
     public function cariNotaPenjualan(Request $request)
     {
-        $results = [];
-        if ($request->nota != "") {
-            $checkNotaSales = DB::table('d_sales')
-                ->where('s_nota', $request->nota)
-                ->count();
-            $checkNotaReturn = DB::table('d_return_penjualan')
-                ->where('rp_notareturn', $request->nota)
-                ->count();
+        $dataN = DB::table('d_sales')
+            ->select('d_sales.s_id as id', 'd_sales.s_date as tanggal', 'd_sales.s_nota as nota', DB::raw('"sales" as flag'))
+            ->join('d_sales_dt', 'd_sales.s_id', 'd_sales_dt.sd_sales')
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
 
-            if ($checkNotaSales != 0) {
-                $data = DB::table('d_sales')
-                    ->join('d_sales_dt', 'd_sales.s_id', 'd_sales_dt.sd_sales')
-                    ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
-
-                if ($request->member != "") {
-                    $data->where('m_member.m_name', 'like', '%'.$request->member.'%');
-                } else if ($request->idmember != "") {
-                    $data->orWhere('d_sales.s_member', $request->idmember);
-                } else if ($request->kode != "") {
-                    $data->orWhere('d_sales_dt.sd_specificcode', $request->kode);
-                } else if ($request->nota != "") {
-                    $data->orWhere('d_sales.s_nota', $request->nota);
-                } else if ($request->tgl_awal != ""  && $request->tgl_akhir == "") {
-                    $data->orWhere('d_sales.s_date', Carbon::parse($request->tglAwal)->format('Y-m-d'));
-                } else if ($request->tgl_awal == "" && $request->tgl_akhir != "") {
-                    $data->orWhere('d_sales.s_date', Carbon::parse($request->tgl_akhir)->format('Y-m-d'));
-                } else if ($request->tgl_awal != "" && $request->tgl_akhir != "") {
-                    $data->whereBetween('d_sales.s_date', [Carbon::parse($request->tgl_awal)->format('Y-m-d'), Carbon::parse($request->tgl_akhir)->format('Y-m-d')]);
-                }
-                $data->groupBy('d_sales.s_nota');
-
-                foreach ($data->get() as $key => $dt) {
-                    $results[] = array(
-                        'tanggal' => Carbon::parse($dt->s_date)->format('d-m-Y'),
-                        'nota' => $dt->s_nota,
-                        'flag' => 'sales'
-                    );
-                }
-                return json_encode($results);
-            } else if ($checkNotaReturn != 0) {
-                //
-            } else {
-                $results = [];
-            }
+        if ($request->member != "") {
+            $dataN->where('m_member.m_name', 'like', '%'.$request->member.'%');
+        } else if ($request->idmember != "") {
+            $dataN->orWhere('d_sales.s_member', $request->idmember);
+        } else if ($request->kode != "") {
+            $dataN->orWhere('d_sales_dt.sd_specificcode', $request->kode);
+        } else if ($request->nota != "") {
+            $dataN->orWhere('d_sales.s_nota', $request->nota);
+        } else if ($request->tgl_awal != ""  && $request->tgl_akhir == "") {
+            $dataN->orWhere('d_sales.s_date', Carbon::parse($request->tglAwal)->format('Y-m-d'));
+        } else if ($request->tgl_awal == "" && $request->tgl_akhir != "") {
+            $dataN->orWhere('d_sales.s_date', Carbon::parse($request->tgl_akhir)->format('Y-m-d'));
+        } else if ($request->tgl_awal != "" && $request->tgl_akhir != "") {
+            $dataN->whereBetween('d_sales.s_date', [Carbon::parse($request->tgl_awal)->format('Y-m-d'), Carbon::parse($request->tgl_akhir)->format('Y-m-d')]);
         }
 
-//        return DataTables::of($data)
-//
-//            ->addColumn('tanggal', function ($data){
-//                return Carbon::parse($data->s_date)->format('d-m-Y');
-//            })
-//
-//            ->addColumn('aksi', function ($data) {
-//
-//                if (Access::checkAkses(20, 'update') == false) {
-//
-//                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-//
-//                } else {
-//
-//                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Service Barang" onclick="servicePenjualan(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button></div>';
-//
-//                }
-//
-//            })
-//
-//            ->rawColumns(['aksi'])
-//
-//            ->make(true);
+        $dataY = DB::table('d_return_penjualan')
+            ->select('d_return_penjualan.rp_id as id', 'd_return_penjualan.rp_date as tanggal', 'd_return_penjualan.rp_notareturn as nota', DB::raw('"return" as flag'))
+            ->leftjoin('d_return_penjualanganti', 'd_return_penjualan.rp_id', 'd_return_penjualanganti.rpg_return')
+            ->join('d_sales', 'd_return_penjualan.rp_notapenjualan', '=', 'd_sales.s_nota')
+            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
+
+        if ($request->member != "") {
+            $dataY->where('m_member.m_name', 'like', '%'.$request->member.'%');
+        } else if ($request->idmember != "") {
+            $dataY->orWhere('d_sales.s_member', $request->idmember);
+        } else if ($request->kode != "") {
+            $dataY->orWhere('d_return_penjualanganti.rpg_specificcode', $request->kode);
+        } else if ($request->nota != "") {
+            $dataY->orWhere('d_return_penjualan.rp_notareturn', $request->nota);
+        } else if ($request->tgl_awal != ""  && $request->tgl_akhir == "") {
+            $dataY->orWhere('d_return_penjualan.rp_date', Carbon::parse($request->tglAwal)->format('Y-m-d'));
+        } else if ($request->tgl_awal == "" && $request->tgl_akhir != "") {
+            $dataY->orWhere('d_return_penjualan.rp_date', Carbon::parse($request->tgl_akhir)->format('Y-m-d'));
+        } else if ($request->tgl_awal != "" && $request->tgl_akhir != "") {
+            $dataY->whereBetween('d_return_penjualan.rp_date', [Carbon::parse($request->tgl_awal)->format('Y-m-d'), Carbon::parse($request->tgl_akhir)->format('Y-m-d')]);
+        }
+
+        $dataY->groupBy('d_return_penjualan.rp_notareturn');
+
+        $data = $dataN->union($dataY)->get();
+
+        return DataTables::of($data)
+
+            ->addColumn('tanggal', function ($data){
+                return Carbon::parse($data->tanggal)->format('d-m-Y');
+            })
+
+            ->addColumn('aksi', function ($data) {
+
+                if (Access::checkAkses(20, 'update') == false) {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\', \'' . $data->flag . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+
+                } else {
+
+                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->id) . '\', \'' . $data->flag . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Service Barang" onclick="servicePenjualan(\'' . Crypt::encrypt($data->id) . '\', \'' . $data->flag . '\')"><i class="glyphicon glyphicon-wrench"></i></button></div>';
+
+                }
+
+            })
+
+            ->rawColumns(['aksi'])
+
+            ->make(true);
     }
 
-    public function cariNotaDetail($id = null)
+    public function cariNotaDetail($id = null, $flag = null)
     {
         if (Access::checkAkses(20, 'read') == false) {
             return json_encode(array('status' => 'Access denied'));
