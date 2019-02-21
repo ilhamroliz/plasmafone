@@ -478,7 +478,6 @@
                     $('#title_detail').html('<strong>Detail Penjualan</strong>');
                     $('#dt_tanggal').text(response.data[0].tanggal);
                     $('#dt_nota').text(response.data[0].nota);
-                    $('#dt_total').text(response.data[0].s_total_net);
                     $('#dt_salesman').text(response.data[0].salesman);
                     $('#dt_member').text(response.data[0].m_name);
                     $('#dt_telp').text(response.data[0].m_telp);
@@ -531,7 +530,6 @@
                     $('#title_detail').html('<strong>Detail Penjualan</strong>');
                     $('#dt_tanggal').text(response.data[0].tanggal);
                     $('#dt_nota').text(response.data[0].nota);
-                    $('#dt_total').text(response.data[0].s_total_net);
                     $('#dt_salesman').text(response.data[0].salesman);
                     $('#dt_member').text(response.data[0].m_name);
                     $('#dt_telp').text(response.data[0].m_telp);
