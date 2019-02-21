@@ -542,6 +542,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/distribusi/terima', 'inventory\ReceptionController@dataDistribusiTerima')->name('distribusi.terima');
     Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
     Route::get('/inventory/penerimaan/distribusi/detail-terima/{id}', 'inventory\ReceptionController@detailTerima');
+    Route::get('/inventory/penerimaan/distribusi/detail-terima-barang/{id}/{item}', 'inventory\ReceptionController@detailTerimaBarang');
     Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
     Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}/{item}', 'inventory\ReceptionController@getItemReceived');
     Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
