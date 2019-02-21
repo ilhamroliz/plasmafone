@@ -572,7 +572,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			var row = '';
 			var btn = '';
 			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item).then(response => {
-                console.log(response);
+                // console.log(response);
 				if (response.data.status == 'Access denied') {
 
 					$('#overlay').fadeOut(200);
@@ -714,6 +714,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					} else {
                         rows = null;
+                        btn = '';
 						row = '<div id="form_qty">'+
                                 '<fieldset>' +
                                     '<div class="form-group">' +
