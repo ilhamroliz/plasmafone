@@ -682,8 +682,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/cari-kode', 'penjualan\ServicesController@cariKode');
     Route::get('/penjualan/service-barang/cari-nota', 'penjualan\ServicesController@cariNota');
     Route::get('/penjualan/service-barang/cari/member', 'penjualan\ServicesController@cariNotaMember');
-    Route::post('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
-    Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
+    Route::get('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
+    Route::get('/penjualan/service-barang/cari/detail/{id}/{flag}', 'penjualan\ServicesController@cariNotaDetail');
     Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
     Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
     Route::get('/penjualan/service-barang/struk/{id}', 'penjualan\ServicesController@struk');
