@@ -715,6 +715,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					} else {
                         rows = null;
                         btn = '';
+                        if ($("#simpan").length){
+                            $("#simpan").remove();
+                        }
 						row = '<div id="form_qty">'+
                                 '<fieldset>' +
                                     '<div class="form-group">' +
