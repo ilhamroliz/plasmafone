@@ -137,9 +137,10 @@ class OnlineshopController extends Controller
         return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
     }
 
-    public function filter_product($merk)
+    public function filter_product(Request $request)
     {
-        dd($merk);
+
+        $merk = $request->data;
 
         $menu_hp = DB::table('d_item')
             ->select('i_merk')
@@ -176,6 +177,52 @@ class OnlineshopController extends Controller
             ->whereIn('i_merk', $merk)
             ->inRandomOrder()
             ->paginate(8);
+        $custom = $merk;
+        return view('onlineshop.halaman.semua_produk', compact('custom', 'menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
+    }
+
+    public function searching(Request $request)
+    {
+        $merk = json_decode($request->data);
+        $data = ['data' => $merk];
+        return \Redirect::route('filter_product', $data);
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
+        $i_merk_hp = DB::table('d_stock')
+            ->selectRaw('distinct i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+
+        $i_merk_acces = DB::table('d_stock')
+            ->selectRaw('distinct i_merk')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+
+        $products = DB::table('d_stock')
+            ->select('s_id', 'i_id', 's_item', 'i_nama', 'i_merk','i_img', 'i_price', 'i_kelompok')
+            ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
+            ->where('s_qty', '!=', 0)
+            ->whereIn('i_merk', $merk)
+            ->inRandomOrder()
+            ->paginate(8);
+
+        $products->withPath('filter/' . json_encode($merk));
 
         return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
     }
