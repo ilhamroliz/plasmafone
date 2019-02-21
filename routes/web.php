@@ -1595,6 +1595,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('onlineshop')->group(function () {
         Route::get('/', 'OnlineshopController@index')->name('frontend');
         Route::get('/products', 'OnlineshopController@product_all')->name('product_all');
+        Route::get('/products/filter/{merk}', 'OnlineshopController@filter_product')->name('filter_product');
         Route::get('/products/filter', 'OnlineshopController@filter_product')->name('filter_product');
         Route::get('/handphone', 'OnlineshopController@product_hp')->name('product_hp');
         Route::get('/accesories', 'OnlineshopController@product_acces')->name('product_acces');
