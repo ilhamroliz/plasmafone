@@ -460,11 +460,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-<<<<<<< HEAD
-                                    '<div class="form-group" id="error">' +
-=======
                                     '<div id="error" class="form-group float-left">' +
->>>>>>> 04f044642eb18aa6fbacba3a8af7c7ada3b31049
                                         '<label class="col-md-4 control-label">Kode Spesifik</label>' +
                                         '<div class="col-md-8">' +
                                             '<div class="input-group">' +
@@ -598,9 +594,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                 '</fieldset>' +
 								'</div>';
 
-						btn = '<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>\n' +
-                            '\t\t\t\t\t\t\t\tSimpan\n' +
-                            '\t\t\t\t\t\t\t</button>';
+						btn = '<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>' +
+                            'Simpan' +
+                            '</button>';
 
                         $(".terima").append(row);
                         $("#tmp_btn").append(btn);

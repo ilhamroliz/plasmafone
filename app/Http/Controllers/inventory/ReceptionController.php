@@ -975,7 +975,7 @@ class ReceptionController extends Controller
                     if ($data->sum_qty == $data->sum_qty_received) {
                         return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
                     } else {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Terima</button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-warning" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>&nbsp;<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima" onclick="detailTerima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-list"></i>&nbsp;Detail</button></div>';
                     }
 
                 }

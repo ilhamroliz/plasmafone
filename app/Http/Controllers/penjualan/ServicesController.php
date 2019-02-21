@@ -452,51 +452,75 @@ class ServicesController extends Controller
 
     public function cariNotaPenjualan(Request $request)
     {
-        $data = DB::table('d_sales')
-            ->join('d_sales_dt', 'd_sales.s_id', 'd_sales_dt.sd_sales')
-            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
+        $results = [];
+        if ($request->nota != "") {
+            $checkNotaSales = DB::table('d_sales')
+                ->where('s_nota', $request->nota)
+                ->count();
+            $checkNotaReturn = DB::table('d_return_penjualan')
+                ->where('rp_notareturn', $request->nota)
+                ->count();
 
-        if ($request->member != "") {
-            $data->where('m_member.m_name', 'like', '%'.$request->member.'%');
-        } else if ($request->idmember != "") {
-            $data->orWhere('d_sales.s_member', $request->idmember);
-        } else if ($request->kode != "") {
-            $data->orWhere('d_sales_dt.sd_specificcode', $request->kode);
-        } else if ($request->nota != "") {
-            $data->orWhere('d_sales.s_nota', $request->nota);
-        } else if ($request->tgl_awal != ""  && $request->tgl_akhir == "") {
-            $data->orWhere('d_sales.s_date', Carbon::parse($request->tglAwal)->format('Y-m-d'));
-        } else if ($request->tgl_awal == "" && $request->tgl_akhir != "") {
-            $data->orWhere('d_sales.s_date', Carbon::parse($request->tgl_akhir)->format('Y-m-d'));
-        } else if ($request->tgl_awal != "" && $request->tgl_akhir != "") {
-            $data->whereBetween('d_sales.s_date', [Carbon::parse($request->tgl_awal)->format('Y-m-d'), Carbon::parse($request->tgl_akhir)->format('Y-m-d')]);
+            if ($checkNotaSales != 0) {
+                $data = DB::table('d_sales')
+                    ->join('d_sales_dt', 'd_sales.s_id', 'd_sales_dt.sd_sales')
+                    ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id');
+
+                if ($request->member != "") {
+                    $data->where('m_member.m_name', 'like', '%'.$request->member.'%');
+                } else if ($request->idmember != "") {
+                    $data->orWhere('d_sales.s_member', $request->idmember);
+                } else if ($request->kode != "") {
+                    $data->orWhere('d_sales_dt.sd_specificcode', $request->kode);
+                } else if ($request->nota != "") {
+                    $data->orWhere('d_sales.s_nota', $request->nota);
+                } else if ($request->tgl_awal != ""  && $request->tgl_akhir == "") {
+                    $data->orWhere('d_sales.s_date', Carbon::parse($request->tglAwal)->format('Y-m-d'));
+                } else if ($request->tgl_awal == "" && $request->tgl_akhir != "") {
+                    $data->orWhere('d_sales.s_date', Carbon::parse($request->tgl_akhir)->format('Y-m-d'));
+                } else if ($request->tgl_awal != "" && $request->tgl_akhir != "") {
+                    $data->whereBetween('d_sales.s_date', [Carbon::parse($request->tgl_awal)->format('Y-m-d'), Carbon::parse($request->tgl_akhir)->format('Y-m-d')]);
+                }
+                $data->groupBy('d_sales.s_nota');
+
+                foreach ($data->get() as $key => $dt) {
+                    $results[] = array(
+                        'tanggal' => Carbon::parse($dt->s_date)->format('d-m-Y'),
+                        'nota' => $dt->s_nota,
+                        'flag' => 'sales'
+                    );
+                }
+                return json_encode($results);
+            } else if ($checkNotaReturn != 0) {
+                //
+            } else {
+                $results = [];
+            }
         }
 
-        $data->groupBy('d_sales.s_nota');
-
-        return DataTables::of($data)
-
-            ->addColumn('tanggal', function ($data){
-                return Carbon::parse($data->s_date)->format('d-m-Y');
-            })
-
-            ->addColumn('aksi', function ($data) {
-
-                if (Access::checkAkses(20, 'update') == false) {
-
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
-
-                } else {
-
-                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Service Barang" onclick="servicePenjualan(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button></div>';
-
-                }
-
-            })
-
-            ->rawColumns(['aksi'])
-
-            ->make(true);
+//        return DataTables::of($data)
+//
+//            ->addColumn('tanggal', function ($data){
+//                return Carbon::parse($data->s_date)->format('d-m-Y');
+//            })
+//
+//            ->addColumn('aksi', function ($data) {
+//
+//                if (Access::checkAkses(20, 'update') == false) {
+//
+//                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button></div>';
+//
+//                } else {
+//
+//                    return '<div class="text-center"><button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>&nbsp;<button class="btn btn-xs btn-warning btn-circle" data-toggle="tooltip" data-placement="top" title="Service Barang" onclick="servicePenjualan(\'' . Crypt::encrypt($data->s_id) . '\')"><i class="glyphicon glyphicon-wrench"></i></button></div>';
+//
+//                }
+//
+//            })
+//
+//            ->rawColumns(['aksi'])
+//
+//            ->make(true);
     }
 
     public function cariNotaDetail($id = null)

@@ -72,7 +72,7 @@
                         </header>
                         <div role="content">
                             <div class="widget-body">
-                                <form class="form-horizontal" id="form_return">
+                                <form class="form-horizontal" id="form_return">{{csrf_field()}}
                                     <fieldset>
                                         <div class="row">
                                             <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -415,34 +415,63 @@
                 if ( $.fn.DataTable.isDataTable('#dt_active') ) {
                     $('#dt_active').DataTable().destroy();
                 }
+                $('#dt_active').dataTable();
 
-                $('#dt_active').dataTable({
-                    "processing": true,
-                    "serverSide": true,
-                    "ajax": "{{ url('/penjualan/service-barang/cari?') }}"+$("#form_return").serialize(),
-                    "columns":[
-                        {"data": "tanggal"},
-                        {"data": "s_nota"},
-                        {"data": "aksi"}
-                    ],
-                    "autoWidth" : true,
-                    "language" : dataTableLanguage,
-                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
-                    "preDrawCallback" : function() {
-                        // Initialize the responsive datatables helper once.
-                        if (!responsiveHelper_dt_basic) {
-                            responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
-                        }
-                    },
-                    "rowCallback" : function(nRow) {
-                        responsiveHelper_dt_basic.createExpandIcon(nRow);
-                    },
-                    "drawCallback" : function(oSettings) {
-                        responsiveHelper_dt_basic.respond();
-                        $('#overlay').fadeOut(200);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
+                $.ajax({
+                    url: baseUrl + '/penjualan/service-barang/cari',
+                    type: 'post',
+                    data: $("#form_return").serialize(),
+                    success: function(response){
+                        console.log(response);
+                    }, error:function(x, e) {
+                        if (x.status == 0) {
+                            alert('ups !! gagal menghubungi server, harap cek kembali koneksi internet anda');
+                        } else if (x.status == 404) {
+                            alert('ups !! Halaman yang diminta tidak dapat ditampilkan.');
+                        } else if (x.status == 500) {
+                            alert('ups !! Server sedang mengalami gangguan. harap coba lagi nanti');
+                        } else if (e == 'parsererror') {
+                            alert('Error.\nParsing JSON Request failed.');
+                        } else if (e == 'timeout'){
+                            alert('Request Time out. Harap coba lagi nanti');
+                        } else {
+                            alert('Unknow Error.\n' + x.responseText);
+                        }
+                    }
+                })
+
+                {{--$('#dt_active').dataTable({--}}
+                    {{--"processing": true,--}}
+                    {{--"serverSide": true,--}}
+                    {{--"ajax": "{{ url('/penjualan/service-barang/cari?') }}"+$("#form_return").serialize(),--}}
+                    {{--"columns":[--}}
+                        {{--{"data": "tanggal"},--}}
+                        {{--{"data": "s_nota"},--}}
+                        {{--{"data": "aksi"}--}}
+                    {{--],--}}
+                    {{--"autoWidth" : true,--}}
+                    {{--"language" : dataTableLanguage,--}}
+                    {{--"sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+--}}
+                        {{--"<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",--}}
+                    {{--"preDrawCallback" : function() {--}}
+                        {{--// Initialize the responsive datatables helper once.--}}
+                        {{--if (!responsiveHelper_dt_basic) {--}}
+                            {{--responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);--}}
+                        {{--}--}}
+                    {{--},--}}
+                    {{--"rowCallback" : function(nRow) {--}}
+                        {{--responsiveHelper_dt_basic.createExpandIcon(nRow);--}}
+                    {{--},--}}
+                    {{--"drawCallback" : function(oSettings) {--}}
+                        {{--responsiveHelper_dt_basic.respond();--}}
+                        {{--$('#overlay').fadeOut(200);--}}
+                    {{--}--}}
+                {{--});--}}
             }
         })
 
