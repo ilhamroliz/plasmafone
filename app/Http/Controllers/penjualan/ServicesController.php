@@ -773,10 +773,9 @@ class ServicesController extends Controller
                     return json_encode(['status' => 'not found']);
                 } else {
                     $sm = DB::table('d_stock_mutation')
-                        ->where('sm_stock', $stock_check->first()->s_id)
-                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_nota', $notasales)
+                        ->where('sm_detail', 'PENGURANGAN')
                         ->where('sm_specificcode', $kode)
-                        ->where('sm_reff', '!=', 'RUSAK')
                         ->first();
 
                     DB::table('d_stock_mutation')
@@ -898,10 +897,9 @@ class ServicesController extends Controller
                     return json_encode(['status' => 'not found']);
                 } else {
                     $sm = DB::table('d_stock_mutation')
-                        ->where('sm_stock', $stock_check->first()->s_id)
-                        ->where('sm_detail', 'PENAMBAHAN')
+                        ->where('sm_nota', $notasales)
+                        ->where('sm_detail', 'PENGURANGAN')
                         ->where('sm_specificcode', $kode)
-                        ->where('sm_reff', '!=', 'RUSAK')
                         ->first();
 
                     DB::table('d_stock_mutation')
@@ -926,7 +924,8 @@ class ServicesController extends Controller
                 }
             }catch (\Exception $e){
                 DB::rollback();
-                return json_encode(['status' => 'false']);
+                return $e;
+//                return json_encode(['status' => 'false']);
             }
         }
     }
@@ -1064,8 +1063,8 @@ class ServicesController extends Controller
                     $stk = DB::table('d_stock')
                         ->where('s_comp', $itemService->first()->si_comp)
                         ->where('s_position', $itemService->first()->si_comp)
-                        ->where('s_item', $itemService->first()->sid_item)
-                        ->where('s_status', 'On Destination')
+                        ->where('s_item', $itemService->first()->sid_item
+                        ->where('s_status', 'On Destination'))
                         ->where('s_condition', 'BROKEN');
 
                     if ($stk->count() == 0) {
