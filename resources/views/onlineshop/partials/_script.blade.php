@@ -94,6 +94,7 @@ $('.js-pscroll').each(function(){
 <script type="text/javascript" src="{{asset('template_asset/frontend/js/bootstrap-input-spinner.js')}}"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip();
 		getNotif();
 	});
 
