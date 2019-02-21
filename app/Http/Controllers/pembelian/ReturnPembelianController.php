@@ -117,6 +117,29 @@ class ReturnPembelianController extends Controller
         ]);
     }
 
+    public function getDataPenjualan(Request $request){
+        $getSales = DB::table('d_return_penjualan')
+            ->select(DB::raw('date_format(rp_date, "%d-%m-%Y") as date'), 'rp_notareturn', 'rp_id');
+
+            if($request->awal != '' && $request->awal != null){
+                $getSales->where(DB::raw('date_format(rp_date, "%d/%m/%Y")'), '>=', $request->awal);
+            }
+    
+            if($request->akhir != '' && $request->akhir != null){
+                $getSales->where(DB::raw('date_format(rp_date, "%d/%m/%Y")'), '<=', $request->akhir);
+            }
+    
+            if($request->nota != '' && $request->nota != null){
+                $getSales->where('rp_notareturn', $request->nota);
+            }
+    
+            $sales = $getSales->get();
+    
+            return json_encode([
+                'data' => $sales
+            ]);
+    }
+
     public function getDataId()
     {
         $cekNota = Carbon::now('Asia/Jakarta')->format('d/m/Y');
@@ -234,7 +257,6 @@ class ReturnPembelianController extends Controller
 
             if(isset($request->lanjut)){
 
-                // dd($request);
                 $arayPRList = array();
                 $count = 1;
                 for($i = 0; $i < count($request->qty); $i++){
@@ -298,6 +320,16 @@ class ReturnPembelianController extends Controller
                     ]);
 
                 }
+
+            }
+
+            if(isset($request->lanjut)){
+
+                $getDataDT = DB::table('d_return_pejualan')
+                    ->join('d_return_penjualandt', 'rpd_return', '=', 'rp_id')
+                    ->where('rp_id', $id)->get();
+
+                return view('pembelian.return_barang.tambah_submit_penjualan')->with(compact('getDataDT'));
 
             }
 

@@ -490,7 +490,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/pembelian/purchase-return/auto-nota', 'pembelian\ReturnPembelianController@auto_nota');
     Route::post('/pembelian/purchase-return/getDataPembelian', 'pembelian\ReturnPembelianController@getDataPembelian');
-    Route::post('/pembelian/purchase-return/getDataPenjualan`', 'pembelian\ReturnPembelianController@getDataPenjualan');
+    Route::post('/pembelian/purchase-return/getDataPenjualan', 'pembelian\ReturnPembelianController@getDataPenjualan');
     Route::get('/pembelian/purchase-return/get-proses', 'pembelian\ReturnPembelianController@get_proses');
 
 
