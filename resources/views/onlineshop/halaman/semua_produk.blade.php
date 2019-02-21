@@ -144,7 +144,11 @@
 					</div>
 					<nav>
 					    <ul class="pagination justify-content-center">
-					         {{$products->links()}}
+                            @if (isset($custom))
+                                {{$products->appends(['data' => $custom])->links("vendor/pagination/bootstrap-4")}}
+                            @else
+                                {{$products->links("vendor/pagination/bootstrap-4")}}
+                            @endif
 					    </ul>
 					</nav>
 				</div>
@@ -182,9 +186,8 @@
             names  = [].map.call(inputs, function( input ) {
             	return input.value;
             });
-            console.log(names);
 
-        	window.location = "{{ url('onlineshop/products/filter') }}/" + $('#formFilter').serialize();
+        	window.location = "{{ url('onlineshop/products/searching') }}?data=" + JSON.stringify(names);
         }
 
     </script>
