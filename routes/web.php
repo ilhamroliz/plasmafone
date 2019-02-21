@@ -684,8 +684,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/cari-kode', 'penjualan\ServicesController@cariKode');
     Route::get('/penjualan/service-barang/cari-nota', 'penjualan\ServicesController@cariNota');
     Route::get('/penjualan/service-barang/cari/member', 'penjualan\ServicesController@cariNotaMember');
-    Route::post('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
-    Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
+    Route::get('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
+    Route::get('/penjualan/service-barang/cari/detail/{id}/{flag}', 'penjualan\ServicesController@cariNotaDetail');
     Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
     Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
     Route::get('/penjualan/service-barang/struk/{id}', 'penjualan\ServicesController@struk');
@@ -1598,7 +1598,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('onlineshop')->group(function () {
         Route::get('/', 'OnlineshopController@index')->name('frontend');
         Route::get('/products', 'OnlineshopController@product_all')->name('product_all');
-        Route::get('/products/filter', 'OnlineshopController@filter_product')->name('filter_product');
+        Route::get('/products/searching', 'OnlineshopController@searching')->name('searching');
+        Route::get('/products/filters', 'OnlineshopController@filter_product')->name('filter_product');
         Route::get('/handphone', 'OnlineshopController@product_hp')->name('product_hp');
         Route::get('/accesories', 'OnlineshopController@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'OnlineshopController@product_detail')->name('product_detail');

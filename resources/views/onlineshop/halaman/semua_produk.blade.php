@@ -28,40 +28,41 @@
 				</div>
 			<div class="wrapper">
 				<nav id="sidebar">
+					<form id="formFilter">
 					<div class="sidebar-header">
 			            <h5>Kategori</h5>
 			        </div>
 			        <ul class="main-menu-m list-unstyled components" style="background-color: #fff;">
 			            <li class="mb-2">
 			            	<h6 data-toggle="collapse" aria-expanded="false" class="mtext-104 cl2">Handphone</h6>
-					        <ul class="sub-menu-m py-0 pl-3">
+					        <ul class="sub-menu-m py-0 pl-3" style="display: block;">
 					        	@foreach($i_merk_hp as $merk)
 								<li>
 									<div class="custom-control custom-checkbox filter filter-hp">
-									  <input type="checkbox" class="custom-control-input hp" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
+									  <input type="checkbox" name="merk[]" class="custom-control-input merkClass" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
 								</li>
 								@endforeach
 					        </ul>
 			                <span class="arrow-main-menu-m p-0" style="color: #333;">
-			                    <i class="fa fa-angle-right" aria-hidden="true" style="line-height: 25px;"></i>
+			                    <i class="fa fa-angle-down" aria-hidden="true" style="line-height: 25px;"></i>
 			                </span>
 					    </li>
 			            <li>
 			            	<h6 data-toggle="collapse" aria-expanded="false" class="mtext-104 cl2">Aksesoris</h6>
-					        <ul class="sub-menu-m py-0 pl-3">
+					        <ul class="sub-menu-m py-0 pl-3" style="display: block;">
 					        	@foreach($i_merk_acces as $merk)
 								<li>
 									<div class="custom-control custom-checkbox filter filter-acces">
-									  <input type="checkbox" class="custom-control-input acces" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
+									  <input type="checkbox" name="merk[]" class="custom-control-input merkClass" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
 								</li>
 								@endforeach
 					        </ul>
 			                <span class="arrow-main-menu-m p-0" style="color: #333;">
-			                    <i class="fa fa-angle-right" aria-hidden="true" style="line-height: 25px;"></i>
+			                    <i class="fa fa-angle-down" aria-hidden="true" style="line-height: 25px;"></i>
 			                </span>
 					    </li>
 					</ul>
@@ -91,11 +92,12 @@
 			            <li>
 					        <ul>
 								<li>
-									<button type="button" id="getFilter" class="btn btn-sm btn-primary btn-block focus stext-105 bor1">Aktifkan Filter</button>
+									<button type="button" class="btn btn-sm btn-primary btn-block focus stext-105 bor1" onclick="getFilter()">Aktifkan Filter</button>
 								</li>
 					        </ul>
 					    </li>
 					</ul>
+					</form>
 				</nav>
 				<div id="content">
 					<div class="row results">
@@ -142,7 +144,11 @@
 					</div>
 					<nav>
 					    <ul class="pagination justify-content-center">
-					         {{$products->links()}}
+                            @if (isset($custom))
+                                {{$products->appends(['data' => $custom])->links("vendor/pagination/bootstrap-4")}}
+                            @else
+                                {{$products->links("vendor/pagination/bootstrap-4")}}
+                            @endif
 					    </ul>
 					</nav>
 				</div>
@@ -171,20 +177,18 @@
             });
 
             $("input[type='number']").inputSpinner();
+
         });
 
-        $('#getFilter').on('click', function(){
-        	var hp = $('.filter-hp').find('input:checked').val();
-        	var acces = $('.filter-acces').find('input:checked').val();
-        	$.ajax({
-        		url : "{{url('/onlineshop/products/filter')}}",
-        		type: "get",
-        		data:{
-        			handphone: hp,
-        			accesories: acces
-        		}
-        	});
-        })
+        function getFilter()
+        {
+        	var inputs = document.getElementsByClassName( 'merkClass' ),
+            names  = [].map.call(inputs, function( input ) {
+            	return input.value;
+            });
+
+        	window.location = "{{ url('onlineshop/products/searching') }}?data=" + JSON.stringify(names);
+        }
 
     </script>
 
