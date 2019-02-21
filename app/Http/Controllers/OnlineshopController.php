@@ -28,6 +28,34 @@ class OnlineshopController extends Controller
         ));
     }
 
+    public function menuHp(Request $request)
+    {
+        $menu_hp = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'HANDPHONE')
+            ->orderBy('i_merk')
+            ->get();
+        return Response::json(array(
+            'success' => true,
+            'menuHp'   => $menuHp
+        ));
+    }
+
+    public function menuAcces(Request $request)
+    {
+        $menu_acces = DB::table('d_item')
+            ->select('i_merk')
+            ->distinct('i_merk')
+            ->where('i_kelompok', '=', 'ACCESORIES')
+            ->orderBy('i_merk')
+            ->get();
+        return Response::json(array(
+            'success' => true,
+            'menuAcces'   => $menuAcces
+        ));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -99,10 +127,11 @@ class OnlineshopController extends Controller
             ->get();
 
         $products = DB::table('d_stock')
-            ->select('s_id', 'i_id', 's_item', 'i_nama', 'i_merk','i_img', 'i_price', 'i_kelompok')
+            ->select('s_id', DB::raw('sum(s_qty) as s_qty') ,'i_id', 's_item', 'i_nama', 'i_merk','i_img', 'i_price', 'i_kelompok')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->where('s_qty', '!=', 0)
-            ->inRandomOrder()
+            ->where('s_status', '=', 'On Destination')
+            ->groupBy('s_item')
             ->paginate(8);
 
         return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
@@ -110,8 +139,8 @@ class OnlineshopController extends Controller
 
     public function filter_product(Request $request)
     {
-        $hp = $request->input('handphone');
-        $acces = $request->input('accesories');
+
+        $merk = $request->data;
 
         $menu_hp = DB::table('d_item')
             ->select('i_merk')
@@ -145,11 +174,18 @@ class OnlineshopController extends Controller
             ->select('s_id', 'i_id', 's_item', 'i_nama', 'i_merk','i_img', 'i_price', 'i_kelompok')
             ->join('d_item', 'd_stock.s_item', '=', 'd_item.i_id')
             ->where('s_qty', '!=', 0)
-            ->where('i_merk', '=', $hp)
+            ->whereIn('i_merk', $merk)
             ->inRandomOrder()
             ->paginate(8);
+        $custom = $merk;
+        return view('onlineshop.halaman.semua_produk', compact('custom', 'menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
+    }
 
-        return view('onlineshop.halaman.semua_produk', compact('menu_hp', 'menu_acces', 'i_merk_hp', 'i_merk_acces', 'products'));
+    public function searching(Request $request)
+    {
+        $merk = json_decode($request->data);
+        $data = ['data' => $merk];
+        return \Redirect::route('filter_product', $data);
     }
 
 

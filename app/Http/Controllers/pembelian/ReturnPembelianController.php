@@ -48,6 +48,21 @@ class ReturnPembelianController extends Controller
         return Response::json($hasilsupp);
     }
 
+    public function get_proses(){
+
+        $getData = DB::table('d_purchas_return')
+            ->join('d_supplier', 's_id', '=', 'pr_supplier')
+            ->where('d_status', 'P')->get();
+
+        DataTables::of($getData)
+            ->addColumn('aksi', function($getData){
+
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+
+    }
+
     public function getDataPembelian(Request $request){
 
         // dd($request);

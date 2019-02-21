@@ -491,6 +491,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/pembelian/purchase-return/auto-nota', 'pembelian\ReturnPembelianController@auto_nota');
     Route::post('/pembelian/purchase-return/getDataPembelian', 'pembelian\ReturnPembelianController@getDataPembelian');
     Route::post('/pembelian/purchase-return/getDataPenjualan`', 'pembelian\ReturnPembelianController@getDataPenjualan');
+    Route::get('/pembelian/purchase-return/get-proses', 'pembelian\ReturnPembelianController@get_proses');
+
 
     Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-penjualan', 'pembelian\ReturnPembelianController@tambah_detil_penjualan');
     Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-pembelian', 'pembelian\ReturnPembelianController@tambah_detil_pembelian');
@@ -1596,7 +1598,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('onlineshop')->group(function () {
         Route::get('/', 'OnlineshopController@index')->name('frontend');
         Route::get('/products', 'OnlineshopController@product_all')->name('product_all');
-        Route::get('/products/filter', 'OnlineshopController@filter_product')->name('filter_product');
+        Route::get('/products/searching', 'OnlineshopController@searching')->name('searching');
+        Route::get('/products/filters', 'OnlineshopController@filter_product')->name('filter_product');
         Route::get('/handphone', 'OnlineshopController@product_hp')->name('product_hp');
         Route::get('/accesories', 'OnlineshopController@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'OnlineshopController@product_detail')->name('product_detail');

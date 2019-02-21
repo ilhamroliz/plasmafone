@@ -536,35 +536,72 @@ class ServicesController extends Controller
             return json_encode(array('status' => 'Not Found'));
         }
 
-        $regular = DB::table('d_sales')
-            ->select('d_sales.*', 'd_sales_dt.*', DB::raw('FORMAT(d_sales_dt.sd_total_net, 0, "de_DE") as total_net'),
-                DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item',
-                'm_member.m_name', 'm_member.m_telp', 'm_member.m_address', 'd_item.i_code')
-            ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
-            ->join('d_mem', 'd_sales.s_salesman', '=', 'd_mem.m_id')
-            ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
-            ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
-            ->where('d_sales.s_id', $id)->get();
+        if ($flag == "sales") {
+            $regular = DB::table('d_sales')
+                ->select('d_sales.*', 'd_sales_dt.*', DB::raw('FORMAT(d_sales_dt.sd_total_net, 0, "de_DE") as total_net'),
+                    DB::raw('DATE_FORMAT(d_sales.s_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item',
+                    'm_member.m_name', 'm_member.m_telp', 'm_member.m_address', 'd_item.i_code')
+                ->join('d_sales_dt', 'd_sales.s_id', '=', 'd_sales_dt.sd_sales')
+                ->join('d_mem', 'd_sales.s_salesman', '=', 'd_mem.m_id')
+                ->join('d_item', 'd_sales_dt.sd_item', '=', 'd_item.i_id')
+                ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+                ->where('d_sales.s_id', $id)->get();
 
-        $row = [];
-        foreach ($regular as $key => $penjualan) {
-            $row[] = array(
-                'tanggal' => $penjualan->tanggal,
-                'nota' => $penjualan->s_nota,
-                's_total_net' => $penjualan->s_total_net,
-                'salesman' => $penjualan->salesman,
-                'm_name' => $penjualan->m_name,
-                'm_telp' => $penjualan->m_telp,
-                'm_address' => $penjualan->m_address,
-                'idsales' => Crypt::encrypt($penjualan->sd_sales),
-                'iditem' => Crypt::encrypt($penjualan->sd_item),
-                'code' => $penjualan->i_code,
-                'specificcode' => $penjualan->sd_specificcode,
-                'nama_item' => $penjualan->nama_item,
-                'qty' => $penjualan->sd_qty,
-                'total_net' => $penjualan->total_net
-            );
+            $row = [];
+            foreach ($regular as $key => $penjualan) {
+                $row[] = array(
+                    'tanggal' => $penjualan->tanggal,
+                    'nota' => $penjualan->s_nota,
+                    'salesman' => $penjualan->salesman,
+                    'm_name' => $penjualan->m_name,
+                    'm_telp' => $penjualan->m_telp,
+                    'm_address' => $penjualan->m_address,
+                    'idsales' => Crypt::encrypt($penjualan->sd_sales),
+                    'iditem' => Crypt::encrypt($penjualan->sd_item),
+                    'code' => $penjualan->i_code,
+                    'specificcode' => $penjualan->sd_specificcode,
+                    'nama_item' => $penjualan->nama_item,
+                    'qty' => $penjualan->sd_qty,
+                    'total_net' => $penjualan->total_net
+                );
+            }
+        } else {
+            $regular = DB::table('d_return_penjualan')
+                ->select('d_return_penjualan.*', 'd_return_penjualanganti.*', DB::raw('FORMAT(d_stock_mutation.sm_sell, 0, "de_DE") as total_net'),
+                    DB::raw('DATE_FORMAT(d_return_penjualan.rp_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as salesman', 'd_item.i_nama as nama_item',
+                    'm_member.m_name', 'm_member.m_telp', 'm_member.m_address', 'd_item.i_code')
+                ->join('d_return_penjualanganti', 'd_return_penjualan.rp_id', '=', 'd_return_penjualanganti.rpg_return')
+                ->join('d_sales', 'd_return_penjualan.rp_notapenjualan', '=', 'd_sales.s_nota')
+                ->join('d_mem', 'd_sales.s_salesman', '=', 'd_mem.m_id')
+                ->join('d_item', 'd_return_penjualanganti.rpg_item', '=', 'd_item.i_id')
+                ->join('m_member', 'd_sales.s_member', '=', 'm_member.m_id')
+                ->join('d_stock_mutation', function ($q){
+                    $q->on('d_stock_mutation.sm_nota', '=', 'd_return_penjualan.rp_notareturn');
+                    $q->where('sm_detail', '=', 'PENGURANGAN');
+                })
+                ->where('d_return_penjualan.rp_id', $id)->get();
+            
+            $row = [];
+            foreach ($regular as $key => $penjualan) {
+                $row[] = array(
+                    'tanggal' => $penjualan->tanggal,
+                    'nota' => $penjualan->rp_notareturn,
+                    'salesman' => $penjualan->salesman,
+                    'm_name' => $penjualan->m_name,
+                    'm_telp' => $penjualan->m_telp,
+                    'm_address' => $penjualan->m_address,
+                    'idsales' => Crypt::encrypt($penjualan->rp_id),
+                    'iditem' => Crypt::encrypt($penjualan->rpg_item),
+                    'code' => $penjualan->i_code,
+                    'specificcode' => $penjualan->rpg_specificcode,
+                    'nama_item' => $penjualan->nama_item,
+                    'qty' => $penjualan->rpg_qty,
+                    'total_net' => $penjualan->total_net
+                );
+            }
         }
+
+
         return json_encode($row);
     }
 
