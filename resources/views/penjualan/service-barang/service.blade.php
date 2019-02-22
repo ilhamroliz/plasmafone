@@ -62,70 +62,140 @@
                         </header>
                         <div role="content">
                             <div class="widget-body">
-                                <form class="form-horizontal" id="form_service">
-                                    {{csrf_field()}}
-                                    <fieldset>
-                                        <div class="row">
-                                            <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                                                <input type="hidden" name="idsales" id="idsales" value="{{ Crypt::encrypt($data->sd_sales) }}">
-                                                <input type="hidden" name="iditem" id="iditem" value="{{ Crypt::encrypt($data->sd_item) }}">
-                                                <div class="form-group">
-                                                    <label class="col-md-3 control-label text-left">Nota</label>
-                                                    <div class="col-md-9">
-                                                        <div class="input-group input-group-md">
-                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
-                                                            <input class="form-control" id="nota" name="nota" readonly type="text"  style="text-transform: uppercase" value="{{$data->s_nota}}">
+                                @if ($data->flag == "sales")
+                                    <form class="form-horizontal" id="form_service">
+                                        {{csrf_field()}}
+                                        <fieldset>
+                                            <div class="row">
+                                                <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <input type="hidden" name="idsales" id="idsales" value="{{ Crypt::encrypt($data->sd_sales) }}">
+                                                    <input type="hidden" name="iditem" id="iditem" value="{{ Crypt::encrypt($data->sd_item) }}">
+                                                    <input type="hidden" name="flag" id="flag" value="{{$data->flag}}">
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Nota</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                                                                <input class="form-control" id="nota" name="nota" readonly type="text"  style="text-transform: uppercase" value="{{$data->s_nota}}">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-md-3 control-label text-left">Kode Spesifik</label>
-                                                    <div class="col-md-9">
-                                                        <div class="input-group input-group-md">
-                                                            <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
-                                                            <input class="form-control" id="kode" name="kode" readonly type="text"  style="text-transform: uppercase" value="{{$data->sd_specificcode}}">
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Kode Spesifik</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+                                                                <input class="form-control" id="kode" name="kode" readonly type="text"  style="text-transform: uppercase" value="{{$data->sd_specificcode}}">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-md-3 control-label text-left">Nama Barang</label>
-                                                    <div class="col-md-9">
-                                                        <div class="input-group input-group-md">
-                                                            <span class="input-group-addon"><i class="fa fa-cube"></i></span>
-                                                            <input class="form-control" id="nama_item" name="nama_item" readonly type="text"  style="text-transform: uppercase" value="@if($data->sd_specificcode != "") {{$data->i_nama}} ({{$data->sd_specificcode}}) @else {{$data->i_code}} - {{$data->i_nama}} @endif">
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Nama Barang</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="fa fa-cube"></i></span>
+                                                                <input class="form-control" id="nama_item" name="nama_item" readonly type="text"  style="text-transform: uppercase" value="@if($data->sd_specificcode != "") {{$data->i_nama}} ({{$data->sd_specificcode}}) @else {{$data->i_code}} - {{$data->i_nama}} @endif">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-md-3 control-label text-left">Kuantitas</label>
-                                                    <div class="col-md-9">
-                                                        <div class="input-group input-group-md">
-                                                            <span class="input-group-addon"><i class="fa fa-balance-scale"></i></span>
-                                                            <input class="form-control" id="qty" name="qty" @if($data->sd_specificcode != "") readonly @endif type="text"  style="text-transform: uppercase" value="{{$data->sd_qty}}">
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Kuantitas</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="fa fa-balance-scale"></i></span>
+                                                                <input class="form-control" id="qty" name="qty" @if($data->sd_specificcode != "") readonly @endif type="text"  style="text-transform: uppercase" value="{{$data->sd_qty}}">
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label class="col-md-3 control-label text-left">Keterangan</label>
-                                                    <div class="col-md-9">
-                                                        <textarea id="ket" name="ket" class="form-control" rows="4"></textarea>
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Keterangan</label>
+                                                        <div class="col-md-9">
+                                                            <textarea id="ket" name="ket" class="form-control" rows="4"></textarea>
+                                                        </div>
                                                     </div>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                        <div class="form-action">
+                                            <div class="row">
+                                                <div class="col-md-6" id="btn_position">
+                                                    <button class="btn btn-primary pull-right" id="btn_service" disabled><i class="fa fa-wrench"></i> Service</button>
                                                 </div>
-                                            </article>
-                                        </div>
-                                    </fieldset>
-                                    <div class="form-action">
-                                        <div class="row">
-                                            <div class="col-md-6" id="btn_position">
-                                                <button class="btn btn-primary pull-right" id="btn_service" disabled><i class="fa fa-wrench"></i> Service</button>
                                             </div>
                                         </div>
-                                    </div>
-                                </form>
+                                    </form>
+                                @else
+                                    <form class="form-horizontal" id="form_service">
+                                        {{csrf_field()}}
+                                        <fieldset>
+                                            <div class="row">
+                                                <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                                    <input type="hidden" name="idsales" id="idsales" value="{{ Crypt::encrypt($data->rpg_return) }}">
+                                                    <input type="hidden" name="iditem" id="iditem" value="{{ Crypt::encrypt($data->rpg_item) }}">
+                                                    <input type="hidden" name="flag" id="flag" value="{{$data->flag}}">
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Nota</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="glyphicon glyphicon-book"></i></span>
+                                                                <input class="form-control" id="nota" name="nota" readonly type="text"  style="text-transform: uppercase" value="{{$data->rp_notareturn}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Kode Spesifik</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
+                                                                <input class="form-control" id="kode" name="kode" readonly type="text"  style="text-transform: uppercase" value="{{$data->rpg_specificcode}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Nama Barang</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="fa fa-cube"></i></span>
+                                                                <input class="form-control" id="nama_item" name="nama_item" readonly type="text"  style="text-transform: uppercase" value="@if($data->rpg_specificcode != "") {{$data->i_nama}} ({{$data->rpg_specificcode}}) @else {{$data->i_code}} - {{$data->i_nama}} @endif">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Kuantitas</label>
+                                                        <div class="col-md-9">
+                                                            <div class="input-group input-group-md">
+                                                                <span class="input-group-addon"><i class="fa fa-balance-scale"></i></span>
+                                                                <input class="form-control" id="qty" name="qty" @if($data->rpg_specificcode != "") readonly @endif type="text"  style="text-transform: uppercase" value="{{$data->rpg_qty}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label class="col-md-3 control-label text-left">Keterangan</label>
+                                                        <div class="col-md-9">
+                                                            <textarea id="ket" name="ket" class="form-control" rows="4"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </article>
+                                            </div>
+                                        </fieldset>
+                                        <div class="form-action">
+                                            <div class="row">
+                                                <div class="col-md-6" id="btn_position">
+                                                    <button class="btn btn-primary pull-right" id="btn_service" disabled><i class="fa fa-wrench"></i> Service</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                @endif
+
                             </div>
                         </div>
                     </div>
@@ -141,6 +211,13 @@
 @section('extra_script')
     <script type="text/javascript">
         $(document).ready(function () {
+
+            var flag = '{{$data->flag}}';
+            if (flag == "sales") {
+                var qty_awal = '{{ $data->sd_qty }}';
+            } else if (flag == "return") {
+                var qty_awal = '{{ $data->rpg_qty }}';
+            }
 
             if ($("#ket").val() == "") {
                 $("#btn_service").attr('disabled', true);
@@ -159,7 +236,6 @@
 
             $("#qty").on("keyup", function (evt) {
                 evt.preventDefault();
-                var qty_awal = '{{ $data->sd_qty }}';
                 if ($(this).val() > qty_awal) {
                     $(this).val(qty_awal);
                 }

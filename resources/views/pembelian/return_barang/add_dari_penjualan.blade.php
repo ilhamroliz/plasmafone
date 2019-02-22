@@ -18,7 +18,7 @@
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
-		<li>Home</li><li>Pembelian</li><li>Return Pembelian</li>
+		<li>Home</li><li>Pembelian</li><li>Return dari Penjualan</li>
 	</ol>
 
 
@@ -35,7 +35,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-credit-card"></i>
-                    Pembelian <span><i class="fa fa-angle-double-right"></i> Return Pembelian </span>
+                    Pembelian <span><i class="fa fa-angle-double-right"></i> Return Barang </span>
                 </h1>
             </div>
 
@@ -79,17 +79,9 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" onblur="setNota()" onkeyup="setNota()" name="carinota" id="carinota" placeholder="Cari Nota Pembelian/DO">
+                                            <input type="text" class="form-control" onblur="setNota()" onkeyup="setNota()" name="carinota" id="carinota" placeholder="Cari Nota Return Penjualan">
                                         </div>
-                                        <div class="col-md-3">
-                                            <select class="select2" id="carisupplier" name="carisupplier">
-                                                <option value="kosong">Pilih Supplier</option>
-                                                @foreach($supplier as $supp)
-                                                    <option value="{{ $supp->s_id }}">{{ $supp->s_name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-1 pull-right" style="text-align: right">
+                                        <div class="col-md-1" style="text-align: right">
                                             <button type="button" class="btn btn-block btn-primary btn-sm icon-btn ml-2" onclick="search()">
                                                 <i class="fa fa-search"></i>
                                             </button>
@@ -102,7 +94,6 @@
                                                 <tr>
                                                     <th>Tanggal</th>
                                                     <th>Nota</th>
-                                                    <th>Supplier</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                                 </thead>
@@ -184,45 +175,31 @@
     function search() {
         var awal = $('#tgl_awal').val();
         var akhir = $('#tgl_akhir').val();
-        var nota = notaGlobal;
+        var nota = $('#carinota').val();
         var supplier = $('#carisupplier').val();
-        $("#table-nota").dataTable().fnDestroy();
-        table = $('#table-nota').dataTable({
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-                "url": baseUrl + '/pembelian/purchase-return/getData',
-                "type": "get",
-                "data": {
-                    'awal': awal,
-                    'akhir': akhir,
-                    'nota': nota,
-                    'supplier': supplier
-                }
-            },
-            "columns":[
-                {"data": "i_merk"},
-                {"data": "i_nama"},
-                {"data": "i_code"},
-                {"data": "harga"}
-            ],
-            "autoWidth" : true,
-            "language" : dataTableLanguage,
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "preDrawCallback" : function() {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_dt_basic) {
-                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#table-nota'), breakpointDefinition);
-                }
-            },
-            "rowCallback" : function(nRow) {
-                responsiveHelper_dt_basic.createExpandIcon(nRow);
-            },
-            "drawCallback" : function(oSettings) {
-                responsiveHelper_dt_basic.respond();
+
+        var data = 'awal=' + awal + '&akhir=' + akhir + '&nota=' + nota + '&supplier=' + supplier;
+
+        axios.post(baseUrl+'/pembelian/purchase-return/getDataPenjualan', data).then((response) => {
+
+            table.clear();
+            for(var i = 0; i < response.data.data.length; i++){
+                table.row.add([
+                    response.data.data[i].date,
+                    response.data.data[i].rp_notareturn,
+                    '<div class="text-center">'+
+                        '<a class="btn btn-success" onclick="toDetail('+response.data.data[i].p_id+')">'+
+                            '<i class="fa fa-plus">'+
+                        '</a>'+
+                    '</div>'
+                ]).draw();
             }
-        });
+
+        })
+    }
+
+    function toDetail(id){
+        window.location.href = baseUrl+'/pembelian/purchase-return/add-dari-penjualan?lanjut=yes&id='+id;
     }
 </script>
 

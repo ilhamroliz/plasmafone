@@ -490,7 +490,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/pembelian/purchase-return/auto-nota', 'pembelian\ReturnPembelianController@auto_nota');
     Route::post('/pembelian/purchase-return/getDataPembelian', 'pembelian\ReturnPembelianController@getDataPembelian');
-    Route::post('/pembelian/purchase-return/getDataPenjualan`', 'pembelian\ReturnPembelianController@getDataPenjualan');
+    Route::post('/pembelian/purchase-return/getDataPenjualan', 'pembelian\ReturnPembelianController@getDataPenjualan');
+    Route::get('/pembelian/purchase-return/get-proses', 'pembelian\ReturnPembelianController@get_proses');
+
 
     Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-penjualan', 'pembelian\ReturnPembelianController@tambah_detil_penjualan');
     Route::match(['get', 'post'],'/pembelian/purchase-return/add-detil-pembelian', 'pembelian\ReturnPembelianController@tambah_detil_pembelian');
@@ -508,8 +510,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('pembelian/refund', 'RefundController@index');
     Route::get('pembelian/refund/get-item', 'RefundController@getItemRefund');
     Route::get('pembelian/refund/tambah', 'RefundController@add');
-    Route::get('pembelian/refund/get-data', 'RefundController@getDataItem');
+    Route::post('pembelian/refund/get-data', 'RefundController@getDataItem');
     Route::get('pembelian/refund/get-supplier', 'RefundController@getSupplier');
+    Route::post('pembelian/refund/simpan', 'RefundController@save');
     //end Refund
 
 	// Pembelian end
@@ -541,12 +544,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/inventory/penerimaan/distribusi/terima', 'inventory\ReceptionController@dataDistribusiTerima')->name('distribusi.terima');
     Route::get('/inventory/penerimaan/distribusi/detail/{id}', 'inventory\ReceptionController@detail');
     Route::get('/inventory/penerimaan/distribusi/detail-terima/{id}', 'inventory\ReceptionController@detailTerima');
+    Route::get('/inventory/penerimaan/distribusi/detail-terima-barang/{id}/{item}', 'inventory\ReceptionController@detailTerimaBarang');
     Route::get('/inventory/penerimaan/distribusi/edit/{id}', 'inventory\ReceptionController@editDistribusi');
-    Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}', 'inventory\ReceptionController@getItemReceived');
+    Route::get('/inventory/penerimaan/distribusi/get-item-received/{id}/{item}', 'inventory\ReceptionController@getItemReceived');
     Route::get('/inventory/penerimaan/distribusi/get-item/{id}', 'inventory\ReceptionController@getItem');
     Route::get('/inventory/penerimaan/distribusi/item-receive/{id}/{item}', 'inventory\ReceptionController@itemReceive');
     Route::post('/inventory/penerimaan/distribusi/item-receive/add', 'inventory\ReceptionController@itemReceiveAdd');
-    Route::get('/inventory/penerimaan/distribusi/item-receive/check/{item}/{code}/{comp}/{dest}', 'inventory\ReceptionController@checkCode');
+    Route::get('/inventory/penerimaan/distribusi/item-receive/check/{iddistribusi}/{item}/{code}/{comp}/{dest}', 'inventory\ReceptionController@checkCode');
 	// End penerimaan barang distribusi
 
 	//=== OPNAME BARANG
@@ -681,8 +685,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/cari-nota', 'penjualan\ServicesController@cariNota');
     Route::get('/penjualan/service-barang/cari/member', 'penjualan\ServicesController@cariNotaMember');
     Route::get('/penjualan/service-barang/cari', 'penjualan\ServicesController@cariNotaPenjualan');
-    Route::get('/penjualan/service-barang/cari/detail/{id}', 'penjualan\ServicesController@cariNotaDetail');
-    Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}', 'penjualan\ServicesController@serviceBarang');
+    Route::get('/penjualan/service-barang/cari/detail/{id}/{flag}', 'penjualan\ServicesController@cariNotaDetail');
+    Route::get('/penjualan/service-barang/service/{idsales}/{iditem}/{spcode}/{flag}', 'penjualan\ServicesController@serviceBarang');
     Route::get('/penjualan/service-barang/send-service/{id}', 'penjualan\ServicesController@sendService');
     Route::get('/penjualan/service-barang/struk/{id}', 'penjualan\ServicesController@struk');
     Route::get('/penjualan/service-barang/tolak-barang/{id}', 'penjualan\ServicesController@serviceTolak');
@@ -690,6 +694,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/penjualan/service-barang/proses-perbaikan/{id}', 'penjualan\ServicesController@serviceProses');
     Route::get('/penjualan/service-barang/selesai-perbaikan/{id}', 'penjualan\ServicesController@serviceSelesai');
     Route::get('/penjualan/service-barang/terima-barang-pusat/{id}', 'penjualan\ServicesController@serviceTerimaPusat');
+    Route::get('/penjualan/service-barang/delete/{id}', 'penjualan\ServicesController@serviceDelete');
     // ####################################
     // End Service Barang
     // ####################################
@@ -1592,7 +1597,9 @@ Route::group(['middleware' => 'auth'], function () {
     // Frontend Onlineshop============================================================== //
     Route::prefix('onlineshop')->group(function () {
         Route::get('/', 'OnlineshopController@index')->name('frontend');
-        Route::get('/product-all', 'OnlineshopController@product_all')->name('product_all');
+        Route::get('/products', 'OnlineshopController@product_all')->name('product_all');
+        Route::get('/products/searching', 'OnlineshopController@searching')->name('searching');
+        Route::get('/products/filters', 'OnlineshopController@filter_product')->name('filter_product');
         Route::get('/handphone', 'OnlineshopController@product_hp')->name('product_hp');
         Route::get('/accesories', 'OnlineshopController@product_acces')->name('product_acces');
         Route::get('/product-detail/{id}', 'OnlineshopController@product_detail')->name('product_detail');

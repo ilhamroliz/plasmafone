@@ -72,7 +72,7 @@
                         </header>
                         <div role="content">
                             <div class="widget-body">
-                                <form class="form-horizontal" id="form_return">
+                                <form class="form-horizontal" id="form_return">{{csrf_field()}}
                                     <fieldset>
                                         <div class="row">
                                             <article class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -124,7 +124,7 @@
                                                     <div class="col-md-9">
                                                         <div class="input-group input-daterange" id="date-range">
                                                             <input type="text" class="form-control" id="tgl_awal" name="tgl_awal"  placeholder="Tanggal Awal">
-                                                            <span class="input-group-addon bg-custom text-white b-0">to</span>
+                                                            <span class="input-group-addon bg-custom text-white b-0">-</span>
                                                             <input type="text" class="form-control" id="tgl_akhir" name="tgl_akhir"  placeholder="Tanggal Akhir">
                                                         </div>
                                                     </div>
@@ -319,7 +319,25 @@
     <script type="text/javascript">
         var aktif;
         $(document).ready(function () {
-            aktif = $('#dt_active').dataTable();
+            aktif = $('#dt_active').dataTable({
+                "autoWidth" : true,
+                "language" : dataTableLanguage,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>"+"t"+
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6 pull-right'p>>",
+                "preDrawCallback" : function() {
+                    // Initialize the responsive datatables helper once.
+                    if (!responsiveHelper_dt_basic) {
+                        responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_active'), breakpointDefinition);
+                    }
+                },
+                "rowCallback" : function(nRow) {
+                    responsiveHelper_dt_basic.createExpandIcon(nRow);
+                },
+                "drawCallback" : function(oSettings) {
+                    responsiveHelper_dt_basic.respond();
+                    $('#overlay').fadeOut(200);
+                }
+            });
 
             var responsiveHelper_dt_basic = undefined;
 
@@ -404,7 +422,7 @@
                     "ajax": "{{ url('/penjualan/service-barang/cari?') }}"+$("#form_return").serialize(),
                     "columns":[
                         {"data": "tanggal"},
-                        {"data": "s_nota"},
+                        {"data": "nota"},
                         {"data": "aksi"}
                     ],
                     "autoWidth" : true,
@@ -428,11 +446,11 @@
             }
         })
 
-        function detail(id){
+        function detail(id, flag){
             $('#overlay').fadeIn(200);
             $('#load-status-text').text('Sedang Mengambil data...');
 
-            axios.get(baseUrl+'/penjualan/service-barang/cari/detail/'+id).then(response => {
+            axios.get(baseUrl+'/penjualan/service-barang/cari/detail/'+id+'/'+flag).then(response => {
 
                 if (response.data.status == 'Access denied') {
 
@@ -460,7 +478,6 @@
                     $('#title_detail').html('<strong>Detail Penjualan</strong>');
                     $('#dt_tanggal').text(response.data[0].tanggal);
                     $('#dt_nota').text(response.data[0].nota);
-                    $('#dt_total').text(response.data[0].s_total_net);
                     $('#dt_salesman').text(response.data[0].salesman);
                     $('#dt_member').text(response.data[0].m_name);
                     $('#dt_telp').text(response.data[0].m_telp);
@@ -481,11 +498,11 @@
             })
         }
 
-        function servicePenjualan(id) {
+        function servicePenjualan(id, flag) {
             $('#overlay').fadeIn(200);
             $('#load-status-text').text('Sedang Mengambil data...');
 
-            axios.get(baseUrl+'/penjualan/service-barang/cari/detail/'+id).then(response => {
+            axios.get(baseUrl+'/penjualan/service-barang/cari/detail/'+id+'/'+flag).then(response => {
 
                 if (response.data.status == 'Access denied') {
 
@@ -513,7 +530,6 @@
                     $('#title_detail').html('<strong>Detail Penjualan</strong>');
                     $('#dt_tanggal').text(response.data[0].tanggal);
                     $('#dt_nota').text(response.data[0].nota);
-                    $('#dt_total').text(response.data[0].s_total_net);
                     $('#dt_salesman').text(response.data[0].salesman);
                     $('#dt_member').text(response.data[0].m_name);
                     $('#dt_telp').text(response.data[0].m_telp);
@@ -527,7 +543,7 @@
                         } else {
                             spcode = element.specificcode;
                         }
-                        url = baseUrl+'/penjualan/service-barang/service/'+element.idsales+'/'+element.iditem+'/'+spcode;
+                        url = baseUrl+'/penjualan/service-barang/service/'+element.idsales+'/'+element.iditem+'/'+spcode+'/'+element.flag;
                         if (element.code != ""){
                             row = '<tr class="tr"><td>'+element.code+' - '+element.nama_item+'</td><td align="center">'+element.qty+'</td><td><p style="float: right">'+element.total_net+'</p></td><td><a href="'+url+'" class="btn btn-xs btn-primary">Pilih</a></td></tr>'
                         } else {

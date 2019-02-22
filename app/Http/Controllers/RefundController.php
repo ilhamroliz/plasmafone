@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB;
 use Response;
@@ -86,5 +87,69 @@ class RefundController extends Controller
             ->get();
 
         return Response::json($data);
+    }
+
+    public function save(Request $request)
+    {
+        if (!PlasmafoneController::checkAkses('6', 'insert')){
+            return Response::json([
+                'status' => 'gagal'
+            ]);
+        }
+        DB::beginTransaction();
+        try {
+            $supplier = $request->supplier;
+            $item = $request->item;
+            $hargaLama = str_replace('Rp. ', '', $request->hargalama);
+            $hargaLama = str_replace('.', '', $hargaLama);
+            $hargaBaru = str_replace('Rp. ', '', $request->hargabaru);
+            $hargaBaru = str_replace('.', '', $hargaBaru);
+            $qty = $request->qty;
+            $idStock = $request->id_stock;
+            $kode = $request->specificcode;
+            $hpp = $request->hargahpp;
+
+            $id = DB::table('d_refund')
+                ->max('r_id');
+            ++$id;
+            $nota = CodeGenerator::codePenambahanPoin('d_refund', 'r_nota', '8', '10', '3', 'RE');
+            DB::table('d_refund')
+                ->insert([
+                    'r_id' => $id,
+                    'r_nota' => $nota,
+                    'r_date' => Carbon::now('Asia/Jakarta')->format('Y-m-d'),
+                    'r_date_approve' => null,
+                    'r_supplier' => $supplier,
+                    'r_status' => 'P'
+                ]);
+
+            $detail = [];
+            for ($i = 0; $i < count($kode); $i++){
+                $detail[$i] = [
+                    'rd_refund' => $id,
+                    'rd_detailid' => $i + 1,
+                    'rd_item' => $item,
+                    'rd_qty' => 1,
+                    'rd_specificcode' => $kode[$i],
+                    'rd_old_hpp' => $hpp[$i],
+                    'rd_new_hpp' => $hargaBaru
+                ];
+            }
+
+            DB::table('d_refund_dt')
+                ->insert($detail);
+            PlasmafoneController::logActivity('Pengajuan Refund dengan nota ' . $nota);
+            DB::commit();
+            return Response::json([
+                'status' => 'sukses'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return Response::json([
+                'status' => 'gagal',
+                'data' => $e
+            ]);
+        }
     }
 }

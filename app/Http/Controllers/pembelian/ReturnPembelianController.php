@@ -48,6 +48,45 @@ class ReturnPembelianController extends Controller
         return Response::json($hasilsupp);
     }
 
+    public function get_proses(){
+
+        $getData = DB::table('d_purchase_return')
+            ->join('d_supplier', 's_id', '=', 'pr_supplier')
+            ->where('pr_status', 'P')->get();
+
+        return DataTables::of($getData)
+            ->addIndexColumn()
+            ->addColumn('aksi', function($getData){
+                $detil = '<button class="btn btn-xs btn-primary btn-circle view" data-toggle="tooltip" data-placement="top" title="Lihat Data" onclick="detail(\'' . Crypt::encrypt($getData->pr_id) . '\')"><i class="glyphicon glyphicon-list-alt"></i></button>';
+                $hapus = '<button class="btn btn-xs btn-danger btn-circle" data-toggle="tooltip" data-placement="top" title="Hapus Data" onclick="hapus(\'' .  Crypt::encrypt($getData->pr_id) . '\')"><i class="glyphicon glyphicon-trash"></i></button>';
+                if(Plasma::checkAkses(5, 'delete') == true){
+                    return '<div class="text-center">'. $detil .'&nbsp;'. $hapus .'</div>';
+                }else{
+                    return '<div class="text-center">'. $detil .'</div>';
+                }
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+
+    }
+
+    public function detail($id){
+
+        $id = Crypt::decrypt($id);
+        $getData = DB::table('d_purchase_return')
+            ->join('d_supplier', 's_id', '=', 'pr_supplier')
+            ->where('pr_id', $id)->first();
+
+        $getDataDT = DB::table('d_purchase_returndt')
+            ->join('d_item', 'i_id', '=', 'prd_item')
+            ->where('prd_purchasereturn', $id)->get();
+
+        return json_encode([
+            'data' => $getData,
+            'dataDT' => $getDataDT
+        ]);
+    }
+
     public function getDataPembelian(Request $request){
 
         // dd($request);
@@ -76,6 +115,29 @@ class ReturnPembelianController extends Controller
         return json_encode([
             'data' => $purchase
         ]);
+    }
+
+    public function getDataPenjualan(Request $request){
+        $getSales = DB::table('d_return_penjualan')
+            ->select(DB::raw('date_format(rp_date, "%d-%m-%Y") as date'), 'rp_notareturn', 'rp_id');
+
+            if($request->awal != '' && $request->awal != null){
+                $getSales->where(DB::raw('date_format(rp_date, "%d/%m/%Y")'), '>=', $request->awal);
+            }
+    
+            if($request->akhir != '' && $request->akhir != null){
+                $getSales->where(DB::raw('date_format(rp_date, "%d/%m/%Y")'), '<=', $request->akhir);
+            }
+    
+            if($request->nota != '' && $request->nota != null){
+                $getSales->where('rp_notareturn', $request->nota);
+            }
+    
+            $sales = $getSales->get();
+    
+            return json_encode([
+                'data' => $sales
+            ]);
     }
 
     public function getDataId()
@@ -117,7 +179,7 @@ class ReturnPembelianController extends Controller
                         $getMax = DB::table('d_purchase_return')->max('pr_id');
                         $idMaxPR = $getMax + 1;
                     }
-                    // dd(Carbon::now('Asia/Jakarta')->format('Y-m-d h:i:s'));
+
                     DB::table('d_purchase_return')->insert([
                         'pr_id' => $idMaxPR,
                         'pr_nota' => $this->getDataId(),
@@ -132,25 +194,27 @@ class ReturnPembelianController extends Controller
                     // Insert untuk PURCHASE_RETURN_DT
                     $arayPRD = array();
                     $count = 1;
-                    for($i = 0; $i < count($request->qty); $i++){
+                    for($i = 0; $i < count($request->kodeqty); $i++){
 
-                        $pecahItem = explode('==', $request->item[$i]);
-                        $index = $pecahItem[0];
-
-                        if(array_key_exists($index, $request->check)){
-                            $pecahCek = explode('==', $request->check[$index]);
-
-                            $aray = ([
-                                'prd_purchasereturn' => $idMaxPR,
-                                'prd_detailid' => $count,
-                                'prd_item' => $pecahItem[1],
-                                'prd_qty' => $request->qty[$index],
-                                'prd_specificcode' => $request->kode[$index]
-                            ]);
-                            array_push($arayPRD, $aray);
-                            $count +=1;
+                        $pecahKQ = explode('==', $request->kodeqty[$i]);
+                        if($pecahKQ[0] == 'Y'){
+                            $qty = 1;
+                            $sc = $pecahKQ[1];
+                        }else{
+                            $qty = $pecahKQ[1];
+                            $sc = null;
                         }
 
+                        $aray = ([
+                            'prd_purchasereturn' => $idMaxPR,
+                            'prd_detailid' => $count,
+                            'prd_item' => $request->idItem[$i],
+                            'prd_qty' => $qty,
+                            'prd_specificcode' => $sc,
+                            'prd_action' => $request->statusReturn[$i]
+                        ]);
+                        array_push($arayPRD, $aray);
+                        $count +=1;
                     }
                     DB::table('d_purchase_returndt')->insert($arayPRD);
                     // dd($arayTry);
@@ -186,14 +250,13 @@ class ReturnPembelianController extends Controller
                     ->get();
 
                 $getId = Crypt::encrypt($id);
-
+                
                 return view('pembelian.return_barang.add_pembelian_pilih')->with(compact('getPurchase', 'getDataDT', 'getId'));
 
             }
 
             if(isset($request->lanjut)){
 
-                // dd($request);
                 $arayPRList = array();
                 $count = 1;
                 for($i = 0; $i < count($request->qty); $i++){
@@ -210,7 +273,8 @@ class ReturnPembelianController extends Controller
                             'idItem' => $pecahItem[1],
                             'namaItem' => $nama->i_nama,
                             'qty' => $request->qty[$index],
-                            'specificcode' => $request->kode[$index]
+                            'specificcode' => $request->kode[$index],
+                            'detailid' => $pecahCek[1]
                         ]);
                         array_push($arayPRList, $aray);
                         $count +=1;
@@ -220,20 +284,12 @@ class ReturnPembelianController extends Controller
                 // dd($request->idP);
                 $idP = Crypt::decrypt($request->idP);
                 $id = $idP;
+                $idSupp = $request->idSupp;
                 $p_nota = $request->pNota;
                 $s_company = $request->namaSupp;
                 $s_phone = $request->telpSupp;
 
-                $purchase = ([
-                    'id' => $idP,
-                    'p_nota' => $request->pNota,
-                    's_company' => $request->namaSupp,
-                    's_phone' => $request->telpSupp
-                ]);
-
-                // dd($arayPRList);
-                return view('pembelian.return_barang.tambah_submit_pembelian')->with(compact('arayPRList', 'id', 'p_nota', 's_company', 's_phone'));
-
+                return view('pembelian.return_barang.tambah_submit_pembelian')->with(compact('arayPRList', 'id', 'p_nota', 's_company', 's_phone', 'idSupp'));
             }
 
             $supplier = DB::table('d_supplier')->where('s_isactive', 'Y')->select('s_id', 's_name')->get();
@@ -264,6 +320,16 @@ class ReturnPembelianController extends Controller
                     ]);
 
                 }
+
+            }
+
+            if(isset($request->lanjut)){
+
+                $getDataDT = DB::table('d_return_pejualan')
+                    ->join('d_return_penjualandt', 'rpd_return', '=', 'rp_id')
+                    ->where('rp_id', $id)->get();
+
+                return view('pembelian.return_barang.tambah_submit_penjualan')->with(compact('getDataDT'));
 
             }
 
@@ -310,17 +376,27 @@ class ReturnPembelianController extends Controller
 
             DB::beginTransaction();
                 try {
+                    $id = Crypt::decrypt($id);
+                    $getNota = DB::table('d_purchase_return')->where('pr_id', $id)->select('pr_nota')->first();
+                    $nota = $getNota->pr_nota;
+                    $log = 'Menghapus Data Return Barang dengan Nota '. $nota;
+
+                    DB::table('d_purchase_returndt')->where('prd_purchasereturn', $id)->delete();
+                    DB::table('d_purchase_return')->where('pr_id', $id)->delete();
 
                     DB::commit();
+                    Plasma::logActivity($log);
                     return json_encode([
-                        'status' => 'sukses'
+                        'status' => 'sukses',
+                        'nota' => $nota
                     ]);
 
                 } catch (\Exception $e) {
 
                     DB::rollback();
                     return json_encode([
-                        'status' => 'gagal'
+                        'status' => 'gagal',
+                        'msg' => $e
                     ]);
 
                 }

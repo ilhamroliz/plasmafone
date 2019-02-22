@@ -18,7 +18,7 @@
 
 	<!-- breadcrumb -->
 	<ol class="breadcrumb">
-		<li>Home</li><li>Pembelian</li><li>Return Pembelian</li>
+		<li>Home</li><li>Pembelian</li><li>Return dari Pembelian</li>
 	</ol>
 
 
@@ -35,7 +35,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                 <h1 class="page-title txt-color-blueDark">
                     <i class="fa-fw fa fa-credit-card"></i>
-                    Pembelian <span><i class="fa fa-angle-double-right"></i> Return Pembelian </span>
+                    Pembelian <span><i class="fa fa-angle-double-right"></i> Return Barang </span>
                 </h1>
             </div>
 

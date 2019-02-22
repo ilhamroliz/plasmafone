@@ -6,7 +6,7 @@
 
 @endsection
 
-<?php 
+<?php
 use App\Http\Controllers\PlasmafoneController as Access;
 ?>
 
@@ -72,7 +72,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 						<div class="alert alert-success alert-block">
 						<a class="close" data-dismiss="alert" href="#">×</a>
 						<h4 class="alert-heading">&nbsp;<i class="fa fa-thumbs-up"></i> &nbsp;Pemberitahuan Berhasil</h4>
-						{{ Session::get('flash_message_success') }} 
+						{{ Session::get('flash_message_success') }}
 					</div>
 				</div>
 			@elseif(Session::has('flash_message_error'))
@@ -96,17 +96,17 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         <header>
 
                                 <h2><strong>Distribusi</strong></h2>
-                            
+
                         </header>
 
                         <div>
-                            
+
                             <div class="widget-body">
 
                                 <form class="form-horizontal" method="post">
                                     {{ csrf_field() }}
 
-                                    <fieldset>  
+                                    <fieldset>
 
                                         <div class="row">
 
@@ -167,7 +167,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                                 </div>
 
                                             </article>
-                                            
+
                                         </div>
 
                                     </fieldset>
@@ -190,25 +190,25 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					<div class="jarviswidget" id="wid-id-11" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
 
 						<header>
-							
+
                             <h2><strong>Daftar Item</strong></h2>
 
 						</header>
 
 						<div>
-							
+
 							<div class="widget-body no-padding">
 
 								<table id="dt_active" class="table table-striped table-bordered table-hover" width="100%">
 
-                                    <thead>		
+                                    <thead>
 
                                         <tr>
 
                                             <th><i class="fa fa-fw fa-building txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Nama Item</th>
 
 											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty</th>
-											
+
 											<th><i class="fa fa-fw fa-cube txt-color-blue hidden-md hidden-sm hidden-xs"></i>&nbsp;Qty Diterima</th>
 
                                             <th class="text-center" width="15%"><i class="fa fa-fw fa-wrench txt-color-blue"></i>&nbsp;Aksi</th>
@@ -235,6 +235,116 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			<!-- end row -->
 
 			<!-- Modal -->
+                <div class="modal fade" id="modalDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+                    <div class="modal-dialog">
+
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;
+                                </button>
+
+                                <h4 class="modal-title" id="myModalLabel">Detail</h4>
+
+                            </div>
+
+                            <div class="modal-body">
+
+                                <div class="row">
+
+                                    <!-- Widget ID (each widget will need unique ID)-->
+                                    <div class="jarviswidget jarviswidget-color-greenLight" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+
+                                        <header>
+
+                                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+
+                                            <h2 id="title_detail"></h2>
+
+                                        </header>
+
+                                        <!-- widget div-->
+                                        <div>
+
+                                            <!-- widget content -->
+                                            <div class="widget-body no-padding">
+
+                                                <div class="table-responsive">
+
+                                                    <table class="table">
+
+                                                        <tbody>
+
+                                                        <tr>
+                                                            <td><strong>Nota</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_nota"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Dari Outlet</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_from"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Tujuan Outlet</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_destination"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Tanggal Distribusi</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_tgl"></td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td><strong>Petugas</strong></td>
+                                                            <td><strong>:</strong></td>
+                                                            <td id="dt_by"></td>
+                                                        </tr>
+
+                                                        </tbody>
+
+                                                    </table>
+
+                                                    <table class="table table-bordered" id="table_item">
+                                                        <thead>
+                                                        <tr class="text-center">
+                                                            <td>Item</td>
+                                                            <td>Qty</td>
+                                                            <td>Qty Diterima</td>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+
+                                            </div>
+                                            <!-- end widget content -->
+
+                                        </div>
+                                        <!-- end widget div -->
+
+                                    </div>
+                                    <!-- end widget -->
+                                </div>
+
+                            </div>
+
+                        </div><!-- /.modal-content -->
+
+                    </div><!-- /.modal-dialog -->
+
+                </div>
+
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 
 				<div class="modal-dialog">
@@ -260,9 +370,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 											</div>
 										</div>
 								</div><br>
-				
+
 								<div class="row terima">
-									
+
 								</div>
 
                                 <div class="row" id="tbl_kode" style="display: none;">
@@ -309,11 +419,11 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
                                     </div>
                                 </div>
-				
+
 							</div>
 						</form>
 
-						<div class="modal-footer">
+						<div class="modal-footer" id="tmp_btn">
 							<button type="button" class="btn btn-default" data-dismiss="modal" onclick="hapus()">
 								Tutup
 							</button>
@@ -337,7 +447,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 @endsection
 
 @section('extra_script')
-	
+
 	<!-- PAGE RELATED PLUGIN(S) -->
 	<script src="{{ asset('template_asset/js/plugin/datatables/jquery.dataTables.min.js') }}"></script>
 	<script src="{{ asset('template_asset/js/plugin/datatables/dataTables.colVis.min.js') }}"></script>
@@ -351,7 +461,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		$('#overlay').fadeIn(200);
 		$('#load-status-text').text('Sedang Menyiapkan...');
 
-		
+
 		var baseUrl = '{{ url('/') }}';
 
 		/* BASIC ;*/
@@ -359,7 +469,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			var responsiveHelper_datatable_fixed_column = undefined;
 			var responsiveHelper_datatable_col_reorder = undefined;
 			var responsiveHelper_datatable_tabletools = undefined;
-			
+
 			var breakpointDefinition = {
 				tablet : 1024,
 				phone : 480
@@ -409,6 +519,48 @@ use App\Http\Controllers\PlasmafoneController as Access;
 		    aktif.api().ajax.reload();
 		}
 
+        function detailTerima(id, item){
+            $('#overlay').fadeIn(200);
+            $('#load-status-text').text('Sedang Mengambil data...');
+
+            axios.get(baseUrl+'/inventory/penerimaan/distribusi/detail-terima-barang/'+id+'/'+item).then(response => {
+
+                if (response.data.status == 'Access denied') {
+
+                    $('#overlay').fadeOut(200);
+                    $.smallBox({
+                        title : "Gagal",
+                        content : "Upsss. Anda tidak diizinkan untuk mengakses data ini",
+                        color : "#A90329",
+                        timeout: 5000,
+                        icon : "fa fa-times bounce animated"
+                    });
+
+                } else {
+                    var row = '';
+                    $('.tr').remove();
+                    $('#title_detail').html('<strong>Detail Distribusi Barang</strong>');
+                    $('#dt_nota').text(response.data.data[0].nota);
+                    $('#dt_from').text(response.data.data[0].from);
+                    $('#dt_destination').text(response.data.data[0].destination);
+                    $('#dt_tgl').text(response.data.data[0].tanggal);
+                    $('#dt_by').text(response.data.data[0].by);
+                    response.data.data.forEach(function(element) {
+                        if (element.i_code != ""){
+                            row = '<tr class="tr"><td>'+element.i_code+' - '+element.nama_item+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        } else {
+                            row = '<tr class="tr"><td>'+element.nama_item+' ('+element.dd_specificcode+')'+'</td><td style="text-align: center;">'+element.qty+'</td><td style="text-align: center;">'+element.qty_received+'</td></tr>';
+                        }
+                        $('#table_item tbody').append(row)
+                    });
+                    $('#overlay').fadeOut(200);
+                    $('#modalDetail').modal('show');
+
+                }
+
+            })
+        }
+
 		function terima(id, item){
             if ( $.fn.DataTable.isDataTable('#dt_code') ) {
                 $('#dt_code').DataTable().destroy();
@@ -418,8 +570,9 @@ use App\Http\Controllers\PlasmafoneController as Access;
 			$('#overlay').fadeIn(200);
 			$('#load-status-text').text('Sedang Mengambil Data...');
 			var row = '';
+			var btn = '';
 			axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/'+id+'/'+item).then(response => {
-                console.log(response);
+                // console.log(response);
 				if (response.data.status == 'Access denied') {
 
 					$('#overlay').fadeOut(200);
@@ -459,7 +612,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div id="error" class="form-group ">' +
+                                    '<div id="error" class="form-group float-left">' +
                                         '<label class="col-md-4 control-label">Kode Spesifik</label>' +
                                         '<div class="col-md-8">' +
                                             '<div class="input-group">' +
@@ -477,10 +630,6 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                         '</div>' +
                                     '</div>' +
                                     '<div class="col-md-12 form-group">'+
-                                        '<button class="btn btn-primary pull-right" type="button" id="simpan" onclick="simpan()">'+
-                                            '<i class="fa fa-floppy-o"></i>'+
-                                            '&nbsp;Simpan'+
-                                        '</button>'+
                                     '</div>'+
                                 '</fieldset>'+
                             '</div>';
@@ -494,7 +643,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                             "serverSide": true,
                             "orderable": false,
                             "order": [],
-                            "ajax": "{{ url('/inventory/penerimaan/distribusi/get-item-received/'.$id) }}",
+                            "ajax": "{{ url('/inventory/penerimaan/distribusi/get-item-received/'.$id) }}" + '/'+item,
                             "columns":[
                                 {"data": "dd_specificcode"},
                                 {"data": "status"},
@@ -531,7 +680,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
                         });
                         $("#kode").on("input", function (evt) {
                             evt.preventDefault();
-                            axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/check/'+response.data.itemId+'/'+$("#kode").val()+'/'+response.data.dari+'/'+response.data.tujuan).then(resp => {
+                            axios.get(baseUrl+'/inventory/penerimaan/distribusi/item-receive/check/'+id+'/'+response.data.itemId+'/'+$("#kode").val()+'/'+response.data.dari+'/'+response.data.tujuan).then(resp => {
                                 // console.log(resp.data);
                                 if (resp.data == 0) {
                                     $("#error").removeClass("has-success");
@@ -565,6 +714,10 @@ use App\Http\Controllers\PlasmafoneController as Access;
 
 					} else {
                         rows = null;
+                        btn = '';
+                        if ($("#simpan").length){
+                            $("#simpan").remove();
+                        }
 						row = '<div id="form_qty">'+
                                 '<fieldset>' +
                                     '<div class="form-group">' +
@@ -594,16 +747,15 @@ use App\Http\Controllers\PlasmafoneController as Access;
                                             '<span class="help-block"></span>' +
                                         '</div>' +
                                     '</div>' +
-                                    '<div class="col-md-12 form-group">'+
-                                        '<button class="btn btn-primary pull-right" type="button" id="simpan" onclick="simpan()">'+
-                                            '<i class="fa fa-floppy-o"></i>'+
-                                            '&nbsp;Simpan'+
-                                        '</button>'+
-                                    '</div>'+
                                 '</fieldset>' +
 								'</div>';
 
+						btn = '<button type="button" id="simpan" class="btn btn-primary" onclick="simpan()" disabled>' +
+                            'Simpan' +
+                            '</button>';
+
                         $(".terima").append(row);
+                        $("#tmp_btn").append(btn);
                         $("#qty").focus();
                         $("#tbl_kode").hide();
                         $(".qty").on("keypress",function (event) {
@@ -759,7 +911,7 @@ use App\Http\Controllers\PlasmafoneController as Access;
 					}
 				}
 			})
-			
+
 		}
 
 	</script>

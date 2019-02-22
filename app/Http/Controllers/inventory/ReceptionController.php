@@ -845,6 +845,34 @@ class ReceptionController extends Controller
         }
     }
 
+    public function detailTerimaBarang($id = null, $item = null)
+    {
+        $id = Crypt::decrypt($id);
+        $item = Crypt::decrypt($item);
+        if (Access::checkAkses(10, 'read') == false) {
+
+            return json_encode([
+                'status' => 'Access denied'
+            ]);
+
+        } else {
+
+            $data = DB::table('d_distribusi')
+                    ->select('d_distribusi.d_id as id', 'd_distribusi.d_nota as nota', 'from.c_name as from', 'destination.c_name as destination', 'd_item.i_nama as nama_item', 'd_item.i_code', 'd_distribusi_dt.dd_specificcode', 'd_distribusi_dt.dd_qty as qty', 'd_distribusi_dt.dd_qty_received as qty_received', DB::raw('DATE_FORMAT(d_date, "%d-%m-%Y") as tanggal'), 'd_mem.m_name as by')
+                    ->join('d_distribusi_dt', 'd_distribusi_dt.dd_distribusi', '=', 'd_distribusi.d_id')
+                    ->join('m_company as from', 'from.c_id', '=', 'd_distribusi.d_from')
+                    ->join('m_company as destination', 'destination.c_id', '=', 'd_distribusi.d_destination')
+                    ->join('d_item', 'd_item.i_id', '=', 'd_distribusi_dt.dd_item')
+                    ->join('d_mem', 'd_mem.m_id', '=', 'd_distribusi.d_mem')
+                    ->where('d_distribusi.d_id', $id)
+                    ->where('d_distribusi_dt.dd_qty_received', '!=', 0)
+                    ->where('d_distribusi_dt.dd_item', '=', $item)
+                    ->get();
+            return response()->json(['status' => 'OK', 'data' => $data]);
+
+        }
+    }
+
     public function detail($id = null)
     {
         $id = Crypt::decrypt($id);
@@ -884,7 +912,7 @@ class ReceptionController extends Controller
         return view('inventory.penerimaan-barang.distribusi.edit')->with(compact('data', 'id'));
     }
 
-    public function checkCode($item = null, $code = null, $comp = null, $dest = null)
+    public function checkCode($iddistribusi = null, $item = null, $code = null, $comp = null, $dest = null)
     {
         $code = strtoupper($code);
         $data = DB::table('d_distribusi')
@@ -894,6 +922,7 @@ class ReceptionController extends Controller
                     $x->where('d_distribusi_dt.dd_specificcode', $code);
                 })
                 ->where('d_distribusi.d_from', $comp)
+                ->where('d_distribusi.d_id', Crypt::decrypt($iddistribusi))
                 ->where('d_distribusi.d_destination', $dest)
                 ->count();
         return json_encode($data);
@@ -923,13 +952,14 @@ class ReceptionController extends Controller
         
     }
 
-    public function getItemReceived($id = null)
+    public function getItemReceived($id = null, $item = null)
     {
         $data = DB::table('d_distribusi_dt')
             ->select('dd_specificcode', 'dd_status')
             ->where('dd_distribusi', Crypt::decrypt($id))
             ->where('dd_specificcode', '!=', null)
-            ->where('dd_status', 'Received');
+            ->where('dd_status', 'Received')
+            ->where('dd_item', Crypt::decrypt($item));
 
         return DataTables::of($data)
 
@@ -973,7 +1003,8 @@ class ReceptionController extends Controller
                     if ($data->sum_qty == $data->sum_qty_received) {
                         return '<div class="text-center"><span class="label label-success">Diterima</span></div>';
                     } else {
-                        return '<div class="text-center"><button class="btn btn-xs btn-primary view" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp; Terima</button></div>';
+//                        return '<div class="text-center"><button class="btn btn-xs btn-warning" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button>&nbsp;<button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Terima" onclick="detailTerima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-list"></i>&nbsp;Detail</button></div>';
+                        return '<div class="text-center"><button class="btn btn-xs btn-warning" data-toggle="tooltip" data-placement="top" title="Terima" onclick="terima(\'' . Crypt::encrypt($data->id) . '\', \'' . Crypt::encrypt($data->itemId) . '\')"><i class="glyphicon glyphicon-arrow-down"></i>&nbsp;Terima</button></div>';
                     }
 
                 }

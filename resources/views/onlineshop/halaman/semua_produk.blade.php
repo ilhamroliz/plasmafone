@@ -28,40 +28,41 @@
 				</div>
 			<div class="wrapper">
 				<nav id="sidebar">
+					<form id="formFilter">
 					<div class="sidebar-header">
 			            <h5>Kategori</h5>
 			        </div>
 			        <ul class="main-menu-m list-unstyled components" style="background-color: #fff;">
-			            <li>
-			            	<a data-toggle="collapse" aria-expanded="false" style="line-height: 1.5;">Handphone</a>
-					        <ul class="sub-menu-m py-0">
+			            <li class="mb-2">
+			            	<h6 data-toggle="collapse" aria-expanded="false" class="mtext-104 cl2">Handphone</h6>
+					        <ul class="sub-menu-m py-0 pl-3" style="display: block;">
 					        	@foreach($i_merk_hp as $merk)
 								<li>
-									<div class="custom-control custom-checkbox">
-									  <input type="checkbox" class="custom-control-input" id="merk-{{$merk->i_merk}}">
+									<div class="custom-control custom-checkbox filter">
+									  <input type="checkbox" name="merk[]" class="custom-control-input merkClass" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
 								</li>
 								@endforeach
 					        </ul>
-			                <span class="arrow-main-menu-m" style="color: #333;">
-			                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+			                <span class="arrow-main-menu-m p-0" style="color: #333;">
+			                    <i class="fa fa-angle-down" aria-hidden="true" style="line-height: 25px;"></i>
 			                </span>
 					    </li>
 			            <li>
-			            	<a data-toggle="collapse" aria-expanded="false" style="line-height: 1.5;">Aksesoris</a>
-					        <ul class="sub-menu-m py-0">
+			            	<h6 data-toggle="collapse" aria-expanded="false" class="mtext-104 cl2">Aksesoris</h6>
+					        <ul class="sub-menu-m py-0 pl-3" style="display: block;">
 					        	@foreach($i_merk_acces as $merk)
 								<li>
-									<div class="custom-control custom-checkbox">
-									  <input type="checkbox" class="custom-control-input" id="merk-{{$merk->i_merk}}">
+									<div class="custom-control custom-checkbox filter">
+									  <input type="checkbox" name="merk[]" class="custom-control-input merkClass" id="merk-{{$merk->i_merk}}" value="{{$merk->i_merk}}">
 									  <label class="custom-control-label text-dark" for="merk-{{$merk->i_merk}}" style="line-height: 25px;">{{mb_convert_case($merk->i_merk, MB_CASE_TITLE, "UTF-8")}}</label>
 									</div>
 								</li>
 								@endforeach
 					        </ul>
-			                <span class="arrow-main-menu-m" style="color: #333;">
-			                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+			                <span class="arrow-main-menu-m p-0" style="color: #333;">
+			                    <i class="fa fa-angle-down" aria-hidden="true" style="line-height: 25px;"></i>
 			                </span>
 					    </li>
 					</ul>
@@ -86,6 +87,17 @@
 					        </ul>
 					    </li>
 					</ul>
+					<div class="sidebar-header"></div>
+			        <ul class="list-unstyled">
+			            <li>
+					        <ul>
+								<li>
+									<button type="button" class="btn btn-sm btn-primary btn-block focus stext-105 bor1" onclick="getFilter()">Aktifkan Filter</button>
+								</li>
+					        </ul>
+					    </li>
+					</ul>
+					</form>
 				</nav>
 				<div id="content">
 					<div class="row results">
@@ -111,7 +123,7 @@
 								<div class="block2-txt flex-w flex-t p-t-14">
 									<div class="block2-txt-child1 flex-col-l ">
 										<a href="{{url('onlineshop/product-detail')}}/{{encrypt($product->i_id)}}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-											{{$product->i_nama}}
+											{{mb_convert_case($product->i_nama, MB_CASE_TITLE, "UTF-8")}}
 										</a>
 
 										<span class="stext-105 cl3">
@@ -132,7 +144,11 @@
 					</div>
 					<nav>
 					    <ul class="pagination justify-content-center">
-					         {{$products->links()}}
+                            @if (isset($custom))
+                                {{$products->appends(['data' => $custom])->links("vendor/pagination/bootstrap-4")}}
+                            @else
+                                {{$products->links("vendor/pagination/bootstrap-4")}}
+                            @endif
 					    </ul>
 					</nav>
 				</div>
@@ -146,22 +162,25 @@
 
 	<script type="text/javascript">
         $(document).ready(function () {
-            $('div.custom-checkbox').find('input:checkbox').on('click', function () {
-                $('.results > .merk').hide();
-                $('div.custom-checkbox').find('input:checked').each(function () {
-                    $('.results > .merk.' + $(this).attr('id')).show();
-                });
-                if(!$('div.custom-checkbox').find('input:checked').length){
-                    $('.results > .merk').show();
-                }
-            });
-
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
 
             $("input[type='number']").inputSpinner();
         });
+
+        function getFilter()
+        {
+        	// var inputs =  document.getElementsByClassName( 'merkClass' );
+
+        	var inputs = $('div.filter').find('input:checked');
+            names  = [].map.call(inputs, function( input) {
+            	return input.value;
+            });
+
+        	window.location = "{{ url('onlineshop/products/searching') }}?data=" + JSON.stringify(names);
+        }
+
     </script>
 
 @endsection
