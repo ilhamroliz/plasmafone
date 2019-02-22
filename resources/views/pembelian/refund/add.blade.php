@@ -177,6 +177,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
     <script type="text/javascript">
         var tablekode;
         var dataGlobal;
+        var termGlobal;
         $(document).ready(function () {
 
             $('#tanggal').datepicker({
@@ -201,7 +202,7 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     responsiveHelper_dt_basic.respond();
                 }
             });
-            $( "#namabarang" ).autocomplete({
+            /*$( "#namabarang" ).autocomplete({
                 source: baseUrl+'/pembelian/refund/get-item',
                 minLength: 1,
                 select: function(event, data) {
@@ -209,7 +210,8 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                     dataGlobal = data;
                     $('.btn-khusus').attr('disabled', false);
                 }
-            });
+            });*/
+
             $('#hargabaru').maskMoney({
                 thousands:'.',
                 precision: 0,
@@ -218,9 +220,46 @@ use App\Http\Controllers\PlasmafoneController as Plasma;
                 prefix: 'Rp. '
             });
         })
+
+        function resetViews() {
+            $('#namabarang').val('');
+            $('#hargalama').val('');
+            $('#hargabaru').val('');
+            $('#qty').val('');
+            $('#totalrefund').val('');
+            $('.btn-khusus').attr('disabled', true);
+            $('.btn-refresh').attr('disabled', true);
+            $('.btn-simpan').attr('disabled', true);
+            $('.baris-1').hide('slow');
+            tablekode.clear().draw();
+        }
         
         function setSupplier() {
+            resetViews();
             $('#namabarang').attr('readonly', false);
+            $('#namabarang').on('keyup', function () {
+                termGlobal = $('#namabarang').val();
+                $( "#namabarang" ).autocomplete({
+                    source: function( request, response ) {
+                        $.ajax({
+                            url: baseUrl+'/pembelian/refund/get-item',
+                            data: {
+                                supplier: $('#supplier').val(),
+                                term: termGlobal
+                            },
+                            success: function( data ) {
+                                response( data );
+                            }
+                        });
+                    },
+                    minLength: 1,
+                    select: function(event, data) {
+                        setData(data);
+                        dataGlobal = data;
+                        $('.btn-khusus').attr('disabled', false);
+                    }
+                });
+            })
         }
 
         function setData(data) {

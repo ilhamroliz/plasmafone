@@ -32,14 +32,18 @@ class RefundController extends Controller
     public function getItemRefund(Request $request)
     {
         $keyword = $request->term;
-        $data = DB::table('d_stock')
-            ->join('d_item', 's_item', '=', 'i_id')
-            ->select(DB::raw('upper(i_nama) as i_nama'), 'i_id', 's_id', 'i_code')
+        $supplier = $request->supplier;
+        $data = DB::table('d_purchase')
+            ->join('d_purchase_dt', 'pd_purchase', '=', 'p_id')
+            ->join('d_stock_dt', 'sd_specificcode', '=', 'pd_specificcode')
+            ->join('d_item', 'i_id', '=', 'pd_item')
+            ->select(DB::raw('upper(i_nama) as i_nama'), 'i_id', 'sd_stock as s_id', 'i_code')
             ->where(function ($q) use ($keyword){
                 $q->orWhere('i_nama', 'like', '%'.$keyword.'%');
                 $q->orWhere('i_code', 'like', '%'.$keyword.'%');
             })
-            ->groupBy('s_item')
+            ->where('p_supplier', '=', $supplier)
+            ->groupBy('i_id')
             ->get();
 
         $hasil = [];
